@@ -1,0 +1,327 @@
+package me.ash.reader.data.repository
+
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
+import android.util.Log
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.work.*
+import com.github.muhrifqii.parserss.ParseRSS
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import me.ash.reader.DataStoreKeys
+import me.ash.reader.R
+import me.ash.reader.data.account.AccountDao
+import me.ash.reader.data.article.Article
+import me.ash.reader.data.article.ArticleDao
+import me.ash.reader.data.feed.Feed
+import me.ash.reader.data.feed.FeedDao
+import me.ash.reader.data.source.ReaderDatabase
+import me.ash.reader.data.source.RssNetworkDataSource
+import me.ash.reader.dataStore
+import me.ash.reader.get
+import net.dankito.readability4j.Readability4J
+import net.dankito.readability4j.extended.Readability4JExtended
+import okhttp3.*
+import org.xmlpull.v1.XmlPullParserFactory
+import java.io.IOException
+import java.util.*
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import kotlin.random.Random
+
+
+class RssRepository @Inject constructor(
+    @ApplicationContext
+    private val context: Context,
+    private val accountDao: AccountDao,
+    private val articleDao: ArticleDao,
+    private val feedDao: FeedDao,
+    private val rssNetworkDataSource: RssNetworkDataSource,
+    private val workManager: WorkManager,
+) {
+    fun parseDescriptionContent(link: String, content: String): String {
+        val readability4J: Readability4J = Readability4JExtended(link, content)
+        val article = readability4J.parse()
+        val element = article.articleContent
+        return element.toString()
+    }
+
+    fun parseFullContent(link: String, title: String, callback: (String) -> Unit) {
+        OkHttpClient()
+            .newCall(Request.Builder().url(link).build())
+            .enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback(e.message.toString())
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val content = response.body?.string()
+                    val readability4J: Readability4J =
+                        Readability4JExtended(link, content ?: "")
+                    val articleContent = readability4J.parse().articleContent
+                    if (articleContent == null) {
+                        callback("")
+                    } else {
+                        val h1Element = articleContent.selectFirst("h1")
+                        if (h1Element != null && h1Element.hasText() && h1Element.text() == title) {
+                            h1Element.remove()
+                        }
+                        callback(articleContent.toString())
+                    }
+                }
+            })
+    }
+
+    fun peekWork(): String {
+        return workManager.getWorkInfosByTag("sync").get().size.toString()
+    }
+
+    suspend fun sync(isWork: Boolean? = false) {
+        if (isWork == true) {
+            workManager.cancelAllWork()
+            val syncWorkerRequest: WorkRequest =
+                PeriodicWorkRequestBuilder<SyncWorker>(
+                    15, TimeUnit.MINUTES
+                ).setConstraints(
+                    Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .setRequiresCharging(true)
+                        .setRequiresDeviceIdle(true)
+                        .build()
+                ).addTag("sync").build()
+            workManager.enqueue(syncWorkerRequest)
+        } else {
+            normalSync(context, accountDao, articleDao, feedDao, rssNetworkDataSource)
+        }
+    }
+
+    @DelicateCoroutinesApi
+    companion object {
+        data class SyncState(
+            val feedCount: Int = 0,
+            val syncedCount: Int = 0,
+            val currentFeedName: String = "",
+        ) {
+            val isSyncing: Boolean = feedCount != 0 || syncedCount != 0 || currentFeedName != ""
+            val isNotSyncing: Boolean = !isSyncing
+        }
+
+        val syncState = MutableStateFlow(SyncState())
+        private val mutex = Mutex()
+
+        suspend fun normalSync(
+            context: Context,
+            accountDao: AccountDao,
+            articleDao: ArticleDao,
+            feedDao: FeedDao,
+            rssNetworkDataSource: RssNetworkDataSource
+        ) {
+            doSync(context, accountDao, articleDao, feedDao, rssNetworkDataSource)
+        }
+
+        suspend fun workerSync(context: Context) {
+            val db = ReaderDatabase.getInstance(context)
+            doSync(
+                context,
+                db.accountDao(),
+                db.articleDao(),
+                db.feedDao(),
+                RssNetworkDataSource.getInstance()
+            )
+        }
+
+        private suspend fun doSync(
+            context: Context,
+            accountDao: AccountDao,
+            articleDao: ArticleDao,
+            feedDao: FeedDao,
+            rssNetworkDataSource: RssNetworkDataSource
+        ) {
+            mutex.withLock {
+                val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)
+                    ?: return
+                val feeds = feedDao.queryAll(accountId)
+                val preTime = System.currentTimeMillis()
+                val chunked = feeds.chunked(6)
+                chunked.forEachIndexed { index, item ->
+                    item.forEach {
+                        Log.i("RlOG", "chunked $index: ${it.name}")
+                    }
+                }
+                val flows = mutableListOf<Flow<List<Article>>>()
+                repeat(chunked.size) {
+                    flows.add(flow {
+                        val articles = mutableListOf<Article>()
+                        chunked[it].forEach { feed ->
+                            val latest = articleDao.queryLatestByFeedId(accountId, feed.id ?: 0)
+//                            if (feed.icon == null) {
+//                                queryRssIcon(feedDao, feed, latest?.link)
+//                            }
+                            articles.addAll(
+                                queryRssXml(
+                                    rssNetworkDataSource,
+                                    accountId,
+                                    feed,
+                                    latest?.title,
+                                )
+                            )
+
+                            syncState.update {
+                                it.copy(
+                                    feedCount = feeds.size,
+                                    syncedCount = syncState.value.syncedCount + 1,
+                                    currentFeedName = feed.name
+                                )
+                            }
+                        }
+                        emit(articles)
+                    })
+                }
+                combine(
+                    flows
+                ) {
+                    val notificationManager: NotificationManager =
+                        getSystemService(
+                            context,
+                            NotificationManager::class.java
+                        ) as NotificationManager
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        notificationManager.createNotificationChannel(
+                            NotificationChannel(
+                                "ARTICLE_UPDATE",
+                                "文章更新",
+                                NotificationManager.IMPORTANCE_DEFAULT
+                            )
+                        )
+                    }
+                    it.reversed().forEachIndexed { index, articleList ->
+                        articleList.forEach { article ->
+                            Log.i("RlOG", "combine $index ${article.feedId}: ${article.title}")
+                            val builder = NotificationCompat.Builder(context, "ARTICLE_UPDATE")
+                                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                .setGroup("ARTICLE_UPDATE")
+                                .setContentTitle(article.title)
+                                .setContentText(article.shortDescription)
+                                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                            notificationManager.notify(Random.nextInt(), builder.build().apply {
+                                flags = Notification.FLAG_AUTO_CANCEL
+                            })
+                        }
+                        articleDao.insertList(articleList)
+                    }
+                }.buffer().onCompletion {
+                    val afterTime = System.currentTimeMillis()
+                    Log.i("RlOG", "onCompletion: ${afterTime - preTime}")
+                    accountDao.queryById(accountId)?.let { account ->
+                        accountDao.update(
+                            account.apply {
+                                updateAt = Date()
+                            }
+                        )
+                    }
+                    syncState.update {
+                        it.copy(
+                            feedCount = 0,
+                            syncedCount = 0,
+                            currentFeedName = ""
+                        )
+                    }
+                }.collect()
+            }
+        }
+
+        private suspend fun queryRssXml(
+            rssNetworkDataSource: RssNetworkDataSource,
+            accountId: Int,
+            feed: Feed,
+            latestTitle: String? = null,
+        ): List<Article> {
+            ParseRSS.init(XmlPullParserFactory.newInstance())
+            val a = mutableListOf<Article>()
+            try {
+                val parseRss = rssNetworkDataSource.parseRss(feed.url)
+                parseRss.items.forEach {
+                    if (latestTitle != null && latestTitle == it.title) return a
+                    Log.i("RLog", "request rss ${feed.name}: ${it.title}")
+                    a.add(
+                        Article(
+                            accountId = accountId,
+                            feedId = feed.id ?: 0,
+                            date = Date(it.publishDate.toString()),
+                            title = it.title.toString(),
+                            author = it.author,
+                            rawDescription = it.description.toString(),
+                            shortDescription = (Readability4JExtended("", it.description.toString())
+                                .parse().textContent ?: "").trim().run {
+                                if (this.length > 100) this.substring(0, 100)
+                                else this
+                            },
+                            link = it.link ?: "",
+                        )
+                    )
+                }
+                return a
+            } catch (e: Exception) {
+                Log.e("RLog", "error ${feed.name}: ${e.message}")
+                return a
+            }
+        }
+
+        private suspend fun queryRssIcon(
+            feedDao: FeedDao,
+            feed: Feed,
+            articleLink: String?,
+        ) {
+            if (articleLink == null) return
+            val exe = OkHttpClient()
+                .newCall(Request.Builder().url(articleLink).build()).execute()
+            val content = exe.body?.string()
+            Log.i("rlog", "queryRssIcon: $content")
+            val regex =
+                Regex("""<link(.+?)rel="shortcut icon"(.+?)type="image/x-icon"(.+?)href="(.+?)"""")
+            if (content != null) {
+                var iconLink = regex
+                    .find(content)
+                    ?.groups?.get(4)
+                    ?.value
+                if (iconLink != null) {
+                    if (iconLink.startsWith("//")) {
+                        iconLink = "http:$iconLink"
+                    }
+                    saveRssIcon(feedDao, feed, iconLink)
+                } else {
+                    saveRssIcon(feedDao, feed, "")
+                }
+            } else {
+                saveRssIcon(feedDao, feed, "")
+            }
+        }
+
+        private suspend fun saveRssIcon(feedDao: FeedDao, feed: Feed, iconLink: String) {
+            feedDao.update(
+                feed.apply {
+                    icon = iconLink
+                }
+            )
+        }
+    }
+}
+
+@DelicateCoroutinesApi
+class SyncWorker(
+    context: Context,
+    workerParams: WorkerParameters,
+) : CoroutineWorker(context, workerParams) {
+    override suspend fun doWork(): Result {
+        Log.i("RLog", "doWork: ")
+        RssRepository.workerSync(applicationContext)
+        return Result.success()
+    }
+}

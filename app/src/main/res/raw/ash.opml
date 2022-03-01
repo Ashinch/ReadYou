@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+<head>
+<title>Ash</title>
+</head>
+<body>
+<outline title="技术" text="技术">
+<outline xmlUrl="https://github.com/hellodword/wechat-feeds/raw/feeds/MzUyNjQxNjYyMg==.xml" htmlUrl="http://MzUyNjQxNjYyMg.favicon.privacyhide.com/favicon.ico" text="五分钟学算法 | wechat-feeds" type="rss" title="五分钟学算法 | wechat-feeds" />
+<outline htmlUrl="http://MzU0MDEwMjgwNA.favicon.privacyhide.com/favicon.ico" xmlUrl="https://github.com/hellodword/wechat-feeds/raw/feeds/MzU0MDEwMjgwNA==.xml" text="SpringForAll社区 | wechat-feeds" type="rss" title="SpringForAll社区 | wechat-feeds" />
+<outline htmlUrl="https://tech.meituan.com/feed/" title="美团技术团队" type="rss" text="美团技术团队" xmlUrl="https://tech.meituan.com/feed/" />
+<outline title="扔物线 | wechat-feeds" type="rss" text="扔物线 | wechat-feeds" htmlUrl="http://MzIwNTczNTY0NA.favicon.privacyhide.com/favicon.ico" xmlUrl="https://github.com/hellodword/wechat-feeds/raw/feeds/MzIwNTczNTY0NA==.xml" />
+<outline text="伴鱼技术团队" title="伴鱼技术团队" type="rss" htmlUrl="https://tech.ipalfish.com/blog/atom.xml" xmlUrl="http://tech.ipalfish.com/blog/atom.xml" />
+<outline text="博客园_编程大观园" type="rss" xmlUrl="http://feed.cnblogs.com/blog/u/201575/rss/" title="博客园_编程大观园" htmlUrl="http://feed.cnblogs.com" />
+<outline xmlUrl="https://tech.youzan.com/rss/" title="有赞技术团队" type="rss" text="有赞技术团队" htmlUrl="https://tech.youzan.com" />
+<outline text="eBay技术荟 | wechat-feeds" htmlUrl="http://MzA3MDMyNDUzOQ.favicon.privacyhide.com/favicon.ico" type="rss" title="eBay技术荟 | wechat-feeds" xmlUrl="https://github.com/hellodword/wechat-feeds/raw/feeds/MzA3MDMyNDUzOQ==.xml" />
+<outline type="rss" text="小米信息部技术团队" htmlUrl="/atom.xml" title="小米信息部技术团队" xmlUrl="https://xiaomi-info.github.io/atom" />
+<outline type="rss" text="IBM Developer" xmlUrl="https://developer.ibm.com/feed/" htmlUrl="https://developer.ibm.com" title="IBM Developer" />
+<outline title="滴滴技术 | wechat-feeds" htmlUrl="http://MzU1ODEzNjI2NA.favicon.privacyhide.com/favicon.ico" text="滴滴技术 | wechat-feeds" type="rss" xmlUrl="https://github.com/hellodword/wechat-feeds/raw/feeds/MzU1ODEzNjI2NA==.xml" />
+<outline title="vivo互联网技术 | wechat-feeds" text="vivo互联网技术 | wechat-feeds" xmlUrl="https://github.com/hellodword/wechat-feeds/raw/feeds/MzI4NjY4MTU5Nw==.xml" htmlUrl="http://MzI4NjY4MTU5Nw.favicon.privacyhide.com/favicon.ico" type="rss" />
+<outline htmlUrl="http://ashinch.com/" type="rss" title="Ash's Knowledge Base" xmlUrl="https://www.ashinch.com/feed" text="Ash's Knowledge Base" />
+<outline type="rss" text="阿里巴巴中间件 | wechat-feeds" title="阿里巴巴中间件 | wechat-feeds" xmlUrl="https://api.feeddd.org/feeds/615ea22c1269c358aa166d7a" htmlUrl="https://mp.weixin.qq.com" />
+<outline title="阿里技术" type="rss" xmlUrl="https://api.feeddd.org/feeds/612c4e602b6da10dfaec7645" htmlUrl="https://mp.weixin.qq.com" text="阿里技术" />
+<outline xmlUrl="https://api.feeddd.org/feeds/615ea22c1269c358aa166d6a" type="rss" title="艾小仙" text="艾小仙" htmlUrl="https://mp.weixin.qq.com" />
+<outline htmlUrl="https://mp.weixin.qq.com" type="rss" xmlUrl="https://api.feeddd.org/feeds/6131b4041269c358aa0deac7" title="爱奇艺技术产品团队" text="爱奇艺技术产品团队" />
+<outline xmlUrl="https://api.feeddd.org/feeds/613381fa1269c358aa0eaec1" text="三太子敖丙 | wechat-feeds" htmlUrl="https://api.feeddd.org" title="三太子敖丙 | wechat-feeds" type="rss" />
+<outline htmlUrl="https://mp.weixin.qq.com" xmlUrl="https://api.feeddd.org/feeds/61455d381269c358aa11efca" title="字节跳动技术团队" type="rss" text="字节跳动技术团队" />
+<outline title="Java3y" text="Java3y" type="rss" htmlUrl="https://mp.weixin.qq.com" xmlUrl="https://api.feeddd.org/feeds/613381f91269c358aa0eabd1" />
+<outline type="rss" text="JavaGuide | wechat-feeds" xmlUrl="https://api.feeddd.org/feeds/613381f91269c358aa0eabd9" title="JavaGuide | wechat-feeds" htmlUrl="https://api.feeddd.org" />
+<outline htmlUrl="https://api.feeddd.org" type="rss" xmlUrl="https://api.feeddd.org/feeds/6140676c1269c358aa11056c" text="Thoughtworks | wechat-feeds" title="Thoughtworks | wechat-feeds" />
+<outline htmlUrl="https://mp.weixin.qq.com" text="有赞coder" type="rss" title="有赞coder" xmlUrl="https://api.feeddd.org/feeds/616e984cb9a7e049c387659c" />
+<outline title="计算机视觉life" type="rss" htmlUrl="https://mp.weixin.qq.com" xmlUrl="https://api.feeddd.org/feeds/61e3f060dca58a380c4456c0" text="计算机视觉life" />
+<outline title="我爱计算机视觉" text="我爱计算机视觉" type="rss" xmlUrl="https://api.feeddd.org/feeds/6159cf1d1269c358aa1550e9" htmlUrl="https://mp.weixin.qq.com" />
+<outline htmlUrl="https://mp.weixin.qq.com" type="rss" xmlUrl="https://api.feeddd.org/feeds/613381fa1269c358aa0eafa9" title="我是程序汪" text="我是程序汪" />
+<outline title="低并发编程" text="低并发编程" type="rss" xmlUrl="https://api.feeddd.org/feeds/61e2b1d2dca58a380c43846b" htmlUrl="https://mp.weixin.qq.com" />
+<outline htmlUrl="https://mp.weixin.qq.com" xmlUrl="https://api.feeddd.org/feeds/61f55b22dca58a380c510633" type="rss" title="eBay技术荟" text="eBay技术荟" />
+<outline htmlUrl="https://mp.weixin.qq.com" title="vivo互联网技术" xmlUrl="https://api.feeddd.org/feeds/61f55b22dca58a380c510624" type="rss" text="vivo互联网技术" />
+</outline>
+<outline text="新鲜事" title="新鲜事">
+<outline title="月光博客" xmlUrl="https://www.williamlong.info/rss.xml" text="月光博客" type="rss" htmlUrl="https://www.williamlong.info/" />
+<outline htmlUrl="https://sspai.com" text="少数派" title="少数派" xmlUrl="https://sspai.com/feed" type="rss" />
+<outline text="知乎每日精选" title="知乎每日精选" xmlUrl="https://www.zhihu.com/rss" type="rss" htmlUrl="http://www.zhihu.com" />
+<outline type="rss" title="澎湃新闻" text="澎湃新闻" htmlUrl="http://thepaper.cn" xmlUrl="https://feedx.net/rss/thepaper.xml" />
+<outline htmlUrl="https://www.qbitai.com" title="量子位" text="量子位" type="rss" xmlUrl="https://www.qbitai.com/feed" />
+</outline>
+</body>
+</opml>

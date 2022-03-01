@@ -1,0 +1,68 @@
+package me.ash.reader.data.source
+
+import android.content.Context
+import android.util.Log
+import android.util.Xml
+import dagger.hilt.android.qualifiers.ApplicationContext
+import me.ash.reader.DataStoreKeys
+import me.ash.reader.data.feed.Feed
+import me.ash.reader.data.group.Group
+import me.ash.reader.data.group.GroupWithFeed
+import me.ash.reader.dataStore
+import me.ash.reader.get
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserException
+import java.io.IOException
+import java.io.InputStream
+import javax.inject.Inject
+
+class OpmlLocalDataSource @Inject constructor(
+    @ApplicationContext
+    private val context: Context,
+) {
+    @Throws(XmlPullParserException::class, IOException::class)
+    fun parseFileInputStream(inputStream: InputStream): List<GroupWithFeed> {
+        val groupWithFeedList = mutableListOf<GroupWithFeed>()
+        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0
+        inputStream.use {
+            val parser: XmlPullParser = Xml.newPullParser()
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+            parser.setInput(it, null)
+            parser.nextTag()
+            while (parser.next() != XmlPullParser.END_DOCUMENT) {
+                if (parser.eventType != XmlPullParser.START_TAG) {
+                    continue
+                }
+                if (parser.name != "outline") {
+                    continue
+                }
+                if ("rss" == parser.getAttributeValue(null, "type")) {
+                    val title = parser.getAttributeValue(null, "title")
+                    val xmlUrl = parser.getAttributeValue(null, "xmlUrl")
+                    Log.i("RLog", "rss: ${title} , ${xmlUrl}")
+                    groupWithFeedList.last().feeds.add(
+                        Feed(
+                            name = title,
+                            url = xmlUrl,
+                            groupId = 0,
+                            accountId = accountId,
+                        )
+                    )
+                } else {
+                    val title = parser.getAttributeValue(null, "title")
+                    Log.i("RLog", "title: ${title}")
+                    groupWithFeedList.add(
+                        GroupWithFeed(
+                            group = Group(
+                                name = title,
+                                accountId = accountId,
+                            ),
+                            feeds = mutableListOf()
+                        )
+                    )
+                }
+            }
+            return groupWithFeedList
+        }
+    }
+}
