@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -24,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
@@ -44,6 +44,7 @@ import me.ash.reader.ui.widget.WebView
 @ExperimentalFoundationApi
 @Composable
 fun ReadPage(
+    navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel: ReadViewModel = hiltViewModel(),
     btnBackOnClickListener: () -> Unit,
@@ -66,9 +67,7 @@ fun ReadPage(
 
     Box {
         Column(
-            modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface)
+            modifier.fillMaxSize()
         ) {
 
             SmallTopAppBar(

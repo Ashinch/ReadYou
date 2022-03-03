@@ -1,4 +1,4 @@
-package me.ash.reader.ui.data
+package me.ash.reader.data.constant
 
 class Filter(
     var index: Int,

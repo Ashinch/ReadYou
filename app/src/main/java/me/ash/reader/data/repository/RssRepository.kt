@@ -3,29 +3,34 @@ package me.ash.reader.data.repository
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.util.Log
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.work.*
 import com.github.muhrifqii.parserss.ParseRSS
+import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import me.ash.reader.DataStoreKeys
+import me.ash.reader.*
 import me.ash.reader.R
 import me.ash.reader.data.account.AccountDao
 import me.ash.reader.data.article.Article
 import me.ash.reader.data.article.ArticleDao
+import me.ash.reader.data.constant.Symbol
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.feed.FeedDao
 import me.ash.reader.data.source.ReaderDatabase
 import me.ash.reader.data.source.RssNetworkDataSource
-import me.ash.reader.dataStore
-import me.ash.reader.get
 import net.dankito.readability4j.Readability4J
 import net.dankito.readability4j.extended.Readability4JExtended
 import okhttp3.*
@@ -34,7 +39,6 @@ import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.random.Random
 
 
 class RssRepository @Inject constructor(
@@ -83,6 +87,10 @@ class RssRepository @Inject constructor(
         return workManager.getWorkInfosByTag("sync").get().size.toString()
     }
 
+    @ExperimentalAnimationApi
+    @ExperimentalMaterial3Api
+    @ExperimentalPagerApi
+    @ExperimentalFoundationApi
     suspend fun sync(isWork: Boolean? = false) {
         if (isWork == true) {
             workManager.cancelAllWork()
@@ -92,7 +100,6 @@ class RssRepository @Inject constructor(
                 ).setConstraints(
                     Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .setRequiresCharging(true)
                         .build()
                 ).addTag("sync").build()
             workManager.enqueue(syncWorkerRequest)
@@ -101,6 +108,10 @@ class RssRepository @Inject constructor(
         }
     }
 
+    @ExperimentalAnimationApi
+    @ExperimentalMaterial3Api
+    @ExperimentalPagerApi
+    @ExperimentalFoundationApi
     @DelicateCoroutinesApi
     companion object {
         data class SyncState(
@@ -194,26 +205,38 @@ class RssRepository @Inject constructor(
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         notificationManager.createNotificationChannel(
                             NotificationChannel(
-                                "ARTICLE_UPDATE",
+                                Symbol.NOTIFICATION_CHANNEL_GROUP_ARTICLE_UPDATE,
                                 "文章更新",
                                 NotificationManager.IMPORTANCE_DEFAULT
                             )
                         )
                     }
-                    it.reversed().forEachIndexed { index, articleList ->
-                        articleList.forEach { article ->
-                            Log.i("RlOG", "combine $index ${article.feedId}: ${article.title}")
-                            val builder = NotificationCompat.Builder(context, "ARTICLE_UPDATE")
+                    it.reversed().forEach { articleList ->
+                        val ids = articleDao.insertList(articleList)
+                        articleList.forEachIndexed { index, article ->
+                            Log.i("RlOG", "combine ${article.feedId}: ${article.title}")
+                            val builder = NotificationCompat.Builder(context, Symbol.NOTIFICATION_CHANNEL_GROUP_ARTICLE_UPDATE)
                                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                .setGroup("ARTICLE_UPDATE")
+                                .setGroup(Symbol.NOTIFICATION_CHANNEL_GROUP_ARTICLE_UPDATE)
                                 .setContentTitle(article.title)
                                 .setContentText(article.shortDescription)
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                            notificationManager.notify(Random.nextInt(), builder.build().apply {
+                                .setContentIntent(
+                                    PendingIntent.getActivity(
+                                        context,
+                                        ids[index].toInt(),
+                                        Intent(context, MainActivity::class.java).apply {
+                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                                                    Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                            putExtra(Symbol.EXTRA_ARTICLE_ID, ids[index].toInt())
+                                        },
+                                        PendingIntent.FLAG_UPDATE_CURRENT
+                                    )
+                                )
+                            notificationManager.notify(ids[index].toInt(), builder.build().apply {
                                 flags = Notification.FLAG_AUTO_CANCEL
                             })
                         }
-                        articleDao.insertList(articleList)
                     }
                 }.buffer().onCompletion {
                     val afterTime = System.currentTimeMillis()
@@ -323,6 +346,10 @@ class RssRepository @Inject constructor(
     }
 }
 
+@ExperimentalAnimationApi
+@ExperimentalMaterial3Api
+@ExperimentalPagerApi
+@ExperimentalFoundationApi
 @DelicateCoroutinesApi
 class SyncWorker(
     context: Context,

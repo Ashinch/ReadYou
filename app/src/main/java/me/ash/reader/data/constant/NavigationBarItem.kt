@@ -1,7 +1,9 @@
-package me.ash.reader.ui.data
+package me.ash.reader.data.constant
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.*
+import androidx.compose.material.icons.rounded.FiberManualRecord
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.Subject
 import androidx.compose.ui.graphics.vector.ImageVector
 
 class NavigationBarItem(

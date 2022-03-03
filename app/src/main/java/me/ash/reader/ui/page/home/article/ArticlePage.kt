@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -40,8 +41,8 @@ import me.ash.reader.DateTimeExt
 import me.ash.reader.DateTimeExt.toString
 import me.ash.reader.R
 import me.ash.reader.data.article.ArticleWithFeed
+import me.ash.reader.data.constant.Filter
 import me.ash.reader.data.repository.RssRepository
-import me.ash.reader.ui.data.Filter
 import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.util.collectAsStateValue
@@ -57,6 +58,7 @@ import me.ash.reader.ui.widget.TopTitleBox
 @ExperimentalFoundationApi
 @Composable
 fun ArticlePage(
+    navController: NavHostController,
     modifier: Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
     viewModel: ArticleViewModel = hiltViewModel(),
@@ -92,7 +94,7 @@ fun ArticlePage(
             homeViewModel.dispatch(HomeViewAction.Sync())
         }
     ) {
-        Box(modifier.background(MaterialTheme.colorScheme.surface)) {
+        Box {
             TopTitleBox(
                 title = when {
                     filterState.group != null -> filterState.group.name
@@ -241,65 +243,67 @@ private fun ArticleItem(
                 )
             }
             Spacer(modifier = modifier.height(1.dp))
-            if (true) {
-                Box(
-                    modifier = Modifier
-                        .padding(top = 3.dp)
-                        .size(24.dp)
-                        .border(
-                            2.dp,
-                            MaterialTheme.colorScheme.inverseOnSurface,
-                            RoundedCornerShape(4.dp)
-                        ),
-                ) {
-                    if (articleWithFeed.feed.icon == null) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.default_folder),
-                            contentDescription = "icon",
-                            modifier = modifier
-                                .fillMaxSize()
-                                .padding(2.dp),
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        )
-                    } else {
-                        Image(
-                            painter = BitmapPainter(
-                                BitmapFactory.decodeByteArray(
-                                    articleWithFeed.feed.icon,
-                                    0,
-                                    articleWithFeed.feed.icon!!.size
-                                ).asImageBitmap()
+            Row {
+                if (true) {
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 3.dp)
+                            .size(24.dp)
+                            .border(
+                                2.dp,
+                                MaterialTheme.colorScheme.inverseOnSurface,
+                                RoundedCornerShape(4.dp)
                             ),
-                            contentDescription = "icon",
-                            modifier = modifier
-                                .fillMaxSize()
-                                .padding(2.dp),
-                        )
+                    ) {
+                        if (articleWithFeed.feed.icon == null) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.default_folder),
+                                contentDescription = "icon",
+                                modifier = modifier
+                                    .fillMaxSize()
+                                    .padding(2.dp),
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                            )
+                        } else {
+                            Image(
+                                painter = BitmapPainter(
+                                    BitmapFactory.decodeByteArray(
+                                        articleWithFeed.feed.icon,
+                                        0,
+                                        articleWithFeed.feed.icon!!.size
+                                    ).asImageBitmap()
+                                ),
+                                contentDescription = "icon",
+                                modifier = modifier
+                                    .fillMaxSize()
+                                    .padding(2.dp),
+                            )
+                        }
                     }
+                    Spacer(modifier = Modifier.width(8.dp))
                 }
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-            Column {
-                Text(
-                    text = articleWithFeed.article.title,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = if (isStarredFilter || articleWithFeed.article.isUnread) {
-                        MaterialTheme.colorScheme.onPrimaryContainer
-                    } else {
-                        MaterialTheme.colorScheme.outline
-                    },
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = modifier.height(1.dp))
-                Text(
-                    text = articleWithFeed.article.shortDescription,
-                    fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.outline,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
+                Column {
+                    Text(
+                        text = articleWithFeed.article.title,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = if (isStarredFilter || articleWithFeed.article.isUnread) {
+                            MaterialTheme.colorScheme.onPrimaryContainer
+                        } else {
+                            MaterialTheme.colorScheme.outline
+                        },
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Spacer(modifier = modifier.height(1.dp))
+                    Text(
+                        text = articleWithFeed.article.shortDescription,
+                        fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.outline,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
         }
     }

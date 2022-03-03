@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
-import me.ash.reader.ui.data.Filter
-import me.ash.reader.ui.data.NavigationBarItem
+import me.ash.reader.data.constant.Filter
+import me.ash.reader.data.constant.NavigationBarItem
 import kotlin.math.absoluteValue
 
 @ExperimentalPagerApi

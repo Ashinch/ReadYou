@@ -271,6 +271,15 @@ interface ArticleDao {
     )
     suspend fun queryLatestByFeedId(accountId: Int, feedId: Int): Article?
 
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM article
+        WHERE id = :id
+        """
+    )
+    suspend fun queryById(id: Int): ArticleWithFeed?
+
     @Insert
     suspend fun insert(article: Article): Long
 

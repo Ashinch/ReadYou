@@ -1,5 +1,8 @@
 package me.ash.reader.ui.page.home
 
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -15,10 +18,13 @@ import kotlinx.coroutines.launch
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.group.Group
 import me.ash.reader.data.repository.RssRepository
-import me.ash.reader.ui.data.Filter
+import me.ash.reader.data.constant.Filter
 import javax.inject.Inject
 
+@ExperimentalAnimationApi
+@ExperimentalMaterial3Api
 @ExperimentalPagerApi
+@ExperimentalFoundationApi
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val rssRepository: RssRepository,

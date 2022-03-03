@@ -6,7 +6,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -26,15 +25,17 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.flow.collect
 import me.ash.reader.DateTimeExt
 import me.ash.reader.DateTimeExt.toString
+import me.ash.reader.data.constant.Filter
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.group.Group
 import me.ash.reader.data.group.GroupWithFeed
 import me.ash.reader.data.repository.RssRepository
-import me.ash.reader.ui.data.Filter
+import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.util.collectAsStateValue
@@ -47,6 +48,7 @@ import me.ash.reader.ui.widget.*
 @ExperimentalFoundationApi
 @Composable
 fun FeedPage(
+    navController: NavHostController,
     modifier: Modifier,
     viewModel: FeedViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel = hiltViewModel(),
@@ -84,9 +86,7 @@ fun FeedPage(
     }
 
     Box(
-        modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface)
+        modifier.fillMaxSize()
     ) {
         TopTitleBox(
             title = viewState.account?.name ?: "未知账户",
@@ -109,7 +109,7 @@ fun FeedPage(
                 title = {},
                 navigationIcon = {
                     IconButton(onClick = {
-
+                        navController.navigate(route = RouteName.SETTINGS)
                     }) {
                         Icon(
                             modifier = Modifier.size(22.dp),

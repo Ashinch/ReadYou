@@ -86,4 +86,8 @@ class ArticleRepository @Inject constructor(
     suspend fun updateArticleInfo(article: Article) {
         articleDao.update(article)
     }
+
+    suspend fun findArticleById(id: Int): ArticleWithFeed? {
+        return articleDao.queryById(id)
+    }
 }

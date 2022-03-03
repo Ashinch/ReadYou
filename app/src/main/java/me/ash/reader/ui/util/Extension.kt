@@ -1,5 +1,8 @@
 package me.ash.reader.ui.util
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
@@ -70,3 +73,9 @@ fun Modifier.roundClick(onClick: () -> Unit = {}) = this
 fun Modifier.paddingFixedHorizontal(top: Dp = 0.dp, bottom: Dp = 0.dp) = this
     .padding(horizontal = 10.dp)
     .padding(top = top, bottom = bottom)
+
+fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
+}

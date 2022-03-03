@@ -12,12 +12,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import me.ash.reader.ui.page.home.HomePage
+import me.ash.reader.ui.page.settings.SettingsPage
 import me.ash.reader.ui.theme.AppTheme
 
 @ExperimentalAnimationApi
@@ -26,6 +30,8 @@ import me.ash.reader.ui.theme.AppTheme
 @ExperimentalFoundationApi
 @Composable
 fun HomeEntry() {
+    val navController = rememberNavController()
+
     AppTheme {
         ProvideWindowInsets {
             rememberSystemUiController().run {
@@ -33,13 +39,24 @@ fun HomeEntry() {
                 setSystemBarsColor(MaterialTheme.colorScheme.surface, !isSystemInDarkTheme())
                 setNavigationBarColor(MaterialTheme.colorScheme.surface, !isSystemInDarkTheme())
             }
-            Column (modifier = Modifier.background(MaterialTheme.colorScheme.surface)){
+            Column(modifier = Modifier.background(MaterialTheme.colorScheme.surface)) {
                 Row(
                     modifier = Modifier
                         .weight(1f)
                         .statusBarsPadding()
                 ) {
-                    HomePage()
+                    NavHost(
+                        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+                        navController = navController,
+                        startDestination = RouteName.HOME,
+                    ) {
+                        composable(route = RouteName.HOME) {
+                            HomePage(navController)
+                        }
+                        composable(route = RouteName.SETTINGS) {
+                            SettingsPage(navController)
+                        }
+                    }
                 }
                 Spacer(
                     modifier = Modifier
