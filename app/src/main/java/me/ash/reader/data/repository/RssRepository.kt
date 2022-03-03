@@ -93,7 +93,6 @@ class RssRepository @Inject constructor(
                     Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
                         .setRequiresCharging(true)
-                        .setRequiresDeviceIdle(true)
                         .build()
                 ).addTag("sync").build()
             workManager.enqueue(syncWorkerRequest)
@@ -161,18 +160,18 @@ class RssRepository @Inject constructor(
                         val articles = mutableListOf<Article>()
                         chunked[it].forEach { feed ->
                             val latest = articleDao.queryLatestByFeedId(accountId, feed.id ?: 0)
-//                            if (feed.icon == null) {
-//                                queryRssIcon(feedDao, feed, latest?.link)
-//                            }
                             articles.addAll(
                                 queryRssXml(
                                     rssNetworkDataSource,
                                     accountId,
                                     feed,
                                     latest?.title,
-                                )
+                                ).also {
+                                    if (feed.icon == null && it.isNotEmpty()) {
+                                        queryRssIcon(feedDao, feed, it.first().link)
+                                    }
+                                }
                             )
-
                             syncState.update {
                                 it.copy(
                                     feedCount = feeds.size,
@@ -280,34 +279,44 @@ class RssRepository @Inject constructor(
             articleLink: String?,
         ) {
             if (articleLink == null) return
-            val exe = OkHttpClient()
-                .newCall(Request.Builder().url(articleLink).build()).execute()
-            val content = exe.body?.string()
-            Log.i("rlog", "queryRssIcon: $content")
+            val execute = OkHttpClient()
+                .newCall(Request.Builder().url(articleLink).build())
+                .execute()
+            val content = execute.body?.string()
             val regex =
-                Regex("""<link(.+?)rel="shortcut icon"(.+?)type="image/x-icon"(.+?)href="(.+?)"""")
+                Regex("""<link(.+?)rel="shortcut icon"(.+?)href="(.+?)"""")
             if (content != null) {
                 var iconLink = regex
                     .find(content)
-                    ?.groups?.get(4)
+                    ?.groups?.get(3)
                     ?.value
+                Log.i("rlog", "queryRssIcon: $iconLink")
                 if (iconLink != null) {
                     if (iconLink.startsWith("//")) {
                         iconLink = "http:$iconLink"
                     }
+                    if (iconLink.startsWith("/")) {
+                        val domainRegex =
+                            Regex("""http(s)?://(([\w-]+\.)+\w+(:\d{1,5})?)""")
+                        iconLink =
+                            "http://${domainRegex.find(articleLink)?.groups?.get(2)?.value}$iconLink"
+                    }
                     saveRssIcon(feedDao, feed, iconLink)
                 } else {
-                    saveRssIcon(feedDao, feed, "")
+//                    saveRssIcon(feedDao, feed, "")
                 }
             } else {
-                saveRssIcon(feedDao, feed, "")
+//                saveRssIcon(feedDao, feed, "")
             }
         }
 
         private suspend fun saveRssIcon(feedDao: FeedDao, feed: Feed, iconLink: String) {
+            val execute = OkHttpClient()
+                .newCall(Request.Builder().url(iconLink).build())
+                .execute()
             feedDao.update(
                 feed.apply {
-                    icon = iconLink
+                    icon = execute.body?.bytes()
                 }
             )
         }

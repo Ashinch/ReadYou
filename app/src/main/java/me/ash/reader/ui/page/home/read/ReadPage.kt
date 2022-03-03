@@ -168,6 +168,7 @@ private fun Header(
 ) {
     Column(
         modifier = Modifier
+            .fillMaxWidth()
             .roundClick {
                 context.startActivity(
                     Intent(Intent.ACTION_VIEW, Uri.parse(article.link))

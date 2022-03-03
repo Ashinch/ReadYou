@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.feed
 
+import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,15 +21,15 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.flow.collect
 import me.ash.reader.DateTimeExt
 import me.ash.reader.DateTimeExt.toString
-import me.ash.reader.R
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.group.Group
 import me.ash.reader.data.group.GroupWithFeed
@@ -239,10 +240,21 @@ private fun ColumnScope.FeedList(
     ) {
         Column(modifier = Modifier.animateContentSize()) {
             feeds.forEach { feed ->
+                Log.i("RLog", "FeedList: ${feed.icon}")
                 BarButton(
                     barButtonType = ItemType(
 //                        icon = feed.icon ?: "",
-                        icon = painterResource(id = R.drawable.default_folder),
+                        icon = if (feed.icon == null) {
+                            null
+                        } else {
+                            BitmapPainter(
+                                BitmapFactory.decodeByteArray(
+                                    feed.icon,
+                                    0,
+                                    feed.icon!!.size
+                                ).asImageBitmap()
+                            )
+                        },
                         content = feed.name,
                         important = feed.important ?: 0
                     )

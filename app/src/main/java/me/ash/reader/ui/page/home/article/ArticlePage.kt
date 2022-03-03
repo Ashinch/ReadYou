@@ -1,11 +1,15 @@
 package me.ash.reader.ui.page.home.article
 
+import android.graphics.BitmapFactory
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.material.icons.rounded.DoneAll
@@ -17,7 +21,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -31,6 +38,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import me.ash.reader.DateTimeExt
 import me.ash.reader.DateTimeExt.toString
+import me.ash.reader.R
 import me.ash.reader.data.article.ArticleWithFeed
 import me.ash.reader.data.repository.RssRepository
 import me.ash.reader.ui.data.Filter
@@ -97,7 +105,7 @@ fun ArticlePage(
                     "${viewState.filterImportant}${filterState.filter.description}"
                 },
                 listState = viewState.listState,
-                startOffset = Offset(20f, 72f),
+                startOffset = Offset(if (true) 52f else 20f, 72f),
                 startHeight = 50f,
                 startTitleFontSize = 24f,
                 startDescriptionFontSize = 14f,
@@ -161,7 +169,7 @@ fun ArticlePage(
                                     item { Spacer(modifier = Modifier.height(40.dp)) }
                                 }
                                 stickyHeader {
-                                    ArticleDateHeader(currentItemDay)
+                                    ArticleDateHeader(currentItemDay, true)
                                 }
                             }
                             item {
@@ -214,6 +222,7 @@ private fun ArticleItem(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
+                    modifier = Modifier.padding(start = 32.dp),
                     text = articleWithFeed.feed.name,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
@@ -232,32 +241,72 @@ private fun ArticleItem(
                 )
             }
             Spacer(modifier = modifier.height(1.dp))
-            Text(
-                text = articleWithFeed.article.title,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = if (isStarredFilter || articleWithFeed.article.isUnread) {
-                    MaterialTheme.colorScheme.onPrimaryContainer
-                } else {
-                    MaterialTheme.colorScheme.outline
-                },
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-            Spacer(modifier = modifier.height(1.dp))
-            Text(
-                text = articleWithFeed.article.shortDescription,
-                fontSize = 18.sp,
-                color = MaterialTheme.colorScheme.outline,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
+            if (true) {
+                Box(
+                    modifier = Modifier
+                        .padding(top = 3.dp)
+                        .size(24.dp)
+                        .border(
+                            2.dp,
+                            MaterialTheme.colorScheme.inverseOnSurface,
+                            RoundedCornerShape(4.dp)
+                        ),
+                ) {
+                    if (articleWithFeed.feed.icon == null) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.default_folder),
+                            contentDescription = "icon",
+                            modifier = modifier
+                                .fillMaxSize()
+                                .padding(2.dp),
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
+                    } else {
+                        Image(
+                            painter = BitmapPainter(
+                                BitmapFactory.decodeByteArray(
+                                    articleWithFeed.feed.icon,
+                                    0,
+                                    articleWithFeed.feed.icon!!.size
+                                ).asImageBitmap()
+                            ),
+                            contentDescription = "icon",
+                            modifier = modifier
+                                .fillMaxSize()
+                                .padding(2.dp),
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            Column {
+                Text(
+                    text = articleWithFeed.article.title,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (isStarredFilter || articleWithFeed.article.isUnread) {
+                        MaterialTheme.colorScheme.onPrimaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.outline
+                    },
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(modifier = modifier.height(1.dp))
+                Text(
+                    text = articleWithFeed.article.shortDescription,
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.outline,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun ArticleDateHeader(date: String) {
+private fun ArticleDateHeader(date: String, isDisplayIcon: Boolean) {
     Row(
         modifier = Modifier
             .height(28.dp)
@@ -269,7 +318,7 @@ private fun ArticleDateHeader(date: String) {
             text = date,
             fontSize = 13.sp,
             color = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.padding(horizontal = 20.dp),
+            modifier = Modifier.padding(start = (if (isDisplayIcon) 52 else 20).dp),
             fontWeight = FontWeight.SemiBold,
         )
     }

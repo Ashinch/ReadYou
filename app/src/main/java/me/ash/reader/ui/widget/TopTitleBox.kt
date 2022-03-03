@@ -73,7 +73,7 @@ fun BoxScope.TopTitleBox(
                 interactionSource = MutableInteractionSource(),
                 indication = null,
                 onClickLabel = "回到顶部",
-                onClick = clickable ?: {}
+                onClick = clickable
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -86,6 +86,7 @@ fun BoxScope.TopTitleBox(
             )
             Spacer(modifier = Modifier.height(SpacerHeight.dp))
             AnimatedText(
+                modifier = Modifier.width(200.dp),
                 text = description,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = descriptionFontSize.sp,

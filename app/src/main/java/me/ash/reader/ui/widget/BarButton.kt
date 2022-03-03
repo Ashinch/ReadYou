@@ -1,6 +1,8 @@
 package me.ash.reader.ui.widget
 
+import android.graphics.BitmapFactory
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,11 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import me.ash.reader.R
 import me.ash.reader.ui.util.paddingFixedHorizontal
 import me.ash.reader.ui.util.roundClick
 
@@ -43,60 +51,73 @@ fun BarButton(
                     end = if (barButtonType is FirstExpandType) 2.dp else 10.dp
                 )
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                when (barButtonType) {
-                    is SecondExpandType -> {
-                        Icon(
-                            imageVector = barButtonType.img as ImageVector,
-                            contentDescription = "icon",
-                            modifier = Modifier
-                                .padding(end = 4.dp)
-                                .clip(CircleShape)
-                                .clickable(onClick = iconOnClickListener),
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        )
-                    }
-                    is ItemType -> {
-                        val modifier = Modifier
-                        Row(
-                            modifier = modifier
-                                .padding(start = 28.dp, end = 4.dp)
-                                .size(24.dp)
-//                                .background(if (barButtonType.img.isBlank()) MaterialTheme.colorScheme.inversePrimary else Color.Unspecified),
-                                .background(MaterialTheme.colorScheme.inversePrimary),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
+            when (barButtonType) {
+                is SecondExpandType -> {
+                    Icon(
+                        imageVector = barButtonType.img,
+                        contentDescription = "icon",
+                        modifier = Modifier
+                            .padding(end = 4.dp)
+                            .clip(CircleShape)
+                            .clickable(onClick = iconOnClickListener),
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
+                }
+                is ItemType -> {
+                    val modifier = Modifier
+                    Row(
+                        modifier = modifier
+                            .padding(start = 28.dp, end = 4.dp)
+                            .size(24.dp)
+                            .background(
+                                if (barButtonType.icon != null) Color.Unspecified
+                                else MaterialTheme.colorScheme.inversePrimary
+                            ),
+//                                .background(MaterialTheme.colorScheme.inversePrimary),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        if (barButtonType.icon == null) {
                             Icon(
-//                                painter = rememberImagePainter(barButtonType.img),
-                                painter = barButtonType.img,
+                                painter = painterResource(id = R.drawable.default_folder),
                                 contentDescription = "icon",
                                 modifier = modifier.fillMaxSize(),
                                 tint = MaterialTheme.colorScheme.onPrimaryContainer,
                             )
+                        } else {
+                            Image(
+                                painter = barButtonType.icon,
+                                contentDescription = "icon",
+                                modifier = modifier.fillMaxSize(),
+                            )
                         }
                     }
                 }
-                when (barButtonType) {
-                    is ButtonType -> {
-                        AnimatedText(
-                            text = barButtonType.text,
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
-                        )
-                    }
-                    else -> {
-                        Text(
-                            text = barButtonType.text,
-                            fontSize = if (barButtonType is FirstExpandType) 22.sp else 18.sp,
-                            fontWeight = if (barButtonType is FirstExpandType) FontWeight.Bold else FontWeight.SemiBold,
-                            color = if (barButtonType is FirstExpandType)
-                                MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimaryContainer,
-                        )
-                    }
+            }
+            when (barButtonType) {
+                is ButtonType -> {
+                    AnimatedText(
+                        modifier = Modifier.weight(1f),
+                        text = barButtonType.text,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
                 }
-
+                else -> {
+                    Text(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 20.dp),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        text = barButtonType.text,
+                        fontSize = if (barButtonType is FirstExpandType) 22.sp else 18.sp,
+                        fontWeight = if (barButtonType is FirstExpandType) FontWeight.Bold else FontWeight.SemiBold,
+                        color = if (barButtonType is FirstExpandType)
+                            MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
+                }
             }
             when (barButtonType) {
                 is ButtonType, is ItemType, is SecondExpandType -> {
@@ -163,13 +184,15 @@ class SecondExpandType(
 
 class ItemType(
 //    private val icon: String,
-    private val icon: Painter,
+    val icon: BitmapPainter?,
     private val content: String,
     private val important: Int,
 ) : BarButtonType {
     //    override val img: String
     override val img: Painter
-        get() = icon
+        get() = icon ?: BitmapPainter(
+            BitmapFactory.decodeByteArray(byteArrayOf(), 0, 0).asImageBitmap()
+        )
     override val text: String
         get() = content
     override val additional: Any

@@ -1,5 +1,6 @@
 package me.ash.reader.ui.widget
 
+import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutLinearInEasing
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -83,7 +85,9 @@ fun AppNavigationBar(
         }
     }
 
-    Divider(modifier = Modifier.alpha(0.3f))
+    Divider(
+        modifier = Modifier.alpha(0.3f),
+    )
     Box(
         modifier = modifier
             .background(MaterialTheme.colorScheme.surface)
@@ -141,6 +145,7 @@ private fun FilterBar(
     filter: Filter,
     onSelected: (Filter) -> Unit = {},
 ) {
+    val view = LocalView.current
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.Center,
@@ -168,6 +173,7 @@ private fun FilterBar(
                         )
                         .clip(CircleShape)
                         .clickable(onClick = {
+                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             onSelected(
                                 when (index) {
                                     0 -> Filter.Starred
@@ -237,6 +243,7 @@ private fun ReaderBar(
     starredOnClick: (afterIsStarred: Boolean) -> Unit = {},
     fullContentOnClick: (afterIsFullContent: Boolean) -> Unit = {},
 ) {
+    val view = LocalView.current
     var fullContent by remember { mutableStateOf(isFullContent) }
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -246,6 +253,7 @@ private fun ReaderBar(
             .padding(horizontal = 8.dp)
     ) {
         CanBeDisabledIconButton(
+            modifier = Modifier.size(18.dp),
             disabled = disabled,
             imageVector = if (isUnread) {
                 Icons.Rounded.Circle
@@ -255,6 +263,7 @@ private fun ReaderBar(
             contentDescription = "Mark Unread",
             tint = MaterialTheme.colorScheme.primary,
         ) {
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             unreadOnClick(!isUnread)
         }
         CanBeDisabledIconButton(
@@ -268,6 +277,7 @@ private fun ReaderBar(
             contentDescription = "Starred",
             tint = MaterialTheme.colorScheme.primary,
         ) {
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             starredOnClick(!isStarred)
         }
         CanBeDisabledIconButton(
@@ -277,7 +287,7 @@ private fun ReaderBar(
             contentDescription = "Next Article",
             tint = MaterialTheme.colorScheme.primary,
         ) {
-
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
         }
         CanBeDisabledIconButton(
             disabled = disabled,
@@ -285,7 +295,7 @@ private fun ReaderBar(
             contentDescription = "Add Tag",
             tint = MaterialTheme.colorScheme.primary,
         ) {
-
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
         }
         CanBeDisabledIconButton(
             disabled = disabled,
@@ -298,6 +308,7 @@ private fun ReaderBar(
             contentDescription = "Full Content Parsing",
             tint = MaterialTheme.colorScheme.primary,
         ) {
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             val afterIsFullContent = !fullContent
             fullContent = afterIsFullContent
             fullContentOnClick(afterIsFullContent)
