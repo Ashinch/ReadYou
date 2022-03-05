@@ -6,23 +6,30 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.ExpandMore
-import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -40,8 +47,10 @@ import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.util.collectAsStateValue
 import me.ash.reader.ui.widget.*
+import java.io.InputStream
 
 
+@ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @ExperimentalMaterial3Api
 @ExperimentalPagerApi
@@ -55,17 +64,9 @@ fun FeedPage(
     filter: Filter,
     groupAndFeedOnClick: (currentGroup: Group?, currentFeed: Feed?) -> Unit = { _, _ -> },
 ) {
-    val context = LocalContext.current
     val viewState = viewModel.viewState.collectAsStateValue()
     val syncState = RssRepository.syncState.collectAsStateValue()
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
-        Log.i("RLog", "launcher: ${it}")
-        it?.let { uri ->
-            context.contentResolver.openInputStream(uri)?.let { inputStream ->
-                viewModel.dispatch(FeedViewAction.AddFromFile(inputStream))
-            }
-        }
-    }
+    var addFeedDialogVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(homeViewModel.filterState) {
         homeViewModel.filterState.collect { state ->
@@ -88,6 +89,13 @@ fun FeedPage(
     Box(
         modifier.fillMaxSize()
     ) {
+        AddFeedDialog(
+            visible = addFeedDialogVisible,
+            hiddenFunction = { addFeedDialogVisible = false },
+            openInputStreamCallback = {
+                viewModel.dispatch(FeedViewAction.AddFromFile(it))
+            },
+        )
         TopTitleBox(
             title = viewState.account?.name ?: "未知账户",
             description = if (syncState.isSyncing) {
@@ -132,7 +140,7 @@ fun FeedPage(
                         )
                     }
                     IconButton(onClick = {
-                        launcher.launch("*/*")
+                        addFeedDialogVisible = true
                     }) {
                         Icon(
                             modifier = Modifier.size(26.dp),
@@ -186,6 +194,107 @@ fun FeedPage(
     }
 }
 
+@ExperimentalComposeUiApi
+@Composable
+private fun AddFeedDialog(
+    visible: Boolean,
+    hiddenFunction: () -> Unit,
+    openInputStreamCallback: (InputStream) -> Unit,
+) {
+    val context = LocalContext.current
+    var inputString by remember { mutableStateOf("") }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
+        it?.let { uri ->
+            context.contentResolver.openInputStream(uri)?.let { inputStream ->
+                openInputStreamCallback(inputStream)
+            }
+        }
+    }
+    val focusRequester = remember { FocusRequester() }
+    val localFocusManager = LocalFocusManager.current
+    val localSoftwareKeyboardController = LocalSoftwareKeyboardController.current
+
+    Dialog(
+        visible = visible,
+        onDismissRequest = hiddenFunction,
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.RssFeed,
+                contentDescription = "Subscribe",
+            )
+        },
+        title = { Text("订阅") },
+        text = {
+            Spacer(modifier = Modifier.height(10.dp))
+            TextField(
+                modifier = Modifier
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { if(it.isFocused) localSoftwareKeyboardController?.hide() }
+                    .focusable(),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colorScheme.onSurface,
+                    textColor = MaterialTheme.colorScheme.onSurface,
+                    focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                ),
+                value = inputString,
+                onValueChange = {
+                    inputString = it
+                },
+                placeholder = {
+                    Text(
+                        text = "订阅源或站点链接",
+                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f)
+                    )
+                },
+                singleLine = true,
+                trailingIcon = {
+                    IconButton(onClick = {}) {
+                        Icon(
+                            imageVector = Icons.Rounded.ContentPaste,
+                            contentDescription = "Paste",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                },
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        hiddenFunction()
+                    }
+                )
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+        },
+        confirmButton = {
+            TextButton(
+                enabled = inputString.isNotEmpty(),
+                onClick = {
+                    hiddenFunction()
+                }
+            ) {
+                Text(
+                    text = "搜索",
+                    color = if (inputString.isNotEmpty()) {
+                        Color.Unspecified
+                    } else {
+                        MaterialTheme.colorScheme.outline.copy(alpha = 0.7f)
+                    }
+                )
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    launcher.launch("*/*")
+                    hiddenFunction()
+                }
+            ) {
+                Text("导入OPML文件")
+            }
+        },
+    )
+}
+
 @ExperimentalAnimationApi
 @Composable
 private fun ColumnScope.GroupList(
@@ -230,9 +339,6 @@ private fun ColumnScope.FeedList(
     feeds: List<Feed>,
     onClick: (currentFeed: Feed?) -> Unit = {},
 ) {
-//    LaunchedEffect(feeds) {
-//
-//    }
     AnimatedVisibility(
         visible = visible,
         enter = fadeIn() + expandVertically(),

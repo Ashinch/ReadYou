@@ -22,7 +22,7 @@ fun CanBeDisabledIconButton(
     IconButton(
         modifier = Modifier.alpha(
             if (disabled) {
-                0.75f
+                0.7f
             } else {
                 1f
             }

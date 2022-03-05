@@ -214,7 +214,7 @@ private fun ArticleItem(
                 if (isStarredFilter || articleWithFeed.article.isUnread) {
                     1f
                 } else {
-                    0.75f
+                    0.7f
                 }
             )
     ) {
