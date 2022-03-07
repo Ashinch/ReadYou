@@ -1,8 +1,5 @@
 package me.ash.reader.ui.page.home
 
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -15,16 +12,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import me.ash.reader.data.constant.Filter
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.group.Group
 import me.ash.reader.data.repository.RssRepository
-import me.ash.reader.data.constant.Filter
 import javax.inject.Inject
 
-@ExperimentalAnimationApi
-@ExperimentalMaterial3Api
-@ExperimentalPagerApi
-@ExperimentalFoundationApi
+@OptIn(ExperimentalPagerApi::class)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val rssRepository: RssRepository,
@@ -35,6 +29,8 @@ class HomeViewModel @Inject constructor(
 
     private val _filterState = MutableStateFlow(FilterState())
     val filterState = _filterState.asStateFlow()
+
+    val syncState = RssRepository.syncState
 
     fun dispatch(action: HomeViewAction) {
         when (action) {
@@ -79,8 +75,8 @@ data class FilterState(
     val filter: Filter = Filter.All,
 )
 
-@ExperimentalPagerApi
-data class HomeViewState(
+@OptIn(ExperimentalPagerApi::class)
+data class HomeViewState constructor(
     val pagerState: PagerState = PagerState(1),
 )
 

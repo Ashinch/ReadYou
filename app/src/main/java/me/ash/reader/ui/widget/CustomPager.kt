@@ -64,7 +64,7 @@ fun <T : Any> CustomPager(
         overshootFraction,
         onItemSelect = { index -> onItemSelect(items[index]) },
     ) {
-        items.forEach{ item ->
+        items.forEach { item ->
             Box(
                 modifier = when (orientation) {
                     Orientation.Horizontal -> Modifier.fillMaxWidth()
@@ -126,7 +126,7 @@ fun <T : Any> Pager(
             val spacing = state.itemSpacing.roundToInt()
             val itemDimensionWithSpace = itemDimension + state.itemSpacing
             val first = ceil(
-                (dragOffset -itemDimension - centerOffset) / itemDimensionWithSpace
+                (dragOffset - itemDimension - centerOffset) / itemDimensionWithSpace
             ).toInt().coerceAtLeast(0)
             val last = ((dimension + dragOffset - centerOffset) / itemDimensionWithSpace).toInt()
                 .coerceAtMost(items.lastIndex)
@@ -269,8 +269,12 @@ private class PagerState {
                     val extra = if (remainder > itemDimension / 2f) 1 else 0
                     val lastVisibleIndex =
                         (targetOffset.absoluteValue / itemDimension.toFloat()).toInt() + extra
-                    targetOffset = (lastVisibleIndex * (itemDimension + itemSpacing) * targetOffset.sign)
-                        .coerceIn(0f, (numberOfItems - 1).toFloat() * (itemDimension + itemSpacing))
+                    targetOffset =
+                        (lastVisibleIndex * (itemDimension + itemSpacing) * targetOffset.sign)
+                            .coerceIn(
+                                0f,
+                                (numberOfItems - 1).toFloat() * (itemDimension + itemSpacing)
+                            )
                     dragOffset.animateTo(
                         animationSpec = animationSpec,
                         targetValue = targetOffset,

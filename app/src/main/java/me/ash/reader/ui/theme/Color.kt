@@ -1,18 +1,21 @@
 package me.ash.reader.ui.theme
-import androidx.compose.ui.graphics.Color
 
+import androidx.compose.ui.graphics.Color
 
 //val md_theme_light_primary = Color(0xFF4D4D4D)
 val md_theme_light_primary = Color(0xFF6750A4)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFFEADDFF)
 val md_theme_light_onPrimaryContainer = Color(0xFF21005D)
+
 //val md_theme_light_secondary = Color(0xFF868686)
 val md_theme_light_secondary = Color(0xFF625B71)
 val md_theme_light_onSecondary = Color(0xFFFFFFFF)
+
 //val md_theme_light_secondaryContainer = Color(0xFFEAEAEA)
 val md_theme_light_secondaryContainer = Color(0xFFE8DEF8)
 val md_theme_light_onSecondaryContainer = Color(0xFF1D192B)
+
 //val md_theme_light_tertiary = Color(0xFFC1C1C1)
 val md_theme_light_tertiary = Color(0xFF7D5260)
 val md_theme_light_onTertiary = Color(0xFFFFFFFF)
@@ -22,13 +25,16 @@ val md_theme_light_error = Color(0xFFB3261E)
 val md_theme_light_errorContainer = Color(0xFFF9DEDC)
 val md_theme_light_onError = Color(0xFFFFFFFF)
 val md_theme_light_onErrorContainer = Color(0xFF410E0B)
+
 //val md_theme_light_background = Color(0xFFF7F5F4)
 val md_theme_light_background = Color(0xFFFFFBFE)
 val md_theme_light_onBackground = Color(0xFF1C1B1F)
+
 //val md_theme_light_surface = Color(0xFFF7F5F4)
 val md_theme_light_surface = Color(0xFFFFFBFE)
 val md_theme_light_onSurface = Color(0xFF1C1B1F)
 val md_theme_light_surfaceVariant = Color(0xFFE7E0EC)
+
 //val md_theme_light_onSurfaceVariant = md_theme_light_secondary
 val md_theme_light_onSurfaceVariant = Color(0xFF49454F)
 val md_theme_light_outline = Color(0xFF79747E)

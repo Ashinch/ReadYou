@@ -8,14 +8,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.work.*
 import com.github.muhrifqii.parserss.ParseRSS
-import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -40,7 +36,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-
+@DelicateCoroutinesApi
 class RssRepository @Inject constructor(
     @ApplicationContext
     private val context: Context,
@@ -87,10 +83,6 @@ class RssRepository @Inject constructor(
         return workManager.getWorkInfosByTag("sync").get().size.toString()
     }
 
-    @ExperimentalAnimationApi
-    @ExperimentalMaterial3Api
-    @ExperimentalPagerApi
-    @ExperimentalFoundationApi
     suspend fun sync(isWork: Boolean? = false) {
         if (isWork == true) {
             workManager.cancelAllWork()
@@ -108,10 +100,6 @@ class RssRepository @Inject constructor(
         }
     }
 
-    @ExperimentalAnimationApi
-    @ExperimentalMaterial3Api
-    @ExperimentalPagerApi
-    @ExperimentalFoundationApi
     @DelicateCoroutinesApi
     companion object {
         data class SyncState(
@@ -215,7 +203,10 @@ class RssRepository @Inject constructor(
                         val ids = articleDao.insertList(articleList)
                         articleList.forEachIndexed { index, article ->
                             Log.i("RlOG", "combine ${article.feedId}: ${article.title}")
-                            val builder = NotificationCompat.Builder(context, Symbol.NOTIFICATION_CHANNEL_GROUP_ARTICLE_UPDATE)
+                            val builder = NotificationCompat.Builder(
+                                context,
+                                Symbol.NOTIFICATION_CHANNEL_GROUP_ARTICLE_UPDATE
+                            )
                                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                                 .setGroup(Symbol.NOTIFICATION_CHANNEL_GROUP_ARTICLE_UPDATE)
                                 .setContentTitle(article.title)
@@ -346,10 +337,6 @@ class RssRepository @Inject constructor(
     }
 }
 
-@ExperimentalAnimationApi
-@ExperimentalMaterial3Api
-@ExperimentalPagerApi
-@ExperimentalFoundationApi
 @DelicateCoroutinesApi
 class SyncWorker(
     context: Context,

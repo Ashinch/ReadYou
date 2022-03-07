@@ -1,10 +1,6 @@
 package me.ash.reader
 
 import android.app.Application
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.material3.ExperimentalMaterial3Api
-import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -18,10 +14,6 @@ import me.ash.reader.data.source.ReaderDatabase
 import me.ash.reader.data.source.RssNetworkDataSource
 import javax.inject.Inject
 
-@ExperimentalAnimationApi
-@ExperimentalMaterial3Api
-@ExperimentalPagerApi
-@ExperimentalFoundationApi
 @DelicateCoroutinesApi
 @HiltAndroidApp
 class App : Application() {

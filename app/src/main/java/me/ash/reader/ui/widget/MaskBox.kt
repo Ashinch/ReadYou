@@ -16,7 +16,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import kotlin.math.absoluteValue
 
-@ExperimentalPagerApi
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun BoxScope.MaskBox(
     modifier: Modifier = Modifier,

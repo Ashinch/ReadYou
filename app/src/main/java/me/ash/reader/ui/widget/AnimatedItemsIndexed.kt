@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.ListUpdateCallback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-@ExperimentalAnimationApi
 @Suppress("UpdateTransitionLabel", "TransitionPropertiesLabel")
 @SuppressLint("ComposableNaming", "UnusedTransitionTargetStateParameter")
 /**
@@ -63,7 +62,6 @@ fun <T> updateAnimatedItemsState(
 
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
                 oldList[oldItemPosition].item == newList[newItemPosition]
-
         }
         val diffResult = calculateDiff(false, diffCb)
         val compositeList = oldList.toMutableList()

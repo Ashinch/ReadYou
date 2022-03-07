@@ -1,4 +1,4 @@
-package me.ash.reader.ui.widget
+package me.ash.reader.ui.page.home
 
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
@@ -36,11 +36,12 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import me.ash.reader.data.constant.Filter
 import me.ash.reader.data.constant.NavigationBarItem
+import me.ash.reader.ui.widget.CanBeDisabledIconButton
 import kotlin.math.absoluteValue
 
-@ExperimentalPagerApi
+@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun AppNavigationBar(
+fun HomeBottomNavBar(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
     filter: Filter,

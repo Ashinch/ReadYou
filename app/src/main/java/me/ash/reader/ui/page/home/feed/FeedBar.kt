@@ -1,7 +1,6 @@
-package me.ash.reader.ui.widget
+package me.ash.reader.ui.page.home.feed
 
 import android.graphics.BitmapFactory
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,12 +24,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.ash.reader.R
-import me.ash.reader.ui.util.paddingFixedHorizontal
-import me.ash.reader.ui.util.roundClick
+import me.ash.reader.ui.extension.paddingFixedHorizontal
+import me.ash.reader.ui.extension.roundClick
+import me.ash.reader.ui.widget.AnimatedText
 
-@ExperimentalAnimationApi
 @Composable
-fun BarButton(
+fun FeedBar(
     barButtonType: BarButtonType,
     iconOnClickListener: () -> Unit = {},
     onClickListener: () -> Unit = {},

@@ -31,8 +31,30 @@ class FeedViewModel @Inject constructor(
             is FeedViewAction.FetchData -> fetchData(action.isStarred, action.isUnread)
             is FeedViewAction.AddFromFile -> addFromFile(action.inputStream)
             is FeedViewAction.ChangeFeedVisible -> changeFeedVisible(action.index)
-            is FeedViewAction.ChangeGroupVisible -> changeGroupVisible()
+            is FeedViewAction.ChangeGroupVisible -> changeGroupVisible(action.visible)
             is FeedViewAction.ScrollToItem -> scrollToItem(action.index)
+            is FeedViewAction.ChangeSubscribeDialogVisible -> changeAddFeedDialogVisible(action.visible)
+            is FeedViewAction.InputSubscribeFeedLink -> inputSubscribeFeedLink(action.subscribeFeedLink)
+        }
+    }
+
+    private fun inputSubscribeFeedLink(subscribeFeedLink: String) {
+        viewModelScope.launch {
+            _viewState.update {
+                it.copy(
+                    subscribeDialogFeedLink = subscribeFeedLink
+                )
+            }
+        }
+    }
+
+    private fun changeAddFeedDialogVisible(visible: Boolean) {
+        viewModelScope.launch {
+            _viewState.update {
+                it.copy(
+                    subscribeDialogVisible = visible
+                )
+            }
         }
     }
 
@@ -121,10 +143,10 @@ class FeedViewModel @Inject constructor(
         }
     }
 
-    private fun changeGroupVisible() {
+    private fun changeGroupVisible(visible: Boolean) {
         _viewState.update {
             it.copy(
-                groupsVisible = !_viewState.value.groupsVisible
+                groupsVisible = visible
             )
         }
     }
@@ -143,6 +165,8 @@ data class FeedViewState(
     val feedsVisible: List<Boolean> = emptyList(),
     val listState: LazyListState = LazyListState(),
     val groupsVisible: Boolean = true,
+    var subscribeDialogVisible: Boolean = false,
+    var subscribeDialogFeedLink: String = "",
 )
 
 sealed class FeedViewAction {
@@ -163,8 +187,19 @@ sealed class FeedViewAction {
         val index: Int
     ) : FeedViewAction()
 
-    object ChangeGroupVisible : FeedViewAction()
+    data class ChangeGroupVisible(
+        val visible: Boolean
+    ) : FeedViewAction()
+
     data class ScrollToItem(
         val index: Int
+    ) : FeedViewAction()
+
+    data class ChangeSubscribeDialogVisible(
+        val visible: Boolean
+    ) : FeedViewAction()
+
+    data class InputSubscribeFeedLink(
+        val subscribeFeedLink: String
     ) : FeedViewAction()
 }

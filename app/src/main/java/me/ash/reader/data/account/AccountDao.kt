@@ -11,7 +11,6 @@ interface AccountDao {
     )
     suspend fun queryAll(): List<Account>
 
-
     @Query(
         """
         SELECT * FROM account

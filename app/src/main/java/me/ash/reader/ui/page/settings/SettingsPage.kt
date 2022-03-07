@@ -1,7 +1,5 @@
 package me.ash.reader.ui.page.settings
 
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,15 +18,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.google.accompanist.pager.ExperimentalPagerApi
-import me.ash.reader.ui.util.paddingFixedHorizontal
-import me.ash.reader.ui.util.roundClick
+import me.ash.reader.ui.extension.paddingFixedHorizontal
+import me.ash.reader.ui.extension.roundClick
 import me.ash.reader.ui.widget.TopTitleBox
 
-@ExperimentalAnimationApi
-@ExperimentalMaterial3Api
-@ExperimentalPagerApi
-@ExperimentalFoundationApi
 @Composable
 fun SettingsPage(
     navController: NavHostController,
@@ -156,10 +149,6 @@ fun Item(
     }
 }
 
-@ExperimentalAnimationApi
-@ExperimentalMaterial3Api
-@ExperimentalPagerApi
-@ExperimentalFoundationApi
 @Preview
 @Composable
 fun SettingsPreview() {

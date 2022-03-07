@@ -29,9 +29,9 @@ fun <T> DataStore<Preferences>.get(dataStoreKeys: DataStoreKeys<T>): T? {
             if (exception is IOException) {
                 Log.e("RLog", "Get data store error $exception")
                 exception.printStackTrace()
-            emit(emptyPreferences())
-        } else {
-            throw exception
+                emit(emptyPreferences())
+            } else {
+                throw exception
             }
         }.map {
             it[dataStoreKeys.key]
