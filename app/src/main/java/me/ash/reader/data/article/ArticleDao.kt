@@ -263,7 +263,8 @@ interface ArticleDao {
         SELECT a.id, a.date, a.title, a.author, a.rawDescription, 
         a.shortDescription, a.fullContent, a.link, a.feedId, 
         a.accountId, a.isUnread, a.isStarred 
-        FROM article AS a, feed AS b 
+        FROM article AS a LEFT JOIN feed AS b 
+        ON a.feedId = b.id
         WHERE a.feedId = :feedId 
         AND a.accountId = :accountId
         ORDER BY date DESC LIMIT 1

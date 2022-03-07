@@ -13,7 +13,10 @@ interface FeedDao {
     suspend fun queryAll(accountId: Int): List<Feed>
 
     @Insert
-    suspend fun insertList(feed: List<Feed>): List<Long>
+    suspend fun insert(feed: Feed): Long
+
+    @Insert
+    suspend fun insertList(feeds: List<Feed>): List<Long>
 
     @Update
     suspend fun update(vararg feed: Feed)

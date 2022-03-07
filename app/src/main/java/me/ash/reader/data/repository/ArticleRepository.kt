@@ -10,6 +10,9 @@ import me.ash.reader.data.article.Article
 import me.ash.reader.data.article.ArticleDao
 import me.ash.reader.data.article.ArticleWithFeed
 import me.ash.reader.data.article.ImportantCount
+import me.ash.reader.data.feed.Feed
+import me.ash.reader.data.feed.FeedDao
+import me.ash.reader.data.group.Group
 import me.ash.reader.data.group.GroupDao
 import me.ash.reader.data.group.GroupWithFeed
 import me.ash.reader.dataStore
@@ -21,7 +24,12 @@ class ArticleRepository @Inject constructor(
     private val context: Context,
     private val articleDao: ArticleDao,
     private val groupDao: GroupDao,
+    private val feedDao: FeedDao,
 ) {
+    fun pullGroups(): Flow<MutableList<Group>> {
+        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0
+        return groupDao.queryAllGroup(accountId)
+    }
 
     fun pullFeeds(): Flow<MutableList<GroupWithFeed>> {
         return groupDao.queryAllGroupWithFeed(
@@ -89,5 +97,12 @@ class ArticleRepository @Inject constructor(
 
     suspend fun findArticleById(id: Int): ArticleWithFeed? {
         return articleDao.queryById(id)
+    }
+
+    suspend fun subscribe(feed: Feed, articles: List<Article>) {
+        val feedId = feedDao.insert(feed).toInt()
+        articleDao.insertList(articles.map {
+            it.copy(feedId = feedId)
+        })
     }
 }

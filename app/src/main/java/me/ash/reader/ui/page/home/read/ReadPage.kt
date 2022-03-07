@@ -3,7 +3,6 @@ package me.ash.reader.ui.page.home.read
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -74,32 +73,30 @@ fun ReadPage(
                 exit = fadeOut() + shrinkVertically(),
             ) {
                 if (viewState.articleWithFeed == null) return@AnimatedVisibility
-                SelectionContainer {
-                    LazyColumn(
-                        state = viewState.listState,
-                        modifier = Modifier
-                            .weight(1f),
-                    ) {
-                        val article = viewState.articleWithFeed.article
-                        val feed = viewState.articleWithFeed.feed
+                LazyColumn(
+                    state = viewState.listState,
+                    modifier = Modifier
+                        .weight(1f),
+                ) {
+                    val article = viewState.articleWithFeed.article
+                    val feed = viewState.articleWithFeed.feed
 
-                        item {
-                            Spacer(modifier = Modifier.height(24.dp))
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .paddingFixedHorizontal()
-                            ) {
-                                Header(context, article, feed)
-                            }
+                    item {
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .paddingFixedHorizontal()
+                        ) {
+                            Header(context, article, feed)
                         }
-                        item {
-                            Spacer(modifier = Modifier.height(40.dp))
-                            WebView(
-                                content = viewState.content ?: "",
-                            )
-                            Spacer(modifier = Modifier.height(50.dp))
-                        }
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(40.dp))
+                        WebView(
+                            content = viewState.content ?: "",
+                        )
+                        Spacer(modifier = Modifier.height(50.dp))
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.feed
 
+import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
@@ -11,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.ui.page.common.RouteName
@@ -22,10 +24,12 @@ fun FeedPageTopBar(
     syncOnClick: () -> Unit = {},
     subscribeOnClick: () -> Unit = {},
 ) {
+    val view = LocalView.current
     SmallTopAppBar(
         title = {},
         navigationIcon = {
             IconButton(onClick = {
+                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                 navController.navigate(route = RouteName.SETTINGS)
             }) {
                 Icon(
@@ -38,6 +42,7 @@ fun FeedPageTopBar(
         },
         actions = {
             IconButton(onClick = {
+                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                 if (isSyncing) return@IconButton
                 syncOnClick()
             }) {
@@ -48,7 +53,10 @@ fun FeedPageTopBar(
                     tint = MaterialTheme.colorScheme.primary,
                 )
             }
-            IconButton(onClick = subscribeOnClick) {
+            IconButton(onClick = {
+                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                subscribeOnClick()
+            }) {
                 Icon(
                     modifier = Modifier.size(26.dp),
                     imageVector = Icons.Rounded.Add,

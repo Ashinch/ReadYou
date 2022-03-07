@@ -33,28 +33,6 @@ class FeedViewModel @Inject constructor(
             is FeedViewAction.ChangeFeedVisible -> changeFeedVisible(action.index)
             is FeedViewAction.ChangeGroupVisible -> changeGroupVisible(action.visible)
             is FeedViewAction.ScrollToItem -> scrollToItem(action.index)
-            is FeedViewAction.ChangeSubscribeDialogVisible -> changeAddFeedDialogVisible(action.visible)
-            is FeedViewAction.InputSubscribeFeedLink -> inputSubscribeFeedLink(action.subscribeFeedLink)
-        }
-    }
-
-    private fun inputSubscribeFeedLink(subscribeFeedLink: String) {
-        viewModelScope.launch {
-            _viewState.update {
-                it.copy(
-                    subscribeDialogFeedLink = subscribeFeedLink
-                )
-            }
-        }
-    }
-
-    private fun changeAddFeedDialogVisible(visible: Boolean) {
-        viewModelScope.launch {
-            _viewState.update {
-                it.copy(
-                    subscribeDialogVisible = visible
-                )
-            }
         }
     }
 
@@ -165,8 +143,6 @@ data class FeedViewState(
     val feedsVisible: List<Boolean> = emptyList(),
     val listState: LazyListState = LazyListState(),
     val groupsVisible: Boolean = true,
-    var subscribeDialogVisible: Boolean = false,
-    var subscribeDialogFeedLink: String = "",
 )
 
 sealed class FeedViewAction {
@@ -193,13 +169,5 @@ sealed class FeedViewAction {
 
     data class ScrollToItem(
         val index: Int
-    ) : FeedViewAction()
-
-    data class ChangeSubscribeDialogVisible(
-        val visible: Boolean
-    ) : FeedViewAction()
-
-    data class InputSubscribeFeedLink(
-        val subscribeFeedLink: String
     ) : FeedViewAction()
 }

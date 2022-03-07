@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.article
 
+import android.view.HapticFeedbackConstants
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.material.icons.rounded.DoneAll
@@ -9,6 +10,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalView
 
 @Composable
 fun ArticlePageTopBar(
@@ -16,10 +18,14 @@ fun ArticlePageTopBar(
     readAllOnClick: () -> Unit = {},
     searchOnClick: () -> Unit = {},
 ) {
+    val view = LocalView.current
     SmallTopAppBar(
         title = {},
         navigationIcon = {
-            IconButton(onClick = backOnClick) {
+            IconButton(onClick = {
+                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                backOnClick()
+            }) {
                 Icon(
                     imageVector = Icons.Rounded.ArrowBackIosNew,
                     contentDescription = "Back",
@@ -28,14 +34,20 @@ fun ArticlePageTopBar(
             }
         },
         actions = {
-            IconButton(onClick = readAllOnClick) {
+            IconButton(onClick = {
+                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                readAllOnClick()
+            }) {
                 Icon(
                     imageVector = Icons.Rounded.DoneAll,
                     contentDescription = "Done All",
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
-            IconButton(onClick = searchOnClick) {
+            IconButton(onClick = {
+                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                searchOnClick()
+            }) {
                 Icon(
                     imageVector = Icons.Rounded.Search,
                     contentDescription = "Search",

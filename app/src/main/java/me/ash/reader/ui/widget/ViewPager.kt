@@ -16,7 +16,7 @@ fun ViewPager(
     modifier: Modifier = Modifier,
     state: PagerState = com.google.accompanist.pager.rememberPagerState(),
     composableList: List<@Composable () -> Unit>,
-    userScrollEnabled: Boolean = true
+    userScrollEnabled: Boolean = true,
 ) {
     HorizontalPager(
         count = composableList.size,

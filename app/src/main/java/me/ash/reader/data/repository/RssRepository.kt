@@ -11,7 +11,6 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.work.*
-import com.github.muhrifqii.parserss.ParseRSS
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -25,12 +24,12 @@ import me.ash.reader.data.article.ArticleDao
 import me.ash.reader.data.constant.Symbol
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.feed.FeedDao
+import me.ash.reader.data.feed.FeedWithArticle
 import me.ash.reader.data.source.ReaderDatabase
 import me.ash.reader.data.source.RssNetworkDataSource
 import net.dankito.readability4j.Readability4J
 import net.dankito.readability4j.extended.Readability4JExtended
 import okhttp3.*
-import org.xmlpull.v1.XmlPullParserFactory
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -46,6 +45,38 @@ class RssRepository @Inject constructor(
     private val rssNetworkDataSource: RssNetworkDataSource,
     private val workManager: WorkManager,
 ) {
+    @Throws(Exception::class)
+    suspend fun searchFeed(feedLink: String): FeedWithArticle {
+        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0
+        val parseRss = rssNetworkDataSource.parseRss(feedLink)
+        val feed = Feed(
+            name = parseRss.title!!,
+            url = feedLink,
+            groupId = 0,
+            accountId = accountId,
+        )
+        val articles = mutableListOf<Article>()
+        parseRss.items.forEach {
+            articles.add(
+                Article(
+                    accountId = accountId,
+                    feedId = feed.id ?: 0,
+                    date = Date(it.publishDate.toString()),
+                    title = it.title.toString(),
+                    author = it.author,
+                    rawDescription = it.description.toString(),
+                    shortDescription = (Readability4JExtended("", it.description.toString())
+                        .parse().textContent ?: "").trim().run {
+                        if (this.length > 100) this.substring(0, 100)
+                        else this
+                    },
+                    link = it.link ?: "",
+                )
+            )
+        }
+        return FeedWithArticle(feed, articles)
+    }
+
     fun parseDescriptionContent(link: String, content: String): String {
         val readability4J: Readability4J = Readability4JExtended(link, content)
         val article = readability4J.parse()
@@ -146,6 +177,10 @@ class RssRepository @Inject constructor(
                 val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)
                     ?: return
                 val feeds = feedDao.queryAll(accountId)
+                val feedNotificationMap = mutableMapOf<Int, Boolean>()
+                feeds.forEach { feed ->
+                    feedNotificationMap[feed.id ?: 0] = feed.isNotification
+                }
                 val preTime = System.currentTimeMillis()
                 val chunked = feeds.chunked(6)
                 chunked.forEachIndexed { index, item ->
@@ -199,34 +234,41 @@ class RssRepository @Inject constructor(
                             )
                         )
                     }
-                    it.reversed().forEach { articleList ->
+                    it.forEach { articleList ->
                         val ids = articleDao.insertList(articleList)
                         articleList.forEachIndexed { index, article ->
                             Log.i("RlOG", "combine ${article.feedId}: ${article.title}")
-                            val builder = NotificationCompat.Builder(
-                                context,
-                                Symbol.NOTIFICATION_CHANNEL_GROUP_ARTICLE_UPDATE
-                            )
-                                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                .setGroup(Symbol.NOTIFICATION_CHANNEL_GROUP_ARTICLE_UPDATE)
-                                .setContentTitle(article.title)
-                                .setContentText(article.shortDescription)
-                                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                                .setContentIntent(
-                                    PendingIntent.getActivity(
-                                        context,
-                                        ids[index].toInt(),
-                                        Intent(context, MainActivity::class.java).apply {
-                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                                                    Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                            putExtra(Symbol.EXTRA_ARTICLE_ID, ids[index].toInt())
-                                        },
-                                        PendingIntent.FLAG_UPDATE_CURRENT
+                            if (feedNotificationMap[article.feedId] == true) {
+                                val builder = NotificationCompat.Builder(
+                                    context,
+                                    Symbol.NOTIFICATION_CHANNEL_GROUP_ARTICLE_UPDATE
+                                ).setSmallIcon(R.drawable.ic_launcher_foreground)
+                                    .setGroup(Symbol.NOTIFICATION_CHANNEL_GROUP_ARTICLE_UPDATE)
+                                    .setContentTitle(article.title)
+                                    .setContentText(article.shortDescription)
+                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                    .setContentIntent(
+                                        PendingIntent.getActivity(
+                                            context,
+                                            ids[index].toInt(),
+                                            Intent(context, MainActivity::class.java).apply {
+                                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                                                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                                putExtra(
+                                                    Symbol.EXTRA_ARTICLE_ID,
+                                                    ids[index].toInt()
+                                                )
+                                            },
+                                            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                                        )
                                     )
+                                notificationManager.notify(
+                                    ids[index].toInt(),
+                                    builder.build().apply {
+                                        flags = Notification.FLAG_AUTO_CANCEL
+                                    }
                                 )
-                            notificationManager.notify(ids[index].toInt(), builder.build().apply {
-                                flags = Notification.FLAG_AUTO_CANCEL
-                            })
+                            }
                         }
                     }
                 }.buffer().onCompletion {
@@ -256,7 +298,6 @@ class RssRepository @Inject constructor(
             feed: Feed,
             latestTitle: String? = null,
         ): List<Article> {
-            ParseRSS.init(XmlPullParserFactory.newInstance())
             val a = mutableListOf<Article>()
             try {
                 val parseRss = rssNetworkDataSource.parseRss(feed.url)

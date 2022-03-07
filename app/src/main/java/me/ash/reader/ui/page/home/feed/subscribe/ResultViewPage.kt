@@ -1,7 +1,9 @@
 package me.ash.reader.ui.page.home.feed.subscribe
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Article
@@ -17,31 +19,56 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
+import me.ash.reader.data.group.Group
 import me.ash.reader.ui.widget.SelectionChip
 
 @Composable
-fun ResultViewPage() {
+fun ResultViewPage(
+    link: String = "",
+    groups: List<Group> = emptyList(),
+    selectedNotificationPreset: Boolean = false,
+    selectedFullContentParsePreset: Boolean = false,
+    selectedGroupId: Int = 0,
+    notificationPresetOnClick: () -> Unit = {},
+    fullContentParsePresetOnClick: () -> Unit = {},
+    groupOnClick: (groupId: Int) -> Unit = {},
+    onKeyboardAction: () -> Unit = {},
+) {
     Column {
-        Link()
+        Link(
+            text = link
+        )
         Spacer(modifier = Modifier.height(26.dp))
 
-        Preset()
+        Preset(
+            selectedNotificationPreset = selectedNotificationPreset,
+            selectedFullContentParsePreset = selectedFullContentParsePreset,
+            notificationPresetOnClick = notificationPresetOnClick,
+            fullContentParsePresetOnClick = fullContentParsePresetOnClick,
+        )
         Spacer(modifier = Modifier.height(26.dp))
 
-        AddToGroup()
+        AddToGroup(
+            groups = groups,
+            selectedGroupId = selectedGroupId,
+            groupOnClick = groupOnClick,
+            onKeyboardAction = onKeyboardAction,
+        )
         Spacer(modifier = Modifier.height(6.dp))
     }
 }
 
 @Composable
-private fun Link() {
+private fun Link(
+    text: String,
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
         SelectionContainer {
             Text(
-                text = "https://material.io/feed.xml",
+                text = text,
                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
             )
         }
@@ -49,7 +76,12 @@ private fun Link() {
 }
 
 @Composable
-private fun Preset() {
+private fun Preset(
+    selectedNotificationPreset: Boolean = false,
+    selectedFullContentParsePreset: Boolean = false,
+    notificationPresetOnClick: () -> Unit = {},
+    fullContentParsePresetOnClick: () -> Unit = {},
+) {
     Text(
         text = "预设",
         color = MaterialTheme.colorScheme.primary,
@@ -62,7 +94,7 @@ private fun Preset() {
         mainAxisSpacing = 10.dp,
     ) {
         SelectionChip(
-            selected = true,
+            selected = selectedNotificationPreset,
             selectedIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Notifications,
@@ -70,7 +102,7 @@ private fun Preset() {
                     modifier = Modifier.size(20.dp)
                 )
             },
-            onClick = { /*TODO*/ },
+            onClick = notificationPresetOnClick,
         ) {
             Text(
                 text = "接收通知",
@@ -79,7 +111,7 @@ private fun Preset() {
             )
         }
         SelectionChip(
-            selected = false,
+            selected = selectedFullContentParsePreset,
             selectedIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Article,
@@ -87,10 +119,10 @@ private fun Preset() {
                     modifier = Modifier.size(20.dp)
                 )
             },
-            onClick = { /*TODO*/ }
+            onClick = fullContentParsePresetOnClick,
         ) {
             Text(
-                text = "全文输出",
+                text = "全文解析",
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 14.sp,
             )
@@ -99,7 +131,12 @@ private fun Preset() {
 }
 
 @Composable
-private fun AddToGroup() {
+private fun AddToGroup(
+    groups: List<Group>,
+    selectedGroupId: Int,
+    groupOnClick: (groupId: Int) -> Unit = {},
+    onKeyboardAction: () -> Unit = {},
+) {
     Text(
         text = "添加到组",
         color = MaterialTheme.colorScheme.primary,
@@ -111,48 +148,22 @@ private fun AddToGroup() {
         crossAxisSpacing = 10.dp,
         mainAxisSpacing = 10.dp,
     ) {
+        groups.forEach {
+            SelectionChip(
+                modifier = Modifier.animateContentSize(),
+                selected = it.id == selectedGroupId,
+                onClick = { groupOnClick(it.id ?: 0) },
+            ) {
+                Text(
+                    text = it.name,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp,
+                )
+            }
+        }
+
         SelectionChip(
             selected = false,
-            onClick = { /*TODO*/ },
-        ) {
-            Text(
-                text = "未分组",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp,
-            )
-        }
-        SelectionChip(
-            selected = true,
-            onClick = { /*TODO*/ }
-        ) {
-            Text(
-                text = "技术",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp,
-            )
-        }
-        SelectionChip(
-            selected = true,
-            onClick = { /*TODO*/ }
-        ) {
-            Text(
-                text = "新鲜事",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp,
-            )
-        }
-        SelectionChip(
-            selected = false,
-            onClick = { /*TODO*/ }
-        ) {
-            Text(
-                text = "游戏",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp,
-            )
-        }
-        SelectionChip(
-            selected = true,
             onClick = { /*TODO*/ },
         ) {
             BasicTextField(
@@ -165,6 +176,11 @@ private fun AddToGroup() {
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                 ),
                 singleLine = true,
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        onKeyboardAction()
+                    }
+                )
             )
         }
     }

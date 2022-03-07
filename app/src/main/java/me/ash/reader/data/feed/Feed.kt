@@ -23,9 +23,11 @@ data class Feed(
     @ColumnInfo
     val url: String,
     @ColumnInfo(index = true)
-    var groupId: Int,
+    var groupId: Int? = null,
     @ColumnInfo(index = true)
     val accountId: Int,
+    @ColumnInfo(defaultValue = "false")
+    var isNotification: Boolean = false,
     @ColumnInfo(defaultValue = "false")
     var isFullContent: Boolean = false,
 ) {
@@ -47,6 +49,7 @@ data class Feed(
         if (url != other.url) return false
         if (groupId != other.groupId) return false
         if (accountId != other.accountId) return false
+        if (isNotification != other.isNotification) return false
         if (isFullContent != other.isFullContent) return false
         if (important != other.important) return false
 
@@ -58,8 +61,9 @@ data class Feed(
         result = 31 * result + name.hashCode()
         result = 31 * result + (icon?.contentHashCode() ?: 0)
         result = 31 * result + url.hashCode()
-        result = 31 * result + groupId
+        result = 31 * result + (groupId ?: 0)
         result = 31 * result + accountId
+        result = 31 * result + isNotification.hashCode()
         result = 31 * result + isFullContent.hashCode()
         result = 31 * result + (important ?: 0)
         return result

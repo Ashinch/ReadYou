@@ -1,6 +1,5 @@
 package me.ash.reader.ui.widget
 
-import androidx.compose.animation.*
 import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.Composable
 
@@ -14,11 +13,12 @@ fun Dialog(
     confirmButton: @Composable () -> Unit,
     dismissButton: @Composable (() -> Unit)? = null,
 ) {
-    AnimatedVisibility(
-        visible = visible,
-        enter = fadeIn() + expandVertically(),
-        exit = fadeOut() + shrinkVertically(),
-    ) {
+//    AnimatedVisibility(
+//        visible = visible,
+//        enter = fadeIn() + expandVertically(),
+//        exit = fadeOut() + shrinkVertically(),
+//    ) {
+    if (visible) {
         AlertDialog(
             onDismissRequest = onDismissRequest,
             icon = icon,

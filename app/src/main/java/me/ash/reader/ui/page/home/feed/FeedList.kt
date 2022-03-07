@@ -1,7 +1,6 @@
 package me.ash.reader.ui.page.home.feed
 
 import android.graphics.BitmapFactory
-import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -24,7 +23,6 @@ fun ColumnScope.FeedList(
     ) {
         Column(modifier = Modifier.animateContentSize()) {
             feeds.forEach { feed ->
-                Log.i("RLog", "FeedList: ${feed.icon}")
                 FeedBar(
                     barButtonType = ItemType(
 //                        icon = feed.icon ?: "",

@@ -23,6 +23,8 @@ import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feed.subscribe.SubscribeDialog
+import me.ash.reader.ui.page.home.feed.subscribe.SubscribeViewAction
+import me.ash.reader.ui.page.home.feed.subscribe.SubscribeViewModel
 import me.ash.reader.ui.widget.TopTitleBox
 
 @Composable
@@ -31,6 +33,7 @@ fun FeedPage(
     modifier: Modifier = Modifier,
     viewModel: FeedViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel = hiltViewModel(),
+    subscribeViewModel: SubscribeViewModel = hiltViewModel(),
     filter: Filter,
     groupAndFeedOnClick: (currentGroup: Group?, currentFeed: Feed?) -> Unit = { _, _ -> },
 ) {
@@ -59,21 +62,6 @@ fun FeedPage(
         modifier = modifier.fillMaxSize()
     ) {
         SubscribeDialog(
-            visible = viewState.subscribeDialogVisible,
-            hiddenFunction = {
-                viewModel.dispatch(FeedViewAction.ChangeSubscribeDialogVisible(false))
-            },
-            inputContent = viewState.subscribeDialogFeedLink,
-            onValueChange = {
-                viewModel.dispatch(
-                    FeedViewAction.InputSubscribeFeedLink(it)
-                )
-            },
-            onKeyboardAction = {
-                viewModel.dispatch(
-                    FeedViewAction.ChangeSubscribeDialogVisible(false)
-                )
-            },
             openInputStreamCallback = {
                 viewModel.dispatch(FeedViewAction.AddFromFile(it))
             },
@@ -102,7 +90,7 @@ fun FeedPage(
                     homeViewModel.dispatch(HomeViewAction.Sync())
                 },
                 subscribeOnClick = {
-                    viewModel.dispatch(FeedViewAction.ChangeSubscribeDialogVisible(true))
+                    subscribeViewModel.dispatch(SubscribeViewAction.Show)
                 },
             )
             LazyColumn(

@@ -16,6 +16,7 @@ import me.ash.reader.data.constant.Filter
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.group.Group
 import me.ash.reader.data.repository.RssRepository
+import me.ash.reader.ui.extension.animateScrollToPage
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagerApi::class)
@@ -62,10 +63,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun scrollToPage(scope: CoroutineScope, targetPage: Int, callback: () -> Unit = {}) {
-        scope.launch {
-            _viewState.value.pagerState.animateScrollToPage(targetPage)
-            callback()
-        }
+        _viewState.value.pagerState.animateScrollToPage(scope, targetPage, callback)
     }
 }
 
@@ -76,7 +74,7 @@ data class FilterState(
 )
 
 @OptIn(ExperimentalPagerApi::class)
-data class HomeViewState constructor(
+data class HomeViewState(
     val pagerState: PagerState = PagerState(1),
 )
 
