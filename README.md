@@ -9,7 +9,7 @@
 以下是目前取得的进展和近期将要努力的目标：
 
 -   [x] 本地
-
+    -   [x] [Figma 文件](https://www.figma.com/file/ViBW8GbUgkTMmK6a80h8X1/Reader-You?node-id=7028%3A23673)
     -   [x] 订阅 Feed 链接
     -   [x] 导入 OPML 文件
     -   [x] 文章同步
