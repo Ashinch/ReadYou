@@ -31,7 +31,7 @@ class FeedViewModel @Inject constructor(
             is FeedViewAction.FetchData -> fetchData(action.isStarred, action.isUnread)
             is FeedViewAction.AddFromFile -> addFromFile(action.inputStream)
             is FeedViewAction.ChangeFeedVisible -> changeFeedVisible(action.index)
-            is FeedViewAction.ChangeGroupVisible -> changeGroupVisible(action.visible)
+            is FeedViewAction.ChangeGroupVisible -> changeGroupVisible()
             is FeedViewAction.ScrollToItem -> scrollToItem(action.index)
         }
     }
@@ -121,10 +121,10 @@ class FeedViewModel @Inject constructor(
         }
     }
 
-    private fun changeGroupVisible(visible: Boolean) {
+    private fun changeGroupVisible() {
         _viewState.update {
             it.copy(
-                groupsVisible = visible
+                groupsVisible = !_viewState.value.groupsVisible
             )
         }
     }
@@ -163,9 +163,7 @@ sealed class FeedViewAction {
         val index: Int
     ) : FeedViewAction()
 
-    data class ChangeGroupVisible(
-        val visible: Boolean
-    ) : FeedViewAction()
+    object ChangeGroupVisible : FeedViewAction()
 
     data class ScrollToItem(
         val index: Int

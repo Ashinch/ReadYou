@@ -99,25 +99,27 @@ fun FeedPage(
             ) {
                 item {
                     Spacer(modifier = Modifier.height(114.dp))
-                    FeedBar(
-                        barButtonType = ButtonType(
-                            content = filter.title,
-                            important = viewState.filterImportant
-                        )
-                    ) {
-                        groupAndFeedOnClick(null, null)
-                    }
+                    ButtonBar(
+                        buttonBarType = ButtonBarType.FilterBar(
+                            title = filter.title,
+                            important = viewState.filterImportant,
+                        ),
+                        onClick = {
+                            groupAndFeedOnClick(null, null)
+                        }
+                    )
                 }
                 item {
                     Spacer(modifier = Modifier.height(10.dp))
-                    FeedBar(
-                        barButtonType = FirstExpandType(
-                            content = "Feeds",
+                    ButtonBar(
+                        buttonBarType = ButtonBarType.AllBar(
+                            title = "Feeds",
                             icon = Icons.Rounded.ExpandMore
-                        )
-                    ) {
-                        viewModel.dispatch(FeedViewAction.ChangeGroupVisible(!viewState.groupsVisible))
-                    }
+                        ),
+                        onClick = {
+                            viewModel.dispatch(FeedViewAction.ChangeGroupVisible)
+                        }
+                    )
                 }
                 itemsIndexed(viewState.groupWithFeedList) { index, groupWithFeed ->
                     GroupList(

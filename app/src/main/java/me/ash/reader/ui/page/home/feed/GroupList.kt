@@ -18,7 +18,7 @@ fun ColumnScope.GroupList(
     feedVisible: Boolean,
     groupWithFeed: GroupWithFeed,
     groupAndFeedOnClick: (currentGroup: Group?, currentFeed: Feed?) -> Unit = { _, _ -> },
-    expandOnClick: () -> Unit
+    expandOnClick: () -> Unit,
 ) {
     AnimatedVisibility(
         visible = groupVisible,
@@ -26,16 +26,17 @@ fun ColumnScope.GroupList(
         exit = fadeOut() + shrinkVertically(),
     ) {
         Column(modifier = modifier) {
-            FeedBar(
-                barButtonType = SecondExpandType(
-                    content = groupWithFeed.group.name,
+            ButtonBar(
+                buttonBarType = ButtonBarType.GroupBar(
+                    title = groupWithFeed.group.name,
                     icon = Icons.Rounded.ExpandMore,
                     important = groupWithFeed.group.important ?: 0,
+                    iconOnClick = expandOnClick,
                 ),
-                iconOnClickListener = expandOnClick
-            ) {
-                groupAndFeedOnClick(groupWithFeed.group, null)
-            }
+                onClick = {
+                    groupAndFeedOnClick(groupWithFeed.group, null)
+                }
+            )
             FeedList(
                 visible = feedVisible,
                 feeds = groupWithFeed.feeds,

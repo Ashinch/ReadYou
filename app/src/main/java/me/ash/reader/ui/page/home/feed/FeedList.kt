@@ -23,9 +23,10 @@ fun ColumnScope.FeedList(
     ) {
         Column(modifier = Modifier.animateContentSize()) {
             feeds.forEach { feed ->
-                FeedBar(
-                    barButtonType = ItemType(
-//                        icon = feed.icon ?: "",
+                ButtonBar(
+                    buttonBarType = ButtonBarType.FeedBar(
+                        title = feed.name,
+                        important = feed.important ?: 0,
                         icon = if (feed.icon == null) {
                             null
                         } else {
@@ -37,12 +38,11 @@ fun ColumnScope.FeedList(
                                 ).asImageBitmap()
                             )
                         },
-                        content = feed.name,
-                        important = feed.important ?: 0
-                    )
-                ) {
-                    onClick(feed)
-                }
+                    ),
+                    onClick = {
+                        onClick(feed)
+                    },
+                )
             }
         }
     }

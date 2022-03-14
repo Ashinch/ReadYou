@@ -40,7 +40,7 @@ fun ReadPageTopBar(
                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             }) {
                 Icon(
-                    modifier = Modifier.size(20.dp),
+//                    modifier = Modifier.size(20.dp),
                     imageVector = Icons.Rounded.Share,
                     contentDescription = "Share",
                     tint = MaterialTheme.colorScheme.primary,
@@ -50,7 +50,7 @@ fun ReadPageTopBar(
                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             }) {
                 Icon(
-                    modifier = Modifier.size(28.dp),
+//                    modifier = Modifier.size(28.dp),
                     imageVector = Icons.Rounded.MoreHoriz,
                     contentDescription = "More",
                     tint = MaterialTheme.colorScheme.primary,
