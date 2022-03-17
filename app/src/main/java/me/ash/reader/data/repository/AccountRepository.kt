@@ -24,12 +24,12 @@ class AccountRepository @Inject constructor(
         return accountDao.queryAll().isEmpty()
     }
 
-    suspend fun addDefaultAccount(): Int {
-        return accountDao.insert(
-            Account(
-                name = "Feeds",
-                type = Account.Type.LOCAL,
-            )
-        ).toInt()
+    suspend fun addDefaultAccount(): Account {
+        return Account(
+            name = "Reader You",
+            type = Account.Type.LOCAL,
+        ).apply {
+            id = accountDao.insert(this).toInt()
+        }
     }
 }

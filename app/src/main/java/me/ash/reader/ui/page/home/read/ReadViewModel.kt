@@ -10,14 +10,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.ash.reader.data.article.ArticleWithFeed
-import me.ash.reader.data.repository.ArticleRepository
+import me.ash.reader.data.repository.RssHelper
 import me.ash.reader.data.repository.RssRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class ReadViewModel @Inject constructor(
-    val articleRepository: ArticleRepository,
-    private val rssRepository: RssRepository,
+    val rssRepository: RssRepository,
+    private val rssHelper: RssHelper,
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(ReadViewState())
     val viewState: StateFlow<ReadViewState> = _viewState.asStateFlow()
@@ -44,7 +44,7 @@ class ReadViewModel @Inject constructor(
     private fun renderDescriptionContent() {
         _viewState.update {
             it.copy(
-                content = rssRepository.parseDescriptionContent(
+                content = rssHelper.parseDescriptionContent(
                     link = it.articleWithFeed?.article?.link ?: "",
                     content = it.articleWithFeed?.article?.rawDescription ?: "",
                 )
@@ -54,7 +54,7 @@ class ReadViewModel @Inject constructor(
 
     private fun renderFullContent() {
         changeLoading(true)
-        rssRepository.parseFullContent(
+        rssHelper.parseFullContent(
             _viewState.value.articleWithFeed?.article?.link ?: "",
             _viewState.value.articleWithFeed?.article?.title ?: ""
         ) { content ->
@@ -76,7 +76,7 @@ class ReadViewModel @Inject constructor(
                 )
             }
             viewModelScope.launch {
-                articleRepository.updateArticleInfo(
+                rssRepository.get().updateArticleInfo(
                     it.article.copy(
                         isUnread = isUnread
                     )
@@ -97,7 +97,7 @@ class ReadViewModel @Inject constructor(
                 )
             }
             viewModelScope.launch {
-                articleRepository.updateArticleInfo(
+                rssRepository.get().updateArticleInfo(
                     it.article.copy(
                         isStarred = isStarred
                     )

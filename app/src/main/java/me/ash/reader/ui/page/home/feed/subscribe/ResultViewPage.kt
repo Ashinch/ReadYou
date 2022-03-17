@@ -28,10 +28,10 @@ fun ResultViewPage(
     groups: List<Group> = emptyList(),
     selectedNotificationPreset: Boolean = false,
     selectedFullContentParsePreset: Boolean = false,
-    selectedGroupId: Int = 0,
+    selectedGroupId: String = "",
     notificationPresetOnClick: () -> Unit = {},
     fullContentParsePresetOnClick: () -> Unit = {},
-    groupOnClick: (groupId: Int) -> Unit = {},
+    groupOnClick: (groupId: String) -> Unit = {},
     onKeyboardAction: () -> Unit = {},
 ) {
     Column {
@@ -133,8 +133,8 @@ private fun Preset(
 @Composable
 private fun AddToGroup(
     groups: List<Group>,
-    selectedGroupId: Int,
-    groupOnClick: (groupId: Int) -> Unit = {},
+    selectedGroupId: String,
+    groupOnClick: (groupId: String) -> Unit = {},
     onKeyboardAction: () -> Unit = {},
 ) {
     Text(
@@ -152,7 +152,7 @@ private fun AddToGroup(
             SelectionChip(
                 modifier = Modifier.animateContentSize(),
                 selected = it.id == selectedGroupId,
-                onClick = { groupOnClick(it.id ?: 0) },
+                onClick = { groupOnClick(it.id) },
             ) {
                 Text(
                     text = it.name,

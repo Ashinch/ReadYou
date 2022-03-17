@@ -14,8 +14,8 @@ import me.ash.reader.data.group.Group
     )],
 )
 data class Feed(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
+    @PrimaryKey
+    val id: String,
     @ColumnInfo
     val name: String,
     @ColumnInfo
@@ -23,7 +23,7 @@ data class Feed(
     @ColumnInfo
     val url: String,
     @ColumnInfo(index = true)
-    var groupId: Int? = null,
+    var groupId: String,
     @ColumnInfo(index = true)
     val accountId: Int,
     @ColumnInfo(defaultValue = "false")
@@ -33,7 +33,6 @@ data class Feed(
 ) {
     @Ignore
     var important: Int? = 0
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -57,11 +56,11 @@ data class Feed(
     }
 
     override fun hashCode(): Int {
-        var result = id ?: 0
+        var result = id.hashCode()
         result = 31 * result + name.hashCode()
         result = 31 * result + (icon?.contentHashCode() ?: 0)
         result = 31 * result + url.hashCode()
-        result = 31 * result + (groupId ?: 0)
+        result = 31 * result + groupId.hashCode()
         result = 31 * result + accountId
         result = 31 * result + isNotification.hashCode()
         result = 31 * result + isFullContent.hashCode()

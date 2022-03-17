@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.InputStream
+import java.util.*
 import javax.inject.Inject
 
 class OpmlLocalDataSource @Inject constructor(
@@ -42,9 +43,10 @@ class OpmlLocalDataSource @Inject constructor(
                     Log.i("RLog", "rss: ${title} , ${xmlUrl}")
                     groupWithFeedList.last().feeds.add(
                         Feed(
+                            id = UUID.randomUUID().toString(),
                             name = title,
                             url = xmlUrl,
-                            groupId = 0,
+                            groupId = UUID.randomUUID().toString(),
                             accountId = accountId,
                         )
                     )
@@ -54,6 +56,7 @@ class OpmlLocalDataSource @Inject constructor(
                     groupWithFeedList.add(
                         GroupWithFeed(
                             group = Group(
+                                id = UUID.randomUUID().toString(),
                                 name = title,
                                 accountId = accountId,
                             ),

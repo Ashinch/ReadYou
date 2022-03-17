@@ -167,7 +167,7 @@ interface ArticleDao {
     )
     fun queryArticleWithFeedByGroupIdWhenIsAll(
         accountId: Int,
-        groupId: Int
+        groupId: String,
     ): PagingSource<Int, ArticleWithFeed>
 
     @Transaction
@@ -188,7 +188,7 @@ interface ArticleDao {
     )
     fun queryArticleWithFeedByGroupIdWhenIsStarred(
         accountId: Int,
-        groupId: Int,
+        groupId: String,
         isStarred: Boolean,
     ): PagingSource<Int, ArticleWithFeed>
 
@@ -210,7 +210,7 @@ interface ArticleDao {
     )
     fun queryArticleWithFeedByGroupIdWhenIsUnread(
         accountId: Int,
-        groupId: Int,
+        groupId: String,
         isUnread: Boolean,
     ): PagingSource<Int, ArticleWithFeed>
 
@@ -224,7 +224,7 @@ interface ArticleDao {
     )
     fun queryArticleWithFeedByFeedIdWhenIsAll(
         accountId: Int,
-        feedId: Int
+        feedId: String
     ): PagingSource<Int, ArticleWithFeed>
 
     @Transaction
@@ -238,7 +238,7 @@ interface ArticleDao {
     )
     fun queryArticleWithFeedByFeedIdWhenIsStarred(
         accountId: Int,
-        feedId: Int,
+        feedId: String,
         isStarred: Boolean,
     ): PagingSource<Int, ArticleWithFeed>
 
@@ -253,7 +253,7 @@ interface ArticleDao {
     )
     fun queryArticleWithFeedByFeedIdWhenIsUnread(
         accountId: Int,
-        feedId: Int,
+        feedId: String,
         isUnread: Boolean,
     ): PagingSource<Int, ArticleWithFeed>
 
@@ -270,7 +270,7 @@ interface ArticleDao {
         ORDER BY date DESC LIMIT 1
         """
     )
-    suspend fun queryLatestByFeedId(accountId: Int, feedId: Int): Article?
+    suspend fun queryLatestByFeedId(accountId: Int, feedId: String): Article?
 
     @Transaction
     @Query(

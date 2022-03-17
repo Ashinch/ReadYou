@@ -13,7 +13,7 @@ import me.ash.reader.data.article.Article
 import me.ash.reader.data.constant.Symbol
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.group.Group
-import me.ash.reader.data.repository.ArticleRepository
+import me.ash.reader.data.repository.RssHelper
 import me.ash.reader.data.repository.RssRepository
 import me.ash.reader.formatUrl
 import me.ash.reader.ui.extension.animateScrollToPage
@@ -22,8 +22,8 @@ import javax.inject.Inject
 @OptIn(ExperimentalPagerApi::class)
 @HiltViewModel
 class SubscribeViewModel @Inject constructor(
-    private val articleRepository: ArticleRepository,
     private val rssRepository: RssRepository,
+    private val rssHelper: RssHelper,
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(SubScribeViewState())
     val viewState: StateFlow<SubScribeViewState> = _viewState.asStateFlow()
@@ -48,7 +48,7 @@ class SubscribeViewModel @Inject constructor(
     private fun init() {
         _viewState.update {
             it.copy(
-                groups = articleRepository.pullGroups()
+                groups = rssRepository.get().pullGroups()
             )
         }
     }
@@ -64,7 +64,7 @@ class SubscribeViewModel @Inject constructor(
                 articles = emptyList(),
                 notificationPreset = false,
                 fullContentParsePreset = false,
-                selectedGroupId = null,
+                selectedGroupId = "",
                 groups = emptyFlow(),
             )
         }
@@ -73,9 +73,9 @@ class SubscribeViewModel @Inject constructor(
     private fun subscribe() {
         val feed = _viewState.value.feed ?: return
         val articles = _viewState.value.articles
-        val groupId = _viewState.value.selectedGroupId ?: 0
+        val groupId = _viewState.value.selectedGroupId
         viewModelScope.launch(Dispatchers.IO) {
-            articleRepository.subscribe(
+            rssRepository.get().subscribe(
                 feed.copy(
                     groupId = groupId,
                     isNotification = _viewState.value.notificationPreset,
@@ -86,7 +86,7 @@ class SubscribeViewModel @Inject constructor(
         }
     }
 
-    private fun selectedGroup(groupId: Int? = null) {
+    private fun selectedGroup(groupId: String) {
         _viewState.update {
             it.copy(
                 selectedGroupId = groupId,
@@ -127,7 +127,7 @@ class SubscribeViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val feedWithArticle = rssRepository.searchFeed(_viewState.value.inputContent)
+                val feedWithArticle = rssHelper.searchFeed(_viewState.value.inputContent)
                 _viewState.update {
                     it.copy(
                         feed = feedWithArticle.feed,
@@ -174,7 +174,7 @@ data class SubScribeViewState(
     val articles: List<Article> = emptyList(),
     val notificationPreset: Boolean = false,
     val fullContentParsePreset: Boolean = false,
-    val selectedGroupId: Int? = null,
+    val selectedGroupId: String = "",
     val groups: Flow<List<Group>> = emptyFlow(),
     val pagerState: PagerState = PagerState(),
 )
@@ -198,7 +198,7 @@ sealed class SubscribeViewAction {
     object ChangeFullContentParsePreset : SubscribeViewAction()
 
     data class SelectedGroup(
-        val groupId: Int? = null
+        val groupId: String
     ) : SubscribeViewAction()
 
     object Subscribe : SubscribeViewAction()

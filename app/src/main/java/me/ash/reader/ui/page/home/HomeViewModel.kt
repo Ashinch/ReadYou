@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
     private val _filterState = MutableStateFlow(FilterState())
     val filterState = _filterState.asStateFlow()
 
-    val syncState = RssRepository.syncState
+    val syncState = rssRepository.get().syncState
 
     fun dispatch(action: HomeViewAction) {
         when (action) {
@@ -47,7 +47,7 @@ class HomeViewModel @Inject constructor(
 
     private fun sync(callback: () -> Unit = {}) {
         viewModelScope.launch(Dispatchers.IO) {
-            rssRepository.sync()
+            rssRepository.get().doSync()
             callback()
         }
     }

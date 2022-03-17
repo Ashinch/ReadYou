@@ -16,8 +16,8 @@ class OpmlRepository @Inject constructor(
         try {
             val groupWithFeedList = opmlLocalDataSource.parseFileInputStream(inputStream)
             groupWithFeedList.forEach { groupWithFeed ->
-                val id = groupDao.insert(groupWithFeed.group).toInt()
-                groupWithFeed.feeds.forEach { it.groupId = id }
+                groupDao.insert(groupWithFeed.group)
+                groupWithFeed.feeds.forEach { it.groupId = groupWithFeed.group.id }
                 feedDao.insertList(groupWithFeed.feeds)
             }
         } catch (e: Exception) {

@@ -46,4 +46,9 @@ sealed class DataStoreKeys<T> {
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("currentAccountId")
     }
+
+    object CurrentAccountType : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("currentAccountType")
+    }
 }

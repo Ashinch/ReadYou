@@ -11,15 +11,15 @@ import kotlinx.coroutines.launch
 import me.ash.reader.data.account.Account
 import me.ash.reader.data.group.GroupWithFeed
 import me.ash.reader.data.repository.AccountRepository
-import me.ash.reader.data.repository.ArticleRepository
 import me.ash.reader.data.repository.OpmlRepository
+import me.ash.reader.data.repository.RssRepository
 import java.io.InputStream
 import javax.inject.Inject
 
 @HiltViewModel
 class FeedViewModel @Inject constructor(
     private val accountRepository: AccountRepository,
-    private val articleRepository: ArticleRepository,
+    private val rssRepository: RssRepository,
     private val opmlRepository: OpmlRepository,
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(FeedViewState())
@@ -62,11 +62,11 @@ class FeedViewModel @Inject constructor(
 
     private suspend fun pullFeeds(isStarred: Boolean, isUnread: Boolean) {
         combine(
-            articleRepository.pullFeeds(),
-            articleRepository.pullImportant(isStarred, isUnread),
+            rssRepository.get().pullFeeds(),
+            rssRepository.get().pullImportant(isStarred, isUnread),
         ) { groupWithFeedList, importantList ->
-            val groupImportantMap = mutableMapOf<Int, Int>()
-            val feedImportantMap = mutableMapOf<Int, Int>()
+            val groupImportantMap = mutableMapOf<String, Int>()
+            val feedImportantMap = mutableMapOf<String, Int>()
             importantList.groupBy { it.groupId }.forEach { (i, list) ->
                 var groupImportantSum = 0
                 list.forEach {

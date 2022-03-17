@@ -18,8 +18,8 @@ import java.util.*
     )]
 )
 data class Article(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
+    @PrimaryKey
+    val id: String,
     @ColumnInfo
     val date: Date,
     @ColumnInfo
@@ -35,7 +35,7 @@ data class Article(
     @ColumnInfo
     val link: String,
     @ColumnInfo(index = true)
-    val feedId: Int,
+    val feedId: String,
     @ColumnInfo(index = true)
     val accountId: Int,
     @ColumnInfo(defaultValue = "true")

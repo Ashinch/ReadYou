@@ -12,13 +12,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.data.article.ArticleWithFeed
-import me.ash.reader.data.repository.ArticleRepository
 import me.ash.reader.data.repository.RssRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class ArticleViewModel @Inject constructor(
-    private val articleRepository: ArticleRepository,
     private val rssRepository: RssRepository,
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(ArticleViewState())
@@ -41,19 +39,19 @@ class ArticleViewModel @Inject constructor(
     private fun peekSyncWork() {
         _viewState.update {
             it.copy(
-                syncWorkInfo = rssRepository.peekWork()
+                syncWorkInfo = rssRepository.get().peekWork()
             )
         }
     }
 
     private fun fetchData(
-        groupId: Int? = null,
-        feedId: Int? = null,
+        groupId: String? = null,
+        feedId: String? = null,
         isStarred: Boolean,
         isUnread: Boolean,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            articleRepository.pullImportant(isStarred, true)
+            rssRepository.get().pullImportant(isStarred, true)
                 .collect { importantList ->
                     _viewState.update {
                         it.copy(
@@ -65,7 +63,7 @@ class ArticleViewModel @Inject constructor(
         _viewState.update {
             it.copy(
                 pagingData = Pager(PagingConfig(pageSize = 10)) {
-                    articleRepository.pullArticles(
+                    rssRepository.get().pullArticles(
                         groupId = groupId,
                         feedId = feedId,
                         isStarred = isStarred,
@@ -99,8 +97,8 @@ data class ArticleViewState(
 
 sealed class ArticleViewAction {
     data class FetchData(
-        val groupId: Int? = null,
-        val feedId: Int? = null,
+        val groupId: String? = null,
+        val feedId: String? = null,
         val isStarred: Boolean,
         val isUnread: Boolean,
     ) : ArticleViewAction()

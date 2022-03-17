@@ -8,7 +8,7 @@ import java.util.*
 @Entity(tableName = "account")
 data class Account(
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
+    var id: Int? = null,
     @ColumnInfo
     var name: String,
     @ColumnInfo
@@ -18,6 +18,7 @@ data class Account(
 ) {
     object Type {
         const val LOCAL = 1
-        const val FRESH_RSS = 2
+        const val FEVER = 2
+        const val GOOGLE_READER = 3
     }
 }

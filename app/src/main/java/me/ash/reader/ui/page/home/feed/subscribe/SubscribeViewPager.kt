@@ -21,11 +21,11 @@ fun SubscribeViewPager(
     groups: List<Group> = emptyList(),
     selectedNotificationPreset: Boolean = false,
     selectedFullContentParsePreset: Boolean = false,
-    selectedGroupId: Int = 0,
+    selectedGroupId: String = "",
     pagerState: PagerState = com.google.accompanist.pager.rememberPagerState(),
     notificationPresetOnClick: () -> Unit = {},
     fullContentParsePresetOnClick: () -> Unit = {},
-    groupOnClick: (groupId: Int) -> Unit = {},
+    groupOnClick: (groupId: String) -> Unit = {},
     onResultKeyboardAction: () -> Unit = {},
 ) {
     ViewPager(

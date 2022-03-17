@@ -82,7 +82,7 @@ fun SubscribeDialog(
                 groups = groupsState.value,
                 selectedNotificationPreset = viewState.notificationPreset,
                 selectedFullContentParsePreset = viewState.fullContentParsePreset,
-                selectedGroupId = viewState.selectedGroupId ?: 0,
+                selectedGroupId = viewState.selectedGroupId,
                 pagerState = viewState.pagerState,
                 notificationPresetOnClick = {
                     viewModel.dispatch(SubscribeViewAction.ChangeNotificationPreset)
