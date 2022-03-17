@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
     private val _filterState = MutableStateFlow(FilterState())
     val filterState = _filterState.asStateFlow()
 
-    val syncState = rssRepository.get().syncState
+    val syncState = rssRepository.get().getSyncState()
 
     fun dispatch(action: HomeViewAction) {
         when (action) {

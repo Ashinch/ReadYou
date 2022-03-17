@@ -46,10 +46,7 @@ class RssHelper @Inject constructor(
                     author = it.author,
                     rawDescription = it.description.toString(),
                     shortDescription = (Readability4JExtended("", it.description.toString())
-                        .parse().textContent ?: "").trim().run {
-                        if (this.length > 100) this.substring(0, 100)
-                        else this
-                    },
+                        .parse().textContent ?: "").take(100).trim(),
                     link = it.link ?: "",
                 )
             )
@@ -112,10 +109,7 @@ class RssHelper @Inject constructor(
                         author = it.author,
                         rawDescription = it.description.toString(),
                         shortDescription = (Readability4JExtended("", it.description.toString())
-                            .parse().textContent ?: "").trim().run {
-                            if (this.length > 100) this.substring(0, 100)
-                            else this
-                        },
+                            .parse().textContent ?: "").take(100).trim(),
                         link = it.link ?: "",
                     )
                 )

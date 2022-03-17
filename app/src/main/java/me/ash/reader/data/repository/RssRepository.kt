@@ -12,13 +12,13 @@ class RssRepository @Inject constructor(
     @ApplicationContext
     private val context: Context,
     private val localRssRepository: LocalRssRepository,
-//    private val feverRssRepository: FeverRssRepository,
+    private val feverRssRepository: FeverRssRepository,
 //    private val googleReaderRssRepository: GoogleReaderRssRepository,
 ) {
     fun get() = when (getAccountType()) {
-//        Account.Type.LOCAL -> localRssRepository
         Account.Type.LOCAL -> localRssRepository
-//        Account.Type.FEVER -> feverRssRepository
+//        Account.Type.LOCAL -> feverRssRepository
+        Account.Type.FEVER -> feverRssRepository
 //        Account.Type.GOOGLE_READER -> googleReaderRssRepository
         else -> throw IllegalStateException("Unknown account type: ${getAccountType()}")
     }

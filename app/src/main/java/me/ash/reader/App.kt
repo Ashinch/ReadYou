@@ -33,6 +33,9 @@ class App : Application() {
     lateinit var localRssRepository: LocalRssRepository
 
     @Inject
+    lateinit var feverRssRepository: FeverRssRepository
+
+    @Inject
     lateinit var opmlRepository: OpmlRepository
 
     @Inject

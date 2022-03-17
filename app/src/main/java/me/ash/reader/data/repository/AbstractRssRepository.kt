@@ -6,6 +6,7 @@ import androidx.paging.PagingSource
 import androidx.work.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import me.ash.reader.DataStoreKeys
 import me.ash.reader.data.account.AccountDao
 import me.ash.reader.data.article.Article
@@ -41,6 +42,8 @@ abstract class AbstractRssRepository constructor(
         val isSyncing: Boolean = feedCount != 0 || syncedCount != 0 || currentFeedName != ""
         val isNotSyncing: Boolean = !isSyncing
     }
+
+    abstract fun getSyncState(): StateFlow<SyncState>
 
     abstract suspend fun updateArticleInfo(article: Article)
 

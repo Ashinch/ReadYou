@@ -41,8 +41,10 @@ class LocalRssRepository @Inject constructor(
     context, accountDao, articleDao, groupDao,
     feedDao, rssNetworkDataSource, workManager,
 ) {
-    val syncState = MutableStateFlow(SyncState())
     private val mutex = Mutex()
+    private val syncState = MutableStateFlow(SyncState())
+
+    override fun getSyncState() = syncState
 
     override suspend fun updateArticleInfo(article: Article) {
         articleDao.update(article)
