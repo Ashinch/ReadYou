@@ -11,15 +11,15 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun Subtitle(
-    text: String,
     modifier: Modifier = Modifier,
+    text: String,
     color: Color = MaterialTheme.colorScheme.primary,
 ) {
     Text(
         text = text,
         modifier = modifier
             .fillMaxWidth()
-            .padding(24.dp, 8.dp, 16.dp, 8.dp),
+            .padding(vertical = 8.dp),
         color = color,
         style = MaterialTheme.typography.labelLarge
     )

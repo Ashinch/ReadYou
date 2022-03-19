@@ -12,6 +12,15 @@ interface FeedDao {
     )
     suspend fun queryAll(accountId: Int): List<Feed>
 
+    @Query(
+        """
+        SELECT * FROM feed
+        WHERE accountId = :accountId
+        and url = :url
+        """
+    )
+    fun queryByLink(accountId: Int, url: String): List<Feed>
+
     @Insert
     suspend fun insert(feed: Feed): Long
 

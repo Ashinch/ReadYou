@@ -8,29 +8,33 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 class Filter(
     var index: Int,
-    var title: String,
+    var name: String,
     var description: String,
     var important: Int,
     var icon: ImageVector,
 ) {
+    fun isStarred(): Boolean = this == Starred
+    fun isUnread(): Boolean = this == Unread
+    fun isAll(): Boolean = this == All
+
     companion object {
         val Starred = Filter(
             index = 0,
-            title = "Starred",
+            name = "Starred",
             description = " Starred Items",
             important = 13,
             icon = Icons.Rounded.StarOutline,
         )
         val Unread = Filter(
             index = 1,
-            title = "Unread",
+            name = "Unread",
             description = " Unread Items",
             important = 666,
             icon = Icons.Outlined.FiberManualRecord,
         )
         val All = Filter(
             index = 2,
-            title = "All",
+            name = "All",
             description = " Unread Items",
             important = 666,
             icon = Icons.Rounded.Subject,

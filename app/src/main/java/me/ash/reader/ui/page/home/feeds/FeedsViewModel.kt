@@ -14,6 +14,7 @@ import me.ash.reader.data.group.GroupWithFeed
 import me.ash.reader.data.repository.AccountRepository
 import me.ash.reader.data.repository.OpmlRepository
 import me.ash.reader.data.repository.RssRepository
+import me.ash.reader.ui.page.home.FilterState
 import java.io.InputStream
 import javax.inject.Inject
 
@@ -29,7 +30,7 @@ class FeedsViewModel @Inject constructor(
     fun dispatch(action: FeedsViewAction) {
         when (action) {
             is FeedsViewAction.FetchAccount -> fetchAccount(action.callback)
-            is FeedsViewAction.FetchData -> fetchData(action.isStarred, action.isUnread)
+            is FeedsViewAction.FetchData -> fetchData(action.filterState)
             is FeedsViewAction.AddFromFile -> addFromFile(action.inputStream)
             is FeedsViewAction.ScrollToItem -> scrollToItem(action.index)
         }
@@ -53,9 +54,12 @@ class FeedsViewModel @Inject constructor(
         }
     }
 
-    private fun fetchData(isStarred: Boolean, isUnread: Boolean) {
+    private fun fetchData(filterState: FilterState) {
         viewModelScope.launch(Dispatchers.IO) {
-            pullFeeds(isStarred, isUnread)
+            pullFeeds(
+                isStarred = filterState.filter.isStarred(),
+                isUnread = filterState.filter.isUnread(),
+            )
             _viewState
         }
     }
@@ -135,8 +139,7 @@ data class FeedsViewState(
 
 sealed class FeedsViewAction {
     data class FetchData(
-        val isStarred: Boolean,
-        val isUnread: Boolean,
+        val filterState: FilterState,
     ) : FeedsViewAction()
 
     data class FetchAccount(

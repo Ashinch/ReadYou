@@ -22,8 +22,8 @@ fun Banner(
     title: String,
     desc: String? = null,
     icon: ImageVector? = null,
+    action: (@Composable () -> Unit)? = null,
     onClick: () -> Unit = {},
-    action: (@Composable () -> Unit)? = null
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),

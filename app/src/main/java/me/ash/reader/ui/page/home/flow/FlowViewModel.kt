@@ -1,4 +1,4 @@
-package me.ash.reader.ui.page.home.article
+package me.ash.reader.ui.page.home.flow
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
@@ -13,26 +13,22 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.data.article.ArticleWithFeed
 import me.ash.reader.data.repository.RssRepository
+import me.ash.reader.ui.page.home.FilterState
 import javax.inject.Inject
 
 @HiltViewModel
-class ArticleViewModel @Inject constructor(
+class FlowViewModel @Inject constructor(
     private val rssRepository: RssRepository,
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(ArticleViewState())
     val viewState: StateFlow<ArticleViewState> = _viewState.asStateFlow()
 
-    fun dispatch(action: ArticleViewAction) {
+    fun dispatch(action: FlowViewAction) {
         when (action) {
-            is ArticleViewAction.FetchData -> fetchData(
-                groupId = action.groupId,
-                feedId = action.feedId,
-                isStarred = action.isStarred,
-                isUnread = action.isUnread,
-            )
-            is ArticleViewAction.ChangeRefreshing -> changeRefreshing(action.isRefreshing)
-            is ArticleViewAction.ScrollToItem -> scrollToItem(action.index)
-            is ArticleViewAction.PeekSyncWork -> peekSyncWork()
+            is FlowViewAction.FetchData -> fetchData(action.filterState)
+            is FlowViewAction.ChangeRefreshing -> changeRefreshing(action.isRefreshing)
+            is FlowViewAction.ScrollToItem -> scrollToItem(action.index)
+            is FlowViewAction.PeekSyncWork -> peekSyncWork()
         }
     }
 
@@ -44,14 +40,9 @@ class ArticleViewModel @Inject constructor(
         }
     }
 
-    private fun fetchData(
-        groupId: String? = null,
-        feedId: String? = null,
-        isStarred: Boolean,
-        isUnread: Boolean,
-    ) {
+    private fun fetchData(filterState: FilterState) {
         viewModelScope.launch(Dispatchers.IO) {
-            rssRepository.get().pullImportant(isStarred, true)
+            rssRepository.get().pullImportant(filterState.filter.isStarred(), true)
                 .collect { importantList ->
                     _viewState.update {
                         it.copy(
@@ -64,10 +55,10 @@ class ArticleViewModel @Inject constructor(
             it.copy(
                 pagingData = Pager(PagingConfig(pageSize = 10)) {
                     rssRepository.get().pullArticles(
-                        groupId = groupId,
-                        feedId = feedId,
-                        isStarred = isStarred,
-                        isUnread = isUnread,
+                        groupId = filterState.group?.id,
+                        feedId = filterState.feed?.id,
+                        isStarred = filterState.filter.isStarred(),
+                        isUnread = filterState.filter.isUnread(),
                     )
                 }.flow.cachedIn(viewModelScope)
             )
@@ -95,21 +86,18 @@ data class ArticleViewState(
     val syncWorkInfo: String = "",
 )
 
-sealed class ArticleViewAction {
+sealed class FlowViewAction {
     data class FetchData(
-        val groupId: String? = null,
-        val feedId: String? = null,
-        val isStarred: Boolean,
-        val isUnread: Boolean,
-    ) : ArticleViewAction()
+        val filterState: FilterState,
+    ) : FlowViewAction()
 
     data class ChangeRefreshing(
         val isRefreshing: Boolean
-    ) : ArticleViewAction()
+    ) : FlowViewAction()
 
     data class ScrollToItem(
         val index: Int
-    ) : ArticleViewAction()
+    ) : FlowViewAction()
 
-    object PeekSyncWork : ArticleViewAction()
+    object PeekSyncWork : FlowViewAction()
 }

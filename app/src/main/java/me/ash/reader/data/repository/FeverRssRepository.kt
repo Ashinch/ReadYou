@@ -20,6 +20,7 @@ import me.ash.reader.data.source.FeverApiDataSource
 import me.ash.reader.data.source.RssNetworkDataSource
 import me.ash.reader.dataStore
 import me.ash.reader.get
+import me.ash.reader.spacerDollar
 import net.dankito.readability4j.extended.Readability4JExtended
 import java.util.*
 import javax.inject.Inject
@@ -82,7 +83,7 @@ class FeverRssRepository @Inject constructor(
                 feverGroupsBody.groups.forEach {
                     groupDao.insert(
                         Group(
-                            id = it.id.toString(),
+                            id = accountId.spacerDollar(it.id),
                             name = it.title,
                             accountId = accountId,
                         )
@@ -99,7 +100,7 @@ class FeverRssRepository @Inject constructor(
                 }
                 val feeds = feverFeeds.map {
                     Feed(
-                        id = it.id.toString(),
+                        id = accountId.spacerDollar(it.id),
                         name = it.title,
                         url = it.url,
                         groupId = feverFeedsGroupsMap[it.id].toString(),
@@ -116,7 +117,7 @@ class FeverRssRepository @Inject constructor(
                 .forEach {
                     articles.add(
                         Article(
-                            id = it.id,
+                            id = accountId.spacerDollar(it.id),
                             date = Date(it.created_on_time * 1000),
                             title = it.title,
                             author = it.author,

@@ -108,7 +108,7 @@ abstract class AbstractRssRepository constructor(
         isStarred: Boolean = false,
         isUnread: Boolean = false,
     ): Flow<List<ImportantCount>> {
-        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0
+        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)!!
         Log.i(
             "RLog",
             "pullImportant: accountId: ${accountId}, isStarred: ${isStarred}, isUnread: ${isUnread}"
@@ -124,6 +124,11 @@ abstract class AbstractRssRepository constructor(
 
     suspend fun findArticleById(id: Int): ArticleWithFeed? {
         return articleDao.queryById(id)
+    }
+
+    fun isExist(url: String): Boolean {
+        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)!!
+        return feedDao.queryByLink(accountId, url).isNotEmpty()
     }
 
     fun peekWork(): String {

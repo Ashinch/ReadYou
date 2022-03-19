@@ -11,6 +11,7 @@ import me.ash.reader.data.feed.FeedWithArticle
 import me.ash.reader.data.source.RssNetworkDataSource
 import me.ash.reader.dataStore
 import me.ash.reader.get
+import me.ash.reader.spacerDollar
 import net.dankito.readability4j.Readability4J
 import net.dankito.readability4j.extended.Readability4JExtended
 import okhttp3.*
@@ -28,17 +29,17 @@ class RssHelper @Inject constructor(
         val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0
         val parseRss = rssNetworkDataSource.parseRss(feedLink)
         val feed = Feed(
-            id = UUID.randomUUID().toString(),
+            id = accountId.spacerDollar(UUID.randomUUID().toString()),
             name = parseRss.title!!,
             url = feedLink,
-            groupId = UUID.randomUUID().toString(),
+            groupId = "",
             accountId = accountId,
         )
         val articles = mutableListOf<Article>()
         parseRss.items.forEach {
             articles.add(
                 Article(
-                    id = UUID.randomUUID().toString(),
+                    id = accountId.spacerDollar(UUID.randomUUID().toString()),
                     accountId = accountId,
                     feedId = feed.id,
                     date = Date(it.publishDate.toString()),
@@ -101,7 +102,7 @@ class RssHelper @Inject constructor(
                 Log.i("RLog", "request rss ${feed.name}: ${it.title}")
                 a.add(
                     Article(
-                        id = UUID.randomUUID().toString(),
+                        id = accountId.spacerDollar(UUID.randomUUID().toString()),
                         accountId = accountId,
                         feedId = feed.id,
                         date = Date(it.publishDate.toString()),
@@ -126,35 +127,39 @@ class RssHelper @Inject constructor(
         feed: Feed,
         articleLink: String?,
     ) {
-        if (articleLink == null) return
-        val execute = OkHttpClient()
-            .newCall(Request.Builder().url(articleLink).build())
-            .execute()
-        val content = execute.body?.string()
-        val regex =
-            Regex("""<link(.+?)rel="shortcut icon"(.+?)href="(.+?)"""")
-        if (content != null) {
-            var iconLink = regex
-                .find(content)
-                ?.groups?.get(3)
-                ?.value
-            Log.i("rlog", "queryRssIcon: $iconLink")
-            if (iconLink != null) {
-                if (iconLink.startsWith("//")) {
-                    iconLink = "http:$iconLink"
-                }
-                if (iconLink.startsWith("/")) {
-                    val domainRegex =
-                        Regex("""http(s)?://(([\w-]+\.)+\w+(:\d{1,5})?)""")
-                    iconLink =
-                        "http://${domainRegex.find(articleLink)?.groups?.get(2)?.value}$iconLink"
-                }
-                saveRssIcon(feedDao, feed, iconLink)
-            } else {
+        try {
+            if (articleLink == null) return
+            val execute = OkHttpClient()
+                .newCall(Request.Builder().url(articleLink).build())
+                .execute()
+            val content = execute.body?.string()
+            val regex =
+                Regex("""<link(.+?)rel="shortcut icon"(.+?)href="(.+?)"""")
+            if (content != null) {
+                var iconLink = regex
+                    .find(content)
+                    ?.groups?.get(3)
+                    ?.value
+                Log.i("rlog", "queryRssIcon: $iconLink")
+                if (iconLink != null) {
+                    if (iconLink.startsWith("//")) {
+                        iconLink = "http:$iconLink"
+                    }
+                    if (iconLink.startsWith("/")) {
+                        val domainRegex =
+                            Regex("""http(s)?://(([\w-]+\.)+\w+(:\d{1,5})?)""")
+                        iconLink =
+                            "http://${domainRegex.find(articleLink)?.groups?.get(2)?.value}$iconLink"
+                    }
+                    saveRssIcon(feedDao, feed, iconLink)
+                } else {
 //                    saveRssIcon(feedDao, feed, "")
-            }
-        } else {
+                }
+            } else {
 //                saveRssIcon(feedDao, feed, "")
+            }
+        } catch (e: Exception) {
+            Log.e("RLog", "queryRssIcon: ${e.message}")
         }
     }
 

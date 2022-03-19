@@ -127,6 +127,14 @@ class SubscribeViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                if (rssRepository.get().isExist(_viewState.value.inputContent)) {
+                    _viewState.update {
+                        it.copy(
+                            errorMessage = "已订阅",
+                        )
+                    }
+                    return@launch
+                }
                 val feedWithArticle = rssHelper.searchFeed(_viewState.value.inputContent)
                 _viewState.update {
                     it.copy(

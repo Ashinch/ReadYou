@@ -10,6 +10,7 @@ import javax.inject.Inject
 class OpmlRepository @Inject constructor(
     private val groupDao: GroupDao,
     private val feedDao: FeedDao,
+    private val rssRepository: RssRepository,
     private val opmlLocalDataSource: OpmlLocalDataSource
 ) {
     suspend fun saveToDatabase(inputStream: InputStream) {
@@ -18,6 +19,9 @@ class OpmlRepository @Inject constructor(
             groupWithFeedList.forEach { groupWithFeed ->
                 groupDao.insert(groupWithFeed.group)
                 groupWithFeed.feeds.forEach { it.groupId = groupWithFeed.group.id }
+                groupWithFeed.feeds.removeIf {
+                    rssRepository.get().isExist(it.url)
+                }
                 feedDao.insertList(groupWithFeed.feeds)
             }
         } catch (e: Exception) {

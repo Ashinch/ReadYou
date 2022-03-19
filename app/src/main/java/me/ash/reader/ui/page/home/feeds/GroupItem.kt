@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import me.ash.reader.data.feed.Feed
 
 @Composable
-fun Group(
+fun GroupItem(
     modifier: Modifier = Modifier,
     text: String,
     feeds: List<Feed>,
@@ -37,7 +37,7 @@ fun Group(
             .clip(RoundedCornerShape(32.dp))
             .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.14f))
             .clickable { groupOnClick() }
-            .padding(top = 22.dp, bottom = if (expanded) 14.dp else 22.dp)
+            .padding(vertical = 22.dp)
     ) {
         Row(
             modifier = modifier.fillMaxWidth(),
@@ -76,9 +76,11 @@ fun Group(
             exit = fadeOut() + shrinkVertically(),
         ) {
             Column {
-                Spacer(modifier = Modifier.height(16.dp))
+                if (feeds.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
                 feeds.forEach { feed ->
-                    Feed(
+                    FeedItem(
                         modifier = Modifier.padding(horizontal = 20.dp),
                         name = feed.name,
                         important = feed.important ?: 0,

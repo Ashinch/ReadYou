@@ -15,7 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Feed(
+fun FeedItem(
     modifier: Modifier = Modifier,
     name: String,
     important: Int,

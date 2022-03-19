@@ -22,6 +22,14 @@ interface GroupDao {
     )
     fun queryAllGroup(accountId: Int): Flow<MutableList<Group>>
 
+    @Query(
+        """
+        SELECT * FROM `group`
+        WHERE accountId = :accountId
+        """
+    )
+    suspend fun queryAll(accountId: Int): List<Group>
+
     @Insert
     suspend fun insert(group: Group): Long
 

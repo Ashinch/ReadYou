@@ -13,6 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
+import me.ash.reader.DataStoreKeys
+import me.ash.reader.dataStore
+import me.ash.reader.get
+import me.ash.reader.spacerDollar
 import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.widget.Dialog
 import java.io.InputStream
@@ -38,6 +42,10 @@ fun SubscribeDialog(
 
     LaunchedEffect(viewState.visible) {
         if (viewState.visible) {
+            val defaultGroupId = context.dataStore
+                .get(DataStoreKeys.CurrentAccountId)!!
+                .spacerDollar("0")
+            viewModel.dispatch(SubscribeViewAction.SelectedGroup(defaultGroupId))
             viewModel.dispatch(SubscribeViewAction.Init)
         } else {
             viewModel.dispatch(SubscribeViewAction.Reset)

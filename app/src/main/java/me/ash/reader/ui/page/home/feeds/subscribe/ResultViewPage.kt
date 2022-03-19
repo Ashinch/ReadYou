@@ -2,9 +2,9 @@ package me.ash.reader.ui.page.home.feeds.subscribe
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Notifications
@@ -13,14 +13,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import me.ash.reader.data.group.Group
 import me.ash.reader.ui.widget.SelectionChip
+import me.ash.reader.ui.widget.SelectionEditorChip
+import me.ash.reader.ui.widget.Subtitle
 
 @Composable
 fun ResultViewPage(
@@ -34,7 +33,9 @@ fun ResultViewPage(
     groupOnClick: (groupId: String) -> Unit = {},
     onKeyboardAction: () -> Unit = {},
 ) {
-    Column {
+    Column(
+        modifier = Modifier.verticalScroll(rememberScrollState())
+    ) {
         Link(
             text = link
         )
@@ -82,11 +83,7 @@ private fun Preset(
     notificationPresetOnClick: () -> Unit = {},
     fullContentParsePresetOnClick: () -> Unit = {},
 ) {
-    Text(
-        text = "预设",
-        color = MaterialTheme.colorScheme.primary,
-        fontSize = 14.sp,
-    )
+    Subtitle(text = "预设")
     Spacer(modifier = Modifier.height(10.dp))
     FlowRow(
         mainAxisAlignment = MainAxisAlignment.Start,
@@ -94,38 +91,36 @@ private fun Preset(
         mainAxisSpacing = 10.dp,
     ) {
         SelectionChip(
+            modifier = Modifier.animateContentSize(),
+            content = "接收通知",
             selected = selectedNotificationPreset,
             selectedIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Notifications,
                     contentDescription = "Check",
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .size(18.dp),
                 )
             },
-            onClick = notificationPresetOnClick,
         ) {
-            Text(
-                text = "接收通知",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp,
-            )
+            notificationPresetOnClick()
         }
         SelectionChip(
+            modifier = Modifier.animateContentSize(),
+            content = "全文解析",
             selected = selectedFullContentParsePreset,
             selectedIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Article,
                     contentDescription = "Check",
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .size(18.dp),
                 )
             },
-            onClick = fullContentParsePresetOnClick,
         ) {
-            Text(
-                text = "全文解析",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp,
-            )
+            fullContentParsePresetOnClick()
         }
     }
 }
@@ -137,11 +132,7 @@ private fun AddToGroup(
     groupOnClick: (groupId: String) -> Unit = {},
     onKeyboardAction: () -> Unit = {},
 ) {
-    Text(
-        text = "添加到组",
-        color = MaterialTheme.colorScheme.primary,
-        fontSize = 14.sp,
-    )
+    Subtitle(text = "添加到组")
     Spacer(modifier = Modifier.height(10.dp))
     FlowRow(
         mainAxisAlignment = MainAxisAlignment.Start,
@@ -151,37 +142,20 @@ private fun AddToGroup(
         groups.forEach {
             SelectionChip(
                 modifier = Modifier.animateContentSize(),
+                content = it.name,
                 selected = it.id == selectedGroupId,
-                onClick = { groupOnClick(it.id) },
             ) {
-                Text(
-                    text = it.name,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 14.sp,
-                )
+                groupOnClick(it.id)
             }
         }
 
-        SelectionChip(
+        SelectionEditorChip(
+            modifier = Modifier.animateContentSize(),
+            content = "新建分组",
             selected = false,
-            onClick = { /*TODO*/ },
+            onKeyboardAction = onKeyboardAction,
         ) {
-            BasicTextField(
-                modifier = Modifier.width(56.dp),
-                value = "新建分组",
-                onValueChange = {},
-                textStyle = TextStyle(
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-                ),
-                singleLine = true,
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        onKeyboardAction()
-                    }
-                )
-            )
+
         }
     }
 }

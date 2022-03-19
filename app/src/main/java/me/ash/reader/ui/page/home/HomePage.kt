@@ -19,8 +19,8 @@ import kotlinx.coroutines.launch
 import me.ash.reader.data.constant.Symbol
 import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.extension.findActivity
-import me.ash.reader.ui.page.home.article.ArticlePage
 import me.ash.reader.ui.page.home.feeds.FeedsPage
+import me.ash.reader.ui.page.home.flow.FlowPage
 import me.ash.reader.ui.page.home.read.ReadPage
 import me.ash.reader.ui.page.home.read.ReadViewAction
 import me.ash.reader.ui.page.home.read.ReadViewModel
@@ -98,35 +98,10 @@ fun HomePage(
             state = viewState.pagerState,
             composableList = listOf(
                 {
-                    FeedsPage(
-                        navController = navController,
-                    )
+                    FeedsPage(navController = navController)
                 },
                 {
-                    ArticlePage(
-                        navController = navController,
-                        BackOnClick = {
-                            viewModel.dispatch(
-                                HomeViewAction.ScrollToPage(
-                                    scope = scope,
-                                    targetPage = 0,
-                                )
-                            )
-                        },
-                        articleOnClick = {
-                            readViewModel.dispatch(ReadViewAction.ScrollToItem(0))
-                            readViewModel.dispatch(ReadViewAction.InitData(it))
-                            if (it.feed.isFullContent) readViewModel.dispatch(ReadViewAction.RenderFullContent)
-                            else readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
-                            readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
-                            viewModel.dispatch(
-                                HomeViewAction.ScrollToPage(
-                                    scope = scope,
-                                    targetPage = 2,
-                                )
-                            )
-                        },
-                    )
+                    FlowPage(navController = navController)
                 },
                 {
                     ReadPage(
