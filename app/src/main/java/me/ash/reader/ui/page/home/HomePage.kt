@@ -20,7 +20,7 @@ import me.ash.reader.data.constant.Symbol
 import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.extension.findActivity
 import me.ash.reader.ui.page.home.article.ArticlePage
-import me.ash.reader.ui.page.home.feed.FeedPage
+import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.read.ReadPage
 import me.ash.reader.ui.page.home.read.ReadViewAction
 import me.ash.reader.ui.page.home.read.ReadViewModel
@@ -98,25 +98,8 @@ fun HomePage(
             state = viewState.pagerState,
             composableList = listOf(
                 {
-                    FeedPage(
+                    FeedsPage(
                         navController = navController,
-                        filter = filterState.filter,
-                        groupAndFeedOnClick = { currentGroup, currentFeed ->
-                            viewModel.dispatch(
-                                HomeViewAction.ChangeFilter(
-                                    filterState.copy(
-                                        group = currentGroup,
-                                        feed = currentFeed,
-                                    )
-                                )
-                            )
-                            viewModel.dispatch(
-                                HomeViewAction.ScrollToPage(
-                                    scope = scope,
-                                    targetPage = 1,
-                                )
-                            )
-                        },
                     )
                 },
                 {

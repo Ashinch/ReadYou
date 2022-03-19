@@ -26,7 +26,7 @@ class AccountRepository @Inject constructor(
 
     suspend fun addDefaultAccount(): Account {
         return Account(
-            name = "Reader You",
+            name = "Read You",
             type = Account.Type.LOCAL,
         ).apply {
             id = accountDao.insert(this).toInt()

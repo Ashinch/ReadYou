@@ -1,4 +1,4 @@
-package me.ash.reader.ui.page.home.feed.subscribe
+package me.ash.reader.ui.page.home.feeds.subscribe
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

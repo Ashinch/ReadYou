@@ -1,4 +1,4 @@
-package me.ash.reader.ui.page.home.feed
+package me.ash.reader.ui.page.home.feeds
 
 import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.data.account.Account
+import me.ash.reader.data.constant.Filter
 import me.ash.reader.data.group.GroupWithFeed
 import me.ash.reader.data.repository.AccountRepository
 import me.ash.reader.data.repository.OpmlRepository
@@ -17,22 +18,20 @@ import java.io.InputStream
 import javax.inject.Inject
 
 @HiltViewModel
-class FeedViewModel @Inject constructor(
+class FeedsViewModel @Inject constructor(
     private val accountRepository: AccountRepository,
     private val rssRepository: RssRepository,
     private val opmlRepository: OpmlRepository,
 ) : ViewModel() {
-    private val _viewState = MutableStateFlow(FeedViewState())
-    val viewState: StateFlow<FeedViewState> = _viewState.asStateFlow()
+    private val _viewState = MutableStateFlow(FeedsViewState())
+    val viewState: StateFlow<FeedsViewState> = _viewState.asStateFlow()
 
-    fun dispatch(action: FeedViewAction) {
+    fun dispatch(action: FeedsViewAction) {
         when (action) {
-            is FeedViewAction.FetchAccount -> fetchAccount(action.callback)
-            is FeedViewAction.FetchData -> fetchData(action.isStarred, action.isUnread)
-            is FeedViewAction.AddFromFile -> addFromFile(action.inputStream)
-            is FeedViewAction.ChangeFeedVisible -> changeFeedVisible(action.index)
-            is FeedViewAction.ChangeGroupVisible -> changeGroupVisible()
-            is FeedViewAction.ScrollToItem -> scrollToItem(action.index)
+            is FeedsViewAction.FetchAccount -> fetchAccount(action.callback)
+            is FeedsViewAction.FetchData -> fetchData(action.isStarred, action.isUnread)
+            is FeedsViewAction.AddFromFile -> addFromFile(action.inputStream)
+            is FeedsViewAction.ScrollToItem -> scrollToItem(action.index)
         }
     }
 
@@ -57,6 +56,7 @@ class FeedViewModel @Inject constructor(
     private fun fetchData(isStarred: Boolean, isUnread: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             pullFeeds(isStarred, isUnread)
+            _viewState
         }
     }
 
@@ -101,7 +101,13 @@ class FeedViewModel @Inject constructor(
         }.onEach { groupWithFeedList ->
             _viewState.update {
                 it.copy(
-                    filterImportant = groupWithFeedList.sumOf { it.group.important ?: 0 },
+                    filter = when {
+                        isStarred -> Filter.Starred
+                        isUnread -> Filter.Unread
+                        else -> Filter.All
+                    }.apply {
+                        important = groupWithFeedList.sumOf { it.group.important ?: 0 }
+                    },
                     groupWithFeedList = groupWithFeedList,
                     feedsVisible = List(groupWithFeedList.size, init = { true })
                 )
@@ -111,24 +117,6 @@ class FeedViewModel @Inject constructor(
         }.collect()
     }
 
-    private fun changeFeedVisible(index: Int) {
-        _viewState.update {
-            it.copy(
-                feedsVisible = _viewState.value.feedsVisible.toMutableList().apply {
-                    this[index] = !this[index]
-                }
-            )
-        }
-    }
-
-    private fun changeGroupVisible() {
-        _viewState.update {
-            it.copy(
-                groupsVisible = !_viewState.value.groupsVisible
-            )
-        }
-    }
-
     private fun scrollToItem(index: Int) {
         viewModelScope.launch {
             _viewState.value.listState.scrollToItem(index)
@@ -136,36 +124,30 @@ class FeedViewModel @Inject constructor(
     }
 }
 
-data class FeedViewState(
+data class FeedsViewState(
     val account: Account? = null,
-    val filterImportant: Int = 0,
+    val filter: Filter = Filter.All,
     val groupWithFeedList: List<GroupWithFeed> = emptyList(),
     val feedsVisible: List<Boolean> = emptyList(),
     val listState: LazyListState = LazyListState(),
     val groupsVisible: Boolean = true,
 )
 
-sealed class FeedViewAction {
+sealed class FeedsViewAction {
     data class FetchData(
         val isStarred: Boolean,
         val isUnread: Boolean,
-    ) : FeedViewAction()
+    ) : FeedsViewAction()
 
     data class FetchAccount(
         val callback: () -> Unit = {},
-    ) : FeedViewAction()
+    ) : FeedsViewAction()
 
     data class AddFromFile(
         val inputStream: InputStream
-    ) : FeedViewAction()
-
-    data class ChangeFeedVisible(
-        val index: Int
-    ) : FeedViewAction()
-
-    object ChangeGroupVisible : FeedViewAction()
+    ) : FeedsViewAction()
 
     data class ScrollToItem(
         val index: Int
-    ) : FeedViewAction()
+    ) : FeedsViewAction()
 }
