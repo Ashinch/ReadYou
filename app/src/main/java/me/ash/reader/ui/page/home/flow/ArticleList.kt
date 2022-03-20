@@ -23,7 +23,7 @@ fun LazyListScope.generateArticleList(
     homeViewModel: HomeViewModel,
     scope: CoroutineScope
 ) {
-    if (pagingItems == null) return
+    pagingItems ?: return
     var lastItemDay: String? = null
     for (itemIndex in 0 until pagingItems.itemCount) {
         val currentItem = pagingItems.peek(itemIndex) ?: continue
@@ -39,7 +39,7 @@ fun LazyListScope.generateArticleList(
         }
         item {
             ArticleItem(
-                articleWithFeed = currentItem,
+                articleWithFeed = pagingItems[itemIndex] ?: return@item,
             ) {
                 readViewModel.dispatch(ReadViewAction.ScrollToItem(0))
                 readViewModel.dispatch(ReadViewAction.InitData(it))
