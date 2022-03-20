@@ -11,12 +11,11 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
-import me.ash.reader.DataStoreKeys
-import me.ash.reader.dataStore
-import me.ash.reader.get
-import me.ash.reader.spacerDollar
+import me.ash.reader.*
+import me.ash.reader.R
 import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.widget.Dialog
 import java.io.InputStream
@@ -61,14 +60,14 @@ fun SubscribeDialog(
         icon = {
             Icon(
                 imageVector = Icons.Rounded.RssFeed,
-                contentDescription = "Subscribe",
+                contentDescription = stringResource(R.string.subscribe),
             )
         },
         title = {
             Text(
                 when (viewState.pagerState.currentPage) {
-                    0 -> "订阅"
-                    else -> viewState.feed?.name ?: "未知"
+                    0 -> stringResource(R.string.subscribe)
+                    else -> viewState.feed?.name ?: stringResource(R.string.unknown)
                 }
             )
         },
@@ -88,15 +87,15 @@ fun SubscribeDialog(
                 },
                 link = viewState.inputContent,
                 groups = groupsState.value,
-                selectedNotificationPreset = viewState.notificationPreset,
-                selectedFullContentParsePreset = viewState.fullContentParsePreset,
+                selectedAllowNotificationPreset = viewState.allowNotificationPreset,
+                selectedParseFullContentPreset = viewState.parseFullContentPreset,
                 selectedGroupId = viewState.selectedGroupId,
                 pagerState = viewState.pagerState,
-                notificationPresetOnClick = {
-                    viewModel.dispatch(SubscribeViewAction.ChangeNotificationPreset)
+                allowNotificationPresetOnClick = {
+                    viewModel.dispatch(SubscribeViewAction.ChangeAllowNotificationPreset)
                 },
-                fullContentParsePresetOnClick = {
-                    viewModel.dispatch(SubscribeViewAction.ChangeFullContentParsePreset)
+                parseFullContentPresetOnClick = {
+                    viewModel.dispatch(SubscribeViewAction.ChangeParseFullContentPreset)
                 },
                 groupOnClick = {
                     viewModel.dispatch(SubscribeViewAction.SelectedGroup(it))
@@ -116,7 +115,7 @@ fun SubscribeDialog(
                         }
                     ) {
                         Text(
-                            text = "搜索",
+                            text = stringResource(R.string.search),
                             color = if (viewState.inputContent.isNotEmpty()) {
                                 Color.Unspecified
                             } else {
@@ -131,7 +130,7 @@ fun SubscribeDialog(
                             viewModel.dispatch(SubscribeViewAction.Subscribe)
                         }
                     ) {
-                        Text("订阅")
+                        Text(stringResource(R.string.subscribe))
                     }
                 }
             }
@@ -145,7 +144,7 @@ fun SubscribeDialog(
                             viewModel.dispatch(SubscribeViewAction.Hide)
                         }
                     ) {
-                        Text("导入OPML文件")
+                        Text(text = stringResource(R.string.import_from_opml))
                     }
                 }
                 1 -> {
@@ -154,7 +153,7 @@ fun SubscribeDialog(
                             viewModel.dispatch(SubscribeViewAction.Hide)
                         }
                     ) {
-                        Text("取消")
+                        Text(text = stringResource(R.string.cancel))
                     }
                 }
             }

@@ -19,11 +19,12 @@ import me.ash.reader.*
 import me.ash.reader.data.account.AccountDao
 import me.ash.reader.data.article.Article
 import me.ash.reader.data.article.ArticleDao
-import me.ash.reader.data.constant.Symbol
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.feed.FeedDao
 import me.ash.reader.data.group.GroupDao
 import me.ash.reader.data.source.RssNetworkDataSource
+import me.ash.reader.ui.page.common.ExtraName
+import me.ash.reader.ui.page.common.NotificationGroupName
 import java.util.*
 import javax.inject.Inject
 
@@ -119,7 +120,7 @@ class LocalRssRepository @Inject constructor(
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     notificationManager.createNotificationChannel(
                         NotificationChannel(
-                            Symbol.NOTIFICATION_CHANNEL_GROUP_ARTICLE_UPDATE,
+                            NotificationGroupName.ARTICLE_UPDATE,
                             "文章更新",
                             NotificationManager.IMPORTANCE_DEFAULT
                         )
@@ -132,9 +133,9 @@ class LocalRssRepository @Inject constructor(
                         if (feedNotificationMap[article.feedId] == true) {
                             val builder = NotificationCompat.Builder(
                                 context,
-                                Symbol.NOTIFICATION_CHANNEL_GROUP_ARTICLE_UPDATE
+                                NotificationGroupName.ARTICLE_UPDATE
                             ).setSmallIcon(R.drawable.ic_launcher_foreground)
-                                .setGroup(Symbol.NOTIFICATION_CHANNEL_GROUP_ARTICLE_UPDATE)
+                                .setGroup(NotificationGroupName.ARTICLE_UPDATE)
                                 .setContentTitle(article.title)
                                 .setContentText(article.shortDescription)
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -146,7 +147,7 @@ class LocalRssRepository @Inject constructor(
                                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or
                                                     Intent.FLAG_ACTIVITY_CLEAR_TASK
                                             putExtra(
-                                                Symbol.EXTRA_ARTICLE_ID,
+                                                ExtraName.ARTICLE_ID,
                                                 ids[index].toInt()
                                             )
                                         },

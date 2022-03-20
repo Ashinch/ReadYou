@@ -2,14 +2,11 @@ package me.ash.reader.data.repository
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
-import me.ash.reader.DataStoreKeys
+import me.ash.reader.*
 import me.ash.reader.data.account.Account
 import me.ash.reader.data.account.AccountDao
 import me.ash.reader.data.group.Group
 import me.ash.reader.data.group.GroupDao
-import me.ash.reader.dataStore
-import me.ash.reader.get
-import me.ash.reader.spacerDollar
 import javax.inject.Inject
 
 class AccountRepository @Inject constructor(
@@ -29,8 +26,10 @@ class AccountRepository @Inject constructor(
     }
 
     suspend fun addDefaultAccount(): Account {
+        val readYouString = context.getString(R.string.read_you)
+        val defaultString = context.getString(R.string.defaults)
         return Account(
-            name = "Read You",
+            name = readYouString,
             type = Account.Type.LOCAL,
         ).apply {
             id = accountDao.insert(this).toInt()
@@ -38,8 +37,8 @@ class AccountRepository @Inject constructor(
             if (groupDao.queryAll(it.id!!).isEmpty()) {
                 groupDao.insert(
                     Group(
-                        id = it.id!!.spacerDollar("0"),
-                        name = "默认",
+                        id = it.id!!.spacerDollar(readYouString + defaultString),
+                        name = defaultString,
                         accountId = it.id!!,
                     )
                 )

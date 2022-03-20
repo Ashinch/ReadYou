@@ -14,13 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.flow.collect
+import me.ash.reader.R
 import me.ash.reader.ui.extension.collectAsStateValue
+import me.ash.reader.ui.extension.getName
 import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.read.ReadViewModel
@@ -37,6 +41,7 @@ fun FlowPage(
     homeViewModel: HomeViewModel = hiltViewModel(),
     readViewModel: ReadViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val viewState = viewModel.viewState.collectAsStateValue()
     val filterState = homeViewModel.filterState.collectAsStateValue()
@@ -66,7 +71,7 @@ fun FlowPage(
                     }) {
                         Icon(
                             imageVector = Icons.Rounded.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
@@ -75,14 +80,14 @@ fun FlowPage(
                     IconButton(onClick = {}) {
                         Icon(
                             imageVector = Icons.Rounded.DoneAll,
-                            contentDescription = "Read All",
+                            contentDescription = stringResource(R.string.mark_all_as_read),
                             tint = MaterialTheme.colorScheme.onSurface,
                         )
                     }
                     IconButton(onClick = {}) {
                         Icon(
                             imageVector = Icons.Rounded.Search,
-                            contentDescription = "Search",
+                            contentDescription = stringResource(R.string.search),
                             tint = MaterialTheme.colorScheme.onSurface,
                         )
                     }
@@ -106,7 +111,7 @@ fun FlowPage(
                         text = when {
                             filterState.group != null -> filterState.group.name
                             filterState.feed != null -> filterState.feed.name
-                            else -> filterState.filter.name
+                            else -> filterState.filter.getName()
                         },
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.onSurface,
@@ -114,7 +119,7 @@ fun FlowPage(
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
-                generateArticleList(pagingItems, readViewModel, homeViewModel, scope)
+                generateArticleList(context, pagingItems, readViewModel, homeViewModel, scope)
             }
         }
     )

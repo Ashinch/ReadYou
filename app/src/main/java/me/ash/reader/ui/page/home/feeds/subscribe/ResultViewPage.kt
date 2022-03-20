@@ -13,9 +13,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
+import me.ash.reader.R
 import me.ash.reader.data.group.Group
 import me.ash.reader.ui.widget.SelectionChip
 import me.ash.reader.ui.widget.SelectionEditorChip
@@ -25,11 +27,11 @@ import me.ash.reader.ui.widget.Subtitle
 fun ResultViewPage(
     link: String = "",
     groups: List<Group> = emptyList(),
-    selectedNotificationPreset: Boolean = false,
-    selectedFullContentParsePreset: Boolean = false,
+    selectedAllowNotificationPreset: Boolean = false,
+    selectedParseFullContentPreset: Boolean = false,
     selectedGroupId: String = "",
-    notificationPresetOnClick: () -> Unit = {},
-    fullContentParsePresetOnClick: () -> Unit = {},
+    allowNotificationPresetOnClick: () -> Unit = {},
+    parseFullContentPresetOnClick: () -> Unit = {},
     groupOnClick: (groupId: String) -> Unit = {},
     onKeyboardAction: () -> Unit = {},
 ) {
@@ -42,10 +44,10 @@ fun ResultViewPage(
         Spacer(modifier = Modifier.height(26.dp))
 
         Preset(
-            selectedNotificationPreset = selectedNotificationPreset,
-            selectedFullContentParsePreset = selectedFullContentParsePreset,
-            notificationPresetOnClick = notificationPresetOnClick,
-            fullContentParsePresetOnClick = fullContentParsePresetOnClick,
+            selectedAllowNotificationPreset = selectedAllowNotificationPreset,
+            selectedParseFullContentPreset = selectedParseFullContentPreset,
+            allowNotificationPresetOnClick = allowNotificationPresetOnClick,
+            parseFullContentPresetOnClick = parseFullContentPresetOnClick,
         )
         Spacer(modifier = Modifier.height(26.dp))
 
@@ -78,12 +80,12 @@ private fun Link(
 
 @Composable
 private fun Preset(
-    selectedNotificationPreset: Boolean = false,
-    selectedFullContentParsePreset: Boolean = false,
-    notificationPresetOnClick: () -> Unit = {},
-    fullContentParsePresetOnClick: () -> Unit = {},
+    selectedAllowNotificationPreset: Boolean = false,
+    selectedParseFullContentPreset: Boolean = false,
+    allowNotificationPresetOnClick: () -> Unit = {},
+    parseFullContentPresetOnClick: () -> Unit = {},
 ) {
-    Subtitle(text = "预设")
+    Subtitle(text = stringResource(R.string.preset))
     Spacer(modifier = Modifier.height(10.dp))
     FlowRow(
         mainAxisAlignment = MainAxisAlignment.Start,
@@ -92,35 +94,35 @@ private fun Preset(
     ) {
         SelectionChip(
             modifier = Modifier.animateContentSize(),
-            content = "接收通知",
-            selected = selectedNotificationPreset,
+            content = stringResource(R.string.allow_notification),
+            selected = selectedAllowNotificationPreset,
             selectedIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Notifications,
-                    contentDescription = "Check",
+                    contentDescription = stringResource(R.string.allow_notification),
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .size(18.dp),
                 )
             },
         ) {
-            notificationPresetOnClick()
+            allowNotificationPresetOnClick()
         }
         SelectionChip(
             modifier = Modifier.animateContentSize(),
-            content = "全文解析",
-            selected = selectedFullContentParsePreset,
+            content = stringResource(R.string.parse_full_content),
+            selected = selectedParseFullContentPreset,
             selectedIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Article,
-                    contentDescription = "Check",
+                    contentDescription = stringResource(R.string.parse_full_content),
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .size(18.dp),
                 )
             },
         ) {
-            fullContentParsePresetOnClick()
+            parseFullContentPresetOnClick()
         }
     }
 }
@@ -132,7 +134,7 @@ private fun AddToGroup(
     groupOnClick: (groupId: String) -> Unit = {},
     onKeyboardAction: () -> Unit = {},
 ) {
-    Subtitle(text = "添加到组")
+    Subtitle(text = stringResource(R.string.add_to_group))
     Spacer(modifier = Modifier.height(10.dp))
     FlowRow(
         mainAxisAlignment = MainAxisAlignment.Start,
@@ -151,7 +153,7 @@ private fun AddToGroup(
 
         SelectionEditorChip(
             modifier = Modifier.animateContentSize(),
-            content = "新建分组",
+            content = stringResource(R.string.new_group),
             selected = false,
             onKeyboardAction = onKeyboardAction,
         ) {

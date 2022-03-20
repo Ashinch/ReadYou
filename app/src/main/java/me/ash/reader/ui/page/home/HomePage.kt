@@ -16,9 +16,10 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import me.ash.reader.data.constant.Symbol
+import me.ash.reader.ui.page.common.NotificationGroupName
 import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.extension.findActivity
+import me.ash.reader.ui.page.common.ExtraName
 import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.flow.FlowPage
 import me.ash.reader.ui.page.home.read.ReadPage
@@ -42,7 +43,7 @@ fun HomePage(
     LaunchedEffect(Unit) {
         context.findActivity()?.let { activity ->
             activity.intent?.let { intent ->
-                intent.extras?.get(Symbol.EXTRA_ARTICLE_ID)?.let {
+                intent.extras?.get(ExtraName.ARTICLE_ID)?.let {
                     readViewModel.dispatch(ReadViewAction.ScrollToItem(2))
                     scope.launch {
                         val article =
@@ -60,7 +61,7 @@ fun HomePage(
                         )
                     }
                 }
-                intent.extras?.remove(Symbol.EXTRA_ARTICLE_ID)
+                intent.extras?.remove(ExtraName.ARTICLE_ID)
             }
         }
     }

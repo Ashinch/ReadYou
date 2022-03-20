@@ -12,11 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import me.ash.reader.DateTimeExt
-import me.ash.reader.DateTimeExt.toString
 import me.ash.reader.data.article.ArticleWithFeed
+import me.ash.reader.formatToString
 
 @Composable
 fun ArticleItem(
@@ -24,6 +24,7 @@ fun ArticleItem(
     articleWithFeed: ArticleWithFeed,
     onClick: (ArticleWithFeed) -> Unit = {},
 ) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .padding(horizontal = 12.dp, vertical = 8.dp)
@@ -44,7 +45,7 @@ fun ArticleItem(
                 style = MaterialTheme.typography.labelMedium,
             )
             Text(
-                text = articleWithFeed.article.date.toString(DateTimeExt.HH_MM),
+                text = articleWithFeed.article.date.formatToString(context, onlyHourMinute = true),
                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
                 style = MaterialTheme.typography.labelMedium,
             )

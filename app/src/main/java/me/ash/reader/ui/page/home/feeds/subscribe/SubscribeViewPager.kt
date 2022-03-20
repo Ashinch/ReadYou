@@ -19,12 +19,12 @@ fun SubscribeViewPager(
     onSearchKeyboardAction: () -> Unit = {},
     link: String = "",
     groups: List<Group> = emptyList(),
-    selectedNotificationPreset: Boolean = false,
-    selectedFullContentParsePreset: Boolean = false,
+    selectedAllowNotificationPreset: Boolean = false,
+    selectedParseFullContentPreset: Boolean = false,
     selectedGroupId: String = "",
     pagerState: PagerState = com.google.accompanist.pager.rememberPagerState(),
-    notificationPresetOnClick: () -> Unit = {},
-    fullContentParsePresetOnClick: () -> Unit = {},
+    allowNotificationPresetOnClick: () -> Unit = {},
+    parseFullContentPresetOnClick: () -> Unit = {},
     groupOnClick: (groupId: String) -> Unit = {},
     onResultKeyboardAction: () -> Unit = {},
 ) {
@@ -35,6 +35,7 @@ fun SubscribeViewPager(
         composableList = listOf(
             {
                 SearchViewPage(
+                    pagerState = pagerState,
                     inputContent = inputContent,
                     errorMessage = errorMessage,
                     onValueChange = onValueChange,
@@ -45,11 +46,11 @@ fun SubscribeViewPager(
                 ResultViewPage(
                     link = link,
                     groups = groups,
-                    selectedNotificationPreset = selectedNotificationPreset,
-                    selectedFullContentParsePreset = selectedFullContentParsePreset,
+                    selectedAllowNotificationPreset = selectedAllowNotificationPreset,
+                    selectedParseFullContentPreset = selectedParseFullContentPreset,
                     selectedGroupId = selectedGroupId,
-                    notificationPresetOnClick = notificationPresetOnClick,
-                    fullContentParsePresetOnClick = fullContentParsePresetOnClick,
+                    allowNotificationPresetOnClick = allowNotificationPresetOnClick,
+                    parseFullContentPresetOnClick = parseFullContentPresetOnClick,
                     groupOnClick = groupOnClick,
                     onKeyboardAction = onResultKeyboardAction,
                 )

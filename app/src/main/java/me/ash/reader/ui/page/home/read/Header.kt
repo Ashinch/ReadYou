@@ -11,10 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import me.ash.reader.DateTimeExt
-import me.ash.reader.DateTimeExt.toString
 import me.ash.reader.data.article.Article
 import me.ash.reader.data.feed.Feed
+import me.ash.reader.formatToString
 import me.ash.reader.ui.extension.roundClick
 
 @Composable
@@ -34,7 +33,7 @@ fun Header(
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
             Text(
-                text = article.date.toString(DateTimeExt.YYYY_MM_DD_HH_MM, true),
+                text = article.date.formatToString(context, atHourMinute = true),
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.outline,
                 fontWeight = FontWeight.Medium,

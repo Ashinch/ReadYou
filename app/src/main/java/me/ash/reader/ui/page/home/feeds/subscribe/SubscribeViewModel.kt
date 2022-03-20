@@ -9,12 +9,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import me.ash.reader.R
 import me.ash.reader.data.article.Article
-import me.ash.reader.data.constant.Symbol
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.group.Group
 import me.ash.reader.data.repository.RssHelper
 import me.ash.reader.data.repository.RssRepository
+import me.ash.reader.data.repository.StringsRepository
 import me.ash.reader.formatUrl
 import me.ash.reader.ui.extension.animateScrollToPage
 import javax.inject.Inject
@@ -24,9 +25,10 @@ import javax.inject.Inject
 class SubscribeViewModel @Inject constructor(
     private val rssRepository: RssRepository,
     private val rssHelper: RssHelper,
+    private val stringsRepository: StringsRepository,
 ) : ViewModel() {
-    private val _viewState = MutableStateFlow(SubScribeViewState())
-    val viewState: StateFlow<SubScribeViewState> = _viewState.asStateFlow()
+    private val _viewState = MutableStateFlow(SubscribeViewState())
+    val viewState: StateFlow<SubscribeViewState> = _viewState.asStateFlow()
 
     fun dispatch(action: SubscribeViewAction) {
         when (action) {
@@ -36,10 +38,10 @@ class SubscribeViewModel @Inject constructor(
             is SubscribeViewAction.Hide -> changeVisible(false)
             is SubscribeViewAction.Input -> inputLink(action.content)
             is SubscribeViewAction.Search -> search(action.scope)
-            is SubscribeViewAction.ChangeNotificationPreset ->
-                changeNotificationPreset()
-            is SubscribeViewAction.ChangeFullContentParsePreset ->
-                changeFullContentParsePreset()
+            is SubscribeViewAction.ChangeAllowNotificationPreset ->
+                changeAllowNotificationPreset()
+            is SubscribeViewAction.ChangeParseFullContentPreset ->
+                changeParseFullContentPreset()
             is SubscribeViewAction.SelectedGroup -> selectedGroup(action.groupId)
             is SubscribeViewAction.Subscribe -> subscribe()
         }
@@ -48,6 +50,7 @@ class SubscribeViewModel @Inject constructor(
     private fun init() {
         _viewState.update {
             it.copy(
+                title = stringsRepository.getString(R.string.subscribe),
                 groups = rssRepository.get().pullGroups()
             )
         }
@@ -57,13 +60,13 @@ class SubscribeViewModel @Inject constructor(
         _viewState.update {
             it.copy(
                 visible = false,
-                title = "订阅",
+                title = stringsRepository.getString(R.string.subscribe),
                 errorMessage = "",
                 inputContent = "",
                 feed = null,
                 articles = emptyList(),
-                notificationPreset = false,
-                fullContentParsePreset = false,
+                allowNotificationPreset = false,
+                parseFullContentPreset = false,
                 selectedGroupId = "",
                 groups = emptyFlow(),
             )
@@ -78,8 +81,8 @@ class SubscribeViewModel @Inject constructor(
             rssRepository.get().subscribe(
                 feed.copy(
                     groupId = groupId,
-                    isNotification = _viewState.value.notificationPreset,
-                    isFullContent = _viewState.value.fullContentParsePreset,
+                    isNotification = _viewState.value.allowNotificationPreset,
+                    isFullContent = _viewState.value.parseFullContentPreset,
                 ), articles
             )
             changeVisible(false)
@@ -94,18 +97,18 @@ class SubscribeViewModel @Inject constructor(
         }
     }
 
-    private fun changeFullContentParsePreset() {
+    private fun changeParseFullContentPreset() {
         _viewState.update {
             it.copy(
-                fullContentParsePreset = !_viewState.value.fullContentParsePreset
+                parseFullContentPreset = !_viewState.value.parseFullContentPreset
             )
         }
     }
 
-    private fun changeNotificationPreset() {
+    private fun changeAllowNotificationPreset() {
         _viewState.update {
             it.copy(
-                notificationPreset = !_viewState.value.notificationPreset
+                allowNotificationPreset = !_viewState.value.allowNotificationPreset
             )
         }
     }
@@ -122,7 +125,7 @@ class SubscribeViewModel @Inject constructor(
         }
         _viewState.update {
             it.copy(
-                title = "搜索中",
+                title = stringsRepository.getString(R.string.searching),
             )
         }
         viewModelScope.launch(Dispatchers.IO) {
@@ -130,7 +133,7 @@ class SubscribeViewModel @Inject constructor(
                 if (rssRepository.get().isExist(_viewState.value.inputContent)) {
                     _viewState.update {
                         it.copy(
-                            errorMessage = "已订阅",
+                            errorMessage = stringsRepository.getString(R.string.already_subscribed),
                         )
                     }
                     return@launch
@@ -147,8 +150,8 @@ class SubscribeViewModel @Inject constructor(
                 e.printStackTrace()
                 _viewState.update {
                     it.copy(
-                        title = "订阅",
-                        errorMessage = e.message ?: Symbol.Unknown,
+                        title = stringsRepository.getString(R.string.subscribe),
+                        errorMessage = e.message ?: stringsRepository.getString(R.string.unknown),
                     )
                 }
             }
@@ -173,15 +176,15 @@ class SubscribeViewModel @Inject constructor(
 }
 
 @OptIn(ExperimentalPagerApi::class)
-data class SubScribeViewState(
+data class SubscribeViewState(
     val visible: Boolean = false,
-    val title: String = "订阅",
+    val title: String = "",
     val errorMessage: String = "",
     val inputContent: String = "",
     val feed: Feed? = null,
     val articles: List<Article> = emptyList(),
-    val notificationPreset: Boolean = false,
-    val fullContentParsePreset: Boolean = false,
+    val allowNotificationPreset: Boolean = false,
+    val parseFullContentPreset: Boolean = false,
     val selectedGroupId: String = "",
     val groups: Flow<List<Group>> = emptyFlow(),
     val pagerState: PagerState = PagerState(),
@@ -202,8 +205,8 @@ sealed class SubscribeViewAction {
         val scope: CoroutineScope,
     ) : SubscribeViewAction()
 
-    object ChangeNotificationPreset : SubscribeViewAction()
-    object ChangeFullContentParsePreset : SubscribeViewAction()
+    object ChangeAllowNotificationPreset : SubscribeViewAction()
+    object ChangeParseFullContentPreset : SubscribeViewAction()
 
     data class SelectedGroup(
         val groupId: String

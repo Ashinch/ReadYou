@@ -21,9 +21,9 @@ The following are the progress made so far and the goals to be worked on in the 
     -   [x] Full Content Parsing
     -   [x] Filter unread and starred
     -   [x] Feed Grouping
+    -   [x] Localization
     -   [ ] Search for articles
     -   [ ] Preference settings
-    -   [ ] Localization
     -   [ ] Release APK
     -   [ ] Widget
     -   [ ] ...

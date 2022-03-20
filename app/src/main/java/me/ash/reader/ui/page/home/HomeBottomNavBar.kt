@@ -29,13 +29,15 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
+import me.ash.reader.R
 import me.ash.reader.data.constant.Filter
-import me.ash.reader.data.constant.NavigationBarItem
+import me.ash.reader.ui.extension.getName
 import me.ash.reader.ui.widget.CanBeDisabledIconButton
 import kotlin.math.absoluteValue
 
@@ -153,10 +155,10 @@ private fun FilterBar(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         listOf(
-            NavigationBarItem.Starred,
-            NavigationBarItem.Unread,
-            NavigationBarItem.All
-        ).forEachIndexed { index, item ->
+            Filter.Starred,
+            Filter.Unread,
+            Filter.All
+        ).forEach { item ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
@@ -175,39 +177,33 @@ private fun FilterBar(
                         .clip(CircleShape)
                         .clickable(onClick = {
                             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                            onSelected(
-                                when (index) {
-                                    0 -> Filter.Starred
-                                    1 -> Filter.Unread
-                                    else -> Filter.All
-                                }
-                            )
+                            onSelected(item)
                         })
                         .background(
-                            if (filter.index == index) {
+                            if (filter == item) {
                                 MaterialTheme.colorScheme.inverseOnSurface
                             } else {
                                 Color.Unspecified
                             }
                         )
                 ) {
-                    if (filter.index == index) {
+                    if (filter == item) {
                         Spacer(modifier = Modifier.width(10.dp))
                         Icon(
                             modifier = Modifier.size(
-                                if (Filter.Unread.index == index) {
-                                    15
+                                if (filter == item) {
+                                    15.dp
                                 } else {
-                                    19
-                                }.dp
+                                    19.dp
+                                }
                             ),
                             imageVector = item.icon,
-                            contentDescription = item.title,
+                            contentDescription = item.getName(),
                             tint = MaterialTheme.colorScheme.primary,
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = item.title,
+                            text = item.getName().uppercase(),
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary,
@@ -216,14 +212,14 @@ private fun FilterBar(
                     } else {
                         Icon(
                             modifier = Modifier.size(
-                                if (Filter.Unread.index == index) {
+                                if (item.isUnread()) {
                                     15
                                 } else {
                                     19
                                 }.dp
                             ),
                             imageVector = item.icon,
-                            contentDescription = item.title,
+                            contentDescription = item.getName(),
                             tint = MaterialTheme.colorScheme.outline,
                         )
                     }
@@ -261,7 +257,7 @@ private fun ReaderBar(
             } else {
                 Icons.Outlined.Circle
             },
-            contentDescription = "Mark Unread",
+            contentDescription = stringResource(if (isUnread) R.string.mark_as_read else R.string.mark_as_unread),
             tint = MaterialTheme.colorScheme.primary,
         ) {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
@@ -275,7 +271,7 @@ private fun ReaderBar(
             } else {
                 Icons.Rounded.StarBorder
             },
-            contentDescription = "Starred",
+            contentDescription = stringResource(if (isStarred) R.string.mark_as_unstar else R.string.mark_as_starred),
             tint = MaterialTheme.colorScheme.primary,
         ) {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
@@ -306,7 +302,7 @@ private fun ReaderBar(
             } else {
                 Icons.Outlined.Article
             },
-            contentDescription = "Full Content Parsing",
+            contentDescription = stringResource(R.string.parse_full_content),
             tint = MaterialTheme.colorScheme.primary,
         ) {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)

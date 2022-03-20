@@ -19,12 +19,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.collect
-import me.ash.reader.data.constant.Symbol
+import me.ash.reader.R
 import me.ash.reader.ui.extension.collectAsStateValue
+import me.ash.reader.ui.extension.getDesc
+import me.ash.reader.ui.extension.getName
 import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
@@ -77,7 +80,7 @@ fun FeedsPage(
                     IconButton(onClick = { }) {
                         Icon(
                             imageVector = Icons.Rounded.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
@@ -90,7 +93,7 @@ fun FeedsPage(
                         Icon(
                             modifier = Modifier.rotate(if (syncState.isSyncing) angle else 0f),
                             imageVector = Icons.Rounded.Refresh,
-                            contentDescription = "Refresh",
+                            contentDescription = stringResource(R.string.refresh),
                             tint = MaterialTheme.colorScheme.onSurface,
                         )
                     }
@@ -99,7 +102,7 @@ fun FeedsPage(
                     }) {
                         Icon(
                             imageVector = Icons.Rounded.Add,
-                            contentDescription = "Subscribe",
+                            contentDescription = stringResource(R.string.subscribe),
                             tint = MaterialTheme.colorScheme.onSurface,
                         )
                     }
@@ -121,20 +124,20 @@ fun FeedsPage(
                             end = 24.dp,
                             bottom = 24.dp
                         ),
-                        text = viewState.account?.name ?: Symbol.Unknown,
+                        text = viewState.account?.name ?: stringResource(R.string.unknown),
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
                 item {
                     Banner(
-                        title = viewState.filter.name,
-                        desc = "${viewState.filter.important}${viewState.filter.description}",
+                        title = filterState.filter.getName(),
+                        desc = filterState.filter.getDesc(),
                         icon = viewState.filter.icon,
                         action = {
                             Icon(
                                 imageVector = Icons.Outlined.KeyboardArrowRight,
-                                contentDescription = "Goto",
+                                contentDescription = stringResource(R.string.go_to),
                                 tint = MaterialTheme.colorScheme.onSurface,
                             )
                         },
@@ -159,7 +162,7 @@ fun FeedsPage(
                     Spacer(modifier = Modifier.height(24.dp))
                     Subtitle(
                         modifier = Modifier.padding(start = 28.dp),
-                        text = "Feeds"
+                        text = stringResource(R.string.feeds)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }

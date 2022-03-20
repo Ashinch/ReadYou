@@ -22,11 +22,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.delay
+import me.ash.reader.R
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun SearchViewPage(
+    pagerState: PagerState,
     inputContent: String = "",
     errorMessage: String = "",
     onValueChange: (String) -> Unit = {},
@@ -51,11 +57,11 @@ fun SearchViewPage(
             ),
             value = inputContent,
             onValueChange = {
-                onValueChange(it)
+                if (pagerState.currentPage == 0) onValueChange(it)
             },
             placeholder = {
                 Text(
-                    text = "订阅源或站点链接",
+                    text = stringResource(R.string.feed_or_site_url),
                     color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f)
                 )
             },
@@ -68,7 +74,7 @@ fun SearchViewPage(
                     }) {
                         Icon(
                             imageVector = Icons.Rounded.Close,
-                            contentDescription = "Clear",
+                            contentDescription = stringResource(R.string.clear),
                             tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
                         )
                     }
@@ -77,7 +83,7 @@ fun SearchViewPage(
                     }) {
                         Icon(
                             imageVector = Icons.Rounded.ContentPaste,
-                            contentDescription = "Paste",
+                            contentDescription = stringResource(R.string.paste),
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }

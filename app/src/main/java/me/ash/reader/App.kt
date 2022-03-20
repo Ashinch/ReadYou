@@ -27,6 +27,9 @@ class App : Application() {
     lateinit var rssHelper: RssHelper
 
     @Inject
+    lateinit var stringsRepository: StringsRepository
+
+    @Inject
     lateinit var accountRepository: AccountRepository
 
     @Inject

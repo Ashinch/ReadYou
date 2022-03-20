@@ -16,7 +16,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import me.ash.reader.R
 import me.ash.reader.data.feed.Feed
 
 @Composable
@@ -37,7 +39,7 @@ fun GroupItem(
             .clip(RoundedCornerShape(32.dp))
             .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.14f))
             .clickable { groupOnClick() }
-            .padding(vertical = 22.dp)
+            .padding(top = 22.dp)
     ) {
         Row(
             modifier = modifier.fillMaxWidth(),
@@ -64,12 +66,12 @@ fun GroupItem(
             ) {
                 Icon(
                     imageVector = if (expanded) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore,
-                    contentDescription = if (expanded) "Expand Less" else "Expand More",
+                    contentDescription = stringResource(if (expanded) R.string.expand_less else R.string.expand_more),
                     tint = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
             }
         }
-
+        Spacer(modifier = Modifier.height(22.dp))
         AnimatedVisibility(
             visible = expanded,
             enter = fadeIn() + expandVertically(),

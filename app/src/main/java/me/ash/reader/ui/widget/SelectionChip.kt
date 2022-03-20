@@ -19,7 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import me.ash.reader.R
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -33,7 +35,7 @@ fun SelectionChip(
     selectedIcon: @Composable () -> Unit = {
         Icon(
             imageVector = Icons.Rounded.Check,
-            contentDescription = "Check",
+            contentDescription = stringResource(R.string.selected),
             modifier = Modifier
                 .padding(start = 8.dp)
                 .size(18.dp)
@@ -87,7 +89,7 @@ fun SelectionEditorChip(
     selectedIcon: @Composable () -> Unit = {
         Icon(
             imageVector = Icons.Rounded.Check,
-            contentDescription = "Check",
+            contentDescription = stringResource(R.string.selected),
             modifier = Modifier
                 .padding(start = 8.dp)
                 .size(16.dp)
