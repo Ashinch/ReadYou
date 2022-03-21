@@ -2,11 +2,18 @@ package me.ash.reader.data.repository
 
 import android.content.Context
 import android.util.Log
+import androidx.hilt.work.HiltWorker
 import androidx.paging.PagingSource
-import androidx.work.*
-import kotlinx.coroutines.DelicateCoroutinesApi
+import androidx.work.CoroutineWorker
+import androidx.work.WorkManager
+import androidx.work.WorkerParameters
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.sync.Mutex
 import me.ash.reader.DataStoreKeys
 import me.ash.reader.data.account.AccountDao
 import me.ash.reader.data.article.Article
@@ -18,12 +25,9 @@ import me.ash.reader.data.feed.FeedDao
 import me.ash.reader.data.group.Group
 import me.ash.reader.data.group.GroupDao
 import me.ash.reader.data.group.GroupWithFeed
-import me.ash.reader.data.source.ReaderDatabase
 import me.ash.reader.data.source.RssNetworkDataSource
 import me.ash.reader.dataStore
 import me.ash.reader.get
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 abstract class AbstractRssRepository constructor(
     private val context: Context,
@@ -43,19 +47,11 @@ abstract class AbstractRssRepository constructor(
         val isNotSyncing: Boolean = !isSyncing
     }
 
-    abstract fun getSyncState(): StateFlow<SyncState>
-
     abstract suspend fun updateArticleInfo(article: Article)
 
     abstract suspend fun subscribe(feed: Feed, articles: List<Article>)
 
-    abstract suspend fun sync(
-        context: Context,
-        accountDao: AccountDao,
-        articleDao: ArticleDao,
-        feedDao: FeedDao,
-        rssNetworkDataSource: RssNetworkDataSource
-    )
+    abstract suspend fun sync()
 
     fun pullGroups(): Flow<MutableList<Group>> {
         val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0
@@ -135,46 +131,32 @@ abstract class AbstractRssRepository constructor(
         return workManager.getWorkInfosByTag("sync").get().size.toString()
     }
 
-    suspend fun doSync(isWork: Boolean? = false) {
-        if (isWork == true) {
-            workManager.cancelAllWork()
-            val syncWorkerRequest: WorkRequest =
-                PeriodicWorkRequestBuilder<SyncWorker>(
-                    15, TimeUnit.MINUTES
-                ).setConstraints(
-                    Constraints.Builder()
-                        .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build()
-                ).addTag("sync").build()
-            workManager.enqueue(syncWorkerRequest)
-        } else {
-            sync(context, accountDao, articleDao, feedDao, rssNetworkDataSource)
+    companion object {
+        val mutex = Mutex()
+
+        private val _syncState = MutableStateFlow(SyncState())
+        val syncState = _syncState.asStateFlow()
+
+        fun updateSyncState(function: (SyncState) -> SyncState) {
+            _syncState.update(function)
         }
     }
 }
 
-@DelicateCoroutinesApi
-class SyncWorker(
-    context: Context,
-    workerParams: WorkerParameters,
+@HiltWorker
+class SyncWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted workerParams: WorkerParameters,
+    private val rssRepository: RssRepository,
 ) : CoroutineWorker(context, workerParams) {
-
-    @Inject
-    lateinit var rssRepository: RssRepository
-
-    @Inject
-    lateinit var rssNetworkDataSource: RssNetworkDataSource
 
     override suspend fun doWork(): Result {
         Log.i("RLog", "doWork: ")
-        val db = ReaderDatabase.getInstance(applicationContext)
-        rssRepository.get().sync(
-            applicationContext,
-            db.accountDao(),
-            db.articleDao(),
-            db.feedDao(),
-            rssNetworkDataSource
-        )
+        rssRepository.get().sync()
         return Result.success()
+    }
+
+    companion object {
+        const val WORK_NAME = "article.sync"
     }
 }

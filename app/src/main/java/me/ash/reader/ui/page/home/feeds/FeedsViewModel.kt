@@ -50,7 +50,7 @@ class FeedsViewModel @Inject constructor(
     private fun addFromFile(inputStream: InputStream) {
         viewModelScope.launch(Dispatchers.IO) {
             opmlRepository.saveToDatabase(inputStream)
-            pullFeeds(isStarred = false, isUnread = false)
+            rssRepository.get().sync()
         }
     }
 
@@ -60,7 +60,6 @@ class FeedsViewModel @Inject constructor(
                 isStarred = filterState.filter.isStarred(),
                 isUnread = filterState.filter.isUnread(),
             )
-            _viewState
         }
     }
 

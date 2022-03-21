@@ -4,9 +4,6 @@ import android.content.Context
 import android.util.Log
 import androidx.work.WorkManager
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import me.ash.reader.DataStoreKeys
 import me.ash.reader.data.account.AccountDao
@@ -33,18 +30,13 @@ class FeverRssRepository @Inject constructor(
     private val groupDao: GroupDao,
     private val rssHelper: RssHelper,
     private val feverApiDataSource: FeverApiDataSource,
+    private val accountDao: AccountDao,
     rssNetworkDataSource: RssNetworkDataSource,
-    accountDao: AccountDao,
     workManager: WorkManager,
 ) : AbstractRssRepository(
     context, accountDao, articleDao, groupDao,
     feedDao, rssNetworkDataSource, workManager,
 ) {
-    private val mutex = Mutex()
-    private val syncState = MutableStateFlow(SyncState())
-
-    override fun getSyncState() = syncState
-
     override suspend fun updateArticleInfo(article: Article) {
         articleDao.update(article)
     }
@@ -56,18 +48,12 @@ class FeverRssRepository @Inject constructor(
         })
     }
 
-    override suspend fun sync(
-        context: Context,
-        accountDao: AccountDao,
-        articleDao: ArticleDao,
-        feedDao: FeedDao,
-        rssNetworkDataSource: RssNetworkDataSource
-    ) {
+    override suspend fun sync() {
         mutex.withLock {
             val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)
                 ?: return
 
-            syncState.update {
+            updateSyncState {
                 it.copy(
                     feedCount = 1,
                     syncedCount = 1,
@@ -140,7 +126,7 @@ class FeverRssRepository @Inject constructor(
             accountDao.update(accountDao.queryById(accountId)!!.apply {
                 updateAt = Date()
             })
-            syncState.update {
+            updateSyncState {
                 it.copy(
                     feedCount = 0,
                     syncedCount = 0,

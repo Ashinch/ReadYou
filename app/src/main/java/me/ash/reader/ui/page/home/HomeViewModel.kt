@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import me.ash.reader.data.constant.Filter
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.group.Group
+import me.ash.reader.data.repository.AbstractRssRepository
 import me.ash.reader.data.repository.RssRepository
 import me.ash.reader.ui.extension.animateScrollToPage
 import javax.inject.Inject
@@ -31,7 +32,7 @@ class HomeViewModel @Inject constructor(
     private val _filterState = MutableStateFlow(FilterState())
     val filterState = _filterState.asStateFlow()
 
-    val syncState = rssRepository.get().getSyncState()
+    val syncState = AbstractRssRepository.syncState
 
     fun dispatch(action: HomeViewAction) {
         when (action) {
@@ -47,7 +48,7 @@ class HomeViewModel @Inject constructor(
 
     private fun sync(callback: () -> Unit = {}) {
         viewModelScope.launch(Dispatchers.IO) {
-            rssRepository.get().doSync()
+            rssRepository.get().sync()
             callback()
         }
     }

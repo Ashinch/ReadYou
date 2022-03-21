@@ -16,7 +16,6 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import me.ash.reader.ui.page.common.NotificationGroupName
 import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.extension.findActivity
 import me.ash.reader.ui.page.common.ExtraName
@@ -46,9 +45,9 @@ fun HomePage(
                 intent.extras?.get(ExtraName.ARTICLE_ID)?.let {
                     readViewModel.dispatch(ReadViewAction.ScrollToItem(2))
                     scope.launch {
-                        val article =
-                            readViewModel.rssRepository.get().findArticleById(it.toString().toInt())
-                                ?: return@launch
+                        val article = readViewModel
+                            .rssRepository.get()
+                            .findArticleById(it.toString().toInt()) ?: return@launch
                         readViewModel.dispatch(ReadViewAction.InitData(article))
                         if (article.feed.isFullContent) readViewModel.dispatch(ReadViewAction.RenderFullContent)
                         else readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)

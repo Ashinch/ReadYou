@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.flow
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -77,7 +78,11 @@ fun FlowPage(
                     }
                 },
                 actions = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {
+                        viewModel.dispatch(FlowViewAction.PeekSyncWork)
+                        Toast.makeText(context, viewState.syncWorkInfo.length.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }) {
                         Icon(
                             imageVector = Icons.Rounded.DoneAll,
                             contentDescription = stringResource(R.string.mark_all_as_read),

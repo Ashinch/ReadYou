@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.work.WorkManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import me.ash.reader.*
 import me.ash.reader.data.account.AccountDao
@@ -34,19 +33,14 @@ class LocalRssRepository @Inject constructor(
     private val articleDao: ArticleDao,
     private val feedDao: FeedDao,
     private val rssHelper: RssHelper,
-    rssNetworkDataSource: RssNetworkDataSource,
+    private val rssNetworkDataSource: RssNetworkDataSource,
+    private val accountDao: AccountDao,
     groupDao: GroupDao,
-    accountDao: AccountDao,
     workManager: WorkManager,
 ) : AbstractRssRepository(
     context, accountDao, articleDao, groupDao,
     feedDao, rssNetworkDataSource, workManager,
 ) {
-    private val mutex = Mutex()
-    private val syncState = MutableStateFlow(SyncState())
-
-    override fun getSyncState() = syncState
-
     override suspend fun updateArticleInfo(article: Article) {
         articleDao.update(article)
     }
@@ -58,13 +52,7 @@ class LocalRssRepository @Inject constructor(
         })
     }
 
-    override suspend fun sync(
-        context: Context,
-        accountDao: AccountDao,
-        articleDao: ArticleDao,
-        feedDao: FeedDao,
-        rssNetworkDataSource: RssNetworkDataSource
-    ) {
+    override suspend fun sync() {
         mutex.withLock {
             val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)
                 ?: return
@@ -98,10 +86,10 @@ class LocalRssRepository @Inject constructor(
                                 }
                             }
                         )
-                        syncState.update {
+                        updateSyncState {
                             it.copy(
                                 feedCount = feeds.size,
-                                syncedCount = syncState.value.syncedCount + 1,
+                                syncedCount = it.syncedCount + 1,
                                 currentFeedName = feed.name
                             )
                         }
@@ -173,7 +161,7 @@ class LocalRssRepository @Inject constructor(
                         }
                     )
                 }
-                syncState.update {
+                updateSyncState {
                     it.copy(
                         feedCount = 0,
                         syncedCount = 0,
