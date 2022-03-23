@@ -7,11 +7,13 @@ import androidx.paging.PagingSource
 import androidx.work.*
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.withContext
 import me.ash.reader.DataStoreKeys
 import me.ash.reader.data.account.AccountDao
 import me.ash.reader.data.article.Article
@@ -109,21 +111,23 @@ abstract class AbstractRssRepository constructor(
         }
     }
 
-    fun pullImportant(
+    suspend fun pullImportant(
         isStarred: Boolean = false,
         isUnread: Boolean = false,
     ): Flow<List<ImportantCount>> {
-        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)!!
-        Log.i(
-            "RLog",
-            "pullImportant: accountId: ${accountId}, isStarred: ${isStarred}, isUnread: ${isUnread}"
-        )
-        return when {
-            isStarred -> articleDao
-                .queryImportantCountWhenIsStarred(accountId, isStarred)
-            isUnread -> articleDao
-                .queryImportantCountWhenIsUnread(accountId, isUnread)
-            else -> articleDao.queryImportantCountWhenIsAll(accountId)
+        return withContext(Dispatchers.IO) {
+            val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)!!
+            Log.i(
+                "RLog",
+                "pullImportant: accountId: ${accountId}, isStarred: ${isStarred}, isUnread: ${isUnread}"
+            )
+            when {
+                isStarred -> articleDao
+                    .queryImportantCountWhenIsStarred(accountId, isStarred)
+                isUnread -> articleDao
+                    .queryImportantCountWhenIsUnread(accountId, isUnread)
+                else -> articleDao.queryImportantCountWhenIsAll(accountId)
+            }
         }
     }
 
