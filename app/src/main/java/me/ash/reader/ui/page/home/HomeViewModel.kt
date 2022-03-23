@@ -47,8 +47,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun sync(callback: () -> Unit = {}) {
-        viewModelScope.launch(Dispatchers.IO) {
-            rssRepository.get().sync()
+        viewModelScope.launch {
+            rssRepository.get().doSync()
             callback()
         }
     }

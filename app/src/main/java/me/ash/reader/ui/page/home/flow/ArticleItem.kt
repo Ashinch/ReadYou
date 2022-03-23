@@ -27,10 +27,10 @@ fun ArticleItem(
     val context = LocalContext.current
     Column(
         modifier = Modifier
-            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .padding(horizontal = 12.dp)
             .clip(RoundedCornerShape(12.dp))
             .clickable { onClick(articleWithFeed) }
-            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .padding(horizontal = 12.dp, vertical = 12.dp)
             .alpha(if (articleWithFeed.article.isUnread) 1f else 0.5f),
     ) {
         Row(
@@ -72,7 +72,7 @@ fun ArticleItem(
                 )
                 Text(
                     text = articleWithFeed.article.shortDescription,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,

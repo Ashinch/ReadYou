@@ -1,6 +1,7 @@
 package me.ash.reader.data.repository
 
 import android.util.Log
+import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.feed.FeedDao
 import me.ash.reader.data.group.GroupDao
 import me.ash.reader.data.source.OpmlLocalDataSource
@@ -18,11 +19,14 @@ class OpmlRepository @Inject constructor(
             val groupWithFeedList = opmlLocalDataSource.parseFileInputStream(inputStream)
             groupWithFeedList.forEach { groupWithFeed ->
                 groupDao.insert(groupWithFeed.group)
-                groupWithFeed.feeds.forEach { it.groupId = groupWithFeed.group.id }
-                groupWithFeed.feeds.removeIf {
-                    rssRepository.get().isExist(it.url)
+                val repeatList = mutableListOf<Feed>()
+                groupWithFeed.feeds.forEach {
+                    it.groupId = groupWithFeed.group.id
+                    if (rssRepository.get().isExist(it.url)) {
+                        repeatList.add(it)
+                    }
                 }
-                feedDao.insertList(groupWithFeed.feeds)
+                feedDao.insertList((groupWithFeed.feeds subtract repeatList).toList())
             }
         } catch (e: Exception) {
             Log.e("saveToDatabase", "${e.message}")

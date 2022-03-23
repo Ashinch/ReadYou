@@ -5,7 +5,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.data.account.Account
@@ -48,14 +47,14 @@ class FeedsViewModel @Inject constructor(
     }
 
     private fun addFromFile(inputStream: InputStream) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             opmlRepository.saveToDatabase(inputStream)
-            rssRepository.get().sync()
+            rssRepository.get().doSync()
         }
     }
 
     private fun fetchData(filterState: FilterState) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             pullFeeds(
                 isStarred = filterState.filter.isStarred(),
                 isUnread = filterState.filter.isUnread(),

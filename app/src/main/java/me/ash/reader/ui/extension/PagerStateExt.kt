@@ -12,7 +12,9 @@ fun PagerState.animateScrollToPage(
     callback: () -> Unit = {}
 ) {
     scope.launch {
-        animateScrollToPage(targetPage)
-        callback()
+        if (pageCount > targetPage) {
+            animateScrollToPage(targetPage)
+            callback()
+        }
     }
 }

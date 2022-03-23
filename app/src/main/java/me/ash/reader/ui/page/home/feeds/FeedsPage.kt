@@ -106,6 +106,7 @@ fun FeedsPage(
                             tint = MaterialTheme.colorScheme.onSurface,
                         )
                     }
+
                 }
             )
         },
@@ -138,7 +139,6 @@ fun FeedsPage(
                             Icon(
                                 imageVector = Icons.Outlined.KeyboardArrowRight,
                                 contentDescription = stringResource(R.string.go_to),
-                                tint = MaterialTheme.colorScheme.onSurface,
                             )
                         },
                     ) {
@@ -161,7 +161,7 @@ fun FeedsPage(
                 item {
                     Spacer(modifier = Modifier.height(24.dp))
                     Subtitle(
-                        modifier = Modifier.padding(start = 28.dp),
+                        modifier = Modifier.padding(start = 26.dp),
                         text = stringResource(R.string.feeds)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -206,6 +206,9 @@ fun FeedsPage(
                     if (index != viewState.groupWithFeedList.lastIndex) {
                         Spacer(modifier = Modifier.height(8.dp))
                     }
+                }
+                item {
+                    Spacer(modifier = Modifier.height(48.dp))
                 }
             }
         }

@@ -35,7 +35,7 @@ fun GroupItem(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(32.dp))
             .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.14f))
             .clickable { groupOnClick() }
@@ -78,9 +78,6 @@ fun GroupItem(
             exit = fadeOut() + shrinkVertically(),
         ) {
             Column {
-                if (feeds.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
                 feeds.forEach { feed ->
                     FeedItem(
                         modifier = Modifier.padding(horizontal = 20.dp),
@@ -89,6 +86,9 @@ fun GroupItem(
                     ) {
                         feedOnClick(feed)
                     }
+                }
+                if (feeds.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }

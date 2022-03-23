@@ -11,8 +11,6 @@ import me.ash.reader.data.group.GroupWithFeed
 import me.ash.reader.dataStore
 import me.ash.reader.get
 import org.xmlpull.v1.XmlPullParser
-import org.xmlpull.v1.XmlPullParserException
-import java.io.IOException
 import java.io.InputStream
 import java.util.*
 import javax.inject.Inject
@@ -21,7 +19,7 @@ class OpmlLocalDataSource @Inject constructor(
     @ApplicationContext
     private val context: Context,
 ) {
-    @Throws(XmlPullParserException::class, IOException::class)
+//    @Throws(XmlPullParserException::class, IOException::class)
     fun parseFileInputStream(inputStream: InputStream): List<GroupWithFeed> {
         val groupWithFeedList = mutableListOf<GroupWithFeed>()
         val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0

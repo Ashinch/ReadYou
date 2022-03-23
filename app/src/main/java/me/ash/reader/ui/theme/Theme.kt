@@ -4,8 +4,9 @@ import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
-import me.ash.reader.ui.theme.*
 
 private val LightThemeColors = lightColorScheme(
 
@@ -37,6 +38,7 @@ private val LightThemeColors = lightColorScheme(
     inversePrimary = md_theme_light_inversePrimary,
 //	shadow = md_theme_light_shadow,
 )
+
 private val DarkThemeColors = darkColorScheme(
 
     primary = md_theme_dark_primary,
@@ -68,6 +70,10 @@ private val DarkThemeColors = darkColorScheme(
 //	shadow = md_theme_dark_shadow,
 )
 
+val LocalLightThemeColors = staticCompositionLocalOf { LightThemeColors }
+
+val LocalDarkThemeColors = staticCompositionLocalOf { DarkThemeColors }
+
 @Composable
 fun AppTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
@@ -75,15 +81,27 @@ fun AppTheme(
 ) {
     // Dynamic color is available on Android 12+
     val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-    val colorScheme = when {
-        dynamicColor && useDarkTheme -> dynamicDarkColorScheme(LocalContext.current)
-        dynamicColor && !useDarkTheme -> dynamicLightColorScheme(LocalContext.current)
-        useDarkTheme -> DarkThemeColors
+    val light = when {
+        dynamicColor -> dynamicLightColorScheme(LocalContext.current)
         else -> LightThemeColors
     }
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = AppTypography,
-        content = content
-    )
+    val dark = when {
+        dynamicColor -> dynamicDarkColorScheme(LocalContext.current)
+        else -> DarkThemeColors
+    }
+    val colorScheme = when {
+        useDarkTheme -> dark
+        else -> light
+    }
+
+    CompositionLocalProvider(
+        LocalLightThemeColors provides light,
+        LocalDarkThemeColors provides dark,
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = AppTypography,
+            content = content
+        )
+    }
 }

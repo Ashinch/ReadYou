@@ -4,9 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.paging.PagingSource
-import androidx.work.CoroutineWorker
-import androidx.work.WorkManager
-import androidx.work.WorkerParameters
+import androidx.work.*
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
@@ -28,6 +26,7 @@ import me.ash.reader.data.group.GroupWithFeed
 import me.ash.reader.data.source.RssNetworkDataSource
 import me.ash.reader.dataStore
 import me.ash.reader.get
+import java.util.concurrent.TimeUnit
 
 abstract class AbstractRssRepository constructor(
     private val context: Context,
@@ -51,7 +50,17 @@ abstract class AbstractRssRepository constructor(
 
     abstract suspend fun subscribe(feed: Feed, articles: List<Article>)
 
+    abstract suspend fun addGroup(name: String): String
+
     abstract suspend fun sync()
+
+    fun doSync() {
+        workManager.enqueueUniquePeriodicWork(
+            SyncWorker.WORK_NAME,
+            ExistingPeriodicWorkPolicy.REPLACE,
+            SyncWorker.repeatingRequest
+        )
+    }
 
     fun pullGroups(): Flow<MutableList<Group>> {
         val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0
@@ -118,11 +127,11 @@ abstract class AbstractRssRepository constructor(
         }
     }
 
-    suspend fun findArticleById(id: Int): ArticleWithFeed? {
+    suspend fun findArticleById(id: String): ArticleWithFeed? {
         return articleDao.queryById(id)
     }
 
-    fun isExist(url: String): Boolean {
+    suspend fun isExist(url: String): Boolean {
         val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)!!
         return feedDao.queryByLink(accountId, url).isNotEmpty()
     }
@@ -158,5 +167,13 @@ class SyncWorker @AssistedInject constructor(
 
     companion object {
         const val WORK_NAME = "article.sync"
+
+        val repeatingRequest = PeriodicWorkRequestBuilder<SyncWorker>(
+            15, TimeUnit.MINUTES
+        ).setConstraints(
+            Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+        ).addTag(WORK_NAME).build()
     }
 }

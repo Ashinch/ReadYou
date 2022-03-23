@@ -1,10 +1,13 @@
 package me.ash.reader.ui.page.home.feeds.subscribe
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -22,7 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
@@ -32,12 +37,15 @@ import me.ash.reader.R
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun SearchViewPage(
+    modifier: Modifier = Modifier,
     pagerState: PagerState,
-    inputContent: String = "",
+    readOnly: Boolean = false,
+    inputLink: String = "",
     errorMessage: String = "",
-    onValueChange: (String) -> Unit = {},
+    onLinkValueChange: (String) -> Unit = {},
     onKeyboardAction: () -> Unit = {},
 ) {
+    val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
@@ -45,7 +53,7 @@ fun SearchViewPage(
         focusRequester.requestFocus()
     }
 
-    Column {
+    Column(modifier = modifier) {
         Spacer(modifier = Modifier.height(10.dp))
         TextField(
             modifier = Modifier.focusRequester(focusRequester),
@@ -55,9 +63,10 @@ fun SearchViewPage(
                 textColor = MaterialTheme.colorScheme.onSurface,
                 focusedIndicatorColor = MaterialTheme.colorScheme.primary,
             ),
-            value = inputContent,
+            enabled = !readOnly,
+            value = inputLink,
             onValueChange = {
-                if (pagerState.currentPage == 0) onValueChange(it)
+                if (!readOnly) onLinkValueChange(it)
             },
             placeholder = {
                 Text(
@@ -68,9 +77,9 @@ fun SearchViewPage(
             isError = errorMessage.isNotEmpty(),
             singleLine = true,
             trailingIcon = {
-                if (inputContent.isNotEmpty()) {
+                if (inputLink.isNotEmpty()) {
                     IconButton(onClick = {
-                        onValueChange("")
+                        if (!readOnly) onLinkValueChange("")
                     }) {
                         Icon(
                             imageVector = Icons.Rounded.Close,
@@ -90,17 +99,23 @@ fun SearchViewPage(
                 }
             },
             keyboardActions = KeyboardActions(
-                onDone = {
+                onSearch = {
+                    focusManager.clearFocus()
                     onKeyboardAction()
                 }
-            )
+            ),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search
+            ),
         )
         if (errorMessage.isNotEmpty()) {
             SelectionContainer {
                 Text(
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .horizontalScroll(rememberScrollState()),
                     text = errorMessage,
                     color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(start = 16.dp),
                     maxLines = 1,
                     softWrap = false,
                 )

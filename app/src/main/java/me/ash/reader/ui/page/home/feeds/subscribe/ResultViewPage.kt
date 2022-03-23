@@ -6,8 +6,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Article
-import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.filled.AddAlert
+import androidx.compose.material.icons.filled.Article
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,18 +25,23 @@ import me.ash.reader.ui.widget.Subtitle
 
 @Composable
 fun ResultViewPage(
+    modifier: Modifier = Modifier,
     link: String = "",
     groups: List<Group> = emptyList(),
     selectedAllowNotificationPreset: Boolean = false,
     selectedParseFullContentPreset: Boolean = false,
     selectedGroupId: String = "",
+    newGroupContent: String = "",
+    newGroupSelected: Boolean,
+    onNewGroupValueChange: (String) -> Unit = {},
+    changeNewGroupSelected: (Boolean) -> Unit = {},
     allowNotificationPresetOnClick: () -> Unit = {},
     parseFullContentPresetOnClick: () -> Unit = {},
     groupOnClick: (groupId: String) -> Unit = {},
     onKeyboardAction: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier.verticalScroll(rememberScrollState())
+        modifier = modifier.verticalScroll(rememberScrollState())
     ) {
         Link(
             text = link
@@ -54,6 +59,10 @@ fun ResultViewPage(
         AddToGroup(
             groups = groups,
             selectedGroupId = selectedGroupId,
+            newGroupContent = newGroupContent,
+            newGroupSelected = newGroupSelected,
+            onNewGroupValueChange = onNewGroupValueChange,
+            changeNewGroupSelected = changeNewGroupSelected,
             groupOnClick = groupOnClick,
             onKeyboardAction = onKeyboardAction,
         )
@@ -98,11 +107,12 @@ private fun Preset(
             selected = selectedAllowNotificationPreset,
             selectedIcon = {
                 Icon(
-                    imageVector = Icons.Outlined.Notifications,
+                    imageVector = Icons.Filled.AddAlert,
                     contentDescription = stringResource(R.string.allow_notification),
                     modifier = Modifier
                         .padding(start = 8.dp)
-                        .size(18.dp),
+                        .size(20.dp),
+                    tint = MaterialTheme.colorScheme.onSurface,
                 )
             },
         ) {
@@ -114,11 +124,12 @@ private fun Preset(
             selected = selectedParseFullContentPreset,
             selectedIcon = {
                 Icon(
-                    imageVector = Icons.Outlined.Article,
+                    imageVector = Icons.Filled.Article,
                     contentDescription = stringResource(R.string.parse_full_content),
                     modifier = Modifier
                         .padding(start = 8.dp)
-                        .size(18.dp),
+                        .size(20.dp),
+                    tint = MaterialTheme.colorScheme.onSurface,
                 )
             },
         ) {
@@ -131,6 +142,10 @@ private fun Preset(
 private fun AddToGroup(
     groups: List<Group>,
     selectedGroupId: String,
+    newGroupContent: String,
+    newGroupSelected: Boolean,
+    onNewGroupValueChange: (String) -> Unit = {},
+    changeNewGroupSelected: (Boolean) -> Unit = {},
     groupOnClick: (groupId: String) -> Unit = {},
     onKeyboardAction: () -> Unit = {},
 ) {
@@ -145,19 +160,21 @@ private fun AddToGroup(
             SelectionChip(
                 modifier = Modifier.animateContentSize(),
                 content = it.name,
-                selected = it.id == selectedGroupId,
+                selected = !newGroupSelected && it.id == selectedGroupId,
             ) {
+                changeNewGroupSelected(false)
                 groupOnClick(it.id)
             }
         }
 
         SelectionEditorChip(
             modifier = Modifier.animateContentSize(),
-            content = stringResource(R.string.new_group),
-            selected = false,
+            content = newGroupContent,
+            onValueChange = onNewGroupValueChange,
+            selected = newGroupSelected,
             onKeyboardAction = onKeyboardAction,
         ) {
-
+            changeNewGroupSelected(true)
         }
     }
 }

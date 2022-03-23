@@ -1,6 +1,8 @@
 package me.ash.reader.ui.page.home
 
+import android.util.Log
 import android.view.HapticFeedbackConstants
+import android.view.SoundEffectConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutLinearInEasing
@@ -10,9 +12,10 @@ import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ChipDefaults
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FilterChip
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Circle
@@ -26,13 +29,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.flowlayout.MainAxisAlignment
+import com.google.accompanist.flowlayout.SizeMode
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import me.ash.reader.R
@@ -89,7 +93,7 @@ fun HomeBottomNavBar(
     }
 
     Divider(
-        modifier = Modifier.alpha(0.3f),
+        color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.24f)
     )
     Box(
         modifier = modifier
@@ -107,7 +111,7 @@ fun HomeBottomNavBar(
                     .animateContentSize()
                     .alpha(1 - readerBarAlpha),
             ) {
-//            Log.i("RLog", "AppNavigationBar: ${readerBarAlpha}, ${1f - readerBarAlpha}")
+                Log.i("RLog", "AppNavigationBar: ${readerBarAlpha}, ${1f - readerBarAlpha}")
                 FilterBar(
                     modifier = modifier,
                     filter = filter,
@@ -148,85 +152,152 @@ private fun FilterBar(
     filter: Filter,
     onSelected: (Filter) -> Unit = {},
 ) {
-    val view = LocalView.current
+
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        listOf(
-            Filter.Starred,
-            Filter.Unread,
-            Filter.All
-        ).forEach { item ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .animateContentSize(),
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .height(30.dp)
-                        .defaultMinSize(
-                            minWidth = 82.dp
-                        )
-                        .clip(CircleShape)
-                        .clickable(onClick = {
-                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                            onSelected(item)
-                        })
-                        .background(
-                            if (filter == item) {
-                                MaterialTheme.colorScheme.inverseOnSurface
-                            } else {
-                                Color.Unspecified
-                            }
-                        )
+        FlowRow(
+            mainAxisSize = SizeMode.Expand,
+            mainAxisAlignment = MainAxisAlignment.Center,
+            crossAxisAlignment = FlowCrossAxisAlignment.Center,
+            crossAxisSpacing = 0.dp,
+            mainAxisSpacing = 20.dp,
+        ) {
+            listOf(
+                Filter.Starred,
+                Filter.Unread,
+                Filter.All
+            ).forEach { item ->
+                Item(
+                    icon = if (filter == item) item.filledIcon else item.icon,
+                    name = item.getName(),
+                    selected = filter == item,
                 ) {
-                    if (filter == item) {
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Icon(
-                            modifier = Modifier.size(
-                                if (filter == item) {
-                                    15.dp
-                                } else {
-                                    19.dp
-                                }
-                            ),
-                            imageVector = item.icon,
-                            contentDescription = item.getName(),
-                            tint = MaterialTheme.colorScheme.primary,
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = item.getName().uppercase(),
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                    } else {
-                        Icon(
-                            modifier = Modifier.size(
-                                if (item.isUnread()) {
-                                    15
-                                } else {
-                                    19
-                                }.dp
-                            ),
-                            imageVector = item.icon,
-                            contentDescription = item.getName(),
-                            tint = MaterialTheme.colorScheme.outline,
-                        )
-                    }
+                    onSelected(item)
                 }
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun Item(
+    modifier: Modifier = Modifier,
+    icon: ImageVector,
+    name: String,
+    selected: Boolean = false,
+    onClick: () -> Unit = {},
+) {
+    val view = LocalView.current
+
+    FilterChip(
+        modifier = Modifier
+            .height(36.dp)
+            .animateContentSize(),
+        colors = ChipDefaults.filterChipColors(
+            backgroundColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.outline,
+            leadingIconColor = MaterialTheme.colorScheme.outline,
+            disabledBackgroundColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+            disabledContentColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+            disabledLeadingIconColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+            selectedBackgroundColor = MaterialTheme.colorScheme.primaryContainer,
+            selectedContentColor = MaterialTheme.colorScheme.onSurface,
+            selectedLeadingIconColor = MaterialTheme.colorScheme.onSurface
+        ),
+        selected = selected,
+        selectedIcon = {
+            Icon(
+                imageVector = icon,
+                contentDescription = name,
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .size(20.dp),
+                tint = MaterialTheme.colorScheme.onSurface,
+            )
+        },
+        onClick = {
+            view.playSoundEffect(SoundEffectConstants.CLICK)
+            onClick()
+        },
+        content = {
+            if (selected) {
+                Text(
+                    modifier = modifier.padding(
+                        start = 0.dp,
+                        top = 8.dp,
+                        end = 8.dp,
+                        bottom = 8.dp
+                    ),
+                    text = if (selected) name.uppercase() else "",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = if (selected) {
+                        MaterialTheme.colorScheme.onSurface
+                    } else {
+                        MaterialTheme.colorScheme.outline
+                    },
+                )
+            } else {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = name,
+                    modifier = Modifier.size(20.dp),
+                    tint = MaterialTheme.colorScheme.outline,
+                )
+            }
+        },
+    )
+
+//    Row(
+//        modifier = Modifier
+//            .animateContentSize()
+//            .height(40.dp)
+//            .width(if (selected) Dp.Unspecified else 40.dp)
+//            .padding(vertical = if (selected) 2.dp else 0.dp)
+//            .clip(CircleShape)
+//            .pointerInput(Unit) {
+//                detectTapGestures(
+//                    onTap = {
+//                        view.playSoundEffect(SoundEffectConstants.CLICK)
+//                        onClick()
+//                    }
+//                )
+//            }
+//            .background(
+//                if (selected) {
+//                    MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.54f)
+//                } else {
+//                    Color.Transparent
+//                }
+//            ),
+//        horizontalArrangement = Arrangement.Center,
+//        verticalAlignment = Alignment.CenterVertically,
+//    ) {
+//        Spacer(modifier = Modifier.width(8.dp))
+//        Icon(
+//            modifier = Modifier.size(20.dp),
+//            imageVector = icon,
+//            contentDescription = name,
+//            tint = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
+//        )
+//        if (selected) {
+//            Spacer(modifier = Modifier.width(8.dp))
+//            Text(
+//                modifier = Modifier.padding(horizontal = 8.dp),
+//                text = name.uppercase(),
+//                style = MaterialTheme.typography.titleSmall,
+//                color = if (selected) {
+//                    MaterialTheme.colorScheme.onSurface
+//                } else {
+//                    MaterialTheme.colorScheme.outline
+//                },
+//            )
+//            Spacer(modifier = Modifier.width(8.dp))
+//        }
+//    }
 }
 
 @Composable

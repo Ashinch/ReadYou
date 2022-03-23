@@ -6,7 +6,8 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.R
@@ -29,6 +30,7 @@ class SubscribeViewModel @Inject constructor(
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(SubscribeViewState())
     val viewState: StateFlow<SubscribeViewState> = _viewState.asStateFlow()
+    private var searchJob: Job? = null
 
     fun dispatch(action: SubscribeViewAction) {
         when (action) {
@@ -36,13 +38,15 @@ class SubscribeViewModel @Inject constructor(
             is SubscribeViewAction.Reset -> reset()
             is SubscribeViewAction.Show -> changeVisible(true)
             is SubscribeViewAction.Hide -> changeVisible(false)
-            is SubscribeViewAction.Input -> inputLink(action.content)
+            is SubscribeViewAction.InputLink -> inputLink(action.content)
             is SubscribeViewAction.Search -> search(action.scope)
             is SubscribeViewAction.ChangeAllowNotificationPreset ->
                 changeAllowNotificationPreset()
             is SubscribeViewAction.ChangeParseFullContentPreset ->
                 changeParseFullContentPreset()
             is SubscribeViewAction.SelectedGroup -> selectedGroup(action.groupId)
+            is SubscribeViewAction.InputNewGroup -> inputNewGroup(action.content)
+            is SubscribeViewAction.SelectedNewGroup -> selectedNewGroup(action.selected)
             is SubscribeViewAction.Subscribe -> subscribe()
         }
     }
@@ -51,24 +55,17 @@ class SubscribeViewModel @Inject constructor(
         _viewState.update {
             it.copy(
                 title = stringsRepository.getString(R.string.subscribe),
-                groups = rssRepository.get().pullGroups()
+                groups = rssRepository.get().pullGroups(),
             )
         }
     }
 
     private fun reset() {
+        searchJob?.cancel()
+        searchJob = null
         _viewState.update {
-            it.copy(
-                visible = false,
+            SubscribeViewState().copy(
                 title = stringsRepository.getString(R.string.subscribe),
-                errorMessage = "",
-                inputContent = "",
-                feed = null,
-                articles = emptyList(),
-                allowNotificationPreset = false,
-                parseFullContentPreset = false,
-                selectedGroupId = "",
-                groups = emptyFlow(),
             )
         }
     }
@@ -76,11 +73,20 @@ class SubscribeViewModel @Inject constructor(
     private fun subscribe() {
         val feed = _viewState.value.feed ?: return
         val articles = _viewState.value.articles
-        val groupId = _viewState.value.selectedGroupId
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
+            val groupId = async {
+                if (
+                    _viewState.value.newGroupSelected &&
+                    _viewState.value.newGroupContent.isNotBlank()
+                ) {
+                    rssRepository.get().addGroup(_viewState.value.newGroupContent)
+                } else {
+                    _viewState.value.selectedGroupId
+                }
+            }
             rssRepository.get().subscribe(
                 feed.copy(
-                    groupId = groupId,
+                    groupId = groupId.await(),
                     isNotification = _viewState.value.allowNotificationPreset,
                     isFullContent = _viewState.value.parseFullContentPreset,
                 ), articles
@@ -93,6 +99,14 @@ class SubscribeViewModel @Inject constructor(
         _viewState.update {
             it.copy(
                 selectedGroupId = groupId,
+            )
+        }
+    }
+
+    private fun selectedNewGroup(selected: Boolean) {
+        _viewState.update {
+            it.copy(
+                newGroupSelected = selected,
             )
         }
     }
@@ -114,31 +128,40 @@ class SubscribeViewModel @Inject constructor(
     }
 
     private fun search(scope: CoroutineScope) {
-        _viewState.value.inputContent.formatUrl().let { str ->
-            if (str != _viewState.value.inputContent) {
+        searchJob?.cancel()
+        viewModelScope.launch {
+            try {
                 _viewState.update {
                     it.copy(
-                        inputContent = str
+                        errorMessage = "",
                     )
                 }
-            }
-        }
-        _viewState.update {
-            it.copy(
-                title = stringsRepository.getString(R.string.searching),
-            )
-        }
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                if (rssRepository.get().isExist(_viewState.value.inputContent)) {
+                _viewState.value.linkContent.formatUrl().let { str ->
+                    if (str != _viewState.value.linkContent) {
+                        _viewState.update {
+                            it.copy(
+                                linkContent = str
+                            )
+                        }
+                    }
+                }
+                _viewState.update {
+                    it.copy(
+                        title = stringsRepository.getString(R.string.searching),
+                        lockLinkInput = true,
+                    )
+                }
+                if (rssRepository.get().isExist(_viewState.value.linkContent)) {
                     _viewState.update {
                         it.copy(
+                            title = stringsRepository.getString(R.string.subscribe),
                             errorMessage = stringsRepository.getString(R.string.already_subscribed),
+                            lockLinkInput = false,
                         )
                     }
                     return@launch
                 }
-                val feedWithArticle = rssHelper.searchFeed(_viewState.value.inputContent)
+                val feedWithArticle = rssHelper.searchFeed(_viewState.value.linkContent)
                 _viewState.update {
                     it.copy(
                         feed = feedWithArticle.feed,
@@ -152,16 +175,27 @@ class SubscribeViewModel @Inject constructor(
                     it.copy(
                         title = stringsRepository.getString(R.string.subscribe),
                         errorMessage = e.message ?: stringsRepository.getString(R.string.unknown),
+                        lockLinkInput = false,
                     )
                 }
             }
+        }.also {
+            searchJob = it
         }
     }
 
     private fun inputLink(content: String) {
         _viewState.update {
             it.copy(
-                inputContent = content
+                linkContent = content
+            )
+        }
+    }
+
+    private fun inputNewGroup(content: String) {
+        _viewState.update {
+            it.copy(
+                newGroupContent = content
             )
         }
     }
@@ -180,12 +214,15 @@ data class SubscribeViewState(
     val visible: Boolean = false,
     val title: String = "",
     val errorMessage: String = "",
-    val inputContent: String = "",
+    val linkContent: String = "",
+    val lockLinkInput: Boolean = false,
     val feed: Feed? = null,
     val articles: List<Article> = emptyList(),
     val allowNotificationPreset: Boolean = false,
     val parseFullContentPreset: Boolean = false,
     val selectedGroupId: String = "",
+    val newGroupContent: String = "",
+    val newGroupSelected: Boolean = false,
     val groups: Flow<List<Group>> = emptyFlow(),
     val pagerState: PagerState = PagerState(),
 )
@@ -197,7 +234,7 @@ sealed class SubscribeViewAction {
     object Show : SubscribeViewAction()
     object Hide : SubscribeViewAction()
 
-    data class Input(
+    data class InputLink(
         val content: String
     ) : SubscribeViewAction()
 
@@ -210,6 +247,14 @@ sealed class SubscribeViewAction {
 
     data class SelectedGroup(
         val groupId: String
+    ) : SubscribeViewAction()
+
+    data class InputNewGroup(
+        val content: String
+    ) : SubscribeViewAction()
+
+    data class SelectedNewGroup(
+        val selected: Boolean
     ) : SubscribeViewAction()
 
     object Subscribe : SubscribeViewAction()

@@ -47,7 +47,7 @@ fun HomePage(
                     scope.launch {
                         val article = readViewModel
                             .rssRepository.get()
-                            .findArticleById(it.toString().toInt()) ?: return@launch
+                            .findArticleById(it.toString()) ?: return@launch
                         readViewModel.dispatch(ReadViewAction.InitData(article))
                         if (article.feed.isFullContent) readViewModel.dispatch(ReadViewAction.RenderFullContent)
                         else readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)

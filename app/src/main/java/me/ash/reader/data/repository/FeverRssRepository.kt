@@ -48,6 +48,19 @@ class FeverRssRepository @Inject constructor(
         })
     }
 
+    override suspend fun addGroup(name: String): String {
+        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)!!
+        return UUID.randomUUID().toString().also {
+            groupDao.insert(
+                Group(
+                    id = it,
+                    name = name,
+                    accountId = accountId
+                )
+            )
+        }
+    }
+
     override suspend fun sync() {
         mutex.withLock {
             val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)

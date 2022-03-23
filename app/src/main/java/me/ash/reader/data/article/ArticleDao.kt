@@ -279,7 +279,7 @@ interface ArticleDao {
         WHERE id = :id
         """
     )
-    suspend fun queryById(id: Int): ArticleWithFeed?
+    suspend fun queryById(id: String): ArticleWithFeed?
 
     @Insert
     suspend fun insert(article: Article): Long

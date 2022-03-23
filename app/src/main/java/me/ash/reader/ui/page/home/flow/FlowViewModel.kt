@@ -8,7 +8,6 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.data.article.ArticleWithFeed
@@ -41,7 +40,7 @@ class FlowViewModel @Inject constructor(
     }
 
     private fun fetchData(filterState: FilterState) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             rssRepository.get().pullImportant(filterState.filter.isStarred(), true)
                 .collect { importantList ->
                     _viewState.update {

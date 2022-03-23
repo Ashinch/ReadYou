@@ -2,6 +2,8 @@ package me.ash.reader.ui.page.home.feeds.subscribe
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.RssFeed
 import androidx.compose.material3.Icon
@@ -9,9 +11,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import me.ash.reader.*
@@ -23,10 +29,12 @@ import java.io.InputStream
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun SubscribeDialog(
+    modifier: Modifier = Modifier,
     viewModel: SubscribeViewModel = hiltViewModel(),
     openInputStreamCallback: (InputStream) -> Unit,
 ) {
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
         it?.let { uri ->
@@ -37,13 +45,14 @@ fun SubscribeDialog(
     }
     val viewState = viewModel.viewState.collectAsStateValue()
     val groupsState = viewState.groups.collectAsState(initial = emptyList())
-    var height by remember { mutableStateOf(0) }
-
+    var dialogHeight by remember { mutableStateOf(280.dp) }
+    val readYouString = stringResource(R.string.read_you)
+    val defaultString = stringResource(R.string.defaults)
     LaunchedEffect(viewState.visible) {
         if (viewState.visible) {
             val defaultGroupId = context.dataStore
                 .get(DataStoreKeys.CurrentAccountId)!!
-                .spacerDollar("0")
+                .spacerDollar(readYouString + defaultString)
             viewModel.dispatch(SubscribeViewAction.SelectedGroup(defaultGroupId))
             viewModel.dispatch(SubscribeViewAction.Init)
         } else {
@@ -52,9 +61,21 @@ fun SubscribeDialog(
         }
     }
 
+    LaunchedEffect(viewState.pagerState.currentPage) {
+        focusManager.clearFocus()
+        when (viewState.pagerState.currentPage) {
+            0 -> dialogHeight = 280.dp
+            1 -> dialogHeight = Dp.Unspecified
+        }
+    }
+
     Dialog(
+        modifier = Modifier
+            .padding(horizontal = 44.dp)
+            .height(dialogHeight),
         visible = viewState.visible,
         onDismissRequest = {
+            focusManager.clearFocus()
             viewModel.dispatch(SubscribeViewAction.Hide)
         },
         icon = {
@@ -66,30 +87,35 @@ fun SubscribeDialog(
         title = {
             Text(
                 when (viewState.pagerState.currentPage) {
-                    0 -> stringResource(R.string.subscribe)
+                    0 -> viewState.title
                     else -> viewState.feed?.name ?: stringResource(R.string.unknown)
                 }
             )
         },
         text = {
             SubscribeViewPager(
-//                height = when (viewState.pagerState.currentPage) {
-//                    0 -> 84.dp
-//                    else -> Dp.Unspecified
-//                },
-                inputContent = viewState.inputContent,
+                readOnly = viewState.lockLinkInput,
+                inputLink = viewState.linkContent,
                 errorMessage = viewState.errorMessage,
-                onValueChange = {
-                    viewModel.dispatch(SubscribeViewAction.Input(it))
+                onLinkValueChange = {
+                    viewModel.dispatch(SubscribeViewAction.InputLink(it))
                 },
                 onSearchKeyboardAction = {
                     viewModel.dispatch(SubscribeViewAction.Search(scope))
                 },
-                link = viewState.inputContent,
+                link = viewState.linkContent,
                 groups = groupsState.value,
                 selectedAllowNotificationPreset = viewState.allowNotificationPreset,
                 selectedParseFullContentPreset = viewState.parseFullContentPreset,
                 selectedGroupId = viewState.selectedGroupId,
+                newGroupContent = viewState.newGroupContent,
+                onNewGroupValueChange = {
+                    viewModel.dispatch(SubscribeViewAction.InputNewGroup(it))
+                },
+                newGroupSelected = viewState.newGroupSelected,
+                changeNewGroupSelected = {
+                    viewModel.dispatch(SubscribeViewAction.SelectedNewGroup(it))
+                },
                 pagerState = viewState.pagerState,
                 allowNotificationPresetOnClick = {
                     viewModel.dispatch(SubscribeViewAction.ChangeAllowNotificationPreset)
@@ -109,14 +135,15 @@ fun SubscribeDialog(
             when (viewState.pagerState.currentPage) {
                 0 -> {
                     TextButton(
-                        enabled = viewState.inputContent.isNotEmpty(),
+                        enabled = viewState.linkContent.isNotEmpty(),
                         onClick = {
+                            focusManager.clearFocus()
                             viewModel.dispatch(SubscribeViewAction.Search(scope))
                         }
                     ) {
                         Text(
                             text = stringResource(R.string.search),
-                            color = if (viewState.inputContent.isNotEmpty()) {
+                            color = if (viewState.linkContent.isNotEmpty()) {
                                 Color.Unspecified
                             } else {
                                 MaterialTheme.colorScheme.outline.copy(alpha = 0.7f)
@@ -127,6 +154,7 @@ fun SubscribeDialog(
                 1 -> {
                     TextButton(
                         onClick = {
+                            focusManager.clearFocus()
                             viewModel.dispatch(SubscribeViewAction.Subscribe)
                         }
                     ) {
@@ -140,6 +168,7 @@ fun SubscribeDialog(
                 0 -> {
                     TextButton(
                         onClick = {
+                            focusManager.clearFocus()
                             launcher.launch("*/*")
                             viewModel.dispatch(SubscribeViewAction.Hide)
                         }
@@ -150,6 +179,7 @@ fun SubscribeDialog(
                 1 -> {
                     TextButton(
                         onClick = {
+                            focusManager.clearFocus()
                             viewModel.dispatch(SubscribeViewAction.Hide)
                         }
                     ) {

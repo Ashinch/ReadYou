@@ -20,6 +20,7 @@ import me.ash.reader.data.article.Article
 import me.ash.reader.data.article.ArticleDao
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.feed.FeedDao
+import me.ash.reader.data.group.Group
 import me.ash.reader.data.group.GroupDao
 import me.ash.reader.data.source.RssNetworkDataSource
 import me.ash.reader.ui.page.common.ExtraName
@@ -35,7 +36,7 @@ class LocalRssRepository @Inject constructor(
     private val rssHelper: RssHelper,
     private val rssNetworkDataSource: RssNetworkDataSource,
     private val accountDao: AccountDao,
-    groupDao: GroupDao,
+    private val groupDao: GroupDao,
     workManager: WorkManager,
 ) : AbstractRssRepository(
     context, accountDao, articleDao, groupDao,
@@ -50,6 +51,19 @@ class LocalRssRepository @Inject constructor(
         articleDao.insertList(articles.map {
             it.copy(feedId = feed.id)
         })
+    }
+
+    override suspend fun addGroup(name: String): String {
+        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)!!
+        return UUID.randomUUID().toString().also {
+            groupDao.insert(
+                Group(
+                    id = it,
+                    name = name,
+                    accountId = accountId
+                )
+            )
+        }
     }
 
     override suspend fun sync() {
@@ -136,7 +150,7 @@ class LocalRssRepository @Inject constructor(
                                                     Intent.FLAG_ACTIVITY_CLEAR_TASK
                                             putExtra(
                                                 ExtraName.ARTICLE_ID,
-                                                ids[index].toInt()
+                                                ids[index]
                                             )
                                         },
                                         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT

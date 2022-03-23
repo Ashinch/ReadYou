@@ -19,7 +19,7 @@ interface FeedDao {
         and url = :url
         """
     )
-    fun queryByLink(accountId: Int, url: String): List<Feed>
+    suspend fun queryByLink(accountId: Int, url: String): List<Feed>
 
     @Insert
     suspend fun insert(feed: Feed): Long
