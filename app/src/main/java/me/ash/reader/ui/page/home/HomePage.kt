@@ -2,9 +2,12 @@ package me.ash.reader.ui.page.home
 
 import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,7 +29,7 @@ import me.ash.reader.ui.page.home.read.ReadViewAction
 import me.ash.reader.ui.page.home.read.ReadViewModel
 import me.ash.reader.ui.widget.ViewPager
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
 fun HomePage(
     navController: NavHostController,
@@ -38,6 +41,7 @@ fun HomePage(
     val filterState = viewModel.filterState.collectAsStateValue()
     val readState = readViewModel.viewState.collectAsStateValue()
     val scope = rememberCoroutineScope()
+    val drawerState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
     LaunchedEffect(Unit) {
         context.findActivity()?.let { activity ->
@@ -92,66 +96,69 @@ fun HomePage(
         }
     }
 
-    Column {
-        ViewPager(
-            modifier = Modifier.weight(1f),
-            state = viewState.pagerState,
-            composableList = listOf(
-                {
-                    FeedsPage(navController = navController)
-                },
-                {
-                    FlowPage(navController = navController)
-                },
-                {
-                    ReadPage(
-                        navController = navController,
-                        btnBackOnClickListener = {
-                            viewModel.dispatch(
-                                HomeViewAction.ScrollToPage(
-                                    scope = scope,
-                                    targetPage = 1,
-                                    callback = {
-                                        readViewModel.dispatch(ReadViewAction.ClearArticle)
-                                    }
+    Box {
+        Column {
+            ViewPager(
+                modifier = Modifier.weight(1f),
+                state = viewState.pagerState,
+                composableList = listOf(
+                    {
+                        FeedsPage(navController = navController)
+                    },
+                    {
+                        FlowPage(navController = navController)
+                    },
+                    {
+                        ReadPage(
+                            navController = navController,
+                            btnBackOnClickListener = {
+                                viewModel.dispatch(
+                                    HomeViewAction.ScrollToPage(
+                                        scope = scope,
+                                        targetPage = 1,
+                                        callback = {
+                                            readViewModel.dispatch(ReadViewAction.ClearArticle)
+                                        }
+                                    )
                                 )
-                            )
-                        },
-                    )
+                            },
+                        )
+                    },
+                ),
+            )
+            HomeBottomNavBar(
+                modifier = Modifier
+                    .height(60.dp)
+                    .fillMaxWidth(),
+                pagerState = viewState.pagerState,
+                disabled = readState.articleWithFeed == null,
+                isUnread = readState.articleWithFeed?.article?.isUnread ?: false,
+                isStarred = readState.articleWithFeed?.article?.isStarred ?: false,
+                isFullContent = readState.articleWithFeed?.feed?.isFullContent ?: false,
+                unreadOnClick = {
+                    readViewModel.dispatch(ReadViewAction.MarkUnread(it))
                 },
-            ),
-        )
-        HomeBottomNavBar(
-            modifier = Modifier
-                .height(60.dp)
-                .fillMaxWidth(),
-            pagerState = viewState.pagerState,
-            disabled = readState.articleWithFeed == null,
-            isUnread = readState.articleWithFeed?.article?.isUnread ?: false,
-            isStarred = readState.articleWithFeed?.article?.isStarred ?: false,
-            isFullContent = readState.articleWithFeed?.feed?.isFullContent ?: false,
-            unreadOnClick = {
-                readViewModel.dispatch(ReadViewAction.MarkUnread(it))
-            },
-            starredOnClick = {
-                readViewModel.dispatch(ReadViewAction.MarkStarred(it))
-            },
-            fullContentOnClick = { afterIsFullContent ->
-                readState.articleWithFeed?.let {
-                    if (afterIsFullContent) readViewModel.dispatch(ReadViewAction.RenderFullContent)
-                    else readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
-                }
-            },
-            filter = filterState.filter,
-            filterOnClick = {
-                viewModel.dispatch(
-                    HomeViewAction.ChangeFilter(
-                        filterState.copy(
-                            filter = it
+                starredOnClick = {
+                    readViewModel.dispatch(ReadViewAction.MarkStarred(it))
+                },
+                fullContentOnClick = { afterIsFullContent ->
+                    readState.articleWithFeed?.let {
+                        if (afterIsFullContent) readViewModel.dispatch(ReadViewAction.RenderFullContent)
+                        else readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
+                    }
+                },
+                filter = filterState.filter,
+                filterOnClick = {
+                    viewModel.dispatch(
+                        HomeViewAction.ChangeFilter(
+                            filterState.copy(
+                                filter = it
+                            )
                         )
                     )
-                )
-            },
-        )
+                },
+            )
+        }
+        FeedOptionDrawer(drawerState = drawerState)
     }
 }

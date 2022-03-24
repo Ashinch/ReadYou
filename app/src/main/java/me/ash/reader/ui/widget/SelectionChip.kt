@@ -1,5 +1,6 @@
 package me.ash.reader.ui.widget
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -39,6 +40,7 @@ fun SelectionChip(
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = CircleShape,
+    border: BorderStroke? = null,
     selectedIcon: @Composable () -> Unit = {
         Icon(
             imageVector = Icons.Filled.CheckCircle,
@@ -66,6 +68,7 @@ fun SelectionChip(
             selectedContentColor = MaterialTheme.colorScheme.onSurface,
             selectedLeadingIconColor = MaterialTheme.colorScheme.onSurface
         ),
+        border = border,
         interactionSource = interactionSource,
         enabled = enabled,
         selected = selected,

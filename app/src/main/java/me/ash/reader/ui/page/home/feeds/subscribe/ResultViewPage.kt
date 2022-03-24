@@ -82,6 +82,7 @@ private fun Link(
             Text(
                 text = text,
                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
     }

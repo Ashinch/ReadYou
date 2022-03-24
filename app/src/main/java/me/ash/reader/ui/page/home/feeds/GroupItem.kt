@@ -3,9 +3,11 @@ package me.ash.reader.ui.page.home.feeds
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
@@ -18,9 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.data.feed.Feed
+import me.ash.reader.ui.page.common.LocalDrawerState
 
+@OptIn(ExperimentalMaterialApi::class, androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun GroupItem(
     modifier: Modifier = Modifier,
@@ -31,6 +36,8 @@ fun GroupItem(
     feedOnClick: (feed: Feed) -> Unit = {},
 ) {
     var expanded by remember { mutableStateOf(isExpanded) }
+    val scope = rememberCoroutineScope()
+    val drawerState = LocalDrawerState.current
 
     Column(
         modifier = Modifier
@@ -38,7 +45,16 @@ fun GroupItem(
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(32.dp))
             .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.14f))
-            .clickable { groupOnClick() }
+            .combinedClickable(
+                onClick = {
+                    groupOnClick()
+                },
+                onLongClick = {
+                    scope.launch {
+                        drawerState.show()
+                    }
+                }
+            )
             .padding(top = 22.dp)
     ) {
         Row(

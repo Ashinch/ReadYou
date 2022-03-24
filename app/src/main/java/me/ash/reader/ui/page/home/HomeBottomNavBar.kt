@@ -42,6 +42,7 @@ import com.google.accompanist.pager.PagerState
 import me.ash.reader.R
 import me.ash.reader.data.constant.Filter
 import me.ash.reader.ui.extension.getName
+import me.ash.reader.ui.theme.LocalLightThemeColors
 import me.ash.reader.ui.widget.CanBeDisabledIconButton
 import kotlin.math.absoluteValue
 
@@ -192,6 +193,9 @@ fun Item(
     onClick: () -> Unit = {},
 ) {
     val view = LocalView.current
+    val lightThemeColors = LocalLightThemeColors.current
+    val lightPrimaryContainer = lightThemeColors.primaryContainer
+    val lightOnSurface = lightThemeColors.onSurface
 
     FilterChip(
         modifier = Modifier
@@ -204,9 +208,9 @@ fun Item(
             disabledBackgroundColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
             disabledContentColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
             disabledLeadingIconColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
-            selectedBackgroundColor = MaterialTheme.colorScheme.primaryContainer,
-            selectedContentColor = MaterialTheme.colorScheme.onSurface,
-            selectedLeadingIconColor = MaterialTheme.colorScheme.onSurface
+            selectedBackgroundColor = lightPrimaryContainer,
+            selectedContentColor = lightOnSurface,
+            selectedLeadingIconColor = lightOnSurface
         ),
         selected = selected,
         selectedIcon = {
@@ -216,7 +220,7 @@ fun Item(
                 modifier = Modifier
                     .padding(start = 8.dp)
                     .size(20.dp),
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = lightOnSurface,
             )
         },
         onClick = {
@@ -235,7 +239,7 @@ fun Item(
                     text = if (selected) name.uppercase() else "",
                     style = MaterialTheme.typography.titleSmall,
                     color = if (selected) {
-                        MaterialTheme.colorScheme.onSurface
+                        lightOnSurface
                     } else {
                         MaterialTheme.colorScheme.outline
                     },
