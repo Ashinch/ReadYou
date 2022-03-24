@@ -87,8 +87,8 @@ class LocalRssRepository @Inject constructor(
 
     override suspend fun sync() {
         mutex.withLock {
-            val preTime = System.currentTimeMillis()
             withContext(Dispatchers.IO) {
+                val preTime = System.currentTimeMillis()
                 val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)
                     ?: return@withContext
                 val feeds = async { feedDao.queryAll(accountId) }
@@ -98,6 +98,7 @@ class LocalRssRepository @Inject constructor(
                             feedCount = feed.size,
                         )
                     }
+                    Log.i("RLog", "thread:sync ${Thread.currentThread().name}")
                 }.map { feed ->
                     async {
                         val articles = syncFeed(accountId, feed)
@@ -132,36 +133,37 @@ class LocalRssRepository @Inject constructor(
     private suspend fun syncFeed(
         accountId: Int,
         feed: Feed
-    ): MutableList<Article> {
-        val articles = mutableListOf<Article>()
+    ): List<Article> {
         val latest = articleDao.queryLatestByFeedId(accountId, feed.id)
-        articles.addAll(
-            rssHelper.queryRssXml(
-                rssNetworkDataSource,
-                accountId,
-                feed,
-                latest?.title,
-            ).also {
-                if (feed.icon == null && it.isNotEmpty()) {
-                    rssHelper.queryRssIcon(feedDao, feed, it.first().link)
-                }
+        val articles = rssHelper.queryRssXml(
+            rssNetworkDataSource,
+            accountId,
+            feed,
+            latest?.link,
+        ).also {
+            if (feed.icon == null && it.isNotEmpty()) {
+                rssHelper.queryRssIcon(feedDao, feed, it.first().link)
             }
-        )
+        }
+
+        Log.i("RLog", "thread:syncFeed ${Thread.currentThread().name}")
         updateSyncState {
             it.copy(
                 syncedCount = it.syncedCount + 1,
                 currentFeedName = feed.name
             )
         }
-        articleDao.insertList(articles)
-        if (feed.isNotification) {
-            notify(articles)
+        if (articles.isNotEmpty()) {
+            articleDao.insertList(articles)
+            if (feed.isNotification) {
+                notify(articles)
+            }
         }
         return articles
     }
 
     private fun notify(
-        articles: MutableList<Article>,
+        articles: List<Article>,
     ) {
         articles.forEach { article ->
             val builder = NotificationCompat.Builder(

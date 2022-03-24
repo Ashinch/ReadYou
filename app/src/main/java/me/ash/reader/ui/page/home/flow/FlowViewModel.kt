@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.flow
 
+import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.data.article.ArticleWithFeed
@@ -53,13 +55,14 @@ class FlowViewModel @Inject constructor(
         _viewState.update {
             it.copy(
                 pagingData = Pager(PagingConfig(pageSize = 10)) {
+                    Log.i("RLog", "thread:Pager ${Thread.currentThread().name}")
                     rssRepository.get().pullArticles(
                         groupId = filterState.group?.id,
                         feedId = filterState.feed?.id,
                         isStarred = filterState.filter.isStarred(),
                         isUnread = filterState.filter.isUnread(),
                     )
-                }.flow.cachedIn(viewModelScope)
+                }.flow.flowOn(Dispatchers.IO).cachedIn(viewModelScope)
             )
         }
     }
@@ -81,7 +84,7 @@ data class ArticleViewState(
     val filterImportant: Int = 0,
     val listState: LazyListState = LazyListState(),
     val isRefreshing: Boolean = false,
-    val pagingData: Flow<PagingData<ArticleWithFeed>>? = null,
+    val pagingData: Flow<PagingData<ArticleWithFeed>> = emptyFlow(),
     val syncWorkInfo: String = "",
 )
 

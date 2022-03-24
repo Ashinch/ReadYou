@@ -72,7 +72,7 @@ abstract class AbstractRssRepository constructor(
     fun pullFeeds(): Flow<MutableList<GroupWithFeed>> {
         return groupDao.queryAllGroupWithFeed(
             context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0
-        )
+        )//.flowOn(Dispatchers.IO)
     }
 
     fun pullArticles(
@@ -81,6 +81,7 @@ abstract class AbstractRssRepository constructor(
         isStarred: Boolean = false,
         isUnread: Boolean = false,
     ): PagingSource<Int, ArticleWithFeed> {
+        Log.i("RLog", "thread:pullArticles ${Thread.currentThread().name}")
         val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0
         Log.i(
             "RLog",
@@ -116,6 +117,7 @@ abstract class AbstractRssRepository constructor(
         isUnread: Boolean = false,
     ): Flow<List<ImportantCount>> {
         return withContext(Dispatchers.IO) {
+            Log.i("RLog", "thread:pullImportant ${Thread.currentThread().name}")
             val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)!!
             Log.i(
                 "RLog",
@@ -128,7 +130,7 @@ abstract class AbstractRssRepository constructor(
                     .queryImportantCountWhenIsUnread(accountId, isUnread)
                 else -> articleDao.queryImportantCountWhenIsAll(accountId)
             }
-        }
+        }//.flowOn(Dispatchers.IO)
     }
 
     suspend fun findArticleById(id: String): ArticleWithFeed? {
@@ -176,7 +178,6 @@ class SyncWorker @AssistedInject constructor(
             15, TimeUnit.MINUTES
         ).setConstraints(
             Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
         ).addTag(WORK_NAME).build()
     }

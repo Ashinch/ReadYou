@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
-import kotlinx.coroutines.flow.collect
 import me.ash.reader.R
 import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.extension.getName
@@ -46,7 +45,7 @@ fun FlowPage(
     val scope = rememberCoroutineScope()
     val viewState = viewModel.viewState.collectAsStateValue()
     val filterState = homeViewModel.filterState.collectAsStateValue()
-    val pagingItems = viewState.pagingData?.collectAsLazyPagingItems()
+    val pagingItems = viewState.pagingData.collectAsLazyPagingItems()
 
     LaunchedEffect(homeViewModel.filterState) {
         homeViewModel.filterState.collect { state ->

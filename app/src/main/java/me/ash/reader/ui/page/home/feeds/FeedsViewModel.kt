@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.data.account.Account
@@ -67,6 +68,7 @@ class FeedsViewModel @Inject constructor(
             rssRepository.get().pullFeeds(),
             rssRepository.get().pullImportant(isStarred, isUnread),
         ) { groupWithFeedList, importantList ->
+            Log.i("RLog", "thread:combine ${Thread.currentThread().name}")
             val groupImportantMap = mutableMapOf<String, Int>()
             val feedImportantMap = mutableMapOf<String, Int>()
             importantList.groupBy { it.groupId }.forEach { (i, list) ->
@@ -101,6 +103,8 @@ class FeedsViewModel @Inject constructor(
         }.onStart {
 
         }.onEach { groupWithFeedList ->
+            Log.i("RLog", "thread:onEach ${Thread.currentThread().name}")
+
             _viewState.update {
                 it.copy(
                     filter = when {
@@ -116,7 +120,7 @@ class FeedsViewModel @Inject constructor(
             }
         }.catch {
             Log.e("RLog", "catch in articleRepository.pullFeeds(): $this")
-        }.collect()
+        }.flowOn(Dispatchers.Default).collect()
     }
 
     private fun scrollToItem(index: Int) {

@@ -92,13 +92,13 @@ class RssHelper @Inject constructor(
         rssNetworkDataSource: RssNetworkDataSource,
         accountId: Int,
         feed: Feed,
-        latestTitle: String? = null,
+        latestLink: String? = null,
     ): List<Article> {
         val a = mutableListOf<Article>()
         try {
             val parseRss = rssNetworkDataSource.parseRss(feed.url)
             parseRss.items.forEach {
-                if (latestTitle != null && latestTitle == it.title) return a
+                if (latestLink != null && latestLink == it.link) return a
                 Log.i("RLog", "request rss ${feed.name}: ${it.title}")
                 a.add(
                     Article(

@@ -113,7 +113,12 @@ fun HomeBottomNavBar(
                     .alpha(1 - readerBarAlpha),
             ) {
                 Log.i("RLog", "AppNavigationBar: ${readerBarAlpha}, ${1f - readerBarAlpha}")
-                FilterBar(
+//                FilterBar(
+//                    modifier = modifier,
+//                    filter = filter,
+//                    onSelected = filterOnClick,
+//                )
+                FilterBar2(
                     modifier = modifier,
                     filter = filter,
                     onSelected = filterOnClick,

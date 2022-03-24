@@ -19,12 +19,11 @@ import me.ash.reader.ui.page.home.read.ReadViewModel
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.generateArticleList(
     context: Context,
-    pagingItems: LazyPagingItems<ArticleWithFeed>?,
+    pagingItems: LazyPagingItems<ArticleWithFeed>,
     readViewModel: ReadViewModel,
     homeViewModel: HomeViewModel,
     scope: CoroutineScope
 ) {
-    pagingItems ?: return
     var lastItemDay: String? = null
     for (itemIndex in 0 until pagingItems.itemCount) {
         val currentItem = pagingItems.peek(itemIndex) ?: continue
