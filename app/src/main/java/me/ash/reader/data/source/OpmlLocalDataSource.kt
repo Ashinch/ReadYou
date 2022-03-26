@@ -4,12 +4,10 @@ import android.content.Context
 import android.util.Log
 import android.util.Xml
 import dagger.hilt.android.qualifiers.ApplicationContext
-import me.ash.reader.DataStoreKeys
+import me.ash.reader.currentAccountId
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.group.Group
 import me.ash.reader.data.group.GroupWithFeed
-import me.ash.reader.dataStore
-import me.ash.reader.get
 import org.xmlpull.v1.XmlPullParser
 import java.io.InputStream
 import java.util.*
@@ -22,7 +20,7 @@ class OpmlLocalDataSource @Inject constructor(
 //    @Throws(XmlPullParserException::class, IOException::class)
     fun parseFileInputStream(inputStream: InputStream): List<GroupWithFeed> {
         val groupWithFeedList = mutableListOf<GroupWithFeed>()
-        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0
+        val accountId = context.currentAccountId
         inputStream.use {
             val parser: XmlPullParser = Xml.newPullParser()
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)

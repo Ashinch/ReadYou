@@ -73,13 +73,12 @@ class LocalRssRepository @Inject constructor(
     }
 
     override suspend fun addGroup(name: String): String {
-        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)!!
         return UUID.randomUUID().toString().also {
             groupDao.insert(
                 Group(
                     id = it,
                     name = name,
-                    accountId = accountId
+                    accountId = context.currentAccountId
                 )
             )
         }
@@ -89,8 +88,7 @@ class LocalRssRepository @Inject constructor(
         mutex.withLock {
             withContext(Dispatchers.IO) {
                 val preTime = System.currentTimeMillis()
-                val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)
-                    ?: return@withContext
+                val accountId = context.currentAccountId
                 val feeds = async { feedDao.queryAll(accountId) }
                 val articles = feeds.await().also { feed ->
                     updateSyncState {

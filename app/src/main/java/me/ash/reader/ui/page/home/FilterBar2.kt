@@ -29,7 +29,7 @@ fun FilterBar2(
             NavigationBarItem(
                 icon = {
                     Icon(
-                        imageVector = if (filter == item) item.filledIcon else item.icon,
+                        imageVector = item.icon,
                         contentDescription = item.getName()
                     )
                 },

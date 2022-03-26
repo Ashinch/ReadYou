@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -46,6 +47,7 @@ fun SearchViewPage(
     onKeyboardAction: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
+    val clipboardManager = LocalClipboardManager.current
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
@@ -89,6 +91,7 @@ fun SearchViewPage(
                     }
                 } else {
                     IconButton(onClick = {
+                        onLinkValueChange(clipboardManager.getText()?.text ?: "")
                     }) {
                         Icon(
                             imageVector = Icons.Rounded.ContentPaste,

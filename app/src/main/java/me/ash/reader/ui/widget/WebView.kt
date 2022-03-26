@@ -17,6 +17,8 @@ import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.page.home.read.ReadViewAction
 import me.ash.reader.ui.page.home.read.ReadViewModel
 
+const val INJECTION_TOKEN = "/android_asset_font/"
+
 @Composable
 fun WebView(
     modifier: Modifier = Modifier,
@@ -26,10 +28,29 @@ fun WebView(
     onReceivedError: (error: WebResourceError?) -> Unit = {}
 ) {
     val context = LocalContext.current
-    val color = MaterialTheme.colorScheme.secondary.toArgb()
+    val color = MaterialTheme.colorScheme.onSurfaceVariant.toArgb()
     val backgroundColor = MaterialTheme.colorScheme.surface.toArgb()
     val viewState = viewModel.viewState.collectAsStateValue()
     val webViewClient = object : WebViewClient() {
+
+        override fun shouldInterceptRequest(view: WebView?, url: String?): WebResourceResponse? {
+            if (url != null && url.contains(INJECTION_TOKEN)) {
+                try {
+                    val assetPath = url.substring(
+                        url.indexOf(INJECTION_TOKEN) + INJECTION_TOKEN.length,
+                        url.length
+                    )
+                    return WebResourceResponse(
+                        "text/HTML",
+                        "UTF-8",
+                        context.assets.open(assetPath)
+                    )
+                } catch (e: Exception) {
+                    Log.e("RLog", "WebView shouldInterceptRequest: $e")
+                }
+            }
+            return super.shouldInterceptRequest(view, url);
+        }
 
         override fun onPageStarted(
             view: WebView?,
@@ -131,23 +152,29 @@ fun getStyle(argb: Int): String = """
 *{
     padding: 0;
     margin: 0;
-    color: ${argbToCssColor(argb)}
+    color: ${argbToCssColor(argb)};
+    font-family: url('/android_asset_font/font/google_sans_text_regular.TTF'),
+        url('/android_asset_font/font/google_sans_text_medium_italic.TTF'),
+        url('/android_asset_font/font/google_sans_text_medium.TTF'),
+        url('/android_asset_font/font/google_sans_text_italic.TTF'),
+        url('/android_asset_font/font/google_sans_text_bold_italic.TTF'),
+        url('/android_asset_font/font/google_sans_text_bold.TTF');
 }
 
 .page {
-    padding: 0 20px;
+    padding: 0 24px;
 }
 
 img {
-    margin: 0 -20px 20px;
-    width: calc(100% + 40px);
+    margin: 0 -24px 20px;
+    width: calc(100% + 48px);
     height: auto;
 }
 
 p,span,a,ol,ul,blockquote,article,section {
-    text-align: justify;
-    font-size: 18px;
-    line-height: 32px;
+    text-align: left;
+    font-size: 16px;
+    line-height: 24px;
     margin-bottom: 20px;
 }
 
@@ -186,6 +213,7 @@ hr {
 }
 
 h1,h2,h3,h4,h5,h6,figure,br {
+    font-size: large;
     margin-bottom: 20px;
 }
 

@@ -1,24 +1,29 @@
 package me.ash.reader.ui.page.home.feeds.subscribe
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddAlert
-import androidx.compose.material.icons.filled.Article
+import androidx.compose.material.icons.outlined.Article
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import me.ash.reader.R
 import me.ash.reader.data.group.Group
+import me.ash.reader.ui.extension.roundClick
 import me.ash.reader.ui.widget.SelectionChip
 import me.ash.reader.ui.widget.SelectionEditorChip
 import me.ash.reader.ui.widget.Subtitle
@@ -74,15 +79,23 @@ fun ResultViewPage(
 private fun Link(
     text: String,
 ) {
+    val context = LocalContext.current
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
         SelectionContainer {
             Text(
+                modifier = Modifier.roundClick {
+                    context.startActivity(
+                        Intent(Intent.ACTION_VIEW, Uri.parse(text))
+                    )
+                },
                 text = text,
                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
                 style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }
@@ -108,12 +121,11 @@ private fun Preset(
             selected = selectedAllowNotificationPreset,
             selectedIcon = {
                 Icon(
-                    imageVector = Icons.Filled.AddAlert,
+                    imageVector = Icons.Outlined.Notifications,
                     contentDescription = stringResource(R.string.allow_notification),
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .size(20.dp),
-                    tint = MaterialTheme.colorScheme.onSurface,
                 )
             },
         ) {
@@ -125,12 +137,11 @@ private fun Preset(
             selected = selectedParseFullContentPreset,
             selectedIcon = {
                 Icon(
-                    imageVector = Icons.Filled.Article,
+                    imageVector = Icons.Outlined.Article,
                     contentDescription = stringResource(R.string.parse_full_content),
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .size(20.dp),
-                    tint = MaterialTheme.colorScheme.onSurface,
                 )
             },
         ) {

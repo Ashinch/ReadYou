@@ -1,6 +1,7 @@
 package me.ash.reader.ui.page.home.flow
 
 import android.widget.Toast
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -79,7 +80,11 @@ fun FlowPage(
                 actions = {
                     IconButton(onClick = {
                         viewModel.dispatch(FlowViewAction.PeekSyncWork)
-                        Toast.makeText(context, viewState.syncWorkInfo.length.toString(), Toast.LENGTH_SHORT)
+                        Toast.makeText(
+                            context,
+                            viewState.syncWorkInfo.length.toString(),
+                            Toast.LENGTH_SHORT
+                        )
                             .show()
                     }) {
                         Icon(
@@ -99,31 +104,33 @@ fun FlowPage(
             )
         },
         content = {
-            LazyColumn(
-                state = viewState.listState,
-            ) {
-                item {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                start = if (true) 54.dp else 24.dp,
-                                top = 48.dp,
-                                end = 24.dp,
-                                bottom = 24.dp
-                            ),
-                        text = when {
-                            filterState.group != null -> filterState.group.name
-                            filterState.feed != null -> filterState.feed.name
-                            else -> filterState.filter.getName()
-                        },
-                        style = MaterialTheme.typography.displaySmall,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
+            Crossfade(targetState = pagingItems) { pagingItems ->
+                LazyColumn(
+                    state = viewState.listState,
+                ) {
+                    item {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    start = if (true) 54.dp else 24.dp,
+                                    top = 48.dp,
+                                    end = 24.dp,
+                                    bottom = 24.dp
+                                ),
+                            text = when {
+                                filterState.group != null -> filterState.group.name
+                                filterState.feed != null -> filterState.feed.name
+                                else -> filterState.filter.getName()
+                            },
+                            style = MaterialTheme.typography.displaySmall,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                    generateArticleList(context, pagingItems, readViewModel, homeViewModel, scope)
                 }
-                generateArticleList(context, pagingItems, readViewModel, homeViewModel, scope)
             }
         }
     )

@@ -8,9 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import me.ash.reader.data.article.Article
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.formatToString
@@ -30,37 +28,31 @@ fun Header(
                     Intent(Intent.ACTION_VIEW, Uri.parse(article.link))
                 )
             }
+            .padding(12.dp)
     ) {
-        Column(modifier = Modifier.padding(10.dp)) {
+        Text(
+            text = article.date.formatToString(context, atHourMinute = true),
+            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+            style = MaterialTheme.typography.labelMedium,
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = article.title,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.headlineLarge,
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        article.author?.let {
             Text(
-                text = article.date.formatToString(context, atHourMinute = true),
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.outline,
-                fontWeight = FontWeight.Medium,
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = article.title,
-                fontSize = 27.sp,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold,
-                lineHeight = 34.sp,
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            article.author?.let {
-                Text(
-                    text = article.author,
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.outline,
-                    fontWeight = FontWeight.Medium,
-                )
-            }
-            Text(
-                text = feed.name,
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.outline,
-                fontWeight = FontWeight.Medium,
+                text = article.author,
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                style = MaterialTheme.typography.labelMedium,
             )
         }
+        Text(
+            text = feed.name,
+            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+            style = MaterialTheme.typography.labelMedium,
+        )
     }
 }

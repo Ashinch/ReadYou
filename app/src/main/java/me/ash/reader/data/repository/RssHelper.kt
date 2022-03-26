@@ -3,14 +3,12 @@ package me.ash.reader.data.repository
 import android.content.Context
 import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
-import me.ash.reader.DataStoreKeys
+import me.ash.reader.currentAccountId
 import me.ash.reader.data.article.Article
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.feed.FeedDao
 import me.ash.reader.data.feed.FeedWithArticle
 import me.ash.reader.data.source.RssNetworkDataSource
-import me.ash.reader.dataStore
-import me.ash.reader.get
 import me.ash.reader.spacerDollar
 import net.dankito.readability4j.Readability4J
 import net.dankito.readability4j.extended.Readability4JExtended
@@ -26,7 +24,7 @@ class RssHelper @Inject constructor(
 ) {
     @Throws(Exception::class)
     suspend fun searchFeed(feedLink: String): FeedWithArticle {
-        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0
+        val accountId = context.currentAccountId
         val parseRss = rssNetworkDataSource.parseRss(feedLink)
         val feed = Feed(
             id = accountId.spacerDollar(UUID.randomUUID().toString()),

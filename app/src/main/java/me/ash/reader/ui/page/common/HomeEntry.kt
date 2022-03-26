@@ -6,15 +6,12 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.insets.ProvideWindowInsets
@@ -24,15 +21,9 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import me.ash.reader.ui.page.home.FeedOptionDrawer
 import me.ash.reader.ui.page.home.HomePage
 import me.ash.reader.ui.page.settings.SettingsPage
 import me.ash.reader.ui.theme.AppTheme
-
-@OptIn(ExperimentalMaterialApi::class)
-val LocalDrawerState = staticCompositionLocalOf<ModalBottomSheetState> {
-    error("CompositionLocal LocalDrawerState not present")
-}
 
 @OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
@@ -46,113 +37,105 @@ fun HomeEntry() {
                 setSystemBarsColor(Color.Transparent, !isSystemInDarkTheme())
                 setNavigationBarColor(MaterialTheme.colorScheme.surface, !isSystemInDarkTheme())
             }
-            Box {
-                CompositionLocalProvider(
-                    LocalDrawerState provides rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-                ) {
-                    Column(modifier = Modifier.background(MaterialTheme.colorScheme.surface)) {
-                        Row(
-                            modifier = Modifier
-                                .weight(1f)
-                                .statusBarsPadding()
+            Column(modifier = Modifier.background(MaterialTheme.colorScheme.surface)) {
+                Row(
+                    modifier = Modifier
+                            .weight(1f)
+                            .statusBarsPadding()
+                    ) {
+                        AnimatedNavHost(
+                            navController = navController,
+                            startDestination = RouteName.HOME,
                         ) {
-                            AnimatedNavHost(
-                                modifier = Modifier.background(MaterialTheme.colorScheme.surface),
-                                navController = navController,
-                                startDestination = RouteName.HOME,
+                            composable(
+                                route = RouteName.HOME,
+                                enterTransition = {
+                                    slideInHorizontally(
+                                        animationSpec = spring(
+                                            stiffness = Spring.StiffnessLow,
+                                            dampingRatio = Spring.DampingRatioNoBouncy
+                                        ),
+                                        initialOffsetX = { -it }
+                                    ) + fadeIn(animationSpec = tween(220, delayMillis = 90))
+                                },
+                                exitTransition = {
+                                    slideOutHorizontally(
+                                        animationSpec = spring(
+                                            stiffness = Spring.StiffnessLow,
+                                            dampingRatio = Spring.DampingRatioNoBouncy
+                                        ),
+                                        targetOffsetX = { it }
+                                    ) + fadeOut(animationSpec = tween(220, delayMillis = 90))
+                                },
+                                popEnterTransition = {
+                                    slideInHorizontally(
+                                        animationSpec = spring(
+                                            stiffness = Spring.StiffnessLow,
+                                            dampingRatio = Spring.DampingRatioNoBouncy
+                                        ),
+                                        initialOffsetX = { -it }
+                                    ) + fadeIn(animationSpec = tween(220, delayMillis = 90))
+                                },
+                                popExitTransition = {
+                                    slideOutHorizontally(
+                                        animationSpec = spring(
+                                            stiffness = Spring.StiffnessLow,
+                                            dampingRatio = Spring.DampingRatioNoBouncy
+                                        ),
+                                        targetOffsetX = { it }
+                                    ) + fadeOut(animationSpec = tween(220, delayMillis = 90))
+                                },
                             ) {
-                                composable(
-                                    route = RouteName.HOME,
-                                    enterTransition = {
-                                        slideInHorizontally(
-                                            animationSpec = spring(
-                                                stiffness = Spring.StiffnessLow,
-                                                dampingRatio = Spring.DampingRatioNoBouncy
-                                            ),
-                                            initialOffsetX = { -it }
-                                        ) + fadeIn(animationSpec = tween(220, delayMillis = 90))
-                                    },
-                                    exitTransition = {
-                                        slideOutHorizontally(
-                                            animationSpec = spring(
-                                                stiffness = Spring.StiffnessLow,
-                                                dampingRatio = Spring.DampingRatioNoBouncy
-                                            ),
-                                            targetOffsetX = { it }
-                                        ) + fadeOut(animationSpec = tween(220, delayMillis = 90))
-                                    },
-                                    popEnterTransition = {
-                                        slideInHorizontally(
-                                            animationSpec = spring(
-                                                stiffness = Spring.StiffnessLow,
-                                                dampingRatio = Spring.DampingRatioNoBouncy
-                                            ),
-                                            initialOffsetX = { -it }
-                                        ) + fadeIn(animationSpec = tween(220, delayMillis = 90))
-                                    },
-                                    popExitTransition = {
-                                        slideOutHorizontally(
-                                            animationSpec = spring(
-                                                stiffness = Spring.StiffnessLow,
-                                                dampingRatio = Spring.DampingRatioNoBouncy
-                                            ),
-                                            targetOffsetX = { it }
-                                        ) + fadeOut(animationSpec = tween(220, delayMillis = 90))
-                                    },
-                                ) {
-                                    HomePage(navController)
-                                }
-                                composable(
-                                    route = RouteName.SETTINGS,
-                                    enterTransition = {
-                                        slideInHorizontally(
-                                            animationSpec = spring(
-                                                stiffness = Spring.StiffnessLow,
-                                                dampingRatio = Spring.DampingRatioNoBouncy
-                                            ),
-                                            initialOffsetX = { -it }
-                                        ) + fadeIn(animationSpec = tween(220, delayMillis = 90))
-                                    },
-                                    exitTransition = {
-                                        slideOutHorizontally(
-                                            animationSpec = spring(
-                                                stiffness = Spring.StiffnessLow,
-                                                dampingRatio = Spring.DampingRatioNoBouncy
-                                            ),
-                                            targetOffsetX = { -it }
-                                        ) + fadeOut(animationSpec = tween(220, delayMillis = 90))
-                                    },
-                                    popEnterTransition = {
-                                        slideInHorizontally(
-                                            animationSpec = spring(
-                                                stiffness = Spring.StiffnessLow,
-                                                dampingRatio = Spring.DampingRatioNoBouncy
-                                            ),
-                                            initialOffsetX = { -it }
-                                        ) + fadeIn(animationSpec = tween(220, delayMillis = 90))
-                                    },
-                                    popExitTransition = {
-                                        slideOutHorizontally(
-                                            animationSpec = spring(
-                                                stiffness = Spring.StiffnessLow,
-                                                dampingRatio = Spring.DampingRatioNoBouncy
-                                            ),
-                                            targetOffsetX = { -it }
-                                        ) + fadeOut(animationSpec = tween(220, delayMillis = 90))
-                                    },
-                                ) {
-                                    SettingsPage(navController)
-                                }
+                                HomePage(navController)
+                            }
+                            composable(
+                                route = RouteName.SETTINGS,
+                                enterTransition = {
+                                    slideInHorizontally(
+                                        animationSpec = spring(
+                                            stiffness = Spring.StiffnessLow,
+                                            dampingRatio = Spring.DampingRatioNoBouncy
+                                        ),
+                                        initialOffsetX = { -it }
+                                    ) + fadeIn(animationSpec = tween(220, delayMillis = 90))
+                                },
+                                exitTransition = {
+                                    slideOutHorizontally(
+                                        animationSpec = spring(
+                                            stiffness = Spring.StiffnessLow,
+                                            dampingRatio = Spring.DampingRatioNoBouncy
+                                        ),
+                                        targetOffsetX = { -it }
+                                    ) + fadeOut(animationSpec = tween(220, delayMillis = 90))
+                                },
+                                popEnterTransition = {
+                                    slideInHorizontally(
+                                        animationSpec = spring(
+                                            stiffness = Spring.StiffnessLow,
+                                            dampingRatio = Spring.DampingRatioNoBouncy
+                                        ),
+                                        initialOffsetX = { -it }
+                                    ) + fadeIn(animationSpec = tween(220, delayMillis = 90))
+                                },
+                                popExitTransition = {
+                                    slideOutHorizontally(
+                                        animationSpec = spring(
+                                            stiffness = Spring.StiffnessLow,
+                                            dampingRatio = Spring.DampingRatioNoBouncy
+                                        ),
+                                        targetOffsetX = { -it }
+                                    ) + fadeOut(animationSpec = tween(220, delayMillis = 90))
+                                },
+                            ) {
+                                SettingsPage(navController)
                             }
                         }
-                        Spacer(
-                            modifier = Modifier
-                                .navigationBarsHeight()
-                                .fillMaxWidth()
-                        )
                     }
-                    FeedOptionDrawer(drawerState = LocalDrawerState.current)
-                }
+                    Spacer(
+                        modifier = Modifier
+                            .navigationBarsHeight()
+                        .fillMaxWidth()
+                )
             }
         }
     }

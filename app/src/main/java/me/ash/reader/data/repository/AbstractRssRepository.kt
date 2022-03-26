@@ -8,13 +8,10 @@ import androidx.work.*
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
-import me.ash.reader.DataStoreKeys
+import me.ash.reader.currentAccountId
 import me.ash.reader.data.account.AccountDao
 import me.ash.reader.data.article.Article
 import me.ash.reader.data.article.ArticleDao
@@ -26,8 +23,6 @@ import me.ash.reader.data.group.Group
 import me.ash.reader.data.group.GroupDao
 import me.ash.reader.data.group.GroupWithFeed
 import me.ash.reader.data.source.RssNetworkDataSource
-import me.ash.reader.dataStore
-import me.ash.reader.get
 import java.util.concurrent.TimeUnit
 
 abstract class AbstractRssRepository constructor(
@@ -65,14 +60,11 @@ abstract class AbstractRssRepository constructor(
     }
 
     fun pullGroups(): Flow<MutableList<Group>> {
-        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0
-        return groupDao.queryAllGroup(accountId)
+        return groupDao.queryAllGroup(context.currentAccountId).flowOn(Dispatchers.IO)
     }
 
     fun pullFeeds(): Flow<MutableList<GroupWithFeed>> {
-        return groupDao.queryAllGroupWithFeed(
-            context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0
-        )//.flowOn(Dispatchers.IO)
+        return groupDao.queryAllGroupWithFeed(context.currentAccountId).flowOn(Dispatchers.IO)
     }
 
     fun pullArticles(
@@ -82,7 +74,7 @@ abstract class AbstractRssRepository constructor(
         isUnread: Boolean = false,
     ): PagingSource<Int, ArticleWithFeed> {
         Log.i("RLog", "thread:pullArticles ${Thread.currentThread().name}")
-        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0
+        val accountId = context.currentAccountId
         Log.i(
             "RLog",
             "pullArticles: accountId: ${accountId}, groupId: ${groupId}, feedId: ${feedId}, isStarred: ${isStarred}, isUnread: ${isUnread}"
@@ -118,7 +110,7 @@ abstract class AbstractRssRepository constructor(
     ): Flow<List<ImportantCount>> {
         return withContext(Dispatchers.IO) {
             Log.i("RLog", "thread:pullImportant ${Thread.currentThread().name}")
-            val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)!!
+            val accountId = context.currentAccountId
             Log.i(
                 "RLog",
                 "pullImportant: accountId: ${accountId}, isStarred: ${isStarred}, isUnread: ${isUnread}"
@@ -130,7 +122,11 @@ abstract class AbstractRssRepository constructor(
                     .queryImportantCountWhenIsUnread(accountId, isUnread)
                 else -> articleDao.queryImportantCountWhenIsAll(accountId)
             }
-        }//.flowOn(Dispatchers.IO)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun findFeedById(id: String): Feed? {
+        return feedDao.queryById(id)
     }
 
     suspend fun findArticleById(id: String): ArticleWithFeed? {
@@ -138,12 +134,30 @@ abstract class AbstractRssRepository constructor(
     }
 
     suspend fun isExist(url: String): Boolean {
-        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)!!
-        return feedDao.queryByLink(accountId, url).isNotEmpty()
+        return feedDao.queryByLink(context.currentAccountId, url).isNotEmpty()
     }
 
     fun peekWork(): String {
         return workManager.getWorkInfosByTag("sync").get().size.toString()
+    }
+
+    suspend fun updateGroup(group: Group) {
+        groupDao.update(group)
+    }
+
+    suspend fun updateFeed(feed: Feed) {
+        feedDao.update(feed)
+    }
+
+    suspend fun deleteGroup(group: Group) {
+        groupDao.update(group)
+    }
+
+    suspend fun deleteFeed(feed: Feed) {
+        withContext(Dispatchers.IO) {
+            articleDao.deleteByFeedId(context.currentAccountId, feed.id)
+            feedDao.delete(feed)
+        }
     }
 
     companion object {

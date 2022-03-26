@@ -7,6 +7,15 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ArticleDao {
 
+    @Query(
+        """
+        DELETE FROM article
+        WHERE accountId = :accountId
+        AND feedId = :feedId
+        """
+    )
+    suspend fun deleteByFeedId(accountId: Int, feedId: String)
+
     @Transaction
     @Query(
         """

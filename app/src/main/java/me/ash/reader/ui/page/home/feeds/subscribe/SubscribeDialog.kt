@@ -18,15 +18,17 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
+import kotlinx.coroutines.Dispatchers
 import me.ash.reader.*
 import me.ash.reader.R
 import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.widget.Dialog
 import java.io.InputStream
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, androidx.compose.ui.ExperimentalComposeUiApi::class)
 @Composable
 fun SubscribeDialog(
     modifier: Modifier = Modifier,
@@ -44,8 +46,9 @@ fun SubscribeDialog(
         }
     }
     val viewState = viewModel.viewState.collectAsStateValue()
-    val groupsState = viewState.groups.collectAsState(initial = emptyList())
-    var dialogHeight by remember { mutableStateOf(280.dp) }
+    val groupsState =
+        viewState.groups.collectAsState(initial = emptyList(), context = Dispatchers.IO)
+    var dialogHeight by remember { mutableStateOf(300.dp) }
     val readYouString = stringResource(R.string.read_you)
     val defaultString = stringResource(R.string.defaults)
     LaunchedEffect(viewState.visible) {
@@ -64,7 +67,7 @@ fun SubscribeDialog(
     LaunchedEffect(viewState.pagerState.currentPage) {
         focusManager.clearFocus()
         when (viewState.pagerState.currentPage) {
-            0 -> dialogHeight = 280.dp
+            0 -> dialogHeight = 300.dp
             1 -> dialogHeight = Dp.Unspecified
         }
     }
@@ -74,6 +77,7 @@ fun SubscribeDialog(
             .padding(horizontal = 44.dp)
             .height(dialogHeight),
         visible = viewState.visible,
+        properties = DialogProperties(usePlatformDefaultWidth = false),
         onDismissRequest = {
             focusManager.clearFocus()
             viewModel.dispatch(SubscribeViewAction.Hide)

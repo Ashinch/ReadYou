@@ -15,6 +15,8 @@ import kotlinx.coroutines.runBlocking
 import java.io.IOException
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+val Context.currentAccountId: Int
+    get() = this.dataStore.get(DataStoreKeys.CurrentAccountId)!!
 
 suspend fun <T> DataStore<Preferences>.put(dataStoreKeys: DataStoreKeys<T>, value: T) {
     this.edit {

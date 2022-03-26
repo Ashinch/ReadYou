@@ -17,10 +17,14 @@ import androidx.compose.material.ChipDefaults
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FilterChip
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FiberManualRecord
 import androidx.compose.material.icons.outlined.Article
-import androidx.compose.material.icons.outlined.Circle
-import androidx.compose.material.icons.outlined.Sell
-import androidx.compose.material.icons.rounded.*
+import androidx.compose.material.icons.outlined.FiberManualRecord
+import androidx.compose.material.icons.outlined.TextFormat
+import androidx.compose.material.icons.rounded.Article
+import androidx.compose.material.icons.rounded.ExpandMore
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.StarOutline
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -138,7 +142,7 @@ fun HomeBottomNavBar(
                     .alpha(readerBarAlpha),
             ) {
                 ReaderBar(
-                    modifier = modifier,
+                    modifier = Modifier,
                     disabled = disabled,
                     isUnread = isUnread,
                     isStarred = isStarred,
@@ -323,67 +327,78 @@ private fun ReaderBar(
     val view = LocalView.current
     var fullContent by remember { mutableStateOf(isFullContent) }
     Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp)
+        modifier = modifier.fillMaxWidth()
     ) {
         CanBeDisabledIconButton(
-            modifier = Modifier.size(18.dp),
+            modifier = Modifier.size(40.dp),
             disabled = disabled,
             imageVector = if (isUnread) {
-                Icons.Rounded.Circle
+                Icons.Filled.FiberManualRecord
             } else {
-                Icons.Outlined.Circle
+                Icons.Outlined.FiberManualRecord
             },
             contentDescription = stringResource(if (isUnread) R.string.mark_as_read else R.string.mark_as_unread),
-            tint = MaterialTheme.colorScheme.primary,
+            tint = if (isUnread) {
+                MaterialTheme.colorScheme.onSecondaryContainer
+            } else {
+                MaterialTheme.colorScheme.outline
+            },
         ) {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             unreadOnClick(!isUnread)
         }
         CanBeDisabledIconButton(
+            modifier = Modifier.size(40.dp),
             disabled = disabled,
-            modifier = Modifier.size(28.dp),
             imageVector = if (isStarred) {
                 Icons.Rounded.Star
             } else {
-                Icons.Rounded.StarBorder
+                Icons.Rounded.StarOutline
             },
             contentDescription = stringResource(if (isStarred) R.string.mark_as_unstar else R.string.mark_as_starred),
-            tint = MaterialTheme.colorScheme.primary,
+            tint = if (isStarred) {
+                MaterialTheme.colorScheme.onSecondaryContainer
+            } else {
+                MaterialTheme.colorScheme.outline
+            },
         ) {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             starredOnClick(!isStarred)
         }
         CanBeDisabledIconButton(
             disabled = disabled,
-            modifier = Modifier.size(30.dp),
+            modifier = Modifier.size(40.dp),
             imageVector = Icons.Rounded.ExpandMore,
             contentDescription = "Next Article",
-            tint = MaterialTheme.colorScheme.primary,
+            tint = MaterialTheme.colorScheme.outline,
         ) {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
         }
         CanBeDisabledIconButton(
+            modifier = Modifier.size(40.dp),
             disabled = disabled,
-            imageVector = Icons.Outlined.Sell,
+            imageVector = Icons.Outlined.TextFormat,
             contentDescription = "Add Tag",
-            tint = MaterialTheme.colorScheme.primary,
+            tint = MaterialTheme.colorScheme.outline,
         ) {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
         }
         CanBeDisabledIconButton(
             disabled = disabled,
-            modifier = Modifier.size(26.dp),
+            modifier = Modifier.size(40.dp),
             imageVector = if (fullContent) {
                 Icons.Rounded.Article
             } else {
                 Icons.Outlined.Article
             },
             contentDescription = stringResource(R.string.parse_full_content),
-            tint = MaterialTheme.colorScheme.primary,
+            tint = if (fullContent) {
+                MaterialTheme.colorScheme.onSecondaryContainer
+            } else {
+                MaterialTheme.colorScheme.outline
+            },
         ) {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             val afterIsFullContent = !fullContent

@@ -2,11 +2,13 @@ package me.ash.reader.data.repository
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
-import me.ash.reader.*
+import me.ash.reader.R
+import me.ash.reader.currentAccountId
 import me.ash.reader.data.account.Account
 import me.ash.reader.data.account.AccountDao
 import me.ash.reader.data.group.Group
 import me.ash.reader.data.group.GroupDao
+import me.ash.reader.spacerDollar
 import javax.inject.Inject
 
 class AccountRepository @Inject constructor(
@@ -17,8 +19,7 @@ class AccountRepository @Inject constructor(
 ) {
 
     suspend fun getCurrentAccount(): Account? {
-        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 0
-        return accountDao.queryById(accountId)
+        return accountDao.queryById(context.currentAccountId)
     }
 
     suspend fun isNoAccount(): Boolean {

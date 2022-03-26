@@ -1,7 +1,9 @@
 package me.ash.reader.ui.page.home.feeds
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.flow.collect
 import me.ash.reader.R
 import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.extension.getDesc
@@ -167,44 +168,48 @@ fun FeedsPage(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
                 itemsIndexed(viewState.groupWithFeedList) { index, groupWithFeed ->
-                    GroupItem(
-                        text = groupWithFeed.group.name,
-                        feeds = groupWithFeed.feeds,
-                        groupOnClick = {
-                            homeViewModel.dispatch(
-                                HomeViewAction.ChangeFilter(
-                                    filterState.copy(
-                                        group = groupWithFeed.group,
-                                        feed = null
+                    Crossfade(targetState = groupWithFeed) { groupWithFeed ->
+                        Column {
+                            GroupItem(
+                                text = groupWithFeed.group.name,
+                                feeds = groupWithFeed.feeds,
+                                groupOnClick = {
+                                    homeViewModel.dispatch(
+                                        HomeViewAction.ChangeFilter(
+                                            filterState.copy(
+                                                group = groupWithFeed.group,
+                                                feed = null
+                                            )
+                                        )
                                     )
-                                )
-                            )
-                            homeViewModel.dispatch(
-                                HomeViewAction.ScrollToPage(
-                                    scope = scope,
-                                    targetPage = 1,
-                                )
-                            )
-                        },
-                        feedOnClick = { feed ->
-                            homeViewModel.dispatch(
-                                HomeViewAction.ChangeFilter(
-                                    filterState.copy(
-                                        group = null,
-                                        feed = feed
+                                    homeViewModel.dispatch(
+                                        HomeViewAction.ScrollToPage(
+                                            scope = scope,
+                                            targetPage = 1,
+                                        )
                                     )
-                                )
+                                },
+                                feedOnClick = { feed ->
+                                    homeViewModel.dispatch(
+                                        HomeViewAction.ChangeFilter(
+                                            filterState.copy(
+                                                group = null,
+                                                feed = feed
+                                            )
+                                        )
+                                    )
+                                    homeViewModel.dispatch(
+                                        HomeViewAction.ScrollToPage(
+                                            scope = scope,
+                                            targetPage = 1,
+                                        )
+                                    )
+                                }
                             )
-                            homeViewModel.dispatch(
-                                HomeViewAction.ScrollToPage(
-                                    scope = scope,
-                                    targetPage = 1,
-                                )
-                            )
+                            if (index != viewState.groupWithFeedList.lastIndex) {
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
                         }
-                    )
-                    if (index != viewState.groupWithFeedList.lastIndex) {
-                        Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
                 item {

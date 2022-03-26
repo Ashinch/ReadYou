@@ -1,5 +1,6 @@
 package me.ash.reader.ui.widget
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -42,13 +43,15 @@ fun Banner(
                 .padding(16.dp, 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            icon?.let {
-                Icon(
-                    imageVector = it,
-                    contentDescription = null,
-                    modifier = Modifier.padding(end = 16.dp),
-                    tint = lightOnSurface,
-                )
+            icon?.let { icon ->
+                Crossfade(targetState = icon) {
+                    Icon(
+                        imageVector = it,
+                        contentDescription = null,
+                        modifier = Modifier.padding(end = 16.dp),
+                        tint = lightOnSurface,
+                    )
+                }
             }
             Column(modifier = Modifier.weight(1f)) {
                 Text(

@@ -2,15 +2,14 @@ package me.ash.reader.ui.widget
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.DialogProperties
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Dialog(
     modifier: Modifier = Modifier,
     visible: Boolean,
+    properties: DialogProperties = DialogProperties(),
     onDismissRequest: () -> Unit = {},
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
@@ -20,7 +19,7 @@ fun Dialog(
 ) {
     if (visible) {
         AlertDialog(
-            properties = DialogProperties(usePlatformDefaultWidth = false),
+            properties = properties,
             modifier = modifier,
             onDismissRequest = onDismissRequest,
             icon = icon,

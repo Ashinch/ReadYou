@@ -20,10 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.data.feed.Feed
-import me.ash.reader.ui.page.common.LocalDrawerState
 
 @OptIn(ExperimentalMaterialApi::class, androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
@@ -36,8 +34,6 @@ fun GroupItem(
     feedOnClick: (feed: Feed) -> Unit = {},
 ) {
     var expanded by remember { mutableStateOf(isExpanded) }
-    val scope = rememberCoroutineScope()
-    val drawerState = LocalDrawerState.current
 
     Column(
         modifier = Modifier
@@ -50,9 +46,6 @@ fun GroupItem(
                     groupOnClick()
                 },
                 onLongClick = {
-                    scope.launch {
-                        drawerState.show()
-                    }
                 }
             )
             .padding(top = 22.dp)
@@ -97,8 +90,7 @@ fun GroupItem(
                 feeds.forEach { feed ->
                     FeedItem(
                         modifier = Modifier.padding(horizontal = 20.dp),
-                        name = feed.name,
-                        important = feed.important ?: 0,
+                        feed = feed,
                     ) {
                         feedOnClick(feed)
                     }

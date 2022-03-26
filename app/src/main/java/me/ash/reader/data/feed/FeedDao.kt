@@ -7,6 +7,14 @@ interface FeedDao {
     @Query(
         """
         SELECT * FROM feed
+        WHERE id = :id
+        """
+    )
+    suspend fun queryById(id: String): Feed?
+
+    @Query(
+        """
+        SELECT * FROM feed
         WHERE accountId = :accountId
         """
     )

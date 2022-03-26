@@ -2,10 +2,7 @@ package me.ash.reader.ui.widget
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -14,7 +11,7 @@ import androidx.compose.material.ChipDefaults
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FilterChip
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -41,16 +38,7 @@ fun SelectionChip(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = CircleShape,
     border: BorderStroke? = null,
-    selectedIcon: @Composable () -> Unit = {
-        Icon(
-            imageVector = Icons.Filled.CheckCircle,
-            contentDescription = stringResource(R.string.selected),
-            modifier = Modifier
-                .padding(start = 8.dp)
-                .size(20.dp),
-            tint = MaterialTheme.colorScheme.onSurface
-        )
-    },
+    selectedIcon: @Composable (() -> Unit)? = null,
     onClick: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
@@ -59,20 +47,28 @@ fun SelectionChip(
         modifier = modifier,
         colors = ChipDefaults.filterChipColors(
             backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = MaterialTheme.colorScheme.outline,
-            leadingIconColor = MaterialTheme.colorScheme.onSurface,
-            disabledBackgroundColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
-            disabledContentColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
-            disabledLeadingIconColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            leadingIconColor = MaterialTheme.colorScheme.surfaceVariant,
+            disabledBackgroundColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f),
+            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+            disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
             selectedBackgroundColor = MaterialTheme.colorScheme.primaryContainer,
-            selectedContentColor = MaterialTheme.colorScheme.onSurface,
-            selectedLeadingIconColor = MaterialTheme.colorScheme.onSurface
+            selectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer
         ),
         border = border,
         interactionSource = interactionSource,
         enabled = enabled,
         selected = selected,
-        selectedIcon = selectedIcon,
+        selectedIcon = selectedIcon ?: {
+            Icon(
+                imageVector = Icons.Rounded.Check,
+                contentDescription = stringResource(R.string.selected),
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .size(20.dp),
+            )
+        },
         shape = shape,
         onClick = {
             focusManager.clearFocus()
@@ -88,11 +84,6 @@ fun SelectionChip(
                 ),
                 text = content,
                 style = MaterialTheme.typography.titleSmall,
-                color = if (selected) {
-                    MaterialTheme.colorScheme.onSurface
-                } else {
-                    MaterialTheme.colorScheme.outline
-                },
             )
         },
     )
@@ -108,16 +99,7 @@ fun SelectionEditorChip(
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = CircleShape,
-    selectedIcon: @Composable () -> Unit = {
-        Icon(
-            imageVector = Icons.Filled.CheckCircle,
-            contentDescription = stringResource(R.string.selected),
-            modifier = Modifier
-                .padding(start = 8.dp)
-                .size(20.dp),
-            tint = MaterialTheme.colorScheme.onSecondaryContainer
-        )
-    },
+    selectedIcon: @Composable (() -> Unit)? = null,
     onKeyboardAction: () -> Unit = {},
     onClick: () -> Unit,
 ) {
@@ -125,21 +107,30 @@ fun SelectionEditorChip(
     val placeholder = stringResource(R.string.add_to_group)
 
     FilterChip(
+        modifier = modifier.defaultMinSize(minHeight = 36.dp),
         colors = ChipDefaults.filterChipColors(
             backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            leadingIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            disabledBackgroundColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
-            disabledContentColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
-            disabledLeadingIconColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            leadingIconColor = MaterialTheme.colorScheme.surfaceVariant,
+            disabledBackgroundColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f),
+            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+            disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
             selectedBackgroundColor = MaterialTheme.colorScheme.primaryContainer,
-            selectedContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            selectedLeadingIconColor = MaterialTheme.colorScheme.onSecondaryContainer
+            selectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer
         ),
         interactionSource = interactionSource,
         enabled = enabled,
         selected = selected,
-        selectedIcon = selectedIcon,
+        selectedIcon = selectedIcon ?: {
+            Icon(
+                imageVector = Icons.Rounded.Check,
+                contentDescription = stringResource(R.string.selected),
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .size(20.dp),
+            )
+        },
         shape = shape,
         onClick = onClick,
         content = {
@@ -160,13 +151,9 @@ fun SelectionEditorChip(
                     },
                 value = content,
                 onValueChange = { onValueChange(it) },
-                cursorBrush = SolidColor(MaterialTheme.colorScheme.onSecondaryContainer),
+                cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurfaceVariant),
                 textStyle = MaterialTheme.typography.titleSmall.copy(
-                    color = if (selected) {
-                        MaterialTheme.colorScheme.onSurface
-                    } else {
-                        MaterialTheme.colorScheme.outline
-                    },
+                    color =  MaterialTheme.colorScheme.onSurfaceVariant,
                 ),
                 decorationBox = { innerTextField ->
                     Row(
@@ -176,7 +163,7 @@ fun SelectionEditorChip(
                         if (content.isEmpty()) {
                             Text(
                                 text = placeholder,
-                                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                                 style = MaterialTheme.typography.titleSmall,
                             )
                         }

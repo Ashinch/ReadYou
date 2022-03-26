@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.work.WorkManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.sync.withLock
-import me.ash.reader.DataStoreKeys
+import me.ash.reader.*
 import me.ash.reader.data.account.AccountDao
 import me.ash.reader.data.article.Article
 import me.ash.reader.data.article.ArticleDao
@@ -15,9 +15,6 @@ import me.ash.reader.data.group.Group
 import me.ash.reader.data.group.GroupDao
 import me.ash.reader.data.source.FeverApiDataSource
 import me.ash.reader.data.source.RssNetworkDataSource
-import me.ash.reader.dataStore
-import me.ash.reader.get
-import me.ash.reader.spacerDollar
 import net.dankito.readability4j.extended.Readability4JExtended
 import java.util.*
 import javax.inject.Inject
@@ -49,13 +46,12 @@ class FeverRssRepository @Inject constructor(
     }
 
     override suspend fun addGroup(name: String): String {
-        val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)!!
         return UUID.randomUUID().toString().also {
             groupDao.insert(
                 Group(
                     id = it,
                     name = name,
-                    accountId = accountId
+                    accountId = context.currentAccountId
                 )
             )
         }
@@ -63,8 +59,7 @@ class FeverRssRepository @Inject constructor(
 
     override suspend fun sync() {
         mutex.withLock {
-            val accountId = context.dataStore.get(DataStoreKeys.CurrentAccountId)
-                ?: return
+            val accountId = context.currentAccountId
 
             updateSyncState {
                 it.copy(

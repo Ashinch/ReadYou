@@ -187,7 +187,8 @@ class SubscribeViewModel @Inject constructor(
     private fun inputLink(content: String) {
         _viewState.update {
             it.copy(
-                linkContent = content
+                linkContent = content,
+                errorMessage = "",
             )
         }
     }
