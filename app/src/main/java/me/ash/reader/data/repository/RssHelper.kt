@@ -14,6 +14,8 @@ import net.dankito.readability4j.Readability4J
 import net.dankito.readability4j.extended.Readability4JExtended
 import okhttp3.*
 import java.io.IOException
+import java.text.ParsePosition
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -40,7 +42,13 @@ class RssHelper @Inject constructor(
                     id = accountId.spacerDollar(UUID.randomUUID().toString()),
                     accountId = accountId,
                     feedId = feed.id,
-                    date = Date(it.publishDate.toString()),
+                    date = it.publishDate.toString().let {
+                        try {
+                            Date(it)
+                        } catch (e: IllegalArgumentException) {
+                            parseDate(it) ?: Date()
+                        }
+                    },
                     title = it.title.toString(),
                     author = it.author,
                     rawDescription = it.description.toString(),
@@ -170,5 +178,27 @@ class RssHelper @Inject constructor(
                 icon = execute.body?.bytes()
             }
         )
+    }
+
+    private fun parseDate(
+        inputDate: String, patterns: Array<String?> = arrayOf(
+            "yyyy-MM-dd",
+            "yyyy-MM-dd HH:mm:ss",
+            "yyyyMMdd",
+            "yyyy/MM/dd",
+            "yyyy年MM月dd日",
+            "yyyy MM dd"
+        )
+    ): Date? {
+        val df = SimpleDateFormat()
+        for (pattern in patterns) {
+            df.applyPattern(pattern)
+            df.isLenient = false
+            val date = df.parse(inputDate, ParsePosition(0))
+            if (date != null) {
+                return date
+            }
+        }
+        return null
     }
 }
