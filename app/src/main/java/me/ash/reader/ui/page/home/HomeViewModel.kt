@@ -1,17 +1,14 @@
 package me.ash.reader.ui.page.home
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import me.ash.reader.data.constant.Filter
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.group.Group
@@ -36,7 +33,7 @@ class HomeViewModel @Inject constructor(
 
     fun dispatch(action: HomeViewAction) {
         when (action) {
-            is HomeViewAction.Sync -> sync(action.callback)
+            is HomeViewAction.Sync -> sync()
             is HomeViewAction.ChangeFilter -> changeFilter(action.filterState)
             is HomeViewAction.ScrollToPage -> scrollToPage(
                 action.scope,
@@ -46,11 +43,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun sync(callback: () -> Unit = {}) {
-        viewModelScope.launch {
-            rssRepository.get().doSync()
-            callback()
-        }
+    private fun sync() {
+        rssRepository.get().doSync()
     }
 
     private fun changeFilter(filterState: FilterState) {
@@ -80,9 +74,7 @@ data class HomeViewState(
 )
 
 sealed class HomeViewAction {
-    data class Sync(
-        val callback: () -> Unit = {},
-    ) : HomeViewAction()
+    object Sync : HomeViewAction()
 
     data class ChangeFilter(
         val filterState: FilterState

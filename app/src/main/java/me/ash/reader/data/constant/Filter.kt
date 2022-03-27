@@ -21,7 +21,7 @@ class Filter(
     companion object {
         val Starred = Filter(
             index = 0,
-            important = 13,
+            important = 666,
             icon = Icons.Rounded.StarOutline,
             filledIcon = Icons.Rounded.Star,
         )

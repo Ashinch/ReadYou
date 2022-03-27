@@ -17,7 +17,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import me.ash.reader.*
+import me.ash.reader.MainActivity
+import me.ash.reader.R
+import me.ash.reader.currentAccountId
 import me.ash.reader.data.account.AccountDao
 import me.ash.reader.data.article.Article
 import me.ash.reader.data.article.ArticleDao
@@ -89,49 +91,56 @@ class LocalRssRepository @Inject constructor(
             withContext(Dispatchers.IO) {
                 val preTime = System.currentTimeMillis()
                 val accountId = context.currentAccountId
-                val feeds = async { feedDao.queryAll(accountId) }
-                val articles = feeds.await().also { feed ->
+                val articles = mutableListOf<Article>()
+                feedDao.queryAll(accountId).also { feed ->
                     updateSyncState {
                         it.copy(
                             feedCount = feed.size,
                         )
                     }
-                    Log.i("RLog", "thread:sync ${Thread.currentThread().name}")
                 }.map { feed ->
                     async {
-                        val articles = syncFeed(accountId, feed)
-                        articles
+                        syncFeed(accountId, feed)
                     }
+                }.awaitAll().forEach {
+                    if (it.isNotify) {
+                        notify(it.articles)
+                    }
+                    articles.addAll(it.articles)
                 }
 
-                articles.awaitAll().sumOf { it.size }.let { count ->
-                    Log.i(
-                        "RlOG",
-                        "[${count}] onCompletion: ${System.currentTimeMillis() - preTime}"
+                articleDao.insertList(articles)
+                Log.i(
+                    "RlOG",
+                    "onCompletion: ${System.currentTimeMillis() - preTime}"
+                )
+                accountDao.queryById(accountId)?.let { account ->
+                    accountDao.update(
+                        account.apply {
+                            updateAt = Date()
+                        }
                     )
-                    accountDao.queryById(accountId)?.let { account ->
-                        accountDao.update(
-                            account.apply {
-                                updateAt = Date()
-                            }
-                        )
-                    }
-                    updateSyncState {
-                        it.copy(
-                            feedCount = 0,
-                            syncedCount = 0,
-                            currentFeedName = ""
-                        )
-                    }
+                }
+                updateSyncState {
+                    it.copy(
+                        feedCount = 0,
+                        syncedCount = 0,
+                        currentFeedName = ""
+                    )
                 }
             }
         }
     }
 
+    data class ArticleNotify(
+        val articles: List<Article>,
+        val isNotify: Boolean,
+    )
+
     private suspend fun syncFeed(
         accountId: Int,
         feed: Feed
-    ): List<Article> {
+    ): ArticleNotify {
         val latest = articleDao.queryLatestByFeedId(accountId, feed.id)
         val articles = rssHelper.queryRssXml(
             rssNetworkDataSource,
@@ -143,21 +152,16 @@ class LocalRssRepository @Inject constructor(
                 rssHelper.queryRssIcon(feedDao, feed, it.first().link)
             }
         }
-
-        Log.i("RLog", "thread:syncFeed ${Thread.currentThread().name}")
         updateSyncState {
             it.copy(
                 syncedCount = it.syncedCount + 1,
                 currentFeedName = feed.name
             )
         }
-        if (articles.isNotEmpty()) {
-            articleDao.insertList(articles)
-            if (feed.isNotification) {
-                notify(articles)
-            }
-        }
-        return articles
+        return ArticleNotify(
+            articles = articles,
+            isNotify = articles.isNotEmpty() && feed.isNotification
+        )
     }
 
     private fun notify(

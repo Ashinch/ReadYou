@@ -8,11 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.group.Group
 import me.ash.reader.data.repository.RssRepository
@@ -30,7 +32,7 @@ class FeedOptionViewModel @Inject constructor(
     val viewState: StateFlow<FeedOptionViewState> = _viewState.asStateFlow()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             rssRepository.get().pullGroups().collect { groups ->
                 _viewState.update {
                     it.copy(
@@ -88,7 +90,7 @@ class FeedOptionViewModel @Inject constructor(
     }
 
     private fun selectedGroup(groupId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _viewState.value.feed?.let {
                 rssRepository.get().updateFeed(
                     it.copy(
@@ -109,7 +111,7 @@ class FeedOptionViewModel @Inject constructor(
     }
 
     private fun changeParseFullContentPreset() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _viewState.value.feed?.let {
                 rssRepository.get().updateFeed(
                     it.copy(
@@ -122,7 +124,7 @@ class FeedOptionViewModel @Inject constructor(
     }
 
     private fun changeAllowNotificationPreset() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _viewState.value.feed?.let {
                 rssRepository.get().updateFeed(
                     it.copy(
@@ -136,10 +138,11 @@ class FeedOptionViewModel @Inject constructor(
 
     private fun delete(callback: () -> Unit = {}) {
         _viewState.value.feed?.let {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 rssRepository.get().deleteFeed(it)
-            }.invokeOnCompletion {
-                callback()
+                withContext(Dispatchers.Main) {
+                    callback()
+                }
             }
         }
     }
@@ -201,6 +204,6 @@ sealed class FeedOptionViewAction {
         val callback: () -> Unit = {}
     ) : FeedOptionViewAction()
 
-    object ShowDeleteDialog: FeedOptionViewAction()
-    object HideDeleteDialog: FeedOptionViewAction()
+    object ShowDeleteDialog : FeedOptionViewAction()
+    object HideDeleteDialog : FeedOptionViewAction()
 }

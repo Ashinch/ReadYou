@@ -49,7 +49,7 @@ fun DeleteFeedDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(FeedOptionViewAction.Delete(){
+                    viewModel.dispatch(FeedOptionViewAction.Delete {
                         viewModel.dispatch(FeedOptionViewAction.HideDeleteDialog)
                         viewModel.dispatch(FeedOptionViewAction.Hide(scope))
                         Toast.makeText(context, deletedTip, Toast.LENGTH_SHORT).show()

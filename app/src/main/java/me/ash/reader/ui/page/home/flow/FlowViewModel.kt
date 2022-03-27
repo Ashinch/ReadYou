@@ -42,7 +42,7 @@ class FlowViewModel @Inject constructor(
     }
 
     private fun fetchData(filterState: FilterState) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             rssRepository.get().pullImportant(filterState.filter.isStarred(), true)
                 .collect { importantList ->
                     _viewState.update {

@@ -61,7 +61,7 @@ fun FeedsPage(
     )
 
     LaunchedEffect(Unit) {
-        viewModel.dispatch(FeedsViewAction.FetchAccount())
+        viewModel.dispatch(FeedsViewAction.FetchAccount)
     }
 
     LaunchedEffect(homeViewModel.filterState) {
@@ -89,7 +89,7 @@ fun FeedsPage(
                 actions = {
                     IconButton(onClick = {
                         if (syncState.isSyncing) return@IconButton
-                        homeViewModel.dispatch(HomeViewAction.Sync())
+                        homeViewModel.dispatch(HomeViewAction.Sync)
                     }) {
                         Icon(
                             modifier = Modifier.rotate(if (syncState.isSyncing) angle else 0f),
@@ -135,7 +135,7 @@ fun FeedsPage(
                     Banner(
                         title = filterState.filter.getName(),
                         desc = filterState.filter.getDesc(),
-                        icon = viewState.filter.icon,
+                        icon = filterState.filter.icon,
                         action = {
                             Icon(
                                 imageVector = Icons.Outlined.KeyboardArrowRight,

@@ -10,7 +10,6 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.withContext
 import me.ash.reader.currentAccountId
 import me.ash.reader.data.account.AccountDao
 import me.ash.reader.data.article.Article
@@ -104,24 +103,22 @@ abstract class AbstractRssRepository constructor(
         }
     }
 
-    suspend fun pullImportant(
+    fun pullImportant(
         isStarred: Boolean = false,
         isUnread: Boolean = false,
     ): Flow<List<ImportantCount>> {
-        return withContext(Dispatchers.IO) {
-            Log.i("RLog", "thread:pullImportant ${Thread.currentThread().name}")
-            val accountId = context.currentAccountId
-            Log.i(
-                "RLog",
-                "pullImportant: accountId: ${accountId}, isStarred: ${isStarred}, isUnread: ${isUnread}"
-            )
-            when {
-                isStarred -> articleDao
-                    .queryImportantCountWhenIsStarred(accountId, isStarred)
-                isUnread -> articleDao
-                    .queryImportantCountWhenIsUnread(accountId, isUnread)
-                else -> articleDao.queryImportantCountWhenIsAll(accountId)
-            }
+        Log.i("RLog", "thread:pullImportant ${Thread.currentThread().name}")
+        val accountId = context.currentAccountId
+        Log.i(
+            "RLog",
+            "pullImportant: accountId: ${accountId}, isStarred: ${isStarred}, isUnread: ${isUnread}"
+        )
+        return when {
+            isStarred -> articleDao
+                .queryImportantCountWhenIsStarred(accountId, isStarred)
+            isUnread -> articleDao
+                .queryImportantCountWhenIsUnread(accountId, isUnread)
+            else -> articleDao.queryImportantCountWhenIsAll(accountId)
         }.flowOn(Dispatchers.IO)
     }
 
@@ -154,10 +151,8 @@ abstract class AbstractRssRepository constructor(
     }
 
     suspend fun deleteFeed(feed: Feed) {
-        withContext(Dispatchers.IO) {
-            articleDao.deleteByFeedId(context.currentAccountId, feed.id)
-            feedDao.delete(feed)
-        }
+        articleDao.deleteByFeedId(context.currentAccountId, feed.id)
+        feedDao.delete(feed)
     }
 
     companion object {

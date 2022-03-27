@@ -58,7 +58,7 @@ class App : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
-        applicationScope.launch {
+        applicationScope.launch(Dispatchers.IO) {
             accountInit()
             workerInit()
         }

@@ -29,33 +29,32 @@ class FeedsViewModel @Inject constructor(
 
     fun dispatch(action: FeedsViewAction) {
         when (action) {
-            is FeedsViewAction.FetchAccount -> fetchAccount(action.callback)
+            is FeedsViewAction.FetchAccount -> fetchAccount()
             is FeedsViewAction.FetchData -> fetchData(action.filterState)
             is FeedsViewAction.AddFromFile -> addFromFile(action.inputStream)
             is FeedsViewAction.ScrollToItem -> scrollToItem(action.index)
         }
     }
 
-    private fun fetchAccount(callback: () -> Unit = {}) {
-        viewModelScope.launch {
+    private fun fetchAccount() {
+        viewModelScope.launch(Dispatchers.IO) {
             _viewState.update {
                 it.copy(
                     account = accountRepository.getCurrentAccount()
                 )
             }
-            callback()
         }
     }
 
     private fun addFromFile(inputStream: InputStream) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             opmlRepository.saveToDatabase(inputStream)
             rssRepository.get().doSync()
         }
     }
 
     private fun fetchData(filterState: FilterState) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             pullFeeds(
                 isStarred = filterState.filter.isStarred(),
                 isUnread = filterState.filter.isUnread(),
@@ -144,9 +143,7 @@ sealed class FeedsViewAction {
         val filterState: FilterState,
     ) : FeedsViewAction()
 
-    data class FetchAccount(
-        val callback: () -> Unit = {},
-    ) : FeedsViewAction()
+    object FetchAccount: FeedsViewAction()
 
     data class AddFromFile(
         val inputStream: InputStream

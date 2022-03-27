@@ -4,6 +4,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -65,44 +66,42 @@ class ReadViewModel @Inject constructor(
     }
 
     private fun markUnread(isUnread: Boolean) {
-        _viewState.value.articleWithFeed?.let {
+        val articleWithFeed = _viewState.value.articleWithFeed ?: return
+        viewModelScope.launch(Dispatchers.IO) {
             _viewState.update {
                 it.copy(
-                    articleWithFeed = it.articleWithFeed?.copy(
-                        article = it.articleWithFeed.article.copy(
+                    articleWithFeed = articleWithFeed.copy(
+                        article = articleWithFeed.article.copy(
                             isUnread = isUnread
                         )
                     )
                 )
             }
-            viewModelScope.launch {
-                rssRepository.get().updateArticleInfo(
-                    it.article.copy(
-                        isUnread = isUnread
-                    )
+            rssRepository.get().updateArticleInfo(
+                articleWithFeed.article.copy(
+                    isUnread = isUnread
                 )
-            }
+            )
         }
     }
 
     private fun markStarred(isStarred: Boolean) {
-        _viewState.value.articleWithFeed?.let {
+        val articleWithFeed = _viewState.value.articleWithFeed ?: return
+        viewModelScope.launch(Dispatchers.IO) {
             _viewState.update {
                 it.copy(
-                    articleWithFeed = it.articleWithFeed?.copy(
-                        article = it.articleWithFeed.article.copy(
+                    articleWithFeed = articleWithFeed.copy(
+                        article = articleWithFeed.article.copy(
                             isStarred = isStarred
                         )
                     )
                 )
             }
-            viewModelScope.launch {
-                rssRepository.get().updateArticleInfo(
-                    it.article.copy(
-                        isStarred = isStarred
-                    )
+            rssRepository.get().updateArticleInfo(
+                articleWithFeed.article.copy(
+                    isStarred = isStarred
                 )
-            }
+            )
         }
     }
 

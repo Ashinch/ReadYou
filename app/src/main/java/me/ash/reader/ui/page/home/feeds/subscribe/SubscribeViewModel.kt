@@ -5,11 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.data.article.Article
 import me.ash.reader.data.feed.Feed
@@ -73,7 +70,7 @@ class SubscribeViewModel @Inject constructor(
     private fun subscribe() {
         val feed = _viewState.value.feed ?: return
         val articles = _viewState.value.articles
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val groupId = async {
                 if (
                     _viewState.value.newGroupSelected &&
@@ -129,7 +126,7 @@ class SubscribeViewModel @Inject constructor(
 
     private fun search(scope: CoroutineScope) {
         searchJob?.cancel()
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 _viewState.update {
                     it.copy(
