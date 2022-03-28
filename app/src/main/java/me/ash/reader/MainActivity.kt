@@ -14,7 +14,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            HomeEntry()
+            HomeEntry(intent.extras).also {
+                intent.replaceExtras(null)
+            }
         }
     }
 }
