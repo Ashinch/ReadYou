@@ -6,7 +6,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
@@ -52,15 +51,13 @@ class LocalRssRepository @Inject constructor(
             context,
             NotificationManager::class.java
         ) as NotificationManager).also {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                it.createNotificationChannel(
-                    NotificationChannel(
-                        NotificationGroupName.ARTICLE_UPDATE,
-                        NotificationGroupName.ARTICLE_UPDATE,
-                        NotificationManager.IMPORTANCE_DEFAULT
-                    )
+            it.createNotificationChannel(
+                NotificationChannel(
+                    NotificationGroupName.ARTICLE_UPDATE,
+                    NotificationGroupName.ARTICLE_UPDATE,
+                    NotificationManager.IMPORTANCE_DEFAULT
                 )
-            }
+            )
         }
 
     override suspend fun updateArticleInfo(article: Article) {
@@ -92,28 +89,19 @@ class LocalRssRepository @Inject constructor(
                 val preTime = System.currentTimeMillis()
                 val accountId = context.currentAccountId
                 val articles = mutableListOf<Article>()
-                feedDao.queryAll(accountId).also { feed ->
-                    updateSyncState {
-                        it.copy(
-                            feedCount = feed.size,
-                        )
+                feedDao.queryAll(accountId)
+                    .also { feed -> updateSyncState { it.copy(feedCount = feed.size) } }
+                    .map { feed -> async { syncFeed(feed) } }
+                    .awaitAll()
+                    .forEach {
+                        if (it.isNotify) {
+                            notify(it.articles)
+                        }
+                        articles.addAll(it.articles)
                     }
-                }.map { feed ->
-                    async {
-                        syncFeed(accountId, feed)
-                    }
-                }.awaitAll().forEach {
-                    if (it.isNotify) {
-                        notify(it.articles)
-                    }
-                    articles.addAll(it.articles)
-                }
 
                 articleDao.insertList(articles)
-                Log.i(
-                    "RlOG",
-                    "onCompletion: ${System.currentTimeMillis() - preTime}"
-                )
+                Log.i("RlOG", "onCompletion: ${System.currentTimeMillis() - preTime}")
                 accountDao.queryById(accountId)?.let { account ->
                     accountDao.update(
                         account.apply {
@@ -137,17 +125,9 @@ class LocalRssRepository @Inject constructor(
         val isNotify: Boolean,
     )
 
-    private suspend fun syncFeed(
-        accountId: Int,
-        feed: Feed
-    ): ArticleNotify {
-        val latest = articleDao.queryLatestByFeedId(accountId, feed.id)
-        val articles = rssHelper.queryRssXml(
-            rssNetworkDataSource,
-            accountId,
-            feed,
-            latest?.link,
-        ).also {
+    private suspend fun syncFeed(feed: Feed): ArticleNotify {
+        val latest = articleDao.queryLatestByFeedId(context.currentAccountId, feed.id)
+        val articles = rssHelper.queryRssXml(feed, latest?.link).also {
             if (feed.icon == null && it.isNotEmpty()) {
                 rssHelper.queryRssIcon(feedDao, feed, it.first().link)
             }

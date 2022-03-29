@@ -14,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -208,7 +209,7 @@ private fun Content(
         if (articleWithFeed == null) {
             Spacer(modifier = Modifier.height(64.dp))
             LottieAnimation(
-                modifier = Modifier.padding(80.dp),
+                modifier = Modifier.alpha(0.7f).padding(80.dp),
                 url = "https://assets8.lottiefiles.com/packages/lf20_jm7mv1ib.json",
             )
         } else {

@@ -13,6 +13,7 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -132,7 +133,7 @@ fun FlowPage(
             Crossfade(targetState = pagingItems) { pagingItems ->
                 if (pagingItems.loadState.source.refresh is LoadState.NotLoading && pagingItems.itemCount == 0) {
                     LottieAnimation(
-                        modifier = Modifier.padding(80.dp),
+                        modifier = Modifier.alpha(0.7f).padding(80.dp),
                         url = "https://assets7.lottiefiles.com/packages/lf20_l4ny0jjm.json",
                     )
                 }

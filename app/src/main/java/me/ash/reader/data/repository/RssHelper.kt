@@ -1,6 +1,7 @@
 package me.ash.reader.data.repository
 
 import android.content.Context
+import android.text.Html
 import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import me.ash.reader.currentAccountId
@@ -35,30 +36,7 @@ class RssHelper @Inject constructor(
             groupId = "",
             accountId = accountId,
         )
-        val articles = mutableListOf<Article>()
-        parseRss.items.forEach {
-            articles.add(
-                Article(
-                    id = accountId.spacerDollar(UUID.randomUUID().toString()),
-                    accountId = accountId,
-                    feedId = feed.id,
-                    date = it.publishDate.toString().let {
-                        try {
-                            Date(it)
-                        } catch (e: IllegalArgumentException) {
-                            parseDate(it) ?: Date()
-                        }
-                    },
-                    title = it.title.toString(),
-                    author = it.author,
-                    rawDescription = it.description.toString(),
-                    shortDescription = (Readability4JExtended("", it.description.toString())
-                        .parse().textContent ?: "").take(100).trim(),
-                    link = it.link ?: "",
-                )
-            )
-        }
-        return FeedWithArticle(feed, articles)
+        return FeedWithArticle(feed, queryRssXml(feed))
     }
 
     fun parseDescriptionContent(link: String, content: String): String {
@@ -95,13 +73,12 @@ class RssHelper @Inject constructor(
     }
 
     suspend fun queryRssXml(
-        rssNetworkDataSource: RssNetworkDataSource,
-        accountId: Int,
         feed: Feed,
         latestLink: String? = null,
     ): List<Article> {
         val a = mutableListOf<Article>()
         try {
+            val accountId = context.currentAccountId
             val parseRss = rssNetworkDataSource.parseRss(feed.url)
             parseRss.items.forEach {
                 if (latestLink != null && latestLink == it.link) return a
@@ -111,8 +88,14 @@ class RssHelper @Inject constructor(
                         id = accountId.spacerDollar(UUID.randomUUID().toString()),
                         accountId = accountId,
                         feedId = feed.id,
-                        date = Date(it.publishDate.toString()),
-                        title = it.title.toString(),
+                        date = it.publishDate.toString().let {
+                            try {
+                                Date(it)
+                            } catch (e: IllegalArgumentException) {
+                                parseDate(it) ?: Date()
+                            }
+                        },
+                        title = Html.fromHtml(it.title.toString()).toString(),
                         author = it.author,
                         rawDescription = it.description.toString(),
                         shortDescription = (Readability4JExtended("", it.description.toString())
