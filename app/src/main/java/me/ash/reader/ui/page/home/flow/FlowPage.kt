@@ -1,12 +1,10 @@
 package me.ash.reader.ui.page.home.flow
 
-import android.widget.Toast
-import androidx.compose.animation.Crossfade
+import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -15,6 +13,7 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -22,43 +21,59 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.extension.getName
 import me.ash.reader.ui.page.home.FilterBar
 import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
+import me.ash.reader.ui.page.home.read.ReadViewAction
 import me.ash.reader.ui.page.home.read.ReadViewModel
 
 @OptIn(
     ExperimentalMaterial3Api::class,
-    ExperimentalFoundationApi::class,
+    ExperimentalFoundationApi::class, com.google.accompanist.pager.ExperimentalPagerApi::class,
 )
 @Composable
 fun FlowPage(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: FlowViewModel = hiltViewModel(),
+    flowViewModel: FlowViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel = hiltViewModel(),
     readViewModel: ReadViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val viewState = viewModel.viewState.collectAsStateValue()
+    val viewState = flowViewModel.viewState.collectAsStateValue()
     val filterState = homeViewModel.filterState.collectAsStateValue()
     val pagingItems = viewState.pagingData.collectAsLazyPagingItems()
     var markAsRead by remember { mutableStateOf(false) }
 
     LaunchedEffect(homeViewModel.filterState) {
         homeViewModel.filterState.collect { state ->
-            viewModel.dispatch(
+            flowViewModel.dispatch(
                 FlowViewAction.FetchData(state)
             )
         }
     }
 
+//    LaunchedEffect(viewState.listState.isScrollInProgress) {
+//        Log.i("RLog", "isScrollInProgress: ${viewState.listState.isScrollInProgress}")
+//        if (viewState.listState.isScrollInProgress) {
+//            Log.i("RLog", "isScrollInProgress: ${true}")
+//            markAsRead = false
+//        }
+//    }
+
     Scaffold(
-        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.surface)
+            .pointerInput(markAsRead) {
+                detectTapGestures {
+                    markAsRead = false
+                }
+            },
         topBar = {
             SmallTopAppBar(
                 title = {},
@@ -79,20 +94,27 @@ fun FlowPage(
                     }
                 },
                 actions = {
-                    IconButton(onClick = {
-                        viewModel.dispatch(FlowViewAction.PeekSyncWork)
-                        Toast.makeText(
-                            context,
-                            viewState.syncWorkInfo.length.toString(),
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                    }) {
-                        Icon(
-                            imageVector = Icons.Rounded.DoneAll,
-                            contentDescription = stringResource(R.string.mark_all_as_read),
-                            tint = MaterialTheme.colorScheme.onSurface,
-                        )
+                    AnimatedVisibility(
+                        visible = !filterState.filter.isStarred(),// && pagingItems.loadState.refresh is LoadState.NotLoading && pagingItems.itemCount != 0,
+                        enter = fadeIn() + expandVertically(),
+                        exit = fadeOut() + shrinkVertically(),
+                    ) {
+                        IconButton(onClick = {
+                            scope.launch {
+                                viewState.listState.scrollToItem(0)
+                                markAsRead = !markAsRead
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Rounded.DoneAll,
+                                contentDescription = stringResource(R.string.mark_all_as_read),
+                                tint = if (markAsRead) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.onSurface
+                                },
+                            )
+                        }
                     }
                     IconButton(onClick = {}) {
                         Icon(
@@ -130,7 +152,38 @@ fun FlowPage(
                             overflow = TextOverflow.Ellipsis,
                         )
                     }
-                    generateArticleList(context, pagingItems, readViewModel, homeViewModel, scope)
+                    item {
+                        AnimatedVisibility(
+                            visible = markAsRead,
+                                enter = fadeIn() + expandVertically(),
+                                exit = fadeOut() + shrinkVertically(),
+                            ) {
+                                Column {
+                                    MarkAsReadBar()
+                                    Spacer(modifier = Modifier.height(24.dp))
+                            }
+                        }
+                    }
+                    generateArticleList(
+                        context = context,
+                        pagingItems = pagingItems,
+                    ) {
+                        markAsRead = false
+                        readViewModel.dispatch(ReadViewAction.ScrollToItem(0))
+                        readViewModel.dispatch(ReadViewAction.InitData(it))
+                        if (it.feed.isFullContent) readViewModel.dispatch(ReadViewAction.RenderFullContent)
+                        else readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
+                        readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
+                        homeViewModel.dispatch(
+                            HomeViewAction.ScrollToPage(
+                                scope = scope,
+                                targetPage = 2,
+                            )
+                        )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(64.dp))
+                    }
                 }
             }
         },
