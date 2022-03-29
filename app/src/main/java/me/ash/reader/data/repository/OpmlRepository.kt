@@ -16,9 +16,13 @@ class OpmlRepository @Inject constructor(
 ) {
     suspend fun saveToDatabase(inputStream: InputStream) {
         try {
-            val groupWithFeedList = opmlLocalDataSource.parseFileInputStream(inputStream)
+            val defaultGroup = groupDao.queryById(opmlLocalDataSource.getDefaultGroupId())!!
+            val groupWithFeedList =
+                opmlLocalDataSource.parseFileInputStream(inputStream, defaultGroup)
             groupWithFeedList.forEach { groupWithFeed ->
-                groupDao.insert(groupWithFeed.group)
+                if (groupWithFeed.group != defaultGroup) {
+                    groupDao.insert(groupWithFeed.group)
+                }
                 val repeatList = mutableListOf<Feed>()
                 groupWithFeed.feeds.forEach {
                     it.groupId = groupWithFeed.group.id

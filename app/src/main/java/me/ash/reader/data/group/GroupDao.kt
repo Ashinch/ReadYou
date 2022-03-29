@@ -5,6 +5,14 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GroupDao {
+    @Query(
+        """
+        SELECT * FROM `group`
+        WHERE id = :id
+        """
+    )
+    fun queryById(id: String): Group?
+
     @Transaction
     @Query(
         """
