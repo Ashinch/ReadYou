@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.launch
 import me.ash.reader.R
@@ -30,6 +31,7 @@ import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.read.ReadViewAction
 import me.ash.reader.ui.page.home.read.ReadViewModel
+import me.ash.reader.ui.widget.LottieAnimation
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -128,6 +130,12 @@ fun FlowPage(
         },
         content = {
             Crossfade(targetState = pagingItems) { pagingItems ->
+                if (pagingItems.loadState.source.refresh is LoadState.NotLoading && pagingItems.itemCount == 0) {
+                    LottieAnimation(
+                        modifier = Modifier.padding(80.dp),
+                        url = "https://assets7.lottiefiles.com/packages/lf20_l4ny0jjm.json",
+                    )
+                }
                 LazyColumn(
                     state = viewState.listState,
                 ) {
@@ -155,12 +163,12 @@ fun FlowPage(
                     item {
                         AnimatedVisibility(
                             visible = markAsRead,
-                                enter = fadeIn() + expandVertically(),
-                                exit = fadeOut() + shrinkVertically(),
-                            ) {
-                                Column {
-                                    MarkAsReadBar()
-                                    Spacer(modifier = Modifier.height(24.dp))
+                            enter = fadeIn() + expandVertically(),
+                            exit = fadeOut() + shrinkVertically(),
+                        ) {
+                            Column {
+                                MarkAsReadBar()
+                                Spacer(modifier = Modifier.height(24.dp))
                             }
                         }
                     }
@@ -183,6 +191,9 @@ fun FlowPage(
                     }
                     item {
                         Spacer(modifier = Modifier.height(64.dp))
+                        if (pagingItems.loadState.source.refresh is LoadState.NotLoading && pagingItems.itemCount != 0) {
+                            Spacer(modifier = Modifier.height(64.dp))
+                        }
                     }
                 }
             }
