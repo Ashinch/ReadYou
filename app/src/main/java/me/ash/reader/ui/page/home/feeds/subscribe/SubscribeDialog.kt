@@ -32,12 +32,16 @@ import java.io.InputStream
 @Composable
 fun SubscribeDialog(
     modifier: Modifier = Modifier,
-    viewModel: SubscribeViewModel = hiltViewModel(),
+    subscribeViewModel: SubscribeViewModel = hiltViewModel(),
     openInputStreamCallback: (InputStream) -> Unit,
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
+    val viewState = subscribeViewModel.viewState.collectAsStateValue()
+    val groupsState =
+        viewState.groups.collectAsState(initial = emptyList(), context = Dispatchers.IO)
+    var dialogHeight by remember { mutableStateOf(300.dp) }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
         it?.let { uri ->
             context.contentResolver.openInputStream(uri)?.let { inputStream ->
@@ -45,21 +49,18 @@ fun SubscribeDialog(
             }
         }
     }
-    val viewState = viewModel.viewState.collectAsStateValue()
-    val groupsState =
-        viewState.groups.collectAsState(initial = emptyList(), context = Dispatchers.IO)
-    var dialogHeight by remember { mutableStateOf(300.dp) }
     val readYouString = stringResource(R.string.read_you)
     val defaultString = stringResource(R.string.defaults)
+
     LaunchedEffect(viewState.visible) {
         if (viewState.visible) {
             val defaultGroupId = context.dataStore
                 .get(DataStoreKeys.CurrentAccountId)!!
                 .spacerDollar(readYouString + defaultString)
-            viewModel.dispatch(SubscribeViewAction.SelectedGroup(defaultGroupId))
-            viewModel.dispatch(SubscribeViewAction.Init)
+            subscribeViewModel.dispatch(SubscribeViewAction.SelectedGroup(defaultGroupId))
+            subscribeViewModel.dispatch(SubscribeViewAction.Init)
         } else {
-            viewModel.dispatch(SubscribeViewAction.Reset)
+            subscribeViewModel.dispatch(SubscribeViewAction.Reset)
             viewState.pagerState.scrollToPage(0)
         }
     }
@@ -80,7 +81,7 @@ fun SubscribeDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         onDismissRequest = {
             focusManager.clearFocus()
-            viewModel.dispatch(SubscribeViewAction.Hide)
+            subscribeViewModel.dispatch(SubscribeViewAction.Hide)
         },
         icon = {
             Icon(
@@ -102,10 +103,10 @@ fun SubscribeDialog(
                 inputLink = viewState.linkContent,
                 errorMessage = viewState.errorMessage,
                 onLinkValueChange = {
-                    viewModel.dispatch(SubscribeViewAction.InputLink(it))
+                    subscribeViewModel.dispatch(SubscribeViewAction.InputLink(it))
                 },
                 onSearchKeyboardAction = {
-                    viewModel.dispatch(SubscribeViewAction.Search(scope))
+                    subscribeViewModel.dispatch(SubscribeViewAction.Search(scope))
                 },
                 link = viewState.linkContent,
                 groups = groupsState.value,
@@ -114,24 +115,24 @@ fun SubscribeDialog(
                 selectedGroupId = viewState.selectedGroupId,
                 newGroupContent = viewState.newGroupContent,
                 onNewGroupValueChange = {
-                    viewModel.dispatch(SubscribeViewAction.InputNewGroup(it))
+                    subscribeViewModel.dispatch(SubscribeViewAction.InputNewGroup(it))
                 },
                 newGroupSelected = viewState.newGroupSelected,
                 changeNewGroupSelected = {
-                    viewModel.dispatch(SubscribeViewAction.SelectedNewGroup(it))
+                    subscribeViewModel.dispatch(SubscribeViewAction.SelectedNewGroup(it))
                 },
                 pagerState = viewState.pagerState,
                 allowNotificationPresetOnClick = {
-                    viewModel.dispatch(SubscribeViewAction.ChangeAllowNotificationPreset)
+                    subscribeViewModel.dispatch(SubscribeViewAction.ChangeAllowNotificationPreset)
                 },
                 parseFullContentPresetOnClick = {
-                    viewModel.dispatch(SubscribeViewAction.ChangeParseFullContentPreset)
+                    subscribeViewModel.dispatch(SubscribeViewAction.ChangeParseFullContentPreset)
                 },
                 groupOnClick = {
-                    viewModel.dispatch(SubscribeViewAction.SelectedGroup(it))
+                    subscribeViewModel.dispatch(SubscribeViewAction.SelectedGroup(it))
                 },
                 onResultKeyboardAction = {
-                    viewModel.dispatch(SubscribeViewAction.Subscribe)
+                    subscribeViewModel.dispatch(SubscribeViewAction.Subscribe)
                 }
             )
         },
@@ -142,7 +143,7 @@ fun SubscribeDialog(
                         enabled = viewState.linkContent.isNotEmpty(),
                         onClick = {
                             focusManager.clearFocus()
-                            viewModel.dispatch(SubscribeViewAction.Search(scope))
+                            subscribeViewModel.dispatch(SubscribeViewAction.Search(scope))
                         }
                     ) {
                         Text(
@@ -159,7 +160,7 @@ fun SubscribeDialog(
                     TextButton(
                         onClick = {
                             focusManager.clearFocus()
-                            viewModel.dispatch(SubscribeViewAction.Subscribe)
+                            subscribeViewModel.dispatch(SubscribeViewAction.Subscribe)
                         }
                     ) {
                         Text(stringResource(R.string.subscribe))
@@ -174,7 +175,7 @@ fun SubscribeDialog(
                         onClick = {
                             focusManager.clearFocus()
                             launcher.launch("*/*")
-                            viewModel.dispatch(SubscribeViewAction.Hide)
+                            subscribeViewModel.dispatch(SubscribeViewAction.Hide)
                         }
                     ) {
                         Text(text = stringResource(R.string.import_from_opml))
@@ -184,7 +185,7 @@ fun SubscribeDialog(
                     TextButton(
                         onClick = {
                             focusManager.clearFocus()
-                            viewModel.dispatch(SubscribeViewAction.Hide)
+                            subscribeViewModel.dispatch(SubscribeViewAction.Hide)
                         }
                     ) {
                         Text(text = stringResource(R.string.cancel))

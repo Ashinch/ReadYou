@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "me.ash.reader"
-        minSdk 24
+        minSdk 26
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation("io.coil-kt:coil-compose:2.0.0-rc02")
     implementation("androidx.compose.animation:animation-graphics:$compose_version")
     implementation("com.google.accompanist:accompanist-flowlayout:0.24.3-alpha")
     implementation("com.google.accompanist:accompanist-navigation-animation:0.24.3-alpha")

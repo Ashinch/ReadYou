@@ -14,7 +14,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import me.ash.reader.ui.theme.LocalLightThemeColors
 
 @Composable
 fun Banner(
@@ -25,7 +24,7 @@ fun Banner(
     action: (@Composable () -> Unit)? = null,
     onClick: () -> Unit = {},
 ) {
-    val lightThemeColors = LocalLightThemeColors.current
+    val lightThemeColors = MaterialTheme.colorScheme
     val lightPrimaryContainer = lightThemeColors.primaryContainer
     val lightOnSurface = lightThemeColors.onSurface
 

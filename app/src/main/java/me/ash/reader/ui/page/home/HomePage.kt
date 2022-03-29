@@ -3,13 +3,10 @@ package me.ash.reader.ui.page.home
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -34,8 +31,6 @@ fun HomePage(
     feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
 ) {
     val viewState = viewModel.viewState.collectAsStateValue()
-    val filterState = viewModel.filterState.collectAsStateValue()
-    val readState = readViewModel.viewState.collectAsStateValue()
     val scope = rememberCoroutineScope()
 
     OpenArticleByExtras(extrasArticleId)
@@ -85,38 +80,6 @@ fun HomePage(
                     ReadPage(navController = navController)
                 },
             ),
-        )
-        HomeBottomNavBar(
-            modifier = Modifier
-                .height(60.dp)
-                .fillMaxWidth(),
-            pagerState = viewState.pagerState,
-            disabled = readState.articleWithFeed == null,
-            isUnread = readState.articleWithFeed?.article?.isUnread ?: false,
-            isStarred = readState.articleWithFeed?.article?.isStarred ?: false,
-            isFullContent = readState.articleWithFeed?.feed?.isFullContent ?: false,
-            unreadOnClick = {
-                readViewModel.dispatch(ReadViewAction.MarkUnread(it))
-            },
-            starredOnClick = {
-                readViewModel.dispatch(ReadViewAction.MarkStarred(it))
-            },
-            fullContentOnClick = { afterIsFullContent ->
-                readState.articleWithFeed?.let {
-                    if (afterIsFullContent) readViewModel.dispatch(ReadViewAction.RenderFullContent)
-                    else readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
-                }
-            },
-            filter = filterState.filter,
-            filterOnClick = {
-                viewModel.dispatch(
-                    HomeViewAction.ChangeFilter(
-                        filterState.copy(
-                            filter = it
-                        )
-                    )
-                )
-            },
         )
     }
 

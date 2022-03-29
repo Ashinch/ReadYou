@@ -44,4 +44,10 @@
     <string name="mark_as_unread">标记为未读</string>
     <string name="mark_as_starred">标记为已加星标</string>
     <string name="mark_as_unstar">标记为未加星标</string>
+    <string name="mark_as_read_one_day">超过 1 天标记为已读</string>
+    <string name="mark_as_read_three_days">超过 3 天标记为已读</string>
+    <string name="mark_as_read_seven_days">超过 7 天标记为已读</string>
+    <string name="one_day">1 天</string>
+    <string name="three_days">3 天</string>
+    <string name="seven_days">7 天</string>
 </resources>

@@ -25,13 +25,14 @@ fun ArticleItem(
     onClick: (ArticleWithFeed) -> Unit = {},
 ) {
     val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .padding(horizontal = 12.dp)
             .clip(RoundedCornerShape(12.dp))
             .clickable { onClick(articleWithFeed) }
             .padding(horizontal = 12.dp, vertical = 12.dp)
-            .alpha(if (articleWithFeed.article.isUnread) 1f else 0.5f),
+            .alpha(if (articleWithFeed.article.isStarred || articleWithFeed.article.isUnread) 1f else 0.5f),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),

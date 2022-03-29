@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.page.home.read.ReadViewAction
 import me.ash.reader.ui.page.home.read.ReadViewModel
 
@@ -30,7 +29,6 @@ fun WebView(
     val context = LocalContext.current
     val color = MaterialTheme.colorScheme.onSurfaceVariant.toArgb()
     val backgroundColor = MaterialTheme.colorScheme.surface.toArgb()
-    val viewState = viewModel.viewState.collectAsStateValue()
     val webViewClient = object : WebViewClient() {
 
         override fun shouldInterceptRequest(view: WebView?, url: String?): WebResourceResponse? {

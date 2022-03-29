@@ -6,6 +6,43 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ArticleDao {
+    @Query(
+        """
+        UPDATE article SET isUnread = 0 
+        WHERE accountId = :accountId
+        AND isUnread = 1
+        AND date <= :before
+        """
+    )
+    suspend fun markAllAsRead(accountId: Int, before: Long)
+
+    @Query(
+        """
+        UPDATE article SET isUnread = 0 
+        WHERE accountId = :accountId
+        AND isUnread = 1
+        AND date <= :before
+        AND feedId = :feedId
+        """
+    )
+    suspend fun markAllAsReadByFeedId(accountId: Int, before: Long, feedId: String)
+//
+//    @Query(
+//        """
+//        UPDATE article SET isUnread = 0
+//        WHERE accountId = :accountId
+//        AND isUnread = 1
+//        AND date <= :before
+//        AND feedId = :feedId
+//
+//        SELECT * FROM `group` AS a, feed AS b, article AS c
+//        WHERE a.accountId = :accountId
+//        AND a.id = b.groupId
+//        AND b.groupId = :groupId
+//        AND c.feedId = b.id
+//        """
+//    )
+//    suspend fun markAllAsReadByGroupId(accountId: Int, before: Long, groupId: String)
 
     @Query(
         """

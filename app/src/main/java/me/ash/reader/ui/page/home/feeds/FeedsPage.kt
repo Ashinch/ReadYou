@@ -3,10 +3,7 @@ package me.ash.reader.ui.page.home.feeds
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
@@ -29,6 +26,7 @@ import me.ash.reader.R
 import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.extension.getDesc
 import me.ash.reader.ui.extension.getName
+import me.ash.reader.ui.page.home.FilterBar
 import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
@@ -37,17 +35,17 @@ import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.widget.Banner
 import me.ash.reader.ui.widget.Subtitle
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, com.google.accompanist.pager.ExperimentalPagerApi::class)
 @Composable
 fun FeedsPage(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: FeedsViewModel = hiltViewModel(),
+    feedsViewModel: FeedsViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel = hiltViewModel(),
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
-    val viewState = viewModel.viewState.collectAsStateValue()
+    val viewState = feedsViewModel.viewState.collectAsStateValue()
     val filterState = homeViewModel.filterState.collectAsStateValue()
     val syncState = homeViewModel.syncState.collectAsStateValue()
 
@@ -61,12 +59,12 @@ fun FeedsPage(
     )
 
     LaunchedEffect(Unit) {
-        viewModel.dispatch(FeedsViewAction.FetchAccount)
+        feedsViewModel.dispatch(FeedsViewAction.FetchAccount)
     }
 
     LaunchedEffect(homeViewModel.filterState) {
         homeViewModel.filterState.collect { state ->
-            viewModel.dispatch(
+            feedsViewModel.dispatch(
                 FeedsViewAction.FetchData(state)
             )
         }
@@ -114,7 +112,7 @@ fun FeedsPage(
         content = {
             SubscribeDialog(
                 openInputStreamCallback = {
-                    viewModel.dispatch(FeedsViewAction.AddFromFile(it))
+                    feedsViewModel.dispatch(FeedsViewAction.AddFromFile(it))
                 },
             )
             LazyColumn {
@@ -213,9 +211,27 @@ fun FeedsPage(
                     }
                 }
                 item {
-                    Spacer(modifier = Modifier.height(48.dp))
+                    Spacer(modifier = Modifier.height(64.dp))
+                    Spacer(modifier = Modifier.height(64.dp))
                 }
             }
+        },
+        bottomBar = {
+            FilterBar(
+                modifier = Modifier
+                    .height(60.dp)
+                    .fillMaxWidth(),
+                filter = filterState.filter,
+                filterOnClick = {
+                    homeViewModel.dispatch(
+                        HomeViewAction.ChangeFilter(
+                            filterState.copy(
+                                filter = it
+                            )
+                        )
+                    )
+                },
+            )
         }
     )
 }
