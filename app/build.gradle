@@ -29,6 +29,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -50,6 +53,7 @@ android {
 }
 
 dependencies {
+    implementation "androidx.profileinstaller:profileinstaller:1.2.0-alpha02"
     implementation("io.coil-kt:coil-compose:2.0.0-rc02")
     implementation("androidx.compose.animation:animation-graphics:$compose_version")
     implementation("com.google.accompanist:accompanist-flowlayout:0.24.3-alpha")
