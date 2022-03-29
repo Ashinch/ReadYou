@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.data.feed.Feed
@@ -52,36 +53,41 @@ fun FeedItem(
             .padding(vertical = 14.dp),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 14.dp, end = 6.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(modifier = Modifier.padding(start = 14.dp)) {
+            Row(modifier = Modifier.weight(1f)) {
                 Row(
                     modifier = Modifier
                         .size(20.dp)
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.outline),
                 ) {}
-                Spacer(modifier = Modifier.width(12.dp))
                 Text(
+                    modifier = Modifier.padding(start = 12.dp, end = 6.dp),
                     text = feed.name,
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
             if (feed.important ?: 0 != 0) {
-                Badge(
-                    modifier = Modifier.padding(end = 6.dp),
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.24f),
-                    contentColor = MaterialTheme.colorScheme.outline,
-                    content = {
-                        Text(
-                            text = feed.important.toString(),
-                            style = MaterialTheme.typography.labelSmall
-                        )
-                    },
-                )
+                Row() {
+                    Badge(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.24f),
+                        contentColor = MaterialTheme.colorScheme.outline,
+                        content = {
+                            Text(
+                                text = feed.important.toString(),
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                        },
+                    )
+                }
             }
         }
     }

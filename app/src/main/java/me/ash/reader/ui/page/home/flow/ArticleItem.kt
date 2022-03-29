@@ -40,12 +40,15 @@ fun ArticleItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                modifier = Modifier.padding(start = 30.dp),
+                modifier = Modifier.weight(1f).padding(start = 30.dp),
                 text = articleWithFeed.feed.name,
                 color = MaterialTheme.colorScheme.tertiary,
                 style = MaterialTheme.typography.labelMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
             Text(
+                modifier = Modifier.padding(start = 6.dp),
                 text = articleWithFeed.article.date.formatToString(context, onlyHourMinute = true),
                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
                 style = MaterialTheme.typography.labelMedium,
