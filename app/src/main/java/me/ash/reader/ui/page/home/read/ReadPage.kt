@@ -68,6 +68,7 @@ fun ReadPage(
 
     LaunchedEffect(readViewModel.viewState) {
         readViewModel.viewState.collect {
+            isScrollDown = false
             if (it.articleWithFeed != null) {
                 if (it.articleWithFeed.article.isUnread) {
                     readViewModel.dispatch(ReadViewAction.MarkUnread(false))
@@ -90,7 +91,13 @@ fun ReadPage(
                         .zIndex(1f),
                     contentAlignment = Alignment.TopCenter
                 ) {
-                    TopBar(isScrollDown, homeViewModel, scope, readViewModel, viewState)
+                    TopBar(
+                        viewState.articleWithFeed == null || !isScrollDown,
+                        homeViewModel,
+                        scope,
+                        readViewModel,
+                        viewState
+                    )
                 }
                 Content(viewState, viewState.articleWithFeed, context)
                 Box(
@@ -99,7 +106,11 @@ fun ReadPage(
                         .zIndex(1f),
                     contentAlignment = Alignment.BottomCenter
                 ) {
-                    BottomBar(isScrollDown, viewState.articleWithFeed, readViewModel)
+                    BottomBar(
+                        viewState.articleWithFeed != null && !isScrollDown,
+                        viewState.articleWithFeed,
+                        readViewModel
+                    )
                 }
             }
         },
@@ -109,14 +120,14 @@ fun ReadPage(
 
 @Composable
 private fun TopBar(
-    isScrollDown: Boolean,
+    isShow: Boolean,
     homeViewModel: HomeViewModel,
     scope: CoroutineScope,
     readViewModel: ReadViewModel,
     viewState: ReadViewState
 ) {
     AnimatedVisibility(
-        visible = !isScrollDown,
+        visible = isShow,
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically(),
     ) {
@@ -169,13 +180,13 @@ private fun TopBar(
 
 @Composable
 private fun BottomBar(
-    isScrollDown: Boolean,
+    isShow: Boolean,
     articleWithFeed: ArticleWithFeed?,
     readViewModel: ReadViewModel
 ) {
     articleWithFeed?.let {
         AnimatedVisibility(
-            visible = !isScrollDown,
+            visible = isShow,
             enter = fadeIn() + expandVertically(),
             exit = fadeOut() + shrinkVertically(),
         ) {
@@ -209,7 +220,9 @@ private fun Content(
         if (articleWithFeed == null) {
             Spacer(modifier = Modifier.height(64.dp))
             LottieAnimation(
-                modifier = Modifier.alpha(0.7f).padding(80.dp),
+                modifier = Modifier
+                    .alpha(0.7f)
+                    .padding(80.dp),
                 url = "https://assets8.lottiefiles.com/packages/lf20_jm7mv1ib.json",
             )
         } else {
