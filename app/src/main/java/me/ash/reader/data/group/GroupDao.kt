@@ -20,7 +20,16 @@ interface GroupDao {
         WHERE accountId = :accountId
         """
     )
-    fun queryAllGroupWithFeed(accountId: Int): Flow<MutableList<GroupWithFeed>>
+    fun queryAllGroupWithFeedAsFlow(accountId: Int): Flow<MutableList<GroupWithFeed>>
+
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM `group`
+        WHERE accountId = :accountId
+        """
+    )
+    fun queryAllGroupWithFeed(accountId: Int): List<GroupWithFeed>
 
     @Query(
         """

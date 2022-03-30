@@ -53,6 +53,7 @@ android {
 }
 
 dependencies {
+    implementation 'be.ceau:opml-parser:2.2.0'
     implementation "androidx.profileinstaller:profileinstaller:1.2.0-alpha02"
     implementation("io.coil-kt:coil-compose:2.0.0-rc02")
     implementation("androidx.compose.animation:animation-graphics:$compose_version")

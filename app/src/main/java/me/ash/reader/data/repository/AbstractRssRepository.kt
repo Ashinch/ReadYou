@@ -63,7 +63,7 @@ abstract class AbstractRssRepository constructor(
     }
 
     fun pullFeeds(): Flow<MutableList<GroupWithFeed>> {
-        return groupDao.queryAllGroupWithFeed(context.currentAccountId).flowOn(Dispatchers.IO)
+        return groupDao.queryAllGroupWithFeedAsFlow(context.currentAccountId).flowOn(Dispatchers.IO)
     }
 
     fun pullArticles(

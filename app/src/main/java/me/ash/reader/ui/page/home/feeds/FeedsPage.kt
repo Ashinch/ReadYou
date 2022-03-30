@@ -1,8 +1,11 @@
 package me.ash.reader.ui.page.home.feeds
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -18,6 +21,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -36,7 +41,10 @@ import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.widget.Banner
 import me.ash.reader.ui.widget.Subtitle
 
-@OptIn(ExperimentalMaterial3Api::class, com.google.accompanist.pager.ExperimentalPagerApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class, com.google.accompanist.pager.ExperimentalPagerApi::class,
+    androidx.compose.foundation.ExperimentalFoundationApi::class
+)
 @Composable
 fun FeedsPage(
     modifier: Modifier = Modifier,
@@ -45,6 +53,7 @@ fun FeedsPage(
     homeViewModel: HomeViewModel = hiltViewModel(),
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val viewState = feedsViewModel.viewState.collectAsStateValue()
     val filterState = homeViewModel.filterState.collectAsStateValue()
@@ -58,6 +67,18 @@ fun FeedsPage(
             animation = tween(1000, easing = LinearEasing)
         )
     )
+
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument()
+    ) { result ->
+        feedsViewModel.dispatch(FeedsViewAction.ExportAsString { string ->
+            result?.let { uri ->
+                context.contentResolver.openOutputStream(uri)?.let { outputStream ->
+                    outputStream.write(string.toByteArray())
+                }
+            }
+        })
+    }
 
     LaunchedEffect(Unit) {
         feedsViewModel.dispatch(FeedsViewAction.FetchAccount)
@@ -77,7 +98,8 @@ fun FeedsPage(
             SmallTopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = {
+                    }) {
                         Icon(
                             imageVector = Icons.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.back),
@@ -113,18 +135,26 @@ fun FeedsPage(
         content = {
             SubscribeDialog(
                 openInputStreamCallback = {
-                    feedsViewModel.dispatch(FeedsViewAction.AddFromFile(it))
+                    feedsViewModel.dispatch(FeedsViewAction.ImportFromInputStream(it))
                 },
             )
             LazyColumn {
                 item {
                     Text(
-                        modifier = Modifier.padding(
-                            start = 24.dp,
-                            top = 48.dp,
-                            end = 24.dp,
-                            bottom = 24.dp
-                        ),
+                        modifier = Modifier
+                            .padding(
+                                start = 24.dp,
+                                top = 48.dp,
+                                end = 24.dp,
+                                bottom = 24.dp
+                            )
+                            .pointerInput(Unit) {
+                                detectTapGestures(
+                                    onLongPress = {
+                                        launcher.launch("ReadYou.opml")
+                                    }
+                                )
+                            },
                         text = viewState.account?.name ?: stringResource(R.string.unknown),
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.onSurface,

@@ -1,15 +1,13 @@
 package me.ash.reader.data.source
 
 import android.content.Context
-import android.util.Log
-import android.util.Xml
+import be.ceau.opml.OpmlParser
 import dagger.hilt.android.qualifiers.ApplicationContext
 import me.ash.reader.*
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.group.Group
 import me.ash.reader.data.group.GroupWithFeed
 import me.ash.reader.data.repository.StringsRepository
-import org.xmlpull.v1.XmlPullParser
 import java.io.InputStream
 import java.util.*
 import javax.inject.Inject
@@ -29,59 +27,78 @@ class OpmlLocalDataSource @Inject constructor(
 
     //    @Throws(XmlPullParserException::class, IOException::class)
     fun parseFileInputStream(inputStream: InputStream, defaultGroup: Group): List<GroupWithFeed> {
-        val groupWithFeedList = mutableListOf<GroupWithFeed>()
         val accountId = context.currentAccountId
-        inputStream.use {
-            val parser: XmlPullParser = Xml.newPullParser()
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
-            parser.setInput(it, null)
-            parser.nextTag()
-            while (parser.next() != XmlPullParser.END_DOCUMENT) {
-                if (parser.eventType != XmlPullParser.START_TAG) {
-                    continue
-                }
-                if (parser.name != "outline") {
-                    continue
-                }
-                if ("rss" == parser.getAttributeValue(null, "type")) {
-                    val title = parser.getAttributeValue(null, "title")
-                    val xmlUrl = parser.getAttributeValue(null, "xmlUrl")
-                    Log.i("RLog", "rss: ${title} , ${xmlUrl}")
-                    if (groupWithFeedList.isEmpty()) {
-                        groupWithFeedList.add(
-                            GroupWithFeed(
-                                group = defaultGroup,
-                                feeds = mutableListOf()
-                            )
-                        )
-                    }
-                    groupWithFeedList.last().let { groupWithFeed ->
-                        groupWithFeed.feeds.add(
-                            Feed(
+        val opml = OpmlParser().parse(inputStream)
+        val groupWithFeedList = mutableListOf<GroupWithFeed>().also {
+            it.addGroup(defaultGroup)
+        }
+
+        opml.body.outlines.forEach {
+            // Only feeds
+            if (it.subElements.isEmpty()) {
+                // It's a empty group
+                if (it.attributes["xmlUrl"] == null) {
+                    if (!it.attributes["isDefault"].toBoolean()) {
+                        groupWithFeedList.addGroup(
+                            Group(
                                 id = UUID.randomUUID().toString(),
-                                name = title,
-                                url = xmlUrl,
-                                groupId = groupWithFeed.group.id,
+                                name = it.attributes["title"] ?: it.text!!,
                                 accountId = accountId,
                             )
                         )
                     }
                 } else {
-                    val title = parser.getAttributeValue(null, "title")
-                    Log.i("RLog", "title: ${title}")
-                    groupWithFeedList.add(
-                        GroupWithFeed(
-                            group = Group(
-                                id = UUID.randomUUID().toString(),
-                                name = title,
-                                accountId = accountId,
-                            ),
-                            feeds = mutableListOf()
+                    groupWithFeedList.addFeedToDefault(
+                        Feed(
+                            id = UUID.randomUUID().toString(),
+                            name = it.attributes["title"] ?: it.text!!,
+                            url = it.attributes["xmlUrl"]!!,
+                            groupId = defaultGroup.id,
+                            accountId = accountId,
+                            isNotification = it.attributes["isNotification"].toBoolean(),
+                            isFullContent = it.attributes["isFullContent"].toBoolean(),
+                        )
+                    )
+                }
+            } else {
+                var groupId = defaultGroup.id
+                if (!it.attributes["isDefault"].toBoolean()) {
+                    groupId = UUID.randomUUID().toString()
+                    groupWithFeedList.addGroup(
+                        Group(
+                            id = groupId,
+                            name = it.attributes["title"] ?: it.text!!,
+                            accountId = accountId,
+                        )
+                    )
+                }
+                it.subElements.forEach { outline ->
+                    groupWithFeedList.addFeed(
+                        Feed(
+                            id = UUID.randomUUID().toString(),
+                            name = outline.attributes["title"] ?: outline.text!!,
+                            url = outline.attributes["xmlUrl"]!!,
+                            groupId = groupId,
+                            accountId = accountId,
+                            isNotification = outline.attributes["isNotification"].toBoolean(),
+                            isFullContent = outline.attributes["isFullContent"].toBoolean(),
                         )
                     )
                 }
             }
-            return groupWithFeedList
         }
+        return groupWithFeedList
+    }
+
+    private fun MutableList<GroupWithFeed>.addGroup(group: Group) {
+        add(GroupWithFeed(group = group, feeds = mutableListOf()))
+    }
+
+    private fun MutableList<GroupWithFeed>.addFeed(feed: Feed) {
+        last().feeds.add(feed)
+    }
+
+    private fun MutableList<GroupWithFeed>.addFeedToDefault(feed: Feed) {
+        first().feeds.add(feed)
     }
 }

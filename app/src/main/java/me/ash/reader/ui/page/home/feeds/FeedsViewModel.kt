@@ -31,7 +31,8 @@ class FeedsViewModel @Inject constructor(
         when (action) {
             is FeedsViewAction.FetchAccount -> fetchAccount()
             is FeedsViewAction.FetchData -> fetchData(action.filterState)
-            is FeedsViewAction.AddFromFile -> addFromFile(action.inputStream)
+            is FeedsViewAction.ImportFromInputStream -> importFromInputStream(action.inputStream)
+            is FeedsViewAction.ExportAsString -> exportAsOpml(action.callback)
             is FeedsViewAction.ScrollToItem -> scrollToItem(action.index)
         }
     }
@@ -46,10 +47,16 @@ class FeedsViewModel @Inject constructor(
         }
     }
 
-    private fun addFromFile(inputStream: InputStream) {
+    private fun importFromInputStream(inputStream: InputStream) {
         viewModelScope.launch(Dispatchers.IO) {
             opmlRepository.saveToDatabase(inputStream)
             rssRepository.get().doSync()
+        }
+    }
+
+    private fun exportAsOpml(callback: (String) -> Unit = {}) {
+        viewModelScope.launch(Dispatchers.Default) {
+            opmlRepository.saveToString()?.let { callback(it) }
         }
     }
 
@@ -143,10 +150,14 @@ sealed class FeedsViewAction {
         val filterState: FilterState,
     ) : FeedsViewAction()
 
-    object FetchAccount: FeedsViewAction()
+    object FetchAccount : FeedsViewAction()
 
-    data class AddFromFile(
+    data class ImportFromInputStream(
         val inputStream: InputStream
+    ) : FeedsViewAction()
+
+    data class ExportAsString(
+        val callback: (String) -> Unit = {}
     ) : FeedsViewAction()
 
     data class ScrollToItem(
