@@ -61,3 +61,7 @@ The following are the progress made so far and the goals to be worked on in the 
 -   [Readability4J](https://github.com/dankito/Readability4J): [Apache License 2.0](https://github.com/dankito/Readability4J/blob/master/LICENSE)
 -   [opml-parser](https://github.com/mdewilde/opml-parser): [Apache License 2.0](https://github.com/mdewilde/opml-parser/blob/master/LICENSE)
 -   （To be improved）
+
+## License
+
+[GNU GPL v3.0](https://github.com/Ashinch/ReadYou/blob/main/LICENSE)

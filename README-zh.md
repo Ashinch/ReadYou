@@ -54,10 +54,14 @@
 
     > 如遇卡顿现象，请选择 Release 版本构建。
 
-## Credits
+## 信用
 
 -   [MusicYou](https://github.com/Kyant0/MusicYou)
 -   [ParseRSS](https://github.com/muhrifqii/ParseRSS): [MIT](https://github.com/muhrifqii/ParseRSS/blob/master/LICENSE)
 -   [Readability4J](https://github.com/dankito/Readability4J): [Apache License 2.0](https://github.com/dankito/Readability4J/blob/master/LICENSE)
 -   [opml-parser](https://github.com/mdewilde/opml-parser): [Apache License 2.0](https://github.com/mdewilde/opml-parser/blob/master/LICENSE)
 -   （待完善）
+
+## 许可证
+
+[GNU GPL v3.0](https://github.com/Ashinch/ReadYou/blob/main/LICENSE)
