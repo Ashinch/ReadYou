@@ -2,7 +2,7 @@
 
 # Read You
 
-[Telegram 频道](https://t.me/ReadYouApp) | [Figma 设计稿](https://www.figma.com/file/ViBW8GbUgkTMmK6a80h8X1/Reader-You?node-id=7028%3A23673) | [项目进度](https://github.com/Ashinch/ReadYou/projects/1)
+[Telegram 频道](https://t.me/ReadYouApp) | [Figma 设计稿](https://www.figma.com/file/ViBW8GbUgkTMmK6a80h8X1/Reader-You?node-id=7028%3A23673)
 
 这是一个在 Android 上的 [Reeder](https://reederapp.com/) 仿制品，为了让 Android 拥有一个与 Reeder 相似的 RSS 阅读器。
 
@@ -14,14 +14,15 @@
 
 -   [x] 本地
 
-    -   [x] 订阅 Feed 链接
+    -   [x] 订阅 RSS 链接
     -   [x] 导入 OPML 文件
     -   [x] 文章同步
     -   [x] 文章更新通知
     -   [x] 全文解析
     -   [x] 过滤未读、星标
-    -   [x] Feed 分组
+    -   [x] 订阅源分组
     -   [x] 本地化
+    -   [x] 导出 OPML 文件
     -   [ ] 文章搜索
     -   [ ] 偏好设置
     -   [ ] 发布 APK
@@ -53,9 +54,10 @@
 
     > 如遇卡顿现象，请选择 Release 版本构建。
 
-## 依赖
+## Credits
 
 -   [MusicYou](https://github.com/Kyant0/MusicYou)
--   [ParseRSS](https://github.com/muhrifqii/ParseRSS)
--   [Readability4J](https://github.com/dankito/Readability4J)
+-   [ParseRSS](https://github.com/muhrifqii/ParseRSS): [MIT](https://github.com/muhrifqii/ParseRSS/blob/master/LICENSE)
+-   [Readability4J](https://github.com/dankito/Readability4J): [Apache License 2.0](https://github.com/dankito/Readability4J/blob/master/LICENSE)
+-   [opml-parser](https://github.com/mdewilde/opml-parser): [Apache License 2.0](https://github.com/mdewilde/opml-parser/blob/master/LICENSE)
 -   （待完善）

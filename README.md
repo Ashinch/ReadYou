@@ -2,9 +2,9 @@ English by DeepL | [简体中文](https://github.com/Ashinch/ReadYou/blob/main/R
 
 # Read You
 
-[Telegram](https://t.me/ReadYouApp) | [Figma](https://www.figma.com/file/ViBW8GbUgkTMmK6a80h8X1/Reader-You?node-id=7028%3A23673) | [Project Schedule](https://github.com/Ashinch/ReadYou/projects/1)
+[Telegram](https://t.me/ReadYouApp) | [Figma](https://www.figma.com/file/ViBW8GbUgkTMmK6a80h8X1/Reader-You?node-id=7028%3A23673)
 
-This is a [Reeder](https://reederapp.com/) copycat, in order to give Android an RSS reader similar to Reeder.
+This is a copy of [Reeder](https://reederapp.com/), in order to give Android an RSS reader similar to Reeder.
 
 ## Features
 
@@ -22,6 +22,7 @@ The following are the progress made so far and the goals to be worked on in the 
     -   [x] Filter unread and starred
     -   [x] Feed Grouping
     -   [x] Localization
+    -   [x] Export as OPML
     -   [ ] Search for articles
     -   [ ] Preference settings
     -   [ ] Release APK
@@ -56,6 +57,7 @@ The following are the progress made so far and the goals to be worked on in the 
 ## Credits
 
 -   [MusicYou](https://github.com/Kyant0/MusicYou)
--   [ParseRSS](https://github.com/muhrifqii/ParseRSS)
--   [Readability4J](https://github.com/dankito/Readability4J)
+-   [ParseRSS](https://github.com/muhrifqii/ParseRSS): [MIT](https://github.com/muhrifqii/ParseRSS/blob/master/LICENSE)
+-   [Readability4J](https://github.com/dankito/Readability4J): [Apache License 2.0](https://github.com/dankito/Readability4J/blob/master/LICENSE)
+-   [opml-parser](https://github.com/mdewilde/opml-parser): [Apache License 2.0](https://github.com/mdewilde/opml-parser/blob/master/LICENSE)
 -   （To be improved）
