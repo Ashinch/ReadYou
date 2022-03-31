@@ -1,7 +1,7 @@
 <resources>
     <string name="read_you">Read You</string>
     <string name="all">全部</string>
-    <string name="all_desc">共 %1$d 项</string>
+    <string name="all_desc">%1$d 项已归档</string>
     <string name="unread">未读</string>
     <string name="unread_desc">%1$d 项未读</string>
     <string name="starred">已加星标</string>

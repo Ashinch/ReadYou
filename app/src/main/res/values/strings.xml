@@ -1,7 +1,7 @@
 <resources>
     <string name="read_you">Read You</string>
     <string name="all">All</string>
-    <string name="all_desc">%1$d All Items</string>
+    <string name="all_desc">%1$d Archived Items</string>
     <string name="unread">Unread</string>
     <string name="unread_desc"> %1$d Unread Items</string>
     <string name="starred">Starred</string>
