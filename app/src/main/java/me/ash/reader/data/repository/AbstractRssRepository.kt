@@ -7,7 +7,7 @@ import androidx.paging.PagingSource
 import androidx.work.*
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import me.ash.reader.currentAccountId
@@ -32,6 +32,7 @@ abstract class AbstractRssRepository constructor(
     private val feedDao: FeedDao,
     private val rssNetworkDataSource: RssNetworkDataSource,
     private val workManager: WorkManager,
+    private val dispatcherIO: CoroutineDispatcher,
 ) {
     data class SyncState(
         val feedCount: Int = 0,
@@ -59,11 +60,11 @@ abstract class AbstractRssRepository constructor(
     }
 
     fun pullGroups(): Flow<MutableList<Group>> {
-        return groupDao.queryAllGroup(context.currentAccountId).flowOn(Dispatchers.IO)
+        return groupDao.queryAllGroup(context.currentAccountId).flowOn(dispatcherIO)
     }
 
     fun pullFeeds(): Flow<MutableList<GroupWithFeed>> {
-        return groupDao.queryAllGroupWithFeedAsFlow(context.currentAccountId).flowOn(Dispatchers.IO)
+        return groupDao.queryAllGroupWithFeedAsFlow(context.currentAccountId).flowOn(dispatcherIO)
     }
 
     fun pullArticles(
@@ -72,7 +73,6 @@ abstract class AbstractRssRepository constructor(
         isStarred: Boolean = false,
         isUnread: Boolean = false,
     ): PagingSource<Int, ArticleWithFeed> {
-        Log.i("RLog", "thread:pullArticles ${Thread.currentThread().name}")
         val accountId = context.currentAccountId
         Log.i(
             "RLog",
@@ -107,7 +107,6 @@ abstract class AbstractRssRepository constructor(
         isStarred: Boolean = false,
         isUnread: Boolean = false,
     ): Flow<List<ImportantCount>> {
-        Log.i("RLog", "thread:pullImportant ${Thread.currentThread().name}")
         val accountId = context.currentAccountId
         Log.i(
             "RLog",
@@ -119,7 +118,7 @@ abstract class AbstractRssRepository constructor(
             isUnread -> articleDao
                 .queryImportantCountWhenIsUnread(accountId, isUnread)
             else -> articleDao.queryImportantCountWhenIsAll(accountId)
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(dispatcherIO)
     }
 
     suspend fun findFeedById(id: String): Feed? {
@@ -130,7 +129,7 @@ abstract class AbstractRssRepository constructor(
         return articleDao.queryById(id)
     }
 
-    suspend fun isExist(url: String): Boolean {
+    suspend fun isFeedExist(url: String): Boolean {
         return feedDao.queryByLink(context.currentAccountId, url).isNotEmpty()
     }
 

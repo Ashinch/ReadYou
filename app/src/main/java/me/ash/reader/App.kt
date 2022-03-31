@@ -5,10 +5,11 @@ import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.ash.reader.data.module.ApplicationScope
+import me.ash.reader.data.module.DispatcherDefault
 import me.ash.reader.data.repository.*
 import me.ash.reader.data.source.OpmlLocalDataSource
 import me.ash.reader.data.source.ReaderDatabase
@@ -57,9 +58,13 @@ class App : Application(), Configuration.Provider {
     @ApplicationScope
     lateinit var applicationScope: CoroutineScope
 
+    @Inject
+    @DispatcherDefault
+    lateinit var dispatcherDefault: CoroutineDispatcher
+
     override fun onCreate() {
         super.onCreate()
-        applicationScope.launch(Dispatchers.IO) {
+        applicationScope.launch(dispatcherDefault) {
             accountInit()
             workerInit()
         }

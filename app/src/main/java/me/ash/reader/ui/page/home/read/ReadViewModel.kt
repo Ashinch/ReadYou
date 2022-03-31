@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.read
 
+import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -55,12 +56,23 @@ class ReadViewModel @Inject constructor(
 
     private fun renderFullContent() {
         changeLoading(true)
-        rssHelper.parseFullContent(
-            _viewState.value.articleWithFeed?.article?.link ?: "",
-            _viewState.value.articleWithFeed?.article?.title ?: ""
-        ) { content ->
-            _viewState.update {
-                it.copy(content = content)
+        viewModelScope.launch {
+            try {
+                _viewState.update {
+                    it.copy(
+                        content = rssHelper.parseFullContent(
+                            _viewState.value.articleWithFeed?.article?.link ?: "",
+                            _viewState.value.articleWithFeed?.article?.title ?: ""
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                Log.i("RLog", "renderFullContent: ${e.message}")
+                _viewState.update {
+                    it.copy(
+                        content = e.message
+                    )
+                }
             }
         }
     }

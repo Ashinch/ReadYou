@@ -148,7 +148,7 @@ class SubscribeViewModel @Inject constructor(
                         lockLinkInput = true,
                     )
                 }
-                if (rssRepository.get().isExist(_viewState.value.linkContent)) {
+                if (rssRepository.get().isFeedExist(_viewState.value.linkContent)) {
                     _viewState.update {
                         it.copy(
                             title = stringsRepository.getString(R.string.subscribe),

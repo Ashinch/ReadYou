@@ -49,14 +49,22 @@ class FeedsViewModel @Inject constructor(
 
     private fun importFromInputStream(inputStream: InputStream) {
         viewModelScope.launch(Dispatchers.IO) {
-            opmlRepository.saveToDatabase(inputStream)
-            rssRepository.get().doSync()
+            try {
+                opmlRepository.saveToDatabase(inputStream)
+                rssRepository.get().doSync()
+            } catch (e: Exception) {
+                Log.e("FeedsViewModel", "importFromInputStream: ", e)
+            }
         }
     }
 
     private fun exportAsOpml(callback: (String) -> Unit = {}) {
         viewModelScope.launch(Dispatchers.Default) {
-            opmlRepository.saveToString()?.let { callback(it) }
+            try {
+                callback(opmlRepository.saveToString())
+            } catch (e: Exception) {
+                Log.e("FeedsViewModel", "exportAsOpml: ", e)
+            }
         }
     }
 
@@ -74,7 +82,6 @@ class FeedsViewModel @Inject constructor(
             rssRepository.get().pullFeeds(),
             rssRepository.get().pullImportant(isStarred, isUnread),
         ) { groupWithFeedList, importantList ->
-            Log.i("RLog", "thread:combine ${Thread.currentThread().name}")
             val groupImportantMap = mutableMapOf<String, Int>()
             val feedImportantMap = mutableMapOf<String, Int>()
             importantList.groupBy { it.groupId }.forEach { (i, list) ->
@@ -109,8 +116,6 @@ class FeedsViewModel @Inject constructor(
         }.onStart {
 
         }.onEach { groupWithFeedList ->
-            Log.i("RLog", "thread:onEach ${Thread.currentThread().name}")
-
             _viewState.update {
                 it.copy(
                     filter = when {

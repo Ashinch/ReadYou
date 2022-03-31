@@ -17,6 +17,8 @@ import java.io.IOException
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 val Context.currentAccountId: Int
     get() = this.dataStore.get(DataStoreKeys.CurrentAccountId)!!
+val Context.currentAccountType: Int
+    get() = this.dataStore.get(DataStoreKeys.CurrentAccountType)!!
 
 suspend fun <T> DataStore<Preferences>.put(dataStoreKeys: DataStoreKeys<T>, value: T) {
     this.edit {

@@ -11,11 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.work.WorkManager
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import me.ash.reader.MainActivity
 import me.ash.reader.R
 import me.ash.reader.currentAccountId
@@ -26,6 +22,9 @@ import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.feed.FeedDao
 import me.ash.reader.data.group.Group
 import me.ash.reader.data.group.GroupDao
+import me.ash.reader.data.module.ApplicationScope
+import me.ash.reader.data.module.DispatcherDefault
+import me.ash.reader.data.module.DispatcherIO
 import me.ash.reader.data.source.RssNetworkDataSource
 import me.ash.reader.ui.page.common.ExtraName
 import me.ash.reader.ui.page.common.NotificationGroupName
@@ -41,10 +40,17 @@ class LocalRssRepository @Inject constructor(
     private val rssNetworkDataSource: RssNetworkDataSource,
     private val accountDao: AccountDao,
     private val groupDao: GroupDao,
+    @ApplicationScope
+    private val applicationScope: CoroutineScope,
+    @DispatcherDefault
+    private val dispatcherDefault: CoroutineDispatcher,
+    @DispatcherIO
+    private val dispatcherIO: CoroutineDispatcher,
     workManager: WorkManager,
 ) : AbstractRssRepository(
     context, accountDao, articleDao, groupDao,
     feedDao, rssNetworkDataSource, workManager,
+    dispatcherIO
 ) {
     private val notificationManager: NotificationManager =
         (getSystemService(
@@ -84,40 +90,38 @@ class LocalRssRepository @Inject constructor(
     }
 
     override suspend fun sync() {
-        mutex.withLock {
-            withContext(Dispatchers.IO) {
-                val preTime = System.currentTimeMillis()
-                val accountId = context.currentAccountId
-                val articles = mutableListOf<Article>()
-                feedDao.queryAll(accountId)
-                    .also { feed -> updateSyncState { it.copy(feedCount = feed.size) } }
-                    .map { feed -> async { syncFeed(feed) } }
-                    .awaitAll()
-                    .forEach {
-                        if (it.isNotify) {
-                            notify(it.articles)
-                        }
-                        articles.addAll(it.articles)
+        applicationScope.launch(dispatcherDefault) {
+            val preTime = System.currentTimeMillis()
+            val accountId = context.currentAccountId
+            val articles = mutableListOf<Article>()
+            feedDao.queryAll(accountId)
+                .also { feed -> updateSyncState { it.copy(feedCount = feed.size) } }
+                .map { feed -> async { syncFeed(feed) } }
+                .awaitAll()
+                .forEach {
+                    if (it.isNotify) {
+                        notify(it.articles)
                     }
+                    articles.addAll(it.articles)
+                }
 
-                articleDao.insertList(articles)
-                Log.i("RlOG", "onCompletion: ${System.currentTimeMillis() - preTime}")
-                accountDao.queryById(accountId)?.let { account ->
-                    accountDao.update(
-                        account.apply {
-                            updateAt = Date()
-                        }
-                    )
-                }
-                updateSyncState {
-                    it.copy(
-                        feedCount = 0,
-                        syncedCount = 0,
-                        currentFeedName = ""
-                    )
-                }
+            articleDao.insertList(articles)
+            Log.i("RlOG", "onCompletion: ${System.currentTimeMillis() - preTime}")
+            accountDao.queryById(accountId)?.let { account ->
+                accountDao.update(
+                    account.apply {
+                        updateAt = Date()
+                    }
+                )
             }
-        }
+            updateSyncState {
+                it.copy(
+                    feedCount = 0,
+                    syncedCount = 0,
+                    currentFeedName = ""
+                )
+            }
+        }.join()
     }
 
     data class ArticleNotify(
@@ -127,10 +131,20 @@ class LocalRssRepository @Inject constructor(
 
     private suspend fun syncFeed(feed: Feed): ArticleNotify {
         val latest = articleDao.queryLatestByFeedId(context.currentAccountId, feed.id)
-        val articles = rssHelper.queryRssXml(feed, latest?.link).also {
-            if (feed.icon == null && it.isNotEmpty()) {
-                rssHelper.queryRssIcon(feedDao, feed, it.first().link)
+        var articles: List<Article>? = null
+        try {
+            articles = rssHelper.queryRssXml(feed, latest?.link)
+        } catch (e: Exception) {
+            Log.e("RLog", "queryRssXml[${feed.name}]: ${e.message}")
+            return ArticleNotify(listOf(), false)
+        }
+        try {
+            if (feed.icon == null && !articles.isNullOrEmpty()) {
+                rssHelper.queryRssIcon(feedDao, feed, articles.first().link)
             }
+        } catch (e: Exception) {
+            Log.e("RLog", "queryRssIcon[${feed.name}]: ${e.message}")
+            return ArticleNotify(listOf(), false)
         }
         updateSyncState {
             it.copy(

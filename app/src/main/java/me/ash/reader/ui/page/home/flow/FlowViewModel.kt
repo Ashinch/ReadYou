@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.flow
 
-import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -55,7 +54,6 @@ class FlowViewModel @Inject constructor(
         _viewState.update {
             it.copy(
                 pagingData = Pager(PagingConfig(pageSize = 10)) {
-                    Log.i("RLog", "thread:Pager ${Thread.currentThread().name}")
                     rssRepository.get().pullArticles(
                         groupId = filterState.group?.id,
                         feedId = filterState.feed?.id,
