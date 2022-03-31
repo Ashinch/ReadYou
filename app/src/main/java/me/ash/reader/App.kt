@@ -6,16 +6,15 @@ import androidx.work.Configuration
 import androidx.work.WorkManager
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import me.ash.reader.data.module.ApplicationScope
 import me.ash.reader.data.repository.*
 import me.ash.reader.data.source.OpmlLocalDataSource
 import me.ash.reader.data.source.ReaderDatabase
 import me.ash.reader.data.source.RssNetworkDataSource
 import javax.inject.Inject
 
-@DelicateCoroutinesApi
 @HiltAndroidApp
 class App : Application(), Configuration.Provider {
     @Inject
@@ -54,7 +53,9 @@ class App : Application(), Configuration.Provider {
     @Inject
     lateinit var rssRepository: RssRepository
 
-    private val applicationScope = CoroutineScope(Dispatchers.Default)
+    @Inject
+    @ApplicationScope
+    lateinit var applicationScope: CoroutineScope
 
     override fun onCreate() {
         super.onCreate()

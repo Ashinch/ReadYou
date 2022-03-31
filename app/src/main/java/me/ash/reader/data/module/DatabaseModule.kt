@@ -15,20 +15,25 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class DatabaseModule {
+object DatabaseModule {
+
     @Provides
+    @Singleton
     fun provideArticleDao(readerDatabase: ReaderDatabase): ArticleDao =
         readerDatabase.articleDao()
 
     @Provides
+    @Singleton
     fun provideFeedDao(readerDatabase: ReaderDatabase): FeedDao =
         readerDatabase.feedDao()
 
     @Provides
+    @Singleton
     fun provideGroupDao(readerDatabase: ReaderDatabase): GroupDao =
         readerDatabase.groupDao()
 
     @Provides
+    @Singleton
     fun provideAccountDao(readerDatabase: ReaderDatabase): AccountDao =
         readerDatabase.accountDao()
 

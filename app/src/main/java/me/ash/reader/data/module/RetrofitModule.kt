@@ -11,19 +11,20 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class RetrofitModule {
-    @Singleton
+object RetrofitModule {
+
     @Provides
+    @Singleton
     fun provideRssNetworkDataSource(): RssNetworkDataSource =
         RssNetworkDataSource.getInstance()
 
-    @Singleton
     @Provides
+    @Singleton
     fun provideFeverApiDataSource(): FeverApiDataSource =
         FeverApiDataSource.getInstance()
 
-    @Singleton
     @Provides
+    @Singleton
     fun provideGoogleReaderApiDataSource(): GoogleReaderApiDataSource =
         GoogleReaderApiDataSource.getInstance()
 }
