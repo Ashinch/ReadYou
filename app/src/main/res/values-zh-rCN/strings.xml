@@ -33,9 +33,9 @@
     <string name="open_with">打开 %1$s</string>
     <string name="options">选项</string>
     <string name="delete">删除</string>
-    <string name="has_been_deleted">%1$s 已被删除</string>
+    <string name="has_been_deleted">“%1$s” 已被删除</string>
     <string name="unsubscribe">取消订阅</string>
-    <string name="unsubscribe_tip">不再订阅 %1$s，同时删除其所有已归档的文章。</string>
+    <string name="unsubscribe_tip">不再订阅 “%1$s”，同时删除其所有已归档的文章。</string>
     <string name="today">今天</string>
     <string name="yesterday">昨天</string>
     <string name="date_at_time">%1$s %2$s</string>
@@ -47,7 +47,7 @@
     <string name="mark_as_read_one_day">超过 1 天标记为已读</string>
     <string name="mark_as_read_three_days">超过 3 天标记为已读</string>
     <string name="mark_as_read_seven_days">超过 7 天标记为已读</string>
-    <string name="one_day">1 天</string>
-    <string name="three_days">3 天</string>
-    <string name="seven_days">7 天</string>
+    <string name="one_day">1天</string>
+    <string name="three_days">3天</string>
+    <string name="seven_days">7天</string>
 </resources>

@@ -86,6 +86,7 @@ fun ReadPage(
                 ) {
                     TopBar(
                         isShow = viewState.articleWithFeed == null || !isScrollDown,
+                        isShowActions = viewState.articleWithFeed != null,
                         onScrollToPage = onScrollToPage,
                         onClearArticle = {
                             readViewModel.dispatch(ReadViewAction.ClearArticle)
