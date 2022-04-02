@@ -1,16 +1,18 @@
 package me.ash.reader.ui.page.home
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
+import kotlinx.coroutines.launch
 import me.ash.reader.ui.extension.collectAsStateValue
+import me.ash.reader.ui.extension.findActivity
+import me.ash.reader.ui.page.common.ExtraName
 import me.ash.reader.ui.page.home.drawer.feed.FeedOptionDrawer
 import me.ash.reader.ui.page.home.drawer.feed.FeedOptionViewAction
 import me.ash.reader.ui.page.home.drawer.feed.FeedOptionViewModel
@@ -25,17 +27,44 @@ import me.ash.reader.ui.widget.ViewPager
 @Composable
 fun HomePage(
     navController: NavHostController,
-    extrasArticleId: Any? = null,
     homeViewModel: HomeViewModel = hiltViewModel(),
     readViewModel: ReadViewModel = hiltViewModel(),
     feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
+    val intent = remember { context.findActivity()?.intent }
     val scope = rememberCoroutineScope()
     val viewState = homeViewModel.viewState.collectAsStateValue()
     val filterState = homeViewModel.filterState.collectAsStateValue()
     val syncState = homeViewModel.syncState.collectAsStateValue()
 
-    OpenArticleByExtras(extrasArticleId)
+    var openArticleId by rememberSaveable {
+        mutableStateOf(intent?.extras?.get(ExtraName.ARTICLE_ID)?.toString() ?: "")
+    }.also {
+        intent?.replaceExtras(null)
+    }
+
+    LaunchedEffect(openArticleId) {
+        if (openArticleId.isNotEmpty()) {
+            readViewModel.dispatch(ReadViewAction.ScrollToItem(2))
+            launch {
+                val article = readViewModel
+                    .rssRepository.get()
+                    .findArticleById(openArticleId) ?: return@launch
+                readViewModel.dispatch(ReadViewAction.InitData(article))
+                if (article.feed.isFullContent) readViewModel.dispatch(ReadViewAction.RenderFullContent)
+                else readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
+                readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
+                homeViewModel.dispatch(
+                    HomeViewAction.ScrollToPage(
+                        scope = scope,
+                        targetPage = 2,
+                    )
+                )
+                openArticleId = ""
+            }
+        }
+    }
 
     BackHandler(true) {
         val currentPage = viewState.pagerState.currentPage
@@ -56,15 +85,6 @@ fun HomePage(
                 }
             )
         )
-    }
-
-    LaunchedEffect(homeViewModel.viewState) {
-        homeViewModel.viewState.collect {
-            Log.i(
-                "RLog",
-                "HomePage: ${it.pagerState.currentPage}, ${it.pagerState.targetPage}, ${it.pagerState.currentPageOffset}"
-            )
-        }
     }
 
     Column {

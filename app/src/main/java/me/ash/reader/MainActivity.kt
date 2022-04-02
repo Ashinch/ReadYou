@@ -17,9 +17,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         Log.i("RLog", "onCreate: ${ProfileInstallerInitializer().create(this)}")
         setContent {
-            HomeEntry(intent.extras).also {
-                intent.replaceExtras(null)
-            }
+            HomeEntry()
         }
     }
 }

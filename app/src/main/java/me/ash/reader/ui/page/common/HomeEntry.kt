@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.common
 
-import android.os.Bundle
 import androidx.compose.animation.*
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -28,9 +27,7 @@ import me.ash.reader.ui.theme.AppTheme
 
 @OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
-fun HomeEntry(
-    extras: Bundle? = null,
-) {
+fun HomeEntry() {
     val navController = rememberAnimatedNavController()
 
     AppTheme {
@@ -89,7 +86,7 @@ fun HomeEntry(
                                 ) + fadeOut(animationSpec = tween(220, delayMillis = 90))
                             },
                         ) {
-                            HomePage(navController, extras?.get(ExtraName.ARTICLE_ID))
+                            HomePage(navController)
                         }
                         composable(
                             route = RouteName.SETTINGS,
