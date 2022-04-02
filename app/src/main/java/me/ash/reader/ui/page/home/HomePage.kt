@@ -30,8 +30,10 @@ fun HomePage(
     readViewModel: ReadViewModel = hiltViewModel(),
     feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
 ) {
-    val viewState = viewModel.viewState.collectAsStateValue()
     val scope = rememberCoroutineScope()
+    val viewState = viewModel.viewState.collectAsStateValue()
+    val filterState = viewModel.filterState.collectAsStateValue()
+    val syncState = viewModel.syncState.collectAsStateValue()
 
     OpenArticleByExtras(extrasArticleId)
 
@@ -71,7 +73,25 @@ fun HomePage(
             state = viewState.pagerState,
             composableList = listOf(
                 {
-                    FeedsPage(navController = navController)
+                    FeedsPage(
+                        navController = navController,
+                        filterState = filterState,
+                        syncState = syncState,
+                        onSyncClick = {
+                            viewModel.dispatch(HomeViewAction.Sync)
+                        },
+                        onFilterChange = {
+                            viewModel.dispatch(HomeViewAction.ChangeFilter(it))
+                        },
+                        onScrollToPage = {
+                            viewModel.dispatch(
+                                HomeViewAction.ScrollToPage(
+                                    scope = scope,
+                                    targetPage = it,
+                                )
+                            )
+                        }
+                    )
                 },
                 {
                     FlowPage(navController = navController)

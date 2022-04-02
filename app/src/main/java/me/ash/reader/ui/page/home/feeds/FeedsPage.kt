@@ -2,7 +2,6 @@ package me.ash.reader.ui.page.home.feeds
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -18,7 +17,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.input.pointer.pointerInput
@@ -29,12 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import me.ash.reader.R
+import me.ash.reader.data.repository.AbstractRssRepository
 import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.extension.getDesc
 import me.ash.reader.ui.extension.getName
 import me.ash.reader.ui.page.home.FilterBar
-import me.ash.reader.ui.page.home.HomeViewAction
-import me.ash.reader.ui.page.home.HomeViewModel
+import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewAction
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
@@ -50,14 +48,15 @@ fun FeedsPage(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     feedsViewModel: FeedsViewModel = hiltViewModel(),
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    filterState: FilterState,
+    syncState: AbstractRssRepository.SyncState,
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
+    onSyncClick: () -> Unit = {},
+    onFilterChange: (filterState: FilterState) -> Unit = {},
+    onScrollToPage: (targetPage: Int) -> Unit = {},
 ) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val viewState = feedsViewModel.viewState.collectAsStateValue()
-    val filterState = homeViewModel.filterState.collectAsStateValue()
-    val syncState = homeViewModel.syncState.collectAsStateValue()
 
     val infiniteTransition = rememberInfiniteTransition()
     val angle by infiniteTransition.animateFloat(
@@ -84,12 +83,11 @@ fun FeedsPage(
         feedsViewModel.dispatch(FeedsViewAction.FetchAccount)
     }
 
-    LaunchedEffect(homeViewModel.filterState) {
-        homeViewModel.filterState.collect { state ->
-            feedsViewModel.dispatch(
-                FeedsViewAction.FetchData(state)
-            )
-        }
+
+    LaunchedEffect(filterState) {
+        feedsViewModel.dispatch(
+            FeedsViewAction.FetchData(filterState)
+        )
     }
 
     Scaffold(
@@ -99,6 +97,7 @@ fun FeedsPage(
                 title = {},
                 navigationIcon = {
                     IconButton(onClick = {
+                        onScrollToPage(0)
                     }) {
                         Icon(
                             imageVector = Icons.Rounded.ArrowBack,
@@ -109,8 +108,9 @@ fun FeedsPage(
                 },
                 actions = {
                     IconButton(onClick = {
-                        if (syncState.isSyncing) return@IconButton
-                        homeViewModel.dispatch(HomeViewAction.Sync)
+                        if (syncState.isNotSyncing) {
+                            onSyncClick()
+                        }
                     }) {
                         Icon(
                             modifier = Modifier.rotate(if (syncState.isSyncing) angle else 0f),
@@ -174,20 +174,13 @@ fun FeedsPage(
                             )
                         },
                     ) {
-                        homeViewModel.dispatch(
-                            HomeViewAction.ChangeFilter(
-                                filterState.copy(
-                                    group = null,
-                                    feed = null
-                                )
+                        onFilterChange(
+                            filterState.copy(
+                                group = null,
+                                feed = null
                             )
                         )
-                        homeViewModel.dispatch(
-                            HomeViewAction.ScrollToPage(
-                                scope = scope,
-                                targetPage = 1,
-                            )
-                        )
+                        onScrollToPage(1)
                     }
                 }
                 item {
@@ -199,49 +192,35 @@ fun FeedsPage(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
                 itemsIndexed(viewState.groupWithFeedList) { index, groupWithFeed ->
-                    Crossfade(targetState = groupWithFeed) { groupWithFeed ->
-                        Column {
-                            GroupItem(
-                                text = groupWithFeed.group.name,
-                                feeds = groupWithFeed.feeds,
-                                groupOnClick = {
-                                    homeViewModel.dispatch(
-                                        HomeViewAction.ChangeFilter(
-                                            filterState.copy(
-                                                group = groupWithFeed.group,
-                                                feed = null
-                                            )
-                                        )
+//                    Crossfade(targetState = groupWithFeed) { groupWithFeed ->
+                    Column {
+                        GroupItem(
+                            text = groupWithFeed.group.name,
+                            feeds = groupWithFeed.feeds,
+                            groupOnClick = {
+                                onFilterChange(
+                                    filterState.copy(
+                                        group = groupWithFeed.group,
+                                        feed = null
                                     )
-                                    homeViewModel.dispatch(
-                                        HomeViewAction.ScrollToPage(
-                                            scope = scope,
-                                            targetPage = 1,
-                                        )
+                                )
+                                onScrollToPage(1)
+                            },
+                            feedOnClick = { feed ->
+                                onFilterChange(
+                                    filterState.copy(
+                                        group = null,
+                                        feed = feed
                                     )
-                                },
-                                feedOnClick = { feed ->
-                                    homeViewModel.dispatch(
-                                        HomeViewAction.ChangeFilter(
-                                            filterState.copy(
-                                                group = null,
-                                                feed = feed
-                                            )
-                                        )
-                                    )
-                                    homeViewModel.dispatch(
-                                        HomeViewAction.ScrollToPage(
-                                            scope = scope,
-                                            targetPage = 1,
-                                        )
-                                    )
-                                }
-                            )
-                            if (index != viewState.groupWithFeedList.lastIndex) {
-                                Spacer(modifier = Modifier.height(8.dp))
+                                )
+                                onScrollToPage(1)
                             }
+                        )
+                        if (index != viewState.groupWithFeedList.lastIndex) {
+                            Spacer(modifier = Modifier.height(8.dp))
                         }
                     }
+//                    }
                 }
                 item {
                     Spacer(modifier = Modifier.height(64.dp))
@@ -256,11 +235,9 @@ fun FeedsPage(
                     .fillMaxWidth(),
                 filter = filterState.filter,
                 filterOnClick = {
-                    homeViewModel.dispatch(
-                        HomeViewAction.ChangeFilter(
-                            filterState.copy(
-                                filter = it
-                            )
+                    onFilterChange(
+                        filterState.copy(
+                            filter = it
                         )
                     )
                 },
