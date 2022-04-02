@@ -133,11 +133,7 @@ fun FeedsPage(
             )
         },
         content = {
-            SubscribeDialog(
-                openInputStreamCallback = {
-                    feedsViewModel.dispatch(FeedsViewAction.ImportFromInputStream(it))
-                },
-            )
+            SubscribeDialog()
             LazyColumn {
                 item {
                     Text(

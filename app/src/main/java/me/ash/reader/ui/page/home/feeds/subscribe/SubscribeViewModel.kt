@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.feeds.subscribe
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -11,16 +12,19 @@ import me.ash.reader.R
 import me.ash.reader.data.article.Article
 import me.ash.reader.data.feed.Feed
 import me.ash.reader.data.group.Group
+import me.ash.reader.data.repository.OpmlRepository
 import me.ash.reader.data.repository.RssHelper
 import me.ash.reader.data.repository.RssRepository
 import me.ash.reader.data.repository.StringsRepository
 import me.ash.reader.formatUrl
 import me.ash.reader.ui.extension.animateScrollToPage
+import java.io.InputStream
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagerApi::class)
 @HiltViewModel
 class SubscribeViewModel @Inject constructor(
+    private val opmlRepository: OpmlRepository,
     private val rssRepository: RssRepository,
     private val rssHelper: RssHelper,
     private val stringsRepository: StringsRepository,
@@ -35,6 +39,7 @@ class SubscribeViewModel @Inject constructor(
             is SubscribeViewAction.Reset -> reset()
             is SubscribeViewAction.Show -> changeVisible(true)
             is SubscribeViewAction.Hide -> changeVisible(false)
+            is SubscribeViewAction.ImportFromInputStream -> importFromInputStream(action.inputStream)
             is SubscribeViewAction.InputLink -> inputLink(action.content)
             is SubscribeViewAction.Search -> search(action.scope)
             is SubscribeViewAction.ChangeAllowNotificationPreset ->
@@ -64,6 +69,17 @@ class SubscribeViewModel @Inject constructor(
             SubscribeViewState().copy(
                 title = stringsRepository.getString(R.string.subscribe),
             )
+        }
+    }
+
+    private fun importFromInputStream(inputStream: InputStream) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                opmlRepository.saveToDatabase(inputStream)
+                rssRepository.get().doSync()
+            } catch (e: Exception) {
+                Log.e("FeedsViewModel", "importFromInputStream: ", e)
+            }
         }
     }
 
@@ -231,6 +247,10 @@ sealed class SubscribeViewAction {
 
     object Show : SubscribeViewAction()
     object Hide : SubscribeViewAction()
+
+    data class ImportFromInputStream(
+        val inputStream: InputStream
+    ) : SubscribeViewAction()
 
     data class InputLink(
         val content: String

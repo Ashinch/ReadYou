@@ -42,7 +42,7 @@ fun ResultViewPage(
     changeNewGroupSelected: (Boolean) -> Unit = {},
     allowNotificationPresetOnClick: () -> Unit = {},
     parseFullContentPresetOnClick: () -> Unit = {},
-    groupOnClick: (groupId: String) -> Unit = {},
+    onGroupClick: (groupId: String) -> Unit = {},
     onKeyboardAction: () -> Unit = {},
 ) {
     Column(
@@ -68,7 +68,7 @@ fun ResultViewPage(
             newGroupSelected = newGroupSelected,
             onNewGroupValueChange = onNewGroupValueChange,
             changeNewGroupSelected = changeNewGroupSelected,
-            groupOnClick = groupOnClick,
+            onGroupClick = onGroupClick,
             onKeyboardAction = onKeyboardAction,
         )
         Spacer(modifier = Modifier.height(6.dp))
@@ -158,7 +158,7 @@ private fun AddToGroup(
     newGroupSelected: Boolean,
     onNewGroupValueChange: (String) -> Unit = {},
     changeNewGroupSelected: (Boolean) -> Unit = {},
-    groupOnClick: (groupId: String) -> Unit = {},
+    onGroupClick: (groupId: String) -> Unit = {},
     onKeyboardAction: () -> Unit = {},
 ) {
     Subtitle(text = stringResource(R.string.add_to_group))
@@ -175,7 +175,7 @@ private fun AddToGroup(
                 selected = !newGroupSelected && it.id == selectedGroupId,
             ) {
                 changeNewGroupSelected(false)
-                groupOnClick(it.id)
+                onGroupClick(it.id)
             }
         }
 

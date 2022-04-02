@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.drawer.feed
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
@@ -9,7 +8,6 @@ import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.material.icons.rounded.RssFeed
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -82,7 +80,7 @@ fun FeedOptionDrawer(
                     parseFullContentPresetOnClick = {
                         viewModel.dispatch(FeedOptionViewAction.ChangeParseFullContentPreset)
                     },
-                    groupOnClick = {
+                    onGroupClick = {
                         viewModel.dispatch(FeedOptionViewAction.SelectedGroup(it))
                     },
                     onKeyboardAction = { },

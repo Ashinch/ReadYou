@@ -15,7 +15,6 @@ import me.ash.reader.data.repository.AccountRepository
 import me.ash.reader.data.repository.OpmlRepository
 import me.ash.reader.data.repository.RssRepository
 import me.ash.reader.ui.page.home.FilterState
-import java.io.InputStream
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,7 +30,6 @@ class FeedsViewModel @Inject constructor(
         when (action) {
             is FeedsViewAction.FetchAccount -> fetchAccount()
             is FeedsViewAction.FetchData -> fetchData(action.filterState)
-            is FeedsViewAction.ImportFromInputStream -> importFromInputStream(action.inputStream)
             is FeedsViewAction.ExportAsString -> exportAsOpml(action.callback)
             is FeedsViewAction.ScrollToItem -> scrollToItem(action.index)
         }
@@ -43,17 +41,6 @@ class FeedsViewModel @Inject constructor(
                 it.copy(
                     account = accountRepository.getCurrentAccount()
                 )
-            }
-        }
-    }
-
-    private fun importFromInputStream(inputStream: InputStream) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                opmlRepository.saveToDatabase(inputStream)
-                rssRepository.get().doSync()
-            } catch (e: Exception) {
-                Log.e("FeedsViewModel", "importFromInputStream: ", e)
             }
         }
     }
@@ -156,10 +143,6 @@ sealed class FeedsViewAction {
     ) : FeedsViewAction()
 
     object FetchAccount : FeedsViewAction()
-
-    data class ImportFromInputStream(
-        val inputStream: InputStream
-    ) : FeedsViewAction()
 
     data class ExportAsString(
         val callback: (String) -> Unit = {}

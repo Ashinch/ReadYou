@@ -21,31 +21,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
-import kotlinx.coroutines.Dispatchers
 import me.ash.reader.*
 import me.ash.reader.R
 import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.widget.Dialog
-import java.io.InputStream
 
 @OptIn(ExperimentalPagerApi::class, androidx.compose.ui.ExperimentalComposeUiApi::class)
 @Composable
 fun SubscribeDialog(
     modifier: Modifier = Modifier,
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
-    openInputStreamCallback: (InputStream) -> Unit,
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
     val viewState = subscribeViewModel.viewState.collectAsStateValue()
-    val groupsState =
-        viewState.groups.collectAsState(initial = emptyList(), context = Dispatchers.IO)
+    val groupsState = viewState.groups.collectAsState(initial = emptyList())
     var dialogHeight by remember { mutableStateOf(300.dp) }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
         it?.let { uri ->
             context.contentResolver.openInputStream(uri)?.let { inputStream ->
-                openInputStreamCallback(inputStream)
+                subscribeViewModel.dispatch(SubscribeViewAction.ImportFromInputStream(inputStream))
             }
         }
     }
@@ -99,48 +95,40 @@ fun SubscribeDialog(
         },
         text = {
             SubscribeViewPager(
-                readOnly = viewState.lockLinkInput,
-                inputLink = viewState.linkContent,
-                errorMessage = viewState.errorMessage,
+                viewState = viewState,
                 onLinkValueChange = {
                     subscribeViewModel.dispatch(SubscribeViewAction.InputLink(it))
                 },
                 onSearchKeyboardAction = {
                     subscribeViewModel.dispatch(SubscribeViewAction.Search(scope))
                 },
-                link = viewState.linkContent,
                 groups = groupsState.value,
-                selectedAllowNotificationPreset = viewState.allowNotificationPreset,
-                selectedParseFullContentPreset = viewState.parseFullContentPreset,
-                selectedGroupId = viewState.selectedGroupId,
-                newGroupContent = viewState.newGroupContent,
                 onNewGroupValueChange = {
                     subscribeViewModel.dispatch(SubscribeViewAction.InputNewGroup(it))
                 },
-                newGroupSelected = viewState.newGroupSelected,
                 changeNewGroupSelected = {
                     subscribeViewModel.dispatch(SubscribeViewAction.SelectedNewGroup(it))
                 },
-                pagerState = viewState.pagerState,
                 allowNotificationPresetOnClick = {
                     subscribeViewModel.dispatch(SubscribeViewAction.ChangeAllowNotificationPreset)
                 },
                 parseFullContentPresetOnClick = {
                     subscribeViewModel.dispatch(SubscribeViewAction.ChangeParseFullContentPreset)
                 },
-                groupOnClick = {
+                onGroupClick = {
                     subscribeViewModel.dispatch(SubscribeViewAction.SelectedGroup(it))
                 },
                 onResultKeyboardAction = {
                     subscribeViewModel.dispatch(SubscribeViewAction.Subscribe)
-                }
+                },
             )
         },
         confirmButton = {
             when (viewState.pagerState.currentPage) {
                 0 -> {
                     TextButton(
-                        enabled = viewState.linkContent.isNotEmpty(),
+                        enabled = viewState.linkContent.isNotEmpty()
+                                && viewState.title != stringResource(R.string.searching),
                         onClick = {
                             focusManager.clearFocus()
                             subscribeViewModel.dispatch(SubscribeViewAction.Search(scope))
