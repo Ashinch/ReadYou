@@ -30,16 +30,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.delay
 import me.ash.reader.R
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun SearchViewPage(
+fun SearchView(
     modifier: Modifier = Modifier,
-    pagerState: PagerState,
     readOnly: Boolean = false,
     inputLink: String = "",
     errorMessage: String = "",

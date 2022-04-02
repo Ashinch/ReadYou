@@ -2,7 +2,7 @@ package me.ash.reader.ui.page.home.feeds.subscribe
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.height
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.RssFeed
@@ -10,22 +10,25 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.pager.ExperimentalPagerApi
 import me.ash.reader.R
 import me.ash.reader.ui.component.Dialog
 import me.ash.reader.ui.ext.*
 
-@OptIn(ExperimentalPagerApi::class, androidx.compose.ui.ExperimentalComposeUiApi::class)
+@OptIn(
+    androidx.compose.ui.ExperimentalComposeUiApi::class,
+    ExperimentalAnimationApi::class
+)
 @Composable
 fun SubscribeDialog(
     modifier: Modifier = Modifier,
@@ -33,10 +36,8 @@ fun SubscribeDialog(
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    val scope = rememberCoroutineScope()
     val viewState = subscribeViewModel.viewState.collectAsStateValue()
     val groupsState = viewState.groups.collectAsState(initial = emptyList())
-    var dialogHeight by remember { mutableStateOf(300.dp) }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
         it?.let { uri ->
             context.contentResolver.openInputStream(uri)?.let { inputStream ->
@@ -56,22 +57,12 @@ fun SubscribeDialog(
             subscribeViewModel.dispatch(SubscribeViewAction.Init)
         } else {
             subscribeViewModel.dispatch(SubscribeViewAction.Reset)
-            viewState.pagerState.scrollToPage(0)
-        }
-    }
-
-    LaunchedEffect(viewState.pagerState.currentPage) {
-        focusManager.clearFocus()
-        when (viewState.pagerState.currentPage) {
-            0 -> dialogHeight = 300.dp
-            1 -> dialogHeight = Dp.Unspecified
+            subscribeViewModel.dispatch(SubscribeViewAction.SwitchPage(true))
         }
     }
 
     Dialog(
-        modifier = Modifier
-            .padding(horizontal = 44.dp)
-            .height(dialogHeight),
+        modifier = Modifier.padding(horizontal = 44.dp),
         visible = viewState.visible,
         properties = DialogProperties(usePlatformDefaultWidth = false),
         onDismissRequest = {
@@ -86,97 +77,113 @@ fun SubscribeDialog(
         },
         title = {
             Text(
-                when (viewState.pagerState.currentPage) {
-                    0 -> viewState.title
-                    else -> viewState.feed?.name ?: stringResource(R.string.unknown)
+                if (viewState.isSearchPage) {
+                    viewState.title
+                } else {
+                    viewState.feed?.name ?: stringResource(R.string.unknown)
                 }
             )
         },
         text = {
-            SubscribeViewPager(
-                viewState = viewState,
-                onLinkValueChange = {
-                    subscribeViewModel.dispatch(SubscribeViewAction.InputLink(it))
-                },
-                onSearchKeyboardAction = {
-                    subscribeViewModel.dispatch(SubscribeViewAction.Search(scope))
-                },
-                groups = groupsState.value,
-                onNewGroupValueChange = {
-                    subscribeViewModel.dispatch(SubscribeViewAction.InputNewGroup(it))
-                },
-                changeNewGroupSelected = {
-                    subscribeViewModel.dispatch(SubscribeViewAction.SelectedNewGroup(it))
-                },
-                allowNotificationPresetOnClick = {
-                    subscribeViewModel.dispatch(SubscribeViewAction.ChangeAllowNotificationPreset)
-                },
-                parseFullContentPresetOnClick = {
-                    subscribeViewModel.dispatch(SubscribeViewAction.ChangeParseFullContentPreset)
-                },
-                onGroupClick = {
-                    subscribeViewModel.dispatch(SubscribeViewAction.SelectedGroup(it))
-                },
-                onResultKeyboardAction = {
-                    subscribeViewModel.dispatch(SubscribeViewAction.Subscribe)
-                },
-            )
+            AnimatedContent(
+                targetState = viewState.isSearchPage,
+                transitionSpec = {
+                    slideInHorizontally { width -> width } + fadeIn() with
+                            slideOutHorizontally { width -> -width } + fadeOut()
+                }
+            ) { targetExpanded ->
+                if (targetExpanded) {
+                    SearchView(
+                        readOnly = viewState.lockLinkInput,
+                        inputLink = viewState.linkContent,
+                        errorMessage = viewState.errorMessage,
+                        onLinkValueChange = {
+                            subscribeViewModel.dispatch(SubscribeViewAction.InputLink(it))
+                        },
+                        onKeyboardAction = {
+                            subscribeViewModel.dispatch(SubscribeViewAction.Search)
+                        },
+                    )
+                } else {
+                    ResultView(
+                        link = viewState.linkContent,
+                        groups = groupsState.value,
+                        selectedAllowNotificationPreset = viewState.allowNotificationPreset,
+                        selectedParseFullContentPreset = viewState.parseFullContentPreset,
+                        selectedGroupId = viewState.selectedGroupId,
+                        newGroupContent = viewState.newGroupContent,
+                        onNewGroupValueChange = {
+                            subscribeViewModel.dispatch(SubscribeViewAction.InputNewGroup(it))
+                        },
+                        newGroupSelected = viewState.newGroupSelected,
+                        changeNewGroupSelected = {
+                            subscribeViewModel.dispatch(SubscribeViewAction.SelectedNewGroup(it))
+                        },
+                        allowNotificationPresetOnClick = {
+                            subscribeViewModel.dispatch(SubscribeViewAction.ChangeAllowNotificationPreset)
+                        },
+                        parseFullContentPresetOnClick = {
+                            subscribeViewModel.dispatch(SubscribeViewAction.ChangeParseFullContentPreset)
+                        },
+                        onGroupClick = {
+                            subscribeViewModel.dispatch(SubscribeViewAction.SelectedGroup(it))
+                        },
+                        onKeyboardAction = {
+                            subscribeViewModel.dispatch(SubscribeViewAction.Subscribe)
+                        },
+                    )
+                }
+            }
         },
         confirmButton = {
-            when (viewState.pagerState.currentPage) {
-                0 -> {
-                    TextButton(
-                        enabled = viewState.linkContent.isNotEmpty()
-                                && viewState.title != stringResource(R.string.searching),
-                        onClick = {
-                            focusManager.clearFocus()
-                            subscribeViewModel.dispatch(SubscribeViewAction.Search(scope))
-                        }
-                    ) {
-                        Text(
-                            text = stringResource(R.string.search),
-                            color = if (viewState.linkContent.isNotEmpty()) {
-                                Color.Unspecified
-                            } else {
-                                MaterialTheme.colorScheme.outline.copy(alpha = 0.7f)
-                            }
-                        )
+            if (viewState.isSearchPage) {
+                TextButton(
+                    enabled = viewState.linkContent.isNotEmpty()
+                            && viewState.title != stringResource(R.string.searching),
+                    onClick = {
+                        focusManager.clearFocus()
+                        subscribeViewModel.dispatch(SubscribeViewAction.Search)
                     }
+                ) {
+                    Text(
+                        text = stringResource(R.string.search),
+                        color = if (viewState.linkContent.isNotEmpty()) {
+                            Color.Unspecified
+                        } else {
+                            MaterialTheme.colorScheme.outline.copy(alpha = 0.7f)
+                        }
+                    )
                 }
-                1 -> {
-                    TextButton(
-                        onClick = {
-                            focusManager.clearFocus()
-                            subscribeViewModel.dispatch(SubscribeViewAction.Subscribe)
-                        }
-                    ) {
-                        Text(stringResource(R.string.subscribe))
+            } else {
+                TextButton(
+                    onClick = {
+                        focusManager.clearFocus()
+                        subscribeViewModel.dispatch(SubscribeViewAction.Subscribe)
                     }
+                ) {
+                    Text(stringResource(R.string.subscribe))
                 }
             }
         },
         dismissButton = {
-            when (viewState.pagerState.currentPage) {
-                0 -> {
-                    TextButton(
-                        onClick = {
-                            focusManager.clearFocus()
-                            launcher.launch("*/*")
-                            subscribeViewModel.dispatch(SubscribeViewAction.Hide)
-                        }
-                    ) {
-                        Text(text = stringResource(R.string.import_from_opml))
+            if (viewState.isSearchPage) {
+                TextButton(
+                    onClick = {
+                        focusManager.clearFocus()
+                        launcher.launch("*/*")
+                        subscribeViewModel.dispatch(SubscribeViewAction.Hide)
                     }
+                ) {
+                    Text(text = stringResource(R.string.import_from_opml))
                 }
-                1 -> {
-                    TextButton(
-                        onClick = {
-                            focusManager.clearFocus()
-                            subscribeViewModel.dispatch(SubscribeViewAction.Hide)
-                        }
-                    ) {
-                        Text(text = stringResource(R.string.cancel))
+            } else {
+                TextButton(
+                    onClick = {
+                        focusManager.clearFocus()
+                        subscribeViewModel.dispatch(SubscribeViewAction.Hide)
                     }
+                ) {
+                    Text(text = stringResource(R.string.cancel))
                 }
             }
         },

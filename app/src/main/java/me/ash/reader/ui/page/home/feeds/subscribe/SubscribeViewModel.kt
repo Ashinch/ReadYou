@@ -4,10 +4,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.data.entity.Article
 import me.ash.reader.data.entity.Feed
@@ -16,7 +18,6 @@ import me.ash.reader.data.repository.OpmlRepository
 import me.ash.reader.data.repository.RssHelper
 import me.ash.reader.data.repository.RssRepository
 import me.ash.reader.data.repository.StringsRepository
-import me.ash.reader.ui.ext.animateScrollToPage
 import me.ash.reader.ui.ext.formatUrl
 import java.io.InputStream
 import javax.inject.Inject
@@ -39,9 +40,10 @@ class SubscribeViewModel @Inject constructor(
             is SubscribeViewAction.Reset -> reset()
             is SubscribeViewAction.Show -> changeVisible(true)
             is SubscribeViewAction.Hide -> changeVisible(false)
+            is SubscribeViewAction.SwitchPage -> switchPage(action.isSearchPage)
             is SubscribeViewAction.ImportFromInputStream -> importFromInputStream(action.inputStream)
             is SubscribeViewAction.InputLink -> inputLink(action.content)
-            is SubscribeViewAction.Search -> search(action.scope)
+            is SubscribeViewAction.Search -> search()
             is SubscribeViewAction.ChangeAllowNotificationPreset ->
                 changeAllowNotificationPreset()
             is SubscribeViewAction.ChangeParseFullContentPreset ->
@@ -140,7 +142,7 @@ class SubscribeViewModel @Inject constructor(
         }
     }
 
-    private fun search(scope: CoroutineScope) {
+    private fun search() {
         searchJob?.cancel()
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -181,7 +183,7 @@ class SubscribeViewModel @Inject constructor(
                         articles = feedWithArticle.articles,
                     )
                 }
-                _viewState.value.pagerState.animateScrollToPage(scope, 1)
+                switchPage(false)
             } catch (e: Exception) {
                 e.printStackTrace()
                 _viewState.update {
@@ -221,6 +223,14 @@ class SubscribeViewModel @Inject constructor(
             )
         }
     }
+
+    private fun switchPage(isSearchPage: Boolean) {
+        _viewState.update {
+            it.copy(
+                isSearchPage = isSearchPage
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalPagerApi::class)
@@ -238,7 +248,7 @@ data class SubscribeViewState(
     val newGroupContent: String = "",
     val newGroupSelected: Boolean = false,
     val groups: Flow<List<Group>> = emptyFlow(),
-    val pagerState: PagerState = PagerState(),
+    val isSearchPage: Boolean = true,
 )
 
 sealed class SubscribeViewAction {
@@ -248,6 +258,10 @@ sealed class SubscribeViewAction {
     object Show : SubscribeViewAction()
     object Hide : SubscribeViewAction()
 
+    data class SwitchPage(
+        val isSearchPage: Boolean
+    ) : SubscribeViewAction()
+
     data class ImportFromInputStream(
         val inputStream: InputStream
     ) : SubscribeViewAction()
@@ -256,9 +270,7 @@ sealed class SubscribeViewAction {
         val content: String
     ) : SubscribeViewAction()
 
-    data class Search(
-        val scope: CoroutineScope,
-    ) : SubscribeViewAction()
+    object Search: SubscribeViewAction()
 
     object ChangeAllowNotificationPreset : SubscribeViewAction()
     object ChangeParseFullContentPreset : SubscribeViewAction()

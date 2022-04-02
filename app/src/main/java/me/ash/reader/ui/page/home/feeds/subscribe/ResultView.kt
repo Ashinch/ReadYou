@@ -29,7 +29,7 @@ import me.ash.reader.ui.component.Subtitle
 import me.ash.reader.ui.ext.roundClick
 
 @Composable
-fun ResultViewPage(
+fun ResultView(
     modifier: Modifier = Modifier,
     link: String = "",
     groups: List<Group> = emptyList(),

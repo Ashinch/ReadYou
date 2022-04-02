@@ -21,7 +21,7 @@ import me.ash.reader.ui.component.BottomDrawer
 import me.ash.reader.ui.component.Subtitle
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.roundClick
-import me.ash.reader.ui.page.home.feeds.subscribe.ResultViewPage
+import me.ash.reader.ui.page.home.feeds.subscribe.ResultView
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -60,7 +60,7 @@ fun FeedOptionDrawer(
                     overflow = TextOverflow.Ellipsis,
                 )
                 Spacer(modifier = modifier.height(16.dp))
-                ResultViewPage(
+                ResultView(
                     link = feed?.url ?: stringResource(R.string.unknown),
                     groups = viewState.groups,
                     selectedAllowNotificationPreset = viewState.feed?.isNotification ?: false,
