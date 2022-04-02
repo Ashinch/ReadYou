@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import me.ash.reader.data.article.ArticleWithFeed
+import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.repository.RssHelper
 import me.ash.reader.data.repository.RssRepository
 import javax.inject.Inject

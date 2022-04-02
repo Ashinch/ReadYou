@@ -9,9 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import me.ash.reader.data.article.ArticleWithFeed
-import me.ash.reader.formatToString
-import me.ash.reader.ui.extension.roundClick
+import me.ash.reader.data.entity.ArticleWithFeed
+import me.ash.reader.ui.ext.formatAsString
+import me.ash.reader.ui.ext.roundClick
 
 @Composable
 fun Header(
@@ -30,7 +30,7 @@ fun Header(
             .padding(12.dp)
     ) {
         Text(
-            text = articleWithFeed.article.date.formatToString(context, atHourMinute = true),
+            text = articleWithFeed.article.date.formatAsString(context, atHourMinute = true),
             color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
             style = MaterialTheme.typography.labelMedium,
         )

@@ -10,18 +10,13 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
-import me.ash.reader.currentAccountId
-import me.ash.reader.data.account.AccountDao
-import me.ash.reader.data.article.Article
-import me.ash.reader.data.article.ArticleDao
-import me.ash.reader.data.article.ArticleWithFeed
-import me.ash.reader.data.article.ImportantCount
-import me.ash.reader.data.feed.Feed
-import me.ash.reader.data.feed.FeedDao
-import me.ash.reader.data.group.Group
-import me.ash.reader.data.group.GroupDao
-import me.ash.reader.data.group.GroupWithFeed
+import me.ash.reader.data.dao.AccountDao
+import me.ash.reader.data.dao.ArticleDao
+import me.ash.reader.data.dao.FeedDao
+import me.ash.reader.data.dao.GroupDao
+import me.ash.reader.data.entity.*
 import me.ash.reader.data.source.RssNetworkDataSource
+import me.ash.reader.ui.ext.currentAccountId
 import java.util.concurrent.TimeUnit
 
 abstract class AbstractRssRepository constructor(

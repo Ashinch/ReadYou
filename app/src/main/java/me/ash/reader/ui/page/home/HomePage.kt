@@ -10,8 +10,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
-import me.ash.reader.ui.extension.collectAsStateValue
-import me.ash.reader.ui.extension.findActivity
+import me.ash.reader.ui.component.ViewPager
+import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.findActivity
 import me.ash.reader.ui.page.common.ExtraName
 import me.ash.reader.ui.page.home.drawer.feed.FeedOptionDrawer
 import me.ash.reader.ui.page.home.drawer.feed.FeedOptionViewAction
@@ -21,7 +22,6 @@ import me.ash.reader.ui.page.home.flow.FlowPage
 import me.ash.reader.ui.page.home.read.ReadPage
 import me.ash.reader.ui.page.home.read.ReadViewAction
 import me.ash.reader.ui.page.home.read.ReadViewModel
-import me.ash.reader.ui.widget.ViewPager
 
 @OptIn(ExperimentalPagerApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable

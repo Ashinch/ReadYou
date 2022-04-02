@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.google.accompanist.pager.ExperimentalPagerApi
-import me.ash.reader.data.constant.Filter
-import me.ash.reader.ui.extension.getName
+import me.ash.reader.data.entity.Filter
+import me.ash.reader.ui.ext.getName
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -21,7 +21,10 @@ fun FilterBar(
         modifier = Modifier.height(60.dp)
     ) {
         Divider(
-            modifier = Modifier.fillMaxWidth().height(1.dp).zIndex(1f),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .zIndex(1f),
             color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.24f)
         )
         NavigationBar(

@@ -9,15 +9,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import me.ash.reader.R
-import me.ash.reader.data.article.Article
-import me.ash.reader.data.feed.Feed
-import me.ash.reader.data.group.Group
+import me.ash.reader.data.entity.Article
+import me.ash.reader.data.entity.Feed
+import me.ash.reader.data.entity.Group
 import me.ash.reader.data.repository.OpmlRepository
 import me.ash.reader.data.repository.RssHelper
 import me.ash.reader.data.repository.RssRepository
 import me.ash.reader.data.repository.StringsRepository
-import me.ash.reader.formatUrl
-import me.ash.reader.ui.extension.animateScrollToPage
+import me.ash.reader.ui.ext.animateScrollToPage
+import me.ash.reader.ui.ext.formatUrl
 import java.io.InputStream
 import javax.inject.Inject
 

@@ -14,6 +14,9 @@ import me.ash.reader.data.repository.*
 import me.ash.reader.data.source.OpmlLocalDataSource
 import me.ash.reader.data.source.ReaderDatabase
 import me.ash.reader.data.source.RssNetworkDataSource
+import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.dataStore
+import me.ash.reader.ui.ext.put
 import javax.inject.Inject
 
 @HiltAndroidApp

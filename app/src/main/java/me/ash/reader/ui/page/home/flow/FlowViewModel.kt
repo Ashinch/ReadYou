@@ -11,7 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import me.ash.reader.data.article.ArticleWithFeed
+import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.repository.RssRepository
 import me.ash.reader.ui.page.home.FilterState
 import javax.inject.Inject

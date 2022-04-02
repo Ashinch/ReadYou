@@ -17,11 +17,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.R
-import me.ash.reader.ui.extension.collectAsStateValue
-import me.ash.reader.ui.extension.roundClick
+import me.ash.reader.ui.component.BottomDrawer
+import me.ash.reader.ui.component.Subtitle
+import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.roundClick
 import me.ash.reader.ui.page.home.feeds.subscribe.ResultViewPage
-import me.ash.reader.ui.widget.BottomDrawer
-import me.ash.reader.ui.widget.Subtitle
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

@@ -21,10 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
-import me.ash.reader.*
 import me.ash.reader.R
-import me.ash.reader.ui.extension.collectAsStateValue
-import me.ash.reader.ui.widget.Dialog
+import me.ash.reader.ui.component.Dialog
+import me.ash.reader.ui.ext.*
 
 @OptIn(ExperimentalPagerApi::class, androidx.compose.ui.ExperimentalComposeUiApi::class)
 @Composable

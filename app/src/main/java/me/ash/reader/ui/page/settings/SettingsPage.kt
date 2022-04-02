@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -20,9 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.ui.extension.paddingFixedHorizontal
-import me.ash.reader.ui.extension.roundClick
-import me.ash.reader.ui.widget.TopTitleBox
+import me.ash.reader.ui.ext.paddingFixedHorizontal
+import me.ash.reader.ui.ext.roundClick
 
 @Composable
 fun SettingsPage(
@@ -33,17 +31,6 @@ fun SettingsPage(
 //        LargeTopAppBar(
 //            title = { Text(text = "Settings") }
 //        )
-        TopTitleBox(
-            title = "Settings",
-            description = "",
-            listState = listState,
-            startOffset = Offset(20f, 78f),
-            startHeight = 72f,
-            startTitleFontSize = 36f,
-            startDescriptionFontSize = 0f,
-        ) {
-
-        }
         Column {
             SmallTopAppBar(
                 title = {},

@@ -9,12 +9,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import me.ash.reader.data.constant.Filter
-import me.ash.reader.data.feed.Feed
-import me.ash.reader.data.group.Group
+import me.ash.reader.data.entity.Feed
+import me.ash.reader.data.entity.Filter
+import me.ash.reader.data.entity.Group
 import me.ash.reader.data.repository.AbstractRssRepository
 import me.ash.reader.data.repository.RssRepository
-import me.ash.reader.ui.extension.animateScrollToPage
+import me.ash.reader.ui.ext.animateScrollToPage
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagerApi::class)

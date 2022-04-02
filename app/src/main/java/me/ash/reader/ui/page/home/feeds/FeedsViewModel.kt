@@ -8,9 +8,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import me.ash.reader.data.account.Account
-import me.ash.reader.data.constant.Filter
-import me.ash.reader.data.group.GroupWithFeed
+import me.ash.reader.data.entity.Account
+import me.ash.reader.data.entity.Filter
+import me.ash.reader.data.entity.GroupWithFeed
 import me.ash.reader.data.repository.AccountRepository
 import me.ash.reader.data.repository.OpmlRepository
 import me.ash.reader.data.repository.RssRepository

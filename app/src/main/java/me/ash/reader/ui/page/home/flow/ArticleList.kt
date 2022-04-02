@@ -8,8 +8,8 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import me.ash.reader.data.article.ArticleWithFeed
-import me.ash.reader.formatToString
+import me.ash.reader.data.entity.ArticleWithFeed
+import me.ash.reader.ui.ext.formatAsString
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.generateArticleList(
@@ -20,7 +20,7 @@ fun LazyListScope.generateArticleList(
     var lastItemDay: String? = null
     for (itemIndex in 0 until pagingItems.itemCount) {
         val currentItem = pagingItems.peek(itemIndex) ?: continue
-        val currentItemDay = currentItem.article.date.formatToString(context)
+        val currentItemDay = currentItem.article.date.formatAsString(context)
         if (lastItemDay != currentItemDay) {
             if (itemIndex != 0) {
                 item { Spacer(modifier = Modifier.height(40.dp)) }

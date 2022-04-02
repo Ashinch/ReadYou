@@ -21,9 +21,9 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.data.article.ArticleWithFeed
-import me.ash.reader.ui.extension.collectAsStateValue
-import me.ash.reader.ui.widget.WebView
+import me.ash.reader.data.entity.ArticleWithFeed
+import me.ash.reader.ui.component.WebView
+import me.ash.reader.ui.ext.collectAsStateValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

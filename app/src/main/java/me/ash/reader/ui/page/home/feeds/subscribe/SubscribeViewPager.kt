@@ -6,8 +6,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import com.google.accompanist.pager.ExperimentalPagerApi
-import me.ash.reader.data.group.Group
-import me.ash.reader.ui.widget.ViewPager
+import me.ash.reader.data.entity.Group
+import me.ash.reader.ui.component.ViewPager
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable

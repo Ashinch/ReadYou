@@ -24,9 +24,9 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.data.article.ArticleWithFeed
-import me.ash.reader.ui.extension.collectAsStateValue
-import me.ash.reader.ui.extension.getName
+import me.ash.reader.data.entity.ArticleWithFeed
+import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.getName
 import me.ash.reader.ui.page.home.FilterBar
 import me.ash.reader.ui.page.home.FilterState
 

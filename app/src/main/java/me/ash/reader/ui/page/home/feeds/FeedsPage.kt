@@ -28,16 +28,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.data.repository.AbstractRssRepository
-import me.ash.reader.ui.extension.collectAsStateValue
-import me.ash.reader.ui.extension.getDesc
-import me.ash.reader.ui.extension.getName
+import me.ash.reader.ui.component.Banner
+import me.ash.reader.ui.component.Subtitle
+import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.getDesc
+import me.ash.reader.ui.ext.getName
 import me.ash.reader.ui.page.home.FilterBar
 import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewAction
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
-import me.ash.reader.ui.widget.Banner
-import me.ash.reader.ui.widget.Subtitle
 
 @OptIn(
     ExperimentalMaterial3Api::class, com.google.accompanist.pager.ExperimentalPagerApi::class,

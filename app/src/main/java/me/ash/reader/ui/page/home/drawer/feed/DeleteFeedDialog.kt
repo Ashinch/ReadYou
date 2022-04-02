@@ -14,8 +14,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import me.ash.reader.R
-import me.ash.reader.ui.extension.collectAsStateValue
-import me.ash.reader.ui.widget.Dialog
+import me.ash.reader.ui.component.Dialog
+import me.ash.reader.ui.ext.collectAsStateValue
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable

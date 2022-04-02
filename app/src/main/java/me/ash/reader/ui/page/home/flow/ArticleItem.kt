@@ -15,8 +15,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import me.ash.reader.data.article.ArticleWithFeed
-import me.ash.reader.formatToString
+import me.ash.reader.data.entity.ArticleWithFeed
+import me.ash.reader.ui.ext.formatAsString
 
 @Composable
 fun ArticleItem(
@@ -40,7 +40,9 @@ fun ArticleItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                modifier = Modifier.weight(1f).padding(start = 30.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 30.dp),
                 text = articleWithFeed.feed.name,
                 color = MaterialTheme.colorScheme.tertiary,
                 style = MaterialTheme.typography.labelMedium,
@@ -49,7 +51,7 @@ fun ArticleItem(
             )
             Text(
                 modifier = Modifier.padding(start = 6.dp),
-                text = articleWithFeed.article.date.formatToString(context, onlyHourMinute = true),
+                text = articleWithFeed.article.date.formatAsString(context, onlyHourMinute = true),
                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
                 style = MaterialTheme.typography.labelMedium,
             )

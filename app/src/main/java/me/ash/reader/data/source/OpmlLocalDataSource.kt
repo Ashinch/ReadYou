@@ -5,11 +5,11 @@ import be.ceau.opml.OpmlParser
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import me.ash.reader.currentAccountId
-import me.ash.reader.data.feed.Feed
-import me.ash.reader.data.group.Group
-import me.ash.reader.data.group.GroupWithFeed
+import me.ash.reader.data.entity.Feed
+import me.ash.reader.data.entity.Group
+import me.ash.reader.data.entity.GroupWithFeed
 import me.ash.reader.data.module.DispatcherIO
+import me.ash.reader.ui.ext.currentAccountId
 import java.io.InputStream
 import java.util.*
 import javax.inject.Inject

@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.ash.reader.data.feed.Feed
-import me.ash.reader.data.group.Group
+import me.ash.reader.data.entity.Feed
+import me.ash.reader.data.entity.Group
 import me.ash.reader.data.repository.RssRepository
 import javax.inject.Inject
 

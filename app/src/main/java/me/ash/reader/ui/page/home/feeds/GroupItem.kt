@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import me.ash.reader.R
-import me.ash.reader.data.feed.Feed
+import me.ash.reader.data.entity.Feed
 
 @OptIn(ExperimentalMaterialApi::class, androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
@@ -57,7 +57,9 @@ fun GroupItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                modifier = Modifier.weight(1f).padding(start = 28.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 28.dp),
                 text = text,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,

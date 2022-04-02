@@ -6,10 +6,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import me.ash.reader.data.account.AccountDao
-import me.ash.reader.data.article.ArticleDao
-import me.ash.reader.data.feed.FeedDao
-import me.ash.reader.data.group.GroupDao
+import me.ash.reader.data.dao.AccountDao
+import me.ash.reader.data.dao.ArticleDao
+import me.ash.reader.data.dao.FeedDao
+import me.ash.reader.data.dao.GroupDao
 import me.ash.reader.data.source.ReaderDatabase
 import javax.inject.Singleton
 

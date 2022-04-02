@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import me.ash.reader.R
-import me.ash.reader.ui.widget.CanBeDisabledIconButton
+import me.ash.reader.ui.component.CanBeDisabledIconButton
 
 @Composable
 fun ReadBar(

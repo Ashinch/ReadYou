@@ -1,26 +1,23 @@
 package me.ash.reader.data.source
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import me.ash.reader.data.Converters
-import me.ash.reader.data.account.Account
-import me.ash.reader.data.account.AccountDao
-import me.ash.reader.data.article.Article
-import me.ash.reader.data.article.ArticleDao
-import me.ash.reader.data.feed.Feed
-import me.ash.reader.data.feed.FeedDao
-import me.ash.reader.data.group.Group
-import me.ash.reader.data.group.GroupDao
+import androidx.room.*
+import me.ash.reader.data.dao.AccountDao
+import me.ash.reader.data.dao.ArticleDao
+import me.ash.reader.data.dao.FeedDao
+import me.ash.reader.data.dao.GroupDao
+import me.ash.reader.data.entity.Account
+import me.ash.reader.data.entity.Article
+import me.ash.reader.data.entity.Feed
+import me.ash.reader.data.entity.Group
+import java.util.*
 
 @Database(
     entities = [Account::class, Feed::class, Article::class, Group::class],
     version = 1,
     exportSchema = false,
 )
-@TypeConverters(Converters::class)
+@TypeConverters(ReaderDatabase.Converters::class)
 abstract class ReaderDatabase : RoomDatabase() {
     abstract fun accountDao(): AccountDao
     abstract fun feedDao(): FeedDao
@@ -40,6 +37,19 @@ abstract class ReaderDatabase : RoomDatabase() {
                     instance = it
                 }
             }
+        }
+    }
+
+    class Converters {
+
+        @TypeConverter
+        fun toDate(dateLong: Long?): Date? {
+            return dateLong?.let { Date(it) }
+        }
+
+        @TypeConverter
+        fun fromDate(date: Date?): Long? {
+            return date?.time
         }
     }
 }
