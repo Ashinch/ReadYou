@@ -26,20 +26,20 @@ import me.ash.reader.ui.widget.ViewPager
 fun HomePage(
     navController: NavHostController,
     extrasArticleId: Any? = null,
-    viewModel: HomeViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel(),
     readViewModel: ReadViewModel = hiltViewModel(),
     feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
-    val viewState = viewModel.viewState.collectAsStateValue()
-    val filterState = viewModel.filterState.collectAsStateValue()
-    val syncState = viewModel.syncState.collectAsStateValue()
+    val viewState = homeViewModel.viewState.collectAsStateValue()
+    val filterState = homeViewModel.filterState.collectAsStateValue()
+    val syncState = homeViewModel.syncState.collectAsStateValue()
 
     OpenArticleByExtras(extrasArticleId)
 
     BackHandler(true) {
         val currentPage = viewState.pagerState.currentPage
-        viewModel.dispatch(
+        homeViewModel.dispatch(
             HomeViewAction.ScrollToPage(
                 scope = scope,
                 targetPage = when (currentPage) {
@@ -58,8 +58,8 @@ fun HomePage(
         )
     }
 
-    LaunchedEffect(viewModel.viewState) {
-        viewModel.viewState.collect {
+    LaunchedEffect(homeViewModel.viewState) {
+        homeViewModel.viewState.collect {
             Log.i(
                 "RLog",
                 "HomePage: ${it.pagerState.currentPage}, ${it.pagerState.targetPage}, ${it.pagerState.currentPageOffset}"
@@ -78,13 +78,13 @@ fun HomePage(
                         filterState = filterState,
                         syncState = syncState,
                         onSyncClick = {
-                            viewModel.dispatch(HomeViewAction.Sync)
+                            homeViewModel.dispatch(HomeViewAction.Sync)
                         },
                         onFilterChange = {
-                            viewModel.dispatch(HomeViewAction.ChangeFilter(it))
+                            homeViewModel.dispatch(HomeViewAction.ChangeFilter(it))
                         },
                         onScrollToPage = {
-                            viewModel.dispatch(
+                            homeViewModel.dispatch(
                                 HomeViewAction.ScrollToPage(
                                     scope = scope,
                                     targetPage = it,
@@ -94,10 +94,47 @@ fun HomePage(
                     )
                 },
                 {
-                    FlowPage(navController = navController)
+                    FlowPage(
+                        navController = navController,
+                        filterState = filterState,
+                        onScrollToPage = {
+                            homeViewModel.dispatch(
+                                HomeViewAction.ScrollToPage(
+                                    scope = scope,
+                                    targetPage = it,
+                                )
+                            )
+                        },
+                        onFilterChange = {
+                            homeViewModel.dispatch(HomeViewAction.ChangeFilter(it))
+                        },
+                        onItemClick = {
+                            readViewModel.dispatch(ReadViewAction.ScrollToItem(0))
+                            readViewModel.dispatch(ReadViewAction.InitData(it))
+                            if (it.feed.isFullContent) readViewModel.dispatch(ReadViewAction.RenderFullContent)
+                            else readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
+                            readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
+                            homeViewModel.dispatch(
+                                HomeViewAction.ScrollToPage(
+                                    scope = scope,
+                                    targetPage = 2,
+                                )
+                            )
+                        }
+                    )
                 },
                 {
-                    ReadPage(navController = navController)
+                    ReadPage(
+                        navController = navController,
+                        onScrollToPage = { targetPage, callback ->
+                            homeViewModel.dispatch(
+                                HomeViewAction.ScrollToPage(
+                                    scope = scope,
+                                    targetPage = targetPage,
+                                    callback = callback
+                                ),
+                            )
+                        })
                 },
             ),
         )

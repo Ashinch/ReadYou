@@ -1,11 +1,12 @@
 package me.ash.reader.ui.page.home.read
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Headphones
 import androidx.compose.material.icons.outlined.MoreVert
@@ -14,20 +15,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.CoroutineScope
 import me.ash.reader.R
 import me.ash.reader.data.article.ArticleWithFeed
 import me.ash.reader.ui.extension.collectAsStateValue
-import me.ash.reader.ui.page.home.HomeViewAction
-import me.ash.reader.ui.page.home.HomeViewModel
-import me.ash.reader.ui.widget.LottieAnimation
 import me.ash.reader.ui.widget.WebView
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,10 +31,8 @@ fun ReadPage(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     readViewModel: ReadViewModel = hiltViewModel(),
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    onScrollToPage: (targetPage: Int, callback: () -> Unit) -> Unit = { _, _ -> },
 ) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val viewState = readViewModel.viewState.collectAsStateValue()
     var isScrollDown by remember { mutableStateOf(false) }
 
@@ -92,14 +85,18 @@ fun ReadPage(
                     contentAlignment = Alignment.TopCenter
                 ) {
                     TopBar(
-                        viewState.articleWithFeed == null || !isScrollDown,
-                        homeViewModel,
-                        scope,
-                        readViewModel,
-                        viewState
+                        isShow = viewState.articleWithFeed == null || !isScrollDown,
+                        onScrollToPage = onScrollToPage,
+                        onClearArticle = {
+                            readViewModel.dispatch(ReadViewAction.ClearArticle)
+                        }
                     )
                 }
-                Content(viewState, viewState.articleWithFeed, context)
+                Content(
+                    content = viewState.content ?: "",
+                    articleWithFeed = viewState.articleWithFeed,
+                    LazyListState = viewState.listState,
+                )
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -107,9 +104,18 @@ fun ReadPage(
                     contentAlignment = Alignment.BottomCenter
                 ) {
                     BottomBar(
-                        viewState.articleWithFeed != null && !isScrollDown,
-                        viewState.articleWithFeed,
-                        readViewModel
+                        isShow = viewState.articleWithFeed != null && !isScrollDown,
+                        articleWithFeed = viewState.articleWithFeed,
+                        unreadOnClick = {
+                            readViewModel.dispatch(ReadViewAction.MarkUnread(it))
+                        },
+                        starredOnClick = {
+                            readViewModel.dispatch(ReadViewAction.MarkStarred(it))
+                        },
+                        fullContentOnClick = { afterIsFullContent ->
+                            if (afterIsFullContent) readViewModel.dispatch(ReadViewAction.RenderFullContent)
+                            else readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
+                        },
                     )
                 }
             }
@@ -121,10 +127,9 @@ fun ReadPage(
 @Composable
 private fun TopBar(
     isShow: Boolean,
-    homeViewModel: HomeViewModel,
-    scope: CoroutineScope,
-    readViewModel: ReadViewModel,
-    viewState: ReadViewState
+    isShowActions: Boolean = false,
+    onScrollToPage: (targetPage: Int, callback: () -> Unit) -> Unit = { _, _ -> },
+    onClearArticle: () -> Unit = {},
 ) {
     AnimatedVisibility(
         visible = isShow,
@@ -138,15 +143,9 @@ private fun TopBar(
             title = {},
             navigationIcon = {
                 IconButton(onClick = {
-                    homeViewModel.dispatch(
-                        HomeViewAction.ScrollToPage(
-                            scope = scope,
-                            targetPage = 1,
-                            callback = {
-                                readViewModel.dispatch(ReadViewAction.ClearArticle)
-                            }
-                        )
-                    )
+                    onScrollToPage(1) {
+                        onClearArticle()
+                    }
                 }) {
                     Icon(
                         imageVector = Icons.Rounded.Close,
@@ -156,7 +155,7 @@ private fun TopBar(
                 }
             },
             actions = {
-                viewState.articleWithFeed?.let {
+                if (isShowActions) {
                     IconButton(onClick = {}) {
                         Icon(
                             modifier = Modifier.size(22.dp),
@@ -179,59 +178,24 @@ private fun TopBar(
 }
 
 @Composable
-private fun BottomBar(
-    isShow: Boolean,
-    articleWithFeed: ArticleWithFeed?,
-    readViewModel: ReadViewModel
-) {
-    articleWithFeed?.let {
-        AnimatedVisibility(
-            visible = isShow,
-            enter = fadeIn() + expandVertically(),
-            exit = fadeOut() + shrinkVertically(),
-        ) {
-            ReadBar(
-                disabled = false,
-                isUnread = articleWithFeed.article.isUnread,
-                isStarred = articleWithFeed.article.isStarred,
-                isFullContent = articleWithFeed.feed.isFullContent,
-                unreadOnClick = {
-                    readViewModel.dispatch(ReadViewAction.MarkUnread(it))
-                },
-                starredOnClick = {
-                    readViewModel.dispatch(ReadViewAction.MarkStarred(it))
-                },
-                fullContentOnClick = { afterIsFullContent ->
-                    if (afterIsFullContent) readViewModel.dispatch(ReadViewAction.RenderFullContent)
-                    else readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
-                },
-            )
-        }
-    }
-}
-
-@Composable
 private fun Content(
-    viewState: ReadViewState,
+    content: String,
     articleWithFeed: ArticleWithFeed?,
-    context: Context
+    LazyListState: LazyListState = rememberLazyListState(),
 ) {
     Column {
         if (articleWithFeed == null) {
             Spacer(modifier = Modifier.height(64.dp))
-            LottieAnimation(
-                modifier = Modifier
-                    .alpha(0.7f)
-                    .padding(80.dp),
-                url = "https://assets8.lottiefiles.com/packages/lf20_jm7mv1ib.json",
-            )
+//            LottieAnimation(
+//                modifier = Modifier
+//                    .alpha(0.7f)
+//                    .padding(80.dp),
+//                url = "https://assets8.lottiefiles.com/packages/lf20_jm7mv1ib.json",
+//            )
         } else {
             LazyColumn(
-                state = viewState.listState,
+                state = LazyListState,
             ) {
-                val article = articleWithFeed.article
-                val feed = articleWithFeed.feed
-
                 item {
                     Spacer(modifier = Modifier.height(64.dp))
                 }
@@ -241,14 +205,14 @@ private fun Content(
                         modifier = Modifier
                             .padding(horizontal = 12.dp)
                     ) {
-                        Header(context, article, feed)
+                        Header(articleWithFeed)
                     }
                 }
                 item {
                     Spacer(modifier = Modifier.height(22.dp))
-                    Crossfade(targetState = viewState.content) { content ->
+                    Crossfade(targetState = content) { content ->
                         WebView(
-                            content = content ?: "",
+                            content = content
                         )
                         Spacer(modifier = Modifier.height(50.dp))
                     }
@@ -262,3 +226,29 @@ private fun Content(
     }
 }
 
+@Composable
+private fun BottomBar(
+    isShow: Boolean,
+    articleWithFeed: ArticleWithFeed?,
+    unreadOnClick: (afterIsUnread: Boolean) -> Unit = {},
+    starredOnClick: (afterIsStarred: Boolean) -> Unit = {},
+    fullContentOnClick: (afterIsFullContent: Boolean) -> Unit = {},
+) {
+    articleWithFeed?.let {
+        AnimatedVisibility(
+            visible = isShow,
+            enter = fadeIn() + expandVertically(),
+            exit = fadeOut() + shrinkVertically(),
+        ) {
+            ReadBar(
+                disabled = false,
+                isUnread = articleWithFeed.article.isUnread,
+                isStarred = articleWithFeed.article.isStarred,
+                isFullContent = articleWithFeed.feed.isFullContent,
+                unreadOnClick = unreadOnClick,
+                starredOnClick = starredOnClick,
+                fullContentOnClick = fullContentOnClick,
+            )
+        }
+    }
+}

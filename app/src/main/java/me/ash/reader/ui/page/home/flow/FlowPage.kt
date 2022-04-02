@@ -13,7 +13,6 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -25,14 +24,11 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.data.article.ArticleWithFeed
 import me.ash.reader.ui.extension.collectAsStateValue
 import me.ash.reader.ui.extension.getName
 import me.ash.reader.ui.page.home.FilterBar
-import me.ash.reader.ui.page.home.HomeViewAction
-import me.ash.reader.ui.page.home.HomeViewModel
-import me.ash.reader.ui.page.home.read.ReadViewAction
-import me.ash.reader.ui.page.home.read.ReadViewModel
-import me.ash.reader.ui.widget.LottieAnimation
+import me.ash.reader.ui.page.home.FilterState
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -43,22 +39,21 @@ fun FlowPage(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     flowViewModel: FlowViewModel = hiltViewModel(),
-    homeViewModel: HomeViewModel = hiltViewModel(),
-    readViewModel: ReadViewModel = hiltViewModel(),
+    filterState: FilterState,
+    onFilterChange: (filterState: FilterState) -> Unit = {},
+    onScrollToPage: (targetPage: Int) -> Unit = {},
+    onItemClick: (item: ArticleWithFeed) -> Unit = {},
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val viewState = flowViewModel.viewState.collectAsStateValue()
-    val filterState = homeViewModel.filterState.collectAsStateValue()
     val pagingItems = viewState.pagingData.collectAsLazyPagingItems()
     var markAsRead by remember { mutableStateOf(false) }
 
-    LaunchedEffect(homeViewModel.filterState) {
-        homeViewModel.filterState.collect { state ->
-            flowViewModel.dispatch(
-                FlowViewAction.FetchData(state)
-            )
-        }
+    LaunchedEffect(filterState) {
+        flowViewModel.dispatch(
+            FlowViewAction.FetchData(filterState)
+        )
     }
 
 //    LaunchedEffect(viewState.listState.isScrollInProgress) {
@@ -81,14 +76,7 @@ fun FlowPage(
             SmallTopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(onClick = {
-                        homeViewModel.dispatch(
-                            HomeViewAction.ScrollToPage(
-                                scope = scope,
-                                targetPage = 0,
-                            )
-                        )
-                    }) {
+                    IconButton(onClick = { onScrollToPage(0) }) {
                         Icon(
                             imageVector = Icons.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.back),
@@ -131,12 +119,14 @@ fun FlowPage(
         },
         content = {
             Crossfade(targetState = pagingItems) { pagingItems ->
-                if (pagingItems.loadState.source.refresh is LoadState.NotLoading && pagingItems.itemCount == 0) {
-                    LottieAnimation(
-                        modifier = Modifier.alpha(0.7f).padding(80.dp),
-                        url = "https://assets7.lottiefiles.com/packages/lf20_l4ny0jjm.json",
-                    )
-                }
+//                if (pagingItems.loadState.source.refresh is LoadState.NotLoading && pagingItems.itemCount == 0) {
+//                    LottieAnimation(
+//                        modifier = Modifier
+//                            .alpha(0.7f)
+//                            .padding(80.dp),
+//                        url = "https://assets7.lottiefiles.com/packages/lf20_l4ny0jjm.json",
+//                    )
+//                }
                 LazyColumn(
                     state = viewState.listState,
                 ) {
@@ -178,17 +168,7 @@ fun FlowPage(
                         pagingItems = pagingItems,
                     ) {
                         markAsRead = false
-                        readViewModel.dispatch(ReadViewAction.ScrollToItem(0))
-                        readViewModel.dispatch(ReadViewAction.InitData(it))
-                        if (it.feed.isFullContent) readViewModel.dispatch(ReadViewAction.RenderFullContent)
-                        else readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
-                        readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
-                        homeViewModel.dispatch(
-                            HomeViewAction.ScrollToPage(
-                                scope = scope,
-                                targetPage = 2,
-                            )
-                        )
+                        onItemClick(it)
                     }
                     item {
                         Spacer(modifier = Modifier.height(64.dp))
@@ -207,11 +187,9 @@ fun FlowPage(
                 filter = filterState.filter,
                 filterOnClick = {
                     markAsRead = false
-                    homeViewModel.dispatch(
-                        HomeViewAction.ChangeFilter(
-                            filterState.copy(
-                                filter = it
-                            )
+                    onFilterChange(
+                        filterState.copy(
+                            filter = it
                         )
                     )
                 },
