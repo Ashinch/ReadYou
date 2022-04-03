@@ -49,12 +49,14 @@ class FeedOptionViewModel @Inject constructor(
             is FeedOptionViewAction.Hide -> hide(action.scope)
             is FeedOptionViewAction.SelectedGroup -> selectedGroup(action.groupId)
             is FeedOptionViewAction.InputNewGroup -> inputNewGroup(action.content)
-            is FeedOptionViewAction.SelectedNewGroup -> selectedNewGroup(action.selected)
             is FeedOptionViewAction.ChangeAllowNotificationPreset -> changeAllowNotificationPreset()
             is FeedOptionViewAction.ChangeParseFullContentPreset -> changeParseFullContentPreset()
             is FeedOptionViewAction.ShowDeleteDialog -> showDeleteDialog()
             is FeedOptionViewAction.HideDeleteDialog -> hideDeleteDialog()
             is FeedOptionViewAction.Delete -> delete(action.callback)
+            is FeedOptionViewAction.AddNewGroup -> addNewGroup()
+            is FeedOptionViewAction.ShowNewGroupDialog -> changeNewGroupDialogVisible(true)
+            is FeedOptionViewAction.HideNewGroupDialog -> changeNewGroupDialogVisible(false)
         }
     }
 
@@ -81,11 +83,29 @@ class FeedOptionViewModel @Inject constructor(
         }
     }
 
+    private fun changeNewGroupDialogVisible(visible: Boolean) {
+        _viewState.update {
+            it.copy(
+                newGroupDialogVisible = visible,
+                newGroupContent = "",
+            )
+        }
+    }
+
     private fun inputNewGroup(content: String) {
         _viewState.update {
             it.copy(
                 newGroupContent = content
             )
+        }
+    }
+
+    private fun addNewGroup() {
+        if (_viewState.value.newGroupContent.isNotBlank()) {
+            viewModelScope.launch {
+                selectedGroup(rssRepository.get().addGroup(_viewState.value.newGroupContent))
+                changeNewGroupDialogVisible(false)
+            }
         }
     }
 
@@ -99,14 +119,6 @@ class FeedOptionViewModel @Inject constructor(
                 )
                 fetchFeed(it.id)
             }
-        }
-    }
-
-    private fun selectedNewGroup(selected: Boolean) {
-        _viewState.update {
-            it.copy(
-                newGroupSelected = selected,
-            )
         }
     }
 
@@ -170,7 +182,7 @@ data class FeedOptionViewState(
     val feed: Feed? = null,
     val selectedGroupId: String = "",
     val newGroupContent: String = "",
-    val newGroupSelected: Boolean = false,
+    val newGroupDialogVisible: Boolean = false,
     val groups: List<Group> = emptyList(),
     val deleteDialogVisible: Boolean = false,
 )
@@ -196,14 +208,14 @@ sealed class FeedOptionViewAction {
         val content: String
     ) : FeedOptionViewAction()
 
-    data class SelectedNewGroup(
-        val selected: Boolean
-    ) : FeedOptionViewAction()
-
     data class Delete(
         val callback: () -> Unit = {}
     ) : FeedOptionViewAction()
 
     object ShowDeleteDialog : FeedOptionViewAction()
     object HideDeleteDialog : FeedOptionViewAction()
+
+    object ShowNewGroupDialog : FeedOptionViewAction()
+    object HideNewGroupDialog : FeedOptionViewAction()
+    object AddNewGroup : FeedOptionViewAction()
 }

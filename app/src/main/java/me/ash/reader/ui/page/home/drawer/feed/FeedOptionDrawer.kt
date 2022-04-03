@@ -1,16 +1,19 @@
 package me.ash.reader.ui.page.home.drawer.feed
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.DeleteOutline
+import androidx.compose.material.icons.outlined.CreateNewFolder
 import androidx.compose.material.icons.rounded.RssFeed
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -18,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.R
 import me.ash.reader.ui.component.BottomDrawer
-import me.ash.reader.ui.component.Subtitle
+import me.ash.reader.ui.component.TextFieldDialog
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.roundClick
 import me.ash.reader.ui.page.home.feeds.subscribe.ResultView
@@ -27,10 +30,10 @@ import me.ash.reader.ui.page.home.feeds.subscribe.ResultView
 @Composable
 fun FeedOptionDrawer(
     modifier: Modifier = Modifier,
-    viewModel: FeedOptionViewModel = hiltViewModel(),
+    feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
     content: @Composable () -> Unit = {},
 ) {
-    val viewState = viewModel.viewState.collectAsStateValue()
+    val viewState = feedOptionViewModel.viewState.collectAsStateValue()
     val feed = viewState.feed
 
     BottomDrawer(
@@ -65,53 +68,24 @@ fun FeedOptionDrawer(
                     groups = viewState.groups,
                     selectedAllowNotificationPreset = viewState.feed?.isNotification ?: false,
                     selectedParseFullContentPreset = viewState.feed?.isFullContent ?: false,
+                    showUnsubscribe = true,
                     selectedGroupId = viewState.feed?.groupId ?: "",
-                    newGroupContent = viewState.newGroupContent,
-                    onNewGroupValueChange = {
-                        viewModel.dispatch(FeedOptionViewAction.InputNewGroup(it))
-                    },
-                    newGroupSelected = viewState.newGroupSelected,
-                    changeNewGroupSelected = {
-                        viewModel.dispatch(FeedOptionViewAction.SelectedNewGroup(it))
-                    },
                     allowNotificationPresetOnClick = {
-                        viewModel.dispatch(FeedOptionViewAction.ChangeAllowNotificationPreset)
+                        feedOptionViewModel.dispatch(FeedOptionViewAction.ChangeAllowNotificationPreset)
                     },
                     parseFullContentPresetOnClick = {
-                        viewModel.dispatch(FeedOptionViewAction.ChangeParseFullContentPreset)
+                        feedOptionViewModel.dispatch(FeedOptionViewAction.ChangeParseFullContentPreset)
+                    },
+                    unsubscribeOnClick = {
+                        feedOptionViewModel.dispatch(FeedOptionViewAction.ShowDeleteDialog)
                     },
                     onGroupClick = {
-                        viewModel.dispatch(FeedOptionViewAction.SelectedGroup(it))
+                        feedOptionViewModel.dispatch(FeedOptionViewAction.SelectedGroup(it))
                     },
-                    onKeyboardAction = { },
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                Subtitle(text = stringResource(R.string.options))
-                Spacer(modifier = Modifier.height(10.dp))
-                Button(
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Transparent,
-                        contentColor = MaterialTheme.colorScheme.error,
-                    ),
-                    border = BorderStroke(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.error,
-                    ),
-                    onClick = {
-                        viewModel.dispatch(FeedOptionViewAction.ShowDeleteDialog)
+                    onAddNewGroup = {
+                        feedOptionViewModel.dispatch(FeedOptionViewAction.ShowNewGroupDialog)
                     }
-                ) {
-                    Icon(
-                        modifier = Modifier.size(ButtonDefaults.IconSize),
-                        imageVector = Icons.Rounded.DeleteOutline,
-                        contentDescription = stringResource(R.string.delete),
-                    )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(
-                        text = stringResource(R.string.unsubscribe),
-                        style = MaterialTheme.typography.titleSmall,
-                    )
-                }
+                )
             }
         }
     ) {
@@ -119,4 +93,21 @@ fun FeedOptionDrawer(
     }
 
     DeleteFeedDialog(feedName = feed?.name ?: "")
+
+    TextFieldDialog(
+        visible = viewState.newGroupDialogVisible,
+        title = stringResource(R.string.create_new_group),
+        icon = Icons.Outlined.CreateNewFolder,
+        value = viewState.newGroupContent,
+        placeholder = stringResource(R.string.name),
+        onValueChange = {
+            feedOptionViewModel.dispatch(FeedOptionViewAction.InputNewGroup(it))
+        },
+        onDismissRequest = {
+            feedOptionViewModel.dispatch(FeedOptionViewAction.HideNewGroupDialog)
+        },
+        onConfirm = {
+            feedOptionViewModel.dispatch(FeedOptionViewAction.AddNewGroup)
+        }
+    )
 }

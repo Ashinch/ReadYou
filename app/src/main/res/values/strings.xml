@@ -31,13 +31,14 @@
     <string name="allow_notification">Allow Notification</string>
     <string name="parse_full_content">Parse Full Content</string>
     <string name="add_to_group">Add to Group</string>
-    <string name="new_group">New Group</string>
+    <string name="create_new_group">Create New Group</string>
+    <string name="name">Name</string>
     <string name="open_with">Open %1$s</string>
     <string name="options">Options</string>
     <string name="delete">Delete</string>
-    <string name="has_been_deleted">"%1$s" has been deleted</string>
+    <string name="has_been_deleted">\"%1$s\" has been deleted</string>
     <string name="unsubscribe">Unsubscribe</string>
-    <string name="unsubscribe_tip">Unsubscribe "%1$s" and delete all its archived articles.</string>
+    <string name="unsubscribe_tip">Unsubscribe \"%1$s\" and delete all its archived articles.</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <string name="date_at_time">%1$s At %2$s</string>

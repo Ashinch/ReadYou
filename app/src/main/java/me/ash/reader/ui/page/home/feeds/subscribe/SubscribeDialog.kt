@@ -5,6 +5,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CreateNewFolder
 import androidx.compose.material.icons.rounded.RssFeed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -18,12 +19,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.R
+import me.ash.reader.ui.component.ClipboardTextField
 import me.ash.reader.ui.component.Dialog
-import me.ash.reader.ui.ext.*
+import me.ash.reader.ui.component.TextFieldDialog
+import me.ash.reader.ui.ext.collectAsStateValue
 
 @OptIn(
     androidx.compose.ui.ExperimentalComposeUiApi::class,
@@ -45,15 +50,9 @@ fun SubscribeDialog(
             }
         }
     }
-    val readYouString = stringResource(R.string.read_you)
-    val defaultString = stringResource(R.string.defaults)
 
     LaunchedEffect(viewState.visible) {
         if (viewState.visible) {
-            val defaultGroupId = context.dataStore
-                .get(DataStoreKeys.CurrentAccountId)!!
-                .spacerDollar(readYouString + defaultString)
-            subscribeViewModel.dispatch(SubscribeViewAction.SelectedGroup(defaultGroupId))
             subscribeViewModel.dispatch(SubscribeViewAction.Init)
         } else {
             subscribeViewModel.dispatch(SubscribeViewAction.Reset)
@@ -77,11 +76,13 @@ fun SubscribeDialog(
         },
         title = {
             Text(
-                if (viewState.isSearchPage) {
+                text = if (viewState.isSearchPage) {
                     viewState.title
                 } else {
                     viewState.feed?.name ?: stringResource(R.string.unknown)
-                }
+                },
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         },
         text = {
@@ -93,14 +94,17 @@ fun SubscribeDialog(
                 }
             ) { targetExpanded ->
                 if (targetExpanded) {
-                    SearchView(
+                    ClipboardTextField(
                         readOnly = viewState.lockLinkInput,
-                        inputLink = viewState.linkContent,
-                        errorMessage = viewState.errorMessage,
-                        onLinkValueChange = {
+                        value = viewState.linkContent,
+                        onValueChange = {
                             subscribeViewModel.dispatch(SubscribeViewAction.InputLink(it))
                         },
-                        onKeyboardAction = {
+                        placeholder = stringResource(R.string.feed_or_site_url),
+                        errorText = viewState.errorMessage,
+                        imeAction = ImeAction.Search,
+                        focusManager = focusManager,
+                        onConfirm = {
                             subscribeViewModel.dispatch(SubscribeViewAction.Search)
                         },
                     )
@@ -111,14 +115,6 @@ fun SubscribeDialog(
                         selectedAllowNotificationPreset = viewState.allowNotificationPreset,
                         selectedParseFullContentPreset = viewState.parseFullContentPreset,
                         selectedGroupId = viewState.selectedGroupId,
-                        newGroupContent = viewState.newGroupContent,
-                        onNewGroupValueChange = {
-                            subscribeViewModel.dispatch(SubscribeViewAction.InputNewGroup(it))
-                        },
-                        newGroupSelected = viewState.newGroupSelected,
-                        changeNewGroupSelected = {
-                            subscribeViewModel.dispatch(SubscribeViewAction.SelectedNewGroup(it))
-                        },
                         allowNotificationPresetOnClick = {
                             subscribeViewModel.dispatch(SubscribeViewAction.ChangeAllowNotificationPreset)
                         },
@@ -128,8 +124,8 @@ fun SubscribeDialog(
                         onGroupClick = {
                             subscribeViewModel.dispatch(SubscribeViewAction.SelectedGroup(it))
                         },
-                        onKeyboardAction = {
-                            subscribeViewModel.dispatch(SubscribeViewAction.Subscribe)
+                        onAddNewGroup = {
+                            subscribeViewModel.dispatch(SubscribeViewAction.ShowNewGroupDialog)
                         },
                     )
                 }
@@ -138,7 +134,7 @@ fun SubscribeDialog(
         confirmButton = {
             if (viewState.isSearchPage) {
                 TextButton(
-                    enabled = viewState.linkContent.isNotEmpty()
+                    enabled = viewState.linkContent.isNotBlank()
                             && viewState.title != stringResource(R.string.searching),
                     onClick = {
                         focusManager.clearFocus()
@@ -147,7 +143,7 @@ fun SubscribeDialog(
                 ) {
                     Text(
                         text = stringResource(R.string.search),
-                        color = if (viewState.linkContent.isNotEmpty()) {
+                        color = if (viewState.linkContent.isNotBlank()) {
                             Color.Unspecified
                         } else {
                             MaterialTheme.colorScheme.outline.copy(alpha = 0.7f)
@@ -187,5 +183,22 @@ fun SubscribeDialog(
                 }
             }
         },
+    )
+
+    TextFieldDialog(
+        visible = viewState.newGroupDialogVisible,
+        title = stringResource(R.string.create_new_group),
+        icon = Icons.Outlined.CreateNewFolder,
+        value = viewState.newGroupContent,
+        placeholder = stringResource(R.string.name),
+        onValueChange = {
+            subscribeViewModel.dispatch(SubscribeViewAction.InputNewGroup(it))
+        },
+        onDismissRequest = {
+            subscribeViewModel.dispatch(SubscribeViewAction.HideNewGroupDialog)
+        },
+        onConfirm = {
+            subscribeViewModel.dispatch(SubscribeViewAction.AddNewGroup)
+        }
     )
 }

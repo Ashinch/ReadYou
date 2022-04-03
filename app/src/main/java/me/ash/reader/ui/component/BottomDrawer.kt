@@ -2,6 +2,7 @@ package me.ash.reader.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetDefaults
@@ -12,6 +13,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 
@@ -55,7 +57,8 @@ fun BottomDrawer(
                         ) {
                             Row(
                                 modifier = modifier
-                                    .size(38.dp, 4.dp)
+                                    .size(30.dp, 4.dp)
+                                    .clip(CircleShape)
                                     .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
                                     .zIndex(1f)
                             ) {}

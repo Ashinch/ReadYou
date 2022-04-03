@@ -67,6 +67,10 @@ fun HomePage(
 
     BackHandler(true) {
         val currentPage = viewState.pagerState.currentPage
+        if (currentPage == 0) {
+            context.findActivity()?.moveTaskToBack(false)
+            return@BackHandler
+        }
         homeViewModel.dispatch(
             HomeViewAction.ScrollToPage(
                 scope = scope,

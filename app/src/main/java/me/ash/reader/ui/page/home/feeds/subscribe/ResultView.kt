@@ -3,18 +3,27 @@ package me.ash.reader.ui.page.home.feeds.subscribe
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -24,7 +33,6 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 import me.ash.reader.R
 import me.ash.reader.data.entity.Group
 import me.ash.reader.ui.component.SelectionChip
-import me.ash.reader.ui.component.SelectionEditorChip
 import me.ash.reader.ui.component.Subtitle
 import me.ash.reader.ui.ext.roundClick
 
@@ -35,41 +43,39 @@ fun ResultView(
     groups: List<Group> = emptyList(),
     selectedAllowNotificationPreset: Boolean = false,
     selectedParseFullContentPreset: Boolean = false,
+    showUnsubscribe: Boolean = false,
     selectedGroupId: String = "",
-    newGroupContent: String = "",
-    newGroupSelected: Boolean,
-    onNewGroupValueChange: (String) -> Unit = {},
-    changeNewGroupSelected: (Boolean) -> Unit = {},
     allowNotificationPresetOnClick: () -> Unit = {},
     parseFullContentPresetOnClick: () -> Unit = {},
+    unsubscribeOnClick: () -> Unit = {},
     onGroupClick: (groupId: String) -> Unit = {},
-    onKeyboardAction: () -> Unit = {},
+    onAddNewGroup: () -> Unit = {},
 ) {
+    LaunchedEffect(Unit) {
+        if (groups.isNotEmpty()) onGroupClick(groups.first().id)
+    }
+
     Column(
         modifier = modifier.verticalScroll(rememberScrollState())
     ) {
-        Link(
-            text = link
-        )
+        Link(text = link)
         Spacer(modifier = Modifier.height(26.dp))
 
         Preset(
             selectedAllowNotificationPreset = selectedAllowNotificationPreset,
             selectedParseFullContentPreset = selectedParseFullContentPreset,
+            showUnsubscribe = showUnsubscribe,
             allowNotificationPresetOnClick = allowNotificationPresetOnClick,
             parseFullContentPresetOnClick = parseFullContentPresetOnClick,
+            unsubscribeOnClick = unsubscribeOnClick,
         )
         Spacer(modifier = Modifier.height(26.dp))
 
         AddToGroup(
             groups = groups,
             selectedGroupId = selectedGroupId,
-            newGroupContent = newGroupContent,
-            newGroupSelected = newGroupSelected,
-            onNewGroupValueChange = onNewGroupValueChange,
-            changeNewGroupSelected = changeNewGroupSelected,
             onGroupClick = onGroupClick,
-            onKeyboardAction = onKeyboardAction,
+            onAddNewGroup = onAddNewGroup,
         )
         Spacer(modifier = Modifier.height(6.dp))
     }
@@ -105,8 +111,10 @@ private fun Link(
 private fun Preset(
     selectedAllowNotificationPreset: Boolean = false,
     selectedParseFullContentPreset: Boolean = false,
+    showUnsubscribe: Boolean = false,
     allowNotificationPresetOnClick: () -> Unit = {},
     parseFullContentPresetOnClick: () -> Unit = {},
+    unsubscribeOnClick: () -> Unit = {},
 ) {
     Subtitle(text = stringResource(R.string.preset))
     Spacer(modifier = Modifier.height(10.dp))
@@ -147,6 +155,15 @@ private fun Preset(
         ) {
             parseFullContentPresetOnClick()
         }
+        if (showUnsubscribe) {
+            SelectionChip(
+                modifier = Modifier.animateContentSize(),
+                content = stringResource(R.string.unsubscribe),
+                selected = false,
+            ) {
+                unsubscribeOnClick()
+            }
+        }
     }
 }
 
@@ -154,39 +171,61 @@ private fun Preset(
 private fun AddToGroup(
     groups: List<Group>,
     selectedGroupId: String,
-    newGroupContent: String,
-    newGroupSelected: Boolean,
-    onNewGroupValueChange: (String) -> Unit = {},
-    changeNewGroupSelected: (Boolean) -> Unit = {},
     onGroupClick: (groupId: String) -> Unit = {},
-    onKeyboardAction: () -> Unit = {},
+    onAddNewGroup: () -> Unit = {},
 ) {
     Subtitle(text = stringResource(R.string.add_to_group))
     Spacer(modifier = Modifier.height(10.dp))
-    FlowRow(
-        mainAxisAlignment = MainAxisAlignment.Start,
-        crossAxisSpacing = 10.dp,
-        mainAxisSpacing = 10.dp,
-    ) {
-        groups.forEach {
-            SelectionChip(
-                modifier = Modifier.animateContentSize(),
-                content = it.name,
-                selected = !newGroupSelected && it.id == selectedGroupId,
-            ) {
-                changeNewGroupSelected(false)
-                onGroupClick(it.id)
-            }
-        }
 
-        SelectionEditorChip(
-            modifier = Modifier.animateContentSize(),
-            content = newGroupContent,
-            onValueChange = onNewGroupValueChange,
-            selected = newGroupSelected,
-            onKeyboardAction = onKeyboardAction,
-        ) {
-            changeNewGroupSelected(true)
+    if (groups.size > 6) {
+        LazyRow {
+            items(groups) {
+                SelectionChip(
+                    modifier = Modifier.animateContentSize(),
+                    content = it.name,
+                    selected = it.id == selectedGroupId,
+                ) {
+                    onGroupClick(it.id)
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+            }
+            item { NewGroupButton(onAddNewGroup) }
         }
+    } else {
+        FlowRow(
+            mainAxisAlignment = MainAxisAlignment.Start,
+            crossAxisSpacing = 10.dp,
+            mainAxisSpacing = 10.dp,
+        ) {
+            groups.forEach {
+                SelectionChip(
+                    modifier = Modifier.animateContentSize(),
+                    content = it.name,
+                    selected = it.id == selectedGroupId,
+                ) {
+                    onGroupClick(it.id)
+                }
+            }
+            NewGroupButton(onAddNewGroup)
+        }
+    }
+}
+
+@Composable
+private fun NewGroupButton(onAddNewGroup: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .size(36.dp)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .clickable { onAddNewGroup() },
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            modifier = Modifier.size(20.dp),
+            imageVector = Icons.Outlined.Add,
+            contentDescription = stringResource(R.string.create_new_group),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+        )
     }
 }

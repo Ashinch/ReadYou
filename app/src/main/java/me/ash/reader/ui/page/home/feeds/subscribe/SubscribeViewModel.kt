@@ -40,6 +40,8 @@ class SubscribeViewModel @Inject constructor(
             is SubscribeViewAction.Reset -> reset()
             is SubscribeViewAction.Show -> changeVisible(true)
             is SubscribeViewAction.Hide -> changeVisible(false)
+            is SubscribeViewAction.ShowNewGroupDialog -> changeNewGroupDialogVisible(true)
+            is SubscribeViewAction.HideNewGroupDialog -> changeNewGroupDialogVisible(false)
             is SubscribeViewAction.SwitchPage -> switchPage(action.isSearchPage)
             is SubscribeViewAction.ImportFromInputStream -> importFromInputStream(action.inputStream)
             is SubscribeViewAction.InputLink -> inputLink(action.content)
@@ -50,7 +52,7 @@ class SubscribeViewModel @Inject constructor(
                 changeParseFullContentPreset()
             is SubscribeViewAction.SelectedGroup -> selectedGroup(action.groupId)
             is SubscribeViewAction.InputNewGroup -> inputNewGroup(action.content)
-            is SubscribeViewAction.SelectedNewGroup -> selectedNewGroup(action.selected)
+            is SubscribeViewAction.AddNewGroup -> addNewGroup()
             is SubscribeViewAction.Subscribe -> subscribe()
         }
     }
@@ -90,14 +92,7 @@ class SubscribeViewModel @Inject constructor(
         val articles = _viewState.value.articles
         viewModelScope.launch(Dispatchers.IO) {
             val groupId = async {
-                if (
-                    _viewState.value.newGroupSelected &&
-                    _viewState.value.newGroupContent.isNotBlank()
-                ) {
-                    rssRepository.get().addGroup(_viewState.value.newGroupContent)
-                } else {
-                    _viewState.value.selectedGroupId
-                }
+                _viewState.value.selectedGroupId
             }
             rssRepository.get().subscribe(
                 feed.copy(
@@ -118,11 +113,17 @@ class SubscribeViewModel @Inject constructor(
         }
     }
 
-    private fun selectedNewGroup(selected: Boolean) {
-        _viewState.update {
-            it.copy(
-                newGroupSelected = selected,
-            )
+    private fun addNewGroup() {
+        if (_viewState.value.newGroupContent.isNotBlank()) {
+            viewModelScope.launch {
+                selectedGroup(rssRepository.get().addGroup(_viewState.value.newGroupContent))
+                changeNewGroupDialogVisible(false)
+                _viewState.update {
+                    it.copy(
+                        newGroupContent = "",
+                    )
+                }
+            }
         }
     }
 
@@ -224,6 +225,14 @@ class SubscribeViewModel @Inject constructor(
         }
     }
 
+    private fun changeNewGroupDialogVisible(visible: Boolean) {
+        _viewState.update {
+            it.copy(
+                newGroupDialogVisible = visible,
+            )
+        }
+    }
+
     private fun switchPage(isSearchPage: Boolean) {
         _viewState.update {
             it.copy(
@@ -245,8 +254,8 @@ data class SubscribeViewState(
     val allowNotificationPreset: Boolean = false,
     val parseFullContentPreset: Boolean = false,
     val selectedGroupId: String = "",
+    val newGroupDialogVisible: Boolean = false,
     val newGroupContent: String = "",
-    val newGroupSelected: Boolean = false,
     val groups: Flow<List<Group>> = emptyFlow(),
     val isSearchPage: Boolean = true,
 )
@@ -257,6 +266,10 @@ sealed class SubscribeViewAction {
 
     object Show : SubscribeViewAction()
     object Hide : SubscribeViewAction()
+
+    object ShowNewGroupDialog : SubscribeViewAction()
+    object HideNewGroupDialog : SubscribeViewAction()
+    object AddNewGroup : SubscribeViewAction()
 
     data class SwitchPage(
         val isSearchPage: Boolean
@@ -270,7 +283,7 @@ sealed class SubscribeViewAction {
         val content: String
     ) : SubscribeViewAction()
 
-    object Search: SubscribeViewAction()
+    object Search : SubscribeViewAction()
 
     object ChangeAllowNotificationPreset : SubscribeViewAction()
     object ChangeParseFullContentPreset : SubscribeViewAction()
@@ -281,10 +294,6 @@ sealed class SubscribeViewAction {
 
     data class InputNewGroup(
         val content: String
-    ) : SubscribeViewAction()
-
-    data class SelectedNewGroup(
-        val selected: Boolean
     ) : SubscribeViewAction()
 
     object Subscribe : SubscribeViewAction()

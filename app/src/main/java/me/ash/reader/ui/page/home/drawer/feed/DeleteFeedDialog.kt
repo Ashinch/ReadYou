@@ -2,7 +2,7 @@ package me.ash.reader.ui.page.home.drawer.feed
 
 import android.widget.Toast
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.DeleteOutline
+import androidx.compose.material.icons.outlined.DeleteForever
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -36,7 +36,7 @@ fun DeleteFeedDialog(
         },
         icon = {
             Icon(
-                imageVector = Icons.Rounded.DeleteOutline,
+                imageVector = Icons.Outlined.DeleteForever,
                 contentDescription = stringResource(R.string.subscribe),
             )
         },

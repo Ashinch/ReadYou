@@ -44,7 +44,7 @@ fun SelectionChip(
     val focusManager = LocalFocusManager.current
 
     FilterChip(
-        modifier = modifier,
+        modifier = modifier.defaultMinSize(minHeight = 36.dp),
         colors = ChipDefaults.filterChipColors(
             backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
