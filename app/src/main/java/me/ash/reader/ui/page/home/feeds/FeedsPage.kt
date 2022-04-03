@@ -2,7 +2,6 @@ package me.ash.reader.ui.page.home.feeds
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -12,8 +11,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -22,7 +21,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LiveData
@@ -31,6 +29,8 @@ import androidx.work.WorkInfo
 import me.ash.reader.R
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.Banner
+import me.ash.reader.ui.component.DisplayText
+import me.ash.reader.ui.component.FeedbackIconButton
 import me.ash.reader.ui.component.Subtitle
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.getDesc
@@ -104,39 +104,35 @@ fun FeedsPage(
             SmallTopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(onClick = {
+                    FeedbackIconButton(
+                        isHaptic = false,
+                        imageVector = Icons.Rounded.Tune,
+                        contentDescription = stringResource(R.string.settings),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    ) {
                         onScrollToPage(0)
-                    }) {
-                        Icon(
-                            imageVector = Icons.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.back),
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
                     }
                 },
                 actions = {
-                    IconButton(onClick = {
+                    FeedbackIconButton(
+                        isHaptic = false,
+                        modifier = Modifier.rotate(if (isSyncing) angle else 0f),
+                        imageVector = Icons.Rounded.Refresh,
+                        contentDescription = stringResource(R.string.refresh),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    ) {
                         if (!isSyncing) {
                             onSyncClick()
                         }
-                    }) {
-                        Icon(
-                            modifier = Modifier.rotate(if (isSyncing) angle else 0f),
-                            imageVector = Icons.Rounded.Refresh,
-                            contentDescription = stringResource(R.string.refresh),
-                            tint = MaterialTheme.colorScheme.onSurface,
-                        )
                     }
-                    IconButton(onClick = {
+                    FeedbackIconButton(
+                        isHaptic = false,
+                        imageVector = Icons.Rounded.Add,
+                        contentDescription = stringResource(R.string.subscribe),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    ) {
                         subscribeViewModel.dispatch(SubscribeViewAction.Show)
-                    }) {
-                        Icon(
-                            imageVector = Icons.Rounded.Add,
-                            contentDescription = stringResource(R.string.subscribe),
-                            tint = MaterialTheme.colorScheme.onSurface,
-                        )
                     }
-
                 }
             )
         },
@@ -144,47 +140,17 @@ fun FeedsPage(
             SubscribeDialog()
             LazyColumn {
                 item {
-                    Text(
-                        modifier = Modifier
-                            .padding(
-                                start = 24.dp,
-                                top = 48.dp,
-                                end = 24.dp,
-//                                bottom = 24.dp
+                    DisplayText(
+                        modifier = Modifier.pointerInput(Unit) {
+                            detectTapGestures(
+                                onLongPress = {
+                                    launcher.launch("ReadYou.opml")
+                                }
                             )
-                            .pointerInput(Unit) {
-                                detectTapGestures(
-                                    onLongPress = {
-                                        launcher.launch("ReadYou.opml")
-                                    }
-                                )
-                            },
+                        },
                         text = viewState.account?.name ?: stringResource(R.string.unknown),
-                        style = MaterialTheme.typography.displaySmall,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
+                        desc = if (isSyncing) stringResource(R.string.syncing) else "",
                     )
-                }
-                item {
-                    AnimatedVisibility(
-                        visible = isSyncing,
-                        enter = fadeIn() + expandVertically(),
-                        exit = fadeOut() + shrinkVertically(),
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(
-                                start = 24.dp,
-                                top = 0.dp,
-                                end = 24.dp,
-                                bottom = 0.dp
-                            ),
-                            text = stringResource(R.string.syncing),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(24.dp))
                 }
                 item {
                     Banner(

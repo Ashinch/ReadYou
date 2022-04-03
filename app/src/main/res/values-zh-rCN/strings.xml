@@ -16,6 +16,7 @@
     <string name="unknown">未知</string>
     <string name="back">返回</string>
     <string name="go_to">转到</string>
+    <string name="settings">设置</string>
     <string name="refresh">刷新</string>
     <string name="search">搜索</string>
     <string name="searching">搜索中…</string>

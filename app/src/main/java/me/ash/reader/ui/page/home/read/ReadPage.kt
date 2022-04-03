@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.data.entity.ArticleWithFeed
+import me.ash.reader.ui.component.FeedbackIconButton
 import me.ash.reader.ui.component.WebView
 import me.ash.reader.ui.ext.collectAsStateValue
 
@@ -143,34 +144,33 @@ private fun TopBar(
             ),
             title = {},
             navigationIcon = {
-                IconButton(onClick = {
+                FeedbackIconButton(
+                    isHaptic = false,
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = stringResource(R.string.back),
+                    tint = MaterialTheme.colorScheme.onSurface
+                ) {
                     onScrollToPage(1) {
                         onClearArticle()
                     }
-                }) {
-                    Icon(
-                        imageVector = Icons.Rounded.Close,
-                        contentDescription = stringResource(R.string.back),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
                 }
             },
             actions = {
                 if (isShowActions) {
-                    IconButton(onClick = {}) {
-                        Icon(
-                            modifier = Modifier.size(22.dp),
-                            imageVector = Icons.Outlined.Headphones,
-                            contentDescription = stringResource(R.string.mark_all_as_read),
-                            tint = MaterialTheme.colorScheme.onSurface,
-                        )
+                    FeedbackIconButton(
+                        isHaptic = false,
+                        modifier = Modifier.size(22.dp),
+                        imageVector = Icons.Outlined.Headphones,
+                        contentDescription = stringResource(R.string.mark_all_as_read),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    ) {
                     }
-                    IconButton(onClick = {}) {
-                        Icon(
-                            imageVector = Icons.Outlined.MoreVert,
-                            contentDescription = stringResource(R.string.search),
-                            tint = MaterialTheme.colorScheme.onSurface,
-                        )
+                    FeedbackIconButton(
+                        isHaptic = false,
+                        imageVector = Icons.Outlined.MoreVert,
+                        contentDescription = stringResource(R.string.search),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    ) {
                     }
                 }
             }

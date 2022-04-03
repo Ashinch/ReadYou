@@ -16,6 +16,7 @@
     <string name="unknown">Unknown</string>
     <string name="back">Back</string>
     <string name="go_to">Goto</string>
+    <string name="settings">Settings</string>
     <string name="refresh">Refresh</string>
     <string name="search">Search</string>
     <string name="searching">Searching…</string>

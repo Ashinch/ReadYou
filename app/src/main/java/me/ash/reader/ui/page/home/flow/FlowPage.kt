@@ -10,14 +10,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LiveData
@@ -29,6 +31,8 @@ import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
+import me.ash.reader.ui.component.DisplayText
+import me.ash.reader.ui.component.FeedbackIconButton
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.getName
 import me.ash.reader.ui.page.home.FilterBar
@@ -87,12 +91,13 @@ fun FlowPage(
             SmallTopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(onClick = { onScrollToPage(0) }) {
-                        Icon(
-                            imageVector = Icons.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.back),
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
+                    FeedbackIconButton(
+                        isHaptic = false,
+                        imageVector = Icons.Rounded.ArrowBack,
+                        contentDescription = stringResource(R.string.back),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    ) {
+                        onScrollToPage(0)
                     }
                 },
                 actions = {
@@ -101,29 +106,28 @@ fun FlowPage(
                         enter = fadeIn() + expandVertically(),
                         exit = fadeOut() + shrinkVertically(),
                     ) {
-                        IconButton(onClick = {
+                        FeedbackIconButton(
+                            isHaptic = false,
+                            imageVector = Icons.Rounded.DoneAll,
+                            contentDescription = stringResource(R.string.mark_all_as_read),
+                            tint = if (markAsRead) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onSurface
+                            },
+                        ) {
                             scope.launch {
                                 viewState.listState.scrollToItem(0)
                                 markAsRead = !markAsRead
                             }
-                        }) {
-                            Icon(
-                                imageVector = Icons.Rounded.DoneAll,
-                                contentDescription = stringResource(R.string.mark_all_as_read),
-                                tint = if (markAsRead) {
-                                    MaterialTheme.colorScheme.primary
-                                } else {
-                                    MaterialTheme.colorScheme.onSurface
-                                },
-                            )
                         }
                     }
-                    IconButton(onClick = {}) {
-                        Icon(
-                            imageVector = Icons.Rounded.Search,
-                            contentDescription = stringResource(R.string.search),
-                            tint = MaterialTheme.colorScheme.onSurface,
-                        )
+                    FeedbackIconButton(
+                        isHaptic = false,
+                        imageVector = Icons.Rounded.Search,
+                        contentDescription = stringResource(R.string.search),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    ) {
                     }
                 }
             )
@@ -142,45 +146,15 @@ fun FlowPage(
                     state = viewState.listState,
                 ) {
                     item {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    start = if (true) 54.dp else 24.dp,
-                                    top = 48.dp,
-                                    end = 24.dp,
-//                                    bottom = 24.dp
-                                ),
+                        DisplayText(
+                            modifier = Modifier.padding(start = 30.dp),
                             text = when {
                                 filterState.group != null -> filterState.group.name
                                 filterState.feed != null -> filterState.feed.name
                                 else -> filterState.filter.getName()
                             },
-                            style = MaterialTheme.typography.displaySmall,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
+                            desc = if (isSyncing) stringResource(R.string.syncing) else "",
                         )
-                    }
-                    item {
-                        AnimatedVisibility(
-                            visible = isSyncing,
-                            enter = fadeIn() + expandVertically(),
-                            exit = fadeOut() + shrinkVertically(),
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(
-                                    start = if (true) 54.dp else 24.dp,
-                                    top = 0.dp,
-                                    end = 24.dp,
-                                    bottom = 0.dp
-                                ),
-                                text = stringResource(R.string.syncing),
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(24.dp))
                     }
                     item {
                         AnimatedVisibility(

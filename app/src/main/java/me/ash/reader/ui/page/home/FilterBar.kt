@@ -1,9 +1,11 @@
 package me.ash.reader.ui.page.home
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -17,6 +19,8 @@ fun FilterBar(
     filter: Filter,
     filterOnClick: (Filter) -> Unit = {},
 ) {
+    val view = LocalView.current
+
     Box(
         modifier = Modifier.height(60.dp)
     ) {
@@ -45,7 +49,11 @@ fun FilterBar(
                         )
                     },
                     selected = filter == item,
-                    onClick = { filterOnClick(item) },
+                    onClick = {
+//                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                        filterOnClick(item)
+                    },
 //                    colors = NavigationBarItemDefaults.colors(
 //                        selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
 //                        unselectedIconColor = MaterialTheme.colorScheme.outline,
