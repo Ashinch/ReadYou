@@ -48,8 +48,8 @@ class App : Application(), Configuration.Provider {
     @Inject
     lateinit var localRssRepository: LocalRssRepository
 
-    @Inject
-    lateinit var feverRssRepository: FeverRssRepository
+//    @Inject
+//    lateinit var feverRssRepository: FeverRssRepository
 
     @Inject
     lateinit var opmlRepository: OpmlRepository

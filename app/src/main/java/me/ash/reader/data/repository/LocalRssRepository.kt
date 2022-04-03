@@ -9,9 +9,14 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.work.CoroutineWorker
+import androidx.work.ListenableWorker
 import androidx.work.WorkManager
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.withContext
 import me.ash.reader.MainActivity
 import me.ash.reader.R
 import me.ash.reader.data.dao.AccountDao
@@ -21,9 +26,9 @@ import me.ash.reader.data.dao.GroupDao
 import me.ash.reader.data.entity.Article
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.entity.Group
-import me.ash.reader.data.module.ApplicationScope
 import me.ash.reader.data.module.DispatcherDefault
 import me.ash.reader.data.module.DispatcherIO
+import me.ash.reader.data.repository.SyncWorker.Companion.setIsSyncing
 import me.ash.reader.data.source.RssNetworkDataSource
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.page.common.ExtraName
@@ -40,8 +45,6 @@ class LocalRssRepository @Inject constructor(
     private val rssNetworkDataSource: RssNetworkDataSource,
     private val accountDao: AccountDao,
     private val groupDao: GroupDao,
-    @ApplicationScope
-    private val applicationScope: CoroutineScope,
     @DispatcherDefault
     private val dispatcherDefault: CoroutineDispatcher,
     @DispatcherIO
@@ -89,13 +92,13 @@ class LocalRssRepository @Inject constructor(
         }
     }
 
-    override suspend fun sync() {
-        applicationScope.launch(dispatcherDefault) {
+    override suspend fun sync(coroutineWorker: CoroutineWorker): ListenableWorker.Result {
+        return withContext(dispatcherDefault) {
             val preTime = System.currentTimeMillis()
             val accountId = context.currentAccountId
             val articles = mutableListOf<Article>()
             feedDao.queryAll(accountId)
-                .also { feed -> updateSyncState { it.copy(feedCount = feed.size) } }
+                .also { coroutineWorker.setProgress(setIsSyncing(true)) }
                 .map { feed -> async { syncFeed(feed) } }
                 .awaitAll()
                 .forEach {
@@ -114,14 +117,9 @@ class LocalRssRepository @Inject constructor(
                     }
                 )
             }
-            updateSyncState {
-                it.copy(
-                    feedCount = 0,
-                    syncedCount = 0,
-                    currentFeedName = ""
-                )
-            }
-        }.join()
+            coroutineWorker.setProgress(setIsSyncing(false))
+            ListenableWorker.Result.success()
+        }
     }
 
     data class ArticleNotify(
@@ -145,12 +143,6 @@ class LocalRssRepository @Inject constructor(
         } catch (e: Exception) {
             Log.e("RLog", "queryRssIcon[${feed.name}]: ${e.message}")
             return ArticleNotify(listOf(), false)
-        }
-        updateSyncState {
-            it.copy(
-                syncedCount = it.syncedCount + 1,
-                currentFeedName = feed.name
-            )
         }
         return ArticleNotify(
             articles = articles,

@@ -1,6 +1,7 @@
 package me.ash.reader.ui.page.home
 
 import androidx.lifecycle.ViewModel
+import androidx.work.WorkManager
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,8 +13,8 @@ import kotlinx.coroutines.flow.update
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.entity.Filter
 import me.ash.reader.data.entity.Group
-import me.ash.reader.data.repository.AbstractRssRepository
 import me.ash.reader.data.repository.RssRepository
+import me.ash.reader.data.repository.SyncWorker
 import me.ash.reader.ui.ext.animateScrollToPage
 import javax.inject.Inject
 
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val rssRepository: RssRepository,
+    private val workManager: WorkManager,
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(HomeViewState())
@@ -29,7 +31,7 @@ class HomeViewModel @Inject constructor(
     private val _filterState = MutableStateFlow(FilterState())
     val filterState = _filterState.asStateFlow()
 
-    val syncState = AbstractRssRepository.syncState
+    val syncWorkLiveData = workManager.getWorkInfoByIdLiveData(SyncWorker.UUID)
 
     fun dispatch(action: HomeViewAction) {
         when (action) {

@@ -2,6 +2,7 @@ package me.ash.reader.ui.page.home.feeds
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -14,20 +15,21 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
+import androidx.work.WorkInfo
 import me.ash.reader.R
-import me.ash.reader.data.repository.AbstractRssRepository
+import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.Banner
 import me.ash.reader.ui.component.Subtitle
 import me.ash.reader.ui.ext.collectAsStateValue
@@ -48,8 +50,8 @@ fun FeedsPage(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     feedsViewModel: FeedsViewModel = hiltViewModel(),
+    syncWorkLiveData: LiveData<WorkInfo>,
     filterState: FilterState,
-    syncState: AbstractRssRepository.SyncState,
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
     onSyncClick: () -> Unit = {},
     onFilterChange: (filterState: FilterState) -> Unit = {},
@@ -57,6 +59,12 @@ fun FeedsPage(
 ) {
     val context = LocalContext.current
     val viewState = feedsViewModel.viewState.collectAsStateValue()
+
+    val owner = LocalLifecycleOwner.current
+    var isSyncing by remember { mutableStateOf(false) }
+    syncWorkLiveData.observe(owner) {
+        it?.let { isSyncing = it.progress.getIsSyncing() }
+    }
 
     val infiniteTransition = rememberInfiniteTransition()
     val angle by infiniteTransition.animateFloat(
@@ -108,12 +116,12 @@ fun FeedsPage(
                 },
                 actions = {
                     IconButton(onClick = {
-                        if (syncState.isNotSyncing) {
+                        if (!isSyncing) {
                             onSyncClick()
                         }
                     }) {
                         Icon(
-                            modifier = Modifier.rotate(if (syncState.isSyncing) angle else 0f),
+                            modifier = Modifier.rotate(if (isSyncing) angle else 0f),
                             imageVector = Icons.Rounded.Refresh,
                             contentDescription = stringResource(R.string.refresh),
                             tint = MaterialTheme.colorScheme.onSurface,
@@ -142,7 +150,7 @@ fun FeedsPage(
                                 start = 24.dp,
                                 top = 48.dp,
                                 end = 24.dp,
-                                bottom = 24.dp
+//                                bottom = 24.dp
                             )
                             .pointerInput(Unit) {
                                 detectTapGestures(
@@ -157,6 +165,26 @@ fun FeedsPage(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
+                }
+                item {
+                    AnimatedVisibility(
+                        visible = isSyncing,
+                        enter = fadeIn() + expandVertically(),
+                        exit = fadeOut() + shrinkVertically(),
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(
+                                start = 24.dp,
+                                top = 0.dp,
+                                end = 24.dp,
+                                bottom = 0.dp
+                            ),
+                            text = stringResource(R.string.syncing),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
                 }
                 item {
                     Banner(

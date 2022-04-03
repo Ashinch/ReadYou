@@ -5,6 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,8 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import me.ash.reader.R
 import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.ui.ext.formatAsString
 
@@ -49,12 +54,29 @@ fun ArticleItem(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            Text(
+            Row(
                 modifier = Modifier.padding(start = 6.dp),
-                text = articleWithFeed.article.date.formatAsString(context, onlyHourMinute = true),
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
-                style = MaterialTheme.typography.labelMedium,
-            )
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                if (articleWithFeed.article.isStarred) {
+                    Icon(
+                        modifier = Modifier
+                            .size(14.dp)
+                            .padding(end = 2.dp),
+                        imageVector = Icons.Rounded.Star,
+                        contentDescription = stringResource(R.string.starred),
+                        tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                    )
+                }
+                Text(
+                    text = articleWithFeed.article.date.formatAsString(
+                        context,
+                        onlyHourMinute = true
+                    ),
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                    style = MaterialTheme.typography.labelMedium,
+                )
+            }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),

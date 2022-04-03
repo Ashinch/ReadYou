@@ -36,7 +36,6 @@ fun HomePage(
     val scope = rememberCoroutineScope()
     val viewState = homeViewModel.viewState.collectAsStateValue()
     val filterState = homeViewModel.filterState.collectAsStateValue()
-    val syncState = homeViewModel.syncState.collectAsStateValue()
 
     var openArticleId by rememberSaveable {
         mutableStateOf(intent?.extras?.get(ExtraName.ARTICLE_ID)?.toString() ?: "")
@@ -95,8 +94,8 @@ fun HomePage(
                 {
                     FeedsPage(
                         navController = navController,
+                        syncWorkLiveData = homeViewModel.syncWorkLiveData,
                         filterState = filterState,
-                        syncState = syncState,
                         onSyncClick = {
                             homeViewModel.dispatch(HomeViewAction.Sync)
                         },
@@ -116,6 +115,7 @@ fun HomePage(
                 {
                     FlowPage(
                         navController = navController,
+                        syncWorkLiveData = homeViewModel.syncWorkLiveData,
                         filterState = filterState,
                         onScrollToPage = {
                             homeViewModel.dispatch(

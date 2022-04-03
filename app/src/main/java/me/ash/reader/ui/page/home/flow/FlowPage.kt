@@ -15,16 +15,20 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.work.WorkInfo
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.data.entity.ArticleWithFeed
+import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.getName
 import me.ash.reader.ui.page.home.FilterBar
@@ -39,6 +43,7 @@ fun FlowPage(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     flowViewModel: FlowViewModel = hiltViewModel(),
+    syncWorkLiveData: LiveData<WorkInfo>,
     filterState: FilterState,
     onFilterChange: (filterState: FilterState) -> Unit = {},
     onScrollToPage: (targetPage: Int) -> Unit = {},
@@ -49,6 +54,12 @@ fun FlowPage(
     val viewState = flowViewModel.viewState.collectAsStateValue()
     val pagingItems = viewState.pagingData.collectAsLazyPagingItems()
     var markAsRead by remember { mutableStateOf(false) }
+
+    val owner = LocalLifecycleOwner.current
+    var isSyncing by remember { mutableStateOf(false) }
+    syncWorkLiveData.observe(owner) {
+        it?.let { isSyncing = it.progress.getIsSyncing() }
+    }
 
     LaunchedEffect(filterState) {
         flowViewModel.dispatch(
@@ -138,7 +149,7 @@ fun FlowPage(
                                     start = if (true) 54.dp else 24.dp,
                                     top = 48.dp,
                                     end = 24.dp,
-                                    bottom = 24.dp
+//                                    bottom = 24.dp
                                 ),
                             text = when {
                                 filterState.group != null -> filterState.group.name
@@ -150,6 +161,26 @@ fun FlowPage(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
+                    }
+                    item {
+                        AnimatedVisibility(
+                            visible = isSyncing,
+                            enter = fadeIn() + expandVertically(),
+                            exit = fadeOut() + shrinkVertically(),
+                        ) {
+                            Text(
+                                modifier = Modifier.padding(
+                                    start = if (true) 54.dp else 24.dp,
+                                    top = 0.dp,
+                                    end = 24.dp,
+                                    bottom = 0.dp
+                                ),
+                                text = stringResource(R.string.syncing),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(24.dp))
                     }
                     item {
                         AnimatedVisibility(
