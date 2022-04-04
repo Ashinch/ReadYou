@@ -69,6 +69,7 @@ class App : Application(), Configuration.Provider {
         super.onCreate()
         applicationScope.launch(dispatcherDefault) {
             accountInit()
+            dataStoreInit()
             workerInit()
         }
     }
@@ -79,6 +80,9 @@ class App : Application(), Configuration.Provider {
             applicationContext.dataStore.put(DataStoreKeys.CurrentAccountId, account.id!!)
             applicationContext.dataStore.put(DataStoreKeys.CurrentAccountType, account.type)
         }
+    }
+
+    private fun dataStoreInit() {
     }
 
     private fun workerInit() {

@@ -56,6 +56,20 @@ interface ArticleDao {
     )
     suspend fun deleteByFeedId(accountId: Int, feedId: String)
 
+    @Query(
+        """
+        DELETE FROM article
+        WHERE id IN (
+            SELECT a.id FROM article AS a, feed AS b, `group` AS c
+            WHERE a.accountId = :accountId
+            AND a.feedId = b.id
+            AND b.groupId = c.id
+            AND c.id = :groupId
+        )
+        """
+    )
+    suspend fun deleteByGroupId(accountId: Int, groupId: String)
+
     @Transaction
     @Query(
         """

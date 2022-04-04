@@ -186,7 +186,7 @@ fun FeedsPage(
 //                    Crossfade(targetState = groupWithFeed) { groupWithFeed ->
                     Column {
                         GroupItem(
-                            text = groupWithFeed.group.name,
+                            group = groupWithFeed.group,
                             feeds = groupWithFeed.feeds,
                             groupOnClick = {
                                 onFilterChange(

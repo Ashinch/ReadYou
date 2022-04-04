@@ -112,6 +112,10 @@ abstract class AbstractRssRepository constructor(
         return feedDao.queryById(id)
     }
 
+    suspend fun findGroupById(id: String): Group? {
+        return groupDao.queryById(id)
+    }
+
     suspend fun findArticleById(id: String): ArticleWithFeed? {
         return articleDao.queryById(id)
     }
@@ -133,12 +137,22 @@ abstract class AbstractRssRepository constructor(
     }
 
     suspend fun deleteGroup(group: Group) {
-        groupDao.update(group)
+        articleDao.deleteByGroupId(context.currentAccountId, group.id)
+        feedDao.deleteByGroupId(context.currentAccountId, group.id)
+        groupDao.delete(group)
     }
 
     suspend fun deleteFeed(feed: Feed) {
         articleDao.deleteByFeedId(context.currentAccountId, feed.id)
         feedDao.delete(feed)
+    }
+
+    suspend fun groupParseFullContent(group: Group, isFullContent: Boolean) {
+        feedDao.updateIsFullContentByGroupId(context.currentAccountId, group.id, isFullContent)
+    }
+
+    suspend fun groupAllowNotification(group: Group, isNotification: Boolean) {
+        feedDao.updateIsNotificationByGroupId(context.currentAccountId, group.id, isNotification)
     }
 }
 

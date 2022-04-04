@@ -31,6 +31,7 @@ import me.ash.reader.data.module.DispatcherIO
 import me.ash.reader.data.repository.SyncWorker.Companion.setIsSyncing
 import me.ash.reader.data.source.RssNetworkDataSource
 import me.ash.reader.ui.ext.currentAccountId
+import me.ash.reader.ui.ext.spacerDollar
 import me.ash.reader.ui.page.common.ExtraName
 import me.ash.reader.ui.page.common.NotificationGroupName
 import java.util.*
@@ -81,14 +82,16 @@ class LocalRssRepository @Inject constructor(
     }
 
     override suspend fun addGroup(name: String): String {
-        return UUID.randomUUID().toString().also {
-            groupDao.insert(
-                Group(
-                    id = it,
-                    name = name,
-                    accountId = context.currentAccountId
+        context.currentAccountId.let { accountId ->
+            return accountId.spacerDollar(UUID.randomUUID().toString()).also {
+                groupDao.insert(
+                    Group(
+                        id = it,
+                        name = name,
+                        accountId = accountId
+                    )
                 )
-            )
+            }
         }
     }
 

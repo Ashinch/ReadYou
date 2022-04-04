@@ -13,7 +13,7 @@ interface GroupDao {
         WHERE id = :id
         """
     )
-    fun queryById(id: String): Group?
+    suspend fun queryById(id: String): Group?
 
     @Transaction
     @Query(
@@ -31,7 +31,7 @@ interface GroupDao {
         WHERE accountId = :accountId
         """
     )
-    fun queryAllGroupWithFeed(accountId: Int): List<GroupWithFeed>
+    suspend fun queryAllGroupWithFeed(accountId: Int): List<GroupWithFeed>
 
     @Query(
         """

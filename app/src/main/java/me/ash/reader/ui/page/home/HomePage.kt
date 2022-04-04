@@ -17,6 +17,7 @@ import me.ash.reader.ui.page.common.ExtraName
 import me.ash.reader.ui.page.home.drawer.feed.FeedOptionDrawer
 import me.ash.reader.ui.page.home.drawer.feed.FeedOptionViewAction
 import me.ash.reader.ui.page.home.drawer.feed.FeedOptionViewModel
+import me.ash.reader.ui.page.home.drawer.group.GroupOptionDrawer
 import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.flow.FlowPage
 import me.ash.reader.ui.page.home.read.ReadPage
@@ -165,4 +166,5 @@ fun HomePage(
     }
 
     FeedOptionDrawer()
+    GroupOptionDrawer()
 }

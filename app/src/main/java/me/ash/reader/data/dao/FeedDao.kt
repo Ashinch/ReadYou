@@ -7,6 +7,41 @@ import me.ash.reader.data.entity.Feed
 interface FeedDao {
     @Query(
         """
+        UPDATE feed SET isFullContent = :isFullContent
+        WHERE accountId = :accountId
+        AND groupId = :groupId
+        """
+    )
+    suspend fun updateIsFullContentByGroupId(
+        accountId: Int,
+        groupId: String,
+        isFullContent: Boolean
+    )
+
+    @Query(
+        """
+        UPDATE feed SET isNotification = :isNotification
+        WHERE accountId = :accountId
+        AND groupId = :groupId
+        """
+    )
+    suspend fun updateIsNotificationByGroupId(
+        accountId: Int,
+        groupId: String,
+        isNotification: Boolean
+    )
+
+    @Query(
+        """
+        DELETE FROM feed
+        WHERE groupId = :groupId
+        AND accountId = :accountId
+        """
+    )
+    suspend fun deleteByGroupId(accountId: Int, groupId: String)
+
+    @Query(
+        """
         SELECT * FROM feed
         WHERE id = :id
         """

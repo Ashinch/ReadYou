@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.feeds
 
+import android.view.HapticFeedbackConstants
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,22 +19,30 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.R
 import me.ash.reader.data.entity.Feed
+import me.ash.reader.data.entity.Group
+import me.ash.reader.ui.page.home.drawer.group.GroupOptionViewAction
+import me.ash.reader.ui.page.home.drawer.group.GroupOptionViewModel
 
 @OptIn(ExperimentalMaterialApi::class, androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun GroupItem(
     modifier: Modifier = Modifier,
-    text: String,
+    group: Group,
     feeds: List<Feed>,
     isExpanded: Boolean = true,
+    groupOptionViewModel: GroupOptionViewModel = hiltViewModel(),
     groupOnClick: () -> Unit = {},
     feedOnClick: (feed: Feed) -> Unit = {},
 ) {
+    val view = LocalView.current
+    val scope = rememberCoroutineScope()
     var expanded by remember { mutableStateOf(isExpanded) }
 
     Column(
@@ -47,6 +56,8 @@ fun GroupItem(
                     groupOnClick()
                 },
                 onLongClick = {
+                    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                    groupOptionViewModel.dispatch(GroupOptionViewAction.Show(scope, group.id))
                 }
             )
             .padding(top = 22.dp)
@@ -60,7 +71,7 @@ fun GroupItem(
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 28.dp),
-                text = text,
+                text = group.name,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 maxLines = 1,

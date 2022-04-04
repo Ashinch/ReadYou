@@ -8,7 +8,7 @@ import me.ash.reader.data.dao.GroupDao
 import me.ash.reader.data.entity.Account
 import me.ash.reader.data.entity.Group
 import me.ash.reader.ui.ext.currentAccountId
-import me.ash.reader.ui.ext.spacerDollar
+import me.ash.reader.ui.ext.getDefaultGroupId
 import javax.inject.Inject
 
 class AccountRepository @Inject constructor(
@@ -38,7 +38,7 @@ class AccountRepository @Inject constructor(
             if (groupDao.queryAll(it.id!!).isEmpty()) {
                 groupDao.insert(
                     Group(
-                        id = it.id!!.spacerDollar(readYouString + defaultString),
+                        id = it.id!!.getDefaultGroupId(),
                         name = defaultString,
                         accountId = it.id!!,
                     )

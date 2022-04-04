@@ -7,14 +7,13 @@ import be.ceau.opml.entity.Head
 import be.ceau.opml.entity.Opml
 import be.ceau.opml.entity.Outline
 import dagger.hilt.android.qualifiers.ApplicationContext
-import me.ash.reader.R
 import me.ash.reader.data.dao.AccountDao
 import me.ash.reader.data.dao.FeedDao
 import me.ash.reader.data.dao.GroupDao
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.source.OpmlLocalDataSource
 import me.ash.reader.ui.ext.currentAccountId
-import me.ash.reader.ui.ext.spacerDollar
+import me.ash.reader.ui.ext.getDefaultGroupId
 import java.io.InputStream
 import java.util.*
 import javax.inject.Inject
@@ -27,7 +26,6 @@ class OpmlRepository @Inject constructor(
     private val accountDao: AccountDao,
     private val rssRepository: RssRepository,
     private val opmlLocalDataSource: OpmlLocalDataSource,
-    private val stringsRepository: StringsRepository,
 ) {
     @Throws(Exception::class)
     suspend fun saveToDatabase(inputStream: InputStream) {
@@ -88,8 +86,6 @@ class OpmlRepository @Inject constructor(
     }
 
     private fun getDefaultGroupId(): String {
-        val readYouString = stringsRepository.getString(R.string.read_you)
-        val defaultString = stringsRepository.getString(R.string.defaults)
-        return context.currentAccountId.spacerDollar(readYouString + defaultString)
+        return context.currentAccountId.getDefaultGroupId()
     }
 }
