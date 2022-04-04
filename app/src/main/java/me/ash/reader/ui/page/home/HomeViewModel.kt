@@ -72,7 +72,7 @@ data class FilterState(
 
 @OptIn(ExperimentalPagerApi::class)
 data class HomeViewState(
-    val pagerState: PagerState = PagerState(1),
+    val pagerState: PagerState = PagerState(0),
 )
 
 sealed class HomeViewAction {

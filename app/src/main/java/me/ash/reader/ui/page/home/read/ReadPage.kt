@@ -147,7 +147,7 @@ private fun TopBar(
                 FeedbackIconButton(
                     isHaptic = false,
                     imageVector = Icons.Rounded.Close,
-                    contentDescription = stringResource(R.string.back),
+                    contentDescription = stringResource(R.string.close),
                     tint = MaterialTheme.colorScheme.onSurface
                 ) {
                     onScrollToPage(1) {

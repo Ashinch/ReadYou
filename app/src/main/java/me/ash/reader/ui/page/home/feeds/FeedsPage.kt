@@ -35,6 +35,7 @@ import me.ash.reader.ui.component.Subtitle
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.getDesc
 import me.ash.reader.ui.ext.getName
+import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterBar
 import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
@@ -91,7 +92,6 @@ fun FeedsPage(
         feedsViewModel.dispatch(FeedsViewAction.FetchAccount)
     }
 
-
     LaunchedEffect(filterState) {
         feedsViewModel.dispatch(
             FeedsViewAction.FetchData(filterState)
@@ -111,7 +111,7 @@ fun FeedsPage(
                         contentDescription = stringResource(R.string.settings),
                         tint = MaterialTheme.colorScheme.onSurface,
                     ) {
-                        onScrollToPage(0)
+                        navController.navigate(RouteName.SETTINGS)
                     }
                 },
                 actions = {

@@ -3,10 +3,10 @@ package me.ash.reader.ui.page.settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.rounded.ArrowBackIosNew
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,90 +19,98 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
+import me.ash.reader.ui.component.Banner
+import me.ash.reader.ui.component.DisplayText
+import me.ash.reader.ui.component.FeedbackIconButton
+import me.ash.reader.ui.component.SelectableSettingGroupItem
 import me.ash.reader.ui.ext.paddingFixedHorizontal
 import me.ash.reader.ui.ext.roundClick
+import me.ash.reader.ui.page.common.RouteName
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPage(
     navController: NavHostController,
 ) {
-    val listState = rememberLazyListState()
-    Box(modifier = Modifier.fillMaxSize()) {
-//        LargeTopAppBar(
-//            title = { Text(text = "Settings") }
-//        )
-        Column {
+    Scaffold(
+        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+        topBar = {
             SmallTopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.Rounded.ArrowBackIosNew,
-                            contentDescription = stringResource(R.string.back),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
+                    FeedbackIconButton(
+                        isHaptic = false,
+                        imageVector = Icons.Rounded.ArrowBack,
+                        contentDescription = stringResource(R.string.back),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    ) {
+                        navController.navigate(RouteName.HOME)
                     }
                 },
+                actions = {}
             )
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .paddingFixedHorizontal(),
-                state = listState
-            ) {
+        },
+        content = {
+            LazyColumn {
                 item {
-                    Spacer(modifier = Modifier.height(112.dp))
+                    DisplayText(text = stringResource(R.string.settings), desc = "")
                 }
                 item {
-                    Item(
-                        title = "通用",
-                        description = "应用的基本设置",
-                        imageVector = Icons.Outlined.Apps,
+                    Banner(
+                        title = stringResource(R.string.get_new_updates),
+                        desc = stringResource(R.string.get_new_updates_desc),
+                        icon = Icons.Outlined.Lightbulb,
+                        action = {
+                            Icon(
+                                imageVector = Icons.Rounded.Close,
+                                contentDescription = stringResource(R.string.close),
+                            )
+                        },
                     )
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
                 item {
-                    Item(
-                        title = "外观",
-                        description = "字体、颜色、背景",
-                        imageVector = Icons.Outlined.ColorLens,
-                    )
+                    SelectableSettingGroupItem(
+                        title = stringResource(R.string.accounts),
+                        desc = stringResource(R.string.accounts_desc),
+                        icon = Icons.Outlined.AccountCircle,
+                    ) {}
                 }
                 item {
-                    Item(
-                        title = "阅读",
-                        description = "渲染阅读视图的设置",
-                        imageVector = Icons.Outlined.LocalLibrary,
-                    )
+                    SelectableSettingGroupItem(
+                        title = stringResource(R.string.color_and_style),
+                        desc = stringResource(R.string.color_and_style_desc),
+                        icon = Icons.Outlined.Palette,
+                    ) {}
                 }
                 item {
-                    Item(
-                        title = "Ash",
-                        description = "本地账户",
-                        imageVector = Icons.Outlined.Storage,
-                    )
+                    SelectableSettingGroupItem(
+                        title = stringResource(R.string.interaction),
+                        desc = stringResource(R.string.interaction_desc),
+                        icon = Icons.Outlined.TouchApp,
+                    ) {}
                 }
                 item {
-                    Item(
-                        title = "添加账户",
-                        description = "FreshRSS、Inoreader、Feedly",
-                        imageVector = Icons.Outlined.AccountCircle,
-                    )
+                    SelectableSettingGroupItem(
+                        title = stringResource(R.string.languages),
+                        desc = stringResource(R.string.languages_desc),
+                        icon = Icons.Outlined.Language,
+                    ) {}
                 }
                 item {
-                    Spacer(modifier = Modifier.height(500.dp))
-                    Item(
-                        title = "添加账户",
-                        description = "FreshRSS、Inoreader、Feedly",
-                        imageVector = Icons.Outlined.AccountCircle,
-                    )
+                    SelectableSettingGroupItem(
+                        title = stringResource(R.string.tips_and_support),
+                        desc = stringResource(R.string.tips_and_support_desc),
+                        icon = Icons.Outlined.TipsAndUpdates,
+                    ) {}
                 }
             }
         }
-    }
+    )
 }
 
 @Composable
-fun Item(
+fun SettingsItem(
     title: String = "",
     description: String = "",
     imageVector: ImageVector,

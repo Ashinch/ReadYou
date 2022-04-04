@@ -53,4 +53,17 @@
     <string name="one_day">1天</string>
     <string name="three_days">3天</string>
     <string name="seven_days">7天</string>
+    <string name="close">关闭</string>
+    <string name="get_new_updates">获取新的更新</string>
+    <string name="get_new_updates_desc">版本 0.6.1 现已发布</string>
+    <string name="accounts">账户</string>
+    <string name="accounts_desc">本地、Fresh</string>
+    <string name="color_and_style">颜色和样式</string>
+    <string name="color_and_style_desc">主题、色彩系统、字体大小</string>
+    <string name="interaction">交互</string>
+    <string name="interaction_desc">布局、触觉反馈</string>
+    <string name="languages">语言</string>
+    <string name="languages_desc">英语、中文</string>
+    <string name="tips_and_support">提示和支持</string>
+    <string name="tips_and_support_desc">关于、开源</string>
 </resources>

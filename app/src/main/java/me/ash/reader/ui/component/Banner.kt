@@ -1,3 +1,11 @@
+/**
+ * Copyright (C) 2021 Kyant0
+ *
+ * @link https://github.com/Kyant0/MusicYou
+ * @author Kyant0
+ * @modifier Ashinch
+ */
+
 package me.ash.reader.ui.component
 
 import androidx.compose.animation.Crossfade
@@ -12,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -29,12 +38,12 @@ fun Banner(
     val lightOnSurface = lightThemeColors.onSurface
 
     Surface(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().height(88.dp),
         color = MaterialTheme.colorScheme.surface,
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(horizontal = 16.dp)
                 .clip(RoundedCornerShape(32.dp))
                 .background(lightPrimaryContainer)
@@ -52,19 +61,24 @@ fun Banner(
                     )
                 }
             }
-            Column(modifier = Modifier.weight(1f)) {
+            Column(
+                modifier = Modifier.weight(1f).fillMaxHeight(),
+                verticalArrangement = Arrangement.SpaceBetween,
+            ) {
                 Text(
                     text = title,
                     maxLines = if (desc == null) 2 else 1,
                     style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
                     color = lightOnSurface,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 desc?.let {
                     Text(
                         text = it,
-                        maxLines = 1,
                         style = MaterialTheme.typography.bodyMedium,
                         color = lightOnSurface.copy(alpha = 0.7f),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }

@@ -53,4 +53,17 @@
     <string name="one_day">1d</string>
     <string name="three_days">3d</string>
     <string name="seven_days">7d</string>
+    <string name="close">Close</string>
+    <string name="get_new_updates">Get New updates</string>
+    <string name="get_new_updates_desc">Version 0.6.1 has been released</string>
+    <string name="accounts">Accounts</string>
+    <string name="accounts_desc">Local, Fresh</string>
+    <string name="color_and_style">Color &amp; style</string>
+    <string name="color_and_style_desc">Theme, color system, font size</string>
+    <string name="interaction">Interaction</string>
+    <string name="interaction_desc">Layout, haptic feedback</string>
+    <string name="languages">Languages</string>
+    <string name="languages_desc">English, Chinese</string>
+    <string name="tips_and_support">Tips &amp; support</string>
+    <string name="tips_and_support_desc">About, open source</string>
 </resources>

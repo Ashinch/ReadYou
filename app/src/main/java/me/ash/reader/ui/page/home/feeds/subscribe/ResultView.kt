@@ -52,7 +52,7 @@ fun ResultView(
     onAddNewGroup: () -> Unit = {},
 ) {
     LaunchedEffect(Unit) {
-        if (groups.isNotEmpty()) onGroupClick(groups.first().id)
+        if (groups.isNotEmpty() && selectedGroupId.isEmpty()) onGroupClick(groups.first().id)
     }
 
     Column(
