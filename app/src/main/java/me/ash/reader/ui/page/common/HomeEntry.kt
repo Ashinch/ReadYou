@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
@@ -18,13 +19,16 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import me.ash.reader.ui.ext.animatedComposable
+import me.ash.reader.ui.ext.isFirstLaunch
 import me.ash.reader.ui.page.home.HomePage
 import me.ash.reader.ui.page.settings.SettingsPage
+import me.ash.reader.ui.page.startup.StartupPage
 import me.ash.reader.ui.theme.AppTheme
 
 @OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
 fun HomeEntry() {
+    val context = LocalContext.current
     val navController = rememberAnimatedNavController()
 
     AppTheme {
@@ -42,8 +46,11 @@ fun HomeEntry() {
                 ) {
                     AnimatedNavHost(
                         navController = navController,
-                        startDestination = RouteName.HOME,
+                        startDestination = if (context.isFirstLaunch) RouteName.STARTUP else RouteName.HOME,
                     ) {
+                        animatedComposable(route = RouteName.STARTUP) {
+                            StartupPage(navController)
+                        }
                         animatedComposable(route = RouteName.HOME) {
                             HomePage(navController)
                         }

@@ -77,4 +77,9 @@
     <string name="languages_desc">英语、中文</string>
     <string name="tips_and_support">提示和支持</string>
     <string name="tips_and_support_desc">关于、开源</string>
+    <string name="welcome">欢迎</string>
+    <string name="agree_terms">在此之前，您需要同意 Read You 的服务条款与隐私政策后才能继续。</string>
+    <string name="view_terms">查看《&lt;u&gt;服务条款与隐私政策&lt;/u&gt;》</string>
+    <string name="terms_link">https://gitee.com/Ashinch/ReadYou/blob/main/TERMS_OF_SERVICE_AND_PRIVACY_POLICY-zh.md</string>
+    <string name="agree_and_continue">同意并继续</string>
 </resources>

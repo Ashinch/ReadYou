@@ -3,10 +3,7 @@ package me.ash.reader.ui.ext
 import android.content.Context
 import android.util.Log
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -15,6 +12,8 @@ import kotlinx.coroutines.runBlocking
 import java.io.IOException
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+val Context.isFirstLaunch: Boolean
+    get() = this.dataStore.get(DataStoreKeys.IsFirstLaunch) ?: true
 val Context.currentAccountId: Int
     get() = this.dataStore.get(DataStoreKeys.CurrentAccountId)!!
 val Context.currentAccountType: Int
@@ -45,6 +44,11 @@ fun <T> DataStore<Preferences>.get(dataStoreKeys: DataStoreKeys<T>): T? {
 
 sealed class DataStoreKeys<T> {
     abstract val key: Preferences.Key<T>
+
+    object IsFirstLaunch : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("isFirstLaunch")
+    }
 
     object CurrentAccountId : DataStoreKeys<Int>() {
         override val key: Preferences.Key<Int>
