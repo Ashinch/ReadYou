@@ -39,15 +39,14 @@ fun SelectableSettingGroupItem(
     Surface(
         modifier = modifier.clickable { onClick() },
         color = Color.Unspecified,
-        contentColor = if (selected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.onSurface
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .background(
-                    if (selected) MaterialTheme.colorScheme.onSurface else Color.Unspecified,
-                    RoundedCornerShape(24.dp)
+                    color = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(24.dp)
                 )
                 .padding(8.dp, 16.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -55,9 +54,9 @@ fun SelectableSettingGroupItem(
             icon?.let {
                 Icon(
                     imageVector = it,
-                    contentDescription = null,
+                    contentDescription = title,
                     modifier = Modifier.padding(start = 8.dp, end = 16.dp),
-                    tint = if (selected) MaterialTheme.colorScheme.surface.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                    tint = if (selected) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             Column(modifier = Modifier.weight(1f)) {
@@ -65,6 +64,7 @@ fun SelectableSettingGroupItem(
                     text = title,
                     maxLines = if (desc == null) 2 else 1,
                     style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
+                    color = if (selected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.onSurface,
                 )
                 desc?.let {
                     Text(

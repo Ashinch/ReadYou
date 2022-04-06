@@ -71,7 +71,7 @@
     <string name="get_new_updates">Get New updates</string>
     <string name="get_new_updates_desc">Version 0.6.1 has been released</string>
     <string name="accounts">Accounts</string>
-    <string name="accounts_desc">Local, Fresh</string>
+    <string name="accounts_desc">Local, FreshRSS</string>
     <string name="color_and_style">Color &amp; style</string>
     <string name="color_and_style_desc">Theme, color system, font size</string>
     <string name="interaction">Interaction</string>

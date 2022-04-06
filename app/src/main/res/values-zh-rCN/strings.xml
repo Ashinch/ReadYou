@@ -71,7 +71,7 @@
     <string name="get_new_updates">获取新的更新</string>
     <string name="get_new_updates_desc">版本 0.6.1 现已发布</string>
     <string name="accounts">账户</string>
-    <string name="accounts_desc">本地、Fresh</string>
+    <string name="accounts_desc">本地、FreshRSS</string>
     <string name="color_and_style">颜色和样式</string>
     <string name="color_and_style_desc">主题、色彩系统、字体大小</string>
     <string name="interaction">交互</string>
