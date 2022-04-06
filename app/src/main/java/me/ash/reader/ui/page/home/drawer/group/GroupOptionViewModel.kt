@@ -70,6 +70,11 @@ class GroupOptionViewModel @Inject constructor(
                 changeAllMoveToGroupDialogVisible(visible = false)
             is GroupOptionViewAction.AllMoveToGroup ->
                 allMoveToGroup(action.callback)
+
+            is GroupOptionViewAction.InputNewName -> inputNewName(action.content)
+            is GroupOptionViewAction.Rename -> rename()
+            is GroupOptionViewAction.ShowRenameDialog -> changeRenameDialogVisible(true)
+            is GroupOptionViewAction.HideRenameDialog -> changeRenameDialogVisible(false)
         }
     }
 
@@ -173,6 +178,40 @@ class GroupOptionViewModel @Inject constructor(
             )
         }
     }
+
+    private fun rename() {
+        _viewState.value.group?.let {
+            viewModelScope.launch {
+                rssRepository.get().updateGroup(
+                    it.copy(
+                        name = _viewState.value.newName
+                    )
+                )
+                _viewState.update {
+                    it.copy(
+                        renameDialogVisible = false,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun changeRenameDialogVisible(visible: Boolean) {
+        _viewState.update {
+            it.copy(
+                renameDialogVisible = visible,
+                newName = if (visible) _viewState.value.group?.name ?: "" else "",
+            )
+        }
+    }
+
+    private fun inputNewName(content: String) {
+        _viewState.update {
+            it.copy(
+                newName = content
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -185,6 +224,8 @@ data class GroupOptionViewState(
     val allParseFullContentDialogVisible: Boolean = false,
     val allMoveToGroupDialogVisible: Boolean = false,
     val deleteDialogVisible: Boolean = false,
+    val newName: String = "",
+    val renameDialogVisible: Boolean = false,
 )
 
 sealed class GroupOptionViewAction {
@@ -229,4 +270,11 @@ sealed class GroupOptionViewAction {
     ) : GroupOptionViewAction()
 
     object HideAllMoveToGroupDialog : GroupOptionViewAction()
+
+    object ShowRenameDialog : GroupOptionViewAction()
+    object HideRenameDialog : GroupOptionViewAction()
+    object Rename : GroupOptionViewAction()
+    data class InputNewName(
+        val content: String
+    ) : GroupOptionViewAction()
 }

@@ -57,6 +57,10 @@ class FeedOptionViewModel @Inject constructor(
             is FeedOptionViewAction.AddNewGroup -> addNewGroup()
             is FeedOptionViewAction.ShowNewGroupDialog -> changeNewGroupDialogVisible(true)
             is FeedOptionViewAction.HideNewGroupDialog -> changeNewGroupDialogVisible(false)
+            is FeedOptionViewAction.InputNewName -> inputNewName(action.content)
+            is FeedOptionViewAction.Rename -> rename()
+            is FeedOptionViewAction.ShowRenameDialog -> changeRenameDialogVisible(true)
+            is FeedOptionViewAction.HideRenameDialog -> changeRenameDialogVisible(false)
         }
     }
 
@@ -174,6 +178,40 @@ class FeedOptionViewModel @Inject constructor(
             )
         }
     }
+
+    private fun rename() {
+        _viewState.value.feed?.let {
+            viewModelScope.launch {
+                rssRepository.get().updateFeed(
+                    it.copy(
+                        name = _viewState.value.newName
+                    )
+                )
+                _viewState.update {
+                    it.copy(
+                        renameDialogVisible = false,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun changeRenameDialogVisible(visible: Boolean) {
+        _viewState.update {
+            it.copy(
+                renameDialogVisible = visible,
+                newName = if (visible) _viewState.value.feed?.name ?: "" else "",
+            )
+        }
+    }
+
+    private fun inputNewName(content: String) {
+        _viewState.update {
+            it.copy(
+                newName = content
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -185,6 +223,8 @@ data class FeedOptionViewState(
     val newGroupDialogVisible: Boolean = false,
     val groups: List<Group> = emptyList(),
     val deleteDialogVisible: Boolean = false,
+    val newName: String = "",
+    val renameDialogVisible: Boolean = false,
 )
 
 sealed class FeedOptionViewAction {
@@ -218,4 +258,11 @@ sealed class FeedOptionViewAction {
     object ShowNewGroupDialog : FeedOptionViewAction()
     object HideNewGroupDialog : FeedOptionViewAction()
     object AddNewGroup : FeedOptionViewAction()
+
+    object ShowRenameDialog : FeedOptionViewAction()
+    object HideRenameDialog : FeedOptionViewAction()
+    object Rename : FeedOptionViewAction()
+    data class InputNewName(
+        val content: String
+    ) : FeedOptionViewAction()
 }

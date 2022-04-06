@@ -43,6 +43,7 @@ fun ResultView(
     groups: List<Group> = emptyList(),
     selectedAllowNotificationPreset: Boolean = false,
     selectedParseFullContentPreset: Boolean = false,
+    isMoveToGroup: Boolean = false,
     showUnsubscribe: Boolean = false,
     selectedGroupId: String = "",
     allowNotificationPresetOnClick: () -> Unit = {},
@@ -72,6 +73,7 @@ fun ResultView(
         Spacer(modifier = Modifier.height(26.dp))
 
         AddToGroup(
+            isMoveToGroup = isMoveToGroup,
             groups = groups,
             selectedGroupId = selectedGroupId,
             onGroupClick = onGroupClick,
@@ -169,12 +171,13 @@ private fun Preset(
 
 @Composable
 private fun AddToGroup(
+    isMoveToGroup: Boolean = false,
     groups: List<Group>,
     selectedGroupId: String,
     onGroupClick: (groupId: String) -> Unit = {},
     onAddNewGroup: () -> Unit = {},
 ) {
-    Subtitle(text = stringResource(R.string.add_to_group))
+    Subtitle(text = stringResource(if (isMoveToGroup) R.string.move_to_group else R.string.add_to_group))
     Spacer(modifier = Modifier.height(10.dp))
 
     if (groups.size > 6) {

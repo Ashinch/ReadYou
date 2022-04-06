@@ -72,7 +72,6 @@ fun SettingsPage(
                 }
                 item {
                     SelectableSettingGroupItem(
-                        selected = true,
                         title = stringResource(R.string.color_and_style),
                         desc = stringResource(R.string.color_and_style_desc),
                         icon = Icons.Outlined.Palette,

@@ -1,21 +1,21 @@
 package me.ash.reader.ui.page.home.drawer.feed
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import android.widget.Toast
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CreateNewFolder
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.rounded.RssFeed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,41 +33,46 @@ fun FeedOptionDrawer(
     feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
     content: @Composable () -> Unit = {},
 ) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val viewState = feedOptionViewModel.viewState.collectAsStateValue()
     val feed = viewState.feed
+    val toastString = stringResource(R.string.rename_toast, viewState.newName)
 
     BottomDrawer(
         drawerState = viewState.drawerState,
         sheetContent = {
             Column {
-                Icon(
-                    modifier = modifier
-                        .roundClick { }
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally),
-                    imageVector = Icons.Rounded.RssFeed,
-                    contentDescription = feed?.name
-                        ?: stringResource(R.string.unknown),
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(modifier = modifier.height(16.dp))
-                Text(
-                    modifier = Modifier
-                        .roundClick {}
-                        .fillMaxWidth(),
-                    text = feed?.name ?: stringResource(R.string.unknown),
-                    style = MaterialTheme.typography.headlineSmall,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Spacer(modifier = modifier.height(16.dp))
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        modifier = Modifier.roundClick { },
+                        imageVector = Icons.Rounded.RssFeed,
+                        contentDescription = feed?.name ?: stringResource(R.string.unknown),
+                        tint = MaterialTheme.colorScheme.secondary,
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        modifier = Modifier.roundClick {
+                            feedOptionViewModel.dispatch(FeedOptionViewAction.ShowRenameDialog)
+                        },
+                        text = feed?.name ?: stringResource(R.string.unknown),
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
                 ResultView(
                     link = feed?.url ?: stringResource(R.string.unknown),
                     groups = viewState.groups,
                     selectedAllowNotificationPreset = viewState.feed?.isNotification ?: false,
                     selectedParseFullContentPreset = viewState.feed?.isFullContent ?: false,
+                    isMoveToGroup = true,
                     showUnsubscribe = true,
                     selectedGroupId = viewState.feed?.groupId ?: "",
                     allowNotificationPresetOnClick = {
@@ -108,6 +113,25 @@ fun FeedOptionDrawer(
         },
         onConfirm = {
             feedOptionViewModel.dispatch(FeedOptionViewAction.AddNewGroup)
+        }
+    )
+
+    TextFieldDialog(
+        visible = viewState.renameDialogVisible,
+        title = stringResource(R.string.rename),
+        icon = Icons.Outlined.Edit,
+        value = viewState.newName,
+        placeholder = stringResource(R.string.name),
+        onValueChange = {
+            feedOptionViewModel.dispatch(FeedOptionViewAction.InputNewName(it))
+        },
+        onDismissRequest = {
+            feedOptionViewModel.dispatch(FeedOptionViewAction.HideRenameDialog)
+        },
+        onConfirm = {
+            feedOptionViewModel.dispatch(FeedOptionViewAction.Rename)
+            feedOptionViewModel.dispatch(FeedOptionViewAction.Hide(scope))
+            Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show()
         }
     )
 }
