@@ -18,7 +18,7 @@ data class Feed(
     @ColumnInfo
     val name: String,
     @ColumnInfo
-    var icon: ByteArray? = null,
+    var icon: String? = null,
     @ColumnInfo
     val url: String,
     @ColumnInfo(index = true)
@@ -32,6 +32,7 @@ data class Feed(
 ) {
     @Ignore
     var important: Int? = 0
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -40,10 +41,7 @@ data class Feed(
 
         if (id != other.id) return false
         if (name != other.name) return false
-        if (icon != null) {
-            if (other.icon == null) return false
-            if (!icon.contentEquals(other.icon)) return false
-        } else if (other.icon != null) return false
+        if (icon != other.icon) return false
         if (url != other.url) return false
         if (groupId != other.groupId) return false
         if (accountId != other.accountId) return false
@@ -57,7 +55,7 @@ data class Feed(
     override fun hashCode(): Int {
         var result = id.hashCode()
         result = 31 * result + name.hashCode()
-        result = 31 * result + (icon?.contentHashCode() ?: 0)
+        result = 31 * result + (icon?.hashCode() ?: 0)
         result = 31 * result + url.hashCode()
         result = 31 * result + groupId.hashCode()
         result = 31 * result + accountId

@@ -93,9 +93,13 @@ fun FeedsPage(
     }
 
     LaunchedEffect(filterState) {
-        feedsViewModel.dispatch(
-            FeedsViewAction.FetchData(filterState)
-        )
+        feedsViewModel.dispatch(FeedsViewAction.FetchData(filterState))
+    }
+
+    LaunchedEffect(isSyncing) {
+        if (!isSyncing) {
+            feedsViewModel.dispatch(FeedsViewAction.FetchData(filterState))
+        }
     }
 
     Scaffold(

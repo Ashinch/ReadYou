@@ -60,16 +60,14 @@ fun ReadPage(
         }
     }
 
-    LaunchedEffect(readViewModel.viewState) {
-        readViewModel.viewState.collect {
-            isScrollDown = false
-            if (it.articleWithFeed != null) {
-                if (it.articleWithFeed.article.isUnread) {
-                    readViewModel.dispatch(ReadViewAction.MarkUnread(false))
-                }
-                if (it.articleWithFeed.feed.isFullContent) {
-                    readViewModel.dispatch(ReadViewAction.RenderFullContent)
-                }
+    LaunchedEffect(viewState.articleWithFeed?.article?.id) {
+        isScrollDown = false
+        viewState.articleWithFeed?.let {
+            if (it.article.isUnread) {
+                readViewModel.dispatch(ReadViewAction.MarkUnread(false))
+            }
+            if (it.feed.isFullContent) {
+                readViewModel.dispatch(ReadViewAction.RenderFullContent)
             }
         }
     }

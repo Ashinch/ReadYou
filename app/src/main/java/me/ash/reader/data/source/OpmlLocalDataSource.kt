@@ -10,6 +10,7 @@ import me.ash.reader.data.entity.Group
 import me.ash.reader.data.entity.GroupWithFeed
 import me.ash.reader.data.module.DispatcherIO
 import me.ash.reader.ui.ext.currentAccountId
+import me.ash.reader.ui.ext.spacerDollar
 import java.io.InputStream
 import java.util.*
 import javax.inject.Inject
@@ -40,7 +41,9 @@ class OpmlLocalDataSource @Inject constructor(
                         if (!it.attributes["isDefault"].toBoolean()) {
                             groupWithFeedList.addGroup(
                                 Group(
-                                    id = UUID.randomUUID().toString(),
+                                    id = context.currentAccountId.spacerDollar(
+                                        UUID.randomUUID().toString()
+                                    ),
                                     name = it.attributes["title"] ?: it.text!!,
                                     accountId = accountId,
                                 )
@@ -49,7 +52,9 @@ class OpmlLocalDataSource @Inject constructor(
                     } else {
                         groupWithFeedList.addFeedToDefault(
                             Feed(
-                                id = UUID.randomUUID().toString(),
+                                id = context.currentAccountId.spacerDollar(
+                                    UUID.randomUUID().toString()
+                                ),
                                 name = it.attributes["title"] ?: it.text!!,
                                 url = it.attributes["xmlUrl"]!!,
                                 groupId = defaultGroup.id,
@@ -62,7 +67,8 @@ class OpmlLocalDataSource @Inject constructor(
                 } else {
                     var groupId = defaultGroup.id
                     if (!it.attributes["isDefault"].toBoolean()) {
-                        groupId = UUID.randomUUID().toString()
+                        groupId =
+                            context.currentAccountId.spacerDollar(UUID.randomUUID().toString())
                         groupWithFeedList.addGroup(
                             Group(
                                 id = groupId,
@@ -74,7 +80,9 @@ class OpmlLocalDataSource @Inject constructor(
                     it.subElements.forEach { outline ->
                         groupWithFeedList.addFeed(
                             Feed(
-                                id = UUID.randomUUID().toString(),
+                                id = context.currentAccountId.spacerDollar(
+                                    UUID.randomUUID().toString()
+                                ),
                                 name = outline.attributes["title"] ?: outline.text!!,
                                 url = outline.attributes["xmlUrl"]!!,
                                 groupId = groupId,

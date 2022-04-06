@@ -119,10 +119,11 @@ class RssHelper @Inject constructor(
         articleLink: String,
     ) {
         withContext(dispatcherIO) {
-            val execute = OkHttpClient()
+            val domainRegex = Regex("(http|https)://(www.)?(\\w+(\\.)?)+")
+            val request = OkHttpClient()
                 .newCall(Request.Builder().url(articleLink).build())
                 .execute()
-            val content = execute.body!!.string()
+            val content = request.body!!.string()
             val regex =
                 Regex("""<link(.+?)rel="shortcut icon"(.+?)href="(.+?)"""")
             var iconLink = regex
@@ -135,30 +136,29 @@ class RssHelper @Inject constructor(
                     iconLink = "http:$iconLink"
                 }
                 if (iconLink.startsWith("/")) {
-                    val domainRegex =
-                        Regex("""http(s)?://(([\w-]+\.)+\w+(:\d{1,5})?)""")
-                    iconLink =
-                        "http://${domainRegex.find(articleLink)?.groups?.get(2)?.value}$iconLink"
+                    iconLink = "${domainRegex.find(articleLink)?.value}$iconLink"
                 }
                 saveRssIcon(feedDao, feed, iconLink)
             } else {
-//                saveRssIcon(feedDao, feed, "")
+                domainRegex.find(articleLink)?.value?.let {
+                    Log.i("RLog", "favicon: ${it}")
+                    val request = OkHttpClient()
+                        .newCall(Request.Builder().url("$it/favicon.ico").build())
+                        .execute()
+                    if (request.isSuccessful) {
+                        saveRssIcon(feedDao, feed, it)
+                    }
+                }
             }
         }
     }
 
-    @Throws(Exception::class)
-    suspend fun saveRssIcon(feedDao: FeedDao, feed: Feed, iconLink: String) {
-        withContext(dispatcherIO) {
-            val response = OkHttpClient()
-                .newCall(Request.Builder().url(iconLink).build())
-                .execute()
-            feedDao.update(
-                feed.apply {
-                    icon = response.body!!.bytes()
-                }
-            )
-        }
+    private suspend fun saveRssIcon(feedDao: FeedDao, feed: Feed, iconLink: String) {
+        feedDao.update(
+            feed.apply {
+                icon = iconLink
+            }
+        )
     }
 
     private fun parseDate(
