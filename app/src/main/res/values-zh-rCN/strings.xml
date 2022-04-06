@@ -39,6 +39,9 @@
     <string name="all_parse_full_content_toast">全文解析 \"%1$s\" 分组中的文章</string>
     <string name="all_deny_parse_full_content_toast">不再全文解析 \"%1$s\" 分组中的文章</string>
     <string name="add_to_group">添加到组</string>
+    <string name="move_to_group">移动到组</string>
+    <string name="all_move_to_group_tip">将 \"%1$s\" 分组中的所有订阅源移动至 \"%2$s\" 分组。</string>
+    <string name="all_move_to_group_toast">已全部移动至 \"%1$s\" 分组</string>
     <string name="create_new_group">新建分组</string>
     <string name="name">名称</string>
     <string name="open_with">打开 %1$s</string>

@@ -2,6 +2,8 @@ package me.ash.reader.ui.page.home.drawer.group
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
@@ -135,12 +137,48 @@ fun GroupOptionDrawer(
                     }
                     Spacer(modifier = Modifier.height(26.dp))
 
-//                    AddToGroup(
-//                        groups = groups,
-//                        selectedGroupId = selectedGroupId,
-//                        onGroupClick = onGroupClick,
-//                        onAddNewGroup = onAddNewGroup,
-//                    )
+                    Subtitle(text = stringResource(R.string.move_to_group))
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    if (viewState.groups.size > 6) {
+                        LazyRow {
+                            items(viewState.groups) {
+                                if (it.id != group?.id) {
+                                    SelectionChip(
+                                        modifier = Modifier.animateContentSize(),
+                                        content = it.name,
+                                        selected = false,
+                                    ) {
+                                        GroupOptionViewModel.dispatch(
+                                            GroupOptionViewAction.ShowAllMoveToGroupDialog(it)
+                                        )
+                                    }
+                                }
+                                Spacer(modifier = Modifier.width(10.dp))
+                            }
+                        }
+                    } else {
+                        FlowRow(
+                            mainAxisAlignment = MainAxisAlignment.Start,
+                            crossAxisSpacing = 10.dp,
+                            mainAxisSpacing = 10.dp,
+                        ) {
+                            viewState.groups.forEach {
+                                if (it.id != group?.id) {
+                                    SelectionChip(
+                                        modifier = Modifier.animateContentSize(),
+                                        content = it.name,
+                                        selected = false,
+                                    ) {
+                                        GroupOptionViewModel.dispatch(
+                                            GroupOptionViewAction.ShowAllMoveToGroupDialog(it)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     Spacer(modifier = Modifier.height(6.dp))
                 }
             }
@@ -152,4 +190,5 @@ fun GroupOptionDrawer(
     DeleteGroupDialog(groupName = group?.name ?: "")
     AllAllowNotificationDialog(groupName = group?.name ?: "")
     AllParseFullContentDialog(groupName = group?.name ?: "")
+    AllMoveToGroupDialog(groupName = group?.name ?: "")
 }

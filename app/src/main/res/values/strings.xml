@@ -39,6 +39,9 @@
     <string name="all_parse_full_content_toast">Full content parsing of all articles in the \"%1$s\" group</string>
     <string name="all_deny_parse_full_content_toast">No more full content parsing of all articles in the \"%1$s\" group</string>
     <string name="add_to_group">Add to Group</string>
+    <string name="move_to_group">Move to Group</string>
+    <string name="all_move_to_group_tip">Move all feeds in the \"%1$s\" group to the \"%2$s\" group.</string>
+    <string name="all_move_to_group_toast">Moved all to \"%1$s\" group</string>
     <string name="create_new_group">Create New Group</string>
     <string name="name">Name</string>
     <string name="open_with">Open %1$s</string>

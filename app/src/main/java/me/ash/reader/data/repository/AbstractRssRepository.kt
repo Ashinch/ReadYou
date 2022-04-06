@@ -154,6 +154,10 @@ abstract class AbstractRssRepository constructor(
     suspend fun groupAllowNotification(group: Group, isNotification: Boolean) {
         feedDao.updateIsNotificationByGroupId(context.currentAccountId, group.id, isNotification)
     }
+
+    suspend fun groupMoveToTargetGroup(group: Group, targetGroup: Group) {
+        feedDao.updateTargetGroupIdByGroupId(context.currentAccountId, group.id, targetGroup.id)
+    }
 }
 
 @HiltWorker

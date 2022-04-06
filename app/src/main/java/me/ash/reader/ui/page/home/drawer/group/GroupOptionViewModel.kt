@@ -49,18 +49,27 @@ class GroupOptionViewModel @Inject constructor(
             is GroupOptionViewAction.ShowDeleteDialog -> changeDeleteDialogVisible(true)
             is GroupOptionViewAction.HideDeleteDialog -> changeDeleteDialogVisible(false)
             is GroupOptionViewAction.Delete -> delete(action.callback)
+
             is GroupOptionViewAction.ShowAllAllowNotificationDialog ->
                 changeAllAllowNotificationDialogVisible(true)
             is GroupOptionViewAction.HideAllAllowNotificationDialog ->
                 changeAllAllowNotificationDialogVisible(false)
             is GroupOptionViewAction.AllAllowNotification ->
                 allAllowNotification(action.isNotification, action.callback)
+
             is GroupOptionViewAction.ShowAllParseFullContentDialog ->
                 changeAllParseFullContentDialogVisible(true)
             is GroupOptionViewAction.HideAllParseFullContentDialog ->
                 changeAllParseFullContentDialogVisible(false)
             is GroupOptionViewAction.AllParseFullContent ->
                 allParseFullContent(action.isFullContent, action.callback)
+
+            is GroupOptionViewAction.ShowAllMoveToGroupDialog ->
+                changeAllMoveToGroupDialogVisible(action.targetGroup, true)
+            is GroupOptionViewAction.HideAllMoveToGroupDialog ->
+                changeAllMoveToGroupDialogVisible(visible = false)
+            is GroupOptionViewAction.AllMoveToGroup ->
+                allMoveToGroup(action.callback)
         }
     }
 
@@ -142,15 +151,39 @@ class GroupOptionViewModel @Inject constructor(
             )
         }
     }
+
+    private fun allMoveToGroup(callback: () -> Unit) {
+        _viewState.value.group?.let { group ->
+            _viewState.value.targetGroup?.let { targetGroup ->
+                viewModelScope.launch(Dispatchers.IO) {
+                    rssRepository.get().groupMoveToTargetGroup(group, targetGroup)
+                    withContext(Dispatchers.Main) {
+                        callback()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun changeAllMoveToGroupDialogVisible(targetGroup: Group? = null, visible: Boolean) {
+        _viewState.update {
+            it.copy(
+                targetGroup = if (visible) targetGroup else null,
+                allMoveToGroupDialogVisible = visible,
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 data class GroupOptionViewState(
     var drawerState: ModalBottomSheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden),
     val group: Group? = null,
+    val targetGroup: Group? = null,
     val groups: List<Group> = emptyList(),
     val allAllowNotificationDialogVisible: Boolean = false,
     val allParseFullContentDialogVisible: Boolean = false,
+    val allMoveToGroupDialogVisible: Boolean = false,
     val deleteDialogVisible: Boolean = false,
 )
 
@@ -186,4 +219,14 @@ sealed class GroupOptionViewAction {
 
     object ShowAllAllowNotificationDialog : GroupOptionViewAction()
     object HideAllAllowNotificationDialog : GroupOptionViewAction()
+
+    data class AllMoveToGroup(
+        val callback: () -> Unit = {}
+    ) : GroupOptionViewAction()
+
+    data class ShowAllMoveToGroupDialog(
+        val targetGroup: Group
+    ) : GroupOptionViewAction()
+
+    object HideAllMoveToGroupDialog : GroupOptionViewAction()
 }
