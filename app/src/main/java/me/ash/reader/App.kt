@@ -67,6 +67,7 @@ class App : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+        CrashHandler(this)
         applicationScope.launch(dispatcherDefault) {
             accountInit()
             dataStoreInit()
