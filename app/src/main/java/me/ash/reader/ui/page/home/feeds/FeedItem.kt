@@ -64,7 +64,7 @@ fun FeedItem(
                     modifier = Modifier
                         .size(20.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.outline),
+                        .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
                 ) {}
                 Text(
                     modifier = Modifier.padding(start = 12.dp, end = 6.dp),

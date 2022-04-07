@@ -33,7 +33,6 @@ fun SettingsPage(
                 title = {},
                 navigationIcon = {
                     FeedbackIconButton(
-                        isHaptic = false,
                         imageVector = Icons.Rounded.ArrowBack,
                         contentDescription = stringResource(R.string.back),
                         tint = MaterialTheme.colorScheme.onSurface

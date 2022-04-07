@@ -125,6 +125,40 @@ class LocalRssRepository @Inject constructor(
         }
     }
 
+    override suspend fun markAsRead(
+        groupId: String?,
+        feedId: String?,
+        articleId: String?,
+        before: Date?,
+        isUnread: Boolean,
+    ) {
+        val accountId = context.currentAccountId
+        when {
+            groupId != null -> {
+                articleDao.markAllAsReadByGroupId(
+                    accountId = accountId,
+                    groupId = groupId,
+                    isUnread = isUnread,
+                    before = before ?: Date(Long.MAX_VALUE)
+                )
+            }
+            feedId != null -> {
+                articleDao.markAllAsReadByFeedId(
+                    accountId = accountId,
+                    feedId = feedId,
+                    isUnread = isUnread,
+                    before = before ?: Date(Long.MAX_VALUE)
+                )
+            }
+            articleId != null -> {
+                articleDao.markAsReadByArticleId(accountId, articleId, isUnread)
+            }
+            else -> {
+                articleDao.markAllAsRead(accountId, isUnread, before ?: Date(Long.MAX_VALUE))
+            }
+        }
+    }
+
     data class ArticleNotify(
         val articles: List<Article>,
         val isNotify: Boolean,

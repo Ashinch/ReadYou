@@ -6,46 +6,68 @@ import kotlinx.coroutines.flow.Flow
 import me.ash.reader.data.entity.Article
 import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.entity.ImportantCount
+import java.util.*
 
 @Dao
 interface ArticleDao {
     @Query(
         """
-        UPDATE article SET isUnread = 0 
+        UPDATE article SET isUnread = :isUnread 
         WHERE accountId = :accountId
-        AND isUnread = 1
-        AND date <= :before
+        AND date < :before
         """
     )
-    suspend fun markAllAsRead(accountId: Int, before: Long)
+    suspend fun markAllAsRead(
+        accountId: Int,
+        isUnread: Boolean,
+        before: Date,
+    )
 
     @Query(
         """
-        UPDATE article SET isUnread = 0 
-        WHERE accountId = :accountId
-        AND isUnread = 1
-        AND date <= :before
-        AND feedId = :feedId
+        UPDATE article SET isUnread = :isUnread 
+        WHERE feedId IN (
+            SELECT id FROM feed 
+            WHERE groupId = :groupId
+        )
+        AND accountId = :accountId
+        AND date < :before
         """
     )
-    suspend fun markAllAsReadByFeedId(accountId: Int, before: Long, feedId: String)
-//
-//    @Query(
-//        """
-//        UPDATE article SET isUnread = 0
-//        WHERE accountId = :accountId
-//        AND isUnread = 1
-//        AND date <= :before
-//        AND feedId = :feedId
-//
-//        SELECT * FROM `group` AS a, feed AS b, article AS c
-//        WHERE a.accountId = :accountId
-//        AND a.id = b.groupId
-//        AND b.groupId = :groupId
-//        AND c.feedId = b.id
-//        """
-//    )
-//    suspend fun markAllAsReadByGroupId(accountId: Int, before: Long, groupId: String)
+    suspend fun markAllAsReadByGroupId(
+        accountId: Int,
+        groupId: String,
+        isUnread: Boolean,
+        before: Date,
+    )
+
+    @Query(
+        """
+        UPDATE article SET isUnread = :isUnread 
+        WHERE feedId = :feedId
+        AND accountId = :accountId
+        AND date < :before
+        """
+    )
+    suspend fun markAllAsReadByFeedId(
+        accountId: Int,
+        feedId: String,
+        isUnread: Boolean,
+        before: Date,
+    )
+
+    @Query(
+        """
+        UPDATE article SET isUnread = :isUnread 
+        WHERE id = :articleId
+        AND accountId = :accountId
+        """
+    )
+    suspend fun markAsReadByArticleId(
+        accountId: Int,
+        articleId: String,
+        isUnread: Boolean,
+    )
 
     @Query(
         """

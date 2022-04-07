@@ -70,28 +70,30 @@ fun Modifier.combinedFeedbackClickable(
     isSound: Boolean? = false,
     onPressDown: (() -> Unit)? = null,
     onPressUp: (() -> Unit)? = null,
+    onTap: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
     onDoubleClick: (() -> Unit)? = null,
     onClick: (() -> Unit)? = null,
 ): Modifier {
     val view = LocalView.current
     val interactionSource = remember { MutableInteractionSource() }
-    return if (onPressDown != null || onPressUp != null) {
+    return if (onPressDown != null || onPressUp != null || onTap != null) {
         indication(interactionSource, LocalIndication.current)
             .pointerInput(Unit) {
                 detectTapGestures(
                     onPress = { offset ->
                         onPressDown?.let {
+                            it()
                             if (isHaptic == true) view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             val press = PressInteraction.Press(offset)
                             interactionSource.emit(press)
                             tryAwaitRelease()
+                            onPressUp?.invoke()
                             interactionSource.emit(PressInteraction.Release(press))
-                            it()
                         }
                     },
                     onTap = {
-                        onPressUp?.let {
+                        onTap?.let {
                             if (isHaptic == true) view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             if (isSound == true) view.playSoundEffect(SoundEffectConstants.CLICK)
                             it()

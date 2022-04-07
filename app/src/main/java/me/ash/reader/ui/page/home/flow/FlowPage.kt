@@ -3,8 +3,10 @@ package me.ash.reader.ui.page.home.flow
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -16,7 +18,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -71,28 +72,13 @@ fun FlowPage(
         )
     }
 
-//    LaunchedEffect(viewState.listState.isScrollInProgress) {
-//        Log.i("RLog", "isScrollInProgress: ${viewState.listState.isScrollInProgress}")
-//        if (viewState.listState.isScrollInProgress) {
-//            Log.i("RLog", "isScrollInProgress: ${true}")
-//            markAsRead = false
-//        }
-//    }
-
     Scaffold(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .pointerInput(markAsRead) {
-                detectTapGestures {
-                    markAsRead = false
-                }
-            },
+        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
         topBar = {
             SmallTopAppBar(
                 title = {},
                 navigationIcon = {
                     FeedbackIconButton(
-                        isHaptic = false,
                         imageVector = Icons.Rounded.ArrowBack,
                         contentDescription = stringResource(R.string.back),
                         tint = MaterialTheme.colorScheme.onSurface
@@ -107,7 +93,6 @@ fun FlowPage(
                         exit = fadeOut() + shrinkVertically(),
                     ) {
                         FeedbackIconButton(
-                            isHaptic = false,
                             imageVector = Icons.Rounded.DoneAll,
                             contentDescription = stringResource(R.string.mark_all_as_read),
                             tint = if (markAsRead) {
@@ -123,7 +108,6 @@ fun FlowPage(
                         }
                     }
                     FeedbackIconButton(
-                        isHaptic = false,
                         imageVector = Icons.Rounded.Search,
                         contentDescription = stringResource(R.string.search),
                         tint = MaterialTheme.colorScheme.onSurface,
@@ -162,17 +146,30 @@ fun FlowPage(
                             enter = fadeIn() + expandVertically(),
                             exit = fadeOut() + shrinkVertically(),
                         ) {
-                            Column {
-                                MarkAsReadBar()
-                                Spacer(modifier = Modifier.height(24.dp))
-                            }
+                            Spacer(modifier = Modifier.height((56 + 24 + 10).dp))
+                        }
+                        MarkAsReadBar(
+                            visible = markAsRead,
+                            absoluteY = if (isSyncing) (4 + 16 + 180).dp else 180.dp,
+                            onDismissRequest = {
+                                markAsRead = false
+                            },
+                        ) {
+                            markAsRead = false
+                            flowViewModel.dispatch(
+                                FlowViewAction.MarkAsRead(
+                                    groupId = filterState.group?.id,
+                                    feedId = filterState.feed?.id,
+                                    articleId = null,
+                                    markAsReadBefore = it,
+                                )
+                            )
                         }
                     }
                     generateArticleList(
                         context = context,
                         pagingItems = pagingItems,
                     ) {
-                        markAsRead = false
                         onItemClick(it)
                     }
                     item {
@@ -190,14 +187,7 @@ fun FlowPage(
                     .height(60.dp)
                     .fillMaxWidth(),
                 filter = filterState.filter,
-                filterOnClick = {
-                    markAsRead = false
-                    onFilterChange(
-                        filterState.copy(
-                            filter = it
-                        )
-                    )
-                },
+                filterOnClick = { onFilterChange(filterState.copy(filter = it)) },
             )
         }
     )

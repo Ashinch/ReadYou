@@ -38,6 +38,14 @@ abstract class AbstractRssRepository constructor(
 
     abstract suspend fun sync(coroutineWorker: CoroutineWorker): ListenableWorker.Result
 
+    abstract suspend fun markAsRead(
+        groupId: String?,
+        feedId: String?,
+        articleId: String?,
+        before: Date?,
+        isUnread: Boolean,
+    )
+
     fun doSync() {
         workManager.enqueueUniquePeriodicWork(
             SyncWorker.WORK_NAME,

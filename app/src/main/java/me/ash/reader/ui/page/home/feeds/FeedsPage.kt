@@ -109,7 +109,6 @@ fun FeedsPage(
                 title = {},
                 navigationIcon = {
                     FeedbackIconButton(
-                        isHaptic = false,
                         modifier = Modifier.size(20.dp),
                         imageVector = Icons.Outlined.Settings,
                         contentDescription = stringResource(R.string.settings),
@@ -120,7 +119,6 @@ fun FeedsPage(
                 },
                 actions = {
                     FeedbackIconButton(
-                        isHaptic = false,
                         modifier = Modifier.rotate(if (isSyncing) angle else 0f),
                         imageVector = Icons.Rounded.Refresh,
                         contentDescription = stringResource(R.string.refresh),
@@ -131,7 +129,6 @@ fun FeedsPage(
                         }
                     }
                     FeedbackIconButton(
-                        isHaptic = false,
                         imageVector = Icons.Rounded.Add,
                         contentDescription = stringResource(R.string.subscribe),
                         tint = MaterialTheme.colorScheme.onSurface,

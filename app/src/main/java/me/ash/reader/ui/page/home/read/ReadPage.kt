@@ -143,7 +143,6 @@ private fun TopBar(
             title = {},
             navigationIcon = {
                 FeedbackIconButton(
-                    isHaptic = false,
                     imageVector = Icons.Rounded.Close,
                     contentDescription = stringResource(R.string.close),
                     tint = MaterialTheme.colorScheme.onSurface
@@ -156,7 +155,6 @@ private fun TopBar(
             actions = {
                 if (isShowActions) {
                     FeedbackIconButton(
-                        isHaptic = false,
                         modifier = Modifier.size(22.dp),
                         imageVector = Icons.Outlined.Headphones,
                         contentDescription = stringResource(R.string.mark_all_as_read),
@@ -164,7 +162,6 @@ private fun TopBar(
                     ) {
                     }
                     FeedbackIconButton(
-                        isHaptic = false,
                         imageVector = Icons.Outlined.MoreVert,
                         contentDescription = stringResource(R.string.search),
                         tint = MaterialTheme.colorScheme.onSurface,

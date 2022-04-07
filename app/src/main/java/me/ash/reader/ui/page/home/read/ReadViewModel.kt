@@ -79,7 +79,7 @@ class ReadViewModel @Inject constructor(
 
     private fun markUnread(isUnread: Boolean) {
         val articleWithFeed = _viewState.value.articleWithFeed ?: return
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _viewState.update {
                 it.copy(
                     articleWithFeed = articleWithFeed.copy(
@@ -89,10 +89,12 @@ class ReadViewModel @Inject constructor(
                     )
                 )
             }
-            rssRepository.get().updateArticleInfo(
-                articleWithFeed.article.copy(
-                    isUnread = isUnread
-                )
+            rssRepository.get().markAsRead(
+                groupId = null,
+                feedId = null,
+                articleId = _viewState.value.articleWithFeed!!.article.id,
+                before = null,
+                isUnread = isUnread,
             )
         }
     }
