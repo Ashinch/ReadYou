@@ -4,10 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -31,7 +28,6 @@ import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.work.WorkInfo
-import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
@@ -173,6 +169,7 @@ fun FlowPage(
 //                    )
 //                }
             LazyColumn(
+                modifier = Modifier.fillMaxSize(),
                 state = viewState.listState,
             ) {
                 item {
@@ -185,8 +182,6 @@ fun FlowPage(
                         },
                         desc = if (isSyncing) stringResource(R.string.syncing) else "",
                     )
-                }
-                item {
                     AnimatedVisibility(
                         visible = markAsRead,
                         enter = fadeIn() + expandVertically(),
@@ -211,8 +206,6 @@ fun FlowPage(
                             )
                         )
                     }
-                }
-                item {
                     AnimatedVisibility(
                         visible = onSearch,
                         enter = fadeIn() + expandVertically(),

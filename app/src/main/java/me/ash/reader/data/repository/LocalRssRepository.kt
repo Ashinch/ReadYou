@@ -174,9 +174,9 @@ class LocalRssRepository @Inject constructor(
             return ArticleNotify(listOf(), false)
         }
         try {
-            if (feed.icon == null && !articles.isNullOrEmpty()) {
-                rssHelper.queryRssIcon(feedDao, feed, articles.first().link)
-            }
+//            if (feed.icon == null && !articles.isNullOrEmpty()) {
+//                rssHelper.queryRssIcon(feedDao, feed, articles.first().link)
+//            }
         } catch (e: Exception) {
             Log.e("RLog", "queryRssIcon[${feed.name}]: ${e.message}")
             return ArticleNotify(listOf(), false)
