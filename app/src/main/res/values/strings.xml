@@ -58,6 +58,8 @@
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <string name="date_at_time">%1$s At %2$s</string>
+    <string name="search_for_in">Search for %1$s Items in \"%2$s\"</string>
+    <string name="search_for">Search for %1$s Items</string>
     <string name="mark_as_read">Mark as Read</string>
     <string name="mark_all_as_read">Mark All as Read</string>
     <string name="mark_as_unread">Mark as Unread</string>

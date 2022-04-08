@@ -58,6 +58,8 @@
     <string name="today">今天</string>
     <string name="yesterday">昨天</string>
     <string name="date_at_time">%1$s %2$s</string>
+    <string name="search_for_in">在%1$s的 \"%2$s\" 中搜索</string>
+    <string name="search_for">在%1$s中搜索</string>
     <string name="mark_as_read">标记为已读</string>
     <string name="mark_all_as_read">全部标记为已读</string>
     <string name="mark_as_unread">标记为未读</string>

@@ -35,31 +35,50 @@ class FlowViewModel @Inject constructor(
                 action.articleId,
                 action.markAsReadBefore,
             )
+            is FlowViewAction.InputSearchContent -> inputSearchContent(action.content)
         }
     }
 
-    private fun fetchData(filterState: FilterState) {
-        viewModelScope.launch(Dispatchers.Default) {
-            rssRepository.get().pullImportant(filterState.filter.isStarred(), true)
-                .collect { importantList ->
-                    _viewState.update {
-                        it.copy(
-                            filterImportant = importantList.sumOf { it.important },
+    private fun fetchData(filterState: FilterState? = null) {
+//        viewModelScope.launch(Dispatchers.Default) {
+//            rssRepository.get().pullImportant(filterState.filter.isStarred(), true)
+//                .collect { importantList ->
+//                    _viewState.update {
+//                        it.copy(
+//                            filterImportant = importantList.sumOf { it.important },
+//                        )
+//                    }
+//                }
+//        }
+        if (_viewState.value.searchContent.isNotBlank()) {
+            _viewState.update {
+                it.copy(
+                    filterState = filterState,
+                    pagingData = Pager(PagingConfig(pageSize = 10)) {
+                        rssRepository.get().searchArticles(
+                            content = _viewState.value.searchContent.trim(),
+                            groupId = _viewState.value.filterState?.group?.id,
+                            feedId = _viewState.value.filterState?.feed?.id,
+                            isStarred = _viewState.value.filterState?.filter?.isStarred() ?: false,
+                            isUnread = _viewState.value.filterState?.filter?.isUnread() ?: false,
                         )
-                    }
-                }
-        }
-        _viewState.update {
-            it.copy(
-                pagingData = Pager(PagingConfig(pageSize = 10)) {
-                    rssRepository.get().pullArticles(
-                        groupId = filterState.group?.id,
-                        feedId = filterState.feed?.id,
-                        isStarred = filterState.filter.isStarred(),
-                        isUnread = filterState.filter.isUnread(),
-                    )
-                }.flow.flowOn(Dispatchers.IO).cachedIn(viewModelScope)
-            )
+                    }.flow.flowOn(Dispatchers.IO).cachedIn(viewModelScope)
+                )
+            }
+        } else if (filterState != null) {
+            _viewState.update {
+                it.copy(
+                    filterState = filterState,
+                    pagingData = Pager(PagingConfig(pageSize = 10)) {
+                        rssRepository.get().pullArticles(
+                            groupId = filterState.group?.id,
+                            feedId = filterState.feed?.id,
+                            isStarred = filterState.filter.isStarred(),
+                            isUnread = filterState.filter.isUnread(),
+                        )
+                    }.flow.flowOn(Dispatchers.IO).cachedIn(viewModelScope)
+                )
+            }
         }
     }
 
@@ -105,14 +124,25 @@ class FlowViewModel @Inject constructor(
             )
         }
     }
+
+    private fun inputSearchContent(content: String) {
+        _viewState.update {
+            it.copy(
+                searchContent = content,
+            )
+        }
+        fetchData(_viewState.value.filterState)
+    }
 }
 
 data class ArticleViewState(
+    val filterState: FilterState? = null,
     val filterImportant: Int = 0,
     val listState: LazyListState = LazyListState(),
     val isRefreshing: Boolean = false,
     val pagingData: Flow<PagingData<ArticleWithFeed>> = emptyFlow(),
     val syncWorkInfo: String = "",
+    val searchContent: String = "",
 )
 
 sealed class FlowViewAction {
@@ -133,6 +163,10 @@ sealed class FlowViewAction {
         val feedId: String?,
         val articleId: String?,
         val markAsReadBefore: MarkAsReadBefore
+    ) : FlowViewAction()
+
+    data class InputSearchContent(
+        val content: String,
     ) : FlowViewAction()
 }
 

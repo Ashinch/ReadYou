@@ -10,6 +10,198 @@ import java.util.*
 
 @Dao
 interface ArticleDao {
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM article
+        WHERE accountId = :accountId 
+        AND feedId IN (
+            SELECT id FROM feed WHERE groupId = :groupId
+        )
+        AND isUnread = :isUnread
+        AND (
+            title LIKE '%' || :text || '%'
+            OR shortDescription LIKE '%' || :text || '%'
+            OR fullContent LIKE '%' || :text || '%'
+        )
+        ORDER BY date DESC
+        """
+    )
+    fun searchArticleByGroupIdWhenIsUnread(
+        accountId: Int,
+        text: String,
+        groupId: String,
+        isUnread: Boolean,
+    ): PagingSource<Int, ArticleWithFeed>
+
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM article
+        WHERE accountId = :accountId 
+        AND feedId IN (
+            SELECT id FROM feed WHERE groupId = :groupId
+        )
+        AND isStarred = :isStarred
+        AND (
+            title LIKE '%' || :text || '%'
+            OR shortDescription LIKE '%' || :text || '%'
+            OR fullContent LIKE '%' || :text || '%'
+        )
+        ORDER BY date DESC
+        """
+    )
+    fun searchArticleByGroupIdWhenIsStarred(
+        accountId: Int,
+        text: String,
+        groupId: String,
+        isStarred: Boolean,
+    ): PagingSource<Int, ArticleWithFeed>
+
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM article
+        WHERE accountId = :accountId 
+        AND feedId IN (
+            SELECT id FROM feed WHERE groupId = :groupId
+        )
+        AND (
+            title LIKE '%' || :text || '%'
+            OR shortDescription LIKE '%' || :text || '%'
+            OR fullContent LIKE '%' || :text || '%'
+        )
+        ORDER BY date DESC
+        """
+    )
+    fun searchArticleByGroupIdWhenAll(
+        accountId: Int,
+        text: String,
+        groupId: String,
+    ): PagingSource<Int, ArticleWithFeed>
+
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM article
+        WHERE accountId = :accountId 
+        AND feedId = :feedId
+        AND isUnread = :isUnread
+        AND (
+            title LIKE '%' || :text || '%'
+            OR shortDescription LIKE '%' || :text || '%'
+            OR fullContent LIKE '%' || :text || '%'
+        )
+        ORDER BY date DESC
+        """
+    )
+    fun searchArticleByFeedIdWhenIsUnread(
+        accountId: Int,
+        text: String,
+        feedId: String,
+        isUnread: Boolean,
+    ): PagingSource<Int, ArticleWithFeed>
+
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM article
+        WHERE accountId = :accountId 
+        AND feedId = :feedId
+        AND isStarred = :isStarred
+        AND (
+            title LIKE '%' || :text || '%'
+            OR shortDescription LIKE '%' || :text || '%'
+            OR fullContent LIKE '%' || :text || '%'
+        )
+        ORDER BY date DESC
+        """
+    )
+    fun searchArticleByFeedIdWhenIsStarred(
+        accountId: Int,
+        text: String,
+        feedId: String,
+        isStarred: Boolean,
+    ): PagingSource<Int, ArticleWithFeed>
+
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM article
+        WHERE accountId = :accountId 
+        AND feedId = :feedId 
+        AND (
+            title LIKE '%' || :text || '%'
+            OR shortDescription LIKE '%' || :text || '%'
+            OR fullContent LIKE '%' || :text || '%'
+        )
+        ORDER BY date DESC
+        """
+    )
+    fun searchArticleByFeedIdWhenAll(
+        accountId: Int,
+        text: String,
+        feedId: String,
+    ): PagingSource<Int, ArticleWithFeed>
+
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM article
+        WHERE accountId = :accountId 
+        AND isUnread = :isUnread
+        AND (
+            title LIKE '%' || :text || '%'
+            OR shortDescription LIKE '%' || :text || '%'
+            OR fullContent LIKE '%' || :text || '%'
+        )
+        ORDER BY date DESC
+        """
+    )
+    fun searchArticleWhenIsUnread(
+        accountId: Int,
+        text: String,
+        isUnread: Boolean,
+    ): PagingSource<Int, ArticleWithFeed>
+
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM article
+        WHERE accountId = :accountId 
+        AND isStarred = :isStarred
+        AND (
+            title LIKE '%' || :text || '%'
+            OR shortDescription LIKE '%' || :text || '%'
+            OR fullContent LIKE '%' || :text || '%'
+        )
+        ORDER BY date DESC
+        """
+    )
+    fun searchArticleWhenIsStarred(
+        accountId: Int,
+        text: String,
+        isStarred: Boolean,
+    ): PagingSource<Int, ArticleWithFeed>
+
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM article
+        WHERE accountId = :accountId 
+        AND (
+            title LIKE '%' || :text || '%'
+            OR shortDescription LIKE '%' || :text || '%'
+            OR fullContent LIKE '%' || :text || '%'
+        )
+        ORDER BY date DESC
+        """
+    )
+    fun searchArticleWhenAll(
+        accountId: Int,
+        text: String,
+    ): PagingSource<Int, ArticleWithFeed>
+
     @Query(
         """
         UPDATE article SET isUnread = :isUnread 
@@ -91,64 +283,6 @@ interface ArticleDao {
         """
     )
     suspend fun deleteByGroupId(accountId: Int, groupId: String)
-
-    @Transaction
-    @Query(
-        """
-        SELECT * FROM article
-        WHERE accountId = :accountId
-        AND (
-            title LIKE :keyword
-            OR rawDescription LIKE :keyword
-            OR fullContent LIKE :keyword
-        )
-        ORDER BY date DESC
-        """
-    )
-    fun searchArticleWithFeedWhenIsAll(
-        accountId: Int,
-        keyword: String,
-    ): PagingSource<Int, ArticleWithFeed>
-
-    @Transaction
-    @Query(
-        """
-        SELECT * FROM article
-        WHERE isUnread = :isUnread 
-        AND accountId = :accountId
-        AND (
-            title LIKE :keyword
-            OR rawDescription LIKE :keyword
-            OR fullContent LIKE :keyword
-        )
-        ORDER BY date DESC
-        """
-    )
-    fun searchArticleWithFeedWhenIsUnread(
-        accountId: Int,
-        isUnread: Boolean,
-        keyword: String,
-    ): PagingSource<Int, ArticleWithFeed>
-
-    @Transaction
-    @Query(
-        """
-        SELECT * FROM article
-        WHERE isStarred = :isStarred 
-        AND accountId = :accountId
-        AND (
-            title LIKE :keyword
-            OR rawDescription LIKE :keyword
-            OR fullContent LIKE :keyword
-        )
-        ORDER BY date DESC
-        """
-    )
-    fun searchArticleWithFeedWhenIsStarred(
-        accountId: Int,
-        isStarred: Boolean,
-        keyword: String,
-    ): PagingSource<Int, ArticleWithFeed>
 
     @Transaction
     @Query(

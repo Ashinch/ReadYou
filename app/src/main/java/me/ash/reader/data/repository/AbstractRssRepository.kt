@@ -166,6 +166,41 @@ abstract class AbstractRssRepository constructor(
     suspend fun groupMoveToTargetGroup(group: Group, targetGroup: Group) {
         feedDao.updateTargetGroupIdByGroupId(context.currentAccountId, group.id, targetGroup.id)
     }
+
+    fun searchArticles(
+        content: String,
+        groupId: String? = null,
+        feedId: String? = null,
+        isStarred: Boolean = false,
+        isUnread: Boolean = false,
+    ): PagingSource<Int, ArticleWithFeed> {
+        val accountId = context.currentAccountId
+        Log.i(
+            "RLog",
+            "searchArticles: content: ${content}, accountId: ${accountId}, groupId: ${groupId}, feedId: ${feedId}, isStarred: ${isStarred}, isUnread: ${isUnread}"
+        )
+        return when {
+            groupId != null -> when {
+                isStarred -> articleDao
+                    .searchArticleByGroupIdWhenIsStarred(accountId, content, groupId, isStarred)
+                isUnread -> articleDao
+                    .searchArticleByGroupIdWhenIsUnread(accountId, content, groupId, isUnread)
+                else -> articleDao.searchArticleByGroupIdWhenAll(accountId, content, groupId)
+            }
+            feedId != null -> when {
+                isStarred -> articleDao
+                    .searchArticleByFeedIdWhenIsStarred(accountId, content, feedId, isStarred)
+                isUnread -> articleDao
+                    .searchArticleByFeedIdWhenIsUnread(accountId, content, feedId, isUnread)
+                else -> articleDao.searchArticleByFeedIdWhenAll(accountId, content, feedId)
+            }
+            else -> when {
+                isStarred -> articleDao.searchArticleWhenIsStarred(accountId, content, isStarred)
+                isUnread -> articleDao.searchArticleWhenIsUnread(accountId, content, isUnread)
+                else -> articleDao.searchArticleWhenAll(accountId, content)
+            }
+        }
+    }
 }
 
 @HiltWorker
