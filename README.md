@@ -22,13 +22,18 @@
 <div align="center">
     <h1>Read You</h1>
     <p>This is a copy of  <a href="https://reederapp.com/">Reeder</a>, in order to give Android an RSS reader similar to Reeder.</p>
-    <br/>
     <p>English by DeepL&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh.md">简体中文</a></p>
+    <br/>
+    <br/>
+    <img src="./screenshots/en/startup.png" width="19.2%" alt="startup" />
+    <img src="./screenshots/en/feeds.png" width="19.2%" alt="startup" />
+    <img src="./screenshots/en/flow.png" width="19.2%" alt="startup" />
+    <img src="./screenshots/en/read.png" width="19.2%" alt="startup" />
+    <img src="./screenshots/en/settings.png" width="19.2%" alt="startup" />
+    <br/>
+    <br/>
 </div>
-<br>
-<br>
-<br>
 
 ## Features
 
@@ -42,13 +47,13 @@ The following are the progress made so far and the goals to be worked on in the 
     -   [x] Import from OPML
     -   [x] Article Sync
     -   [x] Article Update Notification
-    -   [x] Full Content Parsing
-    -   [x] Filter unread and starred
+    -   [x] Parse Full Content
+    -   [x] Filter Unread and Starred
     -   [x] Feed Grouping
     -   [x] Localization
     -   [x] Export as OPML
-    -   [x] Search for articles
-    -   [ ] Preference settings
+    -   [x] Search for Articles
+    -   [ ] Preference Settings
     -   [ ] Release APK
     -   [ ] Widget
     -   [ ] ...
