@@ -106,12 +106,13 @@ class LocalRssRepository @Inject constructor(
                 .awaitAll()
                 .forEach {
                     if (it.isNotify) {
-                        notify(it.articles)
+                        notify(articleDao.insertIfNotExist(it.articles))
+                    } else {
+                        articleDao.insertIfNotExist(it.articles)
                     }
-                    articles.addAll(it.articles)
                 }
 
-            articleDao.insertList(articles)
+//            articleDao.insertList(articles)
             Log.i("RlOG", "onCompletion: ${System.currentTimeMillis() - preTime}")
             accountDao.queryById(accountId)?.let { account ->
                 accountDao.update(
@@ -188,13 +189,19 @@ class LocalRssRepository @Inject constructor(
     }
 
     private fun notify(
-        articles: List<Article>,
+        articles: List<Article?>,
     ) {
-        articles.forEach { article ->
+        articles.filterNotNull().forEach { article ->
             val builder = NotificationCompat.Builder(
                 context,
                 NotificationGroupName.ARTICLE_UPDATE
-            ).setSmallIcon(R.drawable.ic_launcher_foreground)
+            ).setSmallIcon(R.drawable.ic_notification)
+//                .setLargeIcon(
+//                    BitmapFactory.decodeResource(
+//                        context.resources,
+//                        R.mipmap.ic_launcher_round,
+//                    )
+//                )
                 .setGroup(NotificationGroupName.ARTICLE_UPDATE)
                 .setContentTitle(article.title)
                 .setContentText(article.shortDescription)
