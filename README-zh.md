@@ -1,10 +1,34 @@
-[English by DeepL](https://github.com/Ashinch/ReadYou/blob/main/README.md) | 简体中文
+<div align="center">
+    <img width="200" height="200" style="display: block; border: 1px solid #f5f5f5; border-radius: 9999px;" src="./APP_ICON.png">
+</div>
 
-# Read You
+<br>
+<br>
+<br>
 
-[Telegram 频道](https://t.me/ReadYouApp) | [Figma 设计稿](https://www.figma.com/file/ViBW8GbUgkTMmK6a80h8X1/Reader-You?node-id=7028%3A23673)
+<div align="center">
+    <img alt="GitHub" src="https://img.shields.io/github/license/Ashinch/ReadYou?color=c3e7ff&style=flat-square">
+    <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Ashinch/ReadYou?color=c3e7ff&style=flat-square">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Ashinch/ReadYou?color=c3e7ff&style=flat-square">
+    <br>
+    <a target="_blank" href="https://t.me/ReadYouApp">
+        <img alt="Telegram" src="https://img.shields.io/badge/Telegram-ReadYouApp-c3e7ff?logo=telegram&style=flat-square">
+    </a>
+    <a target="_blank" href="https://www.figma.com/file/ViBW8GbUgkTMmK6a80h8X1/Read-You?node-id=7028%3A23673">
+        <img alt="Figma" src="https://img.shields.io/badge/Figma-ReadYou-c3e7ff?logo=figma&style=flat-square">
+    </a>
+</div>
 
-这是一个在 Android 上的 [Reeder](https://reederapp.com/) 仿制品，为了让 Android 拥有一个与 Reeder 相似的 RSS 阅读器。
+<div align="center">
+    <h1>Read You</h1>
+    <p>这是一个在 Android 上的  <a href="https://reederapp.com/">Reeder</a> 仿制品，为了让 Android 拥有一个与 Reeder 相似的 RSS 阅读器。</p>
+    <br/>
+    <p><a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README.md">English by DeepL</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+    简体中文</p>
+</div>
+<br>
+<br>
+<br>
 
 ## 特性
 
@@ -23,7 +47,7 @@
     -   [x] 订阅源分组
     -   [x] 本地化
     -   [x] 导出 OPML 文件
-    -   [ ] 文章搜索
+    -   [x] 文章搜索
     -   [ ] 偏好设置
     -   [ ] 发布 APK
     -   [ ] 小组件
@@ -60,6 +84,7 @@
 -   [ParseRSS](https://github.com/muhrifqii/ParseRSS): [MIT](https://github.com/muhrifqii/ParseRSS/blob/master/LICENSE)
 -   [Readability4J](https://github.com/dankito/Readability4J): [Apache License 2.0](https://github.com/dankito/Readability4J/blob/master/LICENSE)
 -   [opml-parser](https://github.com/mdewilde/opml-parser): [Apache License 2.0](https://github.com/mdewilde/opml-parser/blob/master/LICENSE)
+-   [compose-html](https://github.com/ireward/compose-html): [Apache License 2.0](https://github.com/ireward/compose-html/blob/main/LICENSE.txt)
 -   （待完善）
 
 ## 许可证
