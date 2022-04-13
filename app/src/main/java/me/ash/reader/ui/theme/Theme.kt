@@ -1,51 +1,54 @@
 package me.ash.reader.ui.theme
 
-import android.os.Build
+import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
-import me.ash.reader.ui.theme.color.PurpleColor
+import kotlinx.coroutines.flow.map
+import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.dataStore
+import me.ash.reader.ui.theme.palette.LocalTonalPalettes
+import me.ash.reader.ui.theme.palette.TonalPalettes
+import me.ash.reader.ui.theme.palette.core.ProvideZcamViewingConditions
+import me.ash.reader.ui.theme.palette.dynamic.extractTonalPalettesFromUserWallpaper
+import me.ash.reader.ui.theme.palette.dynamicDarkColorScheme
+import me.ash.reader.ui.theme.palette.dynamicLightColorScheme
 
-private val LightThemeColors = PurpleColor.lightColorScheme
-private val DarkThemeColors = PurpleColor.darkColorScheme
-
-val LocalLightThemeColors = staticCompositionLocalOf { LightThemeColors }
-val LocalDarkThemeColors = staticCompositionLocalOf { DarkThemeColors }
-
+@SuppressLint("FlowOperatorInvokedInComposition")
 @Composable
 fun AppTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
+    wallpaperPalettes: List<TonalPalettes> = extractTonalPalettesFromUserWallpaper(),
     content: @Composable () -> Unit
 ) {
-    // Dynamic color is available on Android 12+
-    val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val context = LocalContext.current
+    val themeIndex = context.dataStore.data.map { it[DataStoreKeys.ThemeIndex.key] ?: 0 }
+        .collectAsState(initial = 0).value
 
-    val light = when {
-        dynamicColor -> dynamicLightColorScheme(LocalContext.current)
-        else -> LightThemeColors
-    }
-    val dark = when {
-        dynamicColor -> dynamicDarkColorScheme(LocalContext.current)
-        else -> DarkThemeColors
-    }
-    val colorScheme = when {
-        useDarkTheme -> dark
-        else -> light
-    }
-
-    CompositionLocalProvider(
-        LocalLightThemeColors provides light,
-        LocalDarkThemeColors provides dark,
-    ) {
-        MaterialTheme(
-            colorScheme = colorScheme,
-            typography = AppTypography,
-            content = content
-        )
+    ProvideZcamViewingConditions {
+        CompositionLocalProvider(
+            LocalTonalPalettes provides wallpaperPalettes[
+                    if (themeIndex >= wallpaperPalettes.size) {
+                        when {
+                            wallpaperPalettes.size == 5 -> 0
+                            wallpaperPalettes.size > 5 -> 5
+                            else -> 0
+                        }
+                    } else {
+                        themeIndex
+                    }
+            ]
+        ) {
+            MaterialTheme(
+                colorScheme =
+                    if (useDarkTheme) dynamicDarkColorScheme()
+                    else dynamicLightColorScheme(),
+                typography = AppTypography,
+                content = content
+            )
+        }
     }
 }

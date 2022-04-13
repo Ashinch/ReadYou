@@ -79,7 +79,7 @@
     <string name="color_and_style">颜色和样式</string>
     <string name="color_and_style_desc">主题、色彩系统、字体大小</string>
     <string name="interaction">交互</string>
-    <string name="interaction_desc">布局、触觉反馈</string>
+    <string name="interaction_desc">布局、触感反馈</string>
     <string name="languages">语言</string>
     <string name="languages_desc">英语、中文</string>
     <string name="tips_and_support">提示和支持</string>
@@ -89,4 +89,16 @@
     <string name="view_terms">查看《&lt;u&gt;服务条款与隐私政策&lt;/u&gt;》</string>
     <string name="terms_link">https://gitee.com/Ashinch/ReadYou/blob/main/TERMS_OF_SERVICE_AND_PRIVACY_POLICY-zh.md</string>
     <string name="agree_and_continue">同意并继续</string>
+    <string name="wallpaper_colors">壁纸颜色</string>
+    <string name="no_palettes">暂无色板</string>
+    <string name="only_android_8.1_plus">仅限 Android 8.1+</string>
+    <string name="basic_colors">基本颜色</string>
+    <string name="style">样式</string>
+    <string name="dark_theme">深色模式</string>
+    <string name="use_device_theme">跟随系统设置</string>
+    <string name="tonal_elevation">色调海拔</string>
+    <string name="fonts">字体</string>
+    <string name="basic_fonts">基本字体</string>
+    <string name="reading_fonts">阅读字体</string>
+    <string name="reading_fonts_size">阅读字体大小</string>
 </resources>

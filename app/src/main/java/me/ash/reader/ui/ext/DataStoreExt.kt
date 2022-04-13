@@ -18,10 +18,22 @@ val Context.currentAccountId: Int
     get() = this.dataStore.get(DataStoreKeys.CurrentAccountId)!!
 val Context.currentAccountType: Int
     get() = this.dataStore.get(DataStoreKeys.CurrentAccountType)!!
+val Context.themeIndex: Int
+    get() = this.dataStore.get(DataStoreKeys.ThemeIndex) ?: 0
+val Context.customPrimaryColor: String
+    get() = this.dataStore.get(DataStoreKeys.CustomPrimaryColor) ?: ""
 
 suspend fun <T> DataStore<Preferences>.put(dataStoreKeys: DataStoreKeys<T>, value: T) {
     this.edit {
         it[dataStoreKeys.key] = value
+    }
+}
+
+fun <T> DataStore<Preferences>.putBlocking(dataStoreKeys: DataStoreKeys<T>, value: T) {
+    runBlocking {
+        this@putBlocking.edit {
+            it[dataStoreKeys.key] = value
+        }
     }
 }
 
@@ -58,5 +70,15 @@ sealed class DataStoreKeys<T> {
     object CurrentAccountType : DataStoreKeys<Int>() {
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("currentAccountType")
+    }
+
+    object ThemeIndex : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("themeIndex")
+    }
+
+    object CustomPrimaryColor : DataStoreKeys<String>() {
+        override val key: Preferences.Key<String>
+            get() = stringPreferencesKey("customPrimaryColor")
     }
 }

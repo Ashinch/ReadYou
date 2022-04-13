@@ -1,4 +1,4 @@
-package me.ash.reader.ui.theme.color
+package me.ash.reader.ui.theme.palette.preset
 
 import androidx.compose.ui.graphics.Color
 

@@ -19,10 +19,12 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import me.ash.reader.ui.theme.palette.onDark
 
 @Composable
 fun Banner(
@@ -33,20 +35,18 @@ fun Banner(
     action: (@Composable () -> Unit)? = null,
     onClick: () -> Unit = {},
 ) {
-    val lightThemeColors = MaterialTheme.colorScheme
-    val lightPrimaryContainer = lightThemeColors.primaryContainer
-    val lightOnSurface = lightThemeColors.onSurface
-
     Surface(
-        modifier = modifier.fillMaxWidth().height(88.dp),
-        color = MaterialTheme.colorScheme.surface,
+        modifier = modifier
+            .fillMaxWidth()
+            .height(88.dp),
+        color = Color.Unspecified,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
                 .clip(RoundedCornerShape(32.dp))
-                .background(lightPrimaryContainer)
+                .background(MaterialTheme.colorScheme.primaryContainer onDark MaterialTheme.colorScheme.onPrimaryContainer)
                 .clickable { onClick() }
                 .padding(16.dp, 20.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -57,26 +57,29 @@ fun Banner(
                         imageVector = it,
                         contentDescription = null,
                         modifier = Modifier.padding(end = 16.dp),
-                        tint = lightOnSurface,
+                        tint = MaterialTheme.colorScheme.onSurface onDark MaterialTheme.colorScheme.surface,
                     )
                 }
             }
             Column(
-                modifier = Modifier.weight(1f).fillMaxHeight(),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     text = title,
                     maxLines = if (desc == null) 2 else 1,
                     style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
-                    color = lightOnSurface,
+                    color = MaterialTheme.colorScheme.onSurface onDark MaterialTheme.colorScheme.surface,
                     overflow = TextOverflow.Ellipsis,
                 )
                 desc?.let {
                     Text(
                         text = it,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = lightOnSurface.copy(alpha = 0.7f),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                                onDark MaterialTheme.colorScheme.surface.copy(alpha = 0.7f),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -84,9 +87,12 @@ fun Banner(
             }
             action?.let {
                 Box(Modifier.padding(start = 16.dp)) {
-                    CompositionLocalProvider(LocalContentColor provides lightOnSurface) {
-                        it()
-                    }
+                    CompositionLocalProvider(
+                        LocalContentColor provides (
+                                MaterialTheme.colorScheme.onSurface
+                                        onDark MaterialTheme.colorScheme.surface
+                                )
+                    ) { it() }
                 }
             }
         }

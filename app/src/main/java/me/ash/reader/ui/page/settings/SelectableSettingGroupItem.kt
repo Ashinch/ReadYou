@@ -6,7 +6,7 @@
  * @modifier Ashinch
  */
 
-package me.ash.reader.ui.component
+package me.ash.reader.ui.page.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun SelectableSettingGroupItem(
     modifier: Modifier = Modifier,
+    enable: Boolean = true,
     selected: Boolean = false,
     title: String,
     desc: String? = null,
@@ -37,7 +39,7 @@ fun SelectableSettingGroupItem(
     onClick: () -> Unit,
 ) {
     Surface(
-        modifier = modifier.clickable { onClick() },
+        modifier = modifier.clickable { onClick() }.alpha(if (enable) 1f else 0.5f),
         color = Color.Unspecified,
     ) {
         Row(
@@ -45,7 +47,7 @@ fun SelectableSettingGroupItem(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .background(
-                    color = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.surface,
+                    color = if (selected) MaterialTheme.colorScheme.onSurface else Color.Unspecified,
                     shape = RoundedCornerShape(24.dp)
                 )
                 .padding(8.dp, 16.dp),

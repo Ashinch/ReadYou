@@ -89,4 +89,16 @@
     <string name="view_terms">View the &lt;i&gt;&lt;u&gt;Terms of Service and Privacy Policy&lt;/u&gt;&lt;/i&gt;</string>
     <string name="terms_link">https://github.com/Ashinch/ReadYou/blob/main/TERMS_OF_SERVICE_AND_PRIVACY_POLICY.md</string>
     <string name="agree_and_continue">Agree and Continue</string>
+    <string name="wallpaper_colors">Wallpaper Colors</string>
+    <string name="no_palettes">No Palettes</string>
+    <string name="only_android_8.1_plus">Only Android 8.1+</string>
+    <string name="basic_colors">Basic Colors</string>
+    <string name="style">Style</string>
+    <string name="dark_theme">Dark Theme</string>
+    <string name="use_device_theme">Use Device Theme</string>
+    <string name="tonal_elevation">Tonal Elevation</string>
+    <string name="fonts">Fonts</string>
+    <string name="basic_fonts">Basic Fonts</string>
+    <string name="reading_fonts">Reading Fonts</string>
+    <string name="reading_fonts_size">Reading Fonts Size</string>
 </resources>

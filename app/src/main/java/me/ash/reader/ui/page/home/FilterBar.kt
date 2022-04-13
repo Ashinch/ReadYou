@@ -54,13 +54,13 @@ fun FilterBar(
                         view.playSoundEffect(SoundEffectConstants.CLICK)
                         filterOnClick(item)
                     },
-//                    colors = NavigationBarItemDefaults.colors(
+                    colors = NavigationBarItemDefaults.colors(
 //                        selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
 //                        unselectedIconColor = MaterialTheme.colorScheme.outline,
 //                        selectedTextColor = MaterialTheme.colorScheme.onSurface,
 //                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-//                        indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
-//                    )
+                        indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                    )
                 )
             }
             Spacer(modifier = Modifier.width(60.dp))

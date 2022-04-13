@@ -12,13 +12,13 @@ import androidx.compose.material.icons.rounded.CheckCircleOutline
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.google.accompanist.insets.statusBarsPadding
 import com.ireward.htmlcompose.HtmlText
 import kotlinx.coroutines.launch
 import me.ash.reader.R
@@ -37,7 +37,7 @@ fun StartupPage(
     val scope = rememberCoroutineScope()
 
     Scaffold(
-        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+        modifier = Modifier.statusBarsPadding().background(MaterialTheme.colorScheme.surface),
         topBar = {},
         content = {
             LazyColumn {
@@ -87,29 +87,31 @@ fun StartupPage(
             }
         },
         bottomBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                ExtendedFloatingActionButton(
-                    onClick = {
-                        navController.navigate(route = RouteName.HOME)
-                        scope.launch {
-                            context.dataStore.put(DataStoreKeys.IsFirstLaunch, false)
-                        }
-                    },
-                    icon = {
-                        Icon(
-                            Icons.Rounded.CheckCircleOutline,
-                            stringResource(R.string.agree_and_continue)
-                        )
-                    },
-                    text = { Text(text = stringResource(R.string.agree_and_continue)) },
-                )
-            }
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(24.dp),
+//                horizontalArrangement = Arrangement.End,
+//                verticalAlignment = Alignment.CenterVertically,
+//            ) {
+//            }
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = {
+                    navController.navigate(route = RouteName.HOME)
+                    scope.launch {
+                        context.dataStore.put(DataStoreKeys.IsFirstLaunch, false)
+                    }
+                },
+                icon = {
+                    Icon(
+                        Icons.Rounded.CheckCircleOutline,
+                        stringResource(R.string.agree_and_continue)
+                    )
+                },
+                text = { Text(text = stringResource(R.string.agree_and_continue)) },
+            )
         }
     )
 }

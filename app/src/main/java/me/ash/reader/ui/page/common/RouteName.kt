@@ -7,4 +7,5 @@ object RouteName {
     const val ARTICLE = "article"
     const val READ = "read"
     const val SETTINGS = "settings"
+    const val COLOR_AND_STYLE = "color_and_style"
 }
