@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import me.ash.reader.ui.theme.palette.alwaysLight
 import me.ash.reader.ui.theme.palette.onDark
 
 @Composable
@@ -22,9 +23,9 @@ fun BlockButton(
     text: String = "",
     selected: Boolean = false,
     containerColor: Color = MaterialTheme.colorScheme.surface.copy(0.7f) onDark MaterialTheme.colorScheme.inverseOnSurface,
-    selectedContainerColor: Color = MaterialTheme.colorScheme.primaryContainer onDark MaterialTheme.colorScheme.onPrimaryContainer,
+    selectedContainerColor: Color = MaterialTheme.colorScheme.primaryContainer alwaysLight true,
     contentColor: Color = MaterialTheme.colorScheme.inverseSurface,
-    selectedContentColor: Color = MaterialTheme.colorScheme.onSurface onDark MaterialTheme.colorScheme.surface,
+    selectedContentColor: Color = MaterialTheme.colorScheme.onSurface alwaysLight true,
     onClick: () -> Unit = {},
 ) {
     Column(

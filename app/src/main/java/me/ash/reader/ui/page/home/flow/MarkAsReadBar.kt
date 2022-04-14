@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import me.ash.reader.R
 import me.ash.reader.ui.component.AnimatedPopup
+import me.ash.reader.ui.theme.palette.alwaysLight
 
 @Composable
 fun MarkAsReadBar(
@@ -101,7 +102,7 @@ fun MarkAsReadBarItem(
         tonalElevation = 2.dp,
         shape = RoundedCornerShape(16.dp),
         color = if (isPrimary) {
-            MaterialTheme.colorScheme.primaryContainer
+            MaterialTheme.colorScheme.primaryContainer alwaysLight true
         } else {
             MaterialTheme.colorScheme.surface
         }
@@ -115,7 +116,7 @@ fun MarkAsReadBarItem(
                 text = text,
                 style = MaterialTheme.typography.titleSmall,
                 color = if (isPrimary) {
-                    MaterialTheme.colorScheme.onSurface
+                    MaterialTheme.colorScheme.onSurface alwaysLight true
                 } else {
                     MaterialTheme.colorScheme.secondary
                 },

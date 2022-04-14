@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import me.ash.reader.ui.theme.palette.onDark
+import me.ash.reader.ui.theme.palette.alwaysLight
 
 @Composable
 fun Banner(
@@ -46,7 +46,7 @@ fun Banner(
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
                 .clip(RoundedCornerShape(32.dp))
-                .background(MaterialTheme.colorScheme.primaryContainer onDark MaterialTheme.colorScheme.onPrimaryContainer)
+                .background(MaterialTheme.colorScheme.primaryContainer alwaysLight true)
                 .clickable { onClick() }
                 .padding(16.dp, 20.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -57,7 +57,7 @@ fun Banner(
                         imageVector = it,
                         contentDescription = null,
                         modifier = Modifier.padding(end = 16.dp),
-                        tint = MaterialTheme.colorScheme.onSurface onDark MaterialTheme.colorScheme.surface,
+                        tint = MaterialTheme.colorScheme.onSurface alwaysLight true,
                     )
                 }
             }
@@ -71,15 +71,14 @@ fun Banner(
                     text = title,
                     maxLines = if (desc == null) 2 else 1,
                     style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
-                    color = MaterialTheme.colorScheme.onSurface onDark MaterialTheme.colorScheme.surface,
+                    color = MaterialTheme.colorScheme.onSurface alwaysLight true,
                     overflow = TextOverflow.Ellipsis,
                 )
                 desc?.let {
                     Text(
                         text = it,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                                onDark MaterialTheme.colorScheme.surface.copy(alpha = 0.7f),
+                        color = (MaterialTheme.colorScheme.onSurface alwaysLight true).copy(alpha = 0.7f),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -88,10 +87,7 @@ fun Banner(
             action?.let {
                 Box(Modifier.padding(start = 16.dp)) {
                     CompositionLocalProvider(
-                        LocalContentColor provides (
-                                MaterialTheme.colorScheme.onSurface
-                                        onDark MaterialTheme.colorScheme.surface
-                                )
+                        LocalContentColor provides (MaterialTheme.colorScheme.onSurface alwaysLight true)
                     ) { it() }
                 }
             }

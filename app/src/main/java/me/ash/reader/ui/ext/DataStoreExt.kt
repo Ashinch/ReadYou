@@ -19,7 +19,7 @@ val Context.currentAccountId: Int
 val Context.currentAccountType: Int
     get() = this.dataStore.get(DataStoreKeys.CurrentAccountType)!!
 val Context.themeIndex: Int
-    get() = this.dataStore.get(DataStoreKeys.ThemeIndex) ?: 0
+    get() = this.dataStore.get(DataStoreKeys.ThemeIndex) ?: 5
 val Context.customPrimaryColor: String
     get() = this.dataStore.get(DataStoreKeys.CustomPrimaryColor) ?: ""
 

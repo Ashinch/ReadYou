@@ -13,8 +13,8 @@ android {
         applicationId "me.ash.reader"
         minSdk 26
         targetSdk 32
-        versionCode 4
-        versionName "0.7.0"
+        versionCode 5
+        versionName "0.7.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -53,10 +53,12 @@ android {
 }
 
 dependencies {
+    implementation 'com.caverock:androidsvg-aar:1.4'
     implementation 'com.github.ireward:compose-html:1.0.2'
     implementation 'be.ceau:opml-parser:2.2.0'
     implementation "androidx.profileinstaller:profileinstaller:1.2.0-alpha02"
-    implementation("io.coil-kt:coil-compose:2.0.0-rc02")
+    implementation("io.coil-kt:coil-svg:2.0.0-rc03")
+    implementation("io.coil-kt:coil-compose:2.0.0-rc03")
     implementation("androidx.compose.animation:animation-graphics:$compose_version")
     implementation("com.google.accompanist:accompanist-flowlayout:0.24.3-alpha")
     implementation("com.google.accompanist:accompanist-navigation-animation:0.24.3-alpha")

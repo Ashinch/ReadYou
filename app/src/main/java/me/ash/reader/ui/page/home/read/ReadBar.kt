@@ -96,7 +96,7 @@ fun ReadBar(
                     starredOnClick(!isStarred)
                 }
                 CanBeDisabledIconButton(
-                    disabled = disabled,
+                    disabled = true,
                     modifier = Modifier.size(40.dp),
                     imageVector = Icons.Rounded.ExpandMore,
                     contentDescription = "Next Article",
@@ -106,7 +106,7 @@ fun ReadBar(
                 }
                 CanBeDisabledIconButton(
                     modifier = Modifier.size(40.dp),
-                    disabled = disabled,
+                    disabled = true,
                     imageVector = Icons.Outlined.TextFormat,
                     contentDescription = "Add Tag",
                     tint = MaterialTheme.colorScheme.outline,

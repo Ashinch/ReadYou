@@ -15,6 +15,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -155,13 +156,14 @@ private fun TopBar(
             actions = {
                 if (isShowActions) {
                     FeedbackIconButton(
-                        modifier = Modifier.size(22.dp),
+                        modifier = Modifier.size(22.dp).alpha(0.5f),
                         imageVector = Icons.Outlined.Headphones,
                         contentDescription = stringResource(R.string.mark_all_as_read),
                         tint = MaterialTheme.colorScheme.onSurface,
                     ) {
                     }
                     FeedbackIconButton(
+                        modifier = Modifier.alpha(0.5f),
                         imageVector = Icons.Outlined.MoreVert,
                         contentDescription = stringResource(R.string.search),
                         tint = MaterialTheme.colorScheme.onSurface,

@@ -6,6 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.flow.map
 import me.ash.reader.ui.ext.DataStoreKeys
@@ -17,6 +18,8 @@ import me.ash.reader.ui.theme.palette.dynamic.extractTonalPalettesFromUserWallpa
 import me.ash.reader.ui.theme.palette.dynamicDarkColorScheme
 import me.ash.reader.ui.theme.palette.dynamicLightColorScheme
 
+val LocalUseDarkTheme = compositionLocalOf { false }
+
 @SuppressLint("FlowOperatorInvokedInComposition")
 @Composable
 fun AppTheme(
@@ -25,27 +28,31 @@ fun AppTheme(
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
-    val themeIndex = context.dataStore.data.map { it[DataStoreKeys.ThemeIndex.key] ?: 0 }
-        .collectAsState(initial = 0).value
+    val themeIndex = context.dataStore.data
+        .map { it[DataStoreKeys.ThemeIndex.key] ?: 5 }
+        .collectAsState(initial = 5).value
+
+    val tonalPalettes = wallpaperPalettes[
+            if (themeIndex >= wallpaperPalettes.size) {
+                when {
+                    wallpaperPalettes.size == 5 -> 0
+                    wallpaperPalettes.size > 5 -> 5
+                    else -> 0
+                }
+            } else {
+                themeIndex
+            }
+    ]
 
     ProvideZcamViewingConditions {
         CompositionLocalProvider(
-            LocalTonalPalettes provides wallpaperPalettes[
-                    if (themeIndex >= wallpaperPalettes.size) {
-                        when {
-                            wallpaperPalettes.size == 5 -> 0
-                            wallpaperPalettes.size > 5 -> 5
-                            else -> 0
-                        }
-                    } else {
-                        themeIndex
-                    }
-            ]
+            LocalTonalPalettes provides tonalPalettes.also { it.Preheating() },
+            LocalUseDarkTheme provides useDarkTheme
         ) {
             MaterialTheme(
                 colorScheme =
-                    if (useDarkTheme) dynamicDarkColorScheme()
-                    else dynamicLightColorScheme(),
+                if (useDarkTheme) dynamicDarkColorScheme()
+                else dynamicLightColorScheme(),
                 typography = AppTypography,
                 content = content
             )

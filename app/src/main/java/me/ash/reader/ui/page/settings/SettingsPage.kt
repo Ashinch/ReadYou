@@ -55,8 +55,8 @@ fun SettingsPage(
                 }
                 item {
                     Banner(
-                        title = stringResource(R.string.get_new_updates),
-                        desc = stringResource(R.string.get_new_updates_desc),
+                        title = stringResource(R.string.in_coding),
+                        desc = stringResource(R.string.coming_soon),
                         icon = Icons.Outlined.Lightbulb,
                         action = {
                             Icon(

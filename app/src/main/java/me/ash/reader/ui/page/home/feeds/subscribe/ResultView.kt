@@ -35,6 +35,7 @@ import me.ash.reader.data.entity.Group
 import me.ash.reader.ui.component.SelectionChip
 import me.ash.reader.ui.component.Subtitle
 import me.ash.reader.ui.ext.roundClick
+import me.ash.reader.ui.theme.palette.alwaysLight
 
 @Composable
 fun ResultView(
@@ -131,11 +132,12 @@ private fun Preset(
             selected = selectedAllowNotificationPreset,
             selectedIcon = {
                 Icon(
-                    imageVector = Icons.Outlined.Notifications,
-                    contentDescription = stringResource(R.string.allow_notification),
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .size(20.dp),
+                    imageVector = Icons.Outlined.Notifications,
+                    contentDescription = stringResource(R.string.allow_notification),
+                    tint = MaterialTheme.colorScheme.onSurface alwaysLight true,
                 )
             },
         ) {
@@ -147,11 +149,12 @@ private fun Preset(
             selected = selectedParseFullContentPreset,
             selectedIcon = {
                 Icon(
-                    imageVector = Icons.Outlined.Article,
-                    contentDescription = stringResource(R.string.parse_full_content),
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .size(20.dp),
+                    imageVector = Icons.Outlined.Article,
+                    contentDescription = stringResource(R.string.parse_full_content),
+                    tint = MaterialTheme.colorScheme.onSurface alwaysLight true,
                 )
             },
         ) {

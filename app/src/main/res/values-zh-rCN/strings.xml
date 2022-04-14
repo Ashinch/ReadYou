@@ -74,6 +74,8 @@
     <string name="close">关闭</string>
     <string name="get_new_updates">获取新的更新</string>
     <string name="get_new_updates_desc">版本 0.6.1 现已发布</string>
+    <string name="in_coding">施工中</string>
+    <string name="coming_soon">正在路上</string>
     <string name="accounts">账户</string>
     <string name="accounts_desc">本地、FreshRSS</string>
     <string name="color_and_style">颜色和样式</string>
@@ -93,12 +95,16 @@
     <string name="no_palettes">暂无色板</string>
     <string name="only_android_8.1_plus">仅限 Android 8.1+</string>
     <string name="basic_colors">基本颜色</string>
+    <string name="primary_color">强调色</string>
+    <string name="primary_color_hint">例如 #666666 或 666666</string>
+    <string name="appearance">外观</string>
     <string name="style">样式</string>
     <string name="dark_theme">深色模式</string>
     <string name="use_device_theme">跟随系统设置</string>
     <string name="tonal_elevation">色调海拔</string>
     <string name="fonts">字体</string>
     <string name="basic_fonts">基本字体</string>
-    <string name="reading_fonts">阅读字体</string>
-    <string name="reading_fonts_size">阅读字体大小</string>
+    <string name="feeds_page">订阅源页面</string>
+    <string name="flow_page">信息流页面</string>
+    <string name="reading_page">阅读页面</string>
 </resources>

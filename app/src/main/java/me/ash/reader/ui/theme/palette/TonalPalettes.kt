@@ -95,6 +95,17 @@ data class TonalPalettes(
         ).clampToRgb().toColor()
     }
 
+    @Composable
+    fun Preheating() {
+        val tonalValues = listOf(0, 10, 20, 25, 30, 35, 40, 50, 60, 70, 80, 90, 95, 98, 99, 100)
+        tonalValues.forEach { primary(it) }
+        tonalValues.forEach { secondary(it) }
+        tonalValues.forEach { tertiary(it) }
+        tonalValues.forEach { neutral(it) }
+        tonalValues.forEach { neutralVariant(it) }
+        tonalValues.forEach { error(it) }
+    }
+
     companion object {
         @Composable
         fun Color.toTonalPalettes(): TonalPalettes {

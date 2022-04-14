@@ -2,7 +2,6 @@ package me.ash.reader.ui.page.common
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,19 +23,21 @@ import me.ash.reader.ui.page.settings.ColorAndStyle
 import me.ash.reader.ui.page.settings.SettingsPage
 import me.ash.reader.ui.page.startup.StartupPage
 import me.ash.reader.ui.theme.AppTheme
+import me.ash.reader.ui.theme.LocalUseDarkTheme
 
 @OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
 fun HomeEntry() {
-    val context = LocalContext.current
-    val navController = rememberAnimatedNavController()
-
     AppTheme {
+        val context = LocalContext.current
+        val useDarkTheme = LocalUseDarkTheme.current
+        val navController = rememberAnimatedNavController()
+
         ProvideWindowInsets {
             rememberSystemUiController().run {
-                setStatusBarColor(Color.Transparent, !isSystemInDarkTheme())
-                setSystemBarsColor(Color.Transparent, !isSystemInDarkTheme())
-                setNavigationBarColor(MaterialTheme.colorScheme.surface, !isSystemInDarkTheme())
+                setStatusBarColor(Color.Transparent, !useDarkTheme)
+                setSystemBarsColor(Color.Transparent, !useDarkTheme)
+                setNavigationBarColor(MaterialTheme.colorScheme.surface, !useDarkTheme)
             }
             Column {
                 Row(

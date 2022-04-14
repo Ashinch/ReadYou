@@ -26,8 +26,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import me.ash.reader.ui.theme.palette.LocalTonalPalettes
 import me.ash.reader.ui.theme.palette.onDark
-import me.ash.reader.ui.theme.palette.tonalPalettes
 
 // TODO: ripple & swipe
 @Composable
@@ -37,10 +37,12 @@ fun Switch(
     enable: Boolean = true,
     onClick: (() -> Unit)? = null
 ) {
-    val tonalPalettes = MaterialTheme.colorScheme.tonalPalettes()
+    val tonalPalettes = LocalTonalPalettes.current
 
     Surface(
-        modifier = modifier.size(56.dp, 28.dp).alpha(if (enable) 1f else 0.5f),
+        modifier = modifier
+            .size(56.dp, 28.dp)
+            .alpha(if (enable) 1f else 0.5f),
         shape = CircleShape,
         color = animateColorAsState(
             if (activated) (tonalPalettes primary 40) onDark (tonalPalettes neutralVariant 50)
@@ -74,7 +76,7 @@ fun SwitchHeadline(
     title: String,
     modifier: Modifier = Modifier
 ) {
-    val tonalPalettes = MaterialTheme.colorScheme.tonalPalettes()
+    val tonalPalettes = LocalTonalPalettes.current
 
     Surface(
         modifier = modifier,

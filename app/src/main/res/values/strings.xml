@@ -72,8 +72,10 @@
     <string name="three_days">3d</string>
     <string name="seven_days">7d</string>
     <string name="close">Close</string>
-    <string name="get_new_updates">Get New updates</string>
+    <string name="get_new_updates">Get new updates</string>
     <string name="get_new_updates_desc">Version 0.6.1 has been released</string>
+    <string name="in_coding">In coding</string>
+    <string name="coming_soon">Coming soon</string>
     <string name="accounts">Accounts</string>
     <string name="accounts_desc">Local, FreshRSS</string>
     <string name="color_and_style">Color &amp; style</string>
@@ -93,12 +95,16 @@
     <string name="no_palettes">No Palettes</string>
     <string name="only_android_8.1_plus">Only Android 8.1+</string>
     <string name="basic_colors">Basic Colors</string>
+    <string name="primary_color">Primary Color</string>
+    <string name="primary_color_hint">Like #666666 or 666666</string>
+    <string name="appearance">Appearance</string>
     <string name="style">Style</string>
     <string name="dark_theme">Dark Theme</string>
     <string name="use_device_theme">Use Device Theme</string>
     <string name="tonal_elevation">Tonal Elevation</string>
     <string name="fonts">Fonts</string>
     <string name="basic_fonts">Basic Fonts</string>
-    <string name="reading_fonts">Reading Fonts</string>
-    <string name="reading_fonts_size">Reading Fonts Size</string>
+    <string name="feeds_page">Feeds Page</string>
+    <string name="flow_page">Flow Page</string>
+    <string name="reading_page">Reading Page</string>
 </resources>
