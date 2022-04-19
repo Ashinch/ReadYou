@@ -1,7 +1,6 @@
 package me.ash.reader.ui.component
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.net.http.SslError
 import android.util.Log
@@ -15,9 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.hilt.navigation.compose.hiltViewModel
-import me.ash.reader.ui.page.home.read.ReadViewAction
-import me.ash.reader.ui.page.home.read.ReadViewModel
 
 const val INJECTION_TOKEN = "/android_asset_font/"
 
@@ -25,8 +21,6 @@ const val INJECTION_TOKEN = "/android_asset_font/"
 fun WebView(
     modifier: Modifier = Modifier,
     content: String,
-    viewModel: ReadViewModel = hiltViewModel(),
-    onProgressChange: (progress: Int) -> Unit = {},
     onReceivedError: (error: WebResourceError?) -> Unit = {}
 ) {
     val context = LocalContext.current
@@ -57,16 +51,6 @@ fun WebView(
                 return super.shouldInterceptRequest(view, url);
             }
 
-            override fun onPageStarted(
-                view: WebView?,
-                url: String?,
-                favicon: Bitmap?
-            ) {
-                super.onPageStarted(view, url, favicon)
-//            _isLoading = true
-                onProgressChange(-1)
-            }
-
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 val jsCode = "javascript:(function(){" +
@@ -78,8 +62,6 @@ fun WebView(
                         "alert('asf');" +
                         "}}})()"
                 view!!.loadUrl(jsCode)
-                viewModel.dispatch(ReadViewAction.ChangeLoading(false))
-                onProgressChange(100)
             }
 
             override fun shouldOverrideUrlLoading(
@@ -173,10 +155,12 @@ fun getStyle(argb: Int): String = """
     padding: 0 24px;
 }
 
-img {
+img, video {
     margin: 0 -24px 20px;
     width: calc(100% + 48px);
     height: auto;
+    border-top: 1px solid ${argbToCssColor(argb)}08;
+    border-bottom: 1px solid ${argbToCssColor(argb)}08;
 }
 
 p,span,a,ol,ul,blockquote,article,section {

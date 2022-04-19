@@ -191,8 +191,8 @@ fun Palettes(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val themeIndex = context.dataStore.data
-        .map { it[DataStoreKeys.ThemeIndex.key] ?: 0 }
-        .collectAsState(initial = 0).value
+        .map { it[DataStoreKeys.ThemeIndex.key] ?: 5 }
+        .collectAsState(initial = 5).value
     val customPrimaryColor = context.dataStore.data
         .map { it[DataStoreKeys.CustomPrimaryColor.key] ?: "" }
         .collectAsState(initial = "").value

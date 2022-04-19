@@ -20,7 +20,8 @@ fun StickyHeader(currentItemDay: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            modifier = Modifier.padding(start = if (true) 54.dp else 24.dp),
+            modifier = Modifier
+                .padding(start = if (true) 54.dp else 24.dp, bottom = 4.dp),
             text = currentItemDay,
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.labelLarge,

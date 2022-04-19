@@ -22,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val rssRepository: RssRepository,
-    private val workManager: WorkManager,
+    workManager: WorkManager,
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(HomeViewState())

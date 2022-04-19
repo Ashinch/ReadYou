@@ -12,7 +12,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
-import kotlinx.coroutines.launch
 import me.ash.reader.ui.component.ViewPager
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.findActivity
@@ -49,23 +48,10 @@ fun HomePage(
 
     LaunchedEffect(openArticleId) {
         if (openArticleId.isNotEmpty()) {
-            readViewModel.dispatch(ReadViewAction.ScrollToItem(2))
-            launch {
-                val article = readViewModel
-                    .rssRepository.get()
-                    .findArticleById(openArticleId) ?: return@launch
-                readViewModel.dispatch(ReadViewAction.InitData(article))
-                if (article.feed.isFullContent) readViewModel.dispatch(ReadViewAction.RenderFullContent)
-                else readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
-                readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
-                homeViewModel.dispatch(
-                    HomeViewAction.ScrollToPage(
-                        scope = scope,
-                        targetPage = 2,
-                    )
-                )
-                openArticleId = ""
-            }
+            readViewModel.dispatch(ReadViewAction.InitData(openArticleId))
+            readViewModel.dispatch(ReadViewAction.ScrollToItem(0))
+            homeViewModel.dispatch(HomeViewAction.ScrollToPage(scope, 2))
+            openArticleId = ""
         }
     }
 
@@ -142,7 +128,7 @@ fun HomePage(
                         },
                         onItemClick = {
                             readViewModel.dispatch(ReadViewAction.ScrollToItem(0))
-                            readViewModel.dispatch(ReadViewAction.InitData(it))
+                            readViewModel.dispatch(ReadViewAction.InitData(it.article.id))
                             if (it.feed.isFullContent) readViewModel.dispatch(ReadViewAction.RenderFullContent)
                             else readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
                             readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)

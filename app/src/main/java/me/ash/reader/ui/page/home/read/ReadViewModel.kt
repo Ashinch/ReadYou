@@ -26,7 +26,7 @@ class ReadViewModel @Inject constructor(
 
     fun dispatch(action: ReadViewAction) {
         when (action) {
-            is ReadViewAction.InitData -> bindArticleWithFeed(action.articleWithFeed)
+            is ReadViewAction.InitData -> bindArticleWithFeed(action.articleId)
             is ReadViewAction.RenderDescriptionContent -> renderDescriptionContent()
             is ReadViewAction.RenderFullContent -> renderFullContent()
             is ReadViewAction.MarkUnread -> markUnread(action.isUnread)
@@ -37,9 +37,17 @@ class ReadViewModel @Inject constructor(
         }
     }
 
-    private fun bindArticleWithFeed(articleWithFeed: ArticleWithFeed) {
-        _viewState.update {
-            it.copy(articleWithFeed = articleWithFeed)
+    private fun bindArticleWithFeed(articleId: String) {
+        changeLoading(true)
+        viewModelScope.launch {
+            _viewState.update {
+                it.copy(articleWithFeed = rssRepository.get().findArticleById(articleId))
+            }
+            _viewState.value.articleWithFeed?.let {
+                if (it.feed.isFullContent) internalRenderFullContent()
+                else renderDescriptionContent()
+            }
+            changeLoading(false)
         }
     }
 
@@ -55,26 +63,31 @@ class ReadViewModel @Inject constructor(
     }
 
     private fun renderFullContent() {
-        changeLoading(true)
         viewModelScope.launch {
-            try {
-                _viewState.update {
-                    it.copy(
-                        content = rssHelper.parseFullContent(
-                            _viewState.value.articleWithFeed?.article?.link ?: "",
-                            _viewState.value.articleWithFeed?.article?.title ?: ""
-                        )
+            internalRenderFullContent()
+        }
+    }
+
+    private suspend fun internalRenderFullContent() {
+        changeLoading(true)
+        try {
+            _viewState.update {
+                it.copy(
+                    content = rssHelper.parseFullContent(
+                        _viewState.value.articleWithFeed?.article?.link ?: "",
+                        _viewState.value.articleWithFeed?.article?.title ?: ""
                     )
-                }
-            } catch (e: Exception) {
-                Log.i("RLog", "renderFullContent: ${e.message}")
-                _viewState.update {
-                    it.copy(
-                        content = e.message
-                    )
-                }
+                )
+            }
+        } catch (e: Exception) {
+            Log.i("RLog", "renderFullContent: ${e.message}")
+            _viewState.update {
+                it.copy(
+                    content = e.message
+                )
             }
         }
+        changeLoading(false)
     }
 
     private fun markUnread(isUnread: Boolean) {
@@ -141,13 +154,13 @@ class ReadViewModel @Inject constructor(
 data class ReadViewState(
     val articleWithFeed: ArticleWithFeed? = null,
     val content: String? = null,
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val listState: LazyListState = LazyListState(),
 )
 
 sealed class ReadViewAction {
     data class InitData(
-        val articleWithFeed: ArticleWithFeed,
+        val articleId: String,
     ) : ReadViewAction()
 
     object RenderDescriptionContent : ReadViewAction()

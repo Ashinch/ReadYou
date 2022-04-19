@@ -67,9 +67,6 @@ fun ReadPage(
             if (it.article.isUnread) {
                 readViewModel.dispatch(ReadViewAction.MarkUnread(false))
             }
-            if (it.feed.isFullContent) {
-                readViewModel.dispatch(ReadViewAction.RenderFullContent)
-            }
         }
     }
 
@@ -96,6 +93,7 @@ fun ReadPage(
                 Content(
                     content = viewState.content ?: "",
                     articleWithFeed = viewState.articleWithFeed,
+                    viewState = viewState,
                     LazyListState = viewState.listState,
                 )
                 Box(
@@ -156,7 +154,9 @@ private fun TopBar(
             actions = {
                 if (isShowActions) {
                     FeedbackIconButton(
-                        modifier = Modifier.size(22.dp).alpha(0.5f),
+                        modifier = Modifier
+                            .size(22.dp)
+                            .alpha(0.5f),
                         imageVector = Icons.Outlined.Headphones,
                         contentDescription = stringResource(R.string.mark_all_as_read),
                         tint = MaterialTheme.colorScheme.onSurface,
@@ -179,6 +179,7 @@ private fun TopBar(
 private fun Content(
     content: String,
     articleWithFeed: ArticleWithFeed?,
+    viewState: ReadViewState,
     LazyListState: LazyListState = rememberLazyListState(),
 ) {
     Column {
@@ -208,7 +209,27 @@ private fun Content(
                 }
                 item {
                     Spacer(modifier = Modifier.height(22.dp))
-                    Crossfade(targetState = content) { content ->
+                    AnimatedVisibility(
+                        visible = viewState.isLoading,
+                        enter = fadeIn() + expandVertically(),
+                        exit = fadeOut() + shrinkVertically(),
+                    ) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Column {
+                                Spacer(modifier = Modifier.height(22.dp))
+                                CircularProgressIndicator(
+                                    modifier = Modifier
+                                        .size(30.dp),
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                )
+                                Spacer(modifier = Modifier.height(22.dp))
+                            }
+                        }
+                    }
+                    if (!viewState.isLoading) {
                         WebView(
                             content = content
                         )

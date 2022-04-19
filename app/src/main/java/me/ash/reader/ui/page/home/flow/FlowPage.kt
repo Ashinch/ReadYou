@@ -17,7 +17,6 @@ import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -35,6 +34,7 @@ import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.DisplayText
 import me.ash.reader.ui.component.FeedbackIconButton
+import me.ash.reader.ui.component.SwipeRefresh
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.getName
 import me.ash.reader.ui.page.home.FilterBar
@@ -56,7 +56,6 @@ fun FlowPage(
     onScrollToPage: (targetPage: Int) -> Unit = {},
     onItemClick: (item: ArticleWithFeed) -> Unit = {},
 ) {
-    val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
     val scope = rememberCoroutineScope()
@@ -168,90 +167,89 @@ fun FlowPage(
 //                        url = "https://assets7.lottiefiles.com/packages/lf20_l4ny0jjm.json",
 //                    )
 //                }
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                state = viewState.listState,
+            SwipeRefresh(
+                onRefresh = {
+                    if (!isSyncing) {
+                        flowViewModel.dispatch(FlowViewAction.Sync)
+                    }
+                }
             ) {
-                item {
-                    DisplayText(
-                        modifier = Modifier.padding(start = 30.dp),
-                        text = when {
-                            filterState.group != null -> filterState.group.name
-                            filterState.feed != null -> filterState.feed.name
-                            else -> filterState.filter.getName()
-                        },
-                        desc = if (isSyncing) stringResource(R.string.syncing) else "",
-                    )
-                    AnimatedVisibility(
-                        visible = markAsRead,
-                        enter = fadeIn() + expandVertically(),
-                        exit = fadeOut() + shrinkVertically(),
-                    ) {
-                        Spacer(modifier = Modifier.height((56 + 24 + 10).dp))
-                    }
-                    MarkAsReadBar(
-                        visible = markAsRead,
-                        absoluteY = if (isSyncing) (4 + 16 + 180).dp else 180.dp,
-                        onDismissRequest = {
-                            markAsRead = false
-                        },
-                    ) {
-                        markAsRead = false
-                        flowViewModel.dispatch(
-                            FlowViewAction.MarkAsRead(
-                                groupId = filterState.group?.id,
-                                feedId = filterState.feed?.id,
-                                articleId = null,
-                                markAsReadBefore = it,
-                            )
-                        )
-                    }
-                    AnimatedVisibility(
-                        visible = onSearch,
-                        enter = fadeIn() + expandVertically(),
-                        exit = fadeOut() + shrinkVertically(),
-                    ) {
-                        SearchBar(
-                            value = viewState.searchContent,
-                            placeholder = when {
-                                filterState.group != null -> stringResource(
-                                    R.string.search_for_in,
-                                    filterState.filter.getName(),
-                                    filterState.group.name
-                                )
-                                filterState.feed != null -> stringResource(
-                                    R.string.search_for_in,
-                                    filterState.filter.getName(),
-                                    filterState.feed.name
-                                )
-                                else -> stringResource(
-                                    R.string.search_for,
-                                    filterState.filter.getName()
-                                )
-                            },
-                            focusRequester = focusRequester,
-                            onValueChange = {
-                                flowViewModel.dispatch(FlowViewAction.InputSearchContent(it))
-                            },
-                            onClose = {
-                                onSearch = false
-                                flowViewModel.dispatch(FlowViewAction.InputSearchContent(""))
-                            }
-                        )
-                        Spacer(modifier = Modifier.height((56 + 24 + 10).dp))
-                    }
-                }
-                generateArticleList(
-                    context = context,
-                    pagingItems = pagingItems,
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    state = viewState.listState,
                 ) {
-                    onSearch = false
-                    onItemClick(it)
-                }
-                item {
-                    Spacer(modifier = Modifier.height(64.dp))
-                    if (pagingItems.loadState.source.refresh is LoadState.NotLoading && pagingItems.itemCount != 0) {
+                    item {
+                        DisplayTextHeader(filterState, isSyncing)
+                        AnimatedVisibility(
+                            visible = markAsRead,
+                            enter = fadeIn() + expandVertically(),
+                            exit = fadeOut() + shrinkVertically(),
+                        ) {
+                            Spacer(modifier = Modifier.height((56 + 24 + 10).dp))
+                        }
+                        MarkAsReadBar(
+                            visible = markAsRead,
+                            absoluteY = if (isSyncing) (4 + 16 + 180).dp else 180.dp,
+                            onDismissRequest = {
+                                markAsRead = false
+                            },
+                        ) {
+                            markAsRead = false
+                            flowViewModel.dispatch(
+                                FlowViewAction.MarkAsRead(
+                                    groupId = filterState.group?.id,
+                                    feedId = filterState.feed?.id,
+                                    articleId = null,
+                                    markAsReadBefore = it,
+                                )
+                            )
+                        }
+                        AnimatedVisibility(
+                            visible = onSearch,
+                            enter = fadeIn() + expandVertically(),
+                            exit = fadeOut() + shrinkVertically(),
+                        ) {
+                            SearchBar(
+                                value = viewState.searchContent,
+                                placeholder = when {
+                                    filterState.group != null -> stringResource(
+                                        R.string.search_for_in,
+                                        filterState.filter.getName(),
+                                        filterState.group.name
+                                    )
+                                    filterState.feed != null -> stringResource(
+                                        R.string.search_for_in,
+                                        filterState.filter.getName(),
+                                        filterState.feed.name
+                                    )
+                                    else -> stringResource(
+                                        R.string.search_for,
+                                        filterState.filter.getName()
+                                    )
+                                },
+                                focusRequester = focusRequester,
+                                onValueChange = {
+                                    flowViewModel.dispatch(FlowViewAction.InputSearchContent(it))
+                                },
+                                onClose = {
+                                    onSearch = false
+                                    flowViewModel.dispatch(FlowViewAction.InputSearchContent(""))
+                                }
+                            )
+                            Spacer(modifier = Modifier.height((56 + 24 + 10).dp))
+                        }
+                    }
+                    ArticleList(
+                        pagingItems = pagingItems,
+                    ) {
+                        onSearch = false
+                        onItemClick(it)
+                    }
+                    item {
                         Spacer(modifier = Modifier.height(64.dp))
+                        if (pagingItems.loadState.source.refresh is LoadState.NotLoading && pagingItems.itemCount != 0) {
+                            Spacer(modifier = Modifier.height(64.dp))
+                        }
                     }
                 }
             }
@@ -267,5 +265,21 @@ fun FlowPage(
                 },
             )
         }
+    )
+}
+
+@Composable
+private fun DisplayTextHeader(
+    filterState: FilterState,
+    isSyncing: Boolean
+) {
+    DisplayText(
+        modifier = Modifier.padding(start = 30.dp),
+        text = when {
+            filterState.group != null -> filterState.group.name
+            filterState.feed != null -> filterState.feed.name
+            else -> filterState.filter.getName()
+        },
+        desc = if (isSyncing) stringResource(R.string.syncing) else "",
     )
 }

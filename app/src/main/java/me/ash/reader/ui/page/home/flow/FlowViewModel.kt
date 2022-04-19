@@ -3,16 +3,13 @@ package me.ash.reader.ui.page.home.flow
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
+import androidx.paging.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.repository.RssRepository
+import me.ash.reader.data.repository.StringsRepository
 import me.ash.reader.ui.page.home.FilterState
 import java.util.*
 import javax.inject.Inject
@@ -20,14 +17,16 @@ import javax.inject.Inject
 @HiltViewModel
 class FlowViewModel @Inject constructor(
     private val rssRepository: RssRepository,
+    private val stringsRepository: StringsRepository,
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(ArticleViewState())
     val viewState: StateFlow<ArticleViewState> = _viewState.asStateFlow()
 
     fun dispatch(action: FlowViewAction) {
         when (action) {
+            is FlowViewAction.Sync -> sync()
             is FlowViewAction.FetchData -> fetchData(action.filterState)
-            is FlowViewAction.ChangeRefreshing -> changeRefreshing(action.isRefreshing)
+            is FlowViewAction.ChangeIsBack -> changeIsBack(action.isBack)
             is FlowViewAction.ScrollToItem -> scrollToItem(action.index)
             is FlowViewAction.MarkAsRead -> markAsRead(
                 action.groupId,
@@ -37,6 +36,10 @@ class FlowViewModel @Inject constructor(
             )
             is FlowViewAction.InputSearchContent -> inputSearchContent(action.content)
         }
+    }
+
+    private fun sync() {
+        rssRepository.get().doSync()
     }
 
     private fun fetchData(filterState: FilterState? = null) {
@@ -62,7 +65,21 @@ class FlowViewModel @Inject constructor(
                             isStarred = _viewState.value.filterState?.filter?.isStarred() ?: false,
                             isUnread = _viewState.value.filterState?.filter?.isUnread() ?: false,
                         )
-                    }.flow.flowOn(Dispatchers.IO).cachedIn(viewModelScope)
+                    }.flow.map {
+                        it.map {
+                            FlowItemView.Article(it)
+                        }.insertSeparators { before, after ->
+                            val beforeDate =
+                                stringsRepository.formatAsString(before?.articleWithFeed?.article?.date)
+                            val afterDate =
+                                stringsRepository.formatAsString(after?.articleWithFeed?.article?.date)
+                            if (beforeDate != afterDate) {
+                                afterDate?.let { FlowItemView.Date(it) }
+                            } else {
+                                null
+                            }
+                        }
+                    }.cachedIn(viewModelScope)
                 )
             }
         } else if (filterState != null) {
@@ -76,7 +93,21 @@ class FlowViewModel @Inject constructor(
                             isStarred = filterState.filter.isStarred(),
                             isUnread = filterState.filter.isUnread(),
                         )
-                    }.flow.flowOn(Dispatchers.IO).cachedIn(viewModelScope)
+                    }.flow.map {
+                        it.map {
+                            FlowItemView.Article(it)
+                        }.insertSeparators { before, after ->
+                            val beforeDate =
+                                stringsRepository.formatAsString(before?.articleWithFeed?.article?.date)
+                            val afterDate =
+                                stringsRepository.formatAsString(after?.articleWithFeed?.article?.date)
+                            if (beforeDate != afterDate) {
+                                afterDate?.let { FlowItemView.Date(it) }
+                            } else {
+                                null
+                            }
+                        }
+                    }.cachedIn(viewModelScope)
                 )
             }
         }
@@ -88,9 +119,9 @@ class FlowViewModel @Inject constructor(
         }
     }
 
-    private fun changeRefreshing(isRefreshing: Boolean) {
+    private fun changeIsBack(isBack: Boolean) {
         _viewState.update {
-            it.copy(isRefreshing = isRefreshing)
+            it.copy(isBack = isBack)
         }
     }
 
@@ -139,19 +170,21 @@ data class ArticleViewState(
     val filterState: FilterState? = null,
     val filterImportant: Int = 0,
     val listState: LazyListState = LazyListState(),
-    val isRefreshing: Boolean = false,
-    val pagingData: Flow<PagingData<ArticleWithFeed>> = emptyFlow(),
+    val isBack: Boolean = false,
+    val pagingData: Flow<PagingData<FlowItemView>> = emptyFlow(),
     val syncWorkInfo: String = "",
     val searchContent: String = "",
 )
 
 sealed class FlowViewAction {
+    object Sync : FlowViewAction()
+
     data class FetchData(
         val filterState: FilterState,
     ) : FlowViewAction()
 
-    data class ChangeRefreshing(
-        val isRefreshing: Boolean
+    data class ChangeIsBack(
+        val isBack: Boolean
     ) : FlowViewAction()
 
     data class ScrollToItem(
@@ -175,4 +208,9 @@ enum class MarkAsReadBefore {
     ThreeDays,
     OneDay,
     All,
+}
+
+sealed class FlowItemView {
+    class Article(val articleWithFeed: ArticleWithFeed) : FlowItemView()
+    class Date(val date: String) : FlowItemView()
 }

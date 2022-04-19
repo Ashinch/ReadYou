@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.flow
 
-import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -9,33 +8,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import me.ash.reader.data.entity.ArticleWithFeed
-import me.ash.reader.ui.ext.formatAsString
 
+@Suppress("FunctionName")
 @OptIn(ExperimentalFoundationApi::class)
-fun LazyListScope.generateArticleList(
-    context: Context,
-    pagingItems: LazyPagingItems<ArticleWithFeed>,
+fun LazyListScope.ArticleList(
+    pagingItems: LazyPagingItems<FlowItemView>,
     onClick: (ArticleWithFeed) -> Unit = {},
 ) {
-    var lastItemDay: String? = null
     for (itemIndex in 0 until pagingItems.itemCount) {
-        val currentItem = pagingItems.peek(itemIndex) ?: continue
-        val currentItemDay = currentItem.article.date.formatAsString(context)
-        if (lastItemDay != currentItemDay) {
-            if (itemIndex != 0) {
-                item { Spacer(modifier = Modifier.height(40.dp)) }
+        when (val item = pagingItems[itemIndex]) {
+            is FlowItemView.Article -> {
+                item {
+                    ArticleItem(
+                        articleWithFeed = item.articleWithFeed,
+                    ) {
+                        onClick(it)
+                    }
+                }
             }
-            stickyHeader {
-                StickyHeader(currentItemDay)
+            is FlowItemView.Date -> {
+                if (itemIndex != 0) item { Spacer(modifier = Modifier.height(40.dp)) }
+                stickyHeader {
+                    StickyHeader(item.date)
+                }
             }
+            else -> {}
         }
-        item {
-            ArticleItem(
-                articleWithFeed = pagingItems[itemIndex] ?: return@item,
-            ) {
-                onClick(it)
-            }
-        }
-        lastItemDay = currentItemDay
     }
 }
