@@ -1,0 +1,3 @@
+[submodule "ReadYouSecret"]
+	path = ReadYouSecret
+	url = git@github.com:Ashinch/ReadYouSecret.git

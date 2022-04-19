@@ -6,6 +6,14 @@ plugins {
     id "androidx.navigation.safeargs.kotlin"
 }
 
+def gitCommitHash = 'git rev-parse --verify --short HEAD'.execute().text.trim()
+def keyProps = new Properties()
+def keyPropsFile = rootProject.file('ReadYouSecret/keystore.properties')
+if (keyPropsFile.exists()) {
+    println("Loading keystore properties from ${keyPropsFile.absolutePath}")
+    keyProps.load(new FileInputStream(keyPropsFile))
+}
+
 android {
     compileSdk 32
 
@@ -21,12 +29,25 @@ android {
             useSupportLibrary true
         }
     }
-
+    signingConfigs {
+        release {
+            keyAlias keyProps['keyAlias']
+            keyPassword keyProps['keyPassword']
+            storeFile keyProps['storeFile'] ? file(keyProps['storeFile']) : null
+            storePassword keyProps['storePassword']
+        }
+    }
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFileName = "ReadYou-${defaultConfig.versionName}-${gitCommitHash}.apk"
         }
     }
     kotlinOptions {
