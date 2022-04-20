@@ -1,6 +1,21 @@
 buildscript {
     ext {
-        compose_version = '1.2.0-alpha06'
+        compose = '1.2.0-alpha07'
+        accompanist = '0.24.6-alpha'
+        material3 = '1.0.0-alpha09'
+        lifecycle = '2.5.0-alpha06'
+        navigation = '2.5.0-alpha04'
+        paging = '3.1.1'
+        room = '2.5.0-alpha01'
+        datastore = '1.0.0'
+        work = '2.8.0-alpha02'
+        profileinstaller = '1.2.0-alpha02'
+        retrofit2 = '2.9.0'
+        coil = '2.0.0-rc03'
+        parseRSS = '0.5.0'
+        readability4j = '1.0.8'
+        opmlParser = '2.2.0'
+        androidSVG = '1.4'
     }
 
     dependencies {

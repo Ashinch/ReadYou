@@ -2,14 +2,10 @@ package me.ash.reader.ui.component
 
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.ContentPaste
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -40,14 +36,12 @@ fun TextField(
         focusRequester.requestFocus()
     }
 
-    androidx.compose.material.TextField(
+    TextField(
         modifier = Modifier.focusRequester(focusRequester),
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = Color.Transparent,
-            cursorColor = MaterialTheme.colorScheme.onSurface,
-            textColor = MaterialTheme.colorScheme.onSurface,
-            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
         ),
+        maxLines = 1,
         enabled = !readOnly,
         value = value,
         onValueChange = {
@@ -56,7 +50,8 @@ fun TextField(
         placeholder = {
             Text(
                 text = placeholder,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f)
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                style = MaterialTheme.typography.bodyMedium
             )
         },
         isError = errorMessage.isNotEmpty(),
