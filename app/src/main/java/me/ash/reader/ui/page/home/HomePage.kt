@@ -1,10 +1,7 @@
 package me.ash.reader.ui.page.home
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -80,11 +77,7 @@ fun HomePage(
         )
     }
 
-    Column(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .statusBarsPadding(),
-    ) {
+    Column{
         ViewPager(
             modifier = Modifier.weight(1f),
             state = viewState.pagerState,

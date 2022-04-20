@@ -38,8 +38,9 @@ fun StartupPage(
 
     Scaffold(
         modifier = Modifier
+            .background(MaterialTheme.colorScheme.surface)
             .statusBarsPadding()
-            .background(MaterialTheme.colorScheme.surface),
+            .navigationBarsPadding(),
         topBar = {},
         content = {
             LazyColumn {

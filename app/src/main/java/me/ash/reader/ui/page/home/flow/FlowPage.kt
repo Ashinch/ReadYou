@@ -107,7 +107,10 @@ fun FlowPage(
     }
 
     Scaffold(
-        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.surface)
+            .statusBarsPadding()
+            .navigationBarsPadding(),
         topBar = {
             SmallTopAppBar(
                 title = {},

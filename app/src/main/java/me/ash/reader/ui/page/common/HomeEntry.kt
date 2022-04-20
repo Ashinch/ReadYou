@@ -1,18 +1,9 @@
 package me.ash.reader.ui.page.common
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -33,42 +24,27 @@ fun HomeEntry() {
         val useDarkTheme = LocalUseDarkTheme.current
         val navController = rememberAnimatedNavController()
 
-        ProvideWindowInsets {
-            rememberSystemUiController().run {
-                setStatusBarColor(Color.Transparent, !useDarkTheme)
-                setSystemBarsColor(Color.Transparent, !useDarkTheme)
-                setNavigationBarColor(MaterialTheme.colorScheme.surface, !useDarkTheme)
+        rememberSystemUiController().run {
+            setStatusBarColor(Color.Transparent, !useDarkTheme)
+            setSystemBarsColor(Color.Transparent, !useDarkTheme)
+            setNavigationBarColor(Color.Transparent, !useDarkTheme)
+        }
+
+        AnimatedNavHost(
+            navController = navController,
+            startDestination = if (context.isFirstLaunch) RouteName.STARTUP else RouteName.HOME,
+        ) {
+            animatedComposable(route = RouteName.STARTUP) {
+                StartupPage(navController)
             }
-            Column {
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .background(MaterialTheme.colorScheme.surface),
-                ) {
-                    AnimatedNavHost(
-                        navController = navController,
-                        startDestination = if (context.isFirstLaunch) RouteName.STARTUP else RouteName.HOME,
-                    ) {
-                        animatedComposable(route = RouteName.STARTUP) {
-                            StartupPage(navController)
-                        }
-                        animatedComposable(route = RouteName.HOME) {
-                            HomePage(navController)
-                        }
-                        animatedComposable(route = RouteName.SETTINGS) {
-                            SettingsPage(navController)
-                        }
-                        animatedComposable(route = RouteName.COLOR_AND_STYLE) {
-                            ColorAndStyle(navController)
-                        }
-                    }
-                }
-                Spacer(
-                    modifier = Modifier
-                        .navigationBarsHeight()
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surface)
-                )
+            animatedComposable(route = RouteName.HOME) {
+                HomePage(navController)
+            }
+            animatedComposable(route = RouteName.SETTINGS) {
+                SettingsPage(navController)
+            }
+            animatedComposable(route = RouteName.COLOR_AND_STYLE) {
+                ColorAndStyle(navController)
             }
         }
     }

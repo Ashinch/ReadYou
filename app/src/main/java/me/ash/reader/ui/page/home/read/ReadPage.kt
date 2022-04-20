@@ -136,6 +136,7 @@ private fun TopBar(
         exit = fadeOut() + shrinkVertically(),
     ) {
         SmallTopAppBar(
+            modifier = Modifier.statusBarsPadding(),
             colors = TopAppBarDefaults.smallTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.surface,
             ),
@@ -182,7 +183,9 @@ private fun Content(
     viewState: ReadViewState,
     LazyListState: LazyListState = rememberLazyListState(),
 ) {
-    Column {
+    Column(
+        modifier = Modifier.statusBarsPadding(),
+    ) {
         if (articleWithFeed == null) {
             Spacer(modifier = Modifier.height(64.dp))
 //            LottieAnimation(

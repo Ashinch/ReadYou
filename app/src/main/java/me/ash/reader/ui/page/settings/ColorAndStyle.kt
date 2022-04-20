@@ -51,7 +51,8 @@ fun ColorAndStyle(
     Scaffold(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface)
-            .statusBarsPadding(),
+            .statusBarsPadding()
+            .navigationBarsPadding(),
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         topBar = {
             SmallTopAppBar(
