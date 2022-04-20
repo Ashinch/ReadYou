@@ -6,6 +6,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DoneAll
@@ -63,6 +64,7 @@ fun FlowPage(
     var onSearch by remember { mutableStateOf(false) }
     val viewState = flowViewModel.viewState.collectAsStateValue()
     val pagingItems = viewState.pagingData.collectAsLazyPagingItems()
+    val listState = if (pagingItems.itemCount > 0) viewState.listState else rememberLazyListState()
 
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
@@ -176,7 +178,7 @@ fun FlowPage(
             ) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    state = viewState.listState,
+                    state = listState,
                 ) {
                     item {
                         DisplayTextHeader(filterState, isSyncing)

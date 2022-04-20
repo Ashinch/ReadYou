@@ -74,7 +74,7 @@ class FlowViewModel @Inject constructor(
                             val afterDate =
                                 stringsRepository.formatAsString(after?.articleWithFeed?.article?.date)
                             if (beforeDate != afterDate) {
-                                afterDate?.let { FlowItemView.Date(it) }
+                                afterDate?.let { FlowItemView.Date(it, beforeDate != null) }
                             } else {
                                 null
                             }
@@ -102,7 +102,7 @@ class FlowViewModel @Inject constructor(
                             val afterDate =
                                 stringsRepository.formatAsString(after?.articleWithFeed?.article?.date)
                             if (beforeDate != afterDate) {
-                                afterDate?.let { FlowItemView.Date(it) }
+                                afterDate?.let { FlowItemView.Date(it, beforeDate != null) }
                             } else {
                                 null
                             }
@@ -212,5 +212,5 @@ enum class MarkAsReadBefore {
 
 sealed class FlowItemView {
     class Article(val articleWithFeed: ArticleWithFeed) : FlowItemView()
-    class Date(val date: String) : FlowItemView()
+    class Date(val date: String, val showSpacer: Boolean) : FlowItemView()
 }

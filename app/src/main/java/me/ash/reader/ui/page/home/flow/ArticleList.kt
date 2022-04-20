@@ -15,21 +15,22 @@ fun LazyListScope.ArticleList(
     pagingItems: LazyPagingItems<FlowItemView>,
     onClick: (ArticleWithFeed) -> Unit = {},
 ) {
-    for (itemIndex in 0 until pagingItems.itemCount) {
-        when (val item = pagingItems[itemIndex]) {
+    for (index in 0 until pagingItems.itemCount) {
+        when (val item = pagingItems.peek(index)) {
             is FlowItemView.Article -> {
-                item {
+                item(key = item.articleWithFeed.article.id) {
                     ArticleItem(
-                        articleWithFeed = item.articleWithFeed,
+                        articleWithFeed = (pagingItems[index] as FlowItemView.Article).articleWithFeed,
                     ) {
                         onClick(it)
                     }
                 }
             }
             is FlowItemView.Date -> {
-                if (itemIndex != 0) item { Spacer(modifier = Modifier.height(40.dp)) }
+                val separator = pagingItems[index] as FlowItemView.Date
+                if (separator.showSpacer) item { Spacer(modifier = Modifier.height(40.dp)) }
                 stickyHeader {
-                    StickyHeader(item.date)
+                    StickyHeader(separator.date)
                 }
             }
             else -> {}
