@@ -1,4 +1,4 @@
-package me.ash.reader.ui.page.home.drawer.feed
+package me.ash.reader.ui.page.home.feeds.option.feed
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState

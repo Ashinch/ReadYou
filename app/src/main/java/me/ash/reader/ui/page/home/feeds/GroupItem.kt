@@ -27,8 +27,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.R
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.entity.Group
-import me.ash.reader.ui.page.home.drawer.group.GroupOptionViewAction
-import me.ash.reader.ui.page.home.drawer.group.GroupOptionViewModel
+import me.ash.reader.ui.page.home.feeds.option.group.GroupOptionViewAction
+import me.ash.reader.ui.page.home.feeds.option.group.GroupOptionViewModel
 
 @OptIn(ExperimentalMaterialApi::class, androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable

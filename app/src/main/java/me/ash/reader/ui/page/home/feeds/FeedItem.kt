@@ -19,8 +19,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.data.entity.Feed
-import me.ash.reader.ui.page.home.drawer.feed.FeedOptionViewAction
-import me.ash.reader.ui.page.home.drawer.feed.FeedOptionViewModel
+import me.ash.reader.ui.page.home.feeds.option.feed.FeedOptionViewAction
+import me.ash.reader.ui.page.home.feeds.option.feed.FeedOptionViewModel
 
 @OptIn(
     androidx.compose.foundation.ExperimentalFoundationApi::class,

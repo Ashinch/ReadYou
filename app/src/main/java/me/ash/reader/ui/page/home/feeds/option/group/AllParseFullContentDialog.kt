@@ -1,8 +1,8 @@
-package me.ash.reader.ui.page.home.drawer.group
+package me.ash.reader.ui.page.home.feeds.option.group
 
 import android.widget.Toast
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DriveFileMove
+import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -19,7 +19,7 @@ import me.ash.reader.ui.ext.collectAsStateValue
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun AllMoveToGroupDialog(
+fun AllParseFullContentDialog(
     modifier: Modifier = Modifier,
     groupName: String,
     viewModel: GroupOptionViewModel = hiltViewModel(),
@@ -27,55 +27,53 @@ fun AllMoveToGroupDialog(
     val context = LocalContext.current
     val viewState = viewModel.viewState.collectAsStateValue()
     val scope = rememberCoroutineScope()
-    val toastString =
-        stringResource(R.string.all_move_to_group_toast, viewState.targetGroup?.name ?: "")
+    val allowToastString = stringResource(R.string.all_parse_full_content_toast, groupName)
+    val denyToastString = stringResource(R.string.all_deny_parse_full_content_toast, groupName)
 
     Dialog(
-        visible = viewState.allMoveToGroupDialogVisible,
+        visible = viewState.allParseFullContentDialogVisible,
         onDismissRequest = {
-            viewModel.dispatch(GroupOptionViewAction.HideAllMoveToGroupDialog)
+            viewModel.dispatch(GroupOptionViewAction.HideAllParseFullContentDialog)
         },
         icon = {
             Icon(
-                imageVector = Icons.Outlined.DriveFileMove,
-                contentDescription = stringResource(R.string.move_to_group),
+                imageVector = Icons.Outlined.Article,
+                contentDescription = stringResource(R.string.parse_full_content),
             )
         },
         title = {
-            Text(text = stringResource(R.string.move_to_group))
+            Text(text = stringResource(R.string.parse_full_content))
         },
         text = {
-            Text(
-                text = stringResource(
-                    R.string.all_move_to_group_tip,
-                    groupName,
-                    viewState.targetGroup?.name ?: "",
-                )
-            )
+            Text(text = stringResource(R.string.all_parse_full_content_tip, groupName))
         },
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.AllMoveToGroup {
-                        viewModel.dispatch(GroupOptionViewAction.HideAllMoveToGroupDialog)
+                    viewModel.dispatch(GroupOptionViewAction.AllParseFullContent(true) {
+                        viewModel.dispatch(GroupOptionViewAction.HideAllParseFullContentDialog)
                         viewModel.dispatch(GroupOptionViewAction.Hide(scope))
-                        Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, allowToastString, Toast.LENGTH_SHORT).show()
                     })
                 }
             ) {
                 Text(
-                    text = stringResource(R.string.confirm),
+                    text = stringResource(R.string.allow),
                 )
             }
         },
         dismissButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.HideAllMoveToGroupDialog)
+                    viewModel.dispatch(GroupOptionViewAction.AllParseFullContent(false) {
+                        viewModel.dispatch(GroupOptionViewAction.HideAllParseFullContentDialog)
+                        viewModel.dispatch(GroupOptionViewAction.Hide(scope))
+                        Toast.makeText(context, denyToastString, Toast.LENGTH_SHORT).show()
+                    })
                 }
             ) {
                 Text(
-                    text = stringResource(R.string.cancel),
+                    text = stringResource(R.string.deny),
                 )
             }
         },

@@ -1,7 +1,8 @@
-package me.ash.reader.ui.page.home.drawer.group
+package me.ash.reader.ui.page.home.feeds.option.group
 
 import android.content.Context
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -27,8 +28,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
+import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.data.entity.Group
 import me.ash.reader.ui.component.BottomDrawer
@@ -53,10 +56,16 @@ fun GroupOptionDrawer(
     val group = viewState.group
     val toastString = stringResource(R.string.rename_toast, viewState.newName)
 
+    BackHandler(viewState.drawerState.isVisible) {
+        scope.launch {
+            viewState.drawerState.hide()
+        }
+    }
+
     BottomDrawer(
         drawerState = viewState.drawerState,
         sheetContent = {
-            Column {
+            Column(modifier = Modifier.navigationBarsPadding()) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -153,6 +162,7 @@ private fun Preset(
 ) {
     FlowRow(
         mainAxisAlignment = MainAxisAlignment.Start,
+        crossAxisAlignment = FlowCrossAxisAlignment.Center,
         crossAxisSpacing = 10.dp,
         mainAxisSpacing = 10.dp,
     ) {
@@ -208,6 +218,7 @@ private fun FlowRowGroups(
 ) {
     FlowRow(
         mainAxisAlignment = MainAxisAlignment.Start,
+        crossAxisAlignment = FlowCrossAxisAlignment.Center,
         crossAxisSpacing = 10.dp,
         mainAxisSpacing = 10.dp,
     ) {

@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import me.ash.reader.R
@@ -123,6 +124,7 @@ private fun Preset(
     Spacer(modifier = Modifier.height(10.dp))
     FlowRow(
         mainAxisAlignment = MainAxisAlignment.Start,
+        crossAxisAlignment = FlowCrossAxisAlignment.Center,
         crossAxisSpacing = 10.dp,
         mainAxisSpacing = 10.dp,
     ) {
@@ -200,6 +202,7 @@ private fun AddToGroup(
     } else {
         FlowRow(
             mainAxisAlignment = MainAxisAlignment.Start,
+            crossAxisAlignment = FlowCrossAxisAlignment.Center,
             crossAxisSpacing = 10.dp,
             mainAxisSpacing = 10.dp,
         ) {

@@ -1,8 +1,8 @@
-package me.ash.reader.ui.page.home.drawer.group
+package me.ash.reader.ui.page.home.feeds.option.group
 
 import android.widget.Toast
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.DriveFileMove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -19,7 +19,7 @@ import me.ash.reader.ui.ext.collectAsStateValue
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun AllAllowNotificationDialog(
+fun AllMoveToGroupDialog(
     modifier: Modifier = Modifier,
     groupName: String,
     viewModel: GroupOptionViewModel = hiltViewModel(),
@@ -27,53 +27,55 @@ fun AllAllowNotificationDialog(
     val context = LocalContext.current
     val viewState = viewModel.viewState.collectAsStateValue()
     val scope = rememberCoroutineScope()
-    val allowToastString = stringResource(R.string.all_allow_notification_toast, groupName)
-    val denyToastString = stringResource(R.string.all_deny_notification_toast, groupName)
+    val toastString =
+        stringResource(R.string.all_move_to_group_toast, viewState.targetGroup?.name ?: "")
 
     Dialog(
-        visible = viewState.allAllowNotificationDialogVisible,
+        visible = viewState.allMoveToGroupDialogVisible,
         onDismissRequest = {
-            viewModel.dispatch(GroupOptionViewAction.HideAllAllowNotificationDialog)
+            viewModel.dispatch(GroupOptionViewAction.HideAllMoveToGroupDialog)
         },
         icon = {
             Icon(
-                imageVector = Icons.Outlined.Notifications,
-                contentDescription = stringResource(R.string.allow_notification),
+                imageVector = Icons.Outlined.DriveFileMove,
+                contentDescription = stringResource(R.string.move_to_group),
             )
         },
         title = {
-            Text(text = stringResource(R.string.allow_notification))
+            Text(text = stringResource(R.string.move_to_group))
         },
         text = {
-            Text(text = stringResource(R.string.all_allow_notification_tip, groupName))
+            Text(
+                text = stringResource(
+                    R.string.all_move_to_group_tip,
+                    groupName,
+                    viewState.targetGroup?.name ?: "",
+                )
+            )
         },
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.AllAllowNotification(true) {
-                        viewModel.dispatch(GroupOptionViewAction.HideAllAllowNotificationDialog)
+                    viewModel.dispatch(GroupOptionViewAction.AllMoveToGroup {
+                        viewModel.dispatch(GroupOptionViewAction.HideAllMoveToGroupDialog)
                         viewModel.dispatch(GroupOptionViewAction.Hide(scope))
-                        Toast.makeText(context, allowToastString, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show()
                     })
                 }
             ) {
                 Text(
-                    text = stringResource(R.string.allow),
+                    text = stringResource(R.string.confirm),
                 )
             }
         },
         dismissButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.AllAllowNotification(false) {
-                        viewModel.dispatch(GroupOptionViewAction.HideAllAllowNotificationDialog)
-                        viewModel.dispatch(GroupOptionViewAction.Hide(scope))
-                        Toast.makeText(context, denyToastString, Toast.LENGTH_SHORT).show()
-                    })
+                    viewModel.dispatch(GroupOptionViewAction.HideAllMoveToGroupDialog)
                 }
             ) {
                 Text(
-                    text = stringResource(R.string.deny),
+                    text = stringResource(R.string.cancel),
                 )
             }
         },

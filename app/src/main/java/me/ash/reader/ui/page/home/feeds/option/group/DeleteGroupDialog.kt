@@ -1,8 +1,8 @@
-package me.ash.reader.ui.page.home.drawer.group
+package me.ash.reader.ui.page.home.feeds.option.group
 
 import android.widget.Toast
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Article
+import androidx.compose.material.icons.outlined.DeleteForever
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -19,7 +19,7 @@ import me.ash.reader.ui.ext.collectAsStateValue
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun AllParseFullContentDialog(
+fun DeleteGroupDialog(
     modifier: Modifier = Modifier,
     groupName: String,
     viewModel: GroupOptionViewModel = hiltViewModel(),
@@ -27,53 +27,48 @@ fun AllParseFullContentDialog(
     val context = LocalContext.current
     val viewState = viewModel.viewState.collectAsStateValue()
     val scope = rememberCoroutineScope()
-    val allowToastString = stringResource(R.string.all_parse_full_content_toast, groupName)
-    val denyToastString = stringResource(R.string.all_deny_parse_full_content_toast, groupName)
+    val toastString = stringResource(R.string.delete_toast, groupName)
 
     Dialog(
-        visible = viewState.allParseFullContentDialogVisible,
+        visible = viewState.deleteDialogVisible,
         onDismissRequest = {
-            viewModel.dispatch(GroupOptionViewAction.HideAllParseFullContentDialog)
+            viewModel.dispatch(GroupOptionViewAction.HideDeleteDialog)
         },
         icon = {
             Icon(
-                imageVector = Icons.Outlined.Article,
-                contentDescription = stringResource(R.string.parse_full_content),
+                imageVector = Icons.Outlined.DeleteForever,
+                contentDescription = stringResource(R.string.delete_group),
             )
         },
         title = {
-            Text(text = stringResource(R.string.parse_full_content))
+            Text(text = stringResource(R.string.delete_group))
         },
         text = {
-            Text(text = stringResource(R.string.all_parse_full_content_tip, groupName))
+            Text(text = stringResource(R.string.delete_group_tip, groupName))
         },
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.AllParseFullContent(true) {
-                        viewModel.dispatch(GroupOptionViewAction.HideAllParseFullContentDialog)
+                    viewModel.dispatch(GroupOptionViewAction.Delete {
+                        viewModel.dispatch(GroupOptionViewAction.HideDeleteDialog)
                         viewModel.dispatch(GroupOptionViewAction.Hide(scope))
-                        Toast.makeText(context, allowToastString, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show()
                     })
                 }
             ) {
                 Text(
-                    text = stringResource(R.string.allow),
+                    text = stringResource(R.string.delete),
                 )
             }
         },
         dismissButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.AllParseFullContent(false) {
-                        viewModel.dispatch(GroupOptionViewAction.HideAllParseFullContentDialog)
-                        viewModel.dispatch(GroupOptionViewAction.Hide(scope))
-                        Toast.makeText(context, denyToastString, Toast.LENGTH_SHORT).show()
-                    })
+                    viewModel.dispatch(GroupOptionViewAction.HideDeleteDialog)
                 }
             ) {
                 Text(
-                    text = stringResource(R.string.deny),
+                    text = stringResource(R.string.cancel),
                 )
             }
         },

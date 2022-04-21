@@ -1,6 +1,7 @@
-package me.ash.reader.ui.page.home.drawer.feed
+package me.ash.reader.ui.page.home.feeds.option.feed
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
@@ -19,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.ui.component.BottomDrawer
 import me.ash.reader.ui.component.TextFieldDialog
@@ -39,10 +41,16 @@ fun FeedOptionDrawer(
     val feed = viewState.feed
     val toastString = stringResource(R.string.rename_toast, viewState.newName)
 
+    BackHandler(viewState.drawerState.isVisible) {
+        scope.launch {
+            viewState.drawerState.hide()
+        }
+    }
+
     BottomDrawer(
         drawerState = viewState.drawerState,
         sheetContent = {
-            Column {
+            Column(modifier = Modifier.navigationBarsPadding()) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,

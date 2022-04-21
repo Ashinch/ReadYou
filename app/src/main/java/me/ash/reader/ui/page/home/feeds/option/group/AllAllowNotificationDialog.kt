@@ -1,8 +1,8 @@
-package me.ash.reader.ui.page.home.drawer.group
+package me.ash.reader.ui.page.home.feeds.option.group
 
 import android.widget.Toast
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DeleteForever
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -19,7 +19,7 @@ import me.ash.reader.ui.ext.collectAsStateValue
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun DeleteGroupDialog(
+fun AllAllowNotificationDialog(
     modifier: Modifier = Modifier,
     groupName: String,
     viewModel: GroupOptionViewModel = hiltViewModel(),
@@ -27,48 +27,53 @@ fun DeleteGroupDialog(
     val context = LocalContext.current
     val viewState = viewModel.viewState.collectAsStateValue()
     val scope = rememberCoroutineScope()
-    val toastString = stringResource(R.string.delete_toast, groupName)
+    val allowToastString = stringResource(R.string.all_allow_notification_toast, groupName)
+    val denyToastString = stringResource(R.string.all_deny_notification_toast, groupName)
 
     Dialog(
-        visible = viewState.deleteDialogVisible,
+        visible = viewState.allAllowNotificationDialogVisible,
         onDismissRequest = {
-            viewModel.dispatch(GroupOptionViewAction.HideDeleteDialog)
+            viewModel.dispatch(GroupOptionViewAction.HideAllAllowNotificationDialog)
         },
         icon = {
             Icon(
-                imageVector = Icons.Outlined.DeleteForever,
-                contentDescription = stringResource(R.string.delete_group),
+                imageVector = Icons.Outlined.Notifications,
+                contentDescription = stringResource(R.string.allow_notification),
             )
         },
         title = {
-            Text(text = stringResource(R.string.delete_group))
+            Text(text = stringResource(R.string.allow_notification))
         },
         text = {
-            Text(text = stringResource(R.string.delete_group_tip, groupName))
+            Text(text = stringResource(R.string.all_allow_notification_tip, groupName))
         },
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.Delete {
-                        viewModel.dispatch(GroupOptionViewAction.HideDeleteDialog)
+                    viewModel.dispatch(GroupOptionViewAction.AllAllowNotification(true) {
+                        viewModel.dispatch(GroupOptionViewAction.HideAllAllowNotificationDialog)
                         viewModel.dispatch(GroupOptionViewAction.Hide(scope))
-                        Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, allowToastString, Toast.LENGTH_SHORT).show()
                     })
                 }
             ) {
                 Text(
-                    text = stringResource(R.string.delete),
+                    text = stringResource(R.string.allow),
                 )
             }
         },
         dismissButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.HideDeleteDialog)
+                    viewModel.dispatch(GroupOptionViewAction.AllAllowNotification(false) {
+                        viewModel.dispatch(GroupOptionViewAction.HideAllAllowNotificationDialog)
+                        viewModel.dispatch(GroupOptionViewAction.Hide(scope))
+                        Toast.makeText(context, denyToastString, Toast.LENGTH_SHORT).show()
+                    })
                 }
             ) {
                 Text(
-                    text = stringResource(R.string.cancel),
+                    text = stringResource(R.string.deny),
                 )
             }
         },

@@ -1,4 +1,4 @@
-package me.ash.reader.ui.page.home.drawer.feed
+package me.ash.reader.ui.page.home.feeds.option.feed
 
 import android.widget.Toast
 import androidx.compose.material.icons.Icons
