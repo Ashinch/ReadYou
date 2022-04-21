@@ -86,7 +86,7 @@ class RssHelper @Inject constructor(
             val parseRss = rssNetworkDataSource.parseRss(feed.url)
             parseRss.items.forEach {
                 if (latestLink != null && latestLink == it.link) return@withContext a
-                Log.i("RLog", "request rss ${feed.name}: ${it.title}")
+                Log.i("RLog", "request rss:\n${feed.name},${feed.url}\n${it.title}")
                 a.add(
                     Article(
                         id = accountId.spacerDollar(UUID.randomUUID().toString()),

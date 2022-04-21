@@ -14,8 +14,6 @@ import androidx.work.ListenableWorker
 import androidx.work.WorkManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import me.ash.reader.MainActivity
 import me.ash.reader.R
@@ -99,11 +97,12 @@ class LocalRssRepository @Inject constructor(
         return withContext(dispatcherDefault) {
             val preTime = System.currentTimeMillis()
             val accountId = context.currentAccountId
-            val articles = mutableListOf<Article>()
             feedDao.queryAll(accountId)
                 .also { coroutineWorker.setProgress(setIsSyncing(true)) }
-                .map { feed -> async { syncFeed(feed) } }
-                .awaitAll()
+                // For ParseRSS v0.5.0 only
+                .map { feed -> syncFeed(feed) }
+                //.map { feed -> async { syncFeed(feed) } }
+                //.awaitAll()
                 .forEach {
                     if (it.isNotify) {
                         notify(articleDao.insertIfNotExist(it.articles))
@@ -111,8 +110,6 @@ class LocalRssRepository @Inject constructor(
                         articleDao.insertIfNotExist(it.articles)
                     }
                 }
-
-//            articleDao.insertList(articles)
             Log.i("RlOG", "onCompletion: ${System.currentTimeMillis() - preTime}")
             accountDao.queryById(accountId)?.let { account ->
                 accountDao.update(
@@ -167,10 +164,11 @@ class LocalRssRepository @Inject constructor(
 
     private suspend fun syncFeed(feed: Feed): ArticleNotify {
         val latest = articleDao.queryLatestByFeedId(context.currentAccountId, feed.id)
-        var articles: List<Article>? = null
+        val articles: List<Article>?
         try {
             articles = rssHelper.queryRssXml(feed, latest?.link)
         } catch (e: Exception) {
+            e.printStackTrace()
             Log.e("RLog", "queryRssXml[${feed.name}]: ${e.message}")
             return ArticleNotify(listOf(), false)
         }

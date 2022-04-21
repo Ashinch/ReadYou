@@ -1,7 +1,10 @@
 package me.ash.reader.ui.page.common
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.background
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -31,6 +34,7 @@ fun HomeEntry() {
         }
 
         AnimatedNavHost(
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface),
             navController = navController,
             startDestination = if (context.isFirstLaunch) RouteName.STARTUP else RouteName.HOME,
         ) {
