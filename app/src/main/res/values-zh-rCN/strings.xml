@@ -107,4 +107,8 @@
     <string name="feeds_page">订阅源页面</string>
     <string name="flow_page">信息流页面</string>
     <string name="reading_page">阅读页面</string>
+    <string name="sponsor">捐赠</string>
+    <string name="open_source_licenses">开放源代码许可</string>
+    <string name="github_link">https://github.com/Ashinch/ReadYou</string>
+    <string name="telegram_link">https://t.me/ReadYouApp</string>
 </resources>

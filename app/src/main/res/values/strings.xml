@@ -107,4 +107,8 @@
     <string name="feeds_page">Feeds Page</string>
     <string name="flow_page">Flow Page</string>
     <string name="reading_page">Reading Page</string>
+    <string name="sponsor">Sponsor</string>
+    <string name="open_source_licenses">Open Source Licenses</string>
+    <string name="github_link">https://github.com/Ashinch/ReadYou</string>
+    <string name="telegram_link">https://t.me/ReadYouApp</string>
 </resources>

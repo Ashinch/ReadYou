@@ -8,4 +8,5 @@ object RouteName {
     const val READ = "read"
     const val SETTINGS = "settings"
     const val COLOR_AND_STYLE = "color_and_style"
+    const val TIPS_AND_SUPPORT = "tips_and_support"
 }

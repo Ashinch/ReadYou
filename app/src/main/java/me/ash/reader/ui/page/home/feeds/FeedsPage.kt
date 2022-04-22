@@ -38,8 +38,6 @@ import me.ash.reader.ui.ext.getName
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterBar
 import me.ash.reader.ui.page.home.FilterState
-import me.ash.reader.ui.page.home.feeds.option.feed.FeedOptionDrawer
-import me.ash.reader.ui.page.home.feeds.option.group.GroupOptionDrawer
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewAction
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
@@ -241,8 +239,5 @@ fun FeedsPage(
             )
         }
     )
-
-    FeedOptionDrawer()
-    GroupOptionDrawer()
 }
 

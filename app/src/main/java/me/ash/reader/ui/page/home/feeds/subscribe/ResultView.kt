@@ -186,7 +186,9 @@ private fun AddToGroup(
     Spacer(modifier = Modifier.height(10.dp))
 
     if (groups.size > 6) {
-        LazyRow {
+        LazyRow(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             items(groups) {
                 SelectionChip(
                     modifier = Modifier.animateContentSize(),

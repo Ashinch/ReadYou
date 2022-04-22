@@ -15,6 +15,7 @@ import me.ash.reader.ui.ext.isFirstLaunch
 import me.ash.reader.ui.page.home.HomePage
 import me.ash.reader.ui.page.settings.ColorAndStyle
 import me.ash.reader.ui.page.settings.SettingsPage
+import me.ash.reader.ui.page.settings.TipsAndSupport
 import me.ash.reader.ui.page.startup.StartupPage
 import me.ash.reader.ui.theme.AppTheme
 import me.ash.reader.ui.theme.LocalUseDarkTheme
@@ -49,6 +50,9 @@ fun HomeEntry() {
             }
             animatedComposable(route = RouteName.COLOR_AND_STYLE) {
                 ColorAndStyle(navController)
+            }
+            animatedComposable(route = RouteName.TIPS_AND_SUPPORT) {
+                TipsAndSupport(navController)
             }
         }
     }
