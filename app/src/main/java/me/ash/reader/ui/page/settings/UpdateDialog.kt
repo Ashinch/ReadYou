@@ -58,6 +58,7 @@ fun UpdateDialog(
     val newVersionSize = context.dataStore.data
         .map { it[DataStoreKeys.NewVersionSize.key] ?: 0 }
         .map { it / 1024f / 1024f }
+        .map { if (it > 0f) " ${String.format("%.2f", it)} MB" else "" }
         .collectAsState(initial = 0)
         .value
 
@@ -98,7 +99,7 @@ fun UpdateDialog(
                 onClick = {
                 }
             ) {
-                Text(text = stringResource(R.string.update, String.format("%.2f", newVersionSize)))
+                Text(text = stringResource(R.string.update) + newVersionSize)
             }
         },
         dismissButton = {

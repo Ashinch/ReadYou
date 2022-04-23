@@ -13,11 +13,13 @@ class CrashHandler(private val context: Context) : UncaughtExceptionHandler {
     }
 
     override fun uncaughtException(p0: Thread, p1: Throwable) {
-        Looper.prepare()
+        if (Looper.myLooper() == null) {
+            Looper.prepare()
+        }
         Toast.makeText(context, p1.message, Toast.LENGTH_LONG).show()
         Looper.loop()
         p1.printStackTrace()
-        Log.e("RLog", "uncaughtException: ${p1.message}" )
+        Log.e("RLog", "uncaughtException: ${p1.message}")
         android.os.Process.killProcess(android.os.Process.myPid());
         exitProcess(1)
     }

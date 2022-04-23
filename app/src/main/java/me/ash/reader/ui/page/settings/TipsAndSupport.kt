@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.view.HapticFeedbackConstants
 import android.view.SoundEffectConstants
+import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -31,10 +32,13 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.ui.component.CurlyCornerShape
 import me.ash.reader.ui.component.FeedbackIconButton
+import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.theme.palette.alwaysLight
 import me.ash.reader.ui.theme.palette.onLight
 
@@ -42,12 +46,16 @@ import me.ash.reader.ui.theme.palette.onLight
 @Composable
 fun TipsAndSupport(
     navController: NavHostController,
+    updateViewModel: UpdateViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val view = LocalView.current
+    val scope = rememberCoroutineScope()
+    val viewState = updateViewModel.viewState.collectAsStateValue()
     val githubLink = stringResource(R.string.github_link)
     val telegramLink = stringResource(R.string.telegram_link)
-    var version by remember { mutableStateOf("") }
+    val isLatestVersion = stringResource(R.string.is_latest_version)
+    var currentVersion by remember { mutableStateOf("") }
     var pressAMP by remember { mutableStateOf(16f) }
     val animatedPress by animateFloatAsState(
         targetValue = pressAMP,
@@ -55,7 +63,7 @@ fun TipsAndSupport(
     )
 
     LaunchedEffect(Unit) {
-        version = context.packageManager.getPackageInfo(context.packageName, 0).versionName
+        currentVersion = context.getCurrentVersion().toString()
     }
 
     Scaffold(
@@ -100,6 +108,28 @@ fun TipsAndSupport(
                                     view.playSoundEffect(SoundEffectConstants.CLICK)
                                     pressAMP = 16f
                                 },
+                                onTap = {
+                                    scope.launch {
+                                        context.dataStore.put(DataStoreKeys.SkipVersionNumber, "")
+                                        updateViewModel.dispatch(
+                                            UpdateViewAction.CheckUpdate(
+                                                {
+                                                    context.dataStore.put(
+                                                        DataStoreKeys.SkipVersionNumber,
+                                                        ""
+                                                    )
+                                                },
+                                                {
+                                                    if (!it) Toast.makeText(
+                                                        context,
+                                                        isLatestVersion,
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                            )
+                                        )
+                                    }
+                                }
                             )
                         },
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -135,7 +165,7 @@ fun TipsAndSupport(
                                     containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                                     contentColor = MaterialTheme.colorScheme.tertiary,
                                 ) {
-                                    Text(text = version)
+                                    Text(text = currentVersion)
                                 }
                             }
                         ) {
@@ -198,6 +228,11 @@ fun TipsAndSupport(
                 }
             }
         }
+    )
+
+    UpdateDialog(
+        visible = viewState.updateDialogVisible,
+        onDismissRequest = { updateViewModel.dispatch(UpdateViewAction.Hide) },
     )
 }
 

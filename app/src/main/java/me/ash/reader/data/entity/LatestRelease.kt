@@ -1,6 +1,6 @@
 package me.ash.reader.data.entity
 
-data class GitHubRelease(
+data class LatestRelease(
     val html_url: String? = null,
     val tag_name: String? = null,
     val name: String? = null,

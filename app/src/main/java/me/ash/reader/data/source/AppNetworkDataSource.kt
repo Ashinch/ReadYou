@@ -1,13 +1,14 @@
 package me.ash.reader.data.source
 
-import me.ash.reader.data.entity.GitHubRelease
+import me.ash.reader.data.entity.LatestRelease
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Url
 
 interface AppNetworkDataSource {
-    @GET("https://api.github.com/repos/Ashinch/ReadYou/releases/latest")
-    suspend fun getReleaseLatest(): GitHubRelease
+    @GET
+    suspend fun getReleaseLatest(@Url url: String): LatestRelease
 
     companion object {
         private var instance: AppNetworkDataSource? = null

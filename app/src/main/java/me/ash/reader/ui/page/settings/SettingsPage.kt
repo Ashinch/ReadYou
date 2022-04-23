@@ -18,13 +18,13 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.map
 import me.ash.reader.R
-import me.ash.reader.data.repository.compareTo
-import me.ash.reader.data.repository.formatVersion
+import me.ash.reader.data.entity.Version
 import me.ash.reader.ui.component.Banner
 import me.ash.reader.ui.component.DisplayText
 import me.ash.reader.ui.component.FeedbackIconButton
 import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
+import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.theme.palette.onLight
 
@@ -36,18 +36,17 @@ fun SettingsPage(
 ) {
     val context = LocalContext.current
     var updateDialogVisible by remember { mutableStateOf(false) }
-    val skipVersionNumber =
-        context.dataStore.data
-            .map { it[DataStoreKeys.SkipVersionNumber.key] ?: "" }
-            .collectAsState(initial = "")
-            .value
-            .formatVersion()
-    val newVersionNumber =
-        context.dataStore.data
-            .map { it[DataStoreKeys.NewVersionNumber.key] ?: "" }
-            .collectAsState(initial = "")
-            .value
-            .formatVersion()
+    val skipVersion = context.dataStore.data
+        .map { it[DataStoreKeys.SkipVersionNumber.key] ?: "" }
+        .map { Version(it) }
+        .collectAsState(initial = Version())
+        .value
+    val latestVersion = context.dataStore.data
+        .map { it[DataStoreKeys.NewVersionNumber.key] ?: "" }
+        .map { Version(it) }
+        .collectAsState(initial = Version())
+        .value
+    val currentVersion by remember { mutableStateOf(context.getCurrentVersion()) }
 
     Scaffold(
         modifier = Modifier
@@ -78,13 +77,13 @@ fun SettingsPage(
                 }
                 item {
                     Box {
-                        if (newVersionNumber > skipVersionNumber) {
+                        if (latestVersion.whetherNeedUpdate(currentVersion, skipVersion)) {
                             Banner(
                                 modifier = Modifier.zIndex(1f),
                                 title = stringResource(R.string.get_new_updates),
                                 desc = stringResource(
                                     R.string.get_new_updates_desc,
-                                    newVersionNumber.joinToString(".")
+                                    latestVersion.toString(),
                                 ),
                                 icon = Icons.Outlined.Lightbulb,
                                 action = {

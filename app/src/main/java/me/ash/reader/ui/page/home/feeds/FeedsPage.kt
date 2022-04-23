@@ -29,9 +29,8 @@ import androidx.navigation.NavHostController
 import androidx.work.WorkInfo
 import kotlinx.coroutines.flow.map
 import me.ash.reader.R
+import me.ash.reader.data.entity.Version
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
-import me.ash.reader.data.repository.compareTo
-import me.ash.reader.data.repository.formatVersion
 import me.ash.reader.ui.component.Banner
 import me.ash.reader.ui.component.DisplayText
 import me.ash.reader.ui.component.FeedbackIconButton
@@ -62,20 +61,19 @@ fun FeedsPage(
     onScrollToPage: (targetPage: Int) -> Unit = {},
 ) {
     val context = LocalContext.current
-    val skipVersionNumber =
-        context.dataStore.data
-            .map { it[DataStoreKeys.SkipVersionNumber.key] ?: "" }
-            .collectAsState(initial = "")
-            .value
-            .formatVersion()
-    val newVersionNumber =
-        context.dataStore.data
-            .map { it[DataStoreKeys.NewVersionNumber.key] ?: "" }
-            .collectAsState(initial = "")
-            .value
-            .formatVersion()
-
     val viewState = feedsViewModel.viewState.collectAsStateValue()
+
+    val skipVersion = context.dataStore.data
+        .map { it[DataStoreKeys.SkipVersionNumber.key] ?: "" }
+        .map { Version(it) }
+        .collectAsState(initial = Version())
+        .value
+    val latestVersion = context.dataStore.data
+        .map { it[DataStoreKeys.NewVersionNumber.key] ?: "" }
+        .map { Version(it) }
+        .collectAsState(initial = Version())
+        .value
+    val currentVersion by remember { mutableStateOf(context.getCurrentVersion()) }
 
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
@@ -132,7 +130,7 @@ fun FeedsPage(
                         imageVector = Icons.Outlined.Settings,
                         contentDescription = stringResource(R.string.settings),
                         tint = MaterialTheme.colorScheme.onSurface,
-                        showBadge = newVersionNumber > skipVersionNumber,
+                        showBadge = latestVersion.whetherNeedUpdate(currentVersion, skipVersion),
                     ) {
                         navController.navigate(RouteName.SETTINGS)
                     }
