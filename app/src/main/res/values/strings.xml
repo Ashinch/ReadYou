@@ -73,7 +73,7 @@
     <string name="seven_days">7d</string>
     <string name="close">Close</string>
     <string name="get_new_updates">Get new updates</string>
-    <string name="get_new_updates_desc">Version 0.6.1 has been released</string>
+    <string name="get_new_updates_desc">Version %1$s has been released</string>
     <string name="in_coding">In coding</string>
     <string name="coming_soon">Coming soon</string>
     <string name="accounts">Accounts</string>
@@ -111,4 +111,8 @@
     <string name="open_source_licenses">Open Source Licenses</string>
     <string name="github_link">https://github.com/Ashinch/ReadYou</string>
     <string name="telegram_link">https://t.me/ReadYouApp</string>
+    <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
+    <string name="change_log">Change Log</string>
+    <string name="update">Update %1$s MB</string>
+    <string name="skip_this_version">Skip This Version</string>
 </resources>

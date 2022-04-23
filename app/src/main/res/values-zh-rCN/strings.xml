@@ -73,7 +73,7 @@
     <string name="seven_days">7天</string>
     <string name="close">关闭</string>
     <string name="get_new_updates">获取新的更新</string>
-    <string name="get_new_updates_desc">版本 0.6.1 现已发布</string>
+    <string name="get_new_updates_desc">版本 %1$s 现已发布</string>
     <string name="in_coding">施工中</string>
     <string name="coming_soon">正在路上</string>
     <string name="accounts">账户</string>
@@ -111,4 +111,8 @@
     <string name="open_source_licenses">开放源代码许可</string>
     <string name="github_link">https://github.com/Ashinch/ReadYou</string>
     <string name="telegram_link">https://t.me/ReadYouApp</string>
+    <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
+    <string name="change_log">更新日志</string>
+    <string name="update">更新 %1$s MB</string>
+    <string name="skip_this_version">跳过这个版本</string>
 </resources>

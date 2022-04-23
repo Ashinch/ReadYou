@@ -1,33 +1,54 @@
 package me.ash.reader.ui.page.settings
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.flow.map
 import me.ash.reader.R
+import me.ash.reader.data.repository.compareTo
+import me.ash.reader.data.repository.formatVersion
 import me.ash.reader.ui.component.Banner
 import me.ash.reader.ui.component.DisplayText
 import me.ash.reader.ui.component.FeedbackIconButton
+import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.theme.palette.onLight
 
+@SuppressLint("FlowOperatorInvokedInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPage(
     navController: NavHostController,
 ) {
+    val context = LocalContext.current
+    var updateDialogVisible by remember { mutableStateOf(false) }
+    val skipVersionNumber =
+        context.dataStore.data
+            .map { it[DataStoreKeys.SkipVersionNumber.key] ?: "" }
+            .collectAsState(initial = "")
+            .value
+            .formatVersion()
+    val newVersionNumber =
+        context.dataStore.data
+            .map { it[DataStoreKeys.NewVersionNumber.key] ?: "" }
+            .collectAsState(initial = "")
+            .value
+            .formatVersion()
+
     Scaffold(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface)
@@ -56,17 +77,30 @@ fun SettingsPage(
                     DisplayText(text = stringResource(R.string.settings), desc = "")
                 }
                 item {
-                    Banner(
-                        title = stringResource(R.string.in_coding),
-                        desc = stringResource(R.string.coming_soon),
-                        icon = Icons.Outlined.Lightbulb,
-                        action = {
-                            Icon(
-                                imageVector = Icons.Rounded.Close,
-                                contentDescription = stringResource(R.string.close),
-                            )
-                        },
-                    )
+                    Box {
+                        if (newVersionNumber > skipVersionNumber) {
+                            Banner(
+                                modifier = Modifier.zIndex(1f),
+                                title = stringResource(R.string.get_new_updates),
+                                desc = stringResource(
+                                    R.string.get_new_updates_desc,
+                                    newVersionNumber.joinToString(".")
+                                ),
+                                icon = Icons.Outlined.Lightbulb,
+                                action = {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Close,
+                                        contentDescription = stringResource(R.string.close),
+                                    )
+                                },
+                            ) { updateDialogVisible = true }
+                        }
+                        Banner(
+                            title = stringResource(R.string.in_coding),
+                            desc = stringResource(R.string.coming_soon),
+                            icon = Icons.Outlined.Lightbulb,
+                        )
+                    }
                     Spacer(modifier = Modifier.height(16.dp))
                 }
                 item {
@@ -113,5 +147,10 @@ fun SettingsPage(
                 }
             }
         }
+    )
+
+    UpdateDialog(
+        visible = updateDialogVisible,
+        onDismissRequest = { updateDialogVisible = false },
     )
 }

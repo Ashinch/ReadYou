@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.feeds
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.*
@@ -26,15 +27,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import androidx.work.WorkInfo
+import kotlinx.coroutines.flow.map
 import me.ash.reader.R
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
+import me.ash.reader.data.repository.compareTo
+import me.ash.reader.data.repository.formatVersion
 import me.ash.reader.ui.component.Banner
 import me.ash.reader.ui.component.DisplayText
 import me.ash.reader.ui.component.FeedbackIconButton
 import me.ash.reader.ui.component.Subtitle
-import me.ash.reader.ui.ext.collectAsStateValue
-import me.ash.reader.ui.ext.getDesc
-import me.ash.reader.ui.ext.getName
+import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterBar
 import me.ash.reader.ui.page.home.FilterState
@@ -42,6 +44,7 @@ import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewAction
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 
+@SuppressLint("FlowOperatorInvokedInComposition")
 @OptIn(
     ExperimentalMaterial3Api::class, com.google.accompanist.pager.ExperimentalPagerApi::class,
     androidx.compose.foundation.ExperimentalFoundationApi::class
@@ -59,6 +62,19 @@ fun FeedsPage(
     onScrollToPage: (targetPage: Int) -> Unit = {},
 ) {
     val context = LocalContext.current
+    val skipVersionNumber =
+        context.dataStore.data
+            .map { it[DataStoreKeys.SkipVersionNumber.key] ?: "" }
+            .collectAsState(initial = "")
+            .value
+            .formatVersion()
+    val newVersionNumber =
+        context.dataStore.data
+            .map { it[DataStoreKeys.NewVersionNumber.key] ?: "" }
+            .collectAsState(initial = "")
+            .value
+            .formatVersion()
+
     val viewState = feedsViewModel.viewState.collectAsStateValue()
 
     val owner = LocalLifecycleOwner.current
@@ -116,6 +132,7 @@ fun FeedsPage(
                         imageVector = Icons.Outlined.Settings,
                         contentDescription = stringResource(R.string.settings),
                         tint = MaterialTheme.colorScheme.onSurface,
+                        showBadge = newVersionNumber > skipVersionNumber,
                     ) {
                         navController.navigate(RouteName.SETTINGS)
                     }

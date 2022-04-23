@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import me.ash.reader.data.module.ApplicationScope
 import me.ash.reader.data.module.DispatcherDefault
 import me.ash.reader.data.repository.*
+import me.ash.reader.data.source.AppNetworkDataSource
 import me.ash.reader.data.source.OpmlLocalDataSource
 import me.ash.reader.data.source.ReaderDatabase
 import me.ash.reader.data.source.RssNetworkDataSource
@@ -31,6 +32,9 @@ class App : Application(), Configuration.Provider {
     lateinit var workManager: WorkManager
 
     @Inject
+    lateinit var appNetworkDataSource: AppNetworkDataSource
+
+    @Inject
     lateinit var opmlLocalDataSource: OpmlLocalDataSource
 
     @Inject
@@ -38,6 +42,9 @@ class App : Application(), Configuration.Provider {
 
     @Inject
     lateinit var rssHelper: RssHelper
+
+    @Inject
+    lateinit var appRepository: AppRepository
 
     @Inject
     lateinit var stringsRepository: StringsRepository
@@ -72,6 +79,7 @@ class App : Application(), Configuration.Provider {
         applicationScope.launch(dispatcherDefault) {
             accountInit()
             workerInit()
+            checkUpdate()
         }
     }
 
@@ -88,6 +96,10 @@ class App : Application(), Configuration.Provider {
 
     private fun workerInit() {
         rssRepository.get().doSync()
+    }
+
+    private suspend fun checkUpdate() {
+        appRepository.checkUpdate()
     }
 
     override fun getWorkManagerConfiguration(): Configuration =

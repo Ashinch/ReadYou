@@ -31,6 +31,7 @@ fun Banner(
     modifier: Modifier = Modifier,
     title: String,
     desc: String? = null,
+    backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     icon: ImageVector? = null,
     action: (@Composable () -> Unit)? = null,
     onClick: () -> Unit = {},
@@ -46,7 +47,7 @@ fun Banner(
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
                 .clip(RoundedCornerShape(32.dp))
-                .background(MaterialTheme.colorScheme.primaryContainer alwaysLight true)
+                .background(backgroundColor alwaysLight true)
                 .clickable { onClick() }
                 .padding(16.dp, 20.dp),
             verticalAlignment = Alignment.CenterVertically
