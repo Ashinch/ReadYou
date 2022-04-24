@@ -115,5 +115,6 @@
     <string name="change_log">Change Log</string>
     <string name="update">Update</string>
     <string name="skip_this_version">Skip This Version</string>
+    <string name="checking_updates">Checking for updates…</string>
     <string name="is_latest_version">This is the latest version</string>
 </resources>

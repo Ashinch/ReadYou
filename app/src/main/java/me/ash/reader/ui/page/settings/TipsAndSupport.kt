@@ -54,7 +54,9 @@ fun TipsAndSupport(
     val viewState = updateViewModel.viewState.collectAsStateValue()
     val githubLink = stringResource(R.string.github_link)
     val telegramLink = stringResource(R.string.telegram_link)
+    val checkingUpdates = stringResource(R.string.checking_updates)
     val isLatestVersion = stringResource(R.string.is_latest_version)
+    val comingSoon = stringResource(R.string.coming_soon)
     var currentVersion by remember { mutableStateOf("") }
     var pressAMP by remember { mutableStateOf(16f) }
     val animatedPress by animateFloatAsState(
@@ -109,6 +111,11 @@ fun TipsAndSupport(
                                     pressAMP = 16f
                                 },
                                 onTap = {
+                                    Toast.makeText(
+                                        context,
+                                        checkingUpdates,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     scope.launch {
                                         updateViewModel.dispatch(
                                             UpdateViewAction.CheckUpdate(
@@ -187,7 +194,11 @@ fun TipsAndSupport(
                         // Sponsor
                         RoundIconButton(RoundIconButtonType.Sponsor(
                             backgroundColor = MaterialTheme.colorScheme.tertiaryContainer alwaysLight true,
-                        ) {})
+                        ) {
+                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
+                            Toast.makeText(context, comingSoon, Toast.LENGTH_SHORT).show()
+                        })
                         Spacer(modifier = Modifier.width(16.dp))
 
                         // Telegram
@@ -223,7 +234,11 @@ fun TipsAndSupport(
                         // License
                         RoundIconButton(RoundIconButtonType.License(
                             backgroundColor = MaterialTheme.colorScheme.secondaryContainer alwaysLight true,
-                        ) {})
+                        ) {
+                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
+                            Toast.makeText(context, comingSoon, Toast.LENGTH_SHORT).show()
+                        })
                     }
                     Spacer(modifier = Modifier.height(48.dp))
                 }
