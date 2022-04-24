@@ -36,7 +36,7 @@ class UpdateViewModel @Inject constructor(
         viewModelScope.launch {
             preProcessor()
             appRepository.checkUpdate().let {
-                if (it) changeUpdateDialogVisible(true)
+                changeUpdateDialogVisible(it)
                 postProcessor(it)
             }
         }

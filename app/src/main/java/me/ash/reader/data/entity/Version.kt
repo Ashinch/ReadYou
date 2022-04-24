@@ -28,3 +28,5 @@ class Version(identifiers: List<String>) {
 
     override fun toString() = "$major.$minor.$point"
 }
+
+fun String?.toVersion(): Version = Version(this)

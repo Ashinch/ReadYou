@@ -110,7 +110,6 @@ fun TipsAndSupport(
                                 },
                                 onTap = {
                                     scope.launch {
-                                        context.dataStore.put(DataStoreKeys.SkipVersionNumber, "")
                                         updateViewModel.dispatch(
                                             UpdateViewAction.CheckUpdate(
                                                 {
@@ -120,11 +119,13 @@ fun TipsAndSupport(
                                                     )
                                                 },
                                                 {
-                                                    if (!it) Toast.makeText(
-                                                        context,
-                                                        isLatestVersion,
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
+                                                    if (!it) {
+                                                        Toast.makeText(
+                                                            context,
+                                                            isLatestVersion,
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                    }
                                                 }
                                             )
                                         )

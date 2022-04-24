@@ -30,6 +30,7 @@ import androidx.work.WorkInfo
 import kotlinx.coroutines.flow.map
 import me.ash.reader.R
 import me.ash.reader.data.entity.Version
+import me.ash.reader.data.entity.toVersion
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.Banner
 import me.ash.reader.ui.component.DisplayText
@@ -65,14 +66,14 @@ fun FeedsPage(
 
     val skipVersion = context.dataStore.data
         .map { it[DataStoreKeys.SkipVersionNumber.key] ?: "" }
-        .map { Version(it) }
-        .collectAsState(initial = Version())
+        .collectAsState(initial = "")
         .value
+        .toVersion()
     val latestVersion = context.dataStore.data
         .map { it[DataStoreKeys.NewVersionNumber.key] ?: "" }
-        .map { Version(it) }
-        .collectAsState(initial = Version())
+        .collectAsState(initial = "")
         .value
+        .toVersion()
     val currentVersion by remember { mutableStateOf(context.getCurrentVersion()) }
 
     val owner = LocalLifecycleOwner.current

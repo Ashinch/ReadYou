@@ -7,7 +7,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import me.ash.reader.R
-import me.ash.reader.data.entity.Version
+import me.ash.reader.data.entity.toVersion
 import me.ash.reader.data.module.ApplicationScope
 import me.ash.reader.data.module.DispatcherIO
 import me.ash.reader.data.source.AppNetworkDataSource
@@ -24,12 +24,12 @@ class AppRepository @Inject constructor(
     private val dispatcherIO: CoroutineDispatcher,
 ) {
     suspend fun checkUpdate(): Boolean = withContext(dispatcherIO) {
-        return@withContext try {
+        try {
             val latest =
                 appNetworkDataSource.getReleaseLatest(context.getString(R.string.update_link))
-            val latestVersion = Version(latest.tag_name)
-//            val latestVersion = Version("0.7.3")
-            val skipVersion = Version(context.skipVersionNumber)
+            val latestVersion = latest.tag_name.toVersion()
+//            val latestVersion = "0.7.3".toVersion()
+            val skipVersion = context.skipVersionNumber.toVersion()
             val currentVersion = context.getCurrentVersion()
             val latestLog = latest.body ?: ""
             val latestPublishDate = latest.published_at ?: latest.created_at ?: ""
