@@ -3,7 +3,7 @@ package me.ash.reader
 import android.content.Context
 import android.os.Looper
 import android.util.Log
-import android.widget.Toast
+import me.ash.reader.ui.ext.showToastLong
 import java.lang.Thread.UncaughtExceptionHandler
 import kotlin.system.exitProcess
 
@@ -13,10 +13,8 @@ class CrashHandler(private val context: Context) : UncaughtExceptionHandler {
     }
 
     override fun uncaughtException(p0: Thread, p1: Throwable) {
-        if (Looper.myLooper() == null) {
-            Looper.prepare()
-        }
-        Toast.makeText(context, p1.message, Toast.LENGTH_LONG).show()
+        Looper.myLooper() ?: Looper.prepare()
+        context.showToastLong(p1.message)
         Looper.loop()
         p1.printStackTrace()
         Log.e("RLog", "uncaughtException: ${p1.message}")

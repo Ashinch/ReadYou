@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.feeds.option.group
 
-import android.widget.Toast
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
@@ -16,6 +15,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import me.ash.reader.R
 import me.ash.reader.ui.component.Dialog
 import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.showToast
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -53,7 +53,7 @@ fun AllAllowNotificationDialog(
                     viewModel.dispatch(GroupOptionViewAction.AllAllowNotification(true) {
                         viewModel.dispatch(GroupOptionViewAction.HideAllAllowNotificationDialog)
                         viewModel.dispatch(GroupOptionViewAction.Hide(scope))
-                        Toast.makeText(context, allowToastString, Toast.LENGTH_SHORT).show()
+                        context.showToast(allowToastString)
                     })
                 }
             ) {
@@ -68,7 +68,7 @@ fun AllAllowNotificationDialog(
                     viewModel.dispatch(GroupOptionViewAction.AllAllowNotification(false) {
                         viewModel.dispatch(GroupOptionViewAction.HideAllAllowNotificationDialog)
                         viewModel.dispatch(GroupOptionViewAction.Hide(scope))
-                        Toast.makeText(context, denyToastString, Toast.LENGTH_SHORT).show()
+                        context.showToast(denyToastString)
                     })
                 }
             ) {

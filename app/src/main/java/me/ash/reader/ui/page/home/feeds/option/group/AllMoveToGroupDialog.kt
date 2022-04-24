@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.feeds.option.group
 
-import android.widget.Toast
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DriveFileMove
 import androidx.compose.material3.Icon
@@ -16,6 +15,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import me.ash.reader.R
 import me.ash.reader.ui.component.Dialog
 import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.showToast
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -59,7 +59,7 @@ fun AllMoveToGroupDialog(
                     viewModel.dispatch(GroupOptionViewAction.AllMoveToGroup {
                         viewModel.dispatch(GroupOptionViewAction.HideAllMoveToGroupDialog)
                         viewModel.dispatch(GroupOptionViewAction.Hide(scope))
-                        Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show()
+                        context.showToast(toastString)
                     })
                 }
             ) {

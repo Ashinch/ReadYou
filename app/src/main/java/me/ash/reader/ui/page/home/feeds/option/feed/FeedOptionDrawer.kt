@@ -26,6 +26,7 @@ import me.ash.reader.ui.component.BottomDrawer
 import me.ash.reader.ui.component.TextFieldDialog
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.roundClick
+import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.page.home.feeds.subscribe.ResultView
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -139,7 +140,7 @@ fun FeedOptionDrawer(
         onConfirm = {
             feedOptionViewModel.dispatch(FeedOptionViewAction.Rename)
             feedOptionViewModel.dispatch(FeedOptionViewAction.Hide(scope))
-            Toast.makeText(context, toastString, Toast.LENGTH_SHORT).show()
+            context.showToast(toastString)
         }
     )
 }

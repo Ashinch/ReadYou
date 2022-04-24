@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.view.HapticFeedbackConstants
 import android.view.SoundEffectConstants
-import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -111,11 +110,7 @@ fun TipsAndSupport(
                                     pressAMP = 16f
                                 },
                                 onTap = {
-                                    Toast.makeText(
-                                        context,
-                                        checkingUpdates,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    context.showToast(checkingUpdates)
                                     scope.launch {
                                         updateViewModel.dispatch(
                                             UpdateViewAction.CheckUpdate(
@@ -126,13 +121,7 @@ fun TipsAndSupport(
                                                     )
                                                 },
                                                 {
-                                                    if (!it) {
-                                                        Toast.makeText(
-                                                            context,
-                                                            isLatestVersion,
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                    }
+                                                    if (!it) context.showToast(isLatestVersion)
                                                 }
                                             )
                                         )
@@ -197,7 +186,7 @@ fun TipsAndSupport(
                         ) {
                             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             view.playSoundEffect(SoundEffectConstants.CLICK)
-                            Toast.makeText(context, comingSoon, Toast.LENGTH_SHORT).show()
+                            context.showToast(comingSoon)
                         })
                         Spacer(modifier = Modifier.width(16.dp))
 
@@ -237,7 +226,7 @@ fun TipsAndSupport(
                         ) {
                             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             view.playSoundEffect(SoundEffectConstants.CLICK)
-                            Toast.makeText(context, comingSoon, Toast.LENGTH_SHORT).show()
+                            context.showToast(comingSoon)
                         })
                     }
                     Spacer(modifier = Modifier.height(48.dp))
