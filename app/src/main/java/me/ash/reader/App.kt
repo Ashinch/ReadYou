@@ -15,9 +15,7 @@ import me.ash.reader.data.source.AppNetworkDataSource
 import me.ash.reader.data.source.OpmlLocalDataSource
 import me.ash.reader.data.source.ReaderDatabase
 import me.ash.reader.data.source.RssNetworkDataSource
-import me.ash.reader.ui.ext.DataStoreKeys
-import me.ash.reader.ui.ext.dataStore
-import me.ash.reader.ui.ext.put
+import me.ash.reader.ui.ext.*
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -99,7 +97,12 @@ class App : Application(), Configuration.Provider {
     }
 
     private suspend fun checkUpdate() {
-        appRepository.checkUpdate()
+        applicationContext.getLatestApk().let {
+            if (it.exists()) {
+                it.del()
+            }
+        }
+        appRepository.checkUpdate(showToast = false)
     }
 
     override fun getWorkManagerConfiguration(): Configuration =

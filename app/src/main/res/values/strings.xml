@@ -117,4 +117,8 @@
     <string name="skip_this_version">Skip This Version</string>
     <string name="checking_updates">Checking for updates…</string>
     <string name="is_latest_version">This is the latest version</string>
+    <string name="check_failure">Check failure</string>
+    <string name="download_failure">Download failure</string>
+    <string name="rate_limit">The request rate is limited</string>
+    <string name="help">Help</string>
 </resources>

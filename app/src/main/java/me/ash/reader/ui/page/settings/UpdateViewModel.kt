@@ -3,12 +3,10 @@ package me.ash.reader.ui.page.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.data.repository.AppRepository
+import me.ash.reader.data.source.Download
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +24,7 @@ class UpdateViewModel @Inject constructor(
                 action.preProcessor,
                 action.postProcessor
             )
+            is UpdateViewAction.DownloadUpdate -> downloadUpdate(action.url)
         }
     }
 
@@ -36,8 +35,10 @@ class UpdateViewModel @Inject constructor(
         viewModelScope.launch {
             preProcessor()
             appRepository.checkUpdate().let {
-                changeUpdateDialogVisible(it)
-                postProcessor(it)
+                it?.let {
+                    changeUpdateDialogVisible(it)
+                    postProcessor(it)
+                }
             }
         }
     }
@@ -49,10 +50,26 @@ class UpdateViewModel @Inject constructor(
             )
         }
     }
+
+    private fun downloadUpdate(url: String) {
+        viewModelScope.launch {
+            _viewState.update {
+                it.copy(
+                    downloadFlow = flow { emit(Download.Progress(0)) }
+                )
+            }
+            _viewState.update {
+                it.copy(
+                    downloadFlow = appRepository.downloadFile(url)
+                )
+            }
+        }
+    }
 }
 
 data class UpdateViewState(
     val updateDialogVisible: Boolean = false,
+    val downloadFlow: Flow<Download> = emptyFlow(),
 )
 
 sealed class UpdateViewAction {
@@ -62,5 +79,9 @@ sealed class UpdateViewAction {
     data class CheckUpdate(
         val preProcessor: suspend () -> Unit = {},
         val postProcessor: suspend (Boolean) -> Unit = {}
+    ) : UpdateViewAction()
+
+    data class DownloadUpdate(
+        val url: String,
     ) : UpdateViewAction()
 }

@@ -117,4 +117,8 @@
     <string name="skip_this_version">跳过这个版本</string>
     <string name="checking_updates">正在检查更新…</string>
     <string name="is_latest_version">已是最新版本</string>
+    <string name="check_failure">检查失败</string>
+    <string name="download_failure">下载失败</string>
+    <string name="rate_limit">请求速率受限</string>
+    <string name="help">帮助</string>
 </resources>

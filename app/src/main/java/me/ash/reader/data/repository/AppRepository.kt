@@ -5,12 +5,17 @@ import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.withContext
 import me.ash.reader.R
 import me.ash.reader.data.entity.toVersion
 import me.ash.reader.data.module.ApplicationScope
 import me.ash.reader.data.module.DispatcherIO
+import me.ash.reader.data.module.DispatcherMain
 import me.ash.reader.data.source.AppNetworkDataSource
+import me.ash.reader.data.source.Download
+import me.ash.reader.data.source.downloadToFileWithProgress
 import me.ash.reader.ui.ext.*
 import javax.inject.Inject
 
@@ -22,11 +27,28 @@ class AppRepository @Inject constructor(
     private val applicationScope: CoroutineScope,
     @DispatcherIO
     private val dispatcherIO: CoroutineDispatcher,
+    @DispatcherMain
+    private val dispatcherMain: CoroutineDispatcher,
 ) {
-    suspend fun checkUpdate(): Boolean = withContext(dispatcherIO) {
+    suspend fun checkUpdate(showToast: Boolean = true): Boolean? = withContext(dispatcherIO) {
         try {
-            val latest =
+            val response =
                 appNetworkDataSource.getReleaseLatest(context.getString(R.string.update_link))
+            when {
+                response.code() == 403 -> {
+                    withContext(dispatcherMain) {
+                        if (showToast) context.showToast(context.getString(R.string.rate_limit))
+                    }
+                    return@withContext null
+                }
+                response.body() == null -> {
+                    withContext(dispatcherMain) {
+                        if (showToast) context.showToast(context.getString(R.string.check_failure))
+                    }
+                    return@withContext null
+                }
+            }
+            val latest = response.body()!!
             val latestVersion = latest.tag_name.toVersion()
 //            val latestVersion = "0.7.3".toVersion()
             val skipVersion = context.skipVersionNumber.toVersion()
@@ -60,7 +82,26 @@ class AppRepository @Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             Log.e("RLog", "checkUpdate: ${e.message}")
-            false
+            withContext(dispatcherMain) {
+                if (showToast) context.showToast(context.getString(R.string.check_failure))
+            }
+            null
         }
     }
+
+    suspend fun downloadFile(url: String): Flow<Download> =
+        withContext(dispatcherIO) {
+            Log.i("RLog", "downloadFile start: $url")
+            try {
+                return@withContext appNetworkDataSource.downloadFile(url)
+                    .downloadToFileWithProgress(context.getLatestApk())
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("RLog", "downloadFile: ${e.message}")
+                withContext(dispatcherMain) {
+                    context.showToast(context.getString(R.string.download_failure))
+                }
+            }
+            emptyFlow()
+        }
 }

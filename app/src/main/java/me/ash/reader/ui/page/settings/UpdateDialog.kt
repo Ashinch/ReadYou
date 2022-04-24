@@ -1,6 +1,13 @@
 package me.ash.reader.ui.page.settings
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -22,26 +29,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.data.source.Download
 import me.ash.reader.ui.component.Dialog
-import me.ash.reader.ui.ext.DataStoreKeys
-import me.ash.reader.ui.ext.dataStore
-import me.ash.reader.ui.ext.put
+import me.ash.reader.ui.ext.*
 
 @SuppressLint("FlowOperatorInvokedInComposition")
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun UpdateDialog(
-    modifier: Modifier = Modifier,
-    visible: Boolean = false,
-    onDismissRequest: () -> Unit = {},
-    onConfirm: (String) -> Unit = {},
+    updateViewModel: UpdateViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val viewState = updateViewModel.viewState.collectAsStateValue()
+    val downloadState = viewState.downloadFlow.collectAsState(initial = Download.NotYet).value
     val scope = rememberCoroutineScope { Dispatchers.IO }
     val newVersionNumber = context.dataStore.data
         .map { it[DataStoreKeys.NewVersionNumber.key] ?: "" }
@@ -55,17 +61,38 @@ fun UpdateDialog(
         .map { it[DataStoreKeys.NewVersionLog.key] ?: "" }
         .collectAsState(initial = "")
         .value
-    val newVersionSize = context.dataStore.data
+    val newVersionSize = " " + context.dataStore.data
         .map { it[DataStoreKeys.NewVersionSize.key] ?: 0 }
         .map { it / 1024f / 1024f }
         .map { if (it > 0f) " ${String.format("%.2f", it)} MB" else "" }
         .collectAsState(initial = 0)
         .value
 
+    val settings = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        context.installLatestApk()
+    }
+
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { result ->
+        if (result) {
+            context.installLatestApk()
+        } else {
+            settings.launch(
+                Intent(
+                    Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                    Uri.parse("package:${context.packageName}"),
+                ),
+            )
+        }
+    }
+
     Dialog(
-        modifier = modifier.heightIn(max = 400.dp),
-        visible = visible,
-        onDismissRequest = onDismissRequest,
+        modifier = Modifier.heightIn(max = 400.dp),
+        visible = viewState.updateDialogVisible,
+        onDismissRequest = { updateViewModel.dispatch(UpdateViewAction.Hide) },
         icon = {
             Icon(
                 imageVector = Icons.Rounded.Update,
@@ -79,7 +106,7 @@ fun UpdateDialog(
                 Text(text = stringResource(R.string.change_log))
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = newVersionPublishDate,
+                    text = "$newVersionPublishDate$newVersionSize",
                     color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
                     style = MaterialTheme.typography.bodyMedium,
                 )
@@ -97,19 +124,47 @@ fun UpdateDialog(
         confirmButton = {
             TextButton(
                 onClick = {
+                    if (downloadState !is Download.Progress) {
+                        updateViewModel.dispatch(
+                            UpdateViewAction.DownloadUpdate(
+                                url = context.newVersionDownloadUrl,
+                            )
+                        )
+                    }
                 }
             ) {
-                Text(text = stringResource(R.string.update) + newVersionSize)
+                Text(
+                    text = stringResource(R.string.update) + when (downloadState) {
+                        is Download.NotYet -> ""
+                        is Download.Progress -> " ${downloadState.percent}%"
+                        is Download.Finished -> {
+                            if (context.packageManager.canRequestPackageInstalls()) {
+                                Log.i(
+                                    "RLog",
+                                    "Download.Finished: ${downloadState.file.absolutePath}"
+                                )
+                                context.installLatestApk()
+                            } else {
+                                launcher.launch(Manifest.permission.REQUEST_INSTALL_PACKAGES)
+                            }
+                            ""
+                        }
+                    }
+                )
             }
         },
         dismissButton = {
-            TextButton(onClick = {
-                scope.launch {
-                    context.dataStore.put(DataStoreKeys.SkipVersionNumber, newVersionNumber)
-                    onDismissRequest()
+            if (downloadState !is Download.Progress) {
+                TextButton(
+                    onClick = {
+                        scope.launch {
+                            context.dataStore.put(DataStoreKeys.SkipVersionNumber, newVersionNumber)
+                            updateViewModel.dispatch(UpdateViewAction.Hide)
+                        }
+                    }
+                ) {
+                    Text(text = stringResource(R.string.skip_this_version))
                 }
-            }) {
-                Text(text = stringResource(R.string.skip_this_version))
             }
         },
     )

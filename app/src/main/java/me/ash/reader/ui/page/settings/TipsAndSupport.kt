@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Balance
+import androidx.compose.material.icons.rounded.TipsAndUpdates
 import androidx.compose.material.icons.rounded.VolunteerActivism
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -30,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -50,13 +52,8 @@ fun TipsAndSupport(
     val context = LocalContext.current
     val view = LocalView.current
     val scope = rememberCoroutineScope()
-    val viewState = updateViewModel.viewState.collectAsStateValue()
-    val githubLink = stringResource(R.string.github_link)
-    val telegramLink = stringResource(R.string.telegram_link)
-    val checkingUpdates = stringResource(R.string.checking_updates)
-    val isLatestVersion = stringResource(R.string.is_latest_version)
-    val comingSoon = stringResource(R.string.coming_soon)
     var currentVersion by remember { mutableStateOf("") }
+    var clickTime by remember { mutableStateOf(System.currentTimeMillis() - 2000) }
     var pressAMP by remember { mutableStateOf(16f) }
     val animatedPress by animateFloatAsState(
         targetValue = pressAMP,
@@ -88,7 +85,16 @@ fun TipsAndSupport(
                         navController.popBackStack()
                     }
                 },
-                actions = {}
+                actions = {
+                    FeedbackIconButton(
+                        modifier = Modifier.size(20.dp),
+                        imageVector = Icons.Rounded.Balance,
+                        contentDescription = stringResource(R.string.open_source_licenses),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    ) {
+                        context.showToast(context.getString(R.string.coming_soon))
+                    }
+                }
             )
         },
         content = {
@@ -110,21 +116,30 @@ fun TipsAndSupport(
                                     pressAMP = 16f
                                 },
                                 onTap = {
-                                    context.showToast(checkingUpdates)
-                                    scope.launch {
-                                        updateViewModel.dispatch(
-                                            UpdateViewAction.CheckUpdate(
-                                                {
-                                                    context.dataStore.put(
-                                                        DataStoreKeys.SkipVersionNumber,
-                                                        ""
-                                                    )
-                                                },
-                                                {
-                                                    if (!it) context.showToast(isLatestVersion)
-                                                }
+                                    if (System.currentTimeMillis() - clickTime > 2000) {
+                                        clickTime = System.currentTimeMillis()
+                                        context.showToast(context.getString(R.string.checking_updates))
+                                        scope.launch {
+                                            updateViewModel.dispatch(
+                                                UpdateViewAction.CheckUpdate(
+                                                    {
+                                                        context.dataStore.put(
+                                                            DataStoreKeys.SkipVersionNumber,
+                                                            ""
+                                                        )
+                                                    },
+                                                    {
+                                                        if (!it) {
+                                                            context.showToast(
+                                                                context.getString(R.string.is_latest_version)
+                                                            )
+                                                        }
+                                                    }
+                                                )
                                             )
-                                        )
+                                        }
+                                    } else {
+                                        clickTime = System.currentTimeMillis()
                                     }
                                 }
                             )
@@ -186,22 +201,7 @@ fun TipsAndSupport(
                         ) {
                             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             view.playSoundEffect(SoundEffectConstants.CLICK)
-                            context.showToast(comingSoon)
-                        })
-                        Spacer(modifier = Modifier.width(16.dp))
-
-                        // Telegram
-                        RoundIconButton(RoundIconButtonType.Telegram(
-                            backgroundColor = MaterialTheme.colorScheme.primaryContainer alwaysLight true,
-                        ) {
-                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                            view.playSoundEffect(SoundEffectConstants.CLICK)
-                            context.startActivity(
-                                Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse(telegramLink)
-                                )
-                            )
+                            context.showToast(context.getString(R.string.coming_soon))
                         })
                         Spacer(modifier = Modifier.width(16.dp))
 
@@ -214,19 +214,34 @@ fun TipsAndSupport(
                             context.startActivity(
                                 Intent(
                                     Intent.ACTION_VIEW,
-                                    Uri.parse(githubLink)
+                                    Uri.parse(context.getString(R.string.github_link))
                                 )
                             )
                         })
                         Spacer(modifier = Modifier.width(16.dp))
 
-                        // License
-                        RoundIconButton(RoundIconButtonType.License(
+                        // Telegram
+                        RoundIconButton(RoundIconButtonType.Telegram(
+                            backgroundColor = MaterialTheme.colorScheme.primaryContainer alwaysLight true,
+                        ) {
+                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                            view.playSoundEffect(SoundEffectConstants.CLICK)
+                            context.startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse(context.getString(R.string.telegram_link))
+                                )
+                            )
+                        })
+                        Spacer(modifier = Modifier.width(16.dp))
+
+                        // Help
+                        RoundIconButton(RoundIconButtonType.Help(
                             backgroundColor = MaterialTheme.colorScheme.secondaryContainer alwaysLight true,
                         ) {
                             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             view.playSoundEffect(SoundEffectConstants.CLICK)
-                            context.showToast(comingSoon)
+                            context.showToast(context.getString(R.string.coming_soon))
                         })
                     }
                     Spacer(modifier = Modifier.height(48.dp))
@@ -235,10 +250,7 @@ fun TipsAndSupport(
         }
     )
 
-    UpdateDialog(
-        visible = viewState.updateDialogVisible,
-        onDismissRequest = { updateViewModel.dispatch(UpdateViewAction.Hide) },
-    )
+    UpdateDialog()
 }
 
 @Immutable
@@ -247,6 +259,7 @@ sealed class RoundIconButtonType(
     val iconVector: ImageVector? = null,
     val descResource: Int? = null,
     val descString: String? = null,
+    open val size: Dp = 24.dp,
     open val offset: Modifier = Modifier.offset(),
     open val backgroundColor: Color = Color.Unspecified,
     open val onClick: () -> Unit = {},
@@ -259,6 +272,18 @@ sealed class RoundIconButtonType(
     ) : RoundIconButtonType(
         iconVector = Icons.Rounded.VolunteerActivism,
         descResource = desc,
+        backgroundColor = backgroundColor,
+        onClick = onClick,
+    )
+
+    @Immutable
+    data class GitHub(
+        val desc: String = "GitHub",
+        override val backgroundColor: Color,
+        override val onClick: () -> Unit = {},
+    ) : RoundIconButtonType(
+        iconResource = R.drawable.ic_github,
+        descString = desc,
         backgroundColor = backgroundColor,
         onClick = onClick,
     )
@@ -277,24 +302,13 @@ sealed class RoundIconButtonType(
     )
 
     @Immutable
-    data class GitHub(
-        val desc: String = "GitHub",
+    data class Help(
+        val desc: Int = R.string.help,
+        override val offset: Modifier = Modifier.offset(x = (3).dp),
         override val backgroundColor: Color,
         override val onClick: () -> Unit = {},
     ) : RoundIconButtonType(
-        iconResource = R.drawable.ic_github,
-        descString = desc,
-        backgroundColor = backgroundColor,
-        onClick = onClick,
-    )
-
-    @Immutable
-    data class License(
-        val desc: Int = R.string.open_source_licenses,
-        override val backgroundColor: Color,
-        override val onClick: () -> Unit = {},
-    ) : RoundIconButtonType(
-        iconVector = Icons.Rounded.Balance,
+        iconVector = Icons.Rounded.TipsAndUpdates,
         descResource = desc,
         backgroundColor = backgroundColor,
         onClick = onClick,
@@ -313,9 +327,9 @@ private fun RoundIconButton(type: RoundIconButtonType) {
         onClick = { type.onClick() }
     ) {
         when (type) {
-            is RoundIconButtonType.Sponsor, is RoundIconButtonType.License -> {
+            is RoundIconButtonType.Sponsor, is RoundIconButtonType.Help -> {
                 Icon(
-                    modifier = type.offset,
+                    modifier = type.offset.size(type.size),
                     imageVector = type.iconVector!!,
                     contentDescription = stringResource(type.descResource!!),
                     tint = MaterialTheme.colorScheme.onSurface alwaysLight true,
@@ -323,7 +337,7 @@ private fun RoundIconButton(type: RoundIconButtonType) {
             }
             is RoundIconButtonType.GitHub, is RoundIconButtonType.Telegram -> {
                 Icon(
-                    modifier = type.offset,
+                    modifier = type.offset.size(type.size),
                     painter = painterResource(type.iconResource!!),
                     contentDescription = type.descString,
                     tint = MaterialTheme.colorScheme.onSurface alwaysLight true,

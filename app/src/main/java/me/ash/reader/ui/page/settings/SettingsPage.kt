@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.map
 import me.ash.reader.R
@@ -33,9 +34,9 @@ import me.ash.reader.ui.theme.palette.onLight
 @Composable
 fun SettingsPage(
     navController: NavHostController,
+    updateViewModel: UpdateViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    var updateDialogVisible by remember { mutableStateOf(false) }
     val skipVersion = context.dataStore.data
         .map { it[DataStoreKeys.SkipVersionNumber.key] ?: "" }
         .collectAsState(initial = "")
@@ -92,7 +93,9 @@ fun SettingsPage(
                                         contentDescription = stringResource(R.string.close),
                                     )
                                 },
-                            ) { updateDialogVisible = true }
+                            ) {
+                                updateViewModel.dispatch(UpdateViewAction.Show)
+                            }
                         }
                         Banner(
                             title = stringResource(R.string.in_coding),
@@ -148,8 +151,5 @@ fun SettingsPage(
         }
     )
 
-    UpdateDialog(
-        visible = updateDialogVisible,
-        onDismissRequest = { updateDialogVisible = false },
-    )
+    UpdateDialog()
 }
