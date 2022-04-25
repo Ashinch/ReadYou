@@ -54,16 +54,16 @@ data class Izazbz(
 
         fun CieXyz.toIzazbz(): Izazbz {
             val (I, az, bz) = lmsToIzazbz * (
-                xyzToLms * doubleArrayOf(
-                    b * x - (b - 1.0) * z,
-                    g * y - (g - 1.0) * x,
-                    z,
-                )
-                ).map {
-                ((c_1 + c_2 * (it / 10000.0).pow(eta)) / (1.0 + c_3 * (it / 10000.0).pow(eta))).pow(
-                    rho
-                )
-            }.toDoubleArray()
+                    xyzToLms * doubleArrayOf(
+                        b * x - (b - 1.0) * z,
+                        g * y - (g - 1.0) * x,
+                        z,
+                    )
+                    ).map {
+                    ((c_1 + c_2 * (it / 10000.0).pow(eta)) / (1.0 + c_3 * (it / 10000.0).pow(eta))).pow(
+                        rho
+                    )
+                }.toDoubleArray()
             return Izazbz(
                 Iz = I - epsilon,
                 az = az,

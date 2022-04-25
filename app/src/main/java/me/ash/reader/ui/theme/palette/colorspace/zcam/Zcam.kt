@@ -37,12 +37,12 @@ data class Zcam(
         }
         with(cond) {
             val Iz = (
-                when {
-                    !Qz.isNaN() -> Qz
-                    !Jz.isNaN() -> Jz * Qzw / 100.0
-                    else -> Double.NaN
-                } / (2700.0 * F_s.pow(2.2) * sqrt(F_b) * F_L.pow(0.2))
-                ).pow(F_b.pow(0.12) / (1.6 * F_s))
+                    when {
+                        !Qz.isNaN() -> Qz
+                        !Jz.isNaN() -> Jz * Qzw / 100.0
+                        else -> Double.NaN
+                    } / (2700.0 * F_s.pow(2.2) * sqrt(F_b) * F_L.pow(0.2))
+                    ).pow(F_b.pow(0.12) / (1.6 * F_s))
             val Jz = Jz.takeUnless { it.isNaN() } ?: when {
                 !Qz.isNaN() -> 100.0 * Qz / Qzw
                 else -> Double.NaN
@@ -98,7 +98,8 @@ data class Zcam(
             if (!current.toIzazbz().toXyz().toRgb(cond.luminance, colorSpace).isInGamut()) {
                 high = mid
             } else {
-                val next = current.copy(Cz = mid + error).toIzazbz().toXyz().toRgb(cond.luminance, colorSpace)
+                val next = current.copy(Cz = mid + error).toIzazbz().toXyz()
+                    .toRgb(cond.luminance, colorSpace)
                 if (next.isInGamut()) {
                     low = mid
                 } else {
@@ -124,19 +125,22 @@ data class Zcam(
             val F_b = sqrt(Y_b / Y_w)
             val F_L = 0.171 * L_a.pow(1.0 / 3.0) * (1 - exp(-48.0 / 9.0 * L_a))
             val Izw = absoluteWhitePoint.toIzazbz().Iz
-            val Qzw = 2700.0 * Izw.pow(1.6 * F_s / F_b.pow(0.12)) * F_s.pow(2.2) * sqrt(F_b) * F_L.pow(0.2)
+            val Qzw =
+                2700.0 * Izw.pow(1.6 * F_s / F_b.pow(0.12)) * F_s.pow(2.2) * sqrt(F_b) * F_L.pow(0.2)
         }
 
         fun Izazbz.toZcam(cond: ViewingConditions): Zcam {
             with(cond) {
                 val hz = atan2(bz, az).toDegrees().mod(360.0) // hue angle
                 val Qz =
-                    2700.0 * Iz.pow(1.6 * F_s / F_b.pow(0.12)) * F_s.pow(2.2) * sqrt(F_b) * F_L.pow(0.2) // brightness
+                    2700.0 * Iz.pow(1.6 * F_s / F_b.pow(0.12)) * F_s.pow(2.2) * sqrt(F_b) * F_L.pow(
+                        0.2
+                    ) // brightness
                 val Jz = 100.0 * Qz / Qzw // lightness
                 val ez = 1.015 + cos(89.038 + hz).toRadians() // ~ eccentricity factor
                 val Mz =
                     100.0 * (square(az) + square(bz)).pow(0.37) * ez.pow(0.068) * F_L.pow(0.2) /
-                        (F_b.pow(0.1) * Izw.pow(0.78)) // colorfulness
+                            (F_b.pow(0.1) * Izw.pow(0.78)) // colorfulness
                 val Cz = 100.0 * Mz / Qzw // chroma
 
                 val Sz = 100.0 * F_L.pow(0.6) * sqrt(Mz / Qz) // saturation

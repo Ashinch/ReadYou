@@ -18,14 +18,14 @@ data class Jzazbz(
 ) {
     fun toXyz(): CieXyz {
         val (x_, y_, z) = lmsToXyz * (
-            IzazbzToLms * doubleArrayOf(
-                (Jz + d_0) / (1.0 + d - d * (Jz + d_0)),
-                az,
-                bz,
-            )
-            ).map {
-            10000.0 * ((c_1 - it.pow(1.0 / p)) / (c_3 * it.pow(1.0 / p) - c_2)).pow(1.0 / n)
-        }.toDoubleArray()
+                IzazbzToLms * doubleArrayOf(
+                    (Jz + d_0) / (1.0 + d - d * (Jz + d_0)),
+                    az,
+                    bz,
+                )
+                ).map {
+                10000.0 * ((c_1 - it.pow(1.0 / p)) / (c_3 * it.pow(1.0 / p) - c_2)).pow(1.0 / n)
+            }.toDoubleArray()
         val x = (x_ + (b - 1.0) * z) / b
         val y = (y_ + (g - 1.0) * x) / g
         return CieXyz(
@@ -61,14 +61,16 @@ data class Jzazbz(
 
         fun CieXyz.toJzazbz(): Jzazbz {
             val (Iz, az, bz) = lmsToIzazbz * (
-                xyzToLms * doubleArrayOf(
-                    b * x - (b - 1.0) * z,
-                    g * y - (g - 1.0) * x,
-                    z,
-                )
-                ).map {
-                ((c_1 + c_2 * (it / 10000.0).pow(n)) / (1.0 + c_3 * (it / 10000.0).pow(n))).pow(p)
-            }.toDoubleArray()
+                    xyzToLms * doubleArrayOf(
+                        b * x - (b - 1.0) * z,
+                        g * y - (g - 1.0) * x,
+                        z,
+                    )
+                    ).map {
+                    ((c_1 + c_2 * (it / 10000.0).pow(n)) / (1.0 + c_3 * (it / 10000.0).pow(n))).pow(
+                        p
+                    )
+                }.toDoubleArray()
             return Jzazbz(
                 Jz = (1.0 + d) * Iz / (1.0 + d * Iz) - d_0,
                 az = az,

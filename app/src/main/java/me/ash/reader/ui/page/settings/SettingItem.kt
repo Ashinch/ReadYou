@@ -32,7 +32,9 @@ fun SettingItem(
     action: (@Composable () -> Unit)? = null
 ) {
     Surface(
-        modifier = modifier.clickable { onClick() }.alpha(if (enable) 1f else 0.5f),
+        modifier = modifier
+            .clickable { onClick() }
+            .alpha(if (enable) 1f else 0.5f),
         color = Color.Unspecified
     ) {
         Row(

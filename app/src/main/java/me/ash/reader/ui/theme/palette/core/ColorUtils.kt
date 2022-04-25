@@ -63,5 +63,10 @@ fun animateZcamLchAsState(
             }
         )
     }
-    return animateValueAsState(targetValue, converter, animationSpec, finishedListener = finishedListener)
+    return animateValueAsState(
+        targetValue,
+        converter,
+        animationSpec,
+        finishedListener = finishedListener
+    )
 }

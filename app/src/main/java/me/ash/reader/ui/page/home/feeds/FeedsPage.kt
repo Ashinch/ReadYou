@@ -1,6 +1,7 @@
 package me.ash.reader.ui.page.home.feeds
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.*
@@ -24,12 +25,9 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
-import androidx.work.WorkInfo
 import kotlinx.coroutines.flow.map
 import me.ash.reader.R
-import me.ash.reader.data.entity.Version
 import me.ash.reader.data.entity.toVersion
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.Banner
@@ -40,6 +38,10 @@ import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterBar
 import me.ash.reader.ui.page.home.FilterState
+import me.ash.reader.ui.page.home.HomeViewAction
+import me.ash.reader.ui.page.home.HomeViewModel
+import me.ash.reader.ui.page.home.feeds.option.feed.FeedOptionDrawer
+import me.ash.reader.ui.page.home.feeds.option.group.GroupOptionDrawer
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewAction
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
@@ -51,18 +53,14 @@ import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 )
 @Composable
 fun FeedsPage(
-    modifier: Modifier = Modifier,
     navController: NavHostController,
     feedsViewModel: FeedsViewModel = hiltViewModel(),
-    syncWorkLiveData: LiveData<WorkInfo>,
-    filterState: FilterState,
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
-    onSyncClick: () -> Unit = {},
-    onFilterChange: (filterState: FilterState) -> Unit = {},
-    onScrollToPage: (targetPage: Int) -> Unit = {},
+    homeViewModel: HomeViewModel,
 ) {
     val context = LocalContext.current
-    val viewState = feedsViewModel.viewState.collectAsStateValue()
+    val feedsViewState = feedsViewModel.viewState.collectAsStateValue()
+    val filterState = homeViewModel.filterState.collectAsStateValue()
 
     val skipVersion = context.dataStore.data
         .map { it[DataStoreKeys.SkipVersionNumber.key] ?: "" }
@@ -78,7 +76,7 @@ fun FeedsPage(
 
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
-    syncWorkLiveData.observe(owner) {
+    homeViewModel.syncWorkLiveData.observe(owner) {
         it?.let { isSyncing = it.progress.getIsSyncing() }
     }
 
@@ -108,13 +106,13 @@ fun FeedsPage(
     }
 
     LaunchedEffect(filterState) {
-        feedsViewModel.dispatch(FeedsViewAction.FetchData(filterState))
+        snapshotFlow { filterState }.collect {
+            feedsViewModel.dispatch(FeedsViewAction.FetchData(it))
+        }
     }
 
-    LaunchedEffect(isSyncing) {
-        if (!isSyncing) {
-            feedsViewModel.dispatch(FeedsViewAction.FetchData(filterState))
-        }
+    BackHandler(true) {
+        context.findActivity()?.moveTaskToBack(false)
     }
 
     Scaffold(
@@ -133,7 +131,9 @@ fun FeedsPage(
                         tint = MaterialTheme.colorScheme.onSurface,
                         showBadge = latestVersion.whetherNeedUpdate(currentVersion, skipVersion),
                     ) {
-                        navController.navigate(RouteName.SETTINGS)
+                        navController.navigate(RouteName.SETTINGS) {
+                            popUpTo(RouteName.FEEDS)
+                        }
                     }
                 },
                 actions = {
@@ -143,9 +143,7 @@ fun FeedsPage(
                         contentDescription = stringResource(R.string.refresh),
                         tint = MaterialTheme.colorScheme.onSurface,
                     ) {
-                        if (!isSyncing) {
-                            onSyncClick()
-                        }
+                        if (!isSyncing) homeViewModel.dispatch(HomeViewAction.Sync)
                     }
                     FeedbackIconButton(
                         imageVector = Icons.Rounded.Add,
@@ -158,7 +156,6 @@ fun FeedsPage(
             )
         },
         content = {
-            SubscribeDialog()
             LazyColumn {
                 item {
                     DisplayText(
@@ -169,14 +166,14 @@ fun FeedsPage(
                                 }
                             )
                         },
-                        text = viewState.account?.name ?: stringResource(R.string.unknown),
+                        text = feedsViewState.account?.name ?: "",
                         desc = if (isSyncing) stringResource(R.string.syncing) else "",
                     )
                 }
                 item {
                     Banner(
                         title = filterState.filter.getName(),
-                        desc = filterState.filter.getDesc(),
+                        desc = feedsViewState.importantCount,
                         icon = filterState.filter.icon,
                         action = {
                             Icon(
@@ -185,13 +182,14 @@ fun FeedsPage(
                             )
                         },
                     ) {
-                        onFilterChange(
-                            filterState.copy(
+                        filterChange(
+                            navController = navController,
+                            homeViewModel = homeViewModel,
+                            filterState = filterState.copy(
                                 group = null,
-                                feed = null
+                                feed = null,
                             )
                         )
-                        onScrollToPage(1)
                     }
                 }
                 item {
@@ -202,32 +200,34 @@ fun FeedsPage(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
-                itemsIndexed(viewState.groupWithFeedList) { index, groupWithFeed ->
+                itemsIndexed(feedsViewState.groupWithFeedList) { index, groupWithFeed ->
 //                    Crossfade(targetState = groupWithFeed) { groupWithFeed ->
                     Column {
                         GroupItem(
                             group = groupWithFeed.group,
                             feeds = groupWithFeed.feeds,
                             groupOnClick = {
-                                onFilterChange(
-                                    filterState.copy(
+                                filterChange(
+                                    navController = navController,
+                                    homeViewModel = homeViewModel,
+                                    filterState = filterState.copy(
                                         group = groupWithFeed.group,
-                                        feed = null
+                                        feed = null,
                                     )
                                 )
-                                onScrollToPage(1)
                             },
                             feedOnClick = { feed ->
-                                onFilterChange(
-                                    filterState.copy(
+                                filterChange(
+                                    navController = navController,
+                                    homeViewModel = homeViewModel,
+                                    filterState = filterState.copy(
                                         group = null,
-                                        feed = feed
+                                        feed = feed,
                                     )
                                 )
-                                onScrollToPage(1)
                             }
                         )
-                        if (index != viewState.groupWithFeedList.lastIndex) {
+                        if (index != feedsViewState.groupWithFeedList.lastIndex) {
                             Spacer(modifier = Modifier.height(8.dp))
                         }
                     }
@@ -246,14 +246,32 @@ fun FeedsPage(
                     .fillMaxWidth(),
                 filter = filterState.filter,
                 filterOnClick = {
-                    onFilterChange(
-                        filterState.copy(
-                            filter = it
-                        )
+                    filterChange(
+                        navController = navController,
+                        homeViewModel = homeViewModel,
+                        filterState = filterState.copy(filter = it),
+                        isNavigate = false,
                     )
                 },
             )
         }
     )
+
+    SubscribeDialog()
+    GroupOptionDrawer()
+    FeedOptionDrawer()
 }
 
+private fun filterChange(
+    navController: NavHostController,
+    homeViewModel: HomeViewModel,
+    filterState: FilterState,
+    isNavigate: Boolean = true,
+) {
+    homeViewModel.dispatch(HomeViewAction.ChangeFilter(filterState))
+    if (isNavigate) {
+        navController.navigate(RouteName.FLOW) {
+            popUpTo(RouteName.FEEDS)
+        }
+    }
+}

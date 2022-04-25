@@ -8,12 +8,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import me.ash.reader.R
 import me.ash.reader.data.entity.Account
-import me.ash.reader.data.entity.Filter
 import me.ash.reader.data.entity.GroupWithFeed
 import me.ash.reader.data.repository.AccountRepository
 import me.ash.reader.data.repository.OpmlRepository
 import me.ash.reader.data.repository.RssRepository
+import me.ash.reader.data.repository.StringsRepository
 import me.ash.reader.ui.page.home.FilterState
 import javax.inject.Inject
 
@@ -22,6 +23,7 @@ class FeedsViewModel @Inject constructor(
     private val accountRepository: AccountRepository,
     private val rssRepository: RssRepository,
     private val opmlRepository: OpmlRepository,
+    private val stringsRepository: StringsRepository,
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(FeedsViewState())
     val viewState: StateFlow<FeedsViewState> = _viewState.asStateFlow()
@@ -105,19 +107,19 @@ class FeedsViewModel @Inject constructor(
         }.onEach { groupWithFeedList ->
             _viewState.update {
                 it.copy(
-                    filter = when {
-                        isStarred -> Filter.Starred
-                        isUnread -> Filter.Unread
-                        else -> Filter.All
-                    }.apply {
-                        important = groupWithFeedList.sumOf { it.group.important ?: 0 }
+                    importantCount = groupWithFeedList.sumOf { it.group.important ?: 0 }.run {
+                        when {
+                            isStarred -> stringsRepository.getString(R.string.unread_desc, this)
+                            isUnread -> stringsRepository.getString(R.string.starred_desc, this)
+                            else -> stringsRepository.getString(R.string.all_desc, this)
+                        }
                     },
                     groupWithFeedList = groupWithFeedList,
                     feedsVisible = List(groupWithFeedList.size, init = { true })
                 )
             }
-        }.catch {
-            Log.e("RLog", "catch in articleRepository.pullFeeds(): $this")
+        }.catch() {
+            Log.e("RLog", "catch in articleRepository.pullFeeds(): ${it.message}")
         }.flowOn(Dispatchers.Default).collect()
     }
 
@@ -130,7 +132,7 @@ class FeedsViewModel @Inject constructor(
 
 data class FeedsViewState(
     val account: Account? = null,
-    val filter: Filter = Filter.All,
+    val importantCount: String = "",
     val groupWithFeedList: List<GroupWithFeed> = emptyList(),
     val feedsVisible: List<Boolean> = emptyList(),
     val listState: LazyListState = LazyListState(),

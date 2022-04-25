@@ -102,7 +102,7 @@ fun StartupPage(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = {
-                    navController.navigate(route = RouteName.HOME)
+                    navController.navigate(RouteName.FEEDS)
                     scope.launch {
                         context.dataStore.put(DataStoreKeys.IsFirstLaunch, false)
                     }

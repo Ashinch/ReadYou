@@ -38,8 +38,8 @@ class Matrix3(
 
     private fun determinant(): Double =
         x[0] * (y[1] * z[2] - y[2] * z[1]) -
-            x[1] * (y[0] * z[2] - y[2] * z[0]) +
-            x[2] * (y[0] * z[1] - y[1] * z[0])
+                x[1] * (y[0] * z[2] - y[2] * z[0]) +
+                x[2] * (y[0] * z[1] - y[1] * z[0])
 
     private fun transpose() = Matrix3(
         doubleArrayOf(x[0], y[0], z[0]),
@@ -60,5 +60,6 @@ class Matrix3(
         z[0] * vec[0] + z[1] * vec[1] + z[2] * vec[2],
     )
 
-    override fun toString(): String = "{" + arrayOf(x, y, z).joinToString { "[" + it.joinToString() + "]" } + "}"
+    override fun toString(): String =
+        "{" + arrayOf(x, y, z).joinToString { "[" + it.joinToString() + "]" } + "}"
 }
