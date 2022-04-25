@@ -14,6 +14,8 @@ import androidx.work.ListenableWorker
 import androidx.work.WorkManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import me.ash.reader.MainActivity
 import me.ash.reader.R
@@ -99,10 +101,8 @@ class LocalRssRepository @Inject constructor(
             val accountId = context.currentAccountId
             feedDao.queryAll(accountId)
                 .also { coroutineWorker.setProgress(setIsSyncing(true)) }
-                // For ParseRSS v0.5.0 only
-                .map { feed -> syncFeed(feed) }
-                //.map { feed -> async { syncFeed(feed) } }
-                //.awaitAll()
+                .map { feed -> async { syncFeed(feed) } }
+                .awaitAll()
                 .forEach {
                     if (it.isNotify) {
                         notify(articleDao.insertIfNotExist(it.articles))

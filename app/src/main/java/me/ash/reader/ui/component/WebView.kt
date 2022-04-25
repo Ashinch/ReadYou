@@ -70,9 +70,7 @@ fun WebView(
             ): Boolean {
                 if (null == request?.url) return false
                 val url = request.url.toString()
-                context.startActivity(
-                    Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                )
+                if (url.isNotEmpty()) context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                 return true
             }
 

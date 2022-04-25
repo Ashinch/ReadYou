@@ -86,13 +86,13 @@ class RssHelper @Inject constructor(
             val parseRss = rssNetworkDataSource.parseRss(feed.url)
             parseRss.items.forEach {
                 if (latestLink != null && latestLink == it.link) return@withContext a
-                Log.i("RLog", "request rss:\n${feed.name},${feed.url}\n${it.title}")
+                Log.i("RLog", "request rss:\n${feed.name},${feed.url}\n${it.title}\n${it.link}\n")
                 a.add(
                     Article(
                         id = accountId.spacerDollar(UUID.randomUUID().toString()),
                         accountId = accountId,
                         feedId = feed.id,
-                        date = it.publishDate.toString().let {
+                        date = (it.publishDate ?: it.lastUpdated).toString().let {
                             try {
                                 Date(it)
                             } catch (e: IllegalArgumentException) {
@@ -100,9 +100,10 @@ class RssHelper @Inject constructor(
                             }
                         },
                         title = Html.fromHtml(it.title.toString()).toString(),
-                        author = it.author,
-                        rawDescription = it.description.toString(),
-                        shortDescription = (Readability4JExtended("", it.description.toString())
+                        author = it.author?.name,
+                        rawDescription = it.description ?: it.summary ?: "",
+                        shortDescription =
+                        (Readability4JExtended("", it.description ?: it.summary ?: "")
                             .parse().textContent ?: "").take(100).trim(),
                         link = it.link ?: "",
                     )
@@ -163,15 +164,17 @@ class RssHelper @Inject constructor(
 
     private fun parseDate(
         inputDate: String, patterns: Array<String?> = arrayOf(
+            "yyyy-MM-dd'T'HH:mm:ss'Z'",
             "yyyy-MM-dd",
             "yyyy-MM-dd HH:mm:ss",
             "yyyyMMdd",
             "yyyy/MM/dd",
             "yyyy年MM月dd日",
-            "yyyy MM dd"
+            "yyyy MM dd",
         )
     ): Date? {
         val df = SimpleDateFormat()
+        df.timeZone = TimeZone.getDefault()
         for (pattern in patterns) {
             df.applyPattern(pattern)
             df.isLenient = false
