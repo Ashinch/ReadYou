@@ -124,13 +124,20 @@ fun UpdateDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    if (downloadState !is Download.Progress) {
-                        updateViewModel.dispatch(
-                            UpdateViewAction.DownloadUpdate(
-                                url = context.newVersionDownloadUrl,
-                            )
+                    context.startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(context.getString(R.string.github_link)),
                         )
-                    }
+                    )
+                    // Disable automatic updates in F-Droid
+//                    if (downloadState !is Download.Progress) {
+//                        updateViewModel.dispatch(
+//                            UpdateViewAction.DownloadUpdate(
+//                                url = context.newVersionDownloadUrl,
+//                            )
+//                        )
+//                    }
                 }
             ) {
                 Text(

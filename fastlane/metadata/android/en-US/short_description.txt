@@ -1,1 +1,1 @@
-an RSS reader similar to Reeder
+A modern and elegant RSS reader with Material You design

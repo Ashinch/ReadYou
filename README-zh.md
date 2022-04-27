@@ -26,11 +26,11 @@
     简体中文</p>
     <br/>
     <br/>
-    <img src="./screenshots/zh/startup.png" width="19.2%" alt="startup" />
-    <img src="./screenshots/zh/feeds.png" width="19.2%" alt="startup" />
-    <img src="./screenshots/zh/flow.png" width="19.2%" alt="startup" />
-    <img src="./screenshots/zh/read.png" width="19.2%" alt="startup" />
-    <img src="./screenshots/zh/settings.png" width="19.2%" alt="startup" />
+    <img src="./fastlane/metadata/android/zh/images/startup.png" width="19.2%" alt="startup" />
+    <img src="./fastlane/metadata/android/zh/images/feeds.png" width="19.2%" alt="startup" />
+    <img src="./fastlane/metadata/android/zh/images/flow.png" width="19.2%" alt="startup" />
+    <img src="./fastlane/metadata/android/zh/images/read.png" width="19.2%" alt="startup" />
+    <img src="./fastlane/metadata/android/zh/images/settings.png" width="19.2%" alt="startup" />
     <br/>
     <br/>
 </div>
@@ -83,7 +83,7 @@
 
     > 如遇卡顿现象，请选择 Release 版本构建。
 
-## 信用
+## 感谢开源
 
 -   [MusicYou](https://github.com/Kyant0/MusicYou)
 -   [ParseRSS](https://github.com/muhrifqii/ParseRSS): [MIT](https://github.com/muhrifqii/ParseRSS/blob/master/LICENSE)

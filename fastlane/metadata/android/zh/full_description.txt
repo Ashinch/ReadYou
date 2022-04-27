@@ -1,0 +1,16 @@
+<i>Read You</i> 是一个以 <a href='https://m3.material.io/' target='_blank' rel='nofollow'>Material You</a> 风格呈现的 RSS 阅读器
+
+<b>特性：</b>
+
+* 订阅 RSS 链接
+* 导入 OPML 文件
+* 文章同步
+* 文章更新通知
+* 全文解析
+* 过滤未读、星标
+* 订阅源分组
+* 本地化
+* 导出 OPML 文件
+* 文章搜索
+
+更多的在路上…

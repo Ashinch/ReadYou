@@ -1,4 +1,4 @@
-<i>Read You</i> is a copy of <a href='https://reederapp.com/' target='_blank' rel='nofollow'>Reeder</a>, in order to give Android an RSS reader similar to Reeder. It combines the interaction logic of Reeder with the design style of <a href='https://m3.material.io/' target='_blank' rel='nofollow'>Material Design 3 (You)</a>.
+<i>Read You</i> A modern and elegant RSS reader with <a href='https://m3.material.io/' target='_blank' rel='nofollow'>Material You </a> Design
 
 <b>Features:</b>
 
