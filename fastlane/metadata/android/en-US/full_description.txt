@@ -1,0 +1,16 @@
+<i>Read You</i> is a copy of <a href='https://reederapp.com/' target='_blank' rel='nofollow'>Reeder</a>, in order to give Android an RSS reader similar to Reeder. It combines the interaction logic of Reeder with the design style of <a href='https://m3.material.io/' target='_blank' rel='nofollow'>Material Design 3 (You)</a>.
+
+<b>Features:</b>
+
+* Subscribe to Feed Links
+* Import from OPML
+* Article Sync
+* Article Update Notification
+* Parse Full Content
+* Filter Unread and Starred
+* Feed Grouping
+* Localization
+* Export as OPML
+* Search for Articles
+
+More to come…
