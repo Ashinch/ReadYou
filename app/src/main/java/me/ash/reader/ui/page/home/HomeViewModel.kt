@@ -1,27 +1,30 @@
 package me.ash.reader.ui.page.home
 
 import androidx.lifecycle.ViewModel
+import androidx.paging.*
 import androidx.work.WorkManager
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.entity.Filter
 import me.ash.reader.data.entity.Group
+import me.ash.reader.data.module.ApplicationScope
 import me.ash.reader.data.repository.RssRepository
+import me.ash.reader.data.repository.StringsRepository
 import me.ash.reader.data.repository.SyncWorker
-import me.ash.reader.ui.ext.animateScrollToPage
+import me.ash.reader.ui.page.home.flow.FlowItemView
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagerApi::class)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val rssRepository: RssRepository,
+    private val stringsRepository: StringsRepository,
+    @ApplicationScope
+    private val applicationScope: CoroutineScope,
     workManager: WorkManager,
 ) : ViewModel() {
 
@@ -37,11 +40,8 @@ class HomeViewModel @Inject constructor(
         when (action) {
             is HomeViewAction.Sync -> sync()
             is HomeViewAction.ChangeFilter -> changeFilter(action.filterState)
-            is HomeViewAction.ScrollToPage -> scrollToPage(
-                action.scope,
-                action.targetPage,
-                action.callback
-            )
+            is HomeViewAction.FetchArticles -> fetchArticles()
+            is HomeViewAction.InputSearchContent -> inputSearchContent(action.content)
         }
     }
 
@@ -57,10 +57,53 @@ class HomeViewModel @Inject constructor(
                 filter = filterState.filter,
             )
         }
+        fetchArticles()
     }
 
-    private fun scrollToPage(scope: CoroutineScope, targetPage: Int, callback: () -> Unit = {}) {
-        _viewState.value.pagerState.animateScrollToPage(scope, targetPage, callback)
+    private fun fetchArticles() {
+        _viewState.update {
+            it.copy(
+                pagingData = Pager(PagingConfig(pageSize = 10)) {
+                    if (_viewState.value.searchContent.isNotBlank()) {
+                        rssRepository.get().searchArticles(
+                            content = _viewState.value.searchContent.trim(),
+                            groupId = _filterState.value.group?.id,
+                            feedId = _filterState.value.feed?.id,
+                            isStarred = _filterState.value.filter.isStarred(),
+                            isUnread = _filterState.value.filter.isUnread(),
+                        )
+                    } else {
+                        rssRepository.get().pullArticles(
+                            groupId = _filterState.value.group?.id,
+                            feedId = _filterState.value.feed?.id,
+                            isStarred = _filterState.value.filter.isStarred(),
+                            isUnread = _filterState.value.filter.isUnread(),
+                        )
+                    }
+                }.flow.map {
+                    it.map { FlowItemView.Article(it) }.insertSeparators { before, after ->
+                        val beforeDate =
+                            stringsRepository.formatAsString(before?.articleWithFeed?.article?.date)
+                        val afterDate =
+                            stringsRepository.formatAsString(after?.articleWithFeed?.article?.date)
+                        if (beforeDate != afterDate) {
+                            afterDate?.let { FlowItemView.Date(it, beforeDate != null) }
+                        } else {
+                            null
+                        }
+                    }
+                }.cachedIn(applicationScope)
+            )
+        }
+    }
+
+    private fun inputSearchContent(content: String) {
+        _viewState.update {
+            it.copy(
+                searchContent = content,
+            )
+        }
+        fetchArticles()
     }
 }
 
@@ -73,6 +116,8 @@ data class FilterState(
 @OptIn(ExperimentalPagerApi::class)
 data class HomeViewState(
     val pagerState: PagerState = PagerState(0),
+    val pagingData: Flow<PagingData<FlowItemView>> = emptyFlow(),
+    val searchContent: String = "",
 )
 
 sealed class HomeViewAction {
@@ -82,9 +127,9 @@ sealed class HomeViewAction {
         val filterState: FilterState
     ) : HomeViewAction()
 
-    data class ScrollToPage(
-        val scope: CoroutineScope,
-        val targetPage: Int,
-        val callback: () -> Unit = {},
+    object FetchArticles : HomeViewAction()
+
+    data class InputSearchContent(
+        val content: String,
     ) : HomeViewAction()
 }

@@ -22,9 +22,11 @@ class PQTransferFunction : TransferFunction {
     }
 
     override fun EOTF(x: Double): Double =
-        10000.0 * ((x.pow(1.0 / m_2).coerceAtLeast(0.0)) / (c_2 - c_3 * x.pow(1.0 / m_2))).pow(1.0 / m_1)
+        10000.0 * ((x.pow(1.0 / m_2)
+            .coerceAtLeast(0.0)) / (c_2 - c_3 * x.pow(1.0 / m_2))).pow(1.0 / m_1)
 
-    override fun OETF(x: Double): Double = ((c_1 + c_2 * x / 10000.0) / (1 + c_3 * x / 10000.0)).pow(
-        m_2
-    )
+    override fun OETF(x: Double): Double =
+        ((c_1 + c_2 * x / 10000.0) / (1 + c_3 * x / 10000.0)).pow(
+            m_2
+        )
 }

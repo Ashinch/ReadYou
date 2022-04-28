@@ -65,7 +65,7 @@ fun SettingsPage(
                         contentDescription = stringResource(R.string.back),
                         tint = MaterialTheme.colorScheme.onSurface
                     ) {
-                        navController.navigate(RouteName.HOME)
+                        navController.popBackStack()
                     }
                 },
                 actions = {}
@@ -119,7 +119,9 @@ fun SettingsPage(
                         desc = stringResource(R.string.color_and_style_desc),
                         icon = Icons.Outlined.Palette,
                     ) {
-                        navController.navigate(RouteName.COLOR_AND_STYLE)
+                        navController.navigate(RouteName.COLOR_AND_STYLE) {
+                            popUpTo(RouteName.SETTINGS)
+                        }
                     }
                 }
                 item {
@@ -144,7 +146,9 @@ fun SettingsPage(
                         desc = stringResource(R.string.tips_and_support_desc),
                         icon = Icons.Outlined.TipsAndUpdates,
                     ) {
-                        navController.navigate(RouteName.TIPS_AND_SUPPORT)
+                        navController.navigate(RouteName.TIPS_AND_SUPPORT) {
+                            popUpTo(RouteName.SETTINGS)
+                        }
                     }
                 }
             }

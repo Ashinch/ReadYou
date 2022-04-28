@@ -23,7 +23,7 @@ fun Header(
         modifier = Modifier
             .fillMaxWidth()
             .roundClick {
-                articleWithFeed.article.link .let {
+                articleWithFeed.article.link.let {
                     if (it.isNotEmpty()) {
                         context.startActivity(
                             Intent(Intent.ACTION_VIEW, Uri.parse(articleWithFeed.article.link))

@@ -10,6 +10,6 @@ class StringsRepository @Inject constructor(
     @ApplicationContext
     private val context: Context,
 ) {
-    fun getString(resId: Int) = context.getString(resId)
+    fun getString(resId: Int, vararg formatArgs: Any) = context.getString(resId, *formatArgs)
     fun formatAsString(date: Date?) = date?.formatAsString(context)
 }

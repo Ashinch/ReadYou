@@ -10,6 +10,8 @@ package me.ash.reader.ui.component
 
 import android.view.SoundEffectConstants
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -84,6 +86,7 @@ fun Banner(
                 )
                 desc?.let {
                     Text(
+                        modifier = Modifier.animateContentSize(tween()),
                         text = it,
                         style = MaterialTheme.typography.bodyMedium,
                         color = (MaterialTheme.colorScheme.onSurface alwaysLight true).copy(alpha = 0.7f),

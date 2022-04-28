@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.feeds.option.feed
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi

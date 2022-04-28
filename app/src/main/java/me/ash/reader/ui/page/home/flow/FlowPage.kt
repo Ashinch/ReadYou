@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.flow
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -23,61 +24,53 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.work.WorkInfo
+import androidx.paging.compose.LazyPagingItems
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.DisplayText
 import me.ash.reader.ui.component.FeedbackIconButton
 import me.ash.reader.ui.component.SwipeRefresh
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.getName
+import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterBar
 import me.ash.reader.ui.page.home.FilterState
+import me.ash.reader.ui.page.home.HomeViewAction
+import me.ash.reader.ui.page.home.HomeViewModel
 
 @OptIn(
     ExperimentalMaterial3Api::class,
-    ExperimentalFoundationApi::class, com.google.accompanist.pager.ExperimentalPagerApi::class,
+    ExperimentalFoundationApi::class,
+    com.google.accompanist.pager.ExperimentalPagerApi::class,
     androidx.compose.ui.ExperimentalComposeUiApi::class,
 )
 @Composable
 fun FlowPage(
-    modifier: Modifier = Modifier,
     navController: NavHostController,
     flowViewModel: FlowViewModel = hiltViewModel(),
-    syncWorkLiveData: LiveData<WorkInfo>,
-    filterState: FilterState,
-    onFilterChange: (filterState: FilterState) -> Unit = {},
-    onScrollToPage: (targetPage: Int) -> Unit = {},
-    onItemClick: (item: ArticleWithFeed) -> Unit = {},
+    homeViewModel: HomeViewModel,
+    pagingItems: LazyPagingItems<FlowItemView>,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequester = remember { FocusRequester() }
+
     val scope = rememberCoroutineScope()
+    val focusRequester = remember { FocusRequester() }
     var markAsRead by remember { mutableStateOf(false) }
     var onSearch by remember { mutableStateOf(false) }
+
     val viewState = flowViewModel.viewState.collectAsStateValue()
-    val pagingItems = viewState.pagingData.collectAsLazyPagingItems()
+    val filterState = homeViewModel.filterState.collectAsStateValue()
+    val homeViewState = homeViewModel.viewState.collectAsStateValue()
     val listState = if (pagingItems.itemCount > 0) viewState.listState else rememberLazyListState()
 
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
-    syncWorkLiveData.observe(owner) {
+    homeViewModel.syncWorkLiveData.observe(owner) {
         it?.let { isSyncing = it.progress.getIsSyncing() }
-    }
-
-    LaunchedEffect(filterState) {
-        snapshotFlow { filterState }.collect {
-            flowViewModel.dispatch(
-                FlowViewAction.FetchData(it)
-            )
-        }
     }
 
     LaunchedEffect(onSearch) {
@@ -87,8 +80,8 @@ fun FlowPage(
                 focusRequester.requestFocus()
             } else {
                 keyboardController?.hide()
-                if (viewState.searchContent.isNotBlank()) {
-                    flowViewModel.dispatch(FlowViewAction.InputSearchContent(""))
+                if (homeViewState.searchContent.isNotBlank()) {
+                    homeViewModel.dispatch(HomeViewAction.InputSearchContent(""))
                 }
             }
         }
@@ -96,6 +89,7 @@ fun FlowPage(
 
     LaunchedEffect(viewState.listState) {
         snapshotFlow { viewState.listState.firstVisibleItemIndex }.collect {
+            Log.i("RLog", "FlowPage: ${it}")
             if (it > 0) {
                 keyboardController?.hide()
             }
@@ -121,7 +115,7 @@ fun FlowPage(
                         tint = MaterialTheme.colorScheme.onSurface
                     ) {
                         onSearch = false
-                        onScrollToPage(0)
+                        navController.popBackStack()
                     }
                 },
                 actions = {
@@ -215,7 +209,7 @@ fun FlowPage(
                             exit = fadeOut() + shrinkVertically(),
                         ) {
                             SearchBar(
-                                value = viewState.searchContent,
+                                value = homeViewState.searchContent,
                                 placeholder = when {
                                     filterState.group != null -> stringResource(
                                         R.string.search_for_in,
@@ -234,11 +228,11 @@ fun FlowPage(
                                 },
                                 focusRequester = focusRequester,
                                 onValueChange = {
-                                    flowViewModel.dispatch(FlowViewAction.InputSearchContent(it))
+                                    homeViewModel.dispatch(HomeViewAction.InputSearchContent(it))
                                 },
                                 onClose = {
                                     onSearch = false
-                                    flowViewModel.dispatch(FlowViewAction.InputSearchContent(""))
+                                    homeViewModel.dispatch(HomeViewAction.InputSearchContent(""))
                                 }
                             )
                             Spacer(modifier = Modifier.height((56 + 24 + 10).dp))
@@ -248,7 +242,9 @@ fun FlowPage(
                         pagingItems = pagingItems,
                     ) {
                         onSearch = false
-                        onItemClick(it)
+                        navController.navigate("${RouteName.READING}/${it.article.id}") {
+                            popUpTo(RouteName.FLOW)
+                        }
                     }
                     item {
                         Spacer(modifier = Modifier.height(64.dp))
@@ -266,7 +262,9 @@ fun FlowPage(
                     .fillMaxWidth(),
                 filter = filterState.filter,
                 filterOnClick = {
-                    onFilterChange(filterState.copy(filter = it))
+                    flowViewModel.dispatch(FlowViewAction.ScrollToItem(0))
+                    homeViewModel.dispatch(HomeViewAction.ChangeFilter(filterState.copy(filter = it)))
+                    homeViewModel.dispatch(HomeViewAction.FetchArticles)
                 },
             )
         }

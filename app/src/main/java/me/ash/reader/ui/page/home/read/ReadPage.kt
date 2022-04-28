@@ -31,12 +31,18 @@ import me.ash.reader.ui.ext.collectAsStateValue
 @Composable
 fun ReadPage(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
     readViewModel: ReadViewModel = hiltViewModel(),
-    onScrollToPage: (targetPage: Int, callback: () -> Unit) -> Unit = { _, _ -> },
 ) {
     val viewState = readViewModel.viewState.collectAsStateValue()
     var isScrollDown by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        navController.currentBackStackEntryFlow.collect {
+            it.arguments?.getString("articleId")?.let {
+                readViewModel.dispatch(ReadViewAction.InitData(it))
+            }
+        }
+    }
 
     if (viewState.listState.isScrollInProgress) {
         LaunchedEffect(Unit) {
@@ -84,10 +90,9 @@ fun ReadPage(
                     TopBar(
                         isShow = viewState.articleWithFeed == null || !isScrollDown,
                         isShowActions = viewState.articleWithFeed != null,
-                        onScrollToPage = onScrollToPage,
-                        onClearArticle = {
-                            readViewModel.dispatch(ReadViewAction.ClearArticle)
-                        }
+                        onClose = {
+                            navController.popBackStack()
+                        },
                     )
                 }
                 Content(
@@ -127,8 +132,7 @@ fun ReadPage(
 private fun TopBar(
     isShow: Boolean,
     isShowActions: Boolean = false,
-    onScrollToPage: (targetPage: Int, callback: () -> Unit) -> Unit = { _, _ -> },
-    onClearArticle: () -> Unit = {},
+    onClose: () -> Unit = {},
 ) {
     AnimatedVisibility(
         visible = isShow,
@@ -147,9 +151,7 @@ private fun TopBar(
                     contentDescription = stringResource(R.string.close),
                     tint = MaterialTheme.colorScheme.onSurface
                 ) {
-                    onScrollToPage(1) {
-                        onClearArticle()
-                    }
+                    onClose()
                 }
             },
             actions = {
