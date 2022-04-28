@@ -8,7 +8,7 @@ plugins {
 
 def gitCommitHash = "git rev-parse --verify --short HEAD".execute().text.trim()
 def keyProps = new Properties()
-def keyPropsFile = rootProject.file("ReadYouSecret/keystore.properties")
+def keyPropsFile = rootProject.file("signature/keystore.properties")
 if (keyPropsFile.exists()) {
     println("Loading keystore properties from ${keyPropsFile.absolutePath}")
     keyProps.load(new FileInputStream(keyPropsFile))

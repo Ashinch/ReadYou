@@ -10,15 +10,6 @@ jobs:
           distribution: temurin
           java-version: 11
 
-      - uses: actions/checkout@v2
-      - name: Checkout Android Keystore
-        uses: actions/checkout@v2
-        with:
-          repository: Ashinch/ReadYouSecret
-          token: ${{ secrets.ReadYouSecretToken }}
-          path: ReadYouSecret
-          ref: main
-
       - uses: gradle/gradle-build-action@v2
       - run: gradle assembleRelease
 
