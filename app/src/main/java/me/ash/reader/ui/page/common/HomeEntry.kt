@@ -13,17 +13,17 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import me.ash.reader.ui.ext.animatedComposable
-import me.ash.reader.ui.ext.collectAsStateValue
-import me.ash.reader.ui.ext.findActivity
-import me.ash.reader.ui.ext.isFirstLaunch
+import me.ash.reader.data.entity.Filter
+import me.ash.reader.ui.ext.*
+import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.flow.FlowPage
 import me.ash.reader.ui.page.home.read.ReadPage
-import me.ash.reader.ui.page.settings.ColorAndStyle
 import me.ash.reader.ui.page.settings.SettingsPage
-import me.ash.reader.ui.page.settings.TipsAndSupport
+import me.ash.reader.ui.page.settings.color.ColorAndStyle
+import me.ash.reader.ui.page.settings.interaction.Interaction
+import me.ash.reader.ui.page.settings.tips.TipsAndSupport
 import me.ash.reader.ui.page.startup.StartupPage
 import me.ash.reader.ui.theme.AppTheme
 import me.ash.reader.ui.theme.LocalUseDarkTheme
@@ -33,29 +33,58 @@ import me.ash.reader.ui.theme.LocalUseDarkTheme
 fun HomeEntry(
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val viewState = homeViewModel.viewState.collectAsStateValue()
+    val filterState = homeViewModel.filterState.collectAsStateValue()
     val pagingItems = viewState.pagingData.collectAsLazyPagingItems()
 
-    AppTheme {
-        val context = LocalContext.current
-        val useDarkTheme = LocalUseDarkTheme.current
-        val navController = rememberAnimatedNavController()
+    val navController = rememberAnimatedNavController()
 
-        val intent by rememberSaveable { mutableStateOf(context.findActivity()?.intent) }
-        var openArticleId by rememberSaveable {
-            mutableStateOf(intent?.extras?.get(ExtraName.ARTICLE_ID)?.toString() ?: "")
-        }.also {
-            intent?.replaceExtras(null)
-        }
+    val intent by rememberSaveable { mutableStateOf(context.findActivity()?.intent) }
+    var openArticleId by rememberSaveable {
+        mutableStateOf(intent?.extras?.get(ExtraName.ARTICLE_ID)?.toString() ?: "")
+    }.also {
+        intent?.replaceExtras(null)
+    }
 
-        LaunchedEffect(openArticleId) {
-            if (openArticleId.isNotEmpty()) {
-                navController.navigate("${RouteName.READING}/${openArticleId}") {
-                    popUpTo(RouteName.FEEDS)
+    LaunchedEffect(Unit) {
+        when (context.initialPage) {
+            1 -> {
+                navController.navigate(RouteName.FLOW) {
+                    launchSingleTop = true
                 }
-                openArticleId = ""
             }
+            // Other initial pages
         }
+
+        homeViewModel.dispatch(
+            HomeViewAction.ChangeFilter(
+                filterState.copy(
+                    filter = when (context.initialFilter) {
+                        0 -> Filter.Starred
+                        1 -> Filter.Unread
+                        2 -> Filter.All
+                        else -> Filter.All
+                    }
+                )
+            )
+        )
+    }
+
+    LaunchedEffect(openArticleId) {
+        if (openArticleId.isNotEmpty()) {
+            navController.navigate(RouteName.FLOW) {
+                launchSingleTop = true
+            }
+            navController.navigate("${RouteName.READING}/${openArticleId}") {
+                launchSingleTop = true
+            }
+            openArticleId = ""
+        }
+    }
+
+    AppTheme {
+        val useDarkTheme = LocalUseDarkTheme.current
 
         rememberSystemUiController().run {
             setStatusBarColor(Color.Transparent, !useDarkTheme)
@@ -89,6 +118,9 @@ fun HomeEntry(
             }
             animatedComposable(route = RouteName.COLOR_AND_STYLE) {
                 ColorAndStyle(navController)
+            }
+            animatedComposable(route = RouteName.INTERACTION) {
+                Interaction(navController)
             }
             animatedComposable(route = RouteName.TIPS_AND_SUPPORT) {
                 TipsAndSupport(navController)

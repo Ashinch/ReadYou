@@ -1,4 +1,4 @@
-package me.ash.reader.ui.page.settings
+package me.ash.reader.ui.page.settings.color
 
 import android.annotation.SuppressLint
 import android.os.Build
@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.ui.component.*
 import me.ash.reader.ui.ext.*
+import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.svg.PALETTE
 import me.ash.reader.ui.svg.SVGString
 import me.ash.reader.ui.theme.LocalUseDarkTheme
@@ -101,11 +102,11 @@ fun ColorAndStyle(
                     Spacer(modifier = Modifier.height(24.dp))
                 }
                 item {
-                    BlockButtonRadios(
+                    BlockRadioGroupButton(
                         selected = radioButtonSelected,
                         onSelected = { radioButtonSelected = it },
-                        items = listOf(
-                            BlockButtonRadiosItem(
+                        itemRadioGroups = listOf(
+                            BlockRadioGroupButtonItem(
                                 text = stringResource(R.string.wallpaper_colors),
                                 onClick = {},
                             ) {
@@ -120,7 +121,7 @@ fun ColorAndStyle(
                                     themeIndexPrefix = 5,
                                 )
                             },
-                            BlockButtonRadiosItem(
+                            BlockRadioGroupButtonItem(
                                 text = stringResource(R.string.basic_colors),
                                 onClick = {},
                             ) {

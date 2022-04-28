@@ -7,11 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BlockButtonRadios(
+fun BlockRadioGroupButton(
     modifier: Modifier = Modifier,
     selected: Int = 0,
     onSelected: (Int) -> Unit,
-    items: List<BlockButtonRadiosItem> = listOf(),
+    itemRadioGroups: List<BlockRadioGroupButtonItem> = listOf(),
 ) {
 
     Column {
@@ -20,11 +20,11 @@ fun BlockButtonRadios(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            items.forEachIndexed { index, item ->
+            itemRadioGroups.forEachIndexed { index, item ->
                 BlockButton(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(end = if (item == items.last()) 0.dp else 8.dp),
+                        .padding(end = if (item == itemRadioGroups.last()) 0.dp else 8.dp),
                     text = item.text,
                     selected = selected == index,
                 ) {
@@ -34,11 +34,11 @@ fun BlockButtonRadios(
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
-        items[selected].content()
+        itemRadioGroups[selected].content()
     }
 }
 
-data class BlockButtonRadiosItem(
+data class BlockRadioGroupButtonItem(
     val text: String,
     val onClick: () -> Unit = {},
     val content: @Composable () -> Unit,

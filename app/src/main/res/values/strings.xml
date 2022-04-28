@@ -81,7 +81,7 @@
     <string name="color_and_style">Color &amp; style</string>
     <string name="color_and_style_desc">Theme, color system, font size</string>
     <string name="interaction">Interaction</string>
-    <string name="interaction_desc">Layout, haptic feedback</string>
+    <string name="interaction_desc">On start, haptic feedback</string>
     <string name="languages">Languages</string>
     <string name="languages_desc">English, Chinese</string>
     <string name="tips_and_support">Tips &amp; support</string>
@@ -121,4 +121,7 @@
     <string name="download_failure">Download failure</string>
     <string name="rate_limit">The request rate is limited</string>
     <string name="help">Help</string>
+    <string name="on_start">On Start</string>
+    <string name="initial_page">Initial Page</string>
+    <string name="initial_filter">Initial Filter</string>
 </resources>

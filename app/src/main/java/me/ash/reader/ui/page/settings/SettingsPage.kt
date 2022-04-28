@@ -27,6 +27,9 @@ import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.page.common.RouteName
+import me.ash.reader.ui.page.settings.tips.UpdateDialog
+import me.ash.reader.ui.page.settings.tips.UpdateViewAction
+import me.ash.reader.ui.page.settings.tips.UpdateViewModel
 import me.ash.reader.ui.theme.palette.onLight
 
 @SuppressLint("FlowOperatorInvokedInComposition")
@@ -120,7 +123,7 @@ fun SettingsPage(
                         icon = Icons.Outlined.Palette,
                     ) {
                         navController.navigate(RouteName.COLOR_AND_STYLE) {
-                            popUpTo(RouteName.SETTINGS)
+                            launchSingleTop = true
                         }
                     }
                 }
@@ -129,8 +132,11 @@ fun SettingsPage(
                         title = stringResource(R.string.interaction),
                         desc = stringResource(R.string.interaction_desc),
                         icon = Icons.Outlined.TouchApp,
-                        enable = false,
-                    ) {}
+                    ) {
+                        navController.navigate(RouteName.INTERACTION) {
+                            launchSingleTop = true
+                        }
+                    }
                 }
                 item {
                     SelectableSettingGroupItem(
@@ -147,7 +153,7 @@ fun SettingsPage(
                         icon = Icons.Outlined.TipsAndUpdates,
                     ) {
                         navController.navigate(RouteName.TIPS_AND_SUPPORT) {
-                            popUpTo(RouteName.SETTINGS)
+                            launchSingleTop = true
                         }
                     }
                 }

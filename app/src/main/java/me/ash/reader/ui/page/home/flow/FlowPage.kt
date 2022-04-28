@@ -113,7 +113,13 @@ fun FlowPage(
                         tint = MaterialTheme.colorScheme.onSurface
                     ) {
                         onSearch = false
-                        navController.popBackStack()
+                        if(navController.previousBackStackEntry == null) {
+                            navController.navigate(RouteName.FEEDS) {
+                                launchSingleTop = true
+                            }
+                        } else {
+                            navController.popBackStack()
+                        }
                     }
                 },
                 actions = {
@@ -241,7 +247,7 @@ fun FlowPage(
                     ) {
                         onSearch = false
                         navController.navigate("${RouteName.READING}/${it.article.id}") {
-                            popUpTo(RouteName.FLOW)
+                            launchSingleTop = true
                         }
                     }
                     item {

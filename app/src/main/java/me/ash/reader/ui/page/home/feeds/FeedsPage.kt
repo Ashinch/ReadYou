@@ -132,7 +132,7 @@ fun FeedsPage(
                         showBadge = latestVersion.whetherNeedUpdate(currentVersion, skipVersion),
                     ) {
                         navController.navigate(RouteName.SETTINGS) {
-                            popUpTo(RouteName.FEEDS)
+                            launchSingleTop = true
                         }
                     }
                 },
@@ -271,7 +271,7 @@ private fun filterChange(
     homeViewModel.dispatch(HomeViewAction.ChangeFilter(filterState))
     if (isNavigate) {
         navController.navigate(RouteName.FLOW) {
-            popUpTo(RouteName.FEEDS)
+            launchSingleTop = true
         }
     }
 }

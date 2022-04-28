@@ -35,6 +35,10 @@ val Context.themeIndex: Int
     get() = this.dataStore.get(DataStoreKeys.ThemeIndex) ?: 5
 val Context.customPrimaryColor: String
     get() = this.dataStore.get(DataStoreKeys.CustomPrimaryColor) ?: ""
+val Context.initialPage: Int
+    get() = this.dataStore.get(DataStoreKeys.InitialPage) ?: 0
+val Context.initialFilter: Int
+    get() = this.dataStore.get(DataStoreKeys.InitialFilter) ?: 2
 
 suspend fun <T> DataStore<Preferences>.put(dataStoreKeys: DataStoreKeys<T>, value: T) {
     this.edit {
@@ -123,5 +127,15 @@ sealed class DataStoreKeys<T> {
     object CustomPrimaryColor : DataStoreKeys<String>() {
         override val key: Preferences.Key<String>
             get() = stringPreferencesKey("customPrimaryColor")
+    }
+
+    object InitialPage : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("initialPage")
+    }
+
+    object InitialFilter : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("initialFilter")
     }
 }

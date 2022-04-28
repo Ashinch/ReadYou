@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.paging.*
 import androidx.work.WorkManager
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
@@ -25,7 +24,7 @@ class HomeViewModel @Inject constructor(
     private val stringsRepository: StringsRepository,
     @ApplicationScope
     private val applicationScope: CoroutineScope,
-    workManager: WorkManager,
+    private val workManager: WorkManager,
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(HomeViewState())
@@ -115,7 +114,6 @@ data class FilterState(
 
 @OptIn(ExperimentalPagerApi::class)
 data class HomeViewState(
-    val pagerState: PagerState = PagerState(0),
     val pagingData: Flow<PagingData<FlowItemView>> = emptyFlow(),
     val searchContent: String = "",
 )

@@ -81,7 +81,7 @@
     <string name="color_and_style">颜色和样式</string>
     <string name="color_and_style_desc">主题、色彩系统、字体大小</string>
     <string name="interaction">交互</string>
-    <string name="interaction_desc">布局、触感反馈</string>
+    <string name="interaction_desc">启动时、触感反馈</string>
     <string name="languages">语言</string>
     <string name="languages_desc">英语、中文</string>
     <string name="tips_and_support">提示和支持</string>
@@ -121,4 +121,7 @@
     <string name="download_failure">下载失败</string>
     <string name="rate_limit">请求速率受限</string>
     <string name="help">帮助</string>
+    <string name="on_start">启动时</string>
+    <string name="initial_page">起始页面</string>
+    <string name="initial_filter">起始过滤条件</string>
 </resources>

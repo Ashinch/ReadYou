@@ -1,4 +1,4 @@
-package me.ash.reader.ui.page.settings
+package me.ash.reader.ui.page.settings.tips
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

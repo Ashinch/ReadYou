@@ -1,4 +1,4 @@
-package me.ash.reader.ui.page.settings
+package me.ash.reader.ui.page.settings.tips
 
 import android.content.Intent
 import android.net.Uri
