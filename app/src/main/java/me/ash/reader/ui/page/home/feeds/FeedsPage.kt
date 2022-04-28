@@ -166,7 +166,7 @@ fun FeedsPage(
                                 }
                             )
                         },
-                        text = feedsViewState.account?.name ?: "",
+                        text = feedsViewState.account?.name ?: stringResource(R.string.read_you),
                         desc = if (isSyncing) stringResource(R.string.syncing) else "",
                     )
                 }

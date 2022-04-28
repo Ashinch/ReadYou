@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.flow
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -89,7 +88,6 @@ fun FlowPage(
 
     LaunchedEffect(viewState.listState) {
         snapshotFlow { viewState.listState.firstVisibleItemIndex }.collect {
-            Log.i("RLog", "FlowPage: ${it}")
             if (it > 0) {
                 keyboardController?.hide()
             }

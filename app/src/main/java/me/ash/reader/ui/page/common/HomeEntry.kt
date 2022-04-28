@@ -78,7 +78,7 @@ fun HomeEntry(
                 FlowPage(
                     navController = navController,
                     homeViewModel = homeViewModel,
-                    pagingItems = pagingItems
+                    pagingItems = pagingItems,
                 )
             }
             animatedComposable(route = "${RouteName.READING}/{articleId}") {

@@ -163,7 +163,7 @@ class RssHelper @Inject constructor(
     }
 
     private fun parseDate(
-        inputDate: String, patterns: Array<String?> = arrayOf(
+        inputDate: String, patterns: Array<String> = arrayOf(
             "yyyy-MM-dd'T'HH:mm:ss'Z'",
             "yyyy-MM-dd",
             "yyyy-MM-dd HH:mm:ss",
@@ -174,7 +174,6 @@ class RssHelper @Inject constructor(
         )
     ): Date? {
         val df = SimpleDateFormat()
-        df.timeZone = TimeZone.getDefault()
         for (pattern in patterns) {
             df.applyPattern(pattern)
             df.isLenient = false

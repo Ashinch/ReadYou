@@ -562,7 +562,7 @@ interface ArticleDao {
     }
 
     @Transaction
-    suspend fun insertIfNotExist(articles: List<Article>): List<Article?> {
-        return articles.map { if (insertIfNotExist(it) > 0) it else null }
+    suspend fun insertIfNotExist(articles: List<Article>): List<Article> {
+        return articles.mapNotNull { if (insertIfNotExist(it) > 0) it else null }
     }
 }

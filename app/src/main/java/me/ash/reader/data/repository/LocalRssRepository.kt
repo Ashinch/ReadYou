@@ -1,14 +1,12 @@
 package me.ash.reader.data.repository
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
@@ -25,6 +23,7 @@ import me.ash.reader.data.dao.FeedDao
 import me.ash.reader.data.dao.GroupDao
 import me.ash.reader.data.entity.Article
 import me.ash.reader.data.entity.Feed
+import me.ash.reader.data.entity.FeedWithArticle
 import me.ash.reader.data.entity.Group
 import me.ash.reader.data.module.DispatcherDefault
 import me.ash.reader.data.module.DispatcherIO
@@ -56,12 +55,9 @@ class LocalRssRepository @Inject constructor(
     feedDao, rssNetworkDataSource, workManager,
     dispatcherIO
 ) {
-    private val notificationManager: NotificationManager =
-        (getSystemService(
-            context,
-            NotificationManager::class.java
-        ) as NotificationManager).also {
-            it.createNotificationChannel(
+    private val notificationManager: NotificationManagerCompat =
+        NotificationManagerCompat.from(context).apply {
+            createNotificationChannel(
                 NotificationChannel(
                     NotificationGroupName.ARTICLE_UPDATE,
                     NotificationGroupName.ARTICLE_UPDATE,
@@ -105,9 +101,14 @@ class LocalRssRepository @Inject constructor(
                 .awaitAll()
                 .forEach {
                     if (it.isNotify) {
-                        notify(articleDao.insertIfNotExist(it.articles))
+                        notify(
+                            FeedWithArticle(
+                                it.feedWithArticle.feed,
+                                articleDao.insertIfNotExist(it.feedWithArticle.articles)
+                            )
+                        )
                     } else {
-                        articleDao.insertIfNotExist(it.articles)
+                        articleDao.insertIfNotExist(it.feedWithArticle.articles)
                     }
                 }
             Log.i("RlOG", "onCompletion: ${System.currentTimeMillis() - preTime}")
@@ -158,7 +159,7 @@ class LocalRssRepository @Inject constructor(
     }
 
     data class ArticleNotify(
-        val articles: List<Article>,
+        val feedWithArticle: FeedWithArticle,
         val isNotify: Boolean,
     )
 
@@ -170,7 +171,7 @@ class LocalRssRepository @Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             Log.e("RLog", "queryRssXml[${feed.name}]: ${e.message}")
-            return ArticleNotify(listOf(), false)
+            return ArticleNotify(FeedWithArticle(feed, listOf()), false)
         }
         try {
 //            if (feed.icon == null && !articles.isNullOrEmpty()) {
@@ -178,32 +179,33 @@ class LocalRssRepository @Inject constructor(
 //            }
         } catch (e: Exception) {
             Log.e("RLog", "queryRssIcon[${feed.name}]: ${e.message}")
-            return ArticleNotify(listOf(), false)
+            return ArticleNotify(FeedWithArticle(feed, listOf()), false)
         }
         return ArticleNotify(
-            articles = articles,
+            feedWithArticle = FeedWithArticle(feed, articles),
             isNotify = articles.isNotEmpty() && feed.isNotification
         )
     }
 
     private fun notify(
-        articles: List<Article?>,
+        feedWithArticle: FeedWithArticle,
     ) {
-        articles.filterNotNull().forEach { article ->
-            val builder = NotificationCompat.Builder(
-                context,
-                NotificationGroupName.ARTICLE_UPDATE
-            ).setSmallIcon(R.drawable.ic_notification)
-//                .setLargeIcon(
-//                    BitmapFactory.decodeResource(
-//                        context.resources,
-//                        R.mipmap.ic_launcher_round,
-//                    )
-//                )
-                .setGroup(NotificationGroupName.ARTICLE_UPDATE)
+        notificationManager.createNotificationChannelGroup(
+            NotificationChannelGroup(
+                feedWithArticle.feed.id,
+                feedWithArticle.feed.name
+            )
+        )
+        feedWithArticle.articles.forEach { article ->
+            val builder = NotificationCompat.Builder(context, NotificationGroupName.ARTICLE_UPDATE)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setLargeIcon(
+                    (BitmapFactory.decodeResource(
+                        context.resources,
+                        R.drawable.ic_notification
+                    ))
+                )
                 .setContentTitle(article.title)
-                .setContentText(article.shortDescription)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(
                     PendingIntent.getActivity(
                         context,
@@ -219,11 +221,39 @@ class LocalRssRepository @Inject constructor(
                         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                     )
                 )
+                .setGroup(feedWithArticle.feed.id)
+                .setStyle(
+                    NotificationCompat.BigTextStyle()
+                        .bigText(article.shortDescription)
+                        .setSummaryText(feedWithArticle.feed.name)
+                )
+
             notificationManager.notify(
                 Random().nextInt() + article.id.hashCode(),
                 builder.build().apply {
                     flags = Notification.FLAG_AUTO_CANCEL
                 }
+            )
+        }
+
+        if (feedWithArticle.articles.size > 1) {
+            notificationManager.notify(
+                Random().nextInt() + feedWithArticle.feed.id.hashCode(),
+                NotificationCompat.Builder(context, NotificationGroupName.ARTICLE_UPDATE)
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setLargeIcon(
+                        (BitmapFactory.decodeResource(
+                            context.resources,
+                            R.drawable.ic_notification
+                        ))
+                    )
+                    .setStyle(
+                        NotificationCompat.InboxStyle()
+                            .setSummaryText(feedWithArticle.feed.name)
+                    )
+                    .setGroup(feedWithArticle.feed.id)
+                    .setGroupSummary(true)
+                    .build()
             )
         }
     }

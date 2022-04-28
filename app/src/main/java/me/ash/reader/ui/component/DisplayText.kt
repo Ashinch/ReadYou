@@ -1,7 +1,6 @@
 package me.ash.reader.ui.component
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,8 +31,8 @@ fun DisplayText(
     ) {
         Text(
             modifier = Modifier
-                .height(44.dp)
-                .animateContentSize(tween()),
+                .height(44.dp),
+//                .animateContentSize(tween()),
             text = text,
             style = MaterialTheme.typography.displaySmall.copy(
                 baselineShift = BaselineShift.Superscript
