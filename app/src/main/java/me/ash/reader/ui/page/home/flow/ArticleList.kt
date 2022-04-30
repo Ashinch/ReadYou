@@ -13,6 +13,8 @@ import me.ash.reader.data.entity.ArticleWithFeed
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.ArticleList(
     pagingItems: LazyPagingItems<FlowItemView>,
+    articleListFeedIcon: Boolean,
+    articleListTonalElevation: Int,
     onClick: (ArticleWithFeed) -> Unit = {},
 ) {
     for (index in 0 until pagingItems.itemCount) {
@@ -30,7 +32,7 @@ fun LazyListScope.ArticleList(
                 val separator = pagingItems[index] as FlowItemView.Date
                 if (separator.showSpacer) item { Spacer(modifier = Modifier.height(40.dp)) }
                 stickyHeader {
-                    StickyHeader(separator.date)
+                    StickyHeader(separator.date, articleListFeedIcon, articleListTonalElevation)
                 }
             }
             else -> {}

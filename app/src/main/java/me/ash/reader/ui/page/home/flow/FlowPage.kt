@@ -15,6 +15,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -26,6 +27,10 @@ import androidx.paging.compose.LazyPagingItems
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.data.preference.ArticleListFeedIconPreference
+import me.ash.reader.data.preference.ArticleListFeedIconPreference.Companion.articleListFeedIcon
+import me.ash.reader.data.preference.ArticleListTonalElevationPreference
+import me.ash.reader.data.preference.ArticleListTonalElevationPreference.Companion.articleListTonalElevation
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.DisplayText
 import me.ash.reader.ui.component.FeedbackIconButton
@@ -52,6 +57,7 @@ fun FlowPage(
     homeViewModel: HomeViewModel,
     pagingItems: LazyPagingItems<FlowItemView>,
 ) {
+    val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val scope = rememberCoroutineScope()
@@ -63,6 +69,11 @@ fun FlowPage(
     val filterState = homeViewModel.filterState.collectAsStateValue()
     val homeViewState = homeViewModel.viewState.collectAsStateValue()
     val listState = if (pagingItems.itemCount > 0) viewState.listState else rememberLazyListState()
+
+    val articleListTonalElevation =
+        context.articleListTonalElevation.collectAsStateValue(initial = ArticleListTonalElevationPreference.default)
+    val articleListFeedIcon =
+        context.articleListFeedIcon.collectAsStateValue(initial = ArticleListFeedIconPreference.default)
 
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
@@ -98,15 +109,17 @@ fun FlowPage(
 
     Scaffold(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
+            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(articleListTonalElevation.value.dp))
             .statusBarsPadding()
             .navigationBarsPadding(),
-        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
+        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(articleListTonalElevation.value.dp),
         topBar = {
             SmallTopAppBar(
                 title = {},
                 colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
+                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+                        articleListTonalElevation.value.dp
+                    ),
                 ),
                 navigationIcon = {
                     FeedbackIconButton(
@@ -115,7 +128,7 @@ fun FlowPage(
                         tint = MaterialTheme.colorScheme.onSurface
                     ) {
                         onSearch = false
-                        if(navController.previousBackStackEntry == null) {
+                        if (navController.previousBackStackEntry == null) {
                             navController.navigate(RouteName.FEEDS) {
                                 launchSingleTop = true
                             }
@@ -184,7 +197,7 @@ fun FlowPage(
                     state = listState,
                 ) {
                     item {
-                        DisplayTextHeader(filterState, isSyncing)
+                        DisplayTextHeader(filterState, isSyncing, articleListFeedIcon.value)
                         AnimatedVisibility(
                             visible = markAsRead,
                             enter = fadeIn() + expandVertically(),
@@ -246,6 +259,8 @@ fun FlowPage(
                     }
                     ArticleList(
                         pagingItems = pagingItems,
+                        articleListFeedIcon = articleListFeedIcon.value,
+                        articleListTonalElevation = articleListTonalElevation.value,
                     ) {
                         onSearch = false
                         navController.navigate("${RouteName.READING}/${it.article.id}") {
@@ -263,9 +278,6 @@ fun FlowPage(
         },
         bottomBar = {
             FilterBar(
-                modifier = Modifier
-                    .height(60.dp)
-                    .fillMaxWidth(),
                 filter = filterState.filter,
                 filterOnClick = {
                     flowViewModel.dispatch(FlowViewAction.ScrollToItem(0))
@@ -280,10 +292,11 @@ fun FlowPage(
 @Composable
 private fun DisplayTextHeader(
     filterState: FilterState,
-    isSyncing: Boolean
+    isSyncing: Boolean,
+    articleListFeedIcon: Boolean,
 ) {
     DisplayText(
-        modifier = Modifier.padding(start = 30.dp),
+        modifier = Modifier.padding(start = if (articleListFeedIcon) 30.dp else 0.dp),
         text = when {
             filterState.group != null -> filterState.group.name
             filterState.feed != null -> filterState.feed.name

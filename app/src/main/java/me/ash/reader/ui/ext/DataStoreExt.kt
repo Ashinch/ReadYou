@@ -33,6 +33,7 @@ val Context.currentAccountType: Int
     get() = this.dataStore.get(DataStoreKeys.CurrentAccountType)!!
 val Context.themeIndex: Int
     get() = this.dataStore.get(DataStoreKeys.ThemeIndex) ?: 5
+
 val Context.customPrimaryColor: String
     get() = this.dataStore.get(DataStoreKeys.CustomPrimaryColor) ?: ""
 val Context.initialPage: Int
@@ -127,6 +128,56 @@ sealed class DataStoreKeys<T> {
     object CustomPrimaryColor : DataStoreKeys<String>() {
         override val key: Preferences.Key<String>
             get() = stringPreferencesKey("customPrimaryColor")
+    }
+
+    object FilterBarStyle : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("filterBarStyle")
+    }
+
+    object FilterBarFilled : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("filterBarFilled")
+    }
+
+    object FilterBarPadding : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("filterBarPadding")
+    }
+
+    object FilterBarTonalElevation : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("filterBarTonalElevation")
+    }
+
+    object ArticleListFeedIcon : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("articleListFeedIcon")
+    }
+
+    object ArticleListFeedName : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("articleListFeedName")
+    }
+
+    object ArticleListImage : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("articleListImage")
+    }
+
+    object ArticleListDesc : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("articleListDesc")
+    }
+
+    object ArticleListDate : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("articleListDate")
+    }
+
+    object ArticleListTonalElevation : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("articleListTonalElevation")
     }
 
     object InitialPage : DataStoreKeys<Int>() {

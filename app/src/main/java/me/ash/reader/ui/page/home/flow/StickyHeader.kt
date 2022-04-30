@@ -13,16 +13,20 @@ import androidx.compose.ui.unit.dp
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 
 @Composable
-fun StickyHeader(currentItemDay: String) {
+fun StickyHeader(
+    currentItemDay: String,
+    articleListFeedIcon: Boolean,
+    articleListTonalElevation: Int,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)),
+            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(articleListTonalElevation.dp)),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             modifier = Modifier
-                .padding(start = if (true) 54.dp else 24.dp, bottom = 4.dp),
+                .padding(start = if (articleListFeedIcon) 54.dp else 24.dp, bottom = 4.dp),
             text = currentItemDay,
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.labelLarge,

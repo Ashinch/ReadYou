@@ -79,7 +79,7 @@
     <string name="accounts">Accounts</string>
     <string name="accounts_desc">Local, FreshRSS</string>
     <string name="color_and_style">Color &amp; style</string>
-    <string name="color_and_style_desc">Theme, color system, font size</string>
+    <string name="color_and_style_desc">Theme, color style, font size</string>
     <string name="interaction">Interaction</string>
     <string name="interaction_desc">On start, haptic feedback</string>
     <string name="languages">Languages</string>

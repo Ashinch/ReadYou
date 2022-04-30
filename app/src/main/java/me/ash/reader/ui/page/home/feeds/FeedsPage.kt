@@ -174,7 +174,7 @@ fun FeedsPage(
                     Banner(
                         title = filterState.filter.getName(),
                         desc = feedsViewState.importantCount,
-                        icon = filterState.filter.icon,
+                        icon = filterState.filter.iconOutline,
                         action = {
                             Icon(
                                 imageVector = Icons.Outlined.KeyboardArrowRight,
@@ -241,9 +241,6 @@ fun FeedsPage(
         },
         bottomBar = {
             FilterBar(
-                modifier = Modifier
-                    .height(60.dp)
-                    .fillMaxWidth(),
                 filter = filterState.filter,
                 filterOnClick = {
                     filterChange(

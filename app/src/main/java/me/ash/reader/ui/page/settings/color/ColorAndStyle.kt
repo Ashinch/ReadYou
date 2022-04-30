@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.ui.component.*
 import me.ash.reader.ui.ext.*
+import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.svg.PALETTE
 import me.ash.reader.ui.svg.SVGString
@@ -167,8 +168,11 @@ fun ColorAndStyle(
                     ) {}
                     SettingItem(
                         title = stringResource(R.string.flow_page),
-                        enable = false,
-                        onClick = {},
+                        onClick = {
+                            navController.navigate(RouteName.FLOW_PAGE_STYLE) {
+                                launchSingleTop = true
+                            }
+                        },
                     ) {}
                     SettingItem(
                         title = stringResource(R.string.reading_page),

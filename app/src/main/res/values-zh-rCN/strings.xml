@@ -79,7 +79,7 @@
     <string name="accounts">账户</string>
     <string name="accounts_desc">本地、FreshRSS</string>
     <string name="color_and_style">颜色和样式</string>
-    <string name="color_and_style_desc">主题、色彩系统、字体大小</string>
+    <string name="color_and_style_desc">主题、色调样式、字体大小</string>
     <string name="interaction">交互</string>
     <string name="interaction_desc">启动时、触感反馈</string>
     <string name="languages">语言</string>
