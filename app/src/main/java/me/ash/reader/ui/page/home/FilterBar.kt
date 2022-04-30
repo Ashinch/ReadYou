@@ -11,7 +11,6 @@ import androidx.compose.ui.zIndex
 import com.google.accompanist.pager.ExperimentalPagerApi
 import me.ash.reader.data.entity.Filter
 import me.ash.reader.ui.ext.getName
-import me.ash.reader.ui.theme.palette.alwaysLight
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -23,7 +22,7 @@ fun FilterBar(
     val view = LocalView.current
 
     Box(
-        modifier = Modifier.height(60.dp)
+//        modifier = Modifier.height(60.dp)
     ) {
         Divider(
             modifier = Modifier
@@ -33,8 +32,8 @@ fun FilterBar(
             color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.24f)
         )
         NavigationBar(
-            modifier = Modifier.fillMaxSize(),
-            tonalElevation = 0.dp,
+//            modifier = Modifier.fillMaxSize(),
+//            tonalElevation = 0.dp,
         ) {
             Spacer(modifier = Modifier.width(60.dp))
             listOf(
@@ -49,6 +48,7 @@ fun FilterBar(
                             contentDescription = item.getName()
                         )
                     },
+                    label = { Text(text = item.getName(), style = MaterialTheme.typography.labelMedium) },
                     selected = filter == item,
                     onClick = {
 //                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
@@ -56,11 +56,11 @@ fun FilterBar(
                         filterOnClick(item)
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer alwaysLight true,
+//                        selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer alwaysLight true,
 //                        unselectedIconColor = MaterialTheme.colorScheme.outline,
-                        selectedTextColor = MaterialTheme.colorScheme.onSurface alwaysLight true,
+//                        selectedTextColor = MaterialTheme.colorScheme.onSurface alwaysLight true,
 //                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        indicatorColor = MaterialTheme.colorScheme.primaryContainer alwaysLight true,
+//                        indicatorColor = MaterialTheme.colorScheme.primaryContainer alwaysLight true,
                     )
                 )
             }

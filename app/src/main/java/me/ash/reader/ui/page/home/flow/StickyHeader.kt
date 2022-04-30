@@ -10,13 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import me.ash.reader.ui.ext.surfaceColorAtElevation
 
 @Composable
 fun StickyHeader(currentItemDay: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface),
+            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
