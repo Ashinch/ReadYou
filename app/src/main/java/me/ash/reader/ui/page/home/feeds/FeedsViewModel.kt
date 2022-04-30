@@ -102,15 +102,13 @@ class FeedsViewModel @Inject constructor(
                 }
             }
             groupWithFeedList
-        }.onStart {
-
         }.onEach { groupWithFeedList ->
             _viewState.update {
                 it.copy(
                     importantCount = groupWithFeedList.sumOf { it.group.important ?: 0 }.run {
                         when {
-                            isStarred -> stringsRepository.getString(R.string.unread_desc, this)
-                            isUnread -> stringsRepository.getString(R.string.starred_desc, this)
+                            isStarred -> stringsRepository.getString(R.string.starred_desc, this)
+                            isUnread -> stringsRepository.getString(R.string.unread_desc, this)
                             else -> stringsRepository.getString(R.string.all_desc, this)
                         }
                     },
@@ -118,7 +116,7 @@ class FeedsViewModel @Inject constructor(
                     feedsVisible = List(groupWithFeedList.size, init = { true })
                 )
             }
-        }.catch() {
+        }.catch {
             Log.e("RLog", "catch in articleRepository.pullFeeds(): ${it.message}")
         }.flowOn(Dispatchers.Default).collect()
     }
