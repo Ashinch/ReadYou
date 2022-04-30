@@ -11,10 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -35,6 +32,7 @@ import me.ash.reader.ui.component.FeedbackIconButton
 import me.ash.reader.ui.component.SwipeRefresh
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.getName
+import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterBar
 import me.ash.reader.ui.page.home.FilterState
@@ -100,12 +98,16 @@ fun FlowPage(
 
     Scaffold(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface)
+            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp))
             .statusBarsPadding()
             .navigationBarsPadding(),
+        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
         topBar = {
             SmallTopAppBar(
                 title = {},
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
+                ),
                 navigationIcon = {
                     FeedbackIconButton(
                         imageVector = Icons.Rounded.ArrowBack,
