@@ -15,7 +15,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -27,6 +26,7 @@ import androidx.paging.compose.LazyPagingItems
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.data.preference.*
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.DisplayText
 import me.ash.reader.ui.component.FeedbackIconButton
@@ -39,7 +39,6 @@ import me.ash.reader.ui.page.home.FilterBar
 import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
-import me.ash.reader.ui.theme.*
 import me.ash.reader.ui.theme.palette.onDark
 
 @OptIn(
@@ -55,7 +54,6 @@ fun FlowPage(
     homeViewModel: HomeViewModel,
     pagingItems: LazyPagingItems<FlowItemView>,
 ) {
-    val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val topBarTonalElevation = LocalFlowTopBarTonalElevation.current
     val articleListTonalElevation = LocalFlowArticleListTonalElevation.current
@@ -109,18 +107,18 @@ fun FlowPage(
 
     Scaffold(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(topBarTonalElevation.dp))
+            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(topBarTonalElevation.value.dp))
             .statusBarsPadding()
             .navigationBarsPadding(),
         containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-            articleListTonalElevation.dp
+            articleListTonalElevation.value.dp
         ) onDark MaterialTheme.colorScheme.surface,
         topBar = {
             SmallTopAppBar(
                 title = {},
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                        topBarTonalElevation.dp
+                        topBarTonalElevation.value.dp
                     ),
                 ),
                 navigationIcon = {
@@ -199,7 +197,7 @@ fun FlowPage(
                     state = listState,
                 ) {
                     item {
-                        DisplayTextHeader(filterState, isSyncing, articleListFeedIcon)
+                        DisplayTextHeader(filterState, isSyncing, articleListFeedIcon.value)
                         AnimatedVisibility(
                             visible = markAsRead,
                             enter = fadeIn() + expandVertically(),
@@ -261,8 +259,8 @@ fun FlowPage(
                     }
                     ArticleList(
                         pagingItems = pagingItems,
-                        articleListFeedIcon = articleListFeedIcon,
-                        articleListTonalElevation = articleListTonalElevation,
+                        articleListFeedIcon = articleListFeedIcon.value,
+                        articleListTonalElevation = articleListTonalElevation.value,
                     ) {
                         onSearch = false
                         navController.navigate("${RouteName.READING}/${it.article.id}") {
@@ -281,10 +279,10 @@ fun FlowPage(
         bottomBar = {
             FilterBar(
                 filter = filterState.filter,
-                filterBarStyle = filterBarStyle,
-                filterBarFilled = filterBarFilled,
+                filterBarStyle = filterBarStyle.value,
+                filterBarFilled = filterBarFilled.value,
                 filterBarPadding = filterBarPadding.dp,
-                filterBarTonalElevation = filterBarTonalElevation.dp,
+                filterBarTonalElevation = filterBarTonalElevation.value.dp,
             ) {
                 flowViewModel.dispatch(FlowViewAction.ScrollToItem(0))
                 homeViewModel.dispatch(HomeViewAction.ChangeFilter(filterState.copy(filter = it)))

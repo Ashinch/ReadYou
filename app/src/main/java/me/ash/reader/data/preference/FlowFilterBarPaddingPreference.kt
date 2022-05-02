@@ -1,28 +1,22 @@
 package me.ash.reader.data.preference
 
 import android.content.Context
-import androidx.compose.runtime.Immutable
+import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
-@Immutable
 object FlowFilterBarPaddingPreference {
-    const val default = 0
-
-    val Context.flowFilterBarPadding: Flow<Int>
-        get() = this.dataStore.data.map {
-            it[DataStoreKeys.FlowFilterBarPadding.key] ?: default
-        }
+    const val default = 60
 
     fun put(context: Context, scope: CoroutineScope, value: Int) {
-        scope.launch(Dispatchers.IO) {
+        scope.launch {
             context.dataStore.put(DataStoreKeys.FlowFilterBarPadding, value)
         }
     }
+
+    fun fromPreferences(preferences: Preferences) =
+        preferences[DataStoreKeys.FlowFilterBarPadding.key] ?: default
 }

@@ -21,8 +21,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import me.ash.reader.R
 import me.ash.reader.data.entity.ArticleWithFeed
+import me.ash.reader.data.preference.*
 import me.ash.reader.ui.ext.formatAsString
-import me.ash.reader.ui.theme.*
 
 @Composable
 fun ArticleItem(
@@ -35,7 +35,7 @@ fun ArticleItem(
     val articleListFeedName = LocalFlowArticleListFeedName.current
     val articleListImage = LocalFlowArticleListImage.current
     val articleListDesc = LocalFlowArticleListDesc.current
-    val articleListDate = LocalFlowArticleListDate.current
+    val articleListDate = LocalFlowArticleListTime.current
 
     Column(
         modifier = Modifier
@@ -51,11 +51,11 @@ fun ArticleItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             // Feed name
-            if (articleListFeedName) {
+            if (articleListFeedName.value) {
                 Text(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(start = if (articleListFeedIcon) 30.dp else 0.dp),
+                        .padding(start = if (articleListFeedIcon.value) 30.dp else 0.dp),
                     text = articleWithFeed.feed.name,
                     color = MaterialTheme.colorScheme.tertiary,
                     style = MaterialTheme.typography.labelMedium,
@@ -64,12 +64,12 @@ fun ArticleItem(
                 )
             }
 
-            if (articleListDate) {
+            if (articleListDate.value) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    if (!articleListFeedName) {
-                        Spacer(Modifier.width(if (articleListFeedIcon) 30.dp else 0.dp))
+                    if (!articleListFeedName.value) {
+                        Spacer(Modifier.width(if (articleListFeedIcon.value) 30.dp else 0.dp))
                     }
                     // Starred
                     if (articleWithFeed.article.isStarred) {
@@ -99,7 +99,7 @@ fun ArticleItem(
             modifier = Modifier.fillMaxWidth(),
         ) {
             // Feed icon
-            if (articleListFeedIcon) {
+            if (articleListFeedIcon.value) {
                 Row(
                     modifier = Modifier
                         .size(20.dp)
@@ -117,11 +117,11 @@ fun ArticleItem(
                     text = articleWithFeed.article.title,
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.titleMedium,
-                    maxLines = if (articleListDesc) 2 else 4,
+                    maxLines = if (articleListDesc.value) 2 else 4,
                     overflow = TextOverflow.Ellipsis,
                 )
                 // Description
-                if (articleListDesc) {
+                if (articleListDesc.value) {
                     Text(
                         text = articleWithFeed.article.shortDescription,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),

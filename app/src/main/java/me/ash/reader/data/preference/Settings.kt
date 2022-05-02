@@ -1,0 +1,147 @@
+package me.ash.reader.data.preference
+
+import android.util.Log
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.datastore.preferences.core.Preferences
+import kotlinx.coroutines.flow.map
+import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.dataStore
+
+data class Settings(
+    val themeIndex: Int = ThemeIndexPreference.default,
+    val customPrimaryColor: String = CustomPrimaryColorPreference.default,
+
+    val feedsFilterBarStyle: FeedsFilterBarStylePreference = FeedsFilterBarStylePreference.default,
+    val feedsFilterBarFilled: FeedsFilterBarFilledPreference = FeedsFilterBarFilledPreference.default,
+    val feedsFilterBarPadding: Int = FeedsFilterBarPaddingPreference.default,
+    val feedsFilterBarTonalElevation: FeedsFilterBarTonalElevationPreference = FeedsFilterBarTonalElevationPreference.default,
+    val feedsTopBarTonalElevation: FeedsTopBarTonalElevationPreference = FeedsTopBarTonalElevationPreference.default,
+    val feedsGroupListExpand: FeedsGroupListExpandPreference = FeedsGroupListExpandPreference.default,
+    val feedsGroupListTonalElevation: FeedsGroupListTonalElevationPreference = FeedsGroupListTonalElevationPreference.default,
+
+    val flowFilterBarStyle: FlowFilterBarStylePreference = FlowFilterBarStylePreference.default,
+    val flowFilterBarFilled: FlowFilterBarFilledPreference = FlowFilterBarFilledPreference.default,
+    val flowFilterBarPadding: Int = FlowFilterBarPaddingPreference.default,
+    val flowFilterBarTonalElevation: FlowFilterBarTonalElevationPreference = FlowFilterBarTonalElevationPreference.default,
+    val flowTopBarTonalElevation: FlowTopBarTonalElevationPreference = FlowTopBarTonalElevationPreference.default,
+    val flowArticleListFeedIcon: FlowArticleListFeedIconPreference = FlowArticleListFeedIconPreference.default,
+    val flowArticleListFeedName: FlowArticleListFeedNamePreference = FlowArticleListFeedNamePreference.default,
+    val flowArticleListImage: FlowArticleListImagePreference = FlowArticleListImagePreference.default,
+    val flowArticleListDesc: FlowArticleListDescPreference = FlowArticleListDescPreference.default,
+    val flowArticleListTime: FlowArticleListTimePreference = FlowArticleListTimePreference.default,
+    val flowArticleListTonalElevation: FlowArticleListTonalElevationPreference = FlowArticleListTonalElevationPreference.default,
+)
+
+fun Preferences.toSettings(): Settings {
+    return Settings(
+        themeIndex = ThemeIndexPreference.fromPreferences(this),
+        customPrimaryColor = CustomPrimaryColorPreference.fromPreferences(this),
+
+        feedsFilterBarStyle = FeedsFilterBarStylePreference.fromPreferences(this),
+        feedsFilterBarFilled = FeedsFilterBarFilledPreference.fromPreferences(this),
+        feedsFilterBarPadding = FeedsFilterBarPaddingPreference.fromPreferences(this),
+        feedsFilterBarTonalElevation = FeedsFilterBarTonalElevationPreference.fromPreferences(this),
+        feedsTopBarTonalElevation = FeedsTopBarTonalElevationPreference.fromPreferences(this),
+        feedsGroupListExpand = FeedsGroupListExpandPreference.fromPreferences(this),
+        feedsGroupListTonalElevation = FeedsGroupListTonalElevationPreference.fromPreferences(this),
+
+        flowFilterBarStyle = FlowFilterBarStylePreference.fromPreferences(this),
+        flowFilterBarFilled = FlowFilterBarFilledPreference.fromPreferences(this),
+        flowFilterBarPadding = FlowFilterBarPaddingPreference.fromPreferences(this),
+        flowFilterBarTonalElevation = FlowFilterBarTonalElevationPreference.fromPreferences(this),
+        flowTopBarTonalElevation = FlowTopBarTonalElevationPreference.fromPreferences(this),
+        flowArticleListFeedIcon = FlowArticleListFeedIconPreference.fromPreferences(this),
+        flowArticleListFeedName = FlowArticleListFeedNamePreference.fromPreferences(this),
+        flowArticleListImage = FlowArticleListImagePreference.fromPreferences(this),
+        flowArticleListDesc = FlowArticleListDescPreference.fromPreferences(this),
+        flowArticleListTime = FlowArticleListTimePreference.fromPreferences(this),
+        flowArticleListTonalElevation = FlowArticleListTonalElevationPreference.fromPreferences(this),
+    )
+}
+
+@Composable
+fun SettingsProvider(
+    content: @Composable () -> Unit,
+) {
+    val context = LocalContext.current
+    val settings = remember {
+        context.dataStore.data.map {
+            Log.i("RLog", "AppTheme: ${it}")
+            it.toSettings()
+        }
+    }.collectAsStateValue(initial = Settings())
+
+    CompositionLocalProvider(
+        LocalThemeIndex provides settings.themeIndex,
+        LocalCustomPrimaryColor provides settings.customPrimaryColor,
+
+        LocalFeedsTopBarTonalElevation provides settings.feedsTopBarTonalElevation,
+        LocalFeedsGroupListExpand provides settings.feedsGroupListExpand,
+        LocalFeedsGroupListTonalElevation provides settings.feedsGroupListTonalElevation,
+        LocalFeedsFilterBarStyle provides settings.feedsFilterBarStyle,
+        LocalFeedsFilterBarFilled provides settings.feedsFilterBarFilled,
+        LocalFeedsFilterBarPadding provides settings.feedsFilterBarPadding,
+        LocalFeedsFilterBarTonalElevation provides settings.feedsFilterBarTonalElevation,
+
+        LocalFlowTopBarTonalElevation provides settings.flowTopBarTonalElevation,
+        LocalFlowArticleListFeedIcon provides settings.flowArticleListFeedIcon,
+        LocalFlowArticleListFeedName provides settings.flowArticleListFeedName,
+        LocalFlowArticleListImage provides settings.flowArticleListImage,
+        LocalFlowArticleListDesc provides settings.flowArticleListDesc,
+        LocalFlowArticleListTime provides settings.flowArticleListTime,
+        LocalFlowArticleListTonalElevation provides settings.flowArticleListTonalElevation,
+        LocalFlowFilterBarStyle provides settings.flowFilterBarStyle,
+        LocalFlowFilterBarFilled provides settings.flowFilterBarFilled,
+        LocalFlowFilterBarPadding provides settings.flowFilterBarPadding,
+        LocalFlowFilterBarTonalElevation provides settings.flowFilterBarTonalElevation,
+    ) {
+        content()
+    }
+}
+
+val LocalThemeIndex =
+    compositionLocalOf { ThemeIndexPreference.default }
+val LocalCustomPrimaryColor =
+    compositionLocalOf { CustomPrimaryColorPreference.default }
+
+val LocalFeedsFilterBarStyle =
+    compositionLocalOf<FeedsFilterBarStylePreference> { FeedsFilterBarStylePreference.default }
+val LocalFeedsFilterBarFilled =
+    compositionLocalOf<FeedsFilterBarFilledPreference> { FeedsFilterBarFilledPreference.default }
+val LocalFeedsFilterBarPadding =
+    compositionLocalOf { FeedsFilterBarPaddingPreference.default }
+val LocalFeedsFilterBarTonalElevation =
+    compositionLocalOf<FeedsFilterBarTonalElevationPreference> { FeedsFilterBarTonalElevationPreference.default }
+val LocalFeedsTopBarTonalElevation =
+    compositionLocalOf<FeedsTopBarTonalElevationPreference> { FeedsTopBarTonalElevationPreference.default }
+val LocalFeedsGroupListExpand =
+    compositionLocalOf<FeedsGroupListExpandPreference> { FeedsGroupListExpandPreference.default }
+val LocalFeedsGroupListTonalElevation =
+    compositionLocalOf<FeedsGroupListTonalElevationPreference> { FeedsGroupListTonalElevationPreference.default }
+
+val LocalFlowFilterBarStyle =
+    compositionLocalOf<FlowFilterBarStylePreference> { FlowFilterBarStylePreference.default }
+val LocalFlowFilterBarFilled =
+    compositionLocalOf<FlowFilterBarFilledPreference> { FlowFilterBarFilledPreference.default }
+val LocalFlowFilterBarPadding =
+    compositionLocalOf { FlowFilterBarPaddingPreference.default }
+val LocalFlowFilterBarTonalElevation =
+    compositionLocalOf<FlowFilterBarTonalElevationPreference> { FlowFilterBarTonalElevationPreference.default }
+val LocalFlowTopBarTonalElevation =
+    compositionLocalOf<FlowTopBarTonalElevationPreference> { FlowTopBarTonalElevationPreference.default }
+val LocalFlowArticleListFeedIcon =
+    compositionLocalOf<FlowArticleListFeedIconPreference> { FlowArticleListFeedIconPreference.default }
+val LocalFlowArticleListFeedName =
+    compositionLocalOf<FlowArticleListFeedNamePreference> { FlowArticleListFeedNamePreference.default }
+val LocalFlowArticleListImage =
+    compositionLocalOf<FlowArticleListImagePreference> { FlowArticleListImagePreference.default }
+val LocalFlowArticleListDesc =
+    compositionLocalOf<FlowArticleListDescPreference> { FlowArticleListDescPreference.default }
+val LocalFlowArticleListTime =
+    compositionLocalOf<FlowArticleListTimePreference> { FlowArticleListTimePreference.default }
+val LocalFlowArticleListTonalElevation =
+    compositionLocalOf<FlowArticleListTonalElevationPreference> { FlowArticleListTonalElevationPreference.default }

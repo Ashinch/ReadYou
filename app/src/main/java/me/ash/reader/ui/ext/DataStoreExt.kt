@@ -5,10 +5,12 @@ import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.io.IOException
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -32,8 +34,6 @@ val Context.currentAccountId: Int
 val Context.currentAccountType: Int
     get() = this.dataStore.get(DataStoreKeys.CurrentAccountType)!!
 
-val Context.customPrimaryColor: String
-    get() = this.dataStore.get(DataStoreKeys.CustomPrimaryColor) ?: ""
 val Context.initialPage: Int
     get() = this.dataStore.get(DataStoreKeys.InitialPage) ?: 0
 val Context.initialFilter: Int
@@ -41,7 +41,9 @@ val Context.initialFilter: Int
 
 suspend fun <T> DataStore<Preferences>.put(dataStoreKeys: DataStoreKeys<T>, value: T) {
     this.edit {
-        it[dataStoreKeys.key] = value
+        withContext(Dispatchers.IO) {
+            it[dataStoreKeys.key] = value
+        }
     }
 }
 
@@ -208,9 +210,9 @@ sealed class DataStoreKeys<T> {
             get() = booleanPreferencesKey("flowArticleListDesc")
     }
 
-    object FlowArticleListDate : DataStoreKeys<Boolean>() {
+    object FlowArticleListTime : DataStoreKeys<Boolean>() {
         override val key: Preferences.Key<Boolean>
-            get() = booleanPreferencesKey("flowArticleListDate")
+            get() = booleanPreferencesKey("flowArticleListTime")
     }
 
     object FlowArticleListTonalElevation : DataStoreKeys<Int>() {

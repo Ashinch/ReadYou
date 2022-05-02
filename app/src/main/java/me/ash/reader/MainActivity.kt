@@ -18,6 +18,7 @@ import coil.memory.MemoryCache
 import coil.request.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CompletableDeferred
+import me.ash.reader.data.preference.SettingsProvider
 import me.ash.reader.ui.page.common.HomeEntry
 
 @AndroidEntryPoint
@@ -28,7 +29,9 @@ class MainActivity : ComponentActivity(), ImageLoader {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         Log.i("RLog", "onCreate: ${ProfileInstallerInitializer().create(this)}")
         setContent {
-            HomeEntry()
+            SettingsProvider {
+                HomeEntry()
+            }
         }
     }
 

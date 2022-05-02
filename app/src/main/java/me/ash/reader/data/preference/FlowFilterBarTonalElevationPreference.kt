@@ -1,10 +1,8 @@
 package me.ash.reader.data.preference
 
 import android.content.Context
+import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
@@ -19,7 +17,7 @@ sealed class FlowFilterBarTonalElevationPreference(val value: Int) : Preference(
     object Level5 : FlowFilterBarTonalElevationPreference(12)
 
     override fun put(context: Context, scope: CoroutineScope) {
-        scope.launch(Dispatchers.IO) {
+        scope.launch {
             context.dataStore.put(
                 DataStoreKeys.FlowFilterBarTonalElevation,
                 value
@@ -41,17 +39,15 @@ sealed class FlowFilterBarTonalElevationPreference(val value: Int) : Preference(
         val default = Level0
         val values = listOf(Level0, Level1, Level2, Level3, Level4, Level5)
 
-        val Context.flowFilterBarTonalElevation: Flow<FlowFilterBarTonalElevationPreference>
-            get() = this.dataStore.data.map {
-                when (it[DataStoreKeys.FlowFilterBarTonalElevation.key]) {
-                    0 -> Level0
-                    1 -> Level1
-                    3 -> Level2
-                    6 -> Level3
-                    8 -> Level4
-                    12 -> Level5
-                    else -> default
-                }
+        fun fromPreferences(preferences: Preferences) =
+            when (preferences[DataStoreKeys.FlowFilterBarTonalElevation.key]) {
+                0 -> Level0
+                1 -> Level1
+                3 -> Level2
+                6 -> Level3
+                8 -> Level4
+                12 -> Level5
+                else -> default
             }
     }
 }

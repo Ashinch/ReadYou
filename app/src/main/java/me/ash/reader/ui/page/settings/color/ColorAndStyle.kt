@@ -1,6 +1,7 @@
 package me.ash.reader.ui.page.settings.color
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
@@ -24,21 +25,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.data.preference.ThemePreference
+import me.ash.reader.data.preference.CustomPrimaryColorPreference
+import me.ash.reader.data.preference.LocalCustomPrimaryColor
+import me.ash.reader.data.preference.LocalThemeIndex
+import me.ash.reader.data.preference.ThemeIndexPreference
 import me.ash.reader.ui.component.*
-import me.ash.reader.ui.ext.DataStoreKeys
-import me.ash.reader.ui.ext.customPrimaryColor
-import me.ash.reader.ui.ext.dataStore
-import me.ash.reader.ui.ext.put
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.svg.PALETTE
 import me.ash.reader.ui.svg.SVGString
-import me.ash.reader.ui.theme.LocalTheme
 import me.ash.reader.ui.theme.LocalUseDarkTheme
 import me.ash.reader.ui.theme.palette.*
 import me.ash.reader.ui.theme.palette.TonalPalettes.Companion.toTonalPalettes
@@ -52,9 +48,11 @@ fun ColorAndStyle(
 ) {
     val context = LocalContext.current
     val useDarkTheme = LocalUseDarkTheme.current
-    val theme = LocalTheme.current
+    val themeIndex = LocalThemeIndex.current
+    val customPrimaryColor = LocalCustomPrimaryColor.current
+
     val wallpaperTonalPalettes = extractTonalPalettesFromUserWallpaper()
-    var radioButtonSelected by remember { mutableStateOf(if (theme > 4) 0 else 1) }
+    var radioButtonSelected by remember { mutableStateOf(if (themeIndex > 4) 0 else 1) }
 
     Scaffold(
         modifier = Modifier
@@ -118,6 +116,7 @@ fun ColorAndStyle(
                                 onClick = {},
                             ) {
                                 Palettes(
+                                    context = context,
                                     palettes = wallpaperTonalPalettes.run {
                                         if (this.size > 5) {
                                             this.subList(5, wallpaperTonalPalettes.size)
@@ -125,7 +124,9 @@ fun ColorAndStyle(
                                             emptyList()
                                         }
                                     },
+                                    themeIndex = themeIndex,
                                     themeIndexPrefix = 5,
+                                    customPrimaryColor = customPrimaryColor,
                                 )
                             },
                             BlockRadioGroupButtonItem(
@@ -133,7 +134,10 @@ fun ColorAndStyle(
                                 onClick = {},
                             ) {
                                 Palettes(
-                                    palettes = wallpaperTonalPalettes.subList(0, 5)
+                                    context = context,
+                                    themeIndex = themeIndex,
+                                    palettes = wallpaperTonalPalettes.subList(0, 5),
+                                    customPrimaryColor = customPrimaryColor,
                                 )
                             },
                         ),
@@ -199,20 +203,16 @@ fun ColorAndStyle(
 @Composable
 fun Palettes(
     modifier: Modifier = Modifier,
+    context: Context,
     palettes: List<TonalPalettes>,
+    themeIndex: Int = 0,
     themeIndexPrefix: Int = 0,
+    customPrimaryColor: String = "",
 ) {
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val themeIndex = context.dataStore.data
-        .map { it[DataStoreKeys.ThemeIndex.key] ?: 5 }
-        .collectAsState(initial = 5).value
-    val customPrimaryColor = context.dataStore.data
-        .map { it[DataStoreKeys.CustomPrimaryColor.key] ?: "" }
-        .collectAsState(initial = "").value
     val tonalPalettes = customPrimaryColor.safeHexToColor().toTonalPalettes()
     var addDialogVisible by remember { mutableStateOf(false) }
-    var customColorValue by remember { mutableStateOf(context.customPrimaryColor) }
+    var customColorValue by remember { mutableStateOf(customPrimaryColor) }
 
     if (palettes.isEmpty()) {
         Row(
@@ -252,9 +252,10 @@ fun Palettes(
                     isCustom = isCustom,
                     onClick = {
                         if (isCustom) {
+                            customColorValue = customPrimaryColor
                             addDialogVisible = true
                         } else {
-                            ThemePreference.put(context, scope, themeIndexPrefix + index)
+                            ThemeIndexPreference.put(context, scope, themeIndexPrefix + index)
                         }
                     },
                     palette = if (isCustom) tonalPalettes else palette
@@ -274,16 +275,12 @@ fun Palettes(
         },
         onDismissRequest = {
             addDialogVisible = false
-            customColorValue = context.customPrimaryColor
         },
         onConfirm = {
             it.checkColorHex()?.let {
-                scope.launch(Dispatchers.IO) {
-                    context.dataStore.put(DataStoreKeys.CustomPrimaryColor, it)
-                    context.dataStore.put(DataStoreKeys.ThemeIndex, 4)
-                }
+                CustomPrimaryColorPreference.put(context, scope, it)
+                ThemeIndexPreference.put(context, scope, 4)
                 addDialogVisible = false
-                customColorValue = it
             }
         }
     )

@@ -36,6 +36,7 @@ fun HomeEntry(
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+
     val viewState = homeViewModel.viewState.collectAsStateValue()
     val filterState = homeViewModel.filterState.collectAsStateValue()
     val pagingItems = viewState.pagingData.collectAsLazyPagingItems()

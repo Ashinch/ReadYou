@@ -26,19 +26,7 @@ import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.entity.Filter
 import me.ash.reader.data.preference.*
-import me.ash.reader.data.preference.FlowArticleListDatePreference.Companion.flowArticleListDate
-import me.ash.reader.data.preference.FlowArticleListDescPreference.Companion.flowArticleListDesc
-import me.ash.reader.data.preference.FlowArticleListFeedIconPreference.Companion.flowArticleListFeedIcon
-import me.ash.reader.data.preference.FlowArticleListFeedNamePreference.Companion.flowArticleListFeedName
-import me.ash.reader.data.preference.FlowArticleListImagePreference.Companion.flowArticleListImage
-import me.ash.reader.data.preference.FlowArticleListTonalElevationPreference.Companion.flowArticleListTonalElevation
-import me.ash.reader.data.preference.FlowFilterBarFilledPreference.Companion.flowFilterBarFilled
-import me.ash.reader.data.preference.FlowFilterBarPaddingPreference.flowFilterBarPadding
-import me.ash.reader.data.preference.FlowFilterBarStylePreference.Companion.flowFilterBarStyle
-import me.ash.reader.data.preference.FlowFilterBarTonalElevationPreference.Companion.flowFilterBarTonalElevation
-import me.ash.reader.data.preference.FlowTopBarTonalElevationPreference.Companion.flowTopBarTonalElevation
 import me.ash.reader.ui.component.*
-import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.home.FilterBar
 import me.ash.reader.ui.page.home.flow.ArticleItem
@@ -54,29 +42,19 @@ fun FlowPageStyle(
     navController: NavHostController,
 ) {
     val context = LocalContext.current
+    val filterBarStyle = LocalFlowFilterBarStyle.current
+    val filterBarFilled = LocalFlowFilterBarFilled.current
+    val filterBarPadding = LocalFlowFilterBarPadding.current
+    val filterBarTonalElevation = LocalFlowFilterBarTonalElevation.current
+    val topBarTonalElevation = LocalFlowTopBarTonalElevation.current
+    val articleListFeedIcon = LocalFlowArticleListFeedIcon.current
+    val articleListFeedName = LocalFlowArticleListFeedName.current
+    val articleListImage = LocalFlowArticleListImage.current
+    val articleListDesc = LocalFlowArticleListDesc.current
+    val articleListDate = LocalFlowArticleListTime.current
+    val articleListTonalElevation = LocalFlowArticleListTonalElevation.current
+
     val scope = rememberCoroutineScope()
-    val filterBarStyle =
-        context.flowFilterBarStyle.collectAsStateValue(initial = FlowFilterBarStylePreference.default)
-    val filterBarFilled =
-        context.flowFilterBarFilled.collectAsStateValue(initial = FlowFilterBarFilledPreference.default)
-    val filterBarPadding =
-        context.flowFilterBarPadding.collectAsStateValue(initial = FlowFilterBarPaddingPreference.default)
-    val filterBarTonalElevation =
-        context.flowFilterBarTonalElevation.collectAsStateValue(initial = FlowFilterBarTonalElevationPreference.default)
-    val topBarTonalElevation =
-        context.flowTopBarTonalElevation.collectAsStateValue(initial = FlowTopBarTonalElevationPreference.default)
-    val articleListFeedIcon =
-        context.flowArticleListFeedIcon.collectAsStateValue(initial = FlowArticleListFeedIconPreference.default)
-    val articleListFeedName =
-        context.flowArticleListFeedName.collectAsStateValue(initial = FlowArticleListFeedNamePreference.default)
-    val articleListImage =
-        context.flowArticleListImage.collectAsStateValue(initial = FlowArticleListImagePreference.default)
-    val articleListDesc =
-        context.flowArticleListDesc.collectAsStateValue(initial = FlowArticleListDescPreference.default)
-    val articleListDate =
-        context.flowArticleListDate.collectAsStateValue(initial = FlowArticleListDatePreference.default)
-    val articleListTonalElevation =
-        context.flowArticleListTonalElevation.collectAsStateValue(initial = FlowArticleListTonalElevationPreference.default)
 
     var filterBarStyleDialogVisible by remember { mutableStateOf(false) }
     var filterBarPaddingDialogVisible by remember { mutableStateOf(false) }
@@ -162,7 +140,7 @@ fun FlowPageStyle(
                             topBarTonalElevationDialogVisible = true
                         },
                     ) {}
-                    Tips(text = stringResource(R.string.tips_top_bar_tonal_elevation))
+//                    Tips(text = stringResource(R.string.tips_top_bar_tonal_elevation))
                     Spacer(modifier = Modifier.height(24.dp))
                 }
 
@@ -280,7 +258,7 @@ fun FlowPageStyle(
         options = FlowFilterBarStylePreference.values.map {
             RadioDialogOption(
                 text = it.getDesc(context),
-                selected = filterBarStyle == it,
+                selected = it == filterBarStyle,
             ) {
                 it.put(context, scope)
             }
@@ -312,7 +290,7 @@ fun FlowPageStyle(
         options = FlowFilterBarTonalElevationPreference.values.map {
             RadioDialogOption(
                 text = it.getDesc(context),
-                selected = filterBarTonalElevation == it,
+                selected = it == filterBarTonalElevation,
             ) {
                 it.put(context, scope)
             }
@@ -327,7 +305,7 @@ fun FlowPageStyle(
         options = FlowTopBarTonalElevationPreference.values.map {
             RadioDialogOption(
                 text = it.getDesc(context),
-                selected = topBarTonalElevation == it,
+                selected = it == topBarTonalElevation,
             ) {
                 it.put(context, scope)
             }
@@ -342,7 +320,7 @@ fun FlowPageStyle(
         options = FlowArticleListTonalElevationPreference.values.map {
             RadioDialogOption(
                 text = it.getDesc(context),
-                selected = articleListTonalElevation == it,
+                selected = it == articleListTonalElevation,
             ) {
                 it.put(context, scope)
             }

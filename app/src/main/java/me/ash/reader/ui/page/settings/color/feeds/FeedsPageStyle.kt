@@ -24,15 +24,7 @@ import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.entity.Filter
 import me.ash.reader.data.entity.Group
 import me.ash.reader.data.preference.*
-import me.ash.reader.data.preference.FeedsFilterBarFilledPreference.Companion.feedsFilterBarFilled
-import me.ash.reader.data.preference.FeedsFilterBarPaddingPreference.feedsFilterBarPadding
-import me.ash.reader.data.preference.FeedsFilterBarStylePreference.Companion.feedsFilterBarStyle
-import me.ash.reader.data.preference.FeedsFilterBarTonalElevationPreference.Companion.feedsFilterBarTonalElevation
-import me.ash.reader.data.preference.FeedsGroupListExpandPreference.Companion.feedsGroupListExpand
-import me.ash.reader.data.preference.FeedsGroupListTonalElevationPreference.Companion.feedsGroupListTonalElevation
-import me.ash.reader.data.preference.FeedsTopBarTonalElevationPreference.Companion.feedsTopBarTonalElevation
 import me.ash.reader.ui.component.*
-import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.home.FilterBar
 import me.ash.reader.ui.page.home.feeds.GroupItem
@@ -46,21 +38,15 @@ fun FeedsPageStyle(
     navController: NavHostController,
 ) {
     val context = LocalContext.current
+    val filterBarStyle = LocalFeedsFilterBarStyle.current
+    val filterBarFilled = LocalFeedsFilterBarFilled.current
+    val filterBarPadding = LocalFeedsFilterBarPadding.current
+    val filterBarTonalElevation = LocalFeedsFilterBarTonalElevation.current
+    val topBarTonalElevation = LocalFeedsTopBarTonalElevation.current
+    val groupListExpand = LocalFeedsGroupListExpand.current
+    val groupListTonalElevation = LocalFeedsGroupListTonalElevation.current
+
     val scope = rememberCoroutineScope()
-    val filterBarStyle =
-        context.feedsFilterBarStyle.collectAsStateValue(initial = FeedsFilterBarStylePreference.default)
-    val filterBarFilled =
-        context.feedsFilterBarFilled.collectAsStateValue(initial = FeedsFilterBarFilledPreference.default)
-    val filterBarPadding =
-        context.feedsFilterBarPadding.collectAsStateValue(initial = FeedsFilterBarPaddingPreference.default)
-    val filterBarTonalElevation =
-        context.feedsFilterBarTonalElevation.collectAsStateValue(initial = FeedsFilterBarTonalElevationPreference.default)
-    val topBarTonalElevation =
-        context.feedsTopBarTonalElevation.collectAsStateValue(initial = FeedsTopBarTonalElevationPreference.default)
-    val groupListExpand =
-        context.feedsGroupListExpand.collectAsStateValue(initial = FeedsGroupListExpandPreference.default)
-    val groupListTonalElevation =
-        context.feedsGroupListTonalElevation.collectAsStateValue(initial = FeedsGroupListTonalElevationPreference.default)
 
     var filterBarStyleDialogVisible by remember { mutableStateOf(false) }
     var filterBarPaddingDialogVisible by remember { mutableStateOf(false) }
@@ -141,7 +127,7 @@ fun FeedsPageStyle(
                             topBarTonalElevationDialogVisible = true
                         },
                     ) {}
-                    Tips(text = stringResource(R.string.tips_top_bar_tonal_elevation))
+//                    Tips(text = stringResource(R.string.tips_top_bar_tonal_elevation))
                     Spacer(modifier = Modifier.height(24.dp))
                 }
 
@@ -254,7 +240,7 @@ fun FeedsPageStyle(
         options = FeedsFilterBarTonalElevationPreference.values.map {
             RadioDialogOption(
                 text = it.getDesc(context),
-                selected = filterBarTonalElevation == it,
+                selected = it == filterBarTonalElevation,
             ) {
                 it.put(context, scope)
             }
@@ -269,7 +255,7 @@ fun FeedsPageStyle(
         options = FeedsTopBarTonalElevationPreference.values.map {
             RadioDialogOption(
                 text = it.getDesc(context),
-                selected = topBarTonalElevation == it,
+                selected = it == topBarTonalElevation,
             ) {
                 it.put(context, scope)
             }
@@ -284,7 +270,7 @@ fun FeedsPageStyle(
         options = FeedsGroupListTonalElevationPreference.values.map {
             RadioDialogOption(
                 text = it.getDesc(context),
-                selected = groupListTonalElevation == it,
+                selected = it == groupListTonalElevation,
             ) {
                 it.put(context, scope)
             }

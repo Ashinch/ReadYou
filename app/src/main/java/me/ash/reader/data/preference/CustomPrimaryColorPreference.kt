@@ -8,15 +8,15 @@ import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
-object FeedsFilterBarPaddingPreference {
-    const val default = 60
+object CustomPrimaryColorPreference {
+    const val default = ""
 
-    fun put(context: Context, scope: CoroutineScope, value: Int) {
+    fun put(context: Context, scope: CoroutineScope, value: String) {
         scope.launch {
-            context.dataStore.put(DataStoreKeys.FeedsFilterBarPadding, value)
+            context.dataStore.put(DataStoreKeys.CustomPrimaryColor, value)
         }
     }
 
     fun fromPreferences(preferences: Preferences) =
-        preferences[DataStoreKeys.FeedsFilterBarPadding.key] ?: default
+        preferences[DataStoreKeys.CustomPrimaryColor.key] ?: default
 }

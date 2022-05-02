@@ -1,10 +1,8 @@
 package me.ash.reader.data.preference
 
 import android.content.Context
+import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
@@ -15,7 +13,7 @@ sealed class FlowArticleListFeedNamePreference(val value: Boolean) : Preference(
     object OFF : FlowArticleListFeedNamePreference(false)
 
     override fun put(context: Context, scope: CoroutineScope) {
-        scope.launch(Dispatchers.IO) {
+        scope.launch {
             context.dataStore.put(
                 DataStoreKeys.FlowArticleListFeedName,
                 value
@@ -27,13 +25,11 @@ sealed class FlowArticleListFeedNamePreference(val value: Boolean) : Preference(
         val default = ON
         val values = listOf(ON, OFF)
 
-        val Context.flowArticleListFeedName: Flow<FlowArticleListFeedNamePreference>
-            get() = this.dataStore.data.map {
-                when (it[DataStoreKeys.FlowArticleListFeedName.key]) {
-                    true -> ON
-                    false -> OFF
-                    else -> default
-                }
+        fun fromPreferences(preferences: Preferences) =
+            when (preferences[DataStoreKeys.FlowArticleListFeedName.key]) {
+                true -> ON
+                false -> OFF
+                else -> default
             }
     }
 }

@@ -8,14 +8,14 @@ import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
-sealed class FeedsGroupListExpandPreference(val value: Boolean) : Preference() {
-    object ON : FeedsGroupListExpandPreference(true)
-    object OFF : FeedsGroupListExpandPreference(false)
+sealed class FlowArticleListTimePreference(val value: Boolean) : Preference() {
+    object ON : FlowArticleListTimePreference(true)
+    object OFF : FlowArticleListTimePreference(false)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
             context.dataStore.put(
-                DataStoreKeys.FeedsGroupListExpand,
+                DataStoreKeys.FlowArticleListTime,
                 value
             )
         }
@@ -26,7 +26,7 @@ sealed class FeedsGroupListExpandPreference(val value: Boolean) : Preference() {
         val values = listOf(ON, OFF)
 
         fun fromPreferences(preferences: Preferences) =
-            when (preferences[DataStoreKeys.FeedsGroupListExpand.key]) {
+            when (preferences[DataStoreKeys.FlowArticleListTime.key]) {
                 true -> ON
                 false -> OFF
                 else -> default
@@ -34,8 +34,8 @@ sealed class FeedsGroupListExpandPreference(val value: Boolean) : Preference() {
     }
 }
 
-operator fun FeedsGroupListExpandPreference.not(): FeedsGroupListExpandPreference =
+operator fun FlowArticleListTimePreference.not(): FlowArticleListTimePreference =
     when (value) {
-        true -> FeedsGroupListExpandPreference.OFF
-        false -> FeedsGroupListExpandPreference.ON
+        true -> FlowArticleListTimePreference.OFF
+        false -> FlowArticleListTimePreference.ON
     }
