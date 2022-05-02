@@ -27,10 +27,6 @@ import androidx.paging.compose.LazyPagingItems
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.data.preference.ArticleListFeedIconPreference
-import me.ash.reader.data.preference.ArticleListFeedIconPreference.Companion.articleListFeedIcon
-import me.ash.reader.data.preference.ArticleListTonalElevationPreference
-import me.ash.reader.data.preference.ArticleListTonalElevationPreference.Companion.articleListTonalElevation
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.DisplayText
 import me.ash.reader.ui.component.FeedbackIconButton
@@ -43,6 +39,8 @@ import me.ash.reader.ui.page.home.FilterBar
 import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
+import me.ash.reader.ui.theme.*
+import me.ash.reader.ui.theme.palette.onDark
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -59,6 +57,13 @@ fun FlowPage(
 ) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val topBarTonalElevation = LocalFlowTopBarTonalElevation.current
+    val articleListTonalElevation = LocalFlowArticleListTonalElevation.current
+    val articleListFeedIcon = LocalFlowArticleListFeedIcon.current
+    val filterBarStyle = LocalFlowFilterBarStyle.current
+    val filterBarFilled = LocalFlowFilterBarFilled.current
+    val filterBarPadding = LocalFlowFilterBarPadding.current
+    val filterBarTonalElevation = LocalFlowFilterBarTonalElevation.current
 
     val scope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
@@ -69,11 +74,6 @@ fun FlowPage(
     val filterState = homeViewModel.filterState.collectAsStateValue()
     val homeViewState = homeViewModel.viewState.collectAsStateValue()
     val listState = if (pagingItems.itemCount > 0) viewState.listState else rememberLazyListState()
-
-    val articleListTonalElevation =
-        context.articleListTonalElevation.collectAsStateValue(initial = ArticleListTonalElevationPreference.default)
-    val articleListFeedIcon =
-        context.articleListFeedIcon.collectAsStateValue(initial = ArticleListFeedIconPreference.default)
 
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
@@ -109,16 +109,18 @@ fun FlowPage(
 
     Scaffold(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(articleListTonalElevation.value.dp))
+            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(topBarTonalElevation.dp))
             .statusBarsPadding()
             .navigationBarsPadding(),
-        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(articleListTonalElevation.value.dp),
+        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+            articleListTonalElevation.dp
+        ) onDark MaterialTheme.colorScheme.surface,
         topBar = {
             SmallTopAppBar(
                 title = {},
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                        articleListTonalElevation.value.dp
+                        topBarTonalElevation.dp
                     ),
                 ),
                 navigationIcon = {
@@ -197,7 +199,7 @@ fun FlowPage(
                     state = listState,
                 ) {
                     item {
-                        DisplayTextHeader(filterState, isSyncing, articleListFeedIcon.value)
+                        DisplayTextHeader(filterState, isSyncing, articleListFeedIcon)
                         AnimatedVisibility(
                             visible = markAsRead,
                             enter = fadeIn() + expandVertically(),
@@ -259,8 +261,8 @@ fun FlowPage(
                     }
                     ArticleList(
                         pagingItems = pagingItems,
-                        articleListFeedIcon = articleListFeedIcon.value,
-                        articleListTonalElevation = articleListTonalElevation.value,
+                        articleListFeedIcon = articleListFeedIcon,
+                        articleListTonalElevation = articleListTonalElevation,
                     ) {
                         onSearch = false
                         navController.navigate("${RouteName.READING}/${it.article.id}") {
@@ -279,12 +281,15 @@ fun FlowPage(
         bottomBar = {
             FilterBar(
                 filter = filterState.filter,
-                filterOnClick = {
-                    flowViewModel.dispatch(FlowViewAction.ScrollToItem(0))
-                    homeViewModel.dispatch(HomeViewAction.ChangeFilter(filterState.copy(filter = it)))
-                    homeViewModel.dispatch(HomeViewAction.FetchArticles)
-                },
-            )
+                filterBarStyle = filterBarStyle,
+                filterBarFilled = filterBarFilled,
+                filterBarPadding = filterBarPadding.dp,
+                filterBarTonalElevation = filterBarTonalElevation.dp,
+            ) {
+                flowViewModel.dispatch(FlowViewAction.ScrollToItem(0))
+                homeViewModel.dispatch(HomeViewAction.ChangeFilter(filterState.copy(filter = it)))
+                homeViewModel.dispatch(HomeViewAction.FetchArticles)
+            }
         }
     )
 }

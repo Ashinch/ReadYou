@@ -28,12 +28,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.data.preference.ThemePreference
 import me.ash.reader.ui.component.*
-import me.ash.reader.ui.ext.*
+import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.customPrimaryColor
+import me.ash.reader.ui.ext.dataStore
+import me.ash.reader.ui.ext.put
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.svg.PALETTE
 import me.ash.reader.ui.svg.SVGString
+import me.ash.reader.ui.theme.LocalTheme
 import me.ash.reader.ui.theme.LocalUseDarkTheme
 import me.ash.reader.ui.theme.palette.*
 import me.ash.reader.ui.theme.palette.TonalPalettes.Companion.toTonalPalettes
@@ -47,8 +52,9 @@ fun ColorAndStyle(
 ) {
     val context = LocalContext.current
     val useDarkTheme = LocalUseDarkTheme.current
+    val theme = LocalTheme.current
     val wallpaperTonalPalettes = extractTonalPalettesFromUserWallpaper()
-    var radioButtonSelected by remember { mutableStateOf(if (context.themeIndex > 4) 0 else 1) }
+    var radioButtonSelected by remember { mutableStateOf(if (theme > 4) 0 else 1) }
 
     Scaffold(
         modifier = Modifier
@@ -163,8 +169,11 @@ fun ColorAndStyle(
                     )
                     SettingItem(
                         title = stringResource(R.string.feeds_page),
-                        enable = false,
-                        onClick = {},
+                        onClick = {
+                            navController.navigate(RouteName.FEEDS_PAGE_STYLE) {
+                                launchSingleTop = true
+                            }
+                        },
                     ) {}
                     SettingItem(
                         title = stringResource(R.string.flow_page),
@@ -245,12 +254,7 @@ fun Palettes(
                         if (isCustom) {
                             addDialogVisible = true
                         } else {
-                            scope.launch(Dispatchers.IO) {
-                                context.dataStore.put(
-                                    DataStoreKeys.ThemeIndex,
-                                    themeIndexPrefix + index
-                                )
-                            }
+                            ThemePreference.put(context, scope, themeIndexPrefix + index)
                         }
                     },
                     palette = if (isCustom) tonalPalettes else palette

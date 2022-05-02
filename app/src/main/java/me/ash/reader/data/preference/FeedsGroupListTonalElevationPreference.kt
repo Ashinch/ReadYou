@@ -10,18 +10,18 @@ import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
-sealed class FilterBarTonalElevationPreference(val value: Int) : Preference() {
-    object Level0 : FilterBarTonalElevationPreference(0)
-    object Level1 : FilterBarTonalElevationPreference(1)
-    object Level2 : FilterBarTonalElevationPreference(3)
-    object Level3 : FilterBarTonalElevationPreference(6)
-    object Level4 : FilterBarTonalElevationPreference(8)
-    object Level5 : FilterBarTonalElevationPreference(12)
+sealed class FeedsGroupListTonalElevationPreference(val value: Int) : Preference() {
+    object Level0 : FeedsGroupListTonalElevationPreference(0)
+    object Level1 : FeedsGroupListTonalElevationPreference(1)
+    object Level2 : FeedsGroupListTonalElevationPreference(3)
+    object Level3 : FeedsGroupListTonalElevationPreference(6)
+    object Level4 : FeedsGroupListTonalElevationPreference(8)
+    object Level5 : FeedsGroupListTonalElevationPreference(12)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch(Dispatchers.IO) {
             context.dataStore.put(
-                DataStoreKeys.FilterBarTonalElevation,
+                DataStoreKeys.FeedsGroupListTonalElevation,
                 value
             )
         }
@@ -41,9 +41,9 @@ sealed class FilterBarTonalElevationPreference(val value: Int) : Preference() {
         val default = Level0
         val values = listOf(Level0, Level1, Level2, Level3, Level4, Level5)
 
-        val Context.filterBarTonalElevation: Flow<FilterBarTonalElevationPreference>
+        val Context.feedsGroupListTonalElevation: Flow<FeedsGroupListTonalElevationPreference>
             get() = this.dataStore.data.map {
-                when (it[DataStoreKeys.FilterBarTonalElevation.key]) {
+                when (it[DataStoreKeys.FeedsGroupListTonalElevation.key]) {
                     0 -> Level0
                     1 -> Level1
                     3 -> Level2

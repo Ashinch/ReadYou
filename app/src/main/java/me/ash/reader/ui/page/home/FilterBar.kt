@@ -6,20 +6,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import me.ash.reader.data.entity.Filter
-import me.ash.reader.data.preference.FilterBarFilledPreference
-import me.ash.reader.data.preference.FilterBarFilledPreference.Companion.filterBarFilled
-import me.ash.reader.data.preference.FilterBarPaddingPreference
-import me.ash.reader.data.preference.FilterBarPaddingPreference.filterBarPadding
-import me.ash.reader.data.preference.FilterBarStylePreference
-import me.ash.reader.data.preference.FilterBarStylePreference.Companion.filterBarStyle
-import me.ash.reader.data.preference.FilterBarTonalElevationPreference
-import me.ash.reader.data.preference.FilterBarTonalElevationPreference.Companion.filterBarTonalElevation
-import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.data.preference.FlowFilterBarStylePreference
 import me.ash.reader.ui.ext.getName
 import me.ash.reader.ui.theme.palette.onDark
 
@@ -28,23 +19,18 @@ import me.ash.reader.ui.theme.palette.onDark
 fun FilterBar(
     modifier: Modifier = Modifier,
     filter: Filter,
+    filterBarStyle: Int,
+    filterBarFilled: Boolean,
+    filterBarPadding: Dp,
+    filterBarTonalElevation: Dp,
     filterOnClick: (Filter) -> Unit = {},
 ) {
     val view = LocalView.current
-    val context = LocalContext.current
-    val filterBarStyle =
-        context.filterBarStyle.collectAsStateValue(initial = FilterBarStylePreference.default)
-    val filterBarFilled =
-        context.filterBarFilled.collectAsStateValue(initial = FilterBarFilledPreference.default)
-    val filterBarPadding =
-        context.filterBarPadding.collectAsStateValue(initial = FilterBarPaddingPreference.default)
-    val filterBarTonalElevation =
-        context.filterBarTonalElevation.collectAsStateValue(initial = FilterBarTonalElevationPreference.default)
 
     NavigationBar(
-        tonalElevation = filterBarTonalElevation.value.dp,
+        tonalElevation = filterBarTonalElevation,
     ) {
-        Spacer(modifier = Modifier.width(filterBarPadding.dp))
+        Spacer(modifier = Modifier.width(filterBarPadding))
         listOf(
             Filter.Starred,
             Filter.Unread,
@@ -53,13 +39,14 @@ fun FilterBar(
             NavigationBarItem(
 //                        modifier = Modifier.height(60.dp),
                 alwaysShowLabel = when (filterBarStyle) {
-                    is FilterBarStylePreference.Icon -> false
-                    is FilterBarStylePreference.IconLabel -> true
-                    is FilterBarStylePreference.IconLabelOnlySelected -> false
+                    FlowFilterBarStylePreference.Icon.value -> false
+                    FlowFilterBarStylePreference.IconLabel.value -> true
+                    FlowFilterBarStylePreference.IconLabelOnlySelected.value -> false
+                    else -> false
                 },
                 icon = {
                     Icon(
-                        imageVector = if (filter == item && filterBarFilled.value) {
+                        imageVector = if (filter == item && filterBarFilled) {
                             item.iconFilled
                         } else {
                             item.iconOutline
@@ -67,7 +54,7 @@ fun FilterBar(
                         contentDescription = item.getName()
                     )
                 },
-                label = if (filterBarStyle is FilterBarStylePreference.Icon) {
+                label = if (filterBarStyle == FlowFilterBarStylePreference.Icon.value) {
                     null
                 } else {
                     {
@@ -92,6 +79,6 @@ fun FilterBar(
                 )
             )
         }
-        Spacer(modifier = Modifier.width(filterBarPadding.dp))
+        Spacer(modifier = Modifier.width(filterBarPadding))
     }
 }

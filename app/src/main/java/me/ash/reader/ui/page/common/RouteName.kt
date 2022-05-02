@@ -14,6 +14,7 @@ object RouteName {
 
     // Color & Style
     const val COLOR_AND_STYLE = "color_and_style"
+    const val FEEDS_PAGE_STYLE = "feeds_page_style"
     const val FLOW_PAGE_STYLE = "flow_page_style"
 
     // Interaction

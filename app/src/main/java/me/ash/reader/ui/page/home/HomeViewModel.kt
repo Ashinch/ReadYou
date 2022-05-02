@@ -62,7 +62,7 @@ class HomeViewModel @Inject constructor(
     private fun fetchArticles() {
         _viewState.update {
             it.copy(
-                pagingData = Pager(PagingConfig(pageSize = 10)) {
+                pagingData = Pager(PagingConfig(pageSize = 15)) {
                     if (_viewState.value.searchContent.isNotBlank()) {
                         rssRepository.get().searchArticles(
                             content = _viewState.value.searchContent.trim(),

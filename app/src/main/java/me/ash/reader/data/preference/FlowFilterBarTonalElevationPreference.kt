@@ -10,18 +10,18 @@ import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
-sealed class ArticleListTonalElevationPreference(val value: Int) : Preference() {
-    object Level0 : ArticleListTonalElevationPreference(0)
-    object Level1 : ArticleListTonalElevationPreference(1)
-    object Level2 : ArticleListTonalElevationPreference(3)
-    object Level3 : ArticleListTonalElevationPreference(6)
-    object Level4 : ArticleListTonalElevationPreference(8)
-    object Level5 : ArticleListTonalElevationPreference(12)
+sealed class FlowFilterBarTonalElevationPreference(val value: Int) : Preference() {
+    object Level0 : FlowFilterBarTonalElevationPreference(0)
+    object Level1 : FlowFilterBarTonalElevationPreference(1)
+    object Level2 : FlowFilterBarTonalElevationPreference(3)
+    object Level3 : FlowFilterBarTonalElevationPreference(6)
+    object Level4 : FlowFilterBarTonalElevationPreference(8)
+    object Level5 : FlowFilterBarTonalElevationPreference(12)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch(Dispatchers.IO) {
             context.dataStore.put(
-                DataStoreKeys.ArticleListTonalElevation,
+                DataStoreKeys.FlowFilterBarTonalElevation,
                 value
             )
         }
@@ -41,9 +41,9 @@ sealed class ArticleListTonalElevationPreference(val value: Int) : Preference() 
         val default = Level0
         val values = listOf(Level0, Level1, Level2, Level3, Level4, Level5)
 
-        val Context.articleListTonalElevation: Flow<ArticleListTonalElevationPreference>
+        val Context.flowFilterBarTonalElevation: Flow<FlowFilterBarTonalElevationPreference>
             get() = this.dataStore.data.map {
-                when (it[DataStoreKeys.ArticleListTonalElevation.key]) {
+                when (it[DataStoreKeys.FlowFilterBarTonalElevation.key]) {
                     0 -> Level0
                     1 -> Level1
                     3 -> Level2

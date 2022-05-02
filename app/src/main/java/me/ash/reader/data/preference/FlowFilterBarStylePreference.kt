@@ -6,19 +6,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import me.ash.reader.R
 import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
-sealed class FilterBarStylePreference(val value: Int) : Preference() {
-    object Icon : FilterBarStylePreference(0)
-    object IconLabel : FilterBarStylePreference(1)
-    object IconLabelOnlySelected : FilterBarStylePreference(2)
+sealed class FlowFilterBarStylePreference(val value: Int) : Preference() {
+    object Icon : FlowFilterBarStylePreference(0)
+    object IconLabel : FlowFilterBarStylePreference(1)
+    object IconLabelOnlySelected : FlowFilterBarStylePreference(2)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch(Dispatchers.IO) {
             context.dataStore.put(
-                DataStoreKeys.FilterBarStyle,
+                DataStoreKeys.FlowFilterBarStyle,
                 value
             )
         }
@@ -26,18 +27,18 @@ sealed class FilterBarStylePreference(val value: Int) : Preference() {
 
     fun getDesc(context: Context): String =
         when (this) {
-            Icon -> "图标"
-            IconLabel -> "图标 + 标签"
-            IconLabelOnlySelected -> "图标 + 标签（仅选中时）"
+            Icon -> context.getString(R.string.icons)
+            IconLabel -> context.getString(R.string.icons_and_labels)
+            IconLabelOnlySelected -> context.getString(R.string.icons_and_label_only_selected)
         }
 
     companion object {
         val default = Icon
         val values = listOf(Icon, IconLabel, IconLabelOnlySelected)
 
-        val Context.filterBarStyle: Flow<FilterBarStylePreference>
+        val Context.flowFilterBarStyle: Flow<FlowFilterBarStylePreference>
             get() = this.dataStore.data.map {
-                when (it[DataStoreKeys.FilterBarStyle.key]) {
+                when (it[DataStoreKeys.FlowFilterBarStyle.key]) {
                     0 -> Icon
                     1 -> IconLabel
                     2 -> IconLabelOnlySelected

@@ -10,26 +10,26 @@ import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
-sealed class ArticleListFeedNamePreference(val value: Boolean) : Preference() {
-    object ON : ArticleListFeedNamePreference(true)
-    object OFF : ArticleListFeedNamePreference(false)
+sealed class FeedsFilterBarFilledPreference(val value: Boolean) : Preference() {
+    object ON : FeedsFilterBarFilledPreference(true)
+    object OFF : FeedsFilterBarFilledPreference(false)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch(Dispatchers.IO) {
             context.dataStore.put(
-                DataStoreKeys.ArticleListFeedName,
+                DataStoreKeys.FeedsFilterBarFilled,
                 value
             )
         }
     }
 
     companion object {
-        val default = ON
+        val default = OFF
         val values = listOf(ON, OFF)
 
-        val Context.articleListFeedName: Flow<ArticleListFeedNamePreference>
+        val Context.feedsFilterBarFilled: Flow<FeedsFilterBarFilledPreference>
             get() = this.dataStore.data.map {
-                when (it[DataStoreKeys.ArticleListFeedName.key]) {
+                when (it[DataStoreKeys.FeedsFilterBarFilled.key]) {
                     true -> ON
                     false -> OFF
                     else -> default
@@ -38,8 +38,8 @@ sealed class ArticleListFeedNamePreference(val value: Boolean) : Preference() {
     }
 }
 
-operator fun ArticleListFeedNamePreference.not(): ArticleListFeedNamePreference =
+operator fun FeedsFilterBarFilledPreference.not(): FeedsFilterBarFilledPreference =
     when (value) {
-        true -> ArticleListFeedNamePreference.OFF
-        false -> ArticleListFeedNamePreference.ON
+        true -> FeedsFilterBarFilledPreference.OFF
+        false -> FeedsFilterBarFilledPreference.ON
     }

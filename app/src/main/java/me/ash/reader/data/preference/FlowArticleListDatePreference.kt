@@ -10,14 +10,14 @@ import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
-sealed class ArticleListImagePreference(val value: Boolean) : Preference() {
-    object ON : ArticleListImagePreference(true)
-    object OFF : ArticleListImagePreference(false)
+sealed class FlowArticleListDatePreference(val value: Boolean) : Preference() {
+    object ON : FlowArticleListDatePreference(true)
+    object OFF : FlowArticleListDatePreference(false)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch(Dispatchers.IO) {
             context.dataStore.put(
-                DataStoreKeys.ArticleListImage,
+                DataStoreKeys.FlowArticleListDate,
                 value
             )
         }
@@ -27,9 +27,9 @@ sealed class ArticleListImagePreference(val value: Boolean) : Preference() {
         val default = ON
         val values = listOf(ON, OFF)
 
-        val Context.articleListImage: Flow<ArticleListImagePreference>
+        val Context.flowArticleListDate: Flow<FlowArticleListDatePreference>
             get() = this.dataStore.data.map {
-                when (it[DataStoreKeys.ArticleListImage.key]) {
+                when (it[DataStoreKeys.FlowArticleListDate.key]) {
                     true -> ON
                     false -> OFF
                     else -> default
@@ -38,8 +38,8 @@ sealed class ArticleListImagePreference(val value: Boolean) : Preference() {
     }
 }
 
-operator fun ArticleListImagePreference.not(): ArticleListImagePreference =
+operator fun FlowArticleListDatePreference.not(): FlowArticleListDatePreference =
     when (value) {
-        true -> ArticleListImagePreference.OFF
-        false -> ArticleListImagePreference.ON
+        true -> FlowArticleListDatePreference.OFF
+        false -> FlowArticleListDatePreference.ON
     }

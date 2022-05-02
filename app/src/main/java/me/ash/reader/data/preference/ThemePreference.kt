@@ -1,7 +1,6 @@
 package me.ash.reader.data.preference
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.Immutable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,17 +12,17 @@ import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
 @Immutable
-object FilterBarPaddingPreference {
-    const val default = 0
+object ThemePreference {
+    const val default = 5
 
-    val Context.filterBarPadding: Flow<Int>
+    val Context.Theme: Flow<Int>
         get() = this.dataStore.data.map {
-            it[DataStoreKeys.FilterBarPadding.key] ?: 0
+            it[DataStoreKeys.ThemeIndex.key] ?: default
         }
 
     fun put(context: Context, scope: CoroutineScope, value: Int) {
         scope.launch(Dispatchers.IO) {
-            context.dataStore.put(DataStoreKeys.FilterBarPadding, value)
+            context.dataStore.put(DataStoreKeys.ThemeIndex, value)
         }
     }
 }

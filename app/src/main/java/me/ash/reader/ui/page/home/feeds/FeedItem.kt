@@ -16,11 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.ui.page.home.feeds.option.feed.FeedOptionViewAction
 import me.ash.reader.ui.page.home.feeds.option.feed.FeedOptionViewModel
+import kotlin.math.ln
 
 @OptIn(
     androidx.compose.foundation.ExperimentalFoundationApi::class,
@@ -31,6 +33,7 @@ fun FeedItem(
     modifier: Modifier = Modifier,
     feed: Feed,
     feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
+    tonalElevation: Dp,
     onClick: () -> Unit = {},
 ) {
     val view = LocalView.current
@@ -76,18 +79,18 @@ fun FeedItem(
                 )
             }
             if (feed.important ?: 0 != 0) {
-                Row() {
-                    Badge(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.24f),
-                        contentColor = MaterialTheme.colorScheme.outline,
-                        content = {
-                            Text(
-                                text = feed.important.toString(),
-                                style = MaterialTheme.typography.labelSmall
-                            )
-                        },
-                    )
-                }
+                Badge(
+                    containerColor = MaterialTheme.colorScheme.surfaceTint.copy(
+                        alpha = (ln(tonalElevation.value + 1.4f) + 2f) / 100f
+                    ),
+                    contentColor = MaterialTheme.colorScheme.outline,
+                    content = {
+                        Text(
+                            text = feed.important.toString(),
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                    },
+                )
             }
         }
     }

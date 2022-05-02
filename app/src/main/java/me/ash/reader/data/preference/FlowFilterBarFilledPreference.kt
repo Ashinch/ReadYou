@@ -10,26 +10,26 @@ import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
-sealed class ArticleListDescPreference(val value: Boolean) : Preference() {
-    object ON : ArticleListDescPreference(true)
-    object OFF : ArticleListDescPreference(false)
+sealed class FlowFilterBarFilledPreference(val value: Boolean) : Preference() {
+    object ON : FlowFilterBarFilledPreference(true)
+    object OFF : FlowFilterBarFilledPreference(false)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch(Dispatchers.IO) {
             context.dataStore.put(
-                DataStoreKeys.ArticleListDesc,
+                DataStoreKeys.FlowFilterBarFilled,
                 value
             )
         }
     }
 
     companion object {
-        val default = ON
+        val default = OFF
         val values = listOf(ON, OFF)
 
-        val Context.articleListDesc: Flow<ArticleListDescPreference>
+        val Context.flowFilterBarFilled: Flow<FlowFilterBarFilledPreference>
             get() = this.dataStore.data.map {
-                when (it[DataStoreKeys.ArticleListDesc.key]) {
+                when (it[DataStoreKeys.FlowFilterBarFilled.key]) {
                     true -> ON
                     false -> OFF
                     else -> default
@@ -38,8 +38,8 @@ sealed class ArticleListDescPreference(val value: Boolean) : Preference() {
     }
 }
 
-operator fun ArticleListDescPreference.not(): ArticleListDescPreference =
+operator fun FlowFilterBarFilledPreference.not(): FlowFilterBarFilledPreference =
     when (value) {
-        true -> ArticleListDescPreference.OFF
-        false -> ArticleListDescPreference.ON
+        true -> FlowFilterBarFilledPreference.OFF
+        false -> FlowFilterBarFilledPreference.ON
     }

@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.rounded.CheckCircleOutline
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -21,6 +20,7 @@ import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.ui.component.DisplayText
 import me.ash.reader.ui.component.DynamicSVGImage
+import me.ash.reader.ui.component.Tips
 import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
@@ -57,14 +57,12 @@ fun StartupPage(
                     )
                 }
                 item {
-                    TipsItem(
-                        modifier = Modifier
-                            .padding(horizontal = 24.dp)
-                            .padding(top = 40.dp)
+                    Tips(
+                        modifier = Modifier.padding(top = 40.dp),
+                        text = stringResource(R.string.agree_terms),
                     )
                 }
                 item {
-                    Spacer(modifier = Modifier.height(10.dp))
                     TextButton(
                         modifier = Modifier.padding(horizontal = 12.dp),
                         onClick = {
@@ -119,26 +117,4 @@ fun StartupPage(
             )
         }
     )
-}
-
-@Composable
-private fun TipsItem(
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        Icon(
-            imageVector = Icons.Outlined.Info,
-            contentDescription = stringResource(R.string.tips_and_support),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Spacer(modifier = Modifier.height(22.dp))
-        Text(
-            text = stringResource(R.string.agree_terms),
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
 }

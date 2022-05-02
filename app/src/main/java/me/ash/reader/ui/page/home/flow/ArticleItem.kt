@@ -21,14 +21,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import me.ash.reader.R
 import me.ash.reader.data.entity.ArticleWithFeed
-import me.ash.reader.data.preference.*
-import me.ash.reader.data.preference.ArticleListDatePreference.Companion.articleListDate
-import me.ash.reader.data.preference.ArticleListDescPreference.Companion.articleListDesc
-import me.ash.reader.data.preference.ArticleListFeedIconPreference.Companion.articleListFeedIcon
-import me.ash.reader.data.preference.ArticleListFeedNamePreference.Companion.articleListFeedName
-import me.ash.reader.data.preference.ArticleListImagePreference.Companion.articleListImage
-import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.formatAsString
+import me.ash.reader.ui.theme.*
 
 @Composable
 fun ArticleItem(
@@ -37,16 +31,11 @@ fun ArticleItem(
     onClick: (ArticleWithFeed) -> Unit = {},
 ) {
     val context = LocalContext.current
-    val articleListFeedIcon =
-        context.articleListFeedIcon.collectAsStateValue(initial = ArticleListFeedIconPreference.default)
-    val articleListFeedName =
-        context.articleListFeedName.collectAsStateValue(initial = ArticleListFeedNamePreference.default)
-    val articleListImage =
-        context.articleListImage.collectAsStateValue(initial = ArticleListImagePreference.default)
-    val articleListDesc =
-        context.articleListDesc.collectAsStateValue(initial = ArticleListDescPreference.default)
-    val articleListDate =
-        context.articleListDate.collectAsStateValue(initial = ArticleListDatePreference.default)
+    val articleListFeedIcon = LocalFlowArticleListFeedIcon.current
+    val articleListFeedName = LocalFlowArticleListFeedName.current
+    val articleListImage = LocalFlowArticleListImage.current
+    val articleListDesc = LocalFlowArticleListDesc.current
+    val articleListDate = LocalFlowArticleListDate.current
 
     Column(
         modifier = Modifier
@@ -62,11 +51,11 @@ fun ArticleItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             // Feed name
-            if (articleListFeedName.value) {
+            if (articleListFeedName) {
                 Text(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(start = if (articleListFeedIcon.value) 30.dp else 0.dp),
+                        .padding(start = if (articleListFeedIcon) 30.dp else 0.dp),
                     text = articleWithFeed.feed.name,
                     color = MaterialTheme.colorScheme.tertiary,
                     style = MaterialTheme.typography.labelMedium,
@@ -75,11 +64,13 @@ fun ArticleItem(
                 )
             }
 
-            if (articleListDate.value) {
+            if (articleListDate) {
                 Row(
-                    modifier = Modifier.padding(start = 6.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    if (!articleListFeedName) {
+                        Spacer(Modifier.width(if (articleListFeedIcon) 30.dp else 0.dp))
+                    }
                     // Starred
                     if (articleWithFeed.article.isStarred) {
                         Icon(
@@ -91,7 +82,7 @@ fun ArticleItem(
                             tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
                         )
                     }
-                    
+
                     // Date
                     Text(
                         text = articleWithFeed.article.date.formatAsString(
@@ -108,7 +99,7 @@ fun ArticleItem(
             modifier = Modifier.fillMaxWidth(),
         ) {
             // Feed icon
-            if (articleListFeedIcon.value) {
+            if (articleListFeedIcon) {
                 Row(
                     modifier = Modifier
                         .size(20.dp)
@@ -126,11 +117,11 @@ fun ArticleItem(
                     text = articleWithFeed.article.title,
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.titleMedium,
-                    maxLines = if (articleListDesc.value) 2 else 4,
+                    maxLines = if (articleListDesc) 2 else 4,
                     overflow = TextOverflow.Ellipsis,
                 )
                 // Description
-                if (articleListDesc.value) {
+                if (articleListDesc) {
                     Text(
                         text = articleWithFeed.article.shortDescription,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),

@@ -22,6 +22,7 @@ import me.ash.reader.ui.page.home.flow.FlowPage
 import me.ash.reader.ui.page.home.read.ReadPage
 import me.ash.reader.ui.page.settings.SettingsPage
 import me.ash.reader.ui.page.settings.color.ColorAndStyle
+import me.ash.reader.ui.page.settings.color.feeds.FeedsPageStyle
 import me.ash.reader.ui.page.settings.color.flow.FlowPageStyle
 import me.ash.reader.ui.page.settings.interaction.Interaction
 import me.ash.reader.ui.page.settings.tips.TipsAndSupport
@@ -126,6 +127,9 @@ fun HomeEntry(
             // Color & Style
             animatedComposable(route = RouteName.COLOR_AND_STYLE) {
                 ColorAndStyle(navController)
+            }
+            animatedComposable(route = RouteName.FEEDS_PAGE_STYLE) {
+                FeedsPageStyle(navController)
             }
             animatedComposable(route = RouteName.FLOW_PAGE_STYLE) {
                 FlowPageStyle(navController)

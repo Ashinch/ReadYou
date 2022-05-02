@@ -10,14 +10,14 @@ import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
-sealed class ArticleListFeedIconPreference(val value: Boolean) : Preference() {
-    object ON : ArticleListFeedIconPreference(true)
-    object OFF : ArticleListFeedIconPreference(false)
+sealed class FlowArticleListFeedNamePreference(val value: Boolean) : Preference() {
+    object ON : FlowArticleListFeedNamePreference(true)
+    object OFF : FlowArticleListFeedNamePreference(false)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch(Dispatchers.IO) {
             context.dataStore.put(
-                DataStoreKeys.ArticleListFeedIcon,
+                DataStoreKeys.FlowArticleListFeedName,
                 value
             )
         }
@@ -27,9 +27,9 @@ sealed class ArticleListFeedIconPreference(val value: Boolean) : Preference() {
         val default = ON
         val values = listOf(ON, OFF)
 
-        val Context.articleListFeedIcon: Flow<ArticleListFeedIconPreference>
+        val Context.flowArticleListFeedName: Flow<FlowArticleListFeedNamePreference>
             get() = this.dataStore.data.map {
-                when (it[DataStoreKeys.ArticleListFeedIcon.key]) {
+                when (it[DataStoreKeys.FlowArticleListFeedName.key]) {
                     true -> ON
                     false -> OFF
                     else -> default
@@ -38,8 +38,8 @@ sealed class ArticleListFeedIconPreference(val value: Boolean) : Preference() {
     }
 }
 
-operator fun ArticleListFeedIconPreference.not(): ArticleListFeedIconPreference =
+operator fun FlowArticleListFeedNamePreference.not(): FlowArticleListFeedNamePreference =
     when (value) {
-        true -> ArticleListFeedIconPreference.OFF
-        false -> ArticleListFeedIconPreference.ON
+        true -> FlowArticleListFeedNamePreference.OFF
+        false -> FlowArticleListFeedNamePreference.ON
     }

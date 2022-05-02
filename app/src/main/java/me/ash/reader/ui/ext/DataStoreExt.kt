@@ -31,8 +31,6 @@ val Context.currentAccountId: Int
     get() = this.dataStore.get(DataStoreKeys.CurrentAccountId)!!
 val Context.currentAccountType: Int
     get() = this.dataStore.get(DataStoreKeys.CurrentAccountType)!!
-val Context.themeIndex: Int
-    get() = this.dataStore.get(DataStoreKeys.ThemeIndex) ?: 5
 
 val Context.customPrimaryColor: String
     get() = this.dataStore.get(DataStoreKeys.CustomPrimaryColor) ?: ""
@@ -130,54 +128,94 @@ sealed class DataStoreKeys<T> {
             get() = stringPreferencesKey("customPrimaryColor")
     }
 
-    object FilterBarStyle : DataStoreKeys<Int>() {
+    object FeedsFilterBarStyle : DataStoreKeys<Int>() {
         override val key: Preferences.Key<Int>
-            get() = intPreferencesKey("filterBarStyle")
+            get() = intPreferencesKey("feedsFilterBarStyle")
     }
 
-    object FilterBarFilled : DataStoreKeys<Boolean>() {
+    object FeedsFilterBarFilled : DataStoreKeys<Boolean>() {
         override val key: Preferences.Key<Boolean>
-            get() = booleanPreferencesKey("filterBarFilled")
+            get() = booleanPreferencesKey("feedsFilterBarFilled")
     }
 
-    object FilterBarPadding : DataStoreKeys<Int>() {
+    object FeedsFilterBarPadding : DataStoreKeys<Int>() {
         override val key: Preferences.Key<Int>
-            get() = intPreferencesKey("filterBarPadding")
+            get() = intPreferencesKey("feedsFilterBarPadding")
     }
 
-    object FilterBarTonalElevation : DataStoreKeys<Int>() {
+    object FeedsFilterBarTonalElevation : DataStoreKeys<Int>() {
         override val key: Preferences.Key<Int>
-            get() = intPreferencesKey("filterBarTonalElevation")
+            get() = intPreferencesKey("feedsFilterBarTonalElevation")
     }
 
-    object ArticleListFeedIcon : DataStoreKeys<Boolean>() {
-        override val key: Preferences.Key<Boolean>
-            get() = booleanPreferencesKey("articleListFeedIcon")
-    }
-
-    object ArticleListFeedName : DataStoreKeys<Boolean>() {
-        override val key: Preferences.Key<Boolean>
-            get() = booleanPreferencesKey("articleListFeedName")
-    }
-
-    object ArticleListImage : DataStoreKeys<Boolean>() {
-        override val key: Preferences.Key<Boolean>
-            get() = booleanPreferencesKey("articleListImage")
-    }
-
-    object ArticleListDesc : DataStoreKeys<Boolean>() {
-        override val key: Preferences.Key<Boolean>
-            get() = booleanPreferencesKey("articleListDesc")
-    }
-
-    object ArticleListDate : DataStoreKeys<Boolean>() {
-        override val key: Preferences.Key<Boolean>
-            get() = booleanPreferencesKey("articleListDate")
-    }
-
-    object ArticleListTonalElevation : DataStoreKeys<Int>() {
+    object FeedsTopBarTonalElevation : DataStoreKeys<Int>() {
         override val key: Preferences.Key<Int>
-            get() = intPreferencesKey("articleListTonalElevation")
+            get() = intPreferencesKey("feedsTopBarTonalElevation")
+    }
+
+    object FeedsGroupListExpand : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("feedsGroupListExpand")
+    }
+
+    object FeedsGroupListTonalElevation : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("feedsGroupListTonalElevation")
+    }
+
+    object FlowFilterBarStyle : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("flowFilterBarStyle")
+    }
+
+    object FlowFilterBarFilled : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("flowFilterBarFilled")
+    }
+
+    object FlowFilterBarPadding : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("flowFilterBarPadding")
+    }
+
+    object FlowFilterBarTonalElevation : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("flowFilterBarTonalElevation")
+    }
+
+    object FlowTopBarTonalElevation : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("flowTopBarTonalElevation")
+    }
+
+    object FlowArticleListFeedIcon : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("flowArticleListFeedIcon")
+    }
+
+    object FlowArticleListFeedName : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("flowArticleListFeedName")
+    }
+
+    object FlowArticleListImage : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("flowArticleListImage")
+    }
+
+    object FlowArticleListDesc : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("flowArticleListDesc")
+    }
+
+    object FlowArticleListDate : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("flowArticleListDate")
+    }
+
+    object FlowArticleListTonalElevation : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("flowArticleListTonalElevation")
     }
 
     object InitialPage : DataStoreKeys<Int>() {

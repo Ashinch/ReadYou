@@ -10,26 +10,26 @@ import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
-sealed class FilterBarFilledPreference(val value: Boolean) : Preference() {
-    object ON : FilterBarFilledPreference(true)
-    object OFF : FilterBarFilledPreference(false)
+sealed class FeedsGroupListExpandPreference(val value: Boolean) : Preference() {
+    object ON : FeedsGroupListExpandPreference(true)
+    object OFF : FeedsGroupListExpandPreference(false)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch(Dispatchers.IO) {
             context.dataStore.put(
-                DataStoreKeys.FilterBarFilled,
+                DataStoreKeys.FeedsGroupListExpand,
                 value
             )
         }
     }
 
     companion object {
-        val default = OFF
+        val default = ON
         val values = listOf(ON, OFF)
 
-        val Context.filterBarFilled: Flow<FilterBarFilledPreference>
+        val Context.feedsGroupListExpand: Flow<FeedsGroupListExpandPreference>
             get() = this.dataStore.data.map {
-                when (it[DataStoreKeys.FilterBarFilled.key]) {
+                when (it[DataStoreKeys.FeedsGroupListExpand.key]) {
                     true -> ON
                     false -> OFF
                     else -> default
@@ -38,8 +38,8 @@ sealed class FilterBarFilledPreference(val value: Boolean) : Preference() {
     }
 }
 
-operator fun FilterBarFilledPreference.not(): FilterBarFilledPreference =
+operator fun FeedsGroupListExpandPreference.not(): FeedsGroupListExpandPreference =
     when (value) {
-        true -> FilterBarFilledPreference.OFF
-        false -> FilterBarFilledPreference.ON
+        true -> FeedsGroupListExpandPreference.OFF
+        false -> FeedsGroupListExpandPreference.ON
     }

@@ -45,6 +45,8 @@ import me.ash.reader.ui.page.home.feeds.option.group.GroupOptionDrawer
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewAction
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
+import me.ash.reader.ui.theme.*
+import me.ash.reader.ui.theme.palette.onDark
 
 @SuppressLint("FlowOperatorInvokedInComposition")
 @OptIn(
@@ -59,6 +61,14 @@ fun FeedsPage(
     homeViewModel: HomeViewModel,
 ) {
     val context = LocalContext.current
+    val topBarTonalElevation = LocalFeedsTopBarTonalElevation.current
+    val groupListTonalElevation = LocalFeedsGroupListTonalElevation.current
+    val groupListExpand = LocalFeedsGroupListExpand.current
+    val filterBarStyle = LocalFeedsFilterBarStyle.current
+    val filterBarFilled = LocalFeedsFilterBarFilled.current
+    val filterBarPadding = LocalFeedsFilterBarPadding.current
+    val filterBarTonalElevation = LocalFeedsFilterBarTonalElevation.current
+
     val feedsViewState = feedsViewModel.viewState.collectAsStateValue()
     val filterState = homeViewModel.filterState.collectAsStateValue()
 
@@ -117,11 +127,19 @@ fun FeedsPage(
 
     Scaffold(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface)
+            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(topBarTonalElevation.dp))
             .statusBarsPadding()
             .navigationBarsPadding(),
+        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+            groupListTonalElevation.dp
+        ) onDark MaterialTheme.colorScheme.surface,
         topBar = {
             SmallTopAppBar(
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+                        topBarTonalElevation.dp
+                    ),
+                ),
                 title = {},
                 navigationIcon = {
                     FeedbackIconButton(
@@ -204,6 +222,8 @@ fun FeedsPage(
 //                    Crossfade(targetState = groupWithFeed) { groupWithFeed ->
                     Column {
                         GroupItem(
+                            isExpanded = groupListExpand,
+                            tonalElevation = groupListTonalElevation.dp,
                             group = groupWithFeed.group,
                             feeds = groupWithFeed.feeds,
                             groupOnClick = {
@@ -242,15 +262,18 @@ fun FeedsPage(
         bottomBar = {
             FilterBar(
                 filter = filterState.filter,
-                filterOnClick = {
-                    filterChange(
-                        navController = navController,
-                        homeViewModel = homeViewModel,
-                        filterState = filterState.copy(filter = it),
-                        isNavigate = false,
-                    )
-                },
-            )
+                filterBarStyle = filterBarStyle,
+                filterBarFilled = filterBarFilled,
+                filterBarPadding = filterBarPadding.dp,
+                filterBarTonalElevation = filterBarTonalElevation.dp,
+            ) {
+                filterChange(
+                    navController = navController,
+                    homeViewModel = homeViewModel,
+                    filterState = filterState.copy(filter = it),
+                    isNavigate = false,
+                )
+            }
         }
     )
 

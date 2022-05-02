@@ -10,14 +10,14 @@ import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
-sealed class ArticleListDatePreference(val value: Boolean) : Preference() {
-    object ON : ArticleListDatePreference(true)
-    object OFF : ArticleListDatePreference(false)
+sealed class FlowArticleListDescPreference(val value: Boolean) : Preference() {
+    object ON : FlowArticleListDescPreference(true)
+    object OFF : FlowArticleListDescPreference(false)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch(Dispatchers.IO) {
             context.dataStore.put(
-                DataStoreKeys.ArticleListDate,
+                DataStoreKeys.FlowArticleListDesc,
                 value
             )
         }
@@ -27,9 +27,9 @@ sealed class ArticleListDatePreference(val value: Boolean) : Preference() {
         val default = ON
         val values = listOf(ON, OFF)
 
-        val Context.articleListDate: Flow<ArticleListDatePreference>
+        val Context.flowArticleListDesc: Flow<FlowArticleListDescPreference>
             get() = this.dataStore.data.map {
-                when (it[DataStoreKeys.ArticleListDate.key]) {
+                when (it[DataStoreKeys.FlowArticleListDesc.key]) {
                     true -> ON
                     false -> OFF
                     else -> default
@@ -38,8 +38,8 @@ sealed class ArticleListDatePreference(val value: Boolean) : Preference() {
     }
 }
 
-operator fun ArticleListDatePreference.not(): ArticleListDatePreference =
+operator fun FlowArticleListDescPreference.not(): FlowArticleListDescPreference =
     when (value) {
-        true -> ArticleListDatePreference.OFF
-        false -> ArticleListDatePreference.ON
+        true -> FlowArticleListDescPreference.OFF
+        false -> FlowArticleListDescPreference.ON
     }
