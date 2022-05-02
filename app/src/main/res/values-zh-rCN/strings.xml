@@ -134,6 +134,7 @@
     <string name="display_article_image">显示文章插图</string>
     <string name="display_feed_name">显示订阅源名称</string>
     <string name="display_feed_favicon">显示订阅源图标</string>
+    <string name="article_date_sticky_header">文章发布日期粘性标签（实验性）</string>
     <string name="article_list">文章列表</string>
     <string name="group_list">分组列表</string>
     <string name="always_expand">始终展开</string>

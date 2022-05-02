@@ -58,6 +58,7 @@ fun FlowPage(
     val topBarTonalElevation = LocalFlowTopBarTonalElevation.current
     val articleListTonalElevation = LocalFlowArticleListTonalElevation.current
     val articleListFeedIcon = LocalFlowArticleListFeedIcon.current
+    val articleListDateStickyHeader = LocalFlowArticleListDateStickyHeader.current
     val filterBarStyle = LocalFlowFilterBarStyle.current
     val filterBarFilled = LocalFlowFilterBarFilled.current
     val filterBarPadding = LocalFlowFilterBarPadding.current
@@ -260,6 +261,7 @@ fun FlowPage(
                     ArticleList(
                         pagingItems = pagingItems,
                         articleListFeedIcon = articleListFeedIcon.value,
+                        articleListDateStickyHeader = articleListDateStickyHeader.value,
                         articleListTonalElevation = articleListTonalElevation.value,
                     ) {
                         onSearch = false

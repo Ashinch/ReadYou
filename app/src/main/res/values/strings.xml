@@ -134,6 +134,7 @@
     <string name="display_article_image">Display Article Images</string>
     <string name="display_feed_name">Display Feed Names</string>
     <string name="display_feed_favicon">Display Feed Favicons</string>
+    <string name="article_date_sticky_header">Article Publish Date Sticky Header (Experimental)</string>
     <string name="article_list">Article List</string>
     <string name="group_list">Group List</string>
     <string name="always_expand">Always Expand</string>

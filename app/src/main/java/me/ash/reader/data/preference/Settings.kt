@@ -33,6 +33,7 @@ data class Settings(
     val flowArticleListImage: FlowArticleListImagePreference = FlowArticleListImagePreference.default,
     val flowArticleListDesc: FlowArticleListDescPreference = FlowArticleListDescPreference.default,
     val flowArticleListTime: FlowArticleListTimePreference = FlowArticleListTimePreference.default,
+    val flowArticleListDateStickyHeader: FlowArticleListDateStickyHeaderPreference = FlowArticleListDateStickyHeaderPreference.default,
     val flowArticleListTonalElevation: FlowArticleListTonalElevationPreference = FlowArticleListTonalElevationPreference.default,
 )
 
@@ -59,6 +60,7 @@ fun Preferences.toSettings(): Settings {
         flowArticleListImage = FlowArticleListImagePreference.fromPreferences(this),
         flowArticleListDesc = FlowArticleListDescPreference.fromPreferences(this),
         flowArticleListTime = FlowArticleListTimePreference.fromPreferences(this),
+        flowArticleListDateStickyHeader = FlowArticleListDateStickyHeaderPreference.fromPreferences(this),
         flowArticleListTonalElevation = FlowArticleListTonalElevationPreference.fromPreferences(this),
     )
 }
@@ -93,6 +95,7 @@ fun SettingsProvider(
         LocalFlowArticleListImage provides settings.flowArticleListImage,
         LocalFlowArticleListDesc provides settings.flowArticleListDesc,
         LocalFlowArticleListTime provides settings.flowArticleListTime,
+        LocalFlowArticleListDateStickyHeader provides settings.flowArticleListDateStickyHeader,
         LocalFlowArticleListTonalElevation provides settings.flowArticleListTonalElevation,
         LocalFlowFilterBarStyle provides settings.flowFilterBarStyle,
         LocalFlowFilterBarFilled provides settings.flowFilterBarFilled,
@@ -143,5 +146,7 @@ val LocalFlowArticleListDesc =
     compositionLocalOf<FlowArticleListDescPreference> { FlowArticleListDescPreference.default }
 val LocalFlowArticleListTime =
     compositionLocalOf<FlowArticleListTimePreference> { FlowArticleListTimePreference.default }
+val LocalFlowArticleListDateStickyHeader =
+    compositionLocalOf<FlowArticleListDateStickyHeaderPreference> { FlowArticleListDateStickyHeaderPreference.default }
 val LocalFlowArticleListTonalElevation =
     compositionLocalOf<FlowArticleListTonalElevationPreference> { FlowArticleListTonalElevationPreference.default }

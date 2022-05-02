@@ -45,8 +45,8 @@ fun Switch(
             .alpha(if (enable) 1f else 0.5f),
         shape = CircleShape,
         color = animateColorAsState(
-            if (activated) (tonalPalettes primary 40) onDark (tonalPalettes neutralVariant 50)
-            else (tonalPalettes neutralVariant 50) onDark (tonalPalettes neutral 60)
+            if (activated) (tonalPalettes primary 40) onDark (tonalPalettes secondary 50)
+            else (tonalPalettes neutralVariant 50) onDark (tonalPalettes neutral 30)
         ).value
     ) {
         Box(
@@ -61,7 +61,7 @@ fun Switch(
                 shape = CircleShape,
                 color = animateColorAsState(
                     if (activated) tonalPalettes primary 90
-                    else (tonalPalettes neutralVariant 70) onDark (tonalPalettes neutral 30)
+                    else (tonalPalettes neutralVariant 70) onDark (tonalPalettes neutral 60)
                 ).value
             ) {}
         }

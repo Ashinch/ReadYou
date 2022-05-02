@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.settings.color.feeds
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -294,6 +295,7 @@ fun FeedsPagePreview(
 
     Column(
         modifier = Modifier
+            .animateContentSize()
             .background(
                 color = MaterialTheme.colorScheme.surfaceColorAtElevation(
                     groupListTonalElevation.value.dp

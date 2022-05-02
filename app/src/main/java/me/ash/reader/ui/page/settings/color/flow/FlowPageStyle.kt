@@ -1,6 +1,7 @@
 package me.ash.reader.ui.page.settings.color.flow
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -51,7 +52,8 @@ fun FlowPageStyle(
     val articleListFeedName = LocalFlowArticleListFeedName.current
     val articleListImage = LocalFlowArticleListImage.current
     val articleListDesc = LocalFlowArticleListDesc.current
-    val articleListDate = LocalFlowArticleListTime.current
+    val articleListTime = LocalFlowArticleListTime.current
+    val articleListStickyDate = LocalFlowArticleListDateStickyHeader.current
     val articleListTonalElevation = LocalFlowArticleListTonalElevation.current
 
     val scope = rememberCoroutineScope()
@@ -190,11 +192,21 @@ fun FlowPageStyle(
                     SettingItem(
                         title = stringResource(R.string.display_article_date),
                         onClick = {
-                            (!articleListDate).put(context, scope)
+                            (!articleListTime).put(context, scope)
                         },
                     ) {
-                        Switch(activated = articleListDate.value) {
-                            (!articleListDate).put(context, scope)
+                        Switch(activated = articleListTime.value) {
+                            (!articleListTime).put(context, scope)
+                        }
+                    }
+                    SettingItem(
+                        title = stringResource(R.string.article_date_sticky_header),
+                        onClick = {
+                            (!articleListStickyDate).put(context, scope)
+                        },
+                    ) {
+                        Switch(activated = articleListStickyDate.value) {
+                            (!articleListStickyDate).put(context, scope)
                         }
                     }
                     SettingItem(
@@ -343,6 +355,7 @@ fun FlowPagePreview(
 
     Column(
         modifier = Modifier
+            .animateContentSize()
             .background(
                 color = MaterialTheme.colorScheme.surfaceColorAtElevation(
                     articleListTonalElevation.value.dp
