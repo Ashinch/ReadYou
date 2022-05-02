@@ -10,11 +10,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.ash.reader.R
@@ -32,7 +30,6 @@ fun Interaction(
     navController: NavHostController,
 ) {
     val context = LocalContext.current
-    val view = LocalView.current
     val scope = rememberCoroutineScope()
     var initialPageDialogVisible by remember { mutableStateOf(false) }
     var initialFilterDialogVisible by remember { mutableStateOf(false) }
@@ -116,7 +113,7 @@ fun Interaction(
                 text = stringResource(R.string.feeds_page),
                 selected = initialPage == 0,
             ) {
-                scope.launch(Dispatchers.IO) {
+                scope.launch {
                     context.dataStore.put(DataStoreKeys.InitialPage, 0)
                 }
             },
@@ -124,7 +121,7 @@ fun Interaction(
                 text = stringResource(R.string.flow_page),
                 selected = initialPage == 1,
             ) {
-                scope.launch(Dispatchers.IO) {
+                scope.launch {
                     context.dataStore.put(DataStoreKeys.InitialPage, 1)
                 }
             },
@@ -141,7 +138,7 @@ fun Interaction(
                 text = stringResource(R.string.starred),
                 selected = initialFilter == 0,
             ) {
-                scope.launch(Dispatchers.IO) {
+                scope.launch {
                     context.dataStore.put(DataStoreKeys.InitialFilter, 0)
                 }
             },
@@ -149,7 +146,7 @@ fun Interaction(
                 text = stringResource(R.string.unread),
                 selected = initialFilter == 1,
             ) {
-                scope.launch(Dispatchers.IO) {
+                scope.launch {
                     context.dataStore.put(DataStoreKeys.InitialFilter, 1)
                 }
             },
@@ -157,7 +154,7 @@ fun Interaction(
                 text = stringResource(R.string.all),
                 selected = initialFilter == 2,
             ) {
-                scope.launch(Dispatchers.IO) {
+                scope.launch {
                     context.dataStore.put(DataStoreKeys.InitialFilter, 2)
                 }
             },

@@ -22,11 +22,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.R
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.entity.Group
+import me.ash.reader.ui.ext.alphaLN
 import me.ash.reader.ui.page.home.feeds.option.group.GroupOptionViewAction
 import me.ash.reader.ui.page.home.feeds.option.group.GroupOptionViewModel
 
@@ -34,6 +36,7 @@ import me.ash.reader.ui.page.home.feeds.option.group.GroupOptionViewModel
 @Composable
 fun GroupItem(
     modifier: Modifier = Modifier,
+    tonalElevation: Dp,
     group: Group,
     feeds: List<Feed>,
     isExpanded: Boolean = true,
@@ -50,7 +53,9 @@ fun GroupItem(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(32.dp))
-            .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.14f))
+            .background(
+                MaterialTheme.colorScheme.secondary.copy(alpha = tonalElevation.alphaLN(weight = 1.2f))
+            )
             .combinedClickable(
                 onClick = {
                     groupOnClick()
@@ -82,7 +87,11 @@ fun GroupItem(
                     .padding(end = 20.dp)
                     .size(24.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.24f))
+                    .background(
+                        MaterialTheme.colorScheme.surfaceTint.copy(
+                            alpha = tonalElevation.alphaLN(weight = 1.4f)
+                        )
+                    )
                     .clickable {
                         expanded = !expanded
                     },
@@ -107,6 +116,7 @@ fun GroupItem(
                     FeedItem(
                         modifier = Modifier.padding(horizontal = 20.dp),
                         feed = feed,
+                        tonalElevation = tonalElevation,
                     ) {
                         feedOnClick(feed)
                     }

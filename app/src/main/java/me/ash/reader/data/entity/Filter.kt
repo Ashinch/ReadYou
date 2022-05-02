@@ -2,13 +2,16 @@ package me.ash.reader.data.entity
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FiberManualRecord
+import androidx.compose.material.icons.rounded.FiberManualRecord
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.StarOutline
 import androidx.compose.material.icons.rounded.Subject
 import androidx.compose.ui.graphics.vector.ImageVector
 
 class Filter(
-    var index: Int,
-    var icon: ImageVector,
+    val index: Int,
+    val iconOutline: ImageVector,
+    val iconFilled: ImageVector,
 ) {
     fun isStarred(): Boolean = this == Starred
     fun isUnread(): Boolean = this == Unread
@@ -17,15 +20,18 @@ class Filter(
     companion object {
         val Starred = Filter(
             index = 0,
-            icon = Icons.Rounded.StarOutline,
+            iconOutline = Icons.Rounded.StarOutline,
+            iconFilled = Icons.Rounded.Star,
         )
         val Unread = Filter(
             index = 1,
-            icon = Icons.Outlined.FiberManualRecord,
+            iconOutline = Icons.Outlined.FiberManualRecord,
+            iconFilled = Icons.Rounded.FiberManualRecord,
         )
         val All = Filter(
             index = 2,
-            icon = Icons.Rounded.Subject,
+            iconOutline = Icons.Rounded.Subject,
+            iconFilled = Icons.Rounded.Subject,
         )
     }
 }

@@ -22,6 +22,8 @@ import me.ash.reader.ui.page.home.flow.FlowPage
 import me.ash.reader.ui.page.home.read.ReadPage
 import me.ash.reader.ui.page.settings.SettingsPage
 import me.ash.reader.ui.page.settings.color.ColorAndStyle
+import me.ash.reader.ui.page.settings.color.feeds.FeedsPageStyle
+import me.ash.reader.ui.page.settings.color.flow.FlowPageStyle
 import me.ash.reader.ui.page.settings.interaction.Interaction
 import me.ash.reader.ui.page.settings.tips.TipsAndSupport
 import me.ash.reader.ui.page.startup.StartupPage
@@ -34,6 +36,7 @@ fun HomeEntry(
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+
     val viewState = homeViewModel.viewState.collectAsStateValue()
     val filterState = homeViewModel.filterState.collectAsStateValue()
     val pagingItems = viewState.pagingData.collectAsLazyPagingItems()
@@ -97,9 +100,12 @@ fun HomeEntry(
             navController = navController,
             startDestination = if (context.isFirstLaunch) RouteName.STARTUP else RouteName.FEEDS,
         ) {
+            // Startup
             animatedComposable(route = RouteName.STARTUP) {
                 StartupPage(navController)
             }
+
+            // Home
             animatedComposable(route = RouteName.FEEDS) {
                 FeedsPage(navController = navController, homeViewModel = homeViewModel)
             }
@@ -113,15 +119,29 @@ fun HomeEntry(
             animatedComposable(route = "${RouteName.READING}/{articleId}") {
                 ReadPage(navController = navController)
             }
+
+            // Settings
             animatedComposable(route = RouteName.SETTINGS) {
                 SettingsPage(navController)
             }
+
+            // Color & Style
             animatedComposable(route = RouteName.COLOR_AND_STYLE) {
                 ColorAndStyle(navController)
             }
+            animatedComposable(route = RouteName.FEEDS_PAGE_STYLE) {
+                FeedsPageStyle(navController)
+            }
+            animatedComposable(route = RouteName.FLOW_PAGE_STYLE) {
+                FlowPageStyle(navController)
+            }
+
+            // Interaction
             animatedComposable(route = RouteName.INTERACTION) {
                 Interaction(navController)
             }
+
+            // Tips & Support
             animatedComposable(route = RouteName.TIPS_AND_SUPPORT) {
                 TipsAndSupport(navController)
             }

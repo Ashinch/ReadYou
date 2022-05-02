@@ -79,7 +79,7 @@
     <string name="accounts">账户</string>
     <string name="accounts_desc">本地、FreshRSS</string>
     <string name="color_and_style">颜色和样式</string>
-    <string name="color_and_style_desc">主题、色彩系统、字体大小</string>
+    <string name="color_and_style_desc">主题、色调样式、字体大小</string>
     <string name="interaction">交互</string>
     <string name="interaction_desc">启动时、触感反馈</string>
     <string name="languages">语言</string>
@@ -99,7 +99,7 @@
     <string name="primary_color_hint">例如 #666666 或 666666</string>
     <string name="appearance">外观</string>
     <string name="style">样式</string>
-    <string name="dark_theme">深色模式</string>
+    <string name="dark_theme">深色主题</string>
     <string name="use_device_theme">跟随系统设置</string>
     <string name="tonal_elevation">色调海拔</string>
     <string name="fonts">字体</string>
@@ -124,4 +124,29 @@
     <string name="on_start">启动时</string>
     <string name="initial_page">起始页面</string>
     <string name="initial_filter">起始过滤条件</string>
+    <string name="preview_article_title">呜呜呜，黎明之剑完结了</string>
+    <string name="preview_article_desc">是宴席，就有结束的时候，但这本书真的陪了我好久啊，好舍不得，而且主线结束了坑却没填完，不知道啥时候才有番外啊</string>
+    <string name="preview_feed_name">漩涡书院</string>
+    <string name="value">值</string>
+    <string name="padding_on_both_ends">两端边距</string>
+    <string name="display_article_date">显示文章发布时间</string>
+    <string name="display_article_desc">显示文章描述</string>
+    <string name="display_article_image">显示文章插图</string>
+    <string name="display_feed_name">显示订阅源名称</string>
+    <string name="display_feed_favicon">显示订阅源图标</string>
+    <string name="article_date_sticky_header">文章发布日期粘性标签（实验性）</string>
+    <string name="article_list">文章列表</string>
+    <string name="group_list">分组列表</string>
+    <string name="always_expand">始终展开</string>
+    <string name="top">顶部</string>
+    <string name="mark_as_read_button_position">“标记为已读”按钮的位置</string>
+    <string name="top_bar">标题栏</string>
+    <string name="fill_selected_icon">填充已选中的图标</string>
+    <string name="filter_bar">过滤栏</string>
+    <string name="icons">图标</string>
+    <string name="icons_and_labels">图标和文字</string>
+    <string name="icons_and_label_only_selected">图标和文字（仅选中时）</string>
+    <string name="tips_top_bar_tonal_elevation">标题栏的色调海拔仅在滚动时可用。</string>
+    <string name="tips_article_list_tonal_elevation">文章列表的色调海拔仅在亮色主题时可用。</string>
+    <string name="tips_group_list_tonal_elevation">分组列表的色调海拔仅在亮色主题时可用。</string>
 </resources>

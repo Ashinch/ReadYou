@@ -1,16 +1,11 @@
 package me.ash.reader.ui.theme
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.flow.map
-import me.ash.reader.ui.ext.DataStoreKeys
-import me.ash.reader.ui.ext.dataStore
+import me.ash.reader.data.preference.LocalThemeIndex
 import me.ash.reader.ui.theme.palette.LocalTonalPalettes
 import me.ash.reader.ui.theme.palette.TonalPalettes
 import me.ash.reader.ui.theme.palette.core.ProvideZcamViewingConditions
@@ -20,17 +15,13 @@ import me.ash.reader.ui.theme.palette.dynamicLightColorScheme
 
 val LocalUseDarkTheme = compositionLocalOf { false }
 
-@SuppressLint("FlowOperatorInvokedInComposition")
 @Composable
 fun AppTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     wallpaperPalettes: List<TonalPalettes> = extractTonalPalettesFromUserWallpaper(),
     content: @Composable () -> Unit
 ) {
-    val context = LocalContext.current
-    val themeIndex = context.dataStore.data
-        .map { it[DataStoreKeys.ThemeIndex.key] ?: 5 }
-        .collectAsState(initial = 5).value
+    val themeIndex = LocalThemeIndex.current
 
     val tonalPalettes = wallpaperPalettes[
             if (themeIndex >= wallpaperPalettes.size) {
@@ -47,7 +38,7 @@ fun AppTheme(
     ProvideZcamViewingConditions {
         CompositionLocalProvider(
             LocalTonalPalettes provides tonalPalettes.also { it.Preheating() },
-            LocalUseDarkTheme provides useDarkTheme
+            LocalUseDarkTheme provides useDarkTheme,
         ) {
             MaterialTheme(
                 colorScheme =
