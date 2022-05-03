@@ -61,6 +61,10 @@ class FeedOptionViewModel @Inject constructor(
             is FeedOptionViewAction.Rename -> rename()
             is FeedOptionViewAction.ShowRenameDialog -> changeRenameDialogVisible(true)
             is FeedOptionViewAction.HideRenameDialog -> changeRenameDialogVisible(false)
+            is FeedOptionViewAction.InputNewUrl -> inputNewUrl(action.content)
+            is FeedOptionViewAction.ChangeUrl -> changeFeedUrl()
+            is FeedOptionViewAction.HideChangeUrlDialog -> changeFeedUrlDialogVisible(false)
+            is FeedOptionViewAction.ShowChangeUrlDialog -> changeFeedUrlDialogVisible(true)
         }
     }
 
@@ -212,6 +216,40 @@ class FeedOptionViewModel @Inject constructor(
             )
         }
     }
+
+    private fun changeFeedUrlDialogVisible(visible: Boolean) {
+        _viewState.update {
+            it.copy(
+                changeUrlDialogVisible = visible,
+                newUrl = if (visible) _viewState.value.feed?.url ?: "" else "",
+            )
+        }
+    }
+
+    private fun inputNewUrl(content: String) {
+        _viewState.update {
+            it.copy(
+                newUrl = content
+            )
+        }
+    }
+
+    private fun changeFeedUrl() {
+        _viewState.value.feed?.let {
+            viewModelScope.launch {
+                rssRepository.get().updateFeed(
+                    it.copy(
+                        url = _viewState.value.newUrl
+                    )
+                )
+                _viewState.update {
+                    it.copy(
+                        changeUrlDialogVisible = false,
+                    )
+                }
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -225,6 +263,8 @@ data class FeedOptionViewState(
     val deleteDialogVisible: Boolean = false,
     val newName: String = "",
     val renameDialogVisible: Boolean = false,
+    val newUrl: String = "",
+    val changeUrlDialogVisible: Boolean = false,
 )
 
 sealed class FeedOptionViewAction {
@@ -263,6 +303,13 @@ sealed class FeedOptionViewAction {
     object HideRenameDialog : FeedOptionViewAction()
     object Rename : FeedOptionViewAction()
     data class InputNewName(
+        val content: String
+    ) : FeedOptionViewAction()
+
+    object ShowChangeUrlDialog : FeedOptionViewAction()
+    object HideChangeUrlDialog : FeedOptionViewAction()
+    object ChangeUrl : FeedOptionViewAction()
+    data class InputNewUrl(
         val content: String
     ) : FeedOptionViewAction()
 }
