@@ -97,6 +97,9 @@ fun FeedOptionDrawer(
                     },
                     onAddNewGroup = {
                         feedOptionViewModel.dispatch(FeedOptionViewAction.ShowNewGroupDialog)
+                    },
+                    onFeedUrlClick = {
+                        feedOptionViewModel.dispatch(FeedOptionViewAction.ShowChangeUrlDialog)
                     }
                 )
             }
@@ -140,6 +143,24 @@ fun FeedOptionDrawer(
             feedOptionViewModel.dispatch(FeedOptionViewAction.Rename)
             feedOptionViewModel.dispatch(FeedOptionViewAction.Hide(scope))
             context.showToast(toastString)
+        }
+    )
+
+    TextFieldDialog(
+        visible = viewState.changeUrlDialogVisible,
+        title = stringResource(R.string.change_url),
+        icon = Icons.Outlined.Edit,
+        value = viewState.newUrl,
+        placeholder = stringResource(R.string.feed_url_placeholder),
+        onValueChange = {
+            feedOptionViewModel.dispatch(FeedOptionViewAction.InputNewUrl(it))
+        },
+        onDismissRequest = {
+            feedOptionViewModel.dispatch(FeedOptionViewAction.HideChangeUrlDialog)
+        },
+        onConfirm = {
+            feedOptionViewModel.dispatch(FeedOptionViewAction.ChangeUrl)
+            feedOptionViewModel.dispatch(FeedOptionViewAction.Hide(scope))
         }
     )
 }

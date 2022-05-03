@@ -43,6 +43,8 @@
     <string name="all_move_to_group_tip">Move all feeds in the \"%1$s\" group to the \"%2$s\" group.</string>
     <string name="all_move_to_group_toast">Moved all to \"%1$s\" group</string>
     <string name="rename">Rename</string>
+    <string name="change_url">Change URL</string>
+    <string name="feed_url_placeholder" translatable="false">http://example.com/feed.rss</string>
     <string name="rename_toast">Renamed to \"%1$s\"</string>
     <string name="create_new_group">Create New Group</string>
     <string name="name">Name</string>

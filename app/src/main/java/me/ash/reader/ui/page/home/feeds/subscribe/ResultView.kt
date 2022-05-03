@@ -1,7 +1,5 @@
 package me.ash.reader.ui.page.home.feeds.subscribe
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,7 +22,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -53,6 +50,7 @@ fun ResultView(
     unsubscribeOnClick: () -> Unit = {},
     onGroupClick: (groupId: String) -> Unit = {},
     onAddNewGroup: () -> Unit = {},
+    onFeedUrlClick: () -> Unit = {}
 ) {
     LaunchedEffect(Unit) {
         if (groups.isNotEmpty() && selectedGroupId.isEmpty()) onGroupClick(groups.first().id)
@@ -61,7 +59,7 @@ fun ResultView(
     Column(
         modifier = modifier.verticalScroll(rememberScrollState())
     ) {
-        Link(text = link)
+        EditableUrl(text = link, onFeedUrlClick)
         Spacer(modifier = Modifier.height(26.dp))
 
         Preset(
@@ -86,10 +84,10 @@ fun ResultView(
 }
 
 @Composable
-private fun Link(
+private fun EditableUrl(
     text: String,
+    onClick: () -> Unit
 ) {
-    val context = LocalContext.current
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
@@ -97,9 +95,7 @@ private fun Link(
         SelectionContainer {
             Text(
                 modifier = Modifier.roundClick {
-                    context.startActivity(
-                        Intent(Intent.ACTION_VIEW, Uri.parse(text))
-                    )
+                    onClick()
                 },
                 text = text,
                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
