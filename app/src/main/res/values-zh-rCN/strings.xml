@@ -43,7 +43,7 @@
     <string name="all_move_to_group_tip">将 \"%1$s\" 分组中的所有订阅源移动至 \"%2$s\" 分组。</string>
     <string name="all_move_to_group_toast">已全部移动至 \"%1$s\" 分组</string>
     <string name="rename">重命名</string>
-    <string name="change_url">Change URL</string>
+    <string name="change_url">更改链接</string>
     <string name="rename_toast">已重命名为 \"%1$s\"</string>
     <string name="create_new_group">新建分组</string>
     <string name="name">名称</string>
