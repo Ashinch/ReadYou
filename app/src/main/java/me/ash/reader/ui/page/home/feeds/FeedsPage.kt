@@ -128,8 +128,7 @@ fun FeedsPage(
     Scaffold(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surfaceColorAtElevation(topBarTonalElevation.value.dp))
-            .statusBarsPadding()
-            .navigationBarsPadding(),
+            .statusBarsPadding(),
         containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
             groupListTonalElevation.value.dp
         ) onDark MaterialTheme.colorScheme.surface,

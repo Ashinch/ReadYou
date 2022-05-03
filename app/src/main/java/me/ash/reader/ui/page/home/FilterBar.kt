@@ -1,7 +1,9 @@
 package me.ash.reader.ui.page.home
 
 import android.view.SoundEffectConstants
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -12,6 +14,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import me.ash.reader.data.entity.Filter
 import me.ash.reader.data.preference.FlowFilterBarStylePreference
 import me.ash.reader.ui.ext.getName
+import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.theme.palette.onDark
 
 @OptIn(ExperimentalPagerApi::class)
@@ -28,6 +31,9 @@ fun FilterBar(
     val view = LocalView.current
 
     NavigationBar(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(filterBarTonalElevation))
+            .navigationBarsPadding(),
         tonalElevation = filterBarTonalElevation,
     ) {
         Spacer(modifier = Modifier.width(filterBarPadding))
