@@ -1,0 +1,13 @@
+## 0.7.7
+
+1. Add feeds page style settings.
+
+2. Add flow page style settings.
+
+3. add initial page settings.
+
+4. add initial filter settings.
+
+5. Add change feed URL feature.
+
+6. Fix the Banner filter description.
