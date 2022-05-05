@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home
 
+import android.os.Build
 import android.view.SoundEffectConstants
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,7 @@ import androidx.compose.ui.unit.Dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import me.ash.reader.data.entity.Filter
 import me.ash.reader.data.preference.FlowFilterBarStylePreference
+import me.ash.reader.data.preference.LocalThemeIndex
 import me.ash.reader.ui.ext.getName
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.theme.palette.onDark
@@ -29,6 +31,7 @@ fun FilterBar(
     filterOnClick: (Filter) -> Unit = {},
 ) {
     val view = LocalView.current
+    val themeIndex = LocalThemeIndex.current
 
     NavigationBar(
         modifier = Modifier
@@ -77,12 +80,12 @@ fun FilterBar(
                     filterOnClick(item)
                 },
                 colors = NavigationBarItemDefaults.colors(
-//                        selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer alwaysLight true,
-//                        unselectedIconColor = MaterialTheme.colorScheme.outline,
-//                        selectedTextColor = MaterialTheme.colorScheme.onSurface alwaysLight true,
-//                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    indicatorColor = MaterialTheme.colorScheme.primaryContainer onDark MaterialTheme.colorScheme.secondaryContainer,
-                )
+                    indicatorColor = if (themeIndex == 5 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        MaterialTheme.colorScheme.secondaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.primaryContainer
+                    } onDark MaterialTheme.colorScheme.secondaryContainer,
+                ),
             )
         }
         Spacer(modifier = Modifier.width(filterBarPadding))
