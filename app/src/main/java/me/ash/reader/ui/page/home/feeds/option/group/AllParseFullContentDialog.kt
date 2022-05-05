@@ -45,7 +45,7 @@ fun AllParseFullContentDialog(
             Text(text = stringResource(R.string.parse_full_content))
         },
         text = {
-            Text(text = stringResource(R.string.all_parse_full_content_tip, groupName))
+            Text(text = stringResource(R.string.all_parse_full_content_tips, groupName))
         },
         confirmButton = {
             TextButton(

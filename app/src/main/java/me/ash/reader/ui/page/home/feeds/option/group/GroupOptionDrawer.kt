@@ -93,7 +93,7 @@ fun GroupOptionDrawer(
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = stringResource(R.string.group_option_tip),
+                            text = stringResource(R.string.group_option_tips),
                             color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
                             style = MaterialTheme.typography.bodyMedium,
                             textAlign = TextAlign.Center,
@@ -126,6 +126,7 @@ fun GroupOptionDrawer(
         content()
     }
 
+    ClearGroupDialog(groupName = group?.name ?: "")
     DeleteGroupDialog(groupName = group?.name ?: "")
     AllAllowNotificationDialog(groupName = group?.name ?: "")
     AllParseFullContentDialog(groupName = group?.name ?: "")
@@ -193,6 +194,13 @@ private fun Preset(
             },
         ) {
             groupOptionViewModel.dispatch(GroupOptionViewAction.ShowAllParseFullContentDialog)
+        }
+        SelectionChip(
+            modifier = Modifier.animateContentSize(),
+            content = stringResource(R.string.clear_articles),
+            selected = false,
+        ) {
+            groupOptionViewModel.dispatch(GroupOptionViewAction.ShowClearDialog)
         }
         if (group?.id != context.currentAccountId.getDefaultGroupId()) {
             SelectionChip(

@@ -47,6 +47,7 @@ fun ResultView(
     selectedGroupId: String = "",
     allowNotificationPresetOnClick: () -> Unit = {},
     parseFullContentPresetOnClick: () -> Unit = {},
+    clearArticlesOnClick: () -> Unit = {},
     unsubscribeOnClick: () -> Unit = {},
     onGroupClick: (groupId: String) -> Unit = {},
     onAddNewGroup: () -> Unit = {},
@@ -68,6 +69,7 @@ fun ResultView(
             showUnsubscribe = showUnsubscribe,
             allowNotificationPresetOnClick = allowNotificationPresetOnClick,
             parseFullContentPresetOnClick = parseFullContentPresetOnClick,
+            clearArticlesOnClick = clearArticlesOnClick,
             unsubscribeOnClick = unsubscribeOnClick,
         )
         Spacer(modifier = Modifier.height(26.dp))
@@ -114,6 +116,7 @@ private fun Preset(
     showUnsubscribe: Boolean = false,
     allowNotificationPresetOnClick: () -> Unit = {},
     parseFullContentPresetOnClick: () -> Unit = {},
+    clearArticlesOnClick: () -> Unit = {},
     unsubscribeOnClick: () -> Unit = {},
 ) {
     Subtitle(text = stringResource(R.string.preset))
@@ -157,6 +160,13 @@ private fun Preset(
             },
         ) {
             parseFullContentPresetOnClick()
+        }
+        SelectionChip(
+            modifier = Modifier.animateContentSize(),
+            content = stringResource(R.string.clear_articles),
+            selected = false,
+        ) {
+            clearArticlesOnClick()
         }
         if (showUnsubscribe) {
             SelectionChip(

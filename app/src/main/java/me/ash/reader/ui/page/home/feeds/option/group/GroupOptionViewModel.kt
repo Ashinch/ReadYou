@@ -50,6 +50,10 @@ class GroupOptionViewModel @Inject constructor(
             is GroupOptionViewAction.HideDeleteDialog -> changeDeleteDialogVisible(false)
             is GroupOptionViewAction.Delete -> delete(action.callback)
 
+            is GroupOptionViewAction.ShowClearDialog -> showClearDialog()
+            is GroupOptionViewAction.HideClearDialog -> hideClearDialog()
+            is GroupOptionViewAction.Clear -> clear(action.callback)
+
             is GroupOptionViewAction.ShowAllAllowNotificationDialog ->
                 changeAllAllowNotificationDialogVisible(true)
             is GroupOptionViewAction.HideAllAllowNotificationDialog ->
@@ -157,6 +161,33 @@ class GroupOptionViewModel @Inject constructor(
         }
     }
 
+    private fun showClearDialog() {
+        _viewState.update {
+            it.copy(
+                clearDialogVisible = true,
+            )
+        }
+    }
+
+    private fun hideClearDialog() {
+        _viewState.update {
+            it.copy(
+                clearDialogVisible = false,
+            )
+        }
+    }
+
+    private fun clear(callback: () -> Unit = {}) {
+        _viewState.value.group?.let {
+            viewModelScope.launch(Dispatchers.IO) {
+                rssRepository.get().deleteArticles(group = it)
+                withContext(Dispatchers.Main) {
+                    callback()
+                }
+            }
+        }
+    }
+
     private fun allMoveToGroup(callback: () -> Unit) {
         _viewState.value.group?.let { group ->
             _viewState.value.targetGroup?.let { targetGroup ->
@@ -224,6 +255,7 @@ data class GroupOptionViewState(
     val allParseFullContentDialogVisible: Boolean = false,
     val allMoveToGroupDialogVisible: Boolean = false,
     val deleteDialogVisible: Boolean = false,
+    val clearDialogVisible: Boolean = false,
     val newName: String = "",
     val renameDialogVisible: Boolean = false,
 )
@@ -244,6 +276,13 @@ sealed class GroupOptionViewAction {
 
     object ShowDeleteDialog : GroupOptionViewAction()
     object HideDeleteDialog : GroupOptionViewAction()
+
+    data class Clear(
+        val callback: () -> Unit = {}
+    ) : GroupOptionViewAction()
+
+    object ShowClearDialog : GroupOptionViewAction()
+    object HideClearDialog : GroupOptionViewAction()
 
     data class AllParseFullContent(
         val isFullContent: Boolean,

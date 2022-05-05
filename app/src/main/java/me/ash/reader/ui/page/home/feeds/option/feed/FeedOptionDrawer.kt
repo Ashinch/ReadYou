@@ -89,6 +89,9 @@ fun FeedOptionDrawer(
                     parseFullContentPresetOnClick = {
                         feedOptionViewModel.dispatch(FeedOptionViewAction.ChangeParseFullContentPreset)
                     },
+                    clearArticlesOnClick = {
+                        feedOptionViewModel.dispatch(FeedOptionViewAction.ShowClearDialog)
+                    },
                     unsubscribeOnClick = {
                         feedOptionViewModel.dispatch(FeedOptionViewAction.ShowDeleteDialog)
                     },
@@ -109,6 +112,8 @@ fun FeedOptionDrawer(
     }
 
     DeleteFeedDialog(feedName = feed?.name ?: "")
+
+    ClearFeedDialog(feedName = feed?.name ?: "")
 
     TextFieldDialog(
         visible = viewState.newGroupDialogVisible,

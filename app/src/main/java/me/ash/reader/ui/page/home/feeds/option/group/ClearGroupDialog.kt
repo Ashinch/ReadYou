@@ -1,4 +1,4 @@
-package me.ash.reader.ui.page.home.feeds.option.feed
+package me.ash.reader.ui.page.home.feeds.option.group
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DeleteForever
@@ -19,52 +19,52 @@ import me.ash.reader.ui.ext.showToast
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun DeleteFeedDialog(
+fun ClearGroupDialog(
     modifier: Modifier = Modifier,
-    feedName: String,
-    viewModel: FeedOptionViewModel = hiltViewModel(),
+    groupName: String,
+    viewModel: GroupOptionViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val viewState = viewModel.viewState.collectAsStateValue()
     val scope = rememberCoroutineScope()
-    val toastString = stringResource(R.string.delete_toast, feedName)
+    val toastString = stringResource(R.string.clear_articles_in_group_toast, groupName)
 
     Dialog(
-        visible = viewState.deleteDialogVisible,
+        visible = viewState.clearDialogVisible,
         onDismissRequest = {
-            viewModel.dispatch(FeedOptionViewAction.HideDeleteDialog)
+            viewModel.dispatch(GroupOptionViewAction.HideClearDialog)
         },
         icon = {
             Icon(
                 imageVector = Icons.Outlined.DeleteForever,
-                contentDescription = stringResource(R.string.unsubscribe),
+                contentDescription = stringResource(R.string.clear_articles),
             )
         },
         title = {
-            Text(text = stringResource(R.string.unsubscribe))
+            Text(text = stringResource(R.string.clear_articles))
         },
         text = {
-            Text(text = stringResource(R.string.unsubscribe_tips, feedName))
+            Text(text = stringResource(R.string.clear_articles_group_tips, groupName))
         },
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(FeedOptionViewAction.Delete {
-                        viewModel.dispatch(FeedOptionViewAction.HideDeleteDialog)
-                        viewModel.dispatch(FeedOptionViewAction.Hide(scope))
+                    viewModel.dispatch(GroupOptionViewAction.Clear {
+                        viewModel.dispatch(GroupOptionViewAction.HideClearDialog)
+                        viewModel.dispatch(GroupOptionViewAction.Hide(scope))
                         context.showToast(toastString)
                     })
                 }
             ) {
                 Text(
-                    text = stringResource(R.string.unsubscribe),
+                    text = stringResource(R.string.clear),
                 )
             }
         },
         dismissButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(FeedOptionViewAction.HideDeleteDialog)
+                    viewModel.dispatch(GroupOptionViewAction.HideClearDialog)
                 }
             ) {
                 Text(

@@ -45,7 +45,7 @@ fun AllAllowNotificationDialog(
             Text(text = stringResource(R.string.allow_notification))
         },
         text = {
-            Text(text = stringResource(R.string.all_allow_notification_tip, groupName))
+            Text(text = stringResource(R.string.all_allow_notification_tips, groupName))
         },
         confirmButton = {
             TextButton(
