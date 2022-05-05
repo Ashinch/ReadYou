@@ -4,7 +4,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
 import me.ash.reader.data.preference.LocalThemeIndex
 import me.ash.reader.ui.theme.palette.LocalTonalPalettes
 import me.ash.reader.ui.theme.palette.TonalPalettes
@@ -12,8 +11,6 @@ import me.ash.reader.ui.theme.palette.core.ProvideZcamViewingConditions
 import me.ash.reader.ui.theme.palette.dynamic.extractTonalPalettesFromUserWallpaper
 import me.ash.reader.ui.theme.palette.dynamicDarkColorScheme
 import me.ash.reader.ui.theme.palette.dynamicLightColorScheme
-
-val LocalUseDarkTheme = compositionLocalOf { false }
 
 @Composable
 fun AppTheme(
@@ -38,7 +35,6 @@ fun AppTheme(
     ProvideZcamViewingConditions {
         CompositionLocalProvider(
             LocalTonalPalettes provides tonalPalettes.also { it.Preheating() },
-            LocalUseDarkTheme provides useDarkTheme,
         ) {
             MaterialTheme(
                 colorScheme =

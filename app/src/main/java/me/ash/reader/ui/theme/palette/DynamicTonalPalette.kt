@@ -6,7 +6,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import me.ash.reader.ui.theme.LocalUseDarkTheme
+import me.ash.reader.data.preference.LocalDarkTheme
 
 @Composable
 fun dynamicLightColorScheme(): ColorScheme {
@@ -68,20 +68,18 @@ fun dynamicDarkColorScheme(): ColorScheme {
     )
 }
 
-@Suppress("NOTHING_TO_INLINE")
 @Composable
-inline infix fun Color.onLight(lightColor: Color): Color =
-    if (!LocalUseDarkTheme.current) lightColor else this
+infix fun Color.onLight(lightColor: Color): Color =
+    if (!LocalDarkTheme.current.isDarkTheme()) lightColor else this
 
-@Suppress("NOTHING_TO_INLINE")
 @Composable
-inline infix fun Color.onDark(darkColor: Color): Color =
-    if (LocalUseDarkTheme.current) darkColor else this
+infix fun Color.onDark(darkColor: Color): Color =
+    if (LocalDarkTheme.current.isDarkTheme()) darkColor else this
 
 @Composable
 infix fun Color.alwaysLight(isAlways: Boolean): Color {
     val colorScheme = MaterialTheme.colorScheme
-    return if (isAlways && LocalUseDarkTheme.current) {
+    return if (isAlways && LocalDarkTheme.current.isDarkTheme()) {
         when (this) {
             colorScheme.primary -> colorScheme.onPrimary
             colorScheme.secondary -> colorScheme.onSecondary
