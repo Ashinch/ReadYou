@@ -145,14 +145,21 @@ abstract class AbstractRssRepository constructor(
     }
 
     suspend fun deleteGroup(group: Group) {
-        articleDao.deleteByGroupId(context.currentAccountId, group.id)
+        deleteArticles(group = group)
         feedDao.deleteByGroupId(context.currentAccountId, group.id)
         groupDao.delete(group)
     }
 
     suspend fun deleteFeed(feed: Feed) {
-        articleDao.deleteByFeedId(context.currentAccountId, feed.id)
+        deleteArticles(feed = feed)
         feedDao.delete(feed)
+    }
+
+    suspend fun deleteArticles(group: Group? = null, feed: Feed? = null) {
+        when {
+            group != null -> articleDao.deleteByGroupId(context.currentAccountId, group.id)
+            feed != null -> articleDao.deleteByFeedId(context.currentAccountId, feed.id)
+        }
     }
 
     suspend fun groupParseFullContent(group: Group, isFullContent: Boolean) {

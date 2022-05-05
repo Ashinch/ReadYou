@@ -44,7 +44,7 @@ fun DeleteGroupDialog(
             Text(text = stringResource(R.string.delete_group))
         },
         text = {
-            Text(text = stringResource(R.string.delete_group_tip, groupName))
+            Text(text = stringResource(R.string.delete_group_tips, groupName))
         },
         confirmButton = {
             TextButton(

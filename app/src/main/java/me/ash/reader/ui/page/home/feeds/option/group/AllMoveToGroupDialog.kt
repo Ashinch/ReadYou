@@ -47,7 +47,7 @@ fun AllMoveToGroupDialog(
         text = {
             Text(
                 text = stringResource(
-                    R.string.all_move_to_group_tip,
+                    R.string.all_move_to_group_tips,
                     groupName,
                     viewState.targetGroup?.name ?: "",
                 )

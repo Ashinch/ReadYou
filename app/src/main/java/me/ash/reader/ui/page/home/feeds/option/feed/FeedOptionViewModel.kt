@@ -54,6 +54,9 @@ class FeedOptionViewModel @Inject constructor(
             is FeedOptionViewAction.ShowDeleteDialog -> showDeleteDialog()
             is FeedOptionViewAction.HideDeleteDialog -> hideDeleteDialog()
             is FeedOptionViewAction.Delete -> delete(action.callback)
+            is FeedOptionViewAction.ShowClearDialog -> showClearDialog()
+            is FeedOptionViewAction.HideClearDialog -> hideClearDialog()
+            is FeedOptionViewAction.Clear -> clear(action.callback)
             is FeedOptionViewAction.AddNewGroup -> addNewGroup()
             is FeedOptionViewAction.ShowNewGroupDialog -> changeNewGroupDialogVisible(true)
             is FeedOptionViewAction.HideNewGroupDialog -> changeNewGroupDialogVisible(false)
@@ -183,6 +186,33 @@ class FeedOptionViewModel @Inject constructor(
         }
     }
 
+    private fun showClearDialog() {
+        _viewState.update {
+            it.copy(
+                clearDialogVisible = true,
+            )
+        }
+    }
+
+    private fun hideClearDialog() {
+        _viewState.update {
+            it.copy(
+                clearDialogVisible = false,
+            )
+        }
+    }
+
+    private fun clear(callback: () -> Unit = {}) {
+        _viewState.value.feed?.let {
+            viewModelScope.launch(Dispatchers.IO) {
+                rssRepository.get().deleteArticles(feed = it)
+                withContext(Dispatchers.Main) {
+                    callback()
+                }
+            }
+        }
+    }
+
     private fun rename() {
         _viewState.value.feed?.let {
             viewModelScope.launch {
@@ -261,6 +291,7 @@ data class FeedOptionViewState(
     val newGroupDialogVisible: Boolean = false,
     val groups: List<Group> = emptyList(),
     val deleteDialogVisible: Boolean = false,
+    val clearDialogVisible: Boolean = false,
     val newName: String = "",
     val renameDialogVisible: Boolean = false,
     val newUrl: String = "",
@@ -294,6 +325,13 @@ sealed class FeedOptionViewAction {
 
     object ShowDeleteDialog : FeedOptionViewAction()
     object HideDeleteDialog : FeedOptionViewAction()
+
+    data class Clear(
+        val callback: () -> Unit = {}
+    ) : FeedOptionViewAction()
+
+    object ShowClearDialog : FeedOptionViewAction()
+    object HideClearDialog : FeedOptionViewAction()
 
     object ShowNewGroupDialog : FeedOptionViewAction()
     object HideNewGroupDialog : FeedOptionViewAction()

@@ -253,8 +253,8 @@ fun FeedsPage(
 //                    }
                 }
                 item {
-                    Spacer(modifier = Modifier.height(64.dp))
-                    Spacer(modifier = Modifier.height(64.dp))
+                    Spacer(modifier = Modifier.height(128.dp))
+                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }
         },
