@@ -13,8 +13,8 @@ import coil.compose.AsyncImage
 import coil.imageLoader
 import coil.request.ImageRequest
 import com.caverock.androidsvg.SVG
+import me.ash.reader.data.preference.LocalDarkTheme
 import me.ash.reader.ui.svg.parseDynamicColor
-import me.ash.reader.ui.theme.LocalUseDarkTheme
 import me.ash.reader.ui.theme.palette.LocalTonalPalettes
 
 @Composable
@@ -24,10 +24,10 @@ fun DynamicSVGImage(
     contentDescription: String,
 ) {
     val context = LocalContext.current
-    val useDarkTheme = LocalUseDarkTheme.current
+    val useDarkTheme = LocalDarkTheme.current.isDarkTheme()
     val tonalPalettes = LocalTonalPalettes.current
     var size by remember { mutableStateOf(IntSize.Zero) }
-    val pic by remember(tonalPalettes, size) {
+    val pic by remember(useDarkTheme, tonalPalettes, size) {
         mutableStateOf(
             PictureDrawable(
                 SVG.getFromString(svgImageString.parseDynamicColor(tonalPalettes, useDarkTheme))

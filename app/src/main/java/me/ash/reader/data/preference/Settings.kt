@@ -14,6 +14,8 @@ import me.ash.reader.ui.ext.dataStore
 data class Settings(
     val themeIndex: Int = ThemeIndexPreference.default,
     val customPrimaryColor: String = CustomPrimaryColorPreference.default,
+    val darkTheme: DarkThemePreference = DarkThemePreference.default,
+    val amoledDarkTheme: AmoledDarkThemePreference = AmoledDarkThemePreference.default,
 
     val feedsFilterBarStyle: FeedsFilterBarStylePreference = FeedsFilterBarStylePreference.default,
     val feedsFilterBarFilled: FeedsFilterBarFilledPreference = FeedsFilterBarFilledPreference.default,
@@ -41,6 +43,8 @@ fun Preferences.toSettings(): Settings {
     return Settings(
         themeIndex = ThemeIndexPreference.fromPreferences(this),
         customPrimaryColor = CustomPrimaryColorPreference.fromPreferences(this),
+        darkTheme = DarkThemePreference.fromPreferences(this),
+        amoledDarkTheme = AmoledDarkThemePreference.fromPreferences(this),
 
         feedsFilterBarStyle = FeedsFilterBarStylePreference.fromPreferences(this),
         feedsFilterBarFilled = FeedsFilterBarFilledPreference.fromPreferences(this),
@@ -60,7 +64,9 @@ fun Preferences.toSettings(): Settings {
         flowArticleListImage = FlowArticleListImagePreference.fromPreferences(this),
         flowArticleListDesc = FlowArticleListDescPreference.fromPreferences(this),
         flowArticleListTime = FlowArticleListTimePreference.fromPreferences(this),
-        flowArticleListDateStickyHeader = FlowArticleListDateStickyHeaderPreference.fromPreferences(this),
+        flowArticleListDateStickyHeader = FlowArticleListDateStickyHeaderPreference.fromPreferences(
+            this
+        ),
         flowArticleListTonalElevation = FlowArticleListTonalElevationPreference.fromPreferences(this),
     )
 }
@@ -80,6 +86,8 @@ fun SettingsProvider(
     CompositionLocalProvider(
         LocalThemeIndex provides settings.themeIndex,
         LocalCustomPrimaryColor provides settings.customPrimaryColor,
+        LocalDarkTheme provides settings.darkTheme,
+        LocalAmoledDarkTheme provides settings.amoledDarkTheme,
 
         LocalFeedsTopBarTonalElevation provides settings.feedsTopBarTonalElevation,
         LocalFeedsGroupListExpand provides settings.feedsGroupListExpand,
@@ -110,6 +118,10 @@ val LocalThemeIndex =
     compositionLocalOf { ThemeIndexPreference.default }
 val LocalCustomPrimaryColor =
     compositionLocalOf { CustomPrimaryColorPreference.default }
+val LocalDarkTheme =
+    compositionLocalOf<DarkThemePreference> { DarkThemePreference.default }
+val LocalAmoledDarkTheme =
+    compositionLocalOf<AmoledDarkThemePreference> { AmoledDarkThemePreference.default }
 
 val LocalFeedsFilterBarStyle =
     compositionLocalOf<FeedsFilterBarStylePreference> { FeedsFilterBarStylePreference.default }

@@ -14,6 +14,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import me.ash.reader.data.entity.Filter
+import me.ash.reader.data.preference.LocalDarkTheme
 import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
@@ -22,13 +23,13 @@ import me.ash.reader.ui.page.home.flow.FlowPage
 import me.ash.reader.ui.page.home.read.ReadPage
 import me.ash.reader.ui.page.settings.SettingsPage
 import me.ash.reader.ui.page.settings.color.ColorAndStyle
+import me.ash.reader.ui.page.settings.color.DarkTheme
 import me.ash.reader.ui.page.settings.color.feeds.FeedsPageStyle
 import me.ash.reader.ui.page.settings.color.flow.FlowPageStyle
 import me.ash.reader.ui.page.settings.interaction.Interaction
 import me.ash.reader.ui.page.settings.tips.TipsAndSupport
 import me.ash.reader.ui.page.startup.StartupPage
 import me.ash.reader.ui.theme.AppTheme
-import me.ash.reader.ui.theme.LocalUseDarkTheme
 
 @OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
@@ -86,8 +87,9 @@ fun HomeEntry(
         }
     }
 
-    AppTheme {
-        val useDarkTheme = LocalUseDarkTheme.current
+    val useDarkTheme = LocalDarkTheme.current.isDarkTheme()
+
+    AppTheme(useDarkTheme = useDarkTheme) {
 
         rememberSystemUiController().run {
             setStatusBarColor(Color.Transparent, !useDarkTheme)
@@ -128,6 +130,9 @@ fun HomeEntry(
             // Color & Style
             animatedComposable(route = RouteName.COLOR_AND_STYLE) {
                 ColorAndStyle(navController)
+            }
+            animatedComposable(route = RouteName.DARK_THEME) {
+                DarkTheme(navController)
             }
             animatedComposable(route = RouteName.FEEDS_PAGE_STYLE) {
                 FeedsPageStyle(navController)

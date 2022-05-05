@@ -26,16 +26,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.data.preference.CustomPrimaryColorPreference
-import me.ash.reader.data.preference.LocalCustomPrimaryColor
-import me.ash.reader.data.preference.LocalThemeIndex
-import me.ash.reader.data.preference.ThemeIndexPreference
+import me.ash.reader.data.preference.*
 import me.ash.reader.ui.component.*
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.svg.PALETTE
 import me.ash.reader.ui.svg.SVGString
-import me.ash.reader.ui.theme.LocalUseDarkTheme
 import me.ash.reader.ui.theme.palette.*
 import me.ash.reader.ui.theme.palette.TonalPalettes.Companion.toTonalPalettes
 import me.ash.reader.ui.theme.palette.dynamic.extractTonalPalettesFromUserWallpaper
@@ -47,9 +43,11 @@ fun ColorAndStyle(
     navController: NavHostController,
 ) {
     val context = LocalContext.current
-    val useDarkTheme = LocalUseDarkTheme.current
+    val darkTheme = LocalDarkTheme.current
+    val darkThemeNot = !darkTheme
     val themeIndex = LocalThemeIndex.current
     val customPrimaryColor = LocalCustomPrimaryColor.current
+    val scope = rememberCoroutineScope()
 
     val wallpaperTonalPalettes = extractTonalPalettesFromUserWallpaper()
     var radioButtonSelected by remember { mutableStateOf(if (themeIndex > 4) 0 else 1) }
@@ -151,12 +149,19 @@ fun ColorAndStyle(
                     )
                     SettingItem(
                         title = stringResource(R.string.dark_theme),
-                        desc = stringResource(R.string.use_device_theme),
-                        enable = false,
+                        desc = darkTheme.getDesc(context),
                         separatedActions = true,
-                        onClick = {},
+                        onClick = {
+                            navController.navigate(RouteName.DARK_THEME) {
+                                launchSingleTop = true
+                            }
+                        },
                     ) {
-                        Switch(activated = useDarkTheme, enable = false)
+                        Switch(
+                            activated = darkTheme.isDarkTheme()
+                        ) {
+                            darkThemeNot.put(context, scope)
+                        }
                     }
                     SettingItem(
                         title = stringResource(R.string.basic_fonts),

@@ -130,6 +130,16 @@ sealed class DataStoreKeys<T> {
             get() = stringPreferencesKey("customPrimaryColor")
     }
 
+    object DarkTheme : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("darkTheme")
+    }
+
+    object AmoledDarkTheme : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("amoledDarkTheme")
+    }
+
     object FeedsFilterBarStyle : DataStoreKeys<Int>() {
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("feedsFilterBarStyle")
