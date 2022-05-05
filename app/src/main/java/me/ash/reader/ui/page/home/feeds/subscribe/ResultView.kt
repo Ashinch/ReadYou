@@ -161,14 +161,14 @@ private fun Preset(
         ) {
             parseFullContentPresetOnClick()
         }
-        SelectionChip(
-            modifier = Modifier.animateContentSize(),
-            content = stringResource(R.string.clear_articles),
-            selected = false,
-        ) {
-            clearArticlesOnClick()
-        }
         if (showUnsubscribe) {
+            SelectionChip(
+                modifier = Modifier.animateContentSize(),
+                content = stringResource(R.string.clear_articles),
+                selected = false,
+            ) {
+                clearArticlesOnClick()
+            }
             SelectionChip(
                 modifier = Modifier.animateContentSize(),
                 content = stringResource(R.string.unsubscribe),
