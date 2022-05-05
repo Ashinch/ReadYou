@@ -81,10 +81,10 @@ fun DarkTheme(
                     }
                     Subtitle(
                         modifier = Modifier.padding(horizontal = 24.dp),
-                        text = "其他",
+                        text = stringResource(R.string.other),
                     )
                     SettingItem(
-                        title = "Amoled 的深色主题",
+                        title = stringResource(R.string.amoled_dark_theme),
                         onClick = {
                             (!amoledDarkTheme).put(context, scope)
                         },

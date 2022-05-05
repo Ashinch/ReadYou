@@ -2,7 +2,6 @@ package me.ash.reader.ui.page.home.read
 
 import android.util.Log
 import androidx.compose.animation.*
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -77,7 +76,7 @@ fun ReadPage(
     }
 
     Scaffold(
-        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+        containerColor = MaterialTheme.colorScheme.surface,
         topBar = {},
         content = {
             Box(Modifier.fillMaxSize()) {

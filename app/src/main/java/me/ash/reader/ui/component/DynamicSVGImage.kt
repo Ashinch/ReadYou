@@ -27,7 +27,7 @@ fun DynamicSVGImage(
     val useDarkTheme = LocalDarkTheme.current.isDarkTheme()
     val tonalPalettes = LocalTonalPalettes.current
     var size by remember { mutableStateOf(IntSize.Zero) }
-    val pic by remember(tonalPalettes, size) {
+    val pic by remember(useDarkTheme, tonalPalettes, size) {
         mutableStateOf(
             PictureDrawable(
                 SVG.getFromString(svgImageString.parseDynamicColor(tonalPalettes, useDarkTheme))

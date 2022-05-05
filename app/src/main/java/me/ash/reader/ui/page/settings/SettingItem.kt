@@ -19,6 +19,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import me.ash.reader.ui.theme.palette.LocalTonalPalettes
+import me.ash.reader.ui.theme.palette.onDark
 
 @Composable
 fun SettingItem(
@@ -31,6 +33,8 @@ fun SettingItem(
     onClick: () -> Unit,
     action: (@Composable () -> Unit)? = null
 ) {
+    val tonalPalettes = LocalTonalPalettes.current
+
     Surface(
         modifier = modifier
             .clickable { onClick() }
@@ -71,7 +75,8 @@ fun SettingItem(
                     Divider(
                         modifier = Modifier
                             .padding(start = 16.dp)
-                            .size(1.dp, 32.dp)
+                            .size(1.dp, 32.dp),
+                        color = tonalPalettes neutralVariant 80 onDark (tonalPalettes neutralVariant 30),
                     )
                 }
                 Box(Modifier.padding(start = 16.dp)) {

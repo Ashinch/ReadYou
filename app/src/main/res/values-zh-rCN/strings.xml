@@ -102,6 +102,10 @@
     <string name="style">样式</string>
     <string name="dark_theme">深色主题</string>
     <string name="use_device_theme">跟随系统设置</string>
+    <string name="on">开启</string>
+    <string name="off">关闭</string>
+    <string name="amoled_dark_theme">Amoled 深色主题</string>
+    <string name="other">其他</string>
     <string name="tonal_elevation">色调海拔</string>
     <string name="fonts">字体</string>
     <string name="basic_fonts">基本字体</string>

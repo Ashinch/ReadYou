@@ -6,6 +6,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import me.ash.reader.data.preference.LocalAmoledDarkTheme
 import me.ash.reader.data.preference.LocalDarkTheme
 
 @Composable
@@ -41,6 +42,8 @@ fun dynamicLightColorScheme(): ColorScheme {
 @Composable
 fun dynamicDarkColorScheme(): ColorScheme {
     val palettes = LocalTonalPalettes.current
+    val amoledDarkTheme = LocalAmoledDarkTheme.current
+
     return darkColorScheme(
         primary = palettes primary 80,
         onPrimary = palettes primary 20,
@@ -57,7 +60,7 @@ fun dynamicDarkColorScheme(): ColorScheme {
         onTertiaryContainer = palettes tertiary 90,
         background = palettes neutral 10,
         onBackground = palettes neutral 90,
-        surface = palettes neutral 10,
+        surface = palettes neutral if (amoledDarkTheme.value) 0 else 10,
         onSurface = palettes neutral 90,
         surfaceVariant = palettes neutralVariant 30,
         onSurfaceVariant = palettes neutralVariant 80,
