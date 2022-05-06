@@ -1,6 +1,5 @@
 package me.ash.reader.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -14,7 +13,7 @@ import me.ash.reader.ui.theme.palette.dynamicLightColorScheme
 
 @Composable
 fun AppTheme(
-    useDarkTheme: Boolean = isSystemInDarkTheme(),
+    useDarkTheme: Boolean,
     wallpaperPalettes: List<TonalPalettes> = extractTonalPalettesFromUserWallpaper(),
     content: @Composable () -> Unit
 ) {
@@ -34,7 +33,7 @@ fun AppTheme(
 
     ProvideZcamViewingConditions {
         CompositionLocalProvider(
-            LocalTonalPalettes provides tonalPalettes.also { it.Preheating() },
+            LocalTonalPalettes provides tonalPalettes.apply { Preheating() },
         ) {
             MaterialTheme(
                 colorScheme =

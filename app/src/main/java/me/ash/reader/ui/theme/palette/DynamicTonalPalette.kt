@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import me.ash.reader.data.preference.LocalAmoledDarkTheme
 import me.ash.reader.data.preference.LocalDarkTheme
@@ -127,6 +128,7 @@ fun String.checkColorHex(): String? {
     return "[0-9a-fA-F]{6}".toRegex().find(s)?.value
 }
 
+@Stable
 fun String.safeHexToColor(): Color =
     try {
         Color(java.lang.Long.parseLong(this, 16))

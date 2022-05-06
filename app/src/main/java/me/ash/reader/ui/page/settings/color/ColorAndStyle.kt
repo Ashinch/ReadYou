@@ -204,7 +204,6 @@ fun ColorAndStyle(
     )
 }
 
-@SuppressLint("FlowOperatorInvokedInComposition")
 @Composable
 fun Palettes(
     modifier: Modifier = Modifier,
