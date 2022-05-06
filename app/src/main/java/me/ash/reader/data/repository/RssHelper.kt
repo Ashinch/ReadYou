@@ -3,6 +3,9 @@ package me.ash.reader.data.repository
 import android.content.Context
 import android.text.Html
 import android.util.Log
+import com.rometools.rome.feed.synd.SyndFeed
+import com.rometools.rome.io.SyndFeedInput
+import com.rometools.rome.io.XmlReader
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -11,13 +14,13 @@ import me.ash.reader.data.entity.Article
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.entity.FeedWithArticle
 import me.ash.reader.data.module.DispatcherIO
-import me.ash.reader.data.source.RssNetworkDataSource
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.spacerDollar
 import net.dankito.readability4j.Readability4J
 import net.dankito.readability4j.extended.Readability4JExtended
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.net.URL
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,7 +29,6 @@ import javax.inject.Inject
 class RssHelper @Inject constructor(
     @ApplicationContext
     private val context: Context,
-    private val rssNetworkDataSource: RssNetworkDataSource,
     @DispatcherIO
     private val dispatcherIO: CoroutineDispatcher,
 ) {
@@ -34,7 +36,7 @@ class RssHelper @Inject constructor(
     suspend fun searchFeed(feedLink: String): FeedWithArticle {
         return withContext(dispatcherIO) {
             val accountId = context.currentAccountId
-            val parseRss = rssNetworkDataSource.parseRss(feedLink)
+            val parseRss: SyndFeed = SyndFeedInput().build(XmlReader(URL(feedLink)))
             val feed = Feed(
                 id = accountId.spacerDollar(UUID.randomUUID().toString()),
                 name = parseRss.title!!,
@@ -83,28 +85,34 @@ class RssHelper @Inject constructor(
         return withContext(dispatcherIO) {
             val a = mutableListOf<Article>()
             val accountId = context.currentAccountId
-            val parseRss = rssNetworkDataSource.parseRss(feed.url)
-            parseRss.items.forEach {
+            val parseRss: SyndFeed = SyndFeedInput().build(XmlReader(URL(feed.url)))
+            parseRss.entries.forEach {
                 if (latestLink != null && latestLink == it.link) return@withContext a
-                Log.i("RLog", "request rss:\n${feed.name},${feed.url}\n${it.title}\n${it.link}\n")
+                val desc = it.description?.value
+                val content = it.contents?.mapNotNull { it.value }?.joinToString("\n")
+                Log.i(
+                    "RLog",
+                    "request rss:\n" +
+                            "name: ${feed.name}\n" +
+                            "url: ${feed.url}\n" +
+                            "title: ${it.title}\n" +
+                            "desc: ${it.description?.value}\n" +
+                            "content: ${content}\n"
+                )
                 a.add(
                     Article(
                         id = accountId.spacerDollar(UUID.randomUUID().toString()),
                         accountId = accountId,
                         feedId = feed.id,
-                        date = (it.publishDate ?: it.lastUpdated).toString().let {
-                            try {
-                                Date(it)
-                            } catch (e: IllegalArgumentException) {
-                                parseDate(it) ?: Date()
-                            }
-                        },
+                        date = it.publishedDate ?: it.updatedDate ?: Date(),
                         title = Html.fromHtml(it.title.toString()).toString(),
-                        author = it.author?.name,
-                        rawDescription = it.description ?: it.summary ?: "",
-                        shortDescription =
-                        (Readability4JExtended("", it.description ?: it.summary ?: "")
-                            .parse().textContent ?: "").take(100).trim(),
+                        author = it.author,
+                        rawDescription = (desc ?: content) ?: "",
+                        shortDescription = (Readability4JExtended("", desc ?: content ?: "")
+                            .parse().textContent ?: "")
+                            .take(100)
+                            .trim(),
+                        fullContent = content,
                         link = it.link ?: "",
                     )
                 )

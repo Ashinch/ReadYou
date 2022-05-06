@@ -46,11 +46,13 @@ fun Header(
         )
         Spacer(modifier = Modifier.height(4.dp))
         articleWithFeed.article.author?.let {
-            Text(
-                text = articleWithFeed.article.author,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
-                style = MaterialTheme.typography.labelMedium,
-            )
+            if (it.isNotEmpty()) {
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                    style = MaterialTheme.typography.labelMedium,
+                )
+            }
         }
         Text(
             text = articleWithFeed.feed.name,

@@ -12,7 +12,7 @@ buildscript {
         profileinstaller = '1.2.0-alpha02'
         retrofit2 = '2.9.0'
         coil = '2.0.0-rc03'
-        parseRSS = '0.6.0'
+        rome = '1.18.0'
         readability4j = '1.0.8'
         opmlParser = '2.2.0'
         androidSVG = '1.4'

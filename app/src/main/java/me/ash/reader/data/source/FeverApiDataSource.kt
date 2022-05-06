@@ -1,9 +1,7 @@
 package me.ash.reader.data.source
 
-import com.github.muhrifqii.parserss.ParseRSS
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.xmlpull.v1.XmlPullParserFactory
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -48,7 +46,6 @@ interface FeverApiDataSource {
 
         fun getInstance(): FeverApiDataSource {
             return instance ?: synchronized(this) {
-                ParseRSS.init(XmlPullParserFactory.newInstance())
                 instance ?: Retrofit.Builder()
                     .baseUrl("http://10.0.2.2/api/")
                     .addConverterFactory(GsonConverterFactory.create())

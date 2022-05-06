@@ -28,7 +28,6 @@ import me.ash.reader.data.entity.Group
 import me.ash.reader.data.module.DispatcherDefault
 import me.ash.reader.data.module.DispatcherIO
 import me.ash.reader.data.repository.SyncWorker.Companion.setIsSyncing
-import me.ash.reader.data.source.RssNetworkDataSource
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.spacerDollar
 import me.ash.reader.ui.page.common.ExtraName
@@ -42,7 +41,6 @@ class LocalRssRepository @Inject constructor(
     private val articleDao: ArticleDao,
     private val feedDao: FeedDao,
     private val rssHelper: RssHelper,
-    private val rssNetworkDataSource: RssNetworkDataSource,
     private val accountDao: AccountDao,
     private val groupDao: GroupDao,
     @DispatcherDefault
@@ -52,8 +50,7 @@ class LocalRssRepository @Inject constructor(
     workManager: WorkManager,
 ) : AbstractRssRepository(
     context, accountDao, articleDao, groupDao,
-    feedDao, rssNetworkDataSource, workManager,
-    dispatcherIO
+    feedDao, workManager, dispatcherIO
 ) {
     private val notificationManager: NotificationManagerCompat =
         NotificationManagerCompat.from(context).apply {

@@ -127,6 +127,7 @@ fun WebView(
         update = {
             it.apply {
                 Log.i("RLog", "CustomWebView: ${content}")
+                settings.javaScriptEnabled = true
                 loadDataWithBaseURL(
                     null,
                     getStyle(color) + content,
@@ -158,10 +159,9 @@ fun getStyle(argb: Int): String = """
     padding: 0 24px;
 }
 
-img, video {
+img, video, iframe {
     margin: 0 -24px 20px;
     width: calc(100% + 48px);
-    height: auto;
     border-top: 1px solid ${argbToCssColor(argb)}08;
     border-bottom: 1px solid ${argbToCssColor(argb)}08;
 }

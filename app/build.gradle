@@ -85,9 +85,8 @@ dependencies {
     // https://github.com/dankito/Readability4J
     implementation "net.dankito.readability4j:readability4j:$readability4j"
 
-    // https://github.com/muhrifqii/ParseRSS/releases
-    implementation "com.github.muhrifqii.ParseRSS:parserss:$parseRSS"
-    implementation "com.github.muhrifqii.ParseRSS:retrofit:$parseRSS"
+    // https://mvnrepository.com/artifact/com.rometools/rome
+    implementation "com.rometools:rome:$rome"
 
     // https://coil-kt.github.io/coil/changelog/
     implementation("io.coil-kt:coil-compose:$coil")

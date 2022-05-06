@@ -121,7 +121,7 @@ fun ArticleItem(
                     overflow = TextOverflow.Ellipsis,
                 )
                 // Description
-                if (articleListDesc.value) {
+                if (articleListDesc.value && articleWithFeed.article.shortDescription.isNotBlank()) {
                     Text(
                         text = articleWithFeed.article.shortDescription,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
