@@ -8,6 +8,7 @@
     <string name="starred_desc">%1$d 项已加星标</string>
     <string name="feeds">分组</string>
     <string name="syncing">正在同步…</string>
+    <string name="loading">加载中…</string>
     <string name="expand_less">收缩</string>
     <string name="expand_more">展开</string>
     <string name="confirm">确认</string>

@@ -6,10 +6,7 @@ import android.net.http.SslError
 import android.util.Log
 import android.webkit.*
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -122,11 +119,12 @@ fun WebView(
 //    }
 
     AndroidView(
-        modifier = modifier,
+        modifier = modifier,//.padding(horizontal = if (content.contains("class=\"page\"")) 0.dp else 24.dp),
         factory = { webView },
         update = {
             it.apply {
                 Log.i("RLog", "CustomWebView: ${content}")
+                settings.javaScriptEnabled = true
                 loadDataWithBaseURL(
                     null,
                     getStyle(color) + content,
@@ -138,10 +136,12 @@ fun WebView(
     )
 }
 
+@Stable
 fun argbToCssColor(argb: Int): String = String.format("#%06X", 0xFFFFFF and argb)
 
+@Stable
 fun getStyle(argb: Int): String = """
-<head><style>
+<html><head><style>
 *{
     padding: 0;
     margin: 0;
@@ -154,14 +154,13 @@ fun getStyle(argb: Int): String = """
         url('/android_asset_font/font/google_sans_text_bold.TTF');
 }
 
-.page {
+html {
     padding: 0 24px;
 }
 
-img, video {
+img, video, iframe {
     margin: 0 -24px 20px;
     width: calc(100% + 48px);
-    height: auto;
     border-top: 1px solid ${argbToCssColor(argb)}08;
     border-bottom: 1px solid ${argbToCssColor(argb)}08;
 }
@@ -213,5 +212,5 @@ h1,h2,h3,h4,h5,h6,figure,br {
 }
 
 .element::-webkit-scrollbar { width: 0 !important }
-</style></head>
+</style></head></html>
 """

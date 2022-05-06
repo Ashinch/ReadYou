@@ -54,10 +54,8 @@ class ReadViewModel @Inject constructor(
     private fun renderDescriptionContent() {
         _viewState.update {
             it.copy(
-                content = rssHelper.parseDescriptionContent(
-                    link = it.articleWithFeed?.article?.link ?: "",
-                    content = it.articleWithFeed?.article?.rawDescription ?: "",
-                )
+                content = it.articleWithFeed?.article?.fullContent
+                    ?: it.articleWithFeed?.article?.rawDescription ?: "",
             )
         }
     }

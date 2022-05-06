@@ -14,7 +14,6 @@ import me.ash.reader.data.repository.*
 import me.ash.reader.data.source.AppNetworkDataSource
 import me.ash.reader.data.source.OpmlLocalDataSource
 import me.ash.reader.data.source.ReaderDatabase
-import me.ash.reader.data.source.RssNetworkDataSource
 import me.ash.reader.ui.ext.*
 import javax.inject.Inject
 
@@ -34,9 +33,6 @@ class App : Application(), Configuration.Provider {
 
     @Inject
     lateinit var opmlLocalDataSource: OpmlLocalDataSource
-
-    @Inject
-    lateinit var rssNetworkDataSource: RssNetworkDataSource
 
     @Inject
     lateinit var rssHelper: RssHelper

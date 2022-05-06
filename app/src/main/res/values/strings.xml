@@ -8,6 +8,7 @@
     <string name="starred_desc">%1$d Starred Items</string>
     <string name="feeds">Feeds</string>
     <string name="syncing">Syncing…</string>
+    <string name="loading">Loading…</string>
     <string name="expand_less">Expand Less</string>
     <string name="expand_more">Expand More</string>
     <string name="confirm">Confirm</string>

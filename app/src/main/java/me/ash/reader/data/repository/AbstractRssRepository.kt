@@ -15,7 +15,6 @@ import me.ash.reader.data.dao.ArticleDao
 import me.ash.reader.data.dao.FeedDao
 import me.ash.reader.data.dao.GroupDao
 import me.ash.reader.data.entity.*
-import me.ash.reader.data.source.RssNetworkDataSource
 import me.ash.reader.ui.ext.currentAccountId
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -26,7 +25,6 @@ abstract class AbstractRssRepository constructor(
     private val articleDao: ArticleDao,
     private val groupDao: GroupDao,
     private val feedDao: FeedDao,
-    private val rssNetworkDataSource: RssNetworkDataSource,
     private val workManager: WorkManager,
     private val dispatcherIO: CoroutineDispatcher,
 ) {

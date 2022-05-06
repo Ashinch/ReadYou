@@ -7,7 +7,6 @@ import dagger.hilt.components.SingletonComponent
 import me.ash.reader.data.source.AppNetworkDataSource
 import me.ash.reader.data.source.FeverApiDataSource
 import me.ash.reader.data.source.GoogleReaderApiDataSource
-import me.ash.reader.data.source.RssNetworkDataSource
 import javax.inject.Singleton
 
 @Module
@@ -18,11 +17,6 @@ object RetrofitModule {
     @Singleton
     fun provideAppNetworkDataSource(): AppNetworkDataSource =
         AppNetworkDataSource.getInstance()
-
-    @Provides
-    @Singleton
-    fun provideRssNetworkDataSource(): RssNetworkDataSource =
-        RssNetworkDataSource.getInstance()
 
     @Provides
     @Singleton

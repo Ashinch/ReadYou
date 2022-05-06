@@ -1,7 +1,5 @@
 package me.ash.reader.data.source
 
-import com.github.muhrifqii.parserss.ParseRSS
-import org.xmlpull.v1.XmlPullParserFactory
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -33,7 +31,6 @@ interface GoogleReaderApiDataSource {
 
         fun getInstance(): GoogleReaderApiDataSource {
             return instance ?: synchronized(this) {
-                ParseRSS.init(XmlPullParserFactory.newInstance())
                 instance ?: Retrofit.Builder()
                     .baseUrl("http://10.0.2.2/api/greader.php/")
                     .addConverterFactory(GsonConverterFactory.create())
