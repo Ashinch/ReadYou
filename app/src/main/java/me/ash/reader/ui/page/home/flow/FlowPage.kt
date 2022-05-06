@@ -273,6 +273,7 @@ fun FlowPage(
                         if (pagingItems.loadState.source.refresh is LoadState.NotLoading && pagingItems.itemCount != 0) {
                             Spacer(modifier = Modifier.height(64.dp))
                         }
+                        Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                     }
                 }
             }

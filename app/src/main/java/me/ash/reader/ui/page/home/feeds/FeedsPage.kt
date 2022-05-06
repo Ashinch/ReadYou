@@ -190,7 +190,7 @@ fun FeedsPage(
                 item {
                     Banner(
                         title = filterState.filter.getName(),
-                        desc = feedsViewState.importantCount,
+                        desc = feedsViewState.importantCount.ifEmpty { stringResource(R.string.loading) },
                         icon = filterState.filter.iconOutline,
                         action = {
                             Icon(

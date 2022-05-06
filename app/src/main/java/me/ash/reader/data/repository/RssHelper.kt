@@ -89,14 +89,16 @@ class RssHelper @Inject constructor(
             parseRss.entries.forEach {
                 if (latestLink != null && latestLink == it.link) return@withContext a
                 val desc = it.description?.value
-                val content = it.contents?.mapNotNull { it.value }?.joinToString("\n")
+                val content = it.contents
+                    .takeIf { it.isNotEmpty() }
+                    ?.let { it.joinToString("\n") { it.value } }
                 Log.i(
                     "RLog",
                     "request rss:\n" +
                             "name: ${feed.name}\n" +
                             "url: ${feed.url}\n" +
                             "title: ${it.title}\n" +
-                            "desc: ${it.description?.value}\n" +
+                            "desc: ${desc}\n" +
                             "content: ${content}\n"
                 )
                 a.add(
