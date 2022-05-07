@@ -216,7 +216,7 @@ data class TonalPalettes(
         @Composable
         @Stable
         fun Context.getSystemTonalPalettes(): TonalPalettes {
-            val tonalPalettes = LocalTonalPalettes.current
+            val tonalPalettes = TonalPalettes(238.36, 15.0)
             tonalTokens.forEach {
                 tonalPalettes.primary[it] = tonalPalettes.primarySystem(this, it)
             }
