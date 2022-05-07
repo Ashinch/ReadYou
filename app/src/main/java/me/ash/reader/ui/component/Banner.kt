@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.ash.reader.ui.theme.palette.alwaysLight
@@ -43,7 +44,7 @@ fun Banner(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(88.dp),
+            .height(if (!desc.isNullOrBlank()) 88.dp else Dp.Unspecified),
         color = Color.Unspecified,
     ) {
         Row(

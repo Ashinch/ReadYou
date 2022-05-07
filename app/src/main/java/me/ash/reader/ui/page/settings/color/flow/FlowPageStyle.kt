@@ -153,7 +153,7 @@ fun FlowPageStyle(
                         text = stringResource(R.string.article_list)
                     )
                     SettingItem(
-                        title = stringResource(R.string.display_feed_favicon),
+                        title = stringResource(R.string.feed_favicons),
                         onClick = {
                             (!articleListFeedIcon).put(context, scope)
                         },
@@ -163,7 +163,7 @@ fun FlowPageStyle(
                         }
                     }
                     SettingItem(
-                        title = stringResource(R.string.display_feed_name),
+                        title = stringResource(R.string.feed_names),
                         onClick = {
                             (!articleListFeedName).put(context, scope)
                         },
@@ -173,14 +173,14 @@ fun FlowPageStyle(
                         }
                     }
                     SettingItem(
-                        title = stringResource(R.string.display_article_image),
+                        title = stringResource(R.string.article_images),
                         enable = false,
                         onClick = {},
                     ) {
                         Switch(activated = false, enable = false)
                     }
                     SettingItem(
-                        title = stringResource(R.string.display_article_desc),
+                        title = stringResource(R.string.article_desc),
                         onClick = {
                             (!articleListDesc).put(context, scope)
                         },
@@ -190,7 +190,7 @@ fun FlowPageStyle(
                         }
                     }
                     SettingItem(
-                        title = stringResource(R.string.display_article_date),
+                        title = stringResource(R.string.article_date),
                         onClick = {
                             (!articleListTime).put(context, scope)
                         },

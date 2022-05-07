@@ -21,6 +21,9 @@ object RouteName {
     // Interaction
     const val INTERACTION = "interaction"
 
+    // Languages
+    const val LANGUAGES = "languages"
+
     // Tips & Support
     const val TIPS_AND_SUPPORT = "tips_and_support"
 }

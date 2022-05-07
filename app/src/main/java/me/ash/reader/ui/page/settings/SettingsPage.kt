@@ -143,8 +143,11 @@ fun SettingsPage(
                         title = stringResource(R.string.languages),
                         desc = stringResource(R.string.languages_desc),
                         icon = Icons.Outlined.Language,
-                        enable = false,
-                    ) {}
+                    ) {
+                        navController.navigate(RouteName.LANGUAGES) {
+                            launchSingleTop = true
+                        }
+                    }
                 }
                 item {
                     SelectableSettingGroupItem(
@@ -156,6 +159,7 @@ fun SettingsPage(
                             launchSingleTop = true
                         }
                     }
+                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }
         }

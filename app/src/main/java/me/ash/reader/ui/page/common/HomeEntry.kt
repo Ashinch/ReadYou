@@ -27,6 +27,7 @@ import me.ash.reader.ui.page.settings.color.DarkTheme
 import me.ash.reader.ui.page.settings.color.feeds.FeedsPageStyle
 import me.ash.reader.ui.page.settings.color.flow.FlowPageStyle
 import me.ash.reader.ui.page.settings.interaction.Interaction
+import me.ash.reader.ui.page.settings.languages.Languages
 import me.ash.reader.ui.page.settings.tips.TipsAndSupport
 import me.ash.reader.ui.page.startup.StartupPage
 import me.ash.reader.ui.theme.AppTheme
@@ -144,6 +145,11 @@ fun HomeEntry(
             // Interaction
             animatedComposable(route = RouteName.INTERACTION) {
                 Interaction(navController)
+            }
+
+            // Languages
+            animatedComposable(route = RouteName.LANGUAGES) {
+                Languages(navController = navController)
             }
 
             // Tips & Support

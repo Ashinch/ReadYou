@@ -18,7 +18,9 @@ import coil.memory.MemoryCache
 import coil.request.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CompletableDeferred
+import me.ash.reader.data.preference.LanguagesPreference
 import me.ash.reader.data.preference.SettingsProvider
+import me.ash.reader.ui.ext.languages
 import me.ash.reader.ui.page.common.HomeEntry
 
 @AndroidEntryPoint
@@ -28,6 +30,13 @@ class MainActivity : ComponentActivity(), ImageLoader {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         Log.i("RLog", "onCreate: ${ProfileInstallerInitializer().create(this)}")
+
+        // Set the language
+        LanguagesPreference.fromValue(languages).let {
+            if (it == LanguagesPreference.UseDeviceLanguages) return@let
+            it.setLocale(this)
+        }
+
         setContent {
             SettingsProvider {
                 HomeEntry()
