@@ -77,15 +77,15 @@ class App : Application(), Configuration.Provider {
         }
     }
 
+    private fun dataStoreInit() {
+    }
+
     private suspend fun accountInit() {
         if (accountRepository.isNoAccount()) {
             val account = accountRepository.addDefaultAccount()
             applicationContext.dataStore.put(DataStoreKeys.CurrentAccountId, account.id!!)
             applicationContext.dataStore.put(DataStoreKeys.CurrentAccountType, account.type)
         }
-    }
-
-    private fun dataStoreInit() {
     }
 
     private fun workerInit() {

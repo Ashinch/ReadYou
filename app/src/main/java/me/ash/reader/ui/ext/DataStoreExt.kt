@@ -39,6 +39,9 @@ val Context.initialPage: Int
 val Context.initialFilter: Int
     get() = this.dataStore.get(DataStoreKeys.InitialFilter) ?: 2
 
+val Context.languages: Int
+    get() = this.dataStore.get(DataStoreKeys.Languages) ?: 0
+
 suspend fun <T> DataStore<Preferences>.put(dataStoreKeys: DataStoreKeys<T>, value: T) {
     this.edit {
         withContext(Dispatchers.IO) {
@@ -243,5 +246,10 @@ sealed class DataStoreKeys<T> {
     object InitialFilter : DataStoreKeys<Int>() {
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("initialFilter")
+    }
+
+    object Languages : DataStoreKeys<Int>() {
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("languages")
     }
 }

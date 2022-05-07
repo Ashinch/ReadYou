@@ -1,5 +1,4 @@
 <resources>
-    <string name="read_you">Read You</string>
     <string name="all">全部</string>
     <string name="all_desc">%1$d 项已归档</string>
     <string name="unread">未读</string>
@@ -90,7 +89,9 @@
     <string name="interaction">交互</string>
     <string name="interaction_desc">启动时、触感反馈</string>
     <string name="languages">语言</string>
-    <string name="languages_desc">英语、中文</string>
+    <string name="languages_desc">English、简体中文</string>
+    <string name="use_device_languages">跟随系统设置</string>
+    <string name="help_translate">帮助我们翻译</string>
     <string name="tips_and_support">提示和支持</string>
     <string name="tips_and_support_desc">关于、开源</string>
     <string name="welcome">欢迎</string>
@@ -120,8 +121,6 @@
     <string name="reading_page">阅读页面</string>
     <string name="sponsor">捐赠</string>
     <string name="open_source_licenses">开放源代码许可</string>
-    <string name="github_link">https://github.com/Ashinch/ReadYou</string>
-    <string name="telegram_link">https://t.me/ReadYouApp</string>
     <string name="update_link">https://gitee.com/api/v5/repos/Ashinch/ReadYou/releases/latest</string>
     <string name="change_log">更新日志</string>
     <string name="update">更新</string>
@@ -140,11 +139,11 @@
     <string name="preview_feed_name">漩涡书院</string>
     <string name="value">值</string>
     <string name="padding_on_both_ends">两端边距</string>
-    <string name="display_article_date">显示文章发布时间</string>
-    <string name="display_article_desc">显示文章描述</string>
-    <string name="display_article_image">显示文章插图</string>
-    <string name="display_feed_name">显示订阅源名称</string>
-    <string name="display_feed_favicon">显示订阅源图标</string>
+    <string name="article_date">文章发布时间</string>
+    <string name="article_desc">文章描述</string>
+    <string name="article_images">文章插图</string>
+    <string name="feed_names">订阅源名称</string>
+    <string name="feed_favicons">订阅源图标</string>
     <string name="article_date_sticky_header">文章发布日期粘性标签（实验性）</string>
     <string name="article_list">文章列表</string>
     <string name="group_list">分组列表</string>
