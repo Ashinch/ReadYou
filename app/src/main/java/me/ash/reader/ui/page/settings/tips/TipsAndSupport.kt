@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.ui.component.CurlyCornerShape
 import me.ash.reader.ui.component.FeedbackIconButton
@@ -118,26 +117,24 @@ fun TipsAndSupport(
                                 onTap = {
                                     if (System.currentTimeMillis() - clickTime > 2000) {
                                         clickTime = System.currentTimeMillis()
-                                        context.showToast(context.getString(R.string.checking_updates))
-                                        scope.launch {
-                                            updateViewModel.dispatch(
-                                                UpdateViewAction.CheckUpdate(
-                                                    {
-                                                        context.dataStore.put(
-                                                            DataStoreKeys.SkipVersionNumber,
-                                                            ""
+                                        updateViewModel.dispatch(
+                                            UpdateViewAction.CheckUpdate(
+                                                {
+                                                    context.showToast(context.getString(R.string.checking_updates))
+                                                    context.dataStore.put(
+                                                        DataStoreKeys.SkipVersionNumber,
+                                                        ""
+                                                    )
+                                                },
+                                                {
+                                                    if (!it) {
+                                                        context.showToast(
+                                                            context.getString(R.string.is_latest_version)
                                                         )
-                                                    },
-                                                    {
-                                                        if (!it) {
-                                                            context.showToast(
-                                                                context.getString(R.string.is_latest_version)
-                                                            )
-                                                        }
                                                     }
-                                                )
+                                                }
                                             )
-                                        }
+                                        )
                                     } else {
                                         clickTime = System.currentTimeMillis()
                                     }

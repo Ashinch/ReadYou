@@ -29,6 +29,16 @@ android {
             useSupportLibrary true
         }
     }
+
+    flavorDimensions "channel"
+    productFlavors {
+        fdroid {
+            dimension "channel"
+        }
+        github {
+            dimension "channel"
+        }
+    }
     signingConfigs {
         release {
             keyAlias keyProps["keyAlias"]

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import me.ash.reader.BuildConfig
 import me.ash.reader.data.repository.AppRepository
 import me.ash.reader.data.source.Download
 import javax.inject.Inject
@@ -32,12 +33,14 @@ class UpdateViewModel @Inject constructor(
         preProcessor: suspend () -> Unit = {},
         postProcessor: suspend (Boolean) -> Unit = {}
     ) {
-        viewModelScope.launch {
-            preProcessor()
-            appRepository.checkUpdate().let {
-                it?.let {
-                    changeUpdateDialogVisible(it)
-                    postProcessor(it)
+        if (BuildConfig.FLAVOR != "fdroid") {
+            viewModelScope.launch {
+                preProcessor()
+                appRepository.checkUpdate().let {
+                    it?.let {
+                        changeUpdateDialogVisible(it)
+                        postProcessor(it)
+                    }
                 }
             }
         }
