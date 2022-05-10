@@ -73,7 +73,9 @@ class App : Application(), Configuration.Provider {
         applicationScope.launch(dispatcherDefault) {
             accountInit()
             workerInit()
-            checkUpdate()
+            if (BuildConfig.FLAVOR != "fdroid") {
+                checkUpdate()
+            }
         }
     }
 
