@@ -91,11 +91,12 @@
     <string name="interaction">Interaction</string>
     <string name="interaction_desc">On start, haptic feedback</string>
     <string name="languages">Languages</string>
-    <string name="languages_desc">English, 简体中文</string>
+    <string name="languages_desc">English, 简体中文, Deutsch</string>
     <string name="help_translate">Help us translate</string>
-    <string name="use_device_languages">Use Device Languages</string>
+    <string name="use_device_languages">Use Device Language</string>
     <string name="english" translatable="false">English</string>
     <string name="chinese_simplified" translatable="false">简体中文</string>
+    <string name="german" translatable="false">Deutsch</string>
     <string name="tips_and_support">Tips &amp; support</string>
     <string name="tips_and_support_desc">About, open source</string>
     <string name="welcome">Welcome</string>
