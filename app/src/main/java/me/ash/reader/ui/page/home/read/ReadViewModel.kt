@@ -1,7 +1,7 @@
 package me.ash.reader.ui.page.home.read
 
 import android.util.Log
-import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.ScrollState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,7 +31,6 @@ class ReadViewModel @Inject constructor(
             is ReadViewAction.RenderFullContent -> renderFullContent()
             is ReadViewAction.MarkUnread -> markUnread(action.isUnread)
             is ReadViewAction.MarkStarred -> markStarred(action.isStarred)
-            is ReadViewAction.ScrollToItem -> scrollToItem(action.index)
             is ReadViewAction.ClearArticle -> clearArticle()
             is ReadViewAction.ChangeLoading -> changeLoading(action.isLoading)
         }
@@ -130,12 +129,6 @@ class ReadViewModel @Inject constructor(
         }
     }
 
-    private fun scrollToItem(index: Int) {
-        viewModelScope.launch {
-            _viewState.value.listState.scrollToItem(index)
-        }
-    }
-
     private fun clearArticle() {
         _viewState.update {
             it.copy(articleWithFeed = null)
@@ -153,7 +146,7 @@ data class ReadViewState(
     val articleWithFeed: ArticleWithFeed? = null,
     val content: String? = null,
     val isLoading: Boolean = true,
-    val listState: LazyListState = LazyListState(),
+    val scrollState: ScrollState = ScrollState(0),
 )
 
 sealed class ReadViewAction {
@@ -171,10 +164,6 @@ sealed class ReadViewAction {
 
     data class MarkStarred(
         val isStarred: Boolean,
-    ) : ReadViewAction()
-
-    data class ScrollToItem(
-        val index: Int
     ) : ReadViewAction()
 
     object ClearArticle : ReadViewAction()
