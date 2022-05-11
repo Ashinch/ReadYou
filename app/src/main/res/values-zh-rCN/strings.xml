@@ -1,10 +1,16 @@
 <resources>
     <string name="all">全部</string>
-    <string name="all_desc">%1$d 项已归档</string>
+    <plurals name="all_desc">
+        <item quantity="other">%1$d 项已归档</item>
+    </plurals>
     <string name="unread">未读</string>
-    <string name="unread_desc">%1$d 项未读</string>
+    <plurals name="unread_desc">
+        <item quantity="other">%1$d 项未读</item>
+    </plurals>
     <string name="starred">已加星标</string>
-    <string name="starred_desc">%1$d 项已加星标</string>
+    <plurals name="starred_desc">
+        <item quantity="other">%1$d 项已加星标</item>
+    </plurals>
     <string name="feeds">分组</string>
     <string name="syncing">正在同步…</string>
     <string name="loading">加载中…</string>

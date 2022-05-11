@@ -107,9 +107,9 @@ class FeedsViewModel @Inject constructor(
                 it.copy(
                     importantCount = groupWithFeedList.sumOf { it.group.important ?: 0 }.run {
                         when {
-                            isStarred -> stringsRepository.getString(R.string.starred_desc, this)
-                            isUnread -> stringsRepository.getString(R.string.unread_desc, this)
-                            else -> stringsRepository.getString(R.string.all_desc, this)
+                            isStarred -> stringsRepository.getQuantityString(R.plurals.starred_desc, this, this)
+                            isUnread -> stringsRepository.getQuantityString(R.plurals.unread_desc, this, this)
+                            else -> stringsRepository.getQuantityString(R.plurals.all_desc, this, this)
                         }
                     },
                     groupWithFeedList = groupWithFeedList,

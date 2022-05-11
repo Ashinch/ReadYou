@@ -1,11 +1,20 @@
 <resources>
     <string name="read_you" translatable="false">Read You</string>
     <string name="all">All</string>
-    <string name="all_desc">%1$d Archived Items</string>
+    <plurals name="all_desc">
+        <item quantity="one">%1$d Archived Item</item>
+        <item quantity="other">%1$d Archived Items</item>
+    </plurals>
     <string name="unread">Unread</string>
-    <string name="unread_desc"> %1$d Unread Items</string>
+    <plurals name="unread_desc">
+        <item quantity="one">%1$d Unread Item</item>
+        <item quantity="other">%1$d Unread Items</item>
+    </plurals>
     <string name="starred">Starred</string>
-    <string name="starred_desc">%1$d Starred Items</string>
+    <plurals name="starred_desc">
+        <item quantity="one">%1$d Starred Item</item>
+        <item quantity="other">%1$d Starred Items</item>
+    </plurals>
     <string name="feeds">Feeds</string>
     <string name="syncing">Syncing…</string>
     <string name="loading">Loading…</string>
