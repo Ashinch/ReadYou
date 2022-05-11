@@ -2,10 +2,10 @@ package me.ash.reader.ui.page.home.read
 
 import android.util.Log
 import androidx.compose.animation.*
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Headphones
 import androidx.compose.material.icons.outlined.MoreVert
@@ -25,6 +25,7 @@ import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.ui.component.FeedbackIconButton
 import me.ash.reader.ui.component.WebView
 import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.drawVerticalScrollbar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,21 +44,14 @@ fun ReadPage(
         }
     }
 
-    if (viewState.listState.isScrollInProgress) {
+    if (viewState.scrollState.isScrollInProgress) {
         LaunchedEffect(Unit) {
             Log.i("RLog", "scroll: start")
         }
 
-        val preItemIndex by remember { mutableStateOf(viewState.listState.firstVisibleItemIndex) }
-        val preScrollStartOffset by remember { mutableStateOf(viewState.listState.firstVisibleItemScrollOffset) }
-        val currentItemIndex = viewState.listState.firstVisibleItemIndex
-        val currentScrollStartOffset = viewState.listState.firstVisibleItemScrollOffset
-
-        isScrollDown = when {
-            currentItemIndex > preItemIndex -> true
-            currentItemIndex < preItemIndex -> false
-            else -> currentScrollStartOffset > preScrollStartOffset
-        }
+        val preScrollOffset by remember { mutableStateOf(viewState.scrollState.value) }
+        val currentOffset = viewState.scrollState.value
+        isScrollDown = currentOffset > preScrollOffset
 
         DisposableEffect(Unit) {
             onDispose {
@@ -98,7 +92,7 @@ fun ReadPage(
                     content = viewState.content ?: "",
                     articleWithFeed = viewState.articleWithFeed,
                     viewState = viewState,
-                    LazyListState = viewState.listState,
+                    scrollState = viewState.scrollState,
                 )
                 Box(
                     modifier = Modifier
@@ -182,10 +176,14 @@ private fun Content(
     content: String,
     articleWithFeed: ArticleWithFeed?,
     viewState: ReadViewState,
-    LazyListState: LazyListState = rememberLazyListState(),
+    scrollState: ScrollState = rememberScrollState(),
 ) {
     Column(
-        modifier = Modifier.statusBarsPadding(),
+        modifier = Modifier
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .drawVerticalScrollbar(scrollState)
+            .verticalScroll(scrollState),
     ) {
         if (articleWithFeed == null) {
             Spacer(modifier = Modifier.height(64.dp))
@@ -196,54 +194,44 @@ private fun Content(
 //                url = "https://assets8.lottiefiles.com/packages/lf20_jm7mv1ib.json",
 //            )
         } else {
-            LazyColumn(
-                state = LazyListState,
-            ) {
-                item {
-                    Spacer(modifier = Modifier.height(64.dp))
+            Column {
+                Spacer(modifier = Modifier.height(64.dp))
+                Spacer(modifier = Modifier.height(2.dp))
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp)
+                ) {
+                    Header(articleWithFeed)
                 }
-                item {
-                    Spacer(modifier = Modifier.height(2.dp))
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 12.dp)
+                Spacer(modifier = Modifier.height(22.dp))
+                AnimatedVisibility(
+                    visible = viewState.isLoading,
+                    enter = fadeIn() + expandVertically(),
+                    exit = fadeOut() + shrinkVertically(),
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
                     ) {
-                        Header(articleWithFeed)
-                    }
-                }
-                item {
-                    Spacer(modifier = Modifier.height(22.dp))
-                    AnimatedVisibility(
-                        visible = viewState.isLoading,
-                        enter = fadeIn() + expandVertically(),
-                        exit = fadeOut() + shrinkVertically(),
-                    ) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Column {
-                                Spacer(modifier = Modifier.height(22.dp))
-                                CircularProgressIndicator(
-                                    modifier = Modifier
-                                        .size(30.dp),
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                )
-                                Spacer(modifier = Modifier.height(22.dp))
-                            }
+                        Column {
+                            Spacer(modifier = Modifier.height(22.dp))
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .size(30.dp),
+                                color = MaterialTheme.colorScheme.onSurface,
+                            )
+                            Spacer(modifier = Modifier.height(22.dp))
                         }
                     }
-                    if (!viewState.isLoading) {
-                        WebView(
-                            content = content
-                        )
-                        Spacer(modifier = Modifier.height(50.dp))
-                    }
                 }
-                item {
-                    Spacer(modifier = Modifier.height(64.dp))
-                    Spacer(modifier = Modifier.height(64.dp))
+                if (!viewState.isLoading) {
+                    WebView(
+                        content = content
+                    )
+                    Spacer(modifier = Modifier.height(50.dp))
                 }
+                Spacer(modifier = Modifier.height(64.dp))
+                Spacer(modifier = Modifier.height(64.dp))
             }
         }
     }
