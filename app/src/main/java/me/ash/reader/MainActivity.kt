@@ -3,6 +3,7 @@ package me.ash.reader
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -12,6 +13,8 @@ import androidx.profileinstaller.ProfileInstallerInitializer
 import coil.ComponentRegistry
 import coil.ImageLoader
 import coil.decode.DataSource
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import coil.decode.SvgDecoder
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
@@ -45,7 +48,16 @@ class MainActivity : ComponentActivity(), ImageLoader {
     }
 
     override val components: ComponentRegistry
-        get() = ComponentRegistry.Builder().add(SvgDecoder.Factory()).build()
+        get() = ComponentRegistry.Builder()
+            .add(SvgDecoder.Factory())
+            .add(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    ImageDecoderDecoder.Factory()
+                } else {
+                    GifDecoder.Factory()
+                }
+            )
+            .build()
     override val defaults: DefaultRequestOptions
         get() = DefaultRequestOptions()
     override val diskCache: DiskCache
