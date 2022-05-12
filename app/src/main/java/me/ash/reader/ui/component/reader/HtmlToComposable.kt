@@ -487,7 +487,7 @@ private fun TextComposer.appendTextChildren(
                                             Text(
                                                 modifier = Modifier
                                                     .fillMaxWidth()
-                                                    .padding(start = PADDING_HORIZONTAL.dp),
+                                                    .padding(horizontal = PADDING_HORIZONTAL.dp),
                                                 text = alt,
                                                 style = captionStyle(),
                                             )
@@ -611,9 +611,11 @@ private fun TextComposer.appendTextChildren(
                                         Spacer(modifier = Modifier.height(PADDING_HORIZONTAL.dp / 2))
 
                                         Text(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = PADDING_HORIZONTAL.dp),
                                             text = "点击播放视频",
                                             style = captionStyle(),
-                                            modifier = Modifier.fillMaxWidth()
                                         )
 
                                         Spacer(modifier = Modifier.height(PADDING_HORIZONTAL.dp))

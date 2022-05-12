@@ -1,7 +1,7 @@
 package me.ash.reader.ui.page.home.read
 
 import android.util.Log
-import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -146,7 +146,8 @@ data class ReadViewState(
     val articleWithFeed: ArticleWithFeed? = null,
     val content: String? = null,
     val isLoading: Boolean = true,
-    val scrollState: ScrollState = ScrollState(0),
+//    val scrollState: ScrollState = ScrollState(0),
+    val listState: LazyListState = LazyListState(),
 )
 
 sealed class ReadViewAction {

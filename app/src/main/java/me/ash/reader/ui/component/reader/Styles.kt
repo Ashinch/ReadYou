@@ -25,8 +25,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
+import me.ash.reader.ui.ext.alphaLN
 
 const val PADDING_HORIZONTAL = 24.0
 const val MAX_CONTENT_WIDTH = 840.0
@@ -95,13 +99,13 @@ fun codeBlockStyle(): TextStyle =
     MaterialTheme.typography.titleSmall.merge(
         SpanStyle(
             color = bodyForeground(),
-//            fontFamily = FontFamily.Monospace
+            fontFamily = FontFamily.Monospace
         )
     )
 
 @Composable
 fun codeBlockBackground(): Color =
-    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+    MaterialTheme.colorScheme.secondary.copy(alpha = (0.dp).alphaLN(weight = 3.2f))
 
 @Composable
 fun blockQuoteStyle(): SpanStyle =
@@ -113,8 +117,8 @@ fun blockQuoteStyle(): SpanStyle =
 
 @Composable
 fun codeInlineStyle(): SpanStyle =
-    SpanStyle(
+    MaterialTheme.typography.titleSmall.toSpanStyle().copy(
         color = bodyForeground(),
-        background = codeBlockBackground(),
-//        fontFamily = FontFamily.Monospace
+        fontStyle = FontStyle.Italic,
+        fontFamily = FontFamily.Monospace,
     )

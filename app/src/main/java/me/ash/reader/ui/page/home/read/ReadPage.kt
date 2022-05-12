@@ -2,10 +2,9 @@ package me.ash.reader.ui.page.home.read
 
 import android.util.Log
 import androidx.compose.animation.*
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
@@ -37,7 +36,8 @@ fun ReadPage(
     readViewModel: ReadViewModel = hiltViewModel(),
 ) {
     val viewState = readViewModel.viewState.collectAsStateValue()
-    val isScrollDown = viewState.scrollState.isScrollDown()
+    val isScrollDown = viewState.listState.isScrollDown()
+//    val isScrollDown by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         navController.currentBackStackEntryFlow.collect {
@@ -78,7 +78,7 @@ fun ReadPage(
                     content = viewState.content ?: "",
                     articleWithFeed = viewState.articleWithFeed,
                     isLoading = viewState.isLoading,
-                    scrollState = viewState.scrollState,
+                    listState = viewState.listState,
                 )
                 Box(
                     modifier = Modifier
@@ -108,16 +108,22 @@ fun ReadPage(
 }
 
 @Composable
-fun ScrollState.isScrollDown(): Boolean {
+fun LazyListState.isScrollDown(): Boolean {
     var isScrollDown by remember { mutableStateOf(false) }
-    var preOffset by remember { mutableStateOf(0) }
+    var preItemIndex by remember { mutableStateOf(0) }
+    var preScrollStartOffset by remember { mutableStateOf(0) }
 
     LaunchedEffect(this) {
         snapshotFlow { isScrollInProgress }.collect {
             if (isScrollInProgress) {
-                isScrollDown = value > preOffset
+                isScrollDown = when {
+                    firstVisibleItemIndex > preItemIndex -> true
+                    firstVisibleItemScrollOffset < preItemIndex -> false
+                    else -> firstVisibleItemScrollOffset > preScrollStartOffset
+                }
             } else {
-                preOffset = value
+                preItemIndex = firstVisibleItemIndex
+                preScrollStartOffset = firstVisibleItemScrollOffset
             }
         }
     }
@@ -179,7 +185,7 @@ private fun TopBar(
 private fun Content(
     content: String,
     articleWithFeed: ArticleWithFeed?,
-    scrollState: ScrollState = rememberScrollState(),
+    listState: LazyListState,
     isLoading: Boolean,
 ) {
     if (articleWithFeed == null) return
@@ -191,7 +197,8 @@ private fun Content(
                 .fillMaxSize()
                 .statusBarsPadding()
                 .navigationBarsPadding()
-                .drawVerticalScrollbar(scrollState)
+                .drawVerticalScrollbar(listState),
+            state = listState,
         ) {
             item {
                 Spacer(modifier = Modifier.height(64.dp))
