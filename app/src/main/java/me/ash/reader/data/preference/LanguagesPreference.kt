@@ -16,6 +16,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
     object UseDeviceLanguages : LanguagesPreference(0)
     object English : LanguagesPreference(1)
     object ChineseSimplified : LanguagesPreference(2)
+    object German : LanguagesPreference(3)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
@@ -32,6 +33,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
             UseDeviceLanguages -> context.getString(R.string.use_device_languages)
             English -> context.getString(R.string.english)
             ChineseSimplified -> context.getString(R.string.chinese_simplified)
+            German -> context.getString(R.string.german)
         }
 
     fun getLocale(): Locale =
@@ -39,6 +41,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
             UseDeviceLanguages -> LocaleList.getDefault().get(0)
             English -> Locale("en", "US")
             ChineseSimplified -> Locale("zh", "CN")
+            German -> Locale("de", "DE")
         }
 
     fun setLocale(context: Context) {
@@ -65,13 +68,14 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
 
     companion object {
         val default = UseDeviceLanguages
-        val values = listOf(UseDeviceLanguages, English, ChineseSimplified)
+        val values = listOf(UseDeviceLanguages, English, ChineseSimplified, German)
 
         fun fromPreferences(preferences: Preferences): LanguagesPreference =
             when (preferences[DataStoreKeys.Languages.key]) {
                 0 -> UseDeviceLanguages
                 1 -> English
                 2 -> ChineseSimplified
+                3 -> German
                 else -> default
             }
 
@@ -80,6 +84,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
                 0 -> UseDeviceLanguages
                 1 -> English
                 2 -> ChineseSimplified
+                3 -> German
                 else -> default
             }
     }

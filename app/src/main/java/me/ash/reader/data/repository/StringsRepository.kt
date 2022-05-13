@@ -11,5 +11,6 @@ class StringsRepository @Inject constructor(
     private val context: Context,
 ) {
     fun getString(resId: Int, vararg formatArgs: Any) = context.getString(resId, *formatArgs)
+    fun getQuantityString(resId: Int, quantity: Int, vararg formatArgs: Any) = context.resources.getQuantityString(resId, quantity, *formatArgs)
     fun formatAsString(date: Date?) = date?.formatAsString(context)
 }

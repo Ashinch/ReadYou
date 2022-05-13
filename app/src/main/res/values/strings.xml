@@ -1,11 +1,20 @@
 <resources>
     <string name="read_you" translatable="false">Read You</string>
     <string name="all">All</string>
-    <string name="all_desc">%1$d Archived Items</string>
+    <plurals name="all_desc">
+        <item quantity="one">%1$d Archived Item</item>
+        <item quantity="other">%1$d Archived Items</item>
+    </plurals>
     <string name="unread">Unread</string>
-    <string name="unread_desc"> %1$d Unread Items</string>
+    <plurals name="unread_desc">
+        <item quantity="one">%1$d Unread Item</item>
+        <item quantity="other">%1$d Unread Items</item>
+    </plurals>
     <string name="starred">Starred</string>
-    <string name="starred_desc">%1$d Starred Items</string>
+    <plurals name="starred_desc">
+        <item quantity="one">%1$d Starred Item</item>
+        <item quantity="other">%1$d Starred Items</item>
+    </plurals>
     <string name="feeds">Feeds</string>
     <string name="syncing">Syncing…</string>
     <string name="loading">Loading…</string>
@@ -91,11 +100,12 @@
     <string name="interaction">Interaction</string>
     <string name="interaction_desc">On start, haptic feedback</string>
     <string name="languages">Languages</string>
-    <string name="languages_desc">English, 简体中文</string>
+    <string name="languages_desc">English, 简体中文, Deutsch</string>
     <string name="help_translate">Help us translate</string>
-    <string name="use_device_languages">Use Device Languages</string>
+    <string name="use_device_languages">Use Device Language</string>
     <string name="english" translatable="false">English</string>
     <string name="chinese_simplified" translatable="false">简体中文</string>
+    <string name="german" translatable="false">Deutsch</string>
     <string name="tips_and_support">Tips &amp; support</string>
     <string name="tips_and_support_desc">About, open source</string>
     <string name="welcome">Welcome</string>
