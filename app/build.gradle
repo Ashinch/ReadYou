@@ -101,6 +101,7 @@ dependencies {
     // https://coil-kt.github.io/coil/changelog/
     implementation("io.coil-kt:coil-compose:$coil")
     implementation("io.coil-kt:coil-svg:$coil")
+    implementation("io.coil-kt:coil-gif:$coil")
 
     // https://square.github.io/okhttp/changelogs/changelog/
     implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.6"

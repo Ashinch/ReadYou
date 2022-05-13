@@ -1,20 +1,20 @@
 package me.ash.reader.ui.page.home.read
 
-import android.util.Log
+import android.content.Intent
 import androidx.compose.animation.*
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.text.selection.DisableSelection
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Headphones
-import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -23,7 +23,7 @@ import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.ui.component.FeedbackIconButton
-import me.ash.reader.ui.component.WebView
+import me.ash.reader.ui.component.reader.reader
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.drawVerticalScrollbar
 
@@ -34,7 +34,8 @@ fun ReadPage(
     readViewModel: ReadViewModel = hiltViewModel(),
 ) {
     val viewState = readViewModel.viewState.collectAsStateValue()
-    var isScrollDown by remember { mutableStateOf(false) }
+    val isScrollDown = viewState.listState.isScrollDown()
+//    val isScrollDown by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         navController.currentBackStackEntryFlow.collect {
@@ -44,24 +45,7 @@ fun ReadPage(
         }
     }
 
-    if (viewState.scrollState.isScrollInProgress) {
-        LaunchedEffect(Unit) {
-            Log.i("RLog", "scroll: start")
-        }
-
-        val preScrollOffset by remember { mutableStateOf(viewState.scrollState.value) }
-        val currentOffset = viewState.scrollState.value
-        isScrollDown = currentOffset > preScrollOffset
-
-        DisposableEffect(Unit) {
-            onDispose {
-                Log.i("RLog", "scroll: end")
-            }
-        }
-    }
-
     LaunchedEffect(viewState.articleWithFeed?.article?.id) {
-        isScrollDown = false
         viewState.articleWithFeed?.let {
             if (it.article.isUnread) {
                 readViewModel.dispatch(ReadViewAction.MarkUnread(false))
@@ -82,7 +66,8 @@ fun ReadPage(
                 ) {
                     TopBar(
                         isShow = viewState.articleWithFeed == null || !isScrollDown,
-                        isShowActions = viewState.articleWithFeed != null,
+                        title = viewState.articleWithFeed?.article?.title,
+                        link = viewState.articleWithFeed?.article?.link,
                         onClose = {
                             navController.popBackStack()
                         },
@@ -91,8 +76,8 @@ fun ReadPage(
                 Content(
                     content = viewState.content ?: "",
                     articleWithFeed = viewState.articleWithFeed,
-                    viewState = viewState,
-                    scrollState = viewState.scrollState,
+                    isLoading = viewState.isLoading,
+                    listState = viewState.listState,
                 )
                 Box(
                     modifier = Modifier
@@ -122,11 +107,38 @@ fun ReadPage(
 }
 
 @Composable
+fun LazyListState.isScrollDown(): Boolean {
+    var isScrollDown by remember { mutableStateOf(false) }
+    var preItemIndex by remember { mutableStateOf(0) }
+    var preScrollStartOffset by remember { mutableStateOf(0) }
+
+    LaunchedEffect(this) {
+        snapshotFlow { isScrollInProgress }.collect {
+            if (isScrollInProgress) {
+                isScrollDown = when {
+                    firstVisibleItemIndex > preItemIndex -> true
+                    firstVisibleItemScrollOffset < preItemIndex -> false
+                    else -> firstVisibleItemScrollOffset > preScrollStartOffset
+                }
+            } else {
+                preItemIndex = firstVisibleItemIndex
+                preScrollStartOffset = firstVisibleItemScrollOffset
+            }
+        }
+    }
+
+    return isScrollDown
+}
+
+@Composable
 private fun TopBar(
     isShow: Boolean,
-    isShowActions: Boolean = false,
+    title: String? = "",
+    link: String? = "",
     onClose: () -> Unit = {},
 ) {
+    val context = LocalContext.current
+
     AnimatedVisibility(
         visible = isShow,
         enter = fadeIn() + expandVertically(),
@@ -148,23 +160,19 @@ private fun TopBar(
                 }
             },
             actions = {
-                if (isShowActions) {
-                    FeedbackIconButton(
-                        modifier = Modifier
-                            .size(22.dp)
-                            .alpha(0.5f),
-                        imageVector = Icons.Outlined.Headphones,
-                        contentDescription = stringResource(R.string.mark_all_as_read),
-                        tint = MaterialTheme.colorScheme.onSurface,
-                    ) {
-                    }
-                    FeedbackIconButton(
-                        modifier = Modifier.alpha(0.5f),
-                        imageVector = Icons.Outlined.MoreVert,
-                        contentDescription = stringResource(R.string.search),
-                        tint = MaterialTheme.colorScheme.onSurface,
-                    ) {
-                    }
+                FeedbackIconButton(
+                    modifier = Modifier.size(20.dp),
+                    imageVector = Icons.Outlined.Share,
+                    contentDescription = stringResource(R.string.search),
+                    tint = MaterialTheme.colorScheme.onSurface,
+                ) {
+                    context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            title?.takeIf { it.isNotBlank() }?.let { it + "\n" } + link
+                        )
+                        type = "text/plain"
+                    }, "Share"))
                 }
             }
         )
@@ -175,37 +183,37 @@ private fun TopBar(
 private fun Content(
     content: String,
     articleWithFeed: ArticleWithFeed?,
-    viewState: ReadViewState,
-    scrollState: ScrollState = rememberScrollState(),
+    listState: LazyListState,
+    isLoading: Boolean,
 ) {
-    Column(
-        modifier = Modifier
-            .statusBarsPadding()
-            .navigationBarsPadding()
-            .drawVerticalScrollbar(scrollState)
-            .verticalScroll(scrollState),
-    ) {
-        if (articleWithFeed == null) {
-            Spacer(modifier = Modifier.height(64.dp))
-//            LottieAnimation(
-//                modifier = Modifier
-//                    .alpha(0.7f)
-//                    .padding(80.dp),
-//                url = "https://assets8.lottiefiles.com/packages/lf20_jm7mv1ib.json",
-//            )
-        } else {
-            Column {
+    if (articleWithFeed == null) return
+    val context = LocalContext.current
+
+    SelectionContainer {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .navigationBarsPadding()
+                .drawVerticalScrollbar(listState),
+            state = listState,
+        ) {
+            item {
                 Spacer(modifier = Modifier.height(64.dp))
-                Spacer(modifier = Modifier.height(2.dp))
+                Spacer(modifier = Modifier.height(22.dp))
                 Column(
                     modifier = Modifier
                         .padding(horizontal = 12.dp)
                 ) {
-                    Header(articleWithFeed)
+                    DisableSelection {
+                        Header(articleWithFeed)
+                    }
                 }
+            }
+            item {
                 Spacer(modifier = Modifier.height(22.dp))
                 AnimatedVisibility(
-                    visible = viewState.isLoading,
+                    visible = isLoading,
                     enter = fadeIn() + expandVertically(),
                     exit = fadeOut() + shrinkVertically(),
                 ) {
@@ -224,12 +232,15 @@ private fun Content(
                         }
                     }
                 }
-                if (!viewState.isLoading) {
-                    WebView(
-                        content = content
-                    )
-                    Spacer(modifier = Modifier.height(50.dp))
-                }
+            }
+            if (!isLoading) {
+                reader(
+                    context = context,
+                    link = articleWithFeed.article.link,
+                    content = content
+                )
+            }
+            item {
                 Spacer(modifier = Modifier.height(64.dp))
                 Spacer(modifier = Modifier.height(64.dp))
             }

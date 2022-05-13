@@ -7,11 +7,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntSize
-import coil.compose.AsyncImage
-import coil.imageLoader
-import coil.request.ImageRequest
 import com.caverock.androidsvg.SVG
 import me.ash.reader.data.preference.LocalDarkTheme
 import me.ash.reader.ui.svg.parseDynamicColor
@@ -23,7 +19,6 @@ fun DynamicSVGImage(
     svgImageString: String,
     contentDescription: String,
 ) {
-    val context = LocalContext.current
     val useDarkTheme = LocalDarkTheme.current.isDarkTheme()
     val tonalPalettes = LocalTonalPalettes.current
     var size by remember { mutableStateOf(IntSize.Zero) }
@@ -48,11 +43,9 @@ fun DynamicSVGImage(
         Crossfade(targetState = pic) {
             AsyncImage(
                 contentDescription = contentDescription,
-                model = ImageRequest.Builder(context)
-                    .data(it)
-                    .crossfade(true)
-                    .build(),
-                imageLoader = context.imageLoader,
+                data = it,
+                placeholder = null,
+                error = null,
             )
         }
     }

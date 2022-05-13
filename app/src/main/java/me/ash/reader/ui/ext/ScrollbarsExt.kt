@@ -27,6 +27,7 @@ package me.ash.reader.ui.ext
  */
 
 import android.view.ViewConfiguration
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ScrollState
@@ -88,7 +89,7 @@ fun Modifier.drawHorizontalScrollbar(
 fun Modifier.drawVerticalScrollbar(
     state: LazyListState,
     reverseScrolling: Boolean = false
-): Modifier = drawScrollbar(state, Orientation.Vertical, reverseScrolling)
+): Modifier = drawScrollbar(state, Orientation.Vertical, reverseScrolling).animateContentSize()
 
 private fun Modifier.drawScrollbar(
     state: ScrollState,
