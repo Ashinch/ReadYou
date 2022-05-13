@@ -168,4 +168,6 @@
     <string name="tips_top_bar_tonal_elevation">Das farbliche Hervorheben der oberen Leiste ist nur beim Scrollen verfügbar.</string>
     <string name="tips_article_list_tonal_elevation">Das farbliche Hervorheben der Artikelliste ist nur für das helle Design verfügbar.</string>
     <string name="tips_group_list_tonal_elevation">Das farbliche Hervorheben der Gruppenliste ist nur für das helle Design verfügbar.</string>
+    <string name="share">Aktie</string>
+    <string name="touch_to_play_video">Berühren, um Video abzuspielen</string>
 </resources>

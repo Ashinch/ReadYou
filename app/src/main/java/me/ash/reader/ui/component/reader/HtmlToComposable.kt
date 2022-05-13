@@ -39,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -601,7 +602,7 @@ private fun TextComposer.appendTextChildren(
                                                         .fillMaxWidth(),
                                                     data = video.imageUrl,
                                                     size = maxImageSize(),
-                                                    contentDescription = "点击播放视频",
+                                                    contentDescription = stringResource(R.string.touch_to_play_video),
                                                     precision = Precision.INEXACT,
                                                     contentScale = ContentScale.FillWidth,
                                                 )
@@ -614,7 +615,7 @@ private fun TextComposer.appendTextChildren(
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .padding(horizontal = PADDING_HORIZONTAL.dp),
-                                            text = "点击播放视频",
+                                            text = stringResource(R.string.touch_to_play_video),
                                             style = captionStyle(),
                                         )
 

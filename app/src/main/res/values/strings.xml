@@ -175,4 +175,6 @@
     <string name="tips_top_bar_tonal_elevation">Tone elevation of the top bar is only available when scrolling.</string>
     <string name="tips_article_list_tonal_elevation">Tone elevation of the article list is only available for light theme.</string>
     <string name="tips_group_list_tonal_elevation">Tone elevation of the group list is only available for light theme.</string>
+    <string name="share">Share</string>
+    <string name="touch_to_play_video">Touch to play video</string>
 </resources>

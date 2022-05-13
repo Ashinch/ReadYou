@@ -165,4 +165,6 @@
     <string name="tips_top_bar_tonal_elevation">标题栏的色调海拔仅在滚动时可用。</string>
     <string name="tips_article_list_tonal_elevation">文章列表的色调海拔仅在亮色主题时可用。</string>
     <string name="tips_group_list_tonal_elevation">分组列表的色调海拔仅在亮色主题时可用。</string>
+    <string name="share">分享</string>
+    <string name="touch_to_play_video">轻触播放视频</string>
 </resources>

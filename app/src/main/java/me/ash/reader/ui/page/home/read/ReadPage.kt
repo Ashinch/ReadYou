@@ -163,7 +163,7 @@ private fun TopBar(
                 FeedbackIconButton(
                     modifier = Modifier.size(20.dp),
                     imageVector = Icons.Outlined.Share,
-                    contentDescription = stringResource(R.string.search),
+                    contentDescription = stringResource(R.string.share),
                     tint = MaterialTheme.colorScheme.onSurface,
                 ) {
                     context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
@@ -172,7 +172,7 @@ private fun TopBar(
                             title?.takeIf { it.isNotBlank() }?.let { it + "\n" } + link
                         )
                         type = "text/plain"
-                    }, "Share"))
+                    }, context.getString(R.string.share)))
                 }
             }
         )
