@@ -374,7 +374,7 @@ interface ArticleDao {
     @Query(
         """
         SELECT a.id, a.date, a.title, a.author, a.rawDescription, 
-        a.shortDescription, a.fullContent, a.link, a.feedId, 
+        a.shortDescription, a.fullContent, a.img, a.link, a.feedId, 
         a.accountId, a.isUnread, a.isStarred, a.isReadLater 
         FROM article AS a
         LEFT JOIN feed AS b ON b.id = a.feedId
@@ -394,7 +394,7 @@ interface ArticleDao {
     @Query(
         """
         SELECT a.id, a.date, a.title, a.author, a.rawDescription, 
-        a.shortDescription, a.fullContent, a.link, a.feedId, 
+        a.shortDescription, a.fullContent, a.img, a.link, a.feedId, 
         a.accountId, a.isUnread, a.isStarred, a.isReadLater 
         FROM article AS a
         LEFT JOIN feed AS b ON b.id = a.feedId
@@ -416,7 +416,7 @@ interface ArticleDao {
     @Query(
         """
         SELECT a.id, a.date, a.title, a.author, a.rawDescription, 
-        a.shortDescription, a.fullContent, a.link, a.feedId, 
+        a.shortDescription, a.fullContent, a.img, a.link, a.feedId, 
         a.accountId, a.isUnread, a.isStarred, a.isReadLater 
         FROM article AS a
         LEFT JOIN feed AS b ON b.id = a.feedId
@@ -483,7 +483,7 @@ interface ArticleDao {
     @Query(
         """
         SELECT a.id, a.date, a.title, a.author, a.rawDescription, 
-        a.shortDescription, a.fullContent, a.link, a.feedId, 
+        a.shortDescription, a.fullContent, a.img, a.link, a.feedId, 
         a.accountId, a.isUnread, a.isStarred, a.isReadLater 
         FROM article AS a LEFT JOIN feed AS b 
         ON a.feedId = b.id
@@ -504,16 +504,10 @@ interface ArticleDao {
     suspend fun queryById(id: String): ArticleWithFeed?
 
     @Insert
-    suspend fun insert(article: Article): Long
-
-    @Insert
     suspend fun insertList(articles: List<Article>): List<Long>
 
     @Update
     suspend fun update(vararg article: Article)
-
-    @Delete
-    suspend fun delete(vararg article: Article)
 
     @RewriteQueriesToDropUnusedColumns
     @Transaction
@@ -521,7 +515,7 @@ interface ArticleDao {
         """
         INSERT INTO article
         SELECT :id, :date, :title, :author, :rawDescription, 
-        :shortDescription, :fullContent, :link, :feedId, 
+        :shortDescription, :fullContent, :img, :link, :feedId, 
         :accountId, :isUnread, :isStarred, :isReadLater 
         WHERE NOT EXISTS(SELECT 1 FROM article WHERE link = :link AND accountId = :accountId)
         """
@@ -534,6 +528,7 @@ interface ArticleDao {
         rawDescription: String,
         shortDescription: String,
         fullContent: String? = null,
+        img: String? = null,
         link: String,
         feedId: String,
         accountId: Int,
@@ -552,6 +547,7 @@ interface ArticleDao {
             article.rawDescription,
             article.shortDescription,
             article.fullContent,
+            article.img,
             article.link,
             article.feedId,
             article.accountId,

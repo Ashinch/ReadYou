@@ -29,10 +29,18 @@ import me.ash.reader.data.source.AppNetworkDataSource
 import me.ash.reader.data.source.OpmlLocalDataSource
 import me.ash.reader.data.source.ReaderDatabase
 import me.ash.reader.ui.ext.*
+import org.conscrypt.Conscrypt
+import java.security.Security
 import javax.inject.Inject
 
 @HiltAndroidApp
 class App : Application(), Configuration.Provider, ImageLoader {
+    init {
+        // From: https://gitlab.com/spacecowboy/Feeder
+        // Install Conscrypt to handle TLSv1.3 pre Android10
+        Security.insertProviderAt(Conscrypt.newProvider(), 1)
+    }
+
     @Inject
     lateinit var readerDatabase: ReaderDatabase
 

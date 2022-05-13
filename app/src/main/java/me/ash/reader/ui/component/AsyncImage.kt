@@ -3,6 +3,9 @@ package me.ash.reader.ui.component
 import androidx.annotation.DrawableRes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
@@ -31,6 +34,31 @@ fun AsyncImage(
     @DrawableRes error: Int? = R.drawable.ic_broken_image_black_24dp,
 ) {
     val context = LocalContext.current
+    val color = MaterialTheme.colorScheme.onSurfaceVariant
+    val placeholderPainterResource = placeholder?.run { painterResource(this) }
+    val errorPainterResource = error?.run { painterResource(this) }
+    val placeholderPainter by remember {
+        mutableStateOf(
+            placeholderPainterResource?.run {
+                forwardingPainter(
+                    painter = this,
+                    colorFilter = ColorFilter.tint(color),
+                    alpha = 0.1f,
+                )
+            }
+        )
+    }
+    val errorPainter by remember {
+        mutableStateOf(
+            errorPainterResource?.run {
+                forwardingPainter(
+                    painter = this,
+                    colorFilter = ColorFilter.tint(color),
+                    alpha = 0.1f,
+                )
+            }
+        )
+    }
 
     coil.compose.AsyncImage(
         modifier = modifier,
@@ -45,20 +73,8 @@ fun AsyncImage(
         contentDescription = contentDescription,
         contentScale = contentScale,
         imageLoader = context.imageLoader,
-        placeholder = placeholder?.let {
-            forwardingPainter(
-                painter = painterResource(it),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
-                alpha = 0.5f,
-            )
-        },
-        error = error?.let {
-            forwardingPainter(
-                painter = painterResource(it),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onError),
-                alpha = 0.5f
-            )
-        },
+        placeholder = placeholderPainter,
+        error = errorPainter,
     )
 }
 
