@@ -13,86 +13,47 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="syncing"/>
     <string name="expand_less"/>
-    <string name="confirm"/>
     <string name="allow"/>
-    <string name="defaults"/>
     <string name="back"/>
-    <string name="settings"/>
     <string name="search"/>
-    <string name="subscribe"/>
     <string name="clear"/>
-    <string name="feed_or_site_url"/>
     <string name="preset"/>
-    <string name="allow_notification"/>
     <string name="all_allow_notification_toast"/>
-    <string name="parse_full_content"/>
     <string name="all_parse_full_content_toast"/>
-    <string name="clear_articles"/>
     <string name="clear_articles_in_group_toast"/>
-    <string name="clear_articles_group_tips"/>
     <string name="move_to_group"/>
-    <string name="all_move_to_group_toast"/>
     <string name="change_url"/>
     <string name="feed_url_placeholder" translatable="false">http://example.com/feed.rss</string>
-    <string name="create_new_group"/>
     <string name="open_with"/>
-    <string name="delete"/>
     <string name="unsubscribe"/>
-    <string name="delete_group"/>
     <string name="group_option_tips"/>
-    <string name="yesterday"/>
     <string name="search_for_in"/>
-    <string name="mark_as_read"/>
     <string name="mark_as_unread"/>
-    <string name="mark_as_unstar"/>
     <string name="mark_as_read_three_days"/>
-    <string name="one_day"/>
     <string name="seven_days"/>
-    <string name="get_new_updates"/>
     <string name="in_coding"/>
-    <string name="accounts"/>
     <string name="color_and_style"/>
-    <string name="interaction"/>
     <string name="languages"/>
-    <string name="help_translate"/>
     <string name="english" translatable="false">English</string>
     <string name="chinese_simplified" translatable="false">简体中文</string>
     <string name="german" translatable="false">Deutsch</string>
-    <string name="tips_and_support_desc"/>
     <string name="agree_terms"/>
-    <string name="terms_link"/>
     <string name="wallpaper_colors"/>
-    <string name="only_android_8.1_plus"/>
     <string name="primary_color"/>
-    <string name="appearance"/>
     <string name="dark_theme"/>
-    <string name="on"/>
     <string name="other"/>
-    <string name="tonal_elevation"/>
     <string name="basic_fonts"/>
-    <string name="flow_page"/>
     <string name="sponsor"/>
     <string name="github_link" translatable="false">https://github.com/Ashinch/ReadYou</string>
     <string name="telegram_link" translatable="false">https://t.me/ReadYouApp</string>
-    <string name="change_log"/>
     <string name="skip_this_version"/>
-    <string name="is_latest_version"/>
     <string name="download_failure"/>
-    <string name="help"/>
     <string name="initial_page"/>
-    <string name="preview_article_title"/>
     <string name="preview_feed_name"/>
-    <string name="padding_on_both_ends"/>
     <string name="article_desc"/>
-    <string name="feed_names"/>
     <string name="article_date_sticky_header"/>
-    <string name="group_list"/>
     <string name="top"/>
-    <string name="top_bar"/>
     <string name="filter_bar"/>
-    <string name="icons_and_labels"/>
     <string name="tips_top_bar_tonal_elevation"/>
-    <string name="tips_group_list_tonal_elevation"/>
 </resources>
