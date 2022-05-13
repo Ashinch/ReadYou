@@ -13,47 +13,27 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="expand_less"/>
     <string name="allow"/>
-    <string name="back"/>
     <string name="search"/>
-    <string name="clear"/>
     <string name="preset"/>
-    <string name="all_allow_notification_toast"/>
     <string name="all_parse_full_content_toast"/>
-    <string name="clear_articles_in_group_toast"/>
     <string name="move_to_group"/>
-    <string name="change_url"/>
     <string name="feed_url_placeholder" translatable="false">http://example.com/feed.rss</string>
-    <string name="open_with"/>
     <string name="unsubscribe"/>
-    <string name="group_option_tips"/>
     <string name="search_for_in"/>
-    <string name="mark_as_unread"/>
     <string name="mark_as_read_three_days"/>
-    <string name="seven_days"/>
     <string name="in_coding"/>
-    <string name="color_and_style"/>
     <string name="languages"/>
     <string name="english" translatable="false">English</string>
     <string name="chinese_simplified" translatable="false">简体中文</string>
     <string name="german" translatable="false">Deutsch</string>
-    <string name="agree_terms"/>
     <string name="wallpaper_colors"/>
-    <string name="primary_color"/>
     <string name="dark_theme"/>
-    <string name="other"/>
     <string name="basic_fonts"/>
-    <string name="sponsor"/>
     <string name="github_link" translatable="false">https://github.com/Ashinch/ReadYou</string>
     <string name="telegram_link" translatable="false">https://t.me/ReadYouApp</string>
-    <string name="skip_this_version"/>
     <string name="download_failure"/>
-    <string name="initial_page"/>
     <string name="preview_feed_name"/>
-    <string name="article_desc"/>
     <string name="article_date_sticky_header"/>
-    <string name="top"/>
     <string name="filter_bar"/>
-    <string name="tips_top_bar_tonal_elevation"/>
 </resources>
