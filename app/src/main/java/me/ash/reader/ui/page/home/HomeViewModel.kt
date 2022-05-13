@@ -3,7 +3,6 @@ package me.ash.reader.ui.page.home
 import androidx.lifecycle.ViewModel
 import androidx.paging.*
 import androidx.work.WorkManager
-import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
@@ -17,7 +16,6 @@ import me.ash.reader.data.repository.SyncWorker
 import me.ash.reader.ui.page.home.flow.FlowItemView
 import javax.inject.Inject
 
-@OptIn(ExperimentalPagerApi::class)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val rssRepository: RssRepository,
@@ -112,7 +110,6 @@ data class FilterState(
     val filter: Filter = Filter.All,
 )
 
-@OptIn(ExperimentalPagerApi::class)
 data class HomeViewState(
     val pagingData: Flow<PagingData<FlowItemView>> = emptyFlow(),
     val searchContent: String = "",
