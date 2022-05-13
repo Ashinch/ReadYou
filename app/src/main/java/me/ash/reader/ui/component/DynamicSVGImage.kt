@@ -44,6 +44,8 @@ fun DynamicSVGImage(
             AsyncImage(
                 contentDescription = contentDescription,
                 data = it,
+                placeholder = null,
+                error = null,
             )
         }
     }

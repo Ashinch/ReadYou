@@ -1,5 +1,6 @@
 package me.ash.reader.ui.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,6 +27,8 @@ fun AsyncImage(
     precision: Precision = Precision.AUTOMATIC,
     contentScale: ContentScale = ContentScale.Fit,
     contentDescription: String = "",
+    @DrawableRes placeholder: Int? = R.drawable.ic_hourglass_empty_black_24dp,
+    @DrawableRes error: Int? = R.drawable.ic_broken_image_black_24dp,
 ) {
     val context = LocalContext.current
 
@@ -42,16 +45,20 @@ fun AsyncImage(
         contentDescription = contentDescription,
         contentScale = contentScale,
         imageLoader = context.imageLoader,
-        placeholder = forwardingPainter(
-            painter = painterResource(R.drawable.ic_hourglass_empty_black_24dp),
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
-            alpha = 0.5f,
-        ),
-        error = forwardingPainter(
-            painter = painterResource(R.drawable.ic_broken_image_black_24dp),
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.errorContainer),
-            alpha = 0.5f
-        ),
+        placeholder = placeholder?.let {
+            forwardingPainter(
+                painter = painterResource(it),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
+                alpha = 0.5f,
+            )
+        },
+        error = error?.let {
+            forwardingPainter(
+                painter = painterResource(it),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onError),
+                alpha = 0.5f
+            )
+        },
     )
 }
 

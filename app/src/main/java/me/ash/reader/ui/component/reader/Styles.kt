@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -119,6 +118,5 @@ fun blockQuoteStyle(): SpanStyle =
 fun codeInlineStyle(): SpanStyle =
     MaterialTheme.typography.titleSmall.toSpanStyle().copy(
         color = bodyForeground(),
-        fontStyle = FontStyle.Italic,
         fontFamily = FontFamily.Monospace,
     )

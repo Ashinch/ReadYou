@@ -23,6 +23,7 @@ package me.ash.reader.ui.component.reader
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.lazy.LazyListScope
 import me.ash.reader.R
 
@@ -31,6 +32,7 @@ fun LazyListScope.reader(
     link: String,
     content: String,
 ) {
+    Log.i("RLog", "Reader: ")
     htmlFormattedText(
         inputStream = content.byteInputStream(),
         baseUrl = link,

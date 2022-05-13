@@ -7,7 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FiberManualRecord
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.FiberManualRecord
-import androidx.compose.material.icons.outlined.TextFormat
+import androidx.compose.material.icons.outlined.Headphones
 import androidx.compose.material.icons.rounded.Article
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Star
@@ -108,9 +108,9 @@ fun ReadBar(
                     view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                 }
                 CanBeDisabledIconButton(
-                    modifier = Modifier.size(40.dp),
+                    modifier = Modifier.size(36.dp),
                     disabled = true,
-                    imageVector = Icons.Outlined.TextFormat,
+                    imageVector = Icons.Outlined.Headphones,
                     contentDescription = "Add Tag",
                     tint = MaterialTheme.colorScheme.outline,
                 ) {
