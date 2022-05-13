@@ -10,8 +10,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import com.google.accompanist.pager.ExperimentalPagerApi
 import me.ash.reader.data.entity.Filter
 import me.ash.reader.data.preference.FlowFilterBarStylePreference
 import me.ash.reader.data.preference.LocalThemeIndex
@@ -19,7 +19,6 @@ import me.ash.reader.ui.ext.getName
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.theme.palette.onDark
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun FilterBar(
     modifier: Modifier = Modifier,
@@ -69,7 +68,9 @@ fun FilterBar(
                     {
                         Text(
                             text = item.getName(),
-                            style = MaterialTheme.typography.labelLarge
+                            style = MaterialTheme.typography.labelLarge,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 },

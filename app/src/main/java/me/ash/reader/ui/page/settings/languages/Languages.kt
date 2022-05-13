@@ -80,7 +80,7 @@ fun Languages(
                         context.startActivity(
                             Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse(context.getString(R.string.github_link))
+                                Uri.parse("https://github.com/Ashinch/ReadYou/issues/56")
                             )
                         )
                     }
