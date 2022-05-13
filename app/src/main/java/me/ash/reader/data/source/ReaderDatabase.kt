@@ -2,6 +2,8 @@ package me.ash.reader.data.source
 
 import android.content.Context
 import androidx.room.*
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import me.ash.reader.data.dao.AccountDao
 import me.ash.reader.data.dao.ArticleDao
 import me.ash.reader.data.dao.FeedDao
@@ -14,8 +16,7 @@ import java.util.*
 
 @Database(
     entities = [Account::class, Feed::class, Article::class, Group::class],
-    version = 1,
-    exportSchema = false,
+    version = 2,
 )
 @TypeConverters(ReaderDatabase.Converters::class)
 abstract class ReaderDatabase : RoomDatabase() {
@@ -33,7 +34,7 @@ abstract class ReaderDatabase : RoomDatabase() {
                     context.applicationContext,
                     ReaderDatabase::class.java,
                     "Reader"
-                ).build().also {
+                ).addMigrations(*allMigrations).build().also {
                     instance = it
                 }
             }
@@ -51,5 +52,20 @@ abstract class ReaderDatabase : RoomDatabase() {
         fun fromDate(date: Date?): Long? {
             return date?.time
         }
+    }
+}
+
+val allMigrations = arrayOf(
+    MIGRATION_1_2,
+)
+
+@Suppress("ClassName")
+object MIGRATION_1_2 : Migration(1, 2) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+            """
+            ALTER TABLE article ADD COLUMN img TEXT DEFAULT NULL
+            """.trimIndent()
+        )
     }
 }

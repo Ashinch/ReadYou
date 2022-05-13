@@ -116,11 +116,21 @@ class RssHelper @Inject constructor(
                             .trim(),
                         fullContent = content,
                         link = it.link ?: "",
-                    )
+                    ).apply {
+                        img = findImg(rawDescription)
+                    }
                 )
             }
             a
         }
+    }
+
+    private fun findImg(rawDescription: String): String? {
+        // From: https://gitlab.com/spacecowboy/Feeder
+        // Using negative lookahead to skip data: urls, being inline base64
+        // And capturing original quote to use as ending quote
+        val regex = """img.*?src=(["'])((?!data).*?)\1""".toRegex(RegexOption.DOT_MATCHES_ALL)
+        return regex.find(rawDescription)?.groupValues?.get(2)
     }
 
     @Throws(Exception::class)

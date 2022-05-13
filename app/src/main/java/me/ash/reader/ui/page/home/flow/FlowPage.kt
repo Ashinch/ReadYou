@@ -2,7 +2,6 @@ package me.ash.reader.ui.page.home.flow
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
@@ -43,7 +42,6 @@ import me.ash.reader.ui.theme.palette.onDark
 
 @OptIn(
     ExperimentalMaterial3Api::class,
-    ExperimentalFoundationApi::class,
     com.google.accompanist.pager.ExperimentalPagerApi::class,
     androidx.compose.ui.ExperimentalComposeUiApi::class,
 )
@@ -52,8 +50,9 @@ fun FlowPage(
     navController: NavHostController,
     flowViewModel: FlowViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel,
-    pagingItems: LazyPagingItems<FlowItemView>,
 ) {
+    val homeViewView = homeViewModel.viewState.collectAsStateValue()
+    val pagingItems = homeViewView.pagingData.collectAsLazyPagingItems()
     val keyboardController = LocalSoftwareKeyboardController.current
     val topBarTonalElevation = LocalFlowTopBarTonalElevation.current
     val articleListTonalElevation = LocalFlowArticleListTonalElevation.current
@@ -177,14 +176,6 @@ fun FlowPage(
             )
         },
         content = {
-//                if (pagingItems.loadState.source.refresh is LoadState.NotLoading && pagingItems.itemCount == 0) {
-//                    LottieAnimation(
-//                        modifier = Modifier
-//                            .alpha(0.7f)
-//                            .padding(80.dp),
-//                        url = "https://assets7.lottiefiles.com/packages/lf20_l4ny0jjm.json",
-//                    )
-//                }
             SwipeRefresh(
                 onRefresh = {
                     if (!isSyncing) {

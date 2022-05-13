@@ -15,13 +15,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.size.Scale
 import me.ash.reader.R
 import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.preference.*
+import me.ash.reader.ui.component.AsyncImage
 import me.ash.reader.ui.ext.formatAsString
 
 @Composable
@@ -40,11 +43,12 @@ fun ArticleItem(
     Column(
         modifier = Modifier
             .padding(horizontal = 12.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(20.dp))
             .clickable { onClick(articleWithFeed) }
             .padding(horizontal = 12.dp, vertical = 12.dp)
             .alpha(if (articleWithFeed.article.isStarred || articleWithFeed.article.isUnread) 1f else 0.5f),
     ) {
+        // Upper
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -64,6 +68,7 @@ fun ArticleItem(
                 )
             }
 
+            // Right
             if (articleListDate.value) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -95,6 +100,8 @@ fun ArticleItem(
                 }
             }
         }
+
+        // Lower
         Row(
             modifier = Modifier.fillMaxWidth(),
         ) {
@@ -108,10 +115,12 @@ fun ArticleItem(
                 ) {}
                 Spacer(modifier = Modifier.width(10.dp))
             }
+
             // Article
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.weight(1f),
             ) {
+
                 // Title
                 Text(
                     text = articleWithFeed.article.title,
@@ -120,6 +129,7 @@ fun ArticleItem(
                     maxLines = if (articleListDesc.value) 2 else 4,
                     overflow = TextOverflow.Ellipsis,
                 )
+
                 // Description
                 if (articleListDesc.value && articleWithFeed.article.shortDescription.isNotBlank()) {
                     Text(
@@ -130,6 +140,19 @@ fun ArticleItem(
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
+            }
+
+            // Image
+            if (articleWithFeed.article.img != null && articleListImage.value) {
+                AsyncImage(
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                        .size(80.dp)
+                        .clip(RoundedCornerShape(20.dp)),
+                    data = articleWithFeed.article.img,
+                    scale = Scale.FILL,
+                    contentScale = ContentScale.Crop,
+                )
             }
         }
     }

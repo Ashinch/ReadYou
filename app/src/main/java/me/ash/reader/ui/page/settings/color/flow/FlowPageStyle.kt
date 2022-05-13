@@ -174,10 +174,13 @@ fun FlowPageStyle(
                     }
                     SettingItem(
                         title = stringResource(R.string.article_images),
-                        enable = false,
-                        onClick = {},
+                        onClick = {
+                            (!articleListImage).put(context, scope)
+                        },
                     ) {
-                        Switch(activated = false, enable = false)
+                        Switch(activated = articleListImage.value) {
+                            (!articleListImage).put(context, scope)
+                        }
                     }
                     SettingItem(
                         title = stringResource(R.string.article_desc),
@@ -403,6 +406,7 @@ fun FlowPagePreview(
                     accountId = 0,
                     date = Date(),
                     isStarred = true,
+                    img = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=800&q=60"
                 ),
                 feed = Feed(
                     id = "",

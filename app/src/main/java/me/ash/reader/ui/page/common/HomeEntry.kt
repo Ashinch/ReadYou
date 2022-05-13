@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -38,11 +37,7 @@ fun HomeEntry(
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-
-    val viewState = homeViewModel.viewState.collectAsStateValue()
     val filterState = homeViewModel.filterState.collectAsStateValue()
-    val pagingItems = viewState.pagingData.collectAsLazyPagingItems()
-
     val navController = rememberAnimatedNavController()
 
     val intent by rememberSaveable { mutableStateOf(context.findActivity()?.intent) }
@@ -116,7 +111,6 @@ fun HomeEntry(
                 FlowPage(
                     navController = navController,
                     homeViewModel = homeViewModel,
-                    pagingItems = pagingItems,
                 )
             }
             animatedComposable(route = "${RouteName.READING}/{articleId}") {

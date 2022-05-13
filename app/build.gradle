@@ -28,6 +28,15 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation": "$projectDir/schemas".toString(),
+                        "room.incremental"   : "true"
+                ]
+            }
+        }
     }
 
     flavorDimensions "channel"
@@ -102,6 +111,8 @@ dependencies {
     implementation("io.coil-kt:coil-compose:$coil")
     implementation("io.coil-kt:coil-svg:$coil")
     implementation("io.coil-kt:coil-gif:$coil")
+
+    implementation "org.conscrypt:conscrypt-android:2.5.2"
 
     // https://square.github.io/okhttp/changelogs/changelog/
     implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.6"
