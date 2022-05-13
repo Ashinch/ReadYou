@@ -13,17 +13,13 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="search"/>
     <string name="all_parse_full_content_toast"/>
     <string name="feed_url_placeholder" translatable="false">http://example.com/feed.rss</string>
-    <string name="search_for_in"/>
     <string name="in_coding"/>
     <string name="english" translatable="false">English</string>
     <string name="chinese_simplified" translatable="false">简体中文</string>
     <string name="german" translatable="false">Deutsch</string>
-    <string name="dark_theme"/>
     <string name="github_link" translatable="false">https://github.com/Ashinch/ReadYou</string>
     <string name="telegram_link" translatable="false">https://t.me/ReadYouApp</string>
-    <string name="preview_feed_name"/>
     <string name="filter_bar"/>
 </resources>
