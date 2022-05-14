@@ -130,7 +130,8 @@ class RssHelper @Inject constructor(
         // Using negative lookahead to skip data: urls, being inline base64
         // And capturing original quote to use as ending quote
         val regex = """img.*?src=(["'])((?!data).*?)\1""".toRegex(RegexOption.DOT_MATCHES_ALL)
-        return regex.find(rawDescription)?.groupValues?.get(2)
+        // Base64 encoded images can be quite large - and crash database cursors
+        return regex.find(rawDescription)?.groupValues?.get(2)?.takeIf { !it.startsWith("data:") }
     }
 
     @Throws(Exception::class)

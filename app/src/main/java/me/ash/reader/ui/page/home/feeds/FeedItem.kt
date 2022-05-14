@@ -1,10 +1,11 @@
 package me.ash.reader.ui.page.home.feeds
 
 import android.view.HapticFeedbackConstants
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Badge
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.data.entity.Feed
+import me.ash.reader.ui.page.home.FeedIcon
 import me.ash.reader.ui.page.home.feeds.option.feed.FeedOptionViewAction
 import me.ash.reader.ui.page.home.feeds.option.feed.FeedOptionViewModel
 import kotlin.math.ln
@@ -63,12 +65,7 @@ fun FeedItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Row(modifier = Modifier.weight(1f)) {
-                Row(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
-                ) {}
+                FeedIcon(feed.name)
                 Text(
                     modifier = Modifier.padding(start = 12.dp, end = 6.dp),
                     text = feed.name,
@@ -78,7 +75,7 @@ fun FeedItem(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
-            if (feed.important ?: 0 != 0) {
+            if ((feed.important ?: 0) != 0) {
                 Badge(
                     containerColor = MaterialTheme.colorScheme.surfaceTint.copy(
                         alpha = (ln(tonalElevation.value + 1.4f) + 2f) / 100f

@@ -6,8 +6,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CreateNewFolder
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.rounded.RssFeed
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +24,7 @@ import me.ash.reader.ui.component.TextFieldDialog
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.roundClick
 import me.ash.reader.ui.ext.showToast
+import me.ash.reader.ui.page.home.FeedIcon
 import me.ash.reader.ui.page.home.feeds.subscribe.ResultView
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -56,12 +55,13 @@ fun FeedOptionDrawer(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Icon(
-                        modifier = Modifier.roundClick { },
-                        imageVector = Icons.Rounded.RssFeed,
-                        contentDescription = feed?.name ?: stringResource(R.string.unknown),
-                        tint = MaterialTheme.colorScheme.secondary,
-                    )
+                    FeedIcon(feedName = feed?.name ?: "", size = 24.dp)
+//                    Icon(
+//                        modifier = Modifier.roundClick { },
+//                        imageVector = Icons.Rounded.RssFeed,
+//                        contentDescription = feed?.name ?: stringResource(R.string.unknown),
+//                        tint = MaterialTheme.colorScheme.secondary,
+//                    )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         modifier = Modifier.roundClick {

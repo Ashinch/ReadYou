@@ -108,6 +108,7 @@ dependencies {
     implementation "com.rometools:rome:$rome"
 
     // https://coil-kt.github.io/coil/changelog/
+    implementation("io.coil-kt:coil-base:$coil")
     implementation("io.coil-kt:coil-compose:$coil")
     implementation("io.coil-kt:coil-svg:$coil")
     implementation("io.coil-kt:coil-gif:$coil")

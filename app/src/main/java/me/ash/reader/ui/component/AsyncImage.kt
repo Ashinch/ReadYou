@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import coil.imageLoader
+import coil.compose.LocalImageLoader
 import coil.request.ImageRequest
 import coil.size.Precision
 import coil.size.Scale
@@ -72,7 +72,7 @@ fun AsyncImage(
             .build(),
         contentDescription = contentDescription,
         contentScale = contentScale,
-        imageLoader = context.imageLoader,
+        imageLoader = LocalImageLoader.current,
         placeholder = placeholderPainter,
         error = errorPainter,
     )
