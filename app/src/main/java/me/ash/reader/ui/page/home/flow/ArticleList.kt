@@ -30,15 +30,14 @@ fun LazyListScope.ArticleList(
                 }
             }
             is FlowItemView.Date -> {
-                val separator = pagingItems[index] as FlowItemView.Date
-                if (separator.showSpacer) item { Spacer(modifier = Modifier.height(40.dp)) }
+                if (item.showSpacer) item { Spacer(modifier = Modifier.height(40.dp)) }
                 if (articleListDateStickyHeader) {
-                    stickyHeader(key = separator.date) {
-                        StickyHeader(separator.date, articleListFeedIcon, articleListTonalElevation)
+                    stickyHeader(key = item.date) {
+                        StickyHeader(item.date, articleListFeedIcon, articleListTonalElevation)
                     }
                 } else {
-                    item(key = separator.date) {
-                        StickyHeader(separator.date, articleListFeedIcon, articleListTonalElevation)
+                    item(key = item.date) {
+                        StickyHeader(item.date, articleListFeedIcon, articleListTonalElevation)
                     }
                 }
             }

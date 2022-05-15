@@ -1,16 +1,16 @@
 package me.ash.reader.ui.page.home.feeds
 
 import android.view.HapticFeedbackConstants
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Badge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.data.entity.Feed
+import me.ash.reader.ui.page.home.FeedIcon
 import me.ash.reader.ui.page.home.feeds.option.feed.FeedOptionViewAction
 import me.ash.reader.ui.page.home.feeds.option.feed.FeedOptionViewModel
 import kotlin.math.ln
@@ -30,7 +31,6 @@ import kotlin.math.ln
 )
 @Composable
 fun FeedItem(
-    modifier: Modifier = Modifier,
     feed: Feed,
     feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
     tonalElevation: Dp,
@@ -38,6 +38,11 @@ fun FeedItem(
 ) {
     val view = LocalView.current
     val scope = rememberCoroutineScope()
+    val tonalElevationAlpha by remember {
+        derivedStateOf {
+            (ln(tonalElevation.value + 1.4f) + 2f) / 100f
+        }
+    }
 
     Row(
         modifier = Modifier
@@ -63,12 +68,7 @@ fun FeedItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Row(modifier = Modifier.weight(1f)) {
-                Row(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
-                ) {}
+                FeedIcon(feed.name)
                 Text(
                     modifier = Modifier.padding(start = 12.dp, end = 6.dp),
                     text = feed.name,
@@ -78,10 +78,10 @@ fun FeedItem(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
-            if (feed.important ?: 0 != 0) {
+            if ((feed.important ?: 0) != 0) {
                 Badge(
                     containerColor = MaterialTheme.colorScheme.surfaceTint.copy(
-                        alpha = (ln(tonalElevation.value + 1.4f) + 2f) / 100f
+                        alpha = tonalElevationAlpha
                     ),
                     contentColor = MaterialTheme.colorScheme.outline,
                     content = {

@@ -1,24 +1,11 @@
 package me.ash.reader
 
 import android.app.Application
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
-import android.os.Build
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import androidx.work.WorkManager
-import coil.ComponentRegistry
 import coil.ImageLoader
-import coil.decode.DataSource
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
-import coil.decode.SvgDecoder
-import coil.disk.DiskCache
-import coil.memory.MemoryCache
-import coil.request.*
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -29,12 +16,16 @@ import me.ash.reader.data.source.AppNetworkDataSource
 import me.ash.reader.data.source.OpmlLocalDataSource
 import me.ash.reader.data.source.ReaderDatabase
 import me.ash.reader.ui.ext.*
+import okhttp3.Cache
+import okhttp3.OkHttpClient
 import org.conscrypt.Conscrypt
+import java.io.File
 import java.security.Security
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltAndroidApp
-class App : Application(), Configuration.Provider, ImageLoader {
+class App : Application(), Configuration.Provider {
     init {
         // From: https://gitlab.com/spacecowboy/Feeder
         // Install Conscrypt to handle TLSv1.3 pre Android10
@@ -88,6 +79,9 @@ class App : Application(), Configuration.Provider, ImageLoader {
     @DispatcherDefault
     lateinit var dispatcherDefault: CoroutineDispatcher
 
+    @Inject
+    lateinit var imageLoader: ImageLoader
+
     override fun onCreate() {
         super.onCreate()
         CrashHandler(this)
@@ -130,58 +124,29 @@ class App : Application(), Configuration.Provider, ImageLoader {
             .setWorkerFactory(workerFactory)
             .setMinimumLoggingLevel(android.util.Log.DEBUG)
             .build()
+}
 
-    override val components: ComponentRegistry
-        get() = ComponentRegistry.Builder()
-            .add(SvgDecoder.Factory())
-            .add(
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    ImageDecoderDecoder.Factory()
-                } else {
-                    GifDecoder.Factory()
-                }
-            )
-            .build()
-    override val defaults: DefaultRequestOptions
-        get() = DefaultRequestOptions()
-    override val diskCache: DiskCache
-        get() = DiskCache.Builder()
-            .directory(cacheDir.resolve("images"))
-            .maxSizePercent(0.02)
-            .build()
-    override val memoryCache: MemoryCache
-        get() = MemoryCache.Builder(this)
-            .maxSizePercent(0.25)
-            .build()
+fun cachingHttpClient(
+    cacheDirectory: File? = null,
+    cacheSize: Long = 10L * 1024L * 1024L,
+    trustAllCerts: Boolean = true,
+    connectTimeoutSecs: Long = 30L,
+    readTimeoutSecs: Long = 30L
+): OkHttpClient {
+    val builder: OkHttpClient.Builder = OkHttpClient.Builder()
 
-    override fun enqueue(request: ImageRequest): Disposable {
-        // Always call onStart before onSuccess.
-        request.target?.onStart(request.placeholder)
-        val result = ColorDrawable(Color.BLACK)
-        request.target?.onSuccess(result)
-        return object : Disposable {
-            override val job = CompletableDeferred(newResult(request, result))
-            override val isDisposed get() = true
-            override fun dispose() {}
-        }
+    if (cacheDirectory != null) {
+        builder.cache(Cache(cacheDirectory, cacheSize))
     }
 
-    override suspend fun execute(request: ImageRequest): ImageResult {
-        return newResult(request, ColorDrawable(Color.BLACK))
-    }
+    builder
+        .connectTimeout(connectTimeoutSecs, TimeUnit.SECONDS)
+        .readTimeout(readTimeoutSecs, TimeUnit.SECONDS)
+        .followRedirects(true)
 
-    override fun newBuilder(): ImageLoader.Builder {
-        throw UnsupportedOperationException()
-    }
+//    if (trustAllCerts) {
+//        builder.trustAllCerts()
+//    }
 
-    override fun shutdown() {
-    }
-
-    private fun newResult(request: ImageRequest, drawable: Drawable): SuccessResult {
-        return SuccessResult(
-            drawable = drawable,
-            request = request,
-            dataSource = DataSource.MEMORY_CACHE
-        )
-    }
+    return builder.build()
 }

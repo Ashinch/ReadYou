@@ -1,9 +1,7 @@
 package me.ash.reader.ui.page.home.flow
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Star
@@ -26,10 +24,10 @@ import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.preference.*
 import me.ash.reader.ui.component.AsyncImage
 import me.ash.reader.ui.ext.formatAsString
+import me.ash.reader.ui.page.home.FeedIcon
 
 @Composable
 fun ArticleItem(
-    modifier: Modifier = Modifier,
     articleWithFeed: ArticleWithFeed,
     onClick: (ArticleWithFeed) -> Unit = {},
 ) {
@@ -107,12 +105,7 @@ fun ArticleItem(
         ) {
             // Feed icon
             if (articleListFeedIcon.value) {
-                Row(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
-                ) {}
+                FeedIcon(articleWithFeed.feed.name)
                 Spacer(modifier = Modifier.width(10.dp))
             }
 
