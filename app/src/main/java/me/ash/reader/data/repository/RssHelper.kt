@@ -96,7 +96,8 @@ class RssHelper @Inject constructor(
                     "RLog",
                     "request rss:\n" +
                             "name: ${feed.name}\n" +
-                            "url: ${feed.url}\n" +
+                            "feedUrl: ${feed.url}\n" +
+                            "url: ${it.link}\n" +
                             "title: ${it.title}\n" +
                             "desc: ${desc}\n" +
                             "content: ${content}\n"

@@ -515,8 +515,8 @@ interface ArticleDao {
         """
         INSERT INTO article
         SELECT :id, :date, :title, :author, :rawDescription, 
-        :shortDescription, :fullContent, :img, :link, :feedId, 
-        :accountId, :isUnread, :isStarred, :isReadLater 
+        :shortDescription, :fullContent, :link, :feedId, 
+        :accountId, :isUnread, :isStarred, :isReadLater, :img
         WHERE NOT EXISTS(SELECT 1 FROM article WHERE link = :link AND accountId = :accountId)
         """
     )
