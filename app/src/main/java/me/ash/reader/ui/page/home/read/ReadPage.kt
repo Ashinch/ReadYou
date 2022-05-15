@@ -1,6 +1,7 @@
 package me.ash.reader.ui.page.home.read
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -35,7 +36,6 @@ fun ReadPage(
 ) {
     val viewState = readViewModel.viewState.collectAsStateValue()
     val isScrollDown = viewState.listState.isScrollDown()
-//    val isScrollDown by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         navController.currentBackStackEntryFlow.collect {
@@ -46,6 +46,7 @@ fun ReadPage(
     }
 
     LaunchedEffect(viewState.articleWithFeed?.article?.id) {
+        Log.i("RLog", "ReadPage: ${viewState.articleWithFeed}")
         viewState.articleWithFeed?.let {
             if (it.article.isUnread) {
                 readViewModel.dispatch(ReadViewAction.MarkUnread(false))

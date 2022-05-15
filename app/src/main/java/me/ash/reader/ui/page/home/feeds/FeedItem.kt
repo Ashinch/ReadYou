@@ -10,8 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Badge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,7 +31,6 @@ import kotlin.math.ln
 )
 @Composable
 fun FeedItem(
-    modifier: Modifier = Modifier,
     feed: Feed,
     feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
     tonalElevation: Dp,
@@ -40,6 +38,11 @@ fun FeedItem(
 ) {
     val view = LocalView.current
     val scope = rememberCoroutineScope()
+    val tonalElevationAlpha by remember {
+        derivedStateOf {
+            (ln(tonalElevation.value + 1.4f) + 2f) / 100f
+        }
+    }
 
     Row(
         modifier = Modifier
@@ -78,7 +81,7 @@ fun FeedItem(
             if ((feed.important ?: 0) != 0) {
                 Badge(
                     containerColor = MaterialTheme.colorScheme.surfaceTint.copy(
-                        alpha = (ln(tonalElevation.value + 1.4f) + 2f) / 100f
+                        alpha = tonalElevationAlpha
                     ),
                     contentColor = MaterialTheme.colorScheme.outline,
                     content = {

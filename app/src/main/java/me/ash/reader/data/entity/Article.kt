@@ -32,7 +32,7 @@ data class Article(
     @ColumnInfo
     var fullContent: String? = null,
     @ColumnInfo
-    var img: String? = null,
+    val img: String? = null,
     @ColumnInfo
     val link: String,
     @ColumnInfo(index = true)

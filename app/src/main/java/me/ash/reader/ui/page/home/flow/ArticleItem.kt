@@ -28,7 +28,6 @@ import me.ash.reader.ui.page.home.FeedIcon
 
 @Composable
 fun ArticleItem(
-    modifier: Modifier = Modifier,
     articleWithFeed: ArticleWithFeed,
     onClick: (ArticleWithFeed) -> Unit = {},
 ) {

@@ -3,9 +3,7 @@ package me.ash.reader.ui.component
 import androidx.annotation.DrawableRes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
@@ -33,37 +31,10 @@ fun AsyncImage(
     @DrawableRes placeholder: Int? = R.drawable.ic_hourglass_empty_black_24dp,
     @DrawableRes error: Int? = R.drawable.ic_broken_image_black_24dp,
 ) {
-    val context = LocalContext.current
-    val color = MaterialTheme.colorScheme.onSurfaceVariant
-    val placeholderPainterResource = placeholder?.run { painterResource(this) }
-    val errorPainterResource = error?.run { painterResource(this) }
-    val placeholderPainter by remember {
-        mutableStateOf(
-            placeholderPainterResource?.run {
-                forwardingPainter(
-                    painter = this,
-                    colorFilter = ColorFilter.tint(color),
-                    alpha = 0.1f,
-                )
-            }
-        )
-    }
-    val errorPainter by remember {
-        mutableStateOf(
-            errorPainterResource?.run {
-                forwardingPainter(
-                    painter = this,
-                    colorFilter = ColorFilter.tint(color),
-                    alpha = 0.1f,
-                )
-            }
-        )
-    }
-
     coil.compose.AsyncImage(
         modifier = modifier,
         model = ImageRequest
-            .Builder(context)
+            .Builder(LocalContext.current)
             .data(data)
             .crossfade(true)
             .scale(scale)
@@ -73,8 +44,20 @@ fun AsyncImage(
         contentDescription = contentDescription,
         contentScale = contentScale,
         imageLoader = LocalImageLoader.current,
-        placeholder = placeholderPainter,
-        error = errorPainter,
+        placeholder = placeholder?.run {
+            forwardingPainter(
+                painter = painterResource(this),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
+                alpha = 0.1f,
+            )
+        },
+        error = error?.run {
+            forwardingPainter(
+                painter = painterResource(this),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
+                alpha = 0.1f,
+            )
+        },
     )
 }
 
@@ -90,12 +73,14 @@ fun forwardingPainter(
     onDraw: DrawScope.(ForwardingDrawInfo) -> Unit = DefaultOnDraw,
 ): Painter = ForwardingPainter(painter, alpha, colorFilter, onDraw)
 
+@Immutable
 data class ForwardingDrawInfo(
     val painter: Painter,
     val alpha: Float,
     val colorFilter: ColorFilter?,
 )
 
+@Immutable
 private class ForwardingPainter(
     private val painter: Painter,
     private var alpha: Float,

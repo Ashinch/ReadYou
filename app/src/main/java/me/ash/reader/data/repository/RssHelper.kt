@@ -115,10 +115,9 @@ class RssHelper @Inject constructor(
                             .take(100)
                             .trim(),
                         fullContent = content,
+                        img = findImg((desc ?: content) ?: ""),
                         link = it.link ?: "",
-                    ).apply {
-                        img = findImg(rawDescription)
-                    }
+                    )
                 )
             }
             a

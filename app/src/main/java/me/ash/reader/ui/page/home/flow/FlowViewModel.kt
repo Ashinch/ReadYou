@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.repository.RssRepository
 import java.util.*
+import javax.annotation.concurrent.Immutable
 import javax.inject.Inject
 
 @HiltViewModel
@@ -116,7 +117,10 @@ enum class MarkAsReadBefore {
     All,
 }
 
+@Immutable
 sealed class FlowItemView {
+    @Immutable
     class Article(val articleWithFeed: ArticleWithFeed) : FlowItemView()
+    @Immutable
     class Date(val date: String, val showSpacer: Boolean) : FlowItemView()
 }

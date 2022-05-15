@@ -8,7 +8,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
@@ -32,7 +31,7 @@ import me.ash.reader.ui.ext.alphaLN
 import me.ash.reader.ui.page.home.feeds.option.group.GroupOptionViewAction
 import me.ash.reader.ui.page.home.feeds.option.group.GroupOptionViewModel
 
-@OptIn(ExperimentalMaterialApi::class, androidx.compose.foundation.ExperimentalFoundationApi::class)
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun GroupItem(
     modifier: Modifier = Modifier,
@@ -114,7 +113,6 @@ fun GroupItem(
             Column {
                 feeds.forEach { feed ->
                     FeedItem(
-                        modifier = Modifier.padding(horizontal = 20.dp),
                         feed = feed,
                         tonalElevation = tonalElevation,
                     ) {
