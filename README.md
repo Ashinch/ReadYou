@@ -23,6 +23,7 @@
     <h1>Read You</h1>
     <p>This is a copy of  <a href="https://reederapp.com/">Reeder</a>, in order to give Android an RSS reader similar to Reeder.</p>
     <p>English by DeepL&nbsp;&nbsp;|&nbsp;&nbsp;
+    <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-de.md">Deutsch</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh.md">简体中文</a></p>
     <br/>
     <br/>
