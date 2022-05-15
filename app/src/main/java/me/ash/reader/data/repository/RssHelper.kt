@@ -31,6 +31,7 @@ class RssHelper @Inject constructor(
     private val context: Context,
     @DispatcherIO
     private val dispatcherIO: CoroutineDispatcher,
+    private val okHttpClient: OkHttpClient,
 ) {
     @Throws(Exception::class)
     suspend fun searchFeed(feedLink: String): FeedWithArticle {
@@ -58,7 +59,7 @@ class RssHelper @Inject constructor(
     @Throws(Exception::class)
     suspend fun parseFullContent(link: String, title: String): String {
         return withContext(dispatcherIO) {
-            val response = OkHttpClient()
+            val response = okHttpClient
                 .newCall(Request.Builder().url(link).build())
                 .execute()
             val content = response.body!!.string()

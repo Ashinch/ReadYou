@@ -80,6 +80,9 @@ class App : Application(), Configuration.Provider {
     lateinit var dispatcherDefault: CoroutineDispatcher
 
     @Inject
+    lateinit var okHttpClient: OkHttpClient
+
+    @Inject
     lateinit var imageLoader: ImageLoader
 
     override fun onCreate() {
