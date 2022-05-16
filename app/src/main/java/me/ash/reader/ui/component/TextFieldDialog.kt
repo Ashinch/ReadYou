@@ -16,7 +16,6 @@ import androidx.compose.ui.window.DialogProperties
 import com.google.accompanist.pager.ExperimentalPagerApi
 import me.ash.reader.R
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun TextFieldDialog(
     modifier: Modifier = Modifier,

@@ -17,7 +17,6 @@ import me.ash.reader.ui.component.Dialog
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun DeleteFeedDialog(
     modifier: Modifier = Modifier,

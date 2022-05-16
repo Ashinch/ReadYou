@@ -23,7 +23,6 @@ import me.ash.reader.ui.ext.formatUrl
 import java.io.InputStream
 import javax.inject.Inject
 
-@OptIn(ExperimentalPagerApi::class)
 @HiltViewModel
 class SubscribeViewModel @Inject constructor(
     private val opmlRepository: OpmlRepository,
@@ -245,7 +244,6 @@ class SubscribeViewModel @Inject constructor(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 data class SubscribeViewState(
     val visible: Boolean = false,
     val title: String = "",

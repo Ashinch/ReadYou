@@ -23,7 +23,6 @@ import me.ash.reader.data.repository.RssRepository
 import javax.inject.Inject
 
 @OptIn(
-    ExperimentalPagerApi::class,
     ExperimentalMaterialApi::class
 )
 @HiltViewModel

@@ -5,7 +5,6 @@ import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -21,10 +20,7 @@ import me.ash.reader.data.module.DispatcherMain
 import me.ash.reader.data.repository.RssRepository
 import javax.inject.Inject
 
-@OptIn(
-    ExperimentalPagerApi::class,
-    ExperimentalMaterialApi::class
-)
+@OptIn(ExperimentalMaterialApi::class)
 @HiltViewModel
 class GroupOptionViewModel @Inject constructor(
     private val rssRepository: RssRepository,

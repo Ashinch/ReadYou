@@ -33,7 +33,6 @@ import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.material.Text
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ExperimentalComposeApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
@@ -48,7 +47,6 @@ import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
 import coil.size.Precision
 import coil.size.Size
 import coil.size.pxOrElse
@@ -178,7 +176,6 @@ private fun LazyListScope.formatCodeBlock(
     composer.terminateCurrentText()
 }
 
-@OptIn(ExperimentalComposeApi::class, ExperimentalCoilApi::class)
 private fun TextComposer.appendTextChildren(
     nodes: List<Node>,
     preFormatted: Boolean = false,
@@ -646,7 +643,6 @@ private fun TextComposer.appendTextChildren(
     }
 }
 
-@OptIn(ExperimentalStdlibApi::class)
 private fun String.asFontFamily(): FontFamily? = when (this.lowercase()) {
     "monospace" -> FontFamily.Monospace
     "serif" -> FontFamily.Serif

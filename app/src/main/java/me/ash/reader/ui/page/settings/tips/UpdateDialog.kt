@@ -30,7 +30,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -40,7 +39,6 @@ import me.ash.reader.ui.component.Dialog
 import me.ash.reader.ui.ext.*
 
 @SuppressLint("FlowOperatorInvokedInComposition")
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun UpdateDialog(
     updateViewModel: UpdateViewModel = hiltViewModel(),
