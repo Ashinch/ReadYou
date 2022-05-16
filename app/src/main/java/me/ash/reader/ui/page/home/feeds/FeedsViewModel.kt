@@ -5,12 +5,14 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.data.entity.Account
 import me.ash.reader.data.entity.GroupWithFeed
+import me.ash.reader.data.module.DispatcherDefault
+import me.ash.reader.data.module.DispatcherIO
 import me.ash.reader.data.repository.AccountRepository
 import me.ash.reader.data.repository.OpmlRepository
 import me.ash.reader.data.repository.RssRepository
@@ -24,6 +26,10 @@ class FeedsViewModel @Inject constructor(
     private val rssRepository: RssRepository,
     private val opmlRepository: OpmlRepository,
     private val stringsRepository: StringsRepository,
+    @DispatcherDefault
+    private val dispatcherDefault: CoroutineDispatcher,
+    @DispatcherIO
+    private val dispatcherIO: CoroutineDispatcher,
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(FeedsViewState())
     val viewState: StateFlow<FeedsViewState> = _viewState.asStateFlow()
@@ -38,7 +44,7 @@ class FeedsViewModel @Inject constructor(
     }
 
     private fun fetchAccount() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherIO) {
             _viewState.update {
                 it.copy(
                     account = accountRepository.getCurrentAccount()
@@ -48,7 +54,7 @@ class FeedsViewModel @Inject constructor(
     }
 
     private fun exportAsOpml(callback: (String) -> Unit = {}) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(dispatcherDefault) {
             try {
                 callback(opmlRepository.saveToString())
             } catch (e: Exception) {
@@ -58,7 +64,7 @@ class FeedsViewModel @Inject constructor(
     }
 
     private fun fetchData(filterState: FilterState) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherIO) {
             pullFeeds(
                 isStarred = filterState.filter.isStarred(),
                 isUnread = filterState.filter.isUnread(),
@@ -118,7 +124,7 @@ class FeedsViewModel @Inject constructor(
             }
         }.catch {
             Log.e("RLog", "catch in articleRepository.pullFeeds(): ${it.message}")
-        }.flowOn(Dispatchers.Default).collect()
+        }.flowOn(dispatcherDefault).collect()
     }
 
     private fun scrollToItem(index: Int) {

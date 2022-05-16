@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,6 +17,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.entity.Group
+import me.ash.reader.data.module.DispatcherIO
+import me.ash.reader.data.module.DispatcherMain
 import me.ash.reader.data.repository.RssRepository
 import javax.inject.Inject
 
@@ -27,12 +29,16 @@ import javax.inject.Inject
 @HiltViewModel
 class FeedOptionViewModel @Inject constructor(
     private val rssRepository: RssRepository,
+    @DispatcherMain
+    private val dispatcherMain: CoroutineDispatcher,
+    @DispatcherIO
+    private val dispatcherIO: CoroutineDispatcher,
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(FeedOptionViewState())
     val viewState: StateFlow<FeedOptionViewState> = _viewState.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherIO) {
             rssRepository.get().pullGroups().collect { groups ->
                 _viewState.update {
                     it.copy(
@@ -121,7 +127,7 @@ class FeedOptionViewModel @Inject constructor(
     }
 
     private fun selectedGroup(groupId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherIO) {
             _viewState.value.feed?.let {
                 rssRepository.get().updateFeed(
                     it.copy(
@@ -134,7 +140,7 @@ class FeedOptionViewModel @Inject constructor(
     }
 
     private fun changeParseFullContentPreset() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherIO) {
             _viewState.value.feed?.let {
                 rssRepository.get().updateFeed(
                     it.copy(
@@ -147,7 +153,7 @@ class FeedOptionViewModel @Inject constructor(
     }
 
     private fun changeAllowNotificationPreset() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherIO) {
             _viewState.value.feed?.let {
                 rssRepository.get().updateFeed(
                     it.copy(
@@ -161,9 +167,9 @@ class FeedOptionViewModel @Inject constructor(
 
     private fun delete(callback: () -> Unit = {}) {
         _viewState.value.feed?.let {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(dispatcherIO) {
                 rssRepository.get().deleteFeed(it)
-                withContext(Dispatchers.Main) {
+                withContext(dispatcherMain) {
                     callback()
                 }
             }
@@ -204,9 +210,9 @@ class FeedOptionViewModel @Inject constructor(
 
     private fun clear(callback: () -> Unit = {}) {
         _viewState.value.feed?.let {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(dispatcherIO) {
                 rssRepository.get().deleteArticles(feed = it)
-                withContext(Dispatchers.Main) {
+                withContext(dispatcherMain) {
                     callback()
                 }
             }

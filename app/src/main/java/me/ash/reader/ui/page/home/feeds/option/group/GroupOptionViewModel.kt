@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,6 +16,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.ash.reader.data.entity.Group
+import me.ash.reader.data.module.DispatcherIO
+import me.ash.reader.data.module.DispatcherMain
 import me.ash.reader.data.repository.RssRepository
 import javax.inject.Inject
 
@@ -26,12 +28,16 @@ import javax.inject.Inject
 @HiltViewModel
 class GroupOptionViewModel @Inject constructor(
     private val rssRepository: RssRepository,
+    @DispatcherMain
+    private val dispatcherMain: CoroutineDispatcher,
+    @DispatcherIO
+    private val dispatcherIO: CoroutineDispatcher,
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(GroupOptionViewState())
     val viewState: StateFlow<GroupOptionViewState> = _viewState.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherIO) {
             rssRepository.get().pullGroups().collect { groups ->
                 _viewState.update {
                     it.copy(
@@ -106,9 +112,9 @@ class GroupOptionViewModel @Inject constructor(
 
     private fun allAllowNotification(isNotification: Boolean, callback: () -> Unit = {}) {
         _viewState.value.group?.let {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(dispatcherIO) {
                 rssRepository.get().groupAllowNotification(it, isNotification)
-                withContext(Dispatchers.Main) {
+                withContext(dispatcherMain) {
                     callback()
                 }
             }
@@ -125,9 +131,9 @@ class GroupOptionViewModel @Inject constructor(
 
     private fun allParseFullContent(isFullContent: Boolean, callback: () -> Unit = {}) {
         _viewState.value.group?.let {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(dispatcherIO) {
                 rssRepository.get().groupParseFullContent(it, isFullContent)
-                withContext(Dispatchers.Main) {
+                withContext(dispatcherMain) {
                     callback()
                 }
             }
@@ -144,9 +150,9 @@ class GroupOptionViewModel @Inject constructor(
 
     private fun delete(callback: () -> Unit = {}) {
         _viewState.value.group?.let {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(dispatcherIO) {
                 rssRepository.get().deleteGroup(it)
-                withContext(Dispatchers.Main) {
+                withContext(dispatcherMain) {
                     callback()
                 }
             }
@@ -179,9 +185,9 @@ class GroupOptionViewModel @Inject constructor(
 
     private fun clear(callback: () -> Unit = {}) {
         _viewState.value.group?.let {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(dispatcherIO) {
                 rssRepository.get().deleteArticles(group = it)
-                withContext(Dispatchers.Main) {
+                withContext(dispatcherMain) {
                     callback()
                 }
             }
@@ -191,9 +197,9 @@ class GroupOptionViewModel @Inject constructor(
     private fun allMoveToGroup(callback: () -> Unit) {
         _viewState.value.group?.let { group ->
             _viewState.value.targetGroup?.let { targetGroup ->
-                viewModelScope.launch(Dispatchers.IO) {
+                viewModelScope.launch(dispatcherIO) {
                     rssRepository.get().groupMoveToTargetGroup(group, targetGroup)
-                    withContext(Dispatchers.Main) {
+                    withContext(dispatcherMain) {
                         callback()
                     }
                 }

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
@@ -14,6 +14,7 @@ import me.ash.reader.R
 import me.ash.reader.data.entity.Article
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.entity.Group
+import me.ash.reader.data.module.DispatcherIO
 import me.ash.reader.data.repository.OpmlRepository
 import me.ash.reader.data.repository.RssHelper
 import me.ash.reader.data.repository.RssRepository
@@ -29,6 +30,8 @@ class SubscribeViewModel @Inject constructor(
     private val rssRepository: RssRepository,
     private val rssHelper: RssHelper,
     private val stringsRepository: StringsRepository,
+    @DispatcherIO
+    private val dispatcherIO: CoroutineDispatcher,
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(SubscribeViewState())
     val viewState: StateFlow<SubscribeViewState> = _viewState.asStateFlow()
@@ -77,7 +80,7 @@ class SubscribeViewModel @Inject constructor(
     }
 
     private fun importFromInputStream(inputStream: InputStream) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherIO) {
             try {
                 opmlRepository.saveToDatabase(inputStream)
                 rssRepository.get().doSync()
@@ -90,7 +93,7 @@ class SubscribeViewModel @Inject constructor(
     private fun subscribe() {
         val feed = _viewState.value.feed ?: return
         val articles = _viewState.value.articles
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherIO) {
             val groupId = async {
                 _viewState.value.selectedGroupId
             }
@@ -145,7 +148,7 @@ class SubscribeViewModel @Inject constructor(
 
     private fun search() {
         searchJob?.cancel()
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherIO) {
             try {
                 _viewState.update {
                     it.copy(
