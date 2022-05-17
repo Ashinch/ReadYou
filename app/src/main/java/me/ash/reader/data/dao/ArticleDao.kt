@@ -5,7 +5,7 @@ import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import me.ash.reader.data.entity.Article
 import me.ash.reader.data.entity.ArticleWithFeed
-import me.ash.reader.data.entity.ImportantCount
+import me.ash.reader.data.model.ImportantCount
 import java.util.*
 
 @Dao

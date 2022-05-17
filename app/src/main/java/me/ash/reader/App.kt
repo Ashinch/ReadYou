@@ -16,12 +16,9 @@ import me.ash.reader.data.source.AppNetworkDataSource
 import me.ash.reader.data.source.OpmlLocalDataSource
 import me.ash.reader.data.source.ReaderDatabase
 import me.ash.reader.ui.ext.*
-import okhttp3.Cache
 import okhttp3.OkHttpClient
 import org.conscrypt.Conscrypt
-import java.io.File
 import java.security.Security
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -51,6 +48,9 @@ class App : Application(), Configuration.Provider {
     lateinit var rssHelper: RssHelper
 
     @Inject
+    lateinit var notificationHelper: NotificationHelper
+
+    @Inject
     lateinit var appRepository: AppRepository
 
     @Inject
@@ -61,9 +61,6 @@ class App : Application(), Configuration.Provider {
 
     @Inject
     lateinit var localRssRepository: LocalRssRepository
-
-//    @Inject
-//    lateinit var feverRssRepository: FeverRssRepository
 
     @Inject
     lateinit var opmlRepository: OpmlRepository
@@ -92,7 +89,7 @@ class App : Application(), Configuration.Provider {
         applicationScope.launch(dispatcherDefault) {
             accountInit()
             workerInit()
-            if (BuildConfig.FLAVOR != "fdroid") {
+            if (notFdroid) {
                 checkUpdate()
             }
         }
@@ -127,29 +124,4 @@ class App : Application(), Configuration.Provider {
             .setWorkerFactory(workerFactory)
             .setMinimumLoggingLevel(android.util.Log.DEBUG)
             .build()
-}
-
-fun cachingHttpClient(
-    cacheDirectory: File? = null,
-    cacheSize: Long = 10L * 1024L * 1024L,
-    trustAllCerts: Boolean = true,
-    connectTimeoutSecs: Long = 30L,
-    readTimeoutSecs: Long = 30L
-): OkHttpClient {
-    val builder: OkHttpClient.Builder = OkHttpClient.Builder()
-
-    if (cacheDirectory != null) {
-        builder.cache(Cache(cacheDirectory, cacheSize))
-    }
-
-    builder
-        .connectTimeout(connectTimeoutSecs, TimeUnit.SECONDS)
-        .readTimeout(readTimeoutSecs, TimeUnit.SECONDS)
-        .followRedirects(true)
-
-//    if (trustAllCerts) {
-//        builder.trustAllCerts()
-//    }
-
-    return builder.build()
 }

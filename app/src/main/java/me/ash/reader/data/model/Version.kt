@@ -1,4 +1,4 @@
-package me.ash.reader.data.entity
+package me.ash.reader.data.model
 
 class Version(identifiers: List<String>) {
     private var major: Int = 0

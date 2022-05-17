@@ -1,4 +1,4 @@
-package me.ash.reader.data.entity
+package me.ash.reader.data.model
 
 data class ImportantCount(
     val important: Int,

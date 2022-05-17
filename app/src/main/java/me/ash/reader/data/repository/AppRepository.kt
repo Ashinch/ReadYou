@@ -4,13 +4,11 @@ import android.content.Context
 import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.withContext
 import me.ash.reader.R
-import me.ash.reader.data.entity.toVersion
-import me.ash.reader.data.module.ApplicationScope
+import me.ash.reader.data.model.toVersion
 import me.ash.reader.data.module.DispatcherIO
 import me.ash.reader.data.module.DispatcherMain
 import me.ash.reader.data.source.AppNetworkDataSource
@@ -23,8 +21,6 @@ class AppRepository @Inject constructor(
     @ApplicationContext
     private val context: Context,
     private val appNetworkDataSource: AppNetworkDataSource,
-    @ApplicationScope
-    private val applicationScope: CoroutineScope,
     @DispatcherIO
     private val dispatcherIO: CoroutineDispatcher,
     @DispatcherMain
@@ -55,14 +51,8 @@ class AppRepository @Inject constructor(
             val currentVersion = context.getCurrentVersion()
             val latestLog = latest.body ?: ""
             val latestPublishDate = latest.published_at ?: latest.created_at ?: ""
-            val latestSize = latest.assets
-                ?.first()
-                ?.size
-                ?: 0
-            val latestDownloadUrl = latest.assets
-                ?.first()
-                ?.browser_download_url
-                ?: ""
+            val latestSize = latest.assets?.first()?.size ?: 0
+            val latestDownloadUrl = latest.assets?.first()?.browser_download_url ?: ""
 
             Log.i("RLog", "current version $currentVersion")
             if (latestVersion.whetherNeedUpdate(currentVersion, skipVersion)) {

@@ -19,7 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.map
 import me.ash.reader.R
-import me.ash.reader.data.entity.toVersion
+import me.ash.reader.data.model.toVersion
 import me.ash.reader.ui.component.Banner
 import me.ash.reader.ui.component.DisplayText
 import me.ash.reader.ui.component.FeedbackIconButton

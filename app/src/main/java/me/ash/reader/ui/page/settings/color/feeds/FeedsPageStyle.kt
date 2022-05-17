@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.data.entity.Feed
-import me.ash.reader.data.entity.Filter
+import me.ash.reader.data.model.Filter
 import me.ash.reader.data.entity.Group
 import me.ash.reader.data.preference.*
 import me.ash.reader.ui.component.*

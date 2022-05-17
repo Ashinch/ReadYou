@@ -43,7 +43,7 @@ class OpmlRepository @Inject constructor(
                     repeatList.add(it)
                 }
             }
-            feedDao.insertList((groupWithFeed.feeds subtract repeatList).toList())
+            feedDao.insertList((groupWithFeed.feeds subtract repeatList.toSet()).toList())
         }
     }
 

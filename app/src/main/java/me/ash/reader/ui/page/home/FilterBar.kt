@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import me.ash.reader.data.entity.Filter
+import me.ash.reader.data.model.Filter
+import me.ash.reader.data.model.getName
 import me.ash.reader.data.preference.FlowFilterBarStylePreference
 import me.ash.reader.data.preference.LocalThemeIndex
-import me.ash.reader.ui.ext.getName
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.theme.palette.onDark
 
@@ -39,11 +39,7 @@ fun FilterBar(
         tonalElevation = filterBarTonalElevation,
     ) {
         Spacer(modifier = Modifier.width(filterBarPadding))
-        listOf(
-            Filter.Starred,
-            Filter.Unread,
-            Filter.All,
-        ).forEach { item ->
+        Filter.values.forEach { item ->
             NavigationBarItem(
 //                        modifier = Modifier.height(60.dp),
                 alwaysShowLabel = when (filterBarStyle) {

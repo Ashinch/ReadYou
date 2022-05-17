@@ -7,7 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import me.ash.reader.data.entity.Feed
-import me.ash.reader.data.entity.Filter
+import me.ash.reader.data.model.Filter
 import me.ash.reader.data.entity.Group
 import me.ash.reader.data.module.ApplicationScope
 import me.ash.reader.data.repository.RssRepository

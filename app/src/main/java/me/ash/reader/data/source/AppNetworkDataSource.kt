@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import me.ash.reader.data.entity.LatestRelease
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -14,12 +13,6 @@ import retrofit2.http.GET
 import retrofit2.http.Streaming
 import retrofit2.http.Url
 import java.io.File
-
-sealed class Download {
-    object NotYet : Download()
-    data class Progress(val percent: Int) : Download()
-    data class Finished(val file: File) : Download()
-}
 
 interface AppNetworkDataSource {
     @GET
@@ -93,3 +86,31 @@ fun ResponseBody.downloadToFileWithProgress(saveFile: File): Flow<Download> =
             }
         }
     }.flowOn(Dispatchers.IO).distinctUntilChanged()
+
+data class LatestRelease(
+    val html_url: String? = null,
+    val tag_name: String? = null,
+    val name: String? = null,
+    val draft: Boolean? = null,
+    val prerelease: Boolean? = null,
+    val created_at: String? = null,
+    val published_at: String? = null,
+    val assets: List<AssetsItem>? = null,
+    val body: String? = null,
+)
+
+data class AssetsItem(
+    val name: String? = null,
+    val content_type: String? = null,
+    val size: Int? = null,
+    val download_count: Int? = null,
+    val created_at: String? = null,
+    val updated_at: String? = null,
+    val browser_download_url: String? = null,
+)
+
+sealed class Download {
+    object NotYet : Download()
+    data class Progress(val percent: Int) : Download()
+    data class Finished(val file: File) : Download()
+}

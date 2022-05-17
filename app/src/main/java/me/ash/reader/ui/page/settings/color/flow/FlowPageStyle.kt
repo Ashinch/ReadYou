@@ -25,7 +25,7 @@ import me.ash.reader.R
 import me.ash.reader.data.entity.Article
 import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.entity.Feed
-import me.ash.reader.data.entity.Filter
+import me.ash.reader.data.model.Filter
 import me.ash.reader.data.preference.*
 import me.ash.reader.ui.component.*
 import me.ash.reader.ui.ext.surfaceColorAtElevation

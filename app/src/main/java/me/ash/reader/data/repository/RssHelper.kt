@@ -183,27 +183,4 @@ class RssHelper @Inject constructor(
             }
         )
     }
-
-    private fun parseDate(
-        inputDate: String, patterns: Array<String> = arrayOf(
-            "yyyy-MM-dd'T'HH:mm:ss'Z'",
-            "yyyy-MM-dd",
-            "yyyy-MM-dd HH:mm:ss",
-            "yyyyMMdd",
-            "yyyy/MM/dd",
-            "yyyy年MM月dd日",
-            "yyyy MM dd",
-        )
-    ): Date? {
-        val df = SimpleDateFormat()
-        for (pattern in patterns) {
-            df.applyPattern(pattern)
-            df.isLenient = false
-            val date = df.parse(inputDate, ParsePosition(0))
-            if (date != null) {
-                return date
-            }
-        }
-        return null
-    }
 }
