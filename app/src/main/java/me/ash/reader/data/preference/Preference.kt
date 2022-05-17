@@ -10,6 +10,13 @@ sealed class Preference {
 
 fun Preferences.toSettings(): Settings {
     return Settings(
+        newVersionNumber = NewVersionNumberPreference.fromPreferences(this),
+        skipVersionNumber = SkipVersionNumberPreference.fromPreferences(this),
+        newVersionPublishDate = NewVersionPublishDatePreference.fromPreferences(this),
+        newVersionLog = NewVersionLogPreference.fromPreferences(this),
+        newVersionSize = NewVersionSizePreference.fromPreferences(this),
+        newVersionDownloadUrl = NewVersionDownloadUrlPreference.fromPreferences(this),
+
         themeIndex = ThemeIndexPreference.fromPreferences(this),
         customPrimaryColor = CustomPrimaryColorPreference.fromPreferences(this),
         darkTheme = DarkThemePreference.fromPreferences(this),

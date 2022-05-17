@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.feeds
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,19 +26,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.flow.map
 import me.ash.reader.R
 import me.ash.reader.data.model.getName
-import me.ash.reader.data.model.toVersion
 import me.ash.reader.data.preference.*
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
+import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.Banner
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.Subtitle
-import me.ash.reader.ui.ext.*
+import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.findActivity
+import me.ash.reader.ui.ext.getCurrentVersion
+import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.common.RouteName
-import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
@@ -48,6 +50,7 @@ import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewAction
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.theme.palette.onDark
 
+@SuppressLint("FlowOperatorInvokedInComposition")
 @OptIn(
     ExperimentalMaterial3Api::class, com.google.accompanist.pager.ExperimentalPagerApi::class,
     androidx.compose.foundation.ExperimentalFoundationApi::class
@@ -71,16 +74,8 @@ fun FeedsPage(
     val feedsViewState = feedsViewModel.viewState.collectAsStateValue()
     val filterState = homeViewModel.filterState.collectAsStateValue()
 
-    val skipVersion = context.dataStore.data
-        .map { it[DataStoreKeys.SkipVersionNumber.key] ?: "" }
-        .collectAsState(initial = "")
-        .value
-        .toVersion()
-    val latestVersion = context.dataStore.data
-        .map { it[DataStoreKeys.NewVersionNumber.key] ?: "" }
-        .collectAsState(initial = "")
-        .value
-        .toVersion()
+    val newVersion = LocalNewVersionNumber.current
+    val skipVersion = LocalSkipVersionNumber.current
     val currentVersion by remember { mutableStateOf(context.getCurrentVersion()) }
 
     val owner = LocalLifecycleOwner.current
@@ -145,7 +140,7 @@ fun FeedsPage(
                         imageVector = Icons.Outlined.Settings,
                         contentDescription = stringResource(R.string.settings),
                         tint = MaterialTheme.colorScheme.onSurface,
-                        showBadge = latestVersion.whetherNeedUpdate(currentVersion, skipVersion),
+                        showBadge = newVersion.whetherNeedUpdate(currentVersion, skipVersion),
                     ) {
                         navController.navigate(RouteName.SETTINGS) {
                             launchSingleTop = true

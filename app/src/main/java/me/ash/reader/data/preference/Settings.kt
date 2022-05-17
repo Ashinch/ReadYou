@@ -7,10 +7,18 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.flow.map
+import me.ash.reader.data.model.Version
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.dataStore
 
 data class Settings(
+    val newVersionNumber: Version = NewVersionNumberPreference.default,
+    val skipVersionNumber: Version = SkipVersionNumberPreference.default,
+    val newVersionPublishDate: String = NewVersionPublishDatePreference.default,
+    val newVersionLog: String = NewVersionLogPreference.default,
+    val newVersionSize: String = NewVersionSizePreference.default,
+    val newVersionDownloadUrl: String = NewVersionDownloadUrlPreference.default,
+
     val themeIndex: Int = ThemeIndexPreference.default,
     val customPrimaryColor: String = CustomPrimaryColorPreference.default,
     val darkTheme: DarkThemePreference = DarkThemePreference.default,
@@ -53,6 +61,13 @@ fun SettingsProvider(
     }.collectAsStateValue(initial = Settings())
 
     CompositionLocalProvider(
+        LocalNewVersionNumber provides settings.newVersionNumber,
+        LocalSkipVersionNumber provides settings.skipVersionNumber,
+        LocalNewVersionPublishDate provides settings.newVersionPublishDate,
+        LocalNewVersionLog provides settings.newVersionLog,
+        LocalNewVersionSize provides settings.newVersionSize,
+        LocalNewVersionDownloadUrl provides settings.newVersionDownloadUrl,
+
         LocalThemeIndex provides settings.themeIndex,
         LocalCustomPrimaryColor provides settings.customPrimaryColor,
         LocalDarkTheme provides settings.darkTheme,
@@ -84,6 +99,13 @@ fun SettingsProvider(
         content()
     }
 }
+
+val LocalNewVersionNumber = compositionLocalOf { NewVersionNumberPreference.default }
+val LocalSkipVersionNumber = compositionLocalOf { SkipVersionNumberPreference.default }
+val LocalNewVersionPublishDate = compositionLocalOf { NewVersionPublishDatePreference.default }
+val LocalNewVersionLog = compositionLocalOf { NewVersionLogPreference.default }
+val LocalNewVersionSize = compositionLocalOf { NewVersionSizePreference.default }
+val LocalNewVersionDownloadUrl = compositionLocalOf { NewVersionDownloadUrlPreference.default }
 
 val LocalThemeIndex =
     compositionLocalOf { ThemeIndexPreference.default }

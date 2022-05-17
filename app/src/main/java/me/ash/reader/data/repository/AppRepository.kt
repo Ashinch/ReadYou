@@ -11,10 +11,15 @@ import me.ash.reader.R
 import me.ash.reader.data.model.toVersion
 import me.ash.reader.data.module.DispatcherIO
 import me.ash.reader.data.module.DispatcherMain
+import me.ash.reader.data.preference.*
+import me.ash.reader.data.preference.NewVersionSizePreference.formatSize
 import me.ash.reader.data.source.AppNetworkDataSource
 import me.ash.reader.data.source.Download
 import me.ash.reader.data.source.downloadToFileWithProgress
-import me.ash.reader.ui.ext.*
+import me.ash.reader.ui.ext.getCurrentVersion
+import me.ash.reader.ui.ext.getLatestApk
+import me.ash.reader.ui.ext.showToast
+import me.ash.reader.ui.ext.skipVersionNumber
 import javax.inject.Inject
 
 class AppRepository @Inject constructor(
@@ -46,7 +51,7 @@ class AppRepository @Inject constructor(
             }
             val latest = response.body()!!
             val latestVersion = latest.tag_name.toVersion()
-//            val latestVersion = "0.7.3".toVersion()
+//            val latestVersion = "1.0.0".toVersion()
             val skipVersion = context.skipVersionNumber.toVersion()
             val currentVersion = context.getCurrentVersion()
             val latestLog = latest.body ?: ""
@@ -57,14 +62,11 @@ class AppRepository @Inject constructor(
             Log.i("RLog", "current version $currentVersion")
             if (latestVersion.whetherNeedUpdate(currentVersion, skipVersion)) {
                 Log.i("RLog", "new version $latestVersion")
-                context.dataStore.put(
-                    DataStoreKeys.NewVersionNumber,
-                    latestVersion.toString()
-                )
-                context.dataStore.put(DataStoreKeys.NewVersionLog, latestLog)
-                context.dataStore.put(DataStoreKeys.NewVersionPublishDate, latestPublishDate)
-                context.dataStore.put(DataStoreKeys.NewVersionSize, latestSize)
-                context.dataStore.put(DataStoreKeys.NewVersionDownloadUrl, latestDownloadUrl)
+                NewVersionNumberPreference.put(context, this, latestVersion.toString())
+                NewVersionLogPreference.put(context, this, latestLog)
+                NewVersionPublishDatePreference.put(context, this, latestPublishDate)
+                NewVersionSizePreference.put(context, this, latestSize.formatSize())
+                NewVersionDownloadUrlPreference.put(context, this, latestDownloadUrl)
                 true
             } else {
                 false

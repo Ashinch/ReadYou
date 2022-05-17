@@ -15,16 +15,6 @@ import java.io.IOException
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-val Context.newVersionPublishDate: String
-    get() = this.dataStore.get(DataStoreKeys.NewVersionPublishDate) ?: ""
-val Context.newVersionLog: String
-    get() = this.dataStore.get(DataStoreKeys.NewVersionLog) ?: ""
-val Context.newVersionSize: Int
-    get() = this.dataStore.get(DataStoreKeys.NewVersionSize) ?: 0
-val Context.newVersionDownloadUrl: String
-    get() = this.dataStore.get(DataStoreKeys.NewVersionDownloadUrl) ?: ""
-val Context.newVersionNumber: String
-    get() = this.dataStore.get(DataStoreKeys.NewVersionNumber) ?: ""
 val Context.skipVersionNumber: String
     get() = this.dataStore.get(DataStoreKeys.SkipVersionNumber) ?: ""
 val Context.isFirstLaunch: Boolean
@@ -93,9 +83,9 @@ sealed class DataStoreKeys<T> {
             get() = stringPreferencesKey("newVersionLog")
     }
 
-    object NewVersionSize : DataStoreKeys<Int>() {
-        override val key: Preferences.Key<Int>
-            get() = intPreferencesKey("newVersionSize")
+    object NewVersionSize : DataStoreKeys<String>() {
+        override val key: Preferences.Key<String>
+            get() = stringPreferencesKey("newVersionSize")
     }
 
     object NewVersionDownloadUrl : DataStoreKeys<String>() {
