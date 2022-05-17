@@ -23,7 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.data.entity.ArticleWithFeed
-import me.ash.reader.ui.component.FeedbackIconButton
+import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.reader.reader
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.drawVerticalScrollbar

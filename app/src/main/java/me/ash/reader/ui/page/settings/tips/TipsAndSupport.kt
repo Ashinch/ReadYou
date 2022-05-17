@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.ui.component.CurlyCornerShape
-import me.ash.reader.ui.component.FeedbackIconButton
+import me.ash.reader.ui.component.base.CurlyCornerShape
+import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.theme.palette.alwaysLight
 import me.ash.reader.ui.theme.palette.onLight

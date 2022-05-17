@@ -28,8 +28,8 @@ import me.ash.reader.R
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.entity.Group
 import me.ash.reader.ui.ext.alphaLN
-import me.ash.reader.ui.page.home.feeds.option.group.GroupOptionViewAction
-import me.ash.reader.ui.page.home.feeds.option.group.GroupOptionViewModel
+import me.ash.reader.ui.page.home.feeds.drawer.group.GroupOptionViewAction
+import me.ash.reader.ui.page.home.feeds.drawer.group.GroupOptionViewModel
 
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable

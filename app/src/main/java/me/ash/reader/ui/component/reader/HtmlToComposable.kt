@@ -51,7 +51,7 @@ import coil.size.Precision
 import coil.size.Size
 import coil.size.pxOrElse
 import me.ash.reader.R
-import me.ash.reader.ui.component.AsyncImage
+import me.ash.reader.ui.component.base.AsyncImage
 import org.jsoup.Jsoup
 import org.jsoup.helper.StringUtil
 import org.jsoup.nodes.Element

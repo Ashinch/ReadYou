@@ -25,9 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.R
-import me.ash.reader.ui.component.ClipboardTextField
-import me.ash.reader.ui.component.Dialog
-import me.ash.reader.ui.component.TextFieldDialog
+import me.ash.reader.ui.component.base.ClipboardTextField
+import me.ash.reader.ui.component.base.Dialog
+import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.ext.collectAsStateValue
 
 @OptIn(

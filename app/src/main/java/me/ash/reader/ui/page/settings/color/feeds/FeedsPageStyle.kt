@@ -25,9 +25,9 @@ import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.model.Filter
 import me.ash.reader.data.entity.Group
 import me.ash.reader.data.preference.*
-import me.ash.reader.ui.component.*
+import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.surfaceColorAtElevation
-import me.ash.reader.ui.page.home.FilterBar
+import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.page.home.feeds.GroupItem
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onDark

@@ -35,7 +35,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.data.source.Download
-import me.ash.reader.ui.component.Dialog
+import me.ash.reader.ui.component.base.Dialog
 import me.ash.reader.ui.ext.*
 
 @SuppressLint("FlowOperatorInvokedInComposition")

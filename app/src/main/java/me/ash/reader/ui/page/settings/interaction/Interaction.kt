@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.settings.interaction
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,13 +16,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.ui.component.*
+import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
 
-@SuppressLint("FlowOperatorInvokedInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Interaction(

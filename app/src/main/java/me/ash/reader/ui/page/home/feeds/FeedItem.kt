@@ -20,9 +20,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.data.entity.Feed
-import me.ash.reader.ui.page.home.FeedIcon
-import me.ash.reader.ui.page.home.feeds.option.feed.FeedOptionViewAction
-import me.ash.reader.ui.page.home.feeds.option.feed.FeedOptionViewModel
+import me.ash.reader.ui.component.FeedIcon
+import me.ash.reader.ui.page.home.feeds.drawer.feed.FeedOptionViewAction
+import me.ash.reader.ui.page.home.feeds.drawer.feed.FeedOptionViewModel
 import kotlin.math.ln
 
 @OptIn(

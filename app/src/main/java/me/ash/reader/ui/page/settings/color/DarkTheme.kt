@@ -20,10 +20,10 @@ import me.ash.reader.data.preference.DarkThemePreference
 import me.ash.reader.data.preference.LocalAmoledDarkTheme
 import me.ash.reader.data.preference.LocalDarkTheme
 import me.ash.reader.data.preference.not
-import me.ash.reader.ui.component.DisplayText
-import me.ash.reader.ui.component.FeedbackIconButton
-import me.ash.reader.ui.component.Subtitle
-import me.ash.reader.ui.component.Switch
+import me.ash.reader.ui.component.base.DisplayText
+import me.ash.reader.ui.component.base.FeedbackIconButton
+import me.ash.reader.ui.component.base.Subtitle
+import me.ash.reader.ui.component.base.Switch
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
 

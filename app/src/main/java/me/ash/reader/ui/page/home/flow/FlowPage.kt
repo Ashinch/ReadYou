@@ -28,13 +28,13 @@ import me.ash.reader.R
 import me.ash.reader.data.model.getName
 import me.ash.reader.data.preference.*
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
-import me.ash.reader.ui.component.DisplayText
-import me.ash.reader.ui.component.FeedbackIconButton
-import me.ash.reader.ui.component.SwipeRefresh
+import me.ash.reader.ui.component.FilterBar
+import me.ash.reader.ui.component.base.DisplayText
+import me.ash.reader.ui.component.base.FeedbackIconButton
+import me.ash.reader.ui.component.base.SwipeRefresh
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.common.RouteName
-import me.ash.reader.ui.page.home.FilterBar
 import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel

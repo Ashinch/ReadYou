@@ -18,9 +18,9 @@ import androidx.navigation.NavHostController
 import com.ireward.htmlcompose.HtmlText
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.ui.component.DisplayText
-import me.ash.reader.ui.component.DynamicSVGImage
-import me.ash.reader.ui.component.Tips
+import me.ash.reader.ui.component.base.DisplayText
+import me.ash.reader.ui.component.base.DynamicSVGImage
+import me.ash.reader.ui.component.base.Tips
 import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put

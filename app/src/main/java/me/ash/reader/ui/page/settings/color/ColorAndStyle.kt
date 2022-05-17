@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.settings.color
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import androidx.compose.animation.*
@@ -27,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.data.preference.*
-import me.ash.reader.ui.component.*
+import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.svg.PALETTE
@@ -36,7 +35,6 @@ import me.ash.reader.ui.theme.palette.*
 import me.ash.reader.ui.theme.palette.TonalPalettes.Companion.toTonalPalettes
 import me.ash.reader.ui.theme.palette.dynamic.extractTonalPalettesFromUserWallpaper
 
-@SuppressLint("FlowOperatorInvokedInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ColorAndStyle(
@@ -157,7 +155,7 @@ fun ColorAndStyle(
                             }
                         },
                     ) {
-                        Switch(
+                        me.ash.reader.ui.component.base.Switch(
                             activated = darkTheme.isDarkTheme()
                         ) {
                             darkThemeNot.put(context, scope)

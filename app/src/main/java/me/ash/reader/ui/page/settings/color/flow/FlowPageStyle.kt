@@ -27,9 +27,9 @@ import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.model.Filter
 import me.ash.reader.data.preference.*
-import me.ash.reader.ui.component.*
+import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.surfaceColorAtElevation
-import me.ash.reader.ui.page.home.FilterBar
+import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.page.home.flow.ArticleItem
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onDark
@@ -158,7 +158,7 @@ fun FlowPageStyle(
                             (!articleListFeedIcon).put(context, scope)
                         },
                     ) {
-                        Switch(activated = articleListFeedIcon.value) {
+                        me.ash.reader.ui.component.base.Switch(activated = articleListFeedIcon.value) {
                             (!articleListFeedIcon).put(context, scope)
                         }
                     }
@@ -168,7 +168,7 @@ fun FlowPageStyle(
                             (!articleListFeedName).put(context, scope)
                         },
                     ) {
-                        Switch(activated = articleListFeedName.value) {
+                        me.ash.reader.ui.component.base.Switch(activated = articleListFeedName.value) {
                             (!articleListFeedName).put(context, scope)
                         }
                     }
@@ -178,7 +178,7 @@ fun FlowPageStyle(
                             (!articleListImage).put(context, scope)
                         },
                     ) {
-                        Switch(activated = articleListImage.value) {
+                        me.ash.reader.ui.component.base.Switch(activated = articleListImage.value) {
                             (!articleListImage).put(context, scope)
                         }
                     }
@@ -188,7 +188,7 @@ fun FlowPageStyle(
                             (!articleListDesc).put(context, scope)
                         },
                     ) {
-                        Switch(activated = articleListDesc.value) {
+                        me.ash.reader.ui.component.base.Switch(activated = articleListDesc.value) {
                             (!articleListDesc).put(context, scope)
                         }
                     }
@@ -198,7 +198,7 @@ fun FlowPageStyle(
                             (!articleListTime).put(context, scope)
                         },
                     ) {
-                        Switch(activated = articleListTime.value) {
+                        me.ash.reader.ui.component.base.Switch(activated = articleListTime.value) {
                             (!articleListTime).put(context, scope)
                         }
                     }
@@ -208,7 +208,7 @@ fun FlowPageStyle(
                             (!articleListStickyDate).put(context, scope)
                         },
                     ) {
-                        Switch(activated = articleListStickyDate.value) {
+                        me.ash.reader.ui.component.base.Switch(activated = articleListStickyDate.value) {
                             (!articleListStickyDate).put(context, scope)
                         }
                     }
@@ -242,7 +242,7 @@ fun FlowPageStyle(
                             (!filterBarFilled).put(context, scope)
                         },
                     ) {
-                        Switch(activated = filterBarFilled.value) {
+                        me.ash.reader.ui.component.base.Switch(activated = filterBarFilled.value) {
                             (!filterBarFilled).put(context, scope)
                         }
                     }

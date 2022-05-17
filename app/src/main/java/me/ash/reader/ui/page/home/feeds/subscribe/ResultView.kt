@@ -30,8 +30,8 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import me.ash.reader.R
 import me.ash.reader.data.entity.Group
-import me.ash.reader.ui.component.SelectionChip
-import me.ash.reader.ui.component.Subtitle
+import me.ash.reader.ui.component.base.SelectionChip
+import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.ext.roundClick
 import me.ash.reader.ui.theme.palette.alwaysLight
 

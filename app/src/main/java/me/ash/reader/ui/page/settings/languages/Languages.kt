@@ -23,9 +23,9 @@ import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.data.preference.LanguagesPreference
 import me.ash.reader.data.preference.LocalLanguages
-import me.ash.reader.ui.component.Banner
-import me.ash.reader.ui.component.DisplayText
-import me.ash.reader.ui.component.FeedbackIconButton
+import me.ash.reader.ui.component.base.Banner
+import me.ash.reader.ui.component.base.DisplayText
+import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
 
