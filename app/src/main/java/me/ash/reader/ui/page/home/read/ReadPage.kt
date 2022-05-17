@@ -11,7 +11,10 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material3.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +31,6 @@ import me.ash.reader.ui.component.reader.reader
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.drawVerticalScrollbar
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReadPage(
     navController: NavHostController,
@@ -54,9 +56,7 @@ fun ReadPage(
         }
     }
 
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.surface,
-        topBar = {},
+    me.ash.reader.ui.component.base.Scaffold(
         content = {
             Box(Modifier.fillMaxSize()) {
                 Box(
@@ -102,8 +102,7 @@ fun ReadPage(
                     )
                 }
             }
-        },
-        bottomBar = {}
+        }
     )
 }
 

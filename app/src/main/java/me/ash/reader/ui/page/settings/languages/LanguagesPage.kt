@@ -2,17 +2,17 @@ package me.ash.reader.ui.page.settings.languages
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -31,36 +31,23 @@ import me.ash.reader.ui.theme.palette.onLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Languages(
+fun LanguagesPage(
     navController: NavHostController,
 ) {
     val context = LocalContext.current
     val languages = LocalLanguages.current
     val scope = rememberCoroutineScope()
 
-    Scaffold(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
+    me.ash.reader.ui.component.base.Scaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
-        topBar = {
-            SmallTopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface
-                ),
-                title = {},
-                navigationIcon = {
-                    FeedbackIconButton(
-                        imageVector = Icons.Rounded.ArrowBack,
-                        contentDescription = stringResource(R.string.back),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    ) {
-                        navController.popBackStack()
-                    }
-                },
-                actions = {}
-            )
+        navigationIcon = {
+            FeedbackIconButton(
+                imageVector = Icons.Rounded.ArrowBack,
+                contentDescription = stringResource(R.string.back),
+                tint = MaterialTheme.colorScheme.onSurface
+            ) {
+                navController.popBackStack()
+            }
         },
         content = {
             LazyColumn {

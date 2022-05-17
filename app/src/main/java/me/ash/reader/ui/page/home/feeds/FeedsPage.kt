@@ -1,11 +1,9 @@
 package me.ash.reader.ui.page.home.feeds
 
-import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,7 +13,8 @@ import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -38,7 +37,6 @@ import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.findActivity
 import me.ash.reader.ui.ext.getCurrentVersion
-import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.HomeViewAction
@@ -48,11 +46,9 @@ import me.ash.reader.ui.page.home.feeds.drawer.group.GroupOptionDrawer
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewAction
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
-import me.ash.reader.ui.theme.palette.onDark
 
-@SuppressLint("FlowOperatorInvokedInComposition")
 @OptIn(
-    ExperimentalMaterial3Api::class, com.google.accompanist.pager.ExperimentalPagerApi::class,
+    com.google.accompanist.pager.ExperimentalPagerApi::class,
     androidx.compose.foundation.ExperimentalFoundationApi::class
 )
 @Composable
@@ -119,52 +115,38 @@ fun FeedsPage(
         context.findActivity()?.moveTaskToBack(false)
     }
 
-    Scaffold(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(topBarTonalElevation.value.dp))
-            .statusBarsPadding(),
-        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-            groupListTonalElevation.value.dp
-        ) onDark MaterialTheme.colorScheme.surface,
-        topBar = {
-            SmallTopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                        topBarTonalElevation.value.dp
-                    ),
-                ),
-                title = {},
-                navigationIcon = {
-                    FeedbackIconButton(
-                        modifier = Modifier.size(20.dp),
-                        imageVector = Icons.Outlined.Settings,
-                        contentDescription = stringResource(R.string.settings),
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        showBadge = newVersion.whetherNeedUpdate(currentVersion, skipVersion),
-                    ) {
-                        navController.navigate(RouteName.SETTINGS) {
-                            launchSingleTop = true
-                        }
-                    }
-                },
-                actions = {
-                    FeedbackIconButton(
-                        modifier = Modifier.rotate(if (isSyncing) angle else 0f),
-                        imageVector = Icons.Rounded.Refresh,
-                        contentDescription = stringResource(R.string.refresh),
-                        tint = MaterialTheme.colorScheme.onSurface,
-                    ) {
-                        if (!isSyncing) homeViewModel.dispatch(HomeViewAction.Sync)
-                    }
-                    FeedbackIconButton(
-                        imageVector = Icons.Rounded.Add,
-                        contentDescription = stringResource(R.string.subscribe),
-                        tint = MaterialTheme.colorScheme.onSurface,
-                    ) {
-                        subscribeViewModel.dispatch(SubscribeViewAction.Show)
-                    }
+    me.ash.reader.ui.component.base.Scaffold(
+        topBarTonalElevation = topBarTonalElevation.value.dp,
+        containerTonalElevation = groupListTonalElevation.value.dp,
+        navigationIcon = {
+            FeedbackIconButton(
+                modifier = Modifier.size(20.dp),
+                imageVector = Icons.Outlined.Settings,
+                contentDescription = stringResource(R.string.settings),
+                tint = MaterialTheme.colorScheme.onSurface,
+                showBadge = newVersion.whetherNeedUpdate(currentVersion, skipVersion),
+            ) {
+                navController.navigate(RouteName.SETTINGS) {
+                    launchSingleTop = true
                 }
-            )
+            }
+        },
+        actions = {
+            FeedbackIconButton(
+                modifier = Modifier.rotate(if (isSyncing) angle else 0f),
+                imageVector = Icons.Rounded.Refresh,
+                contentDescription = stringResource(R.string.refresh),
+                tint = MaterialTheme.colorScheme.onSurface,
+            ) {
+                if (!isSyncing) homeViewModel.dispatch(HomeViewAction.Sync)
+            }
+            FeedbackIconButton(
+                imageVector = Icons.Rounded.Add,
+                contentDescription = stringResource(R.string.subscribe),
+                tint = MaterialTheme.colorScheme.onSurface,
+            ) {
+                subscribeViewModel.dispatch(SubscribeViewAction.Show)
+            }
         },
         content = {
             LazyColumn {

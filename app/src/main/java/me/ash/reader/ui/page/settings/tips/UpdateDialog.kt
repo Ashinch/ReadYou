@@ -1,7 +1,6 @@
 package me.ash.reader.ui.page.settings.tips
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -38,7 +37,6 @@ import me.ash.reader.ui.component.base.Dialog
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.installLatestApk
 
-@SuppressLint("FlowOperatorInvokedInComposition")
 @Composable
 fun UpdateDialog(
     updateViewModel: UpdateViewModel = hiltViewModel(),

@@ -37,7 +37,7 @@ import me.ash.reader.ui.theme.palette.dynamic.extractTonalPalettesFromUserWallpa
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ColorAndStyle(
+fun ColorAndStylePage(
     navController: NavHostController,
 ) {
     val context = LocalContext.current
@@ -50,29 +50,16 @@ fun ColorAndStyle(
     val wallpaperTonalPalettes = extractTonalPalettesFromUserWallpaper()
     var radioButtonSelected by remember { mutableStateOf(if (themeIndex > 4) 0 else 1) }
 
-    Scaffold(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
+    me.ash.reader.ui.component.base.Scaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
-        topBar = {
-            SmallTopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface
-                ),
-                title = {},
-                navigationIcon = {
-                    FeedbackIconButton(
-                        imageVector = Icons.Rounded.ArrowBack,
-                        contentDescription = stringResource(R.string.back),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    ) {
-                        navController.popBackStack()
-                    }
-                },
-                actions = {}
-            )
+        navigationIcon = {
+            FeedbackIconButton(
+                imageVector = Icons.Rounded.ArrowBack,
+                contentDescription = stringResource(R.string.back),
+                tint = MaterialTheme.colorScheme.onSurface
+            ) {
+                navController.popBackStack()
+            }
         },
         content = {
             LazyColumn {

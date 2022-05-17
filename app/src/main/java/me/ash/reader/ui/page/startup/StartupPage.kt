@@ -2,8 +2,9 @@ package me.ash.reader.ui.page.startup
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircleOutline
@@ -28,7 +29,6 @@ import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.svg.SVGString
 import me.ash.reader.ui.svg.WELCOME
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StartupPage(
     navController: NavHostController,
@@ -36,12 +36,7 @@ fun StartupPage(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    Scaffold(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        topBar = {},
+    me.ash.reader.ui.component.base.Scaffold(
         content = {
             LazyColumn {
                 item {
@@ -87,16 +82,7 @@ fun StartupPage(
                 }
             }
         },
-        bottomBar = {
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(24.dp),
-//                horizontalArrangement = Arrangement.End,
-//                verticalAlignment = Alignment.CenterVertically,
-//            ) {
-//            }
-        },
+        bottomBar = null,
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = {

@@ -45,6 +45,9 @@ data class Settings(
     val flowArticleListDateStickyHeader: FlowArticleListDateStickyHeaderPreference = FlowArticleListDateStickyHeaderPreference.default,
     val flowArticleListTonalElevation: FlowArticleListTonalElevationPreference = FlowArticleListTonalElevationPreference.default,
 
+    val initialPage: InitialPagePreference = InitialPagePreference.default,
+    val initialFilter: InitialFilterPreference = InitialFilterPreference.default,
+
     val languages: LanguagesPreference = LanguagesPreference.default,
 )
 
@@ -93,6 +96,9 @@ fun SettingsProvider(
         LocalFlowFilterBarFilled provides settings.flowFilterBarFilled,
         LocalFlowFilterBarPadding provides settings.flowFilterBarPadding,
         LocalFlowFilterBarTonalElevation provides settings.flowFilterBarTonalElevation,
+
+        LocalInitialPage provides settings.initialPage,
+        LocalInitialFilter provides settings.initialFilter,
 
         LocalLanguages provides settings.languages,
     ) {
@@ -155,6 +161,10 @@ val LocalFlowArticleListDateStickyHeader =
     compositionLocalOf<FlowArticleListDateStickyHeaderPreference> { FlowArticleListDateStickyHeaderPreference.default }
 val LocalFlowArticleListTonalElevation =
     compositionLocalOf<FlowArticleListTonalElevationPreference> { FlowArticleListTonalElevationPreference.default }
+
+val LocalInitialPage = compositionLocalOf<InitialPagePreference> { InitialPagePreference.default }
+val LocalInitialFilter =
+    compositionLocalOf<InitialFilterPreference> { InitialFilterPreference.default }
 
 val LocalLanguages =
     compositionLocalOf<LanguagesPreference> { LanguagesPreference.default }

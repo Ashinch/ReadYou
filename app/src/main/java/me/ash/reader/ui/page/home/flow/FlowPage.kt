@@ -2,7 +2,6 @@ package me.ash.reader.ui.page.home.flow
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -10,7 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -33,15 +32,12 @@ import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.SwipeRefresh
 import me.ash.reader.ui.ext.collectAsStateValue
-import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
-import me.ash.reader.ui.theme.palette.onDark
 
 @OptIn(
-    ExperimentalMaterial3Api::class,
     com.google.accompanist.pager.ExperimentalPagerApi::class,
     androidx.compose.ui.ExperimentalComposeUiApi::class,
 )
@@ -105,75 +101,61 @@ fun FlowPage(
         onSearch = false
     }
 
-    Scaffold(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(topBarTonalElevation.value.dp))
-            .statusBarsPadding(),
-        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-            articleListTonalElevation.value.dp
-        ) onDark MaterialTheme.colorScheme.surface,
-        topBar = {
-            SmallTopAppBar(
-                title = {},
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                        topBarTonalElevation.value.dp
-                    ),
-                ),
-                navigationIcon = {
-                    FeedbackIconButton(
-                        imageVector = Icons.Rounded.ArrowBack,
-                        contentDescription = stringResource(R.string.back),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    ) {
+    me.ash.reader.ui.component.base.Scaffold(
+        topBarTonalElevation = topBarTonalElevation.value.dp,
+        containerTonalElevation = articleListTonalElevation.value.dp,
+        navigationIcon = {
+            FeedbackIconButton(
+                imageVector = Icons.Rounded.ArrowBack,
+                contentDescription = stringResource(R.string.back),
+                tint = MaterialTheme.colorScheme.onSurface
+            ) {
+                onSearch = false
+                if (navController.previousBackStackEntry == null) {
+                    navController.navigate(RouteName.FEEDS) {
+                        launchSingleTop = true
+                    }
+                } else {
+                    navController.popBackStack()
+                }
+            }
+        },
+        actions = {
+            AnimatedVisibility(
+                visible = !filterState.filter.isStarred(),
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically(),
+            ) {
+                FeedbackIconButton(
+                    imageVector = Icons.Rounded.DoneAll,
+                    contentDescription = stringResource(R.string.mark_all_as_read),
+                    tint = if (markAsRead) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
+                    },
+                ) {
+                    scope.launch {
+                        viewState.listState.scrollToItem(0)
+                        markAsRead = !markAsRead
                         onSearch = false
-                        if (navController.previousBackStackEntry == null) {
-                            navController.navigate(RouteName.FEEDS) {
-                                launchSingleTop = true
-                            }
-                        } else {
-                            navController.popBackStack()
-                        }
-                    }
-                },
-                actions = {
-                    AnimatedVisibility(
-                        visible = !filterState.filter.isStarred(),
-                        enter = fadeIn() + expandVertically(),
-                        exit = fadeOut() + shrinkVertically(),
-                    ) {
-                        FeedbackIconButton(
-                            imageVector = Icons.Rounded.DoneAll,
-                            contentDescription = stringResource(R.string.mark_all_as_read),
-                            tint = if (markAsRead) {
-                                MaterialTheme.colorScheme.primary
-                            } else {
-                                MaterialTheme.colorScheme.onSurface
-                            },
-                        ) {
-                            scope.launch {
-                                viewState.listState.scrollToItem(0)
-                                markAsRead = !markAsRead
-                                onSearch = false
-                            }
-                        }
-                    }
-                    FeedbackIconButton(
-                        imageVector = Icons.Rounded.Search,
-                        contentDescription = stringResource(R.string.search),
-                        tint = if (onSearch) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.onSurface
-                        },
-                    ) {
-                        scope.launch {
-                            viewState.listState.scrollToItem(0)
-                            onSearch = !onSearch
-                        }
                     }
                 }
-            )
+            }
+            FeedbackIconButton(
+                imageVector = Icons.Rounded.Search,
+                contentDescription = stringResource(R.string.search),
+                tint = if (onSearch) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                },
+            ) {
+                scope.launch {
+                    viewState.listState.scrollToItem(0)
+                    onSearch = !onSearch
+                }
+            }
         },
         content = {
             SwipeRefresh(

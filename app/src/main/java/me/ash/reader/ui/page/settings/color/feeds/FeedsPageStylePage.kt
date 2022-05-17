@@ -10,7 +10,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,20 +24,19 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.data.entity.Feed
-import me.ash.reader.data.model.Filter
 import me.ash.reader.data.entity.Group
+import me.ash.reader.data.model.Filter
 import me.ash.reader.data.preference.*
+import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.surfaceColorAtElevation
-import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.page.home.feeds.GroupItem
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onDark
 import me.ash.reader.ui.theme.palette.onLight
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FeedsPageStyle(
+fun FeedsPageStylePage(
     navController: NavHostController,
 ) {
     val context = LocalContext.current
@@ -57,29 +58,16 @@ fun FeedsPageStyle(
 
     var filterBarPaddingValue: Int? by remember { mutableStateOf(filterBarPadding) }
 
-    Scaffold(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
+    me.ash.reader.ui.component.base.Scaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
-        topBar = {
-            SmallTopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface
-                ),
-                title = {},
-                navigationIcon = {
-                    FeedbackIconButton(
-                        imageVector = Icons.Rounded.ArrowBack,
-                        contentDescription = stringResource(R.string.back),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    ) {
-                        navController.popBackStack()
-                    }
-                },
-                actions = {}
-            )
+        navigationIcon = {
+            FeedbackIconButton(
+                imageVector = Icons.Rounded.ArrowBack,
+                contentDescription = stringResource(R.string.back),
+                tint = MaterialTheme.colorScheme.onSurface
+            ) {
+                navController.popBackStack()
+            }
         },
         content = {
             LazyColumn {

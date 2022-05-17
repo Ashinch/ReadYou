@@ -45,6 +45,9 @@ fun Preferences.toSettings(): Settings {
         ),
         flowArticleListTonalElevation = FlowArticleListTonalElevationPreference.fromPreferences(this),
 
+        initialPage = InitialPagePreference.fromPreferences(this),
+        initialFilter = InitialFilterPreference.fromPreferences(this),
+
         languages = LanguagesPreference.fromPreferences(this),
     )
 }

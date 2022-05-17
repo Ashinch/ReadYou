@@ -21,13 +21,13 @@ import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.flow.FlowPage
 import me.ash.reader.ui.page.home.read.ReadPage
 import me.ash.reader.ui.page.settings.SettingsPage
-import me.ash.reader.ui.page.settings.color.ColorAndStyle
-import me.ash.reader.ui.page.settings.color.DarkTheme
-import me.ash.reader.ui.page.settings.color.feeds.FeedsPageStyle
-import me.ash.reader.ui.page.settings.color.flow.FlowPageStyle
-import me.ash.reader.ui.page.settings.interaction.Interaction
-import me.ash.reader.ui.page.settings.languages.Languages
-import me.ash.reader.ui.page.settings.tips.TipsAndSupport
+import me.ash.reader.ui.page.settings.color.ColorAndStylePage
+import me.ash.reader.ui.page.settings.color.DarkThemePage
+import me.ash.reader.ui.page.settings.color.feeds.FeedsPageStylePage
+import me.ash.reader.ui.page.settings.color.flow.FlowPageStylePage
+import me.ash.reader.ui.page.settings.interaction.InteractionPage
+import me.ash.reader.ui.page.settings.languages.LanguagesPage
+import me.ash.reader.ui.page.settings.tips.TipsAndSupportPage
 import me.ash.reader.ui.page.startup.StartupPage
 import me.ash.reader.ui.theme.AppTheme
 
@@ -124,31 +124,31 @@ fun HomeEntry(
 
             // Color & Style
             animatedComposable(route = RouteName.COLOR_AND_STYLE) {
-                ColorAndStyle(navController)
+                ColorAndStylePage(navController)
             }
             animatedComposable(route = RouteName.DARK_THEME) {
-                DarkTheme(navController)
+                DarkThemePage(navController)
             }
             animatedComposable(route = RouteName.FEEDS_PAGE_STYLE) {
-                FeedsPageStyle(navController)
+                FeedsPageStylePage(navController)
             }
             animatedComposable(route = RouteName.FLOW_PAGE_STYLE) {
-                FlowPageStyle(navController)
+                FlowPageStylePage(navController)
             }
 
             // Interaction
             animatedComposable(route = RouteName.INTERACTION) {
-                Interaction(navController)
+                InteractionPage(navController)
             }
 
             // Languages
             animatedComposable(route = RouteName.LANGUAGES) {
-                Languages(navController = navController)
+                LanguagesPage(navController = navController)
             }
 
             // Tips & Support
             animatedComposable(route = RouteName.TIPS_AND_SUPPORT) {
-                TipsAndSupport(navController)
+                TipsAndSupportPage(navController)
             }
         }
     }

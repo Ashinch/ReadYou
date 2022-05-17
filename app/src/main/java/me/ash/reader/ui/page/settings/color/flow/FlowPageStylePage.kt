@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.settings.color.flow
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,7 +10,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,19 +29,17 @@ import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.model.Filter
 import me.ash.reader.data.preference.*
+import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.surfaceColorAtElevation
-import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.page.home.flow.ArticleItem
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onDark
 import me.ash.reader.ui.theme.palette.onLight
 import java.util.*
 
-@SuppressLint("FlowOperatorInvokedInComposition")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FlowPageStyle(
+fun FlowPageStylePage(
     navController: NavHostController,
 ) {
     val context = LocalContext.current
@@ -66,29 +66,16 @@ fun FlowPageStyle(
 
     var filterBarPaddingValue: Int? by remember { mutableStateOf(filterBarPadding) }
 
-    Scaffold(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
+    me.ash.reader.ui.component.base.Scaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
-        topBar = {
-            SmallTopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface
-                ),
-                title = {},
-                navigationIcon = {
-                    FeedbackIconButton(
-                        imageVector = Icons.Rounded.ArrowBack,
-                        contentDescription = stringResource(R.string.back),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    ) {
-                        navController.popBackStack()
-                    }
-                },
-                actions = {}
-            )
+        navigationIcon = {
+            FeedbackIconButton(
+                imageVector = Icons.Rounded.ArrowBack,
+                contentDescription = stringResource(R.string.back),
+                tint = MaterialTheme.colorScheme.onSurface
+            ) {
+                navController.popBackStack()
+            }
         },
         content = {
             LazyColumn {

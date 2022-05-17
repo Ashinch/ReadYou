@@ -42,15 +42,13 @@ import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.theme.palette.alwaysLight
 import me.ash.reader.ui.theme.palette.onLight
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TipsAndSupport(
+fun TipsAndSupportPage(
     navController: NavHostController,
     updateViewModel: UpdateViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val view = LocalView.current
-    val scope = rememberCoroutineScope()
     var currentVersion by remember { mutableStateOf("") }
     var clickTime by remember { mutableStateOf(System.currentTimeMillis() - 2000) }
     var pressAMP by remember { mutableStateOf(16f) }
@@ -63,38 +61,26 @@ fun TipsAndSupport(
         currentVersion = context.getCurrentVersion().toString()
     }
 
-    Scaffold(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
+    me.ash.reader.ui.component.base.Scaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
-        topBar = {
-            SmallTopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface
-                ),
-                title = {},
-                navigationIcon = {
-                    FeedbackIconButton(
-                        imageVector = Icons.Rounded.ArrowBack,
-                        contentDescription = stringResource(R.string.back),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    ) {
-                        navController.popBackStack()
-                    }
-                },
-                actions = {
-                    FeedbackIconButton(
-                        modifier = Modifier.size(20.dp),
-                        imageVector = Icons.Rounded.Balance,
-                        contentDescription = stringResource(R.string.open_source_licenses),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    ) {
-                        context.showToast(context.getString(R.string.coming_soon))
-                    }
-                }
-            )
+        navigationIcon = {
+            FeedbackIconButton(
+                imageVector = Icons.Rounded.ArrowBack,
+                contentDescription = stringResource(R.string.back),
+                tint = MaterialTheme.colorScheme.onSurface
+            ) {
+                navController.popBackStack()
+            }
+        },
+        actions = {
+            FeedbackIconButton(
+                modifier = Modifier.size(20.dp),
+                imageVector = Icons.Rounded.Balance,
+                contentDescription = stringResource(R.string.open_source_licenses),
+                tint = MaterialTheme.colorScheme.onSurface
+            ) {
+                context.showToast(context.getString(R.string.coming_soon))
+            }
         },
         content = {
             LazyColumn(

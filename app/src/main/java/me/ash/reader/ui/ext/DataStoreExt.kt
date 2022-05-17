@@ -85,7 +85,7 @@ sealed class DataStoreKeys<T> {
 
     object NewVersionSize : DataStoreKeys<String>() {
         override val key: Preferences.Key<String>
-            get() = stringPreferencesKey("newVersionSize")
+            get() = stringPreferencesKey("newVersionSizeString")
     }
 
     object NewVersionDownloadUrl : DataStoreKeys<String>() {
