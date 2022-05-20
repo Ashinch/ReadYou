@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.ui.component.FeedIcon
-import me.ash.reader.ui.page.home.feeds.drawer.feed.FeedOptionViewAction
 import me.ash.reader.ui.page.home.feeds.drawer.feed.FeedOptionViewModel
 import kotlin.math.ln
 
@@ -55,7 +54,7 @@ fun FeedItem(
                 },
                 onLongClick = {
                     view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                    feedOptionViewModel.dispatch(FeedOptionViewAction.Show(scope, feed.id))
+                    feedOptionViewModel.showDrawer(scope, feed.id)
                 }
             )
             .padding(vertical = 14.dp),

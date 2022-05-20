@@ -19,35 +19,34 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.base.BottomDrawer
 import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.roundClick
 import me.ash.reader.ui.ext.showToast
-import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.page.home.feeds.subscribe.ResultView
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FeedOptionDrawer(
-    modifier: Modifier = Modifier,
     feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
     content: @Composable () -> Unit = {},
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val viewState = feedOptionViewModel.viewState.collectAsStateValue()
-    val feed = viewState.feed
-    val toastString = stringResource(R.string.rename_toast, viewState.newName)
+    val feedOptionUiState = feedOptionViewModel.feedOptionUiState.collectAsStateValue()
+    val feed = feedOptionUiState.feed
+    val toastString = stringResource(R.string.rename_toast, feedOptionUiState.newName)
 
-    BackHandler(viewState.drawerState.isVisible) {
+    BackHandler(feedOptionUiState.drawerState.isVisible) {
         scope.launch {
-            viewState.drawerState.hide()
+            feedOptionUiState.drawerState.hide()
         }
     }
 
     BottomDrawer(
-        drawerState = viewState.drawerState,
+        drawerState = feedOptionUiState.drawerState,
         sheetContent = {
             Column(modifier = Modifier.navigationBarsPadding()) {
                 Column(
@@ -65,7 +64,7 @@ fun FeedOptionDrawer(
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         modifier = Modifier.roundClick {
-                            feedOptionViewModel.dispatch(FeedOptionViewAction.ShowRenameDialog)
+                            feedOptionViewModel.showRenameDialog()
                         },
                         text = feed?.name ?: stringResource(R.string.unknown),
                         style = MaterialTheme.typography.headlineSmall,
@@ -77,32 +76,32 @@ fun FeedOptionDrawer(
                 Spacer(modifier = Modifier.height(16.dp))
                 ResultView(
                     link = feed?.url ?: stringResource(R.string.unknown),
-                    groups = viewState.groups,
-                    selectedAllowNotificationPreset = viewState.feed?.isNotification ?: false,
-                    selectedParseFullContentPreset = viewState.feed?.isFullContent ?: false,
+                    groups = feedOptionUiState.groups,
+                    selectedAllowNotificationPreset = feedOptionUiState.feed?.isNotification ?: false,
+                    selectedParseFullContentPreset = feedOptionUiState.feed?.isFullContent ?: false,
                     isMoveToGroup = true,
                     showUnsubscribe = true,
-                    selectedGroupId = viewState.feed?.groupId ?: "",
+                    selectedGroupId = feedOptionUiState.feed?.groupId ?: "",
                     allowNotificationPresetOnClick = {
-                        feedOptionViewModel.dispatch(FeedOptionViewAction.ChangeAllowNotificationPreset)
+                        feedOptionViewModel.changeAllowNotificationPreset()
                     },
                     parseFullContentPresetOnClick = {
-                        feedOptionViewModel.dispatch(FeedOptionViewAction.ChangeParseFullContentPreset)
+                        feedOptionViewModel.changeParseFullContentPreset()
                     },
                     clearArticlesOnClick = {
-                        feedOptionViewModel.dispatch(FeedOptionViewAction.ShowClearDialog)
+                        feedOptionViewModel.showClearDialog()
                     },
                     unsubscribeOnClick = {
-                        feedOptionViewModel.dispatch(FeedOptionViewAction.ShowDeleteDialog)
+                        feedOptionViewModel.showDeleteDialog()
                     },
                     onGroupClick = {
-                        feedOptionViewModel.dispatch(FeedOptionViewAction.SelectedGroup(it))
+                        feedOptionViewModel.selectedGroup(it)
                     },
                     onAddNewGroup = {
-                        feedOptionViewModel.dispatch(FeedOptionViewAction.ShowNewGroupDialog)
+                        feedOptionViewModel.showNewGroupDialog()
                     },
                     onFeedUrlClick = {
-                        feedOptionViewModel.dispatch(FeedOptionViewAction.ShowChangeUrlDialog)
+                        feedOptionViewModel.showFeedUrlDialog()
                     }
                 )
             }
@@ -116,56 +115,56 @@ fun FeedOptionDrawer(
     ClearFeedDialog(feedName = feed?.name ?: "")
 
     TextFieldDialog(
-        visible = viewState.newGroupDialogVisible,
+        visible = feedOptionUiState.newGroupDialogVisible,
         title = stringResource(R.string.create_new_group),
         icon = Icons.Outlined.CreateNewFolder,
-        value = viewState.newGroupContent,
+        value = feedOptionUiState.newGroupContent,
         placeholder = stringResource(R.string.name),
         onValueChange = {
-            feedOptionViewModel.dispatch(FeedOptionViewAction.InputNewGroup(it))
+            feedOptionViewModel.inputNewGroup(it)
         },
         onDismissRequest = {
-            feedOptionViewModel.dispatch(FeedOptionViewAction.HideNewGroupDialog)
+            feedOptionViewModel.hideNewGroupDialog()
         },
         onConfirm = {
-            feedOptionViewModel.dispatch(FeedOptionViewAction.AddNewGroup)
+            feedOptionViewModel.addNewGroup()
         }
     )
 
     TextFieldDialog(
-        visible = viewState.renameDialogVisible,
+        visible = feedOptionUiState.renameDialogVisible,
         title = stringResource(R.string.rename),
         icon = Icons.Outlined.Edit,
-        value = viewState.newName,
+        value = feedOptionUiState.newName,
         placeholder = stringResource(R.string.name),
         onValueChange = {
-            feedOptionViewModel.dispatch(FeedOptionViewAction.InputNewName(it))
+            feedOptionViewModel.inputNewName(it)
         },
         onDismissRequest = {
-            feedOptionViewModel.dispatch(FeedOptionViewAction.HideRenameDialog)
+            feedOptionViewModel.hideRenameDialog()
         },
         onConfirm = {
-            feedOptionViewModel.dispatch(FeedOptionViewAction.Rename)
-            feedOptionViewModel.dispatch(FeedOptionViewAction.Hide(scope))
+            feedOptionViewModel.renameFeed()
+            feedOptionViewModel.hideDrawer(scope)
             context.showToast(toastString)
         }
     )
 
     TextFieldDialog(
-        visible = viewState.changeUrlDialogVisible,
+        visible = feedOptionUiState.changeUrlDialogVisible,
         title = stringResource(R.string.change_url),
         icon = Icons.Outlined.Edit,
-        value = viewState.newUrl,
+        value = feedOptionUiState.newUrl,
         placeholder = stringResource(R.string.feed_url_placeholder),
         onValueChange = {
-            feedOptionViewModel.dispatch(FeedOptionViewAction.InputNewUrl(it))
+            feedOptionViewModel.inputNewUrl(it)
         },
         onDismissRequest = {
-            feedOptionViewModel.dispatch(FeedOptionViewAction.HideChangeUrlDialog)
+            feedOptionViewModel.hideFeedUrlDialog()
         },
         onConfirm = {
-            feedOptionViewModel.dispatch(FeedOptionViewAction.ChangeUrl)
-            feedOptionViewModel.dispatch(FeedOptionViewAction.Hide(scope))
+            feedOptionViewModel.changeFeedUrl()
+            feedOptionViewModel.hideDrawer(scope)
         }
     )
 }

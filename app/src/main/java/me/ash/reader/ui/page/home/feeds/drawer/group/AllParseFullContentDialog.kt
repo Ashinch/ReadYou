@@ -7,7 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,20 +17,19 @@ import me.ash.reader.ui.ext.showToast
 
 @Composable
 fun AllParseFullContentDialog(
-    modifier: Modifier = Modifier,
     groupName: String,
-    viewModel: GroupOptionViewModel = hiltViewModel(),
+    groupOptionViewModel: GroupOptionViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val viewState = viewModel.viewState.collectAsStateValue()
+    val groupOptionUiState = groupOptionViewModel.groupOptionUiState.collectAsStateValue()
     val scope = rememberCoroutineScope()
     val allowToastString = stringResource(R.string.all_parse_full_content_toast, groupName)
     val denyToastString = stringResource(R.string.all_deny_parse_full_content_toast, groupName)
 
     Dialog(
-        visible = viewState.allParseFullContentDialogVisible,
+        visible = groupOptionUiState.allParseFullContentDialogVisible,
         onDismissRequest = {
-            viewModel.dispatch(GroupOptionViewAction.HideAllParseFullContentDialog)
+            groupOptionViewModel.hideAllParseFullContentDialog()
         },
         icon = {
             Icon(
@@ -48,11 +46,11 @@ fun AllParseFullContentDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.AllParseFullContent(true) {
-                        viewModel.dispatch(GroupOptionViewAction.HideAllParseFullContentDialog)
-                        viewModel.dispatch(GroupOptionViewAction.Hide(scope))
+                    groupOptionViewModel.allParseFullContent(true) {
+                        groupOptionViewModel.hideAllParseFullContentDialog()
+                        groupOptionViewModel.hideDrawer(scope)
                         context.showToast(allowToastString)
-                    })
+                    }
                 }
             ) {
                 Text(
@@ -63,11 +61,11 @@ fun AllParseFullContentDialog(
         dismissButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.AllParseFullContent(false) {
-                        viewModel.dispatch(GroupOptionViewAction.HideAllParseFullContentDialog)
-                        viewModel.dispatch(GroupOptionViewAction.Hide(scope))
+                    groupOptionViewModel.allParseFullContent(false) {
+                        groupOptionViewModel.hideAllParseFullContentDialog()
+                        groupOptionViewModel.hideDrawer(scope)
                         context.showToast(denyToastString)
-                    })
+                    }
                 }
             ) {
                 Text(

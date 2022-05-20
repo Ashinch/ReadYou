@@ -28,7 +28,6 @@ import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.tips.UpdateDialog
-import me.ash.reader.ui.page.settings.tips.UpdateViewAction
 import me.ash.reader.ui.page.settings.tips.UpdateViewModel
 import me.ash.reader.ui.theme.palette.onLight
 
@@ -76,7 +75,7 @@ fun SettingsPage(
                                     )
                                 },
                             ) {
-                                updateViewModel.dispatch(UpdateViewAction.Show)
+                                updateViewModel.showDialog()
                             }
                         }
                         Banner(

@@ -1,4 +1,4 @@
-package me.ash.reader.ui.page.home.read
+package me.ash.reader.ui.page.home.reading
 
 import android.content.Intent
 import android.util.Log
@@ -32,26 +32,26 @@ import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.drawVerticalScrollbar
 
 @Composable
-fun ReadPage(
+fun ReadingPage(
     navController: NavHostController,
-    readViewModel: ReadViewModel = hiltViewModel(),
+    readingViewModel: ReadingViewModel = hiltViewModel(),
 ) {
-    val viewState = readViewModel.viewState.collectAsStateValue()
-    val isScrollDown = viewState.listState.isScrollDown()
+    val readingUiState = readingViewModel.readingUiState.collectAsStateValue()
+    val isScrollDown = readingUiState.listState.isScrollDown()
 
     LaunchedEffect(Unit) {
         navController.currentBackStackEntryFlow.collect {
             it.arguments?.getString("articleId")?.let {
-                readViewModel.dispatch(ReadViewAction.InitData(it))
+                readingViewModel.initData(it)
             }
         }
     }
 
-    LaunchedEffect(viewState.articleWithFeed?.article?.id) {
-        Log.i("RLog", "ReadPage: ${viewState.articleWithFeed}")
-        viewState.articleWithFeed?.let {
+    LaunchedEffect(readingUiState.articleWithFeed?.article?.id) {
+        Log.i("RLog", "ReadPage: ${readingUiState.articleWithFeed}")
+        readingUiState.articleWithFeed?.let {
             if (it.article.isUnread) {
-                readViewModel.dispatch(ReadViewAction.MarkUnread(false))
+                readingViewModel.markUnread(false)
             }
         }
     }
@@ -66,19 +66,19 @@ fun ReadPage(
                     contentAlignment = Alignment.TopCenter
                 ) {
                     TopBar(
-                        isShow = viewState.articleWithFeed == null || !isScrollDown,
-                        title = viewState.articleWithFeed?.article?.title,
-                        link = viewState.articleWithFeed?.article?.link,
+                        isShow = readingUiState.articleWithFeed == null || !isScrollDown,
+                        title = readingUiState.articleWithFeed?.article?.title,
+                        link = readingUiState.articleWithFeed?.article?.link,
                         onClose = {
                             navController.popBackStack()
                         },
                     )
                 }
                 Content(
-                    content = viewState.content ?: "",
-                    articleWithFeed = viewState.articleWithFeed,
-                    isLoading = viewState.isLoading,
-                    listState = viewState.listState,
+                    content = readingUiState.content ?: "",
+                    articleWithFeed = readingUiState.articleWithFeed,
+                    isLoading = readingUiState.isLoading,
+                    listState = readingUiState.listState,
                 )
                 Box(
                     modifier = Modifier
@@ -87,17 +87,17 @@ fun ReadPage(
                     contentAlignment = Alignment.BottomCenter
                 ) {
                     BottomBar(
-                        isShow = viewState.articleWithFeed != null && !isScrollDown,
-                        articleWithFeed = viewState.articleWithFeed,
+                        isShow = readingUiState.articleWithFeed != null && !isScrollDown,
+                        articleWithFeed = readingUiState.articleWithFeed,
                         unreadOnClick = {
-                            readViewModel.dispatch(ReadViewAction.MarkUnread(it))
+                            readingViewModel.markUnread(it)
                         },
                         starredOnClick = {
-                            readViewModel.dispatch(ReadViewAction.MarkStarred(it))
+                            readingViewModel.markStarred(it)
                         },
                         fullContentOnClick = { afterIsFullContent ->
-                            if (afterIsFullContent) readViewModel.dispatch(ReadViewAction.RenderFullContent)
-                            else readViewModel.dispatch(ReadViewAction.RenderDescriptionContent)
+                            if (afterIsFullContent) readingViewModel.renderFullContent()
+                            else readingViewModel.renderDescriptionContent()
                         },
                     )
                 }

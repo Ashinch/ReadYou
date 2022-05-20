@@ -42,24 +42,23 @@ import me.ash.reader.ui.ext.*
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GroupOptionDrawer(
-    modifier: Modifier = Modifier,
     groupOptionViewModel: GroupOptionViewModel = hiltViewModel(),
     content: @Composable () -> Unit = {},
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val viewState = groupOptionViewModel.viewState.collectAsStateValue()
-    val group = viewState.group
-    val toastString = stringResource(R.string.rename_toast, viewState.newName)
+    val groupOptionUiState = groupOptionViewModel.groupOptionUiState.collectAsStateValue()
+    val group = groupOptionUiState.group
+    val toastString = stringResource(R.string.rename_toast, groupOptionUiState.newName)
 
-    BackHandler(viewState.drawerState.isVisible) {
+    BackHandler(groupOptionUiState.drawerState.isVisible) {
         scope.launch {
-            viewState.drawerState.hide()
+            groupOptionUiState.drawerState.hide()
         }
     }
 
     BottomDrawer(
-        drawerState = viewState.drawerState,
+        drawerState = groupOptionUiState.drawerState,
         sheetContent = {
             Column(modifier = Modifier.navigationBarsPadding()) {
                 Column(
@@ -75,7 +74,7 @@ fun GroupOptionDrawer(
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         modifier = Modifier.roundClick {
-                            groupOptionViewModel.dispatch(GroupOptionViewAction.ShowRenameDialog)
+                            groupOptionViewModel.showRenameDialog()
                         },
                         text = group?.name ?: stringResource(R.string.unknown),
                         style = MaterialTheme.typography.headlineSmall,
@@ -106,15 +105,15 @@ fun GroupOptionDrawer(
                     Spacer(modifier = Modifier.height(10.dp))
                     Preset(groupOptionViewModel, group, context)
 
-                    if (viewState.groups.size != 1) {
+                    if (groupOptionUiState.groups.size != 1) {
                         Spacer(modifier = Modifier.height(26.dp))
                         Subtitle(text = stringResource(R.string.move_to_group))
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        if (viewState.groups.size > 6) {
-                            LazyRowGroups(viewState, group, groupOptionViewModel)
+                        if (groupOptionUiState.groups.size > 6) {
+                            LazyRowGroups(groupOptionUiState, group, groupOptionViewModel)
                         } else {
-                            FlowRowGroups(viewState, group, groupOptionViewModel)
+                            FlowRowGroups(groupOptionUiState, group, groupOptionViewModel)
                         }
                     }
 
@@ -132,20 +131,20 @@ fun GroupOptionDrawer(
     AllParseFullContentDialog(groupName = group?.name ?: "")
     AllMoveToGroupDialog(groupName = group?.name ?: "")
     TextFieldDialog(
-        visible = viewState.renameDialogVisible,
+        visible = groupOptionUiState.renameDialogVisible,
         title = stringResource(R.string.rename),
         icon = Icons.Outlined.Edit,
-        value = viewState.newName,
+        value = groupOptionUiState.newName,
         placeholder = stringResource(R.string.name),
         onValueChange = {
-            groupOptionViewModel.dispatch(GroupOptionViewAction.InputNewName(it))
+            groupOptionViewModel.inputNewName(it)
         },
         onDismissRequest = {
-            groupOptionViewModel.dispatch(GroupOptionViewAction.HideRenameDialog)
+            groupOptionViewModel.hideRenameDialog()
         },
         onConfirm = {
-            groupOptionViewModel.dispatch(GroupOptionViewAction.Rename)
-            groupOptionViewModel.dispatch(GroupOptionViewAction.Hide(scope))
+            groupOptionViewModel.rename()
+            groupOptionViewModel.hideDrawer(scope)
             context.showToast(toastString)
         }
     )
@@ -177,7 +176,7 @@ private fun Preset(
                 )
             },
         ) {
-            groupOptionViewModel.dispatch(GroupOptionViewAction.ShowAllAllowNotificationDialog)
+            groupOptionViewModel.showAllAllowNotificationDialog()
         }
         SelectionChip(
             modifier = Modifier.animateContentSize(),
@@ -193,14 +192,14 @@ private fun Preset(
                 )
             },
         ) {
-            groupOptionViewModel.dispatch(GroupOptionViewAction.ShowAllParseFullContentDialog)
+            groupOptionViewModel.showAllParseFullContentDialog()
         }
         SelectionChip(
             modifier = Modifier.animateContentSize(),
             content = stringResource(R.string.clear_articles),
             selected = false,
         ) {
-            groupOptionViewModel.dispatch(GroupOptionViewAction.ShowClearDialog)
+            groupOptionViewModel.showClearDialog()
         }
         if (group?.id != context.currentAccountId.getDefaultGroupId()) {
             SelectionChip(
@@ -208,7 +207,7 @@ private fun Preset(
                 content = stringResource(R.string.delete_group),
                 selected = false,
             ) {
-                groupOptionViewModel.dispatch(GroupOptionViewAction.ShowDeleteDialog)
+                groupOptionViewModel.showDeleteDialog()
             }
         }
     }
@@ -216,7 +215,7 @@ private fun Preset(
 
 @Composable
 private fun FlowRowGroups(
-    viewState: GroupOptionViewState,
+    groupOptionUiState: GroupOptionUiState,
     group: Group?,
     groupOptionViewModel: GroupOptionViewModel
 ) {
@@ -226,16 +225,14 @@ private fun FlowRowGroups(
         crossAxisSpacing = 10.dp,
         mainAxisSpacing = 10.dp,
     ) {
-        viewState.groups.forEach {
+        groupOptionUiState.groups.forEach {
             if (it.id != group?.id) {
                 SelectionChip(
                     modifier = Modifier.animateContentSize(),
                     content = it.name,
                     selected = false,
                 ) {
-                    groupOptionViewModel.dispatch(
-                        GroupOptionViewAction.ShowAllMoveToGroupDialog(it)
-                    )
+                    groupOptionViewModel.showAllMoveToGroupDialog(it)
                 }
             }
         }
@@ -244,21 +241,19 @@ private fun FlowRowGroups(
 
 @Composable
 private fun LazyRowGroups(
-    viewState: GroupOptionViewState,
+    groupOptionUiState: GroupOptionUiState,
     group: Group?,
     groupOptionViewModel: GroupOptionViewModel
 ) {
     LazyRow {
-        items(viewState.groups) {
+        items(groupOptionUiState.groups) {
             if (it.id != group?.id) {
                 SelectionChip(
                     modifier = Modifier.animateContentSize(),
                     content = it.name,
                     selected = false,
                 ) {
-                    groupOptionViewModel.dispatch(
-                        GroupOptionViewAction.ShowAllMoveToGroupDialog(it)
-                    )
+                    groupOptionViewModel.showAllMoveToGroupDialog(it)
                 }
             }
             Spacer(modifier = Modifier.width(10.dp))

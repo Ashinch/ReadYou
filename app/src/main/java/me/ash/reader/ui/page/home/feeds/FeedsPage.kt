@@ -39,12 +39,10 @@ import me.ash.reader.ui.ext.findActivity
 import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterState
-import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.drawer.feed.FeedOptionDrawer
 import me.ash.reader.ui.page.home.feeds.drawer.group.GroupOptionDrawer
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
-import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewAction
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 
 @OptIn(
@@ -67,8 +65,8 @@ fun FeedsPage(
     val filterBarPadding = LocalFeedsFilterBarPadding.current
     val filterBarTonalElevation = LocalFeedsFilterBarTonalElevation.current
 
-    val feedsViewState = feedsViewModel.viewState.collectAsStateValue()
-    val filterState = homeViewModel.filterState.collectAsStateValue()
+    val feedsUiState = feedsViewModel.feedsUiState.collectAsStateValue()
+    val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
 
     val newVersion = LocalNewVersionNumber.current
     val skipVersion = LocalSkipVersionNumber.current
@@ -92,22 +90,22 @@ fun FeedsPage(
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument()
     ) { result ->
-        feedsViewModel.dispatch(FeedsViewAction.ExportAsString { string ->
+        feedsViewModel.exportAsOpml { string ->
             result?.let { uri ->
                 context.contentResolver.openOutputStream(uri)?.let { outputStream ->
                     outputStream.write(string.toByteArray())
                 }
             }
-        })
+        }
     }
 
     LaunchedEffect(Unit) {
-        feedsViewModel.dispatch(FeedsViewAction.FetchAccount)
+        feedsViewModel.fetchAccount()
     }
 
-    LaunchedEffect(filterState) {
-        snapshotFlow { filterState }.collect {
-            feedsViewModel.dispatch(FeedsViewAction.FetchData(it))
+    LaunchedEffect(filterUiState) {
+        snapshotFlow { filterUiState }.collect {
+            feedsViewModel.fetchData(it)
         }
     }
 
@@ -138,14 +136,14 @@ fun FeedsPage(
                 contentDescription = stringResource(R.string.refresh),
                 tint = MaterialTheme.colorScheme.onSurface,
             ) {
-                if (!isSyncing) homeViewModel.dispatch(HomeViewAction.Sync)
+                if (!isSyncing) homeViewModel.sync()
             }
             FeedbackIconButton(
                 imageVector = Icons.Rounded.Add,
                 contentDescription = stringResource(R.string.subscribe),
                 tint = MaterialTheme.colorScheme.onSurface,
             ) {
-                subscribeViewModel.dispatch(SubscribeViewAction.Show)
+                subscribeViewModel.showDrawer()
             }
         },
         content = {
@@ -159,15 +157,15 @@ fun FeedsPage(
                                 }
                             )
                         },
-                        text = feedsViewState.account?.name ?: stringResource(R.string.read_you),
+                        text = feedsUiState.account?.name ?: stringResource(R.string.read_you),
                         desc = if (isSyncing) stringResource(R.string.syncing) else "",
                     )
                 }
                 item {
                     Banner(
-                        title = filterState.filter.getName(),
-                        desc = feedsViewState.importantCount.ifEmpty { stringResource(R.string.loading) },
-                        icon = filterState.filter.iconOutline,
+                        title = filterUiState.filter.getName(),
+                        desc = feedsUiState.importantCount.ifEmpty { stringResource(R.string.loading) },
+                        icon = filterUiState.filter.iconOutline,
                         action = {
                             Icon(
                                 imageVector = Icons.Outlined.KeyboardArrowRight,
@@ -178,7 +176,7 @@ fun FeedsPage(
                         filterChange(
                             navController = navController,
                             homeViewModel = homeViewModel,
-                            filterState = filterState.copy(
+                            filterState = filterUiState.copy(
                                 group = null,
                                 feed = null,
                             )
@@ -193,7 +191,7 @@ fun FeedsPage(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
-                itemsIndexed(feedsViewState.groupWithFeedList) { index, groupWithFeed ->
+                itemsIndexed(feedsUiState.groupWithFeedList) { index, groupWithFeed ->
 //                    Crossfade(targetState = groupWithFeed) { groupWithFeed ->
                     Column {
                         GroupItem(
@@ -205,7 +203,7 @@ fun FeedsPage(
                                 filterChange(
                                     navController = navController,
                                     homeViewModel = homeViewModel,
-                                    filterState = filterState.copy(
+                                    filterState = filterUiState.copy(
                                         group = groupWithFeed.group,
                                         feed = null,
                                     )
@@ -215,14 +213,14 @@ fun FeedsPage(
                                 filterChange(
                                     navController = navController,
                                     homeViewModel = homeViewModel,
-                                    filterState = filterState.copy(
+                                    filterState = filterUiState.copy(
                                         group = null,
                                         feed = feed,
                                     )
                                 )
                             }
                         )
-                        if (index != feedsViewState.groupWithFeedList.lastIndex) {
+                        if (index != feedsUiState.groupWithFeedList.lastIndex) {
                             Spacer(modifier = Modifier.height(8.dp))
                         }
                     }
@@ -236,7 +234,7 @@ fun FeedsPage(
         },
         bottomBar = {
             FilterBar(
-                filter = filterState.filter,
+                filter = filterUiState.filter,
                 filterBarStyle = filterBarStyle.value,
                 filterBarFilled = filterBarFilled.value,
                 filterBarPadding = filterBarPadding.dp,
@@ -245,7 +243,7 @@ fun FeedsPage(
                 filterChange(
                     navController = navController,
                     homeViewModel = homeViewModel,
-                    filterState = filterState.copy(filter = it),
+                    filterState = filterUiState.copy(filter = it),
                     isNavigate = false,
                 )
             }
@@ -263,7 +261,7 @@ private fun filterChange(
     filterState: FilterState,
     isNavigate: Boolean = true,
 ) {
-    homeViewModel.dispatch(HomeViewAction.ChangeFilter(filterState))
+    homeViewModel.changeFilter(filterState)
     if (isNavigate) {
         navController.navigate(RouteName.FLOW) {
             launchSingleTop = true

@@ -41,32 +41,32 @@ fun SubscribeDialog(
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    val viewState = subscribeViewModel.viewState.collectAsStateValue()
-    val groupsState = viewState.groups.collectAsState(initial = emptyList())
+    val subscribeUiState = subscribeViewModel.subscribeUiState.collectAsStateValue()
+    val groupsState = subscribeUiState.groups.collectAsState(initial = emptyList())
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
         it?.let { uri ->
             context.contentResolver.openInputStream(uri)?.let { inputStream ->
-                subscribeViewModel.dispatch(SubscribeViewAction.ImportFromInputStream(inputStream))
+                subscribeViewModel.importFromInputStream(inputStream)
             }
         }
     }
 
-    LaunchedEffect(viewState.visible) {
-        if (viewState.visible) {
-            subscribeViewModel.dispatch(SubscribeViewAction.Init)
+    LaunchedEffect(subscribeUiState.visible) {
+        if (subscribeUiState.visible) {
+            subscribeViewModel.init()
         } else {
-            subscribeViewModel.dispatch(SubscribeViewAction.Reset)
-            subscribeViewModel.dispatch(SubscribeViewAction.SwitchPage(true))
+            subscribeViewModel.reset()
+            subscribeViewModel.switchPage(true)
         }
     }
 
     Dialog(
         modifier = Modifier.padding(horizontal = 44.dp),
-        visible = viewState.visible,
+        visible = subscribeUiState.visible,
         properties = DialogProperties(usePlatformDefaultWidth = false),
         onDismissRequest = {
             focusManager.clearFocus()
-            subscribeViewModel.dispatch(SubscribeViewAction.Hide)
+            subscribeViewModel.hideDrawer()
         },
         icon = {
             Icon(
@@ -76,10 +76,10 @@ fun SubscribeDialog(
         },
         title = {
             Text(
-                text = if (viewState.isSearchPage) {
-                    viewState.title
+                text = if (subscribeUiState.isSearchPage) {
+                    subscribeUiState.title
                 } else {
-                    viewState.feed?.name ?: stringResource(R.string.unknown)
+                    subscribeUiState.feed?.name ?: stringResource(R.string.unknown)
                 },
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -87,7 +87,7 @@ fun SubscribeDialog(
         },
         text = {
             AnimatedContent(
-                targetState = viewState.isSearchPage,
+                targetState = subscribeUiState.isSearchPage,
                 transitionSpec = {
                     slideInHorizontally { width -> width } + fadeIn() with
                             slideOutHorizontally { width -> -width } + fadeOut()
@@ -95,55 +95,55 @@ fun SubscribeDialog(
             ) { targetExpanded ->
                 if (targetExpanded) {
                     ClipboardTextField(
-                        readOnly = viewState.lockLinkInput,
-                        value = viewState.linkContent,
+                        readOnly = subscribeUiState.lockLinkInput,
+                        value = subscribeUiState.linkContent,
                         onValueChange = {
-                            subscribeViewModel.dispatch(SubscribeViewAction.InputLink(it))
+                            subscribeViewModel.inputLink(it)
                         },
                         placeholder = stringResource(R.string.feed_or_site_url),
-                        errorText = viewState.errorMessage,
+                        errorText = subscribeUiState.errorMessage,
                         imeAction = ImeAction.Search,
                         focusManager = focusManager,
                         onConfirm = {
-                            subscribeViewModel.dispatch(SubscribeViewAction.Search)
+                            subscribeViewModel.search()
                         },
                     )
                 } else {
                     ResultView(
-                        link = viewState.linkContent,
+                        link = subscribeUiState.linkContent,
                         groups = groupsState.value,
-                        selectedAllowNotificationPreset = viewState.allowNotificationPreset,
-                        selectedParseFullContentPreset = viewState.parseFullContentPreset,
-                        selectedGroupId = viewState.selectedGroupId,
+                        selectedAllowNotificationPreset = subscribeUiState.allowNotificationPreset,
+                        selectedParseFullContentPreset = subscribeUiState.parseFullContentPreset,
+                        selectedGroupId = subscribeUiState.selectedGroupId,
                         allowNotificationPresetOnClick = {
-                            subscribeViewModel.dispatch(SubscribeViewAction.ChangeAllowNotificationPreset)
+                            subscribeViewModel.changeAllowNotificationPreset()
                         },
                         parseFullContentPresetOnClick = {
-                            subscribeViewModel.dispatch(SubscribeViewAction.ChangeParseFullContentPreset)
+                            subscribeViewModel.changeParseFullContentPreset()
                         },
                         onGroupClick = {
-                            subscribeViewModel.dispatch(SubscribeViewAction.SelectedGroup(it))
+                            subscribeViewModel.selectedGroup(it)
                         },
                         onAddNewGroup = {
-                            subscribeViewModel.dispatch(SubscribeViewAction.ShowNewGroupDialog)
+                            subscribeViewModel.showNewGroupDialog()
                         },
                     )
                 }
             }
         },
         confirmButton = {
-            if (viewState.isSearchPage) {
+            if (subscribeUiState.isSearchPage) {
                 TextButton(
-                    enabled = viewState.linkContent.isNotBlank()
-                            && viewState.title != stringResource(R.string.searching),
+                    enabled = subscribeUiState.linkContent.isNotBlank()
+                            && subscribeUiState.title != stringResource(R.string.searching),
                     onClick = {
                         focusManager.clearFocus()
-                        subscribeViewModel.dispatch(SubscribeViewAction.Search)
+                        subscribeViewModel.search()
                     }
                 ) {
                     Text(
                         text = stringResource(R.string.search),
-                        color = if (viewState.linkContent.isNotBlank()) {
+                        color = if (subscribeUiState.linkContent.isNotBlank()) {
                             Color.Unspecified
                         } else {
                             MaterialTheme.colorScheme.outline.copy(alpha = 0.7f)
@@ -154,7 +154,7 @@ fun SubscribeDialog(
                 TextButton(
                     onClick = {
                         focusManager.clearFocus()
-                        subscribeViewModel.dispatch(SubscribeViewAction.Subscribe)
+                        subscribeViewModel.subscribe()
                     }
                 ) {
                     Text(stringResource(R.string.subscribe))
@@ -162,12 +162,12 @@ fun SubscribeDialog(
             }
         },
         dismissButton = {
-            if (viewState.isSearchPage) {
+            if (subscribeUiState.isSearchPage) {
                 TextButton(
                     onClick = {
                         focusManager.clearFocus()
                         launcher.launch("*/*")
-                        subscribeViewModel.dispatch(SubscribeViewAction.Hide)
+                        subscribeViewModel.hideDrawer()
                     }
                 ) {
                     Text(text = stringResource(R.string.import_from_opml))
@@ -176,7 +176,7 @@ fun SubscribeDialog(
                 TextButton(
                     onClick = {
                         focusManager.clearFocus()
-                        subscribeViewModel.dispatch(SubscribeViewAction.Hide)
+                        subscribeViewModel.hideDrawer()
                     }
                 ) {
                     Text(text = stringResource(R.string.cancel))
@@ -186,19 +186,19 @@ fun SubscribeDialog(
     )
 
     TextFieldDialog(
-        visible = viewState.newGroupDialogVisible,
+        visible = subscribeUiState.newGroupDialogVisible,
         title = stringResource(R.string.create_new_group),
         icon = Icons.Outlined.CreateNewFolder,
-        value = viewState.newGroupContent,
+        value = subscribeUiState.newGroupContent,
         placeholder = stringResource(R.string.name),
         onValueChange = {
-            subscribeViewModel.dispatch(SubscribeViewAction.InputNewGroup(it))
+            subscribeViewModel.inputNewGroup(it)
         },
         onDismissRequest = {
-            subscribeViewModel.dispatch(SubscribeViewAction.HideNewGroupDialog)
+            subscribeViewModel.hideNewGroupDialog()
         },
         onConfirm = {
-            subscribeViewModel.dispatch(SubscribeViewAction.AddNewGroup)
+            subscribeViewModel.addNewGroup()
         }
     )
 }

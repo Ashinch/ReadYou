@@ -7,7 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,19 +17,18 @@ import me.ash.reader.ui.ext.showToast
 
 @Composable
 fun DeleteFeedDialog(
-    modifier: Modifier = Modifier,
     feedName: String,
-    viewModel: FeedOptionViewModel = hiltViewModel(),
+    feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val viewState = viewModel.viewState.collectAsStateValue()
+    val feedOptionUiState = feedOptionViewModel.feedOptionUiState.collectAsStateValue()
     val scope = rememberCoroutineScope()
     val toastString = stringResource(R.string.delete_toast, feedName)
 
     Dialog(
-        visible = viewState.deleteDialogVisible,
+        visible = feedOptionUiState.deleteDialogVisible,
         onDismissRequest = {
-            viewModel.dispatch(FeedOptionViewAction.HideDeleteDialog)
+            feedOptionViewModel.hideDeleteDialog()
         },
         icon = {
             Icon(
@@ -47,11 +45,11 @@ fun DeleteFeedDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(FeedOptionViewAction.Delete {
-                        viewModel.dispatch(FeedOptionViewAction.HideDeleteDialog)
-                        viewModel.dispatch(FeedOptionViewAction.Hide(scope))
+                    feedOptionViewModel.delete {
+                        feedOptionViewModel.hideDeleteDialog()
+                        feedOptionViewModel.hideDrawer(scope)
                         context.showToast(toastString)
-                    })
+                    }
                 }
             ) {
                 Text(
@@ -62,7 +60,7 @@ fun DeleteFeedDialog(
         dismissButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(FeedOptionViewAction.HideDeleteDialog)
+                    feedOptionViewModel.hideDeleteDialog()
                 }
             ) {
                 Text(

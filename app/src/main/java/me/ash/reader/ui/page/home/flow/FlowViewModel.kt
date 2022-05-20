@@ -7,7 +7,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.repository.RssRepository
@@ -19,40 +18,20 @@ import javax.inject.Inject
 class FlowViewModel @Inject constructor(
     private val rssRepository: RssRepository,
 ) : ViewModel() {
-    private val _viewState = MutableStateFlow(ArticleViewState())
-    val viewState: StateFlow<ArticleViewState> = _viewState.asStateFlow()
+    private val _flowUiState = MutableStateFlow(FlowUiState())
+    val flowUiState: StateFlow<FlowUiState> = _flowUiState.asStateFlow()
 
-    fun dispatch(action: FlowViewAction) {
-        when (action) {
-            is FlowViewAction.Sync -> sync()
-            is FlowViewAction.ChangeIsBack -> changeIsBack(action.isBack)
-            is FlowViewAction.ScrollToItem -> scrollToItem(action.index)
-            is FlowViewAction.MarkAsRead -> markAsRead(
-                action.groupId,
-                action.feedId,
-                action.articleId,
-                action.markAsReadBefore,
-            )
-        }
-    }
-
-    private fun sync() {
+    fun sync() {
         rssRepository.get().doSync()
     }
 
-    private fun scrollToItem(index: Int) {
+    fun scrollToItem(index: Int) {
         viewModelScope.launch {
-            _viewState.value.listState.scrollToItem(index)
+            _flowUiState.value.listState.scrollToItem(index)
         }
     }
 
-    private fun changeIsBack(isBack: Boolean) {
-        _viewState.update {
-            it.copy(isBack = isBack)
-        }
-    }
-
-    private fun markAsRead(
+    fun markAsRead(
         groupId: String?,
         feedId: String?,
         articleId: String?,
@@ -84,31 +63,12 @@ class FlowViewModel @Inject constructor(
     }
 }
 
-data class ArticleViewState(
+data class FlowUiState(
     val filterImportant: Int = 0,
     val listState: LazyListState = LazyListState(),
     val isBack: Boolean = false,
     val syncWorkInfo: String = "",
 )
-
-sealed class FlowViewAction {
-    object Sync : FlowViewAction()
-
-    data class ChangeIsBack(
-        val isBack: Boolean
-    ) : FlowViewAction()
-
-    data class ScrollToItem(
-        val index: Int
-    ) : FlowViewAction()
-
-    data class MarkAsRead(
-        val groupId: String?,
-        val feedId: String?,
-        val articleId: String?,
-        val markAsReadBefore: MarkAsReadBefore
-    ) : FlowViewAction()
-}
 
 enum class MarkAsReadBefore {
     SevenDays,

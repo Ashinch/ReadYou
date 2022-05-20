@@ -7,7 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,19 +17,18 @@ import me.ash.reader.ui.ext.showToast
 
 @Composable
 fun ClearFeedDialog(
-    modifier: Modifier = Modifier,
     feedName: String,
-    viewModel: FeedOptionViewModel = hiltViewModel(),
+    feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val viewState = viewModel.viewState.collectAsStateValue()
+    val feedOptionUiState = feedOptionViewModel.feedOptionUiState.collectAsStateValue()
     val scope = rememberCoroutineScope()
     val toastString = stringResource(R.string.clear_articles_in_feed_toast, feedName)
 
     Dialog(
-        visible = viewState.clearDialogVisible,
+        visible = feedOptionUiState.clearDialogVisible,
         onDismissRequest = {
-            viewModel.dispatch(FeedOptionViewAction.HideClearDialog)
+            feedOptionViewModel.hideClearDialog()
         },
         icon = {
             Icon(
@@ -47,11 +45,11 @@ fun ClearFeedDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(FeedOptionViewAction.Clear {
-                        viewModel.dispatch(FeedOptionViewAction.HideClearDialog)
-                        viewModel.dispatch(FeedOptionViewAction.Hide(scope))
+                    feedOptionViewModel.clearFeed {
+                        feedOptionViewModel.hideClearDialog()
+                        feedOptionViewModel.hideDrawer(scope)
                         context.showToast(toastString)
-                    })
+                    }
                 }
             ) {
                 Text(
@@ -62,7 +60,7 @@ fun ClearFeedDialog(
         dismissButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(FeedOptionViewAction.HideClearDialog)
+                    feedOptionViewModel.hideClearDialog()
                 }
             ) {
                 Text(

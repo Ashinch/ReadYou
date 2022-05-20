@@ -31,21 +31,12 @@ class FeedsViewModel @Inject constructor(
     @DispatcherIO
     private val dispatcherIO: CoroutineDispatcher,
 ) : ViewModel() {
-    private val _viewState = MutableStateFlow(FeedsViewState())
-    val viewState: StateFlow<FeedsViewState> = _viewState.asStateFlow()
+    private val _feedsUiState = MutableStateFlow(FeedsUiState())
+    val feedsUiState: StateFlow<FeedsUiState> = _feedsUiState.asStateFlow()
 
-    fun dispatch(action: FeedsViewAction) {
-        when (action) {
-            is FeedsViewAction.FetchAccount -> fetchAccount()
-            is FeedsViewAction.FetchData -> fetchData(action.filterState)
-            is FeedsViewAction.ExportAsString -> exportAsOpml(action.callback)
-            is FeedsViewAction.ScrollToItem -> scrollToItem(action.index)
-        }
-    }
-
-    private fun fetchAccount() {
+    fun fetchAccount() {
         viewModelScope.launch(dispatcherIO) {
-            _viewState.update {
+            _feedsUiState.update {
                 it.copy(
                     account = accountRepository.getCurrentAccount()
                 )
@@ -53,7 +44,7 @@ class FeedsViewModel @Inject constructor(
         }
     }
 
-    private fun exportAsOpml(callback: (String) -> Unit = {}) {
+    fun exportAsOpml(callback: (String) -> Unit = {}) {
         viewModelScope.launch(dispatcherDefault) {
             try {
                 callback(opmlRepository.saveToString())
@@ -63,7 +54,7 @@ class FeedsViewModel @Inject constructor(
         }
     }
 
-    private fun fetchData(filterState: FilterState) {
+    fun fetchData(filterState: FilterState) {
         viewModelScope.launch(dispatcherIO) {
             pullFeeds(
                 isStarred = filterState.filter.isStarred(),
@@ -109,13 +100,25 @@ class FeedsViewModel @Inject constructor(
             }
             groupWithFeedList
         }.onEach { groupWithFeedList ->
-            _viewState.update {
+            _feedsUiState.update {
                 it.copy(
                     importantCount = groupWithFeedList.sumOf { it.group.important ?: 0 }.run {
                         when {
-                            isStarred -> stringsRepository.getQuantityString(R.plurals.starred_desc, this, this)
-                            isUnread -> stringsRepository.getQuantityString(R.plurals.unread_desc, this, this)
-                            else -> stringsRepository.getQuantityString(R.plurals.all_desc, this, this)
+                            isStarred -> stringsRepository.getQuantityString(
+                                R.plurals.starred_desc,
+                                this,
+                                this
+                            )
+                            isUnread -> stringsRepository.getQuantityString(
+                                R.plurals.unread_desc,
+                                this,
+                                this
+                            )
+                            else -> stringsRepository.getQuantityString(
+                                R.plurals.all_desc,
+                                this,
+                                this
+                            )
                         }
                     },
                     groupWithFeedList = groupWithFeedList,
@@ -126,15 +129,9 @@ class FeedsViewModel @Inject constructor(
             Log.e("RLog", "catch in articleRepository.pullFeeds(): ${it.message}")
         }.flowOn(dispatcherDefault).collect()
     }
-
-    private fun scrollToItem(index: Int) {
-        viewModelScope.launch {
-            _viewState.value.listState.scrollToItem(index)
-        }
-    }
 }
 
-data class FeedsViewState(
+data class FeedsUiState(
     val account: Account? = null,
     val importantCount: String = "",
     val groupWithFeedList: List<GroupWithFeed> = emptyList(),
@@ -142,19 +139,3 @@ data class FeedsViewState(
     val listState: LazyListState = LazyListState(),
     val groupsVisible: Boolean = true,
 )
-
-sealed class FeedsViewAction {
-    data class FetchData(
-        val filterState: FilterState,
-    ) : FeedsViewAction()
-
-    object FetchAccount : FeedsViewAction()
-
-    data class ExportAsString(
-        val callback: (String) -> Unit = {}
-    ) : FeedsViewAction()
-
-    data class ScrollToItem(
-        val index: Int
-    ) : FeedsViewAction()
-}

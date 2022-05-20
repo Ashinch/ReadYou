@@ -1,4 +1,4 @@
-package me.ash.reader.ui.page.home.read
+package me.ash.reader.ui.page.home.reading
 
 import android.content.Intent
 import android.net.Uri

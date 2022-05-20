@@ -15,11 +15,10 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import me.ash.reader.data.model.Filter
 import me.ash.reader.data.preference.LocalDarkTheme
 import me.ash.reader.ui.ext.*
-import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.flow.FlowPage
-import me.ash.reader.ui.page.home.read.ReadPage
+import me.ash.reader.ui.page.home.reading.ReadingPage
 import me.ash.reader.ui.page.settings.SettingsPage
 import me.ash.reader.ui.page.settings.color.ColorAndStylePage
 import me.ash.reader.ui.page.settings.color.DarkThemePage
@@ -37,7 +36,7 @@ fun HomeEntry(
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val filterState = homeViewModel.filterState.collectAsStateValue()
+    val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
     val navController = rememberAnimatedNavController()
 
     val intent by rememberSaveable { mutableStateOf(context.findActivity()?.intent) }
@@ -57,16 +56,14 @@ fun HomeEntry(
             // Other initial pages
         }
 
-        homeViewModel.dispatch(
-            HomeViewAction.ChangeFilter(
-                filterState.copy(
-                    filter = when (context.initialFilter) {
-                        0 -> Filter.Starred
-                        1 -> Filter.Unread
-                        2 -> Filter.All
-                        else -> Filter.All
-                    }
-                )
+        homeViewModel.changeFilter(
+            filterUiState.copy(
+                filter = when (context.initialFilter) {
+                    0 -> Filter.Starred
+                    1 -> Filter.Unread
+                    2 -> Filter.All
+                    else -> Filter.All
+                }
             )
         )
     }
@@ -114,7 +111,7 @@ fun HomeEntry(
                 )
             }
             animatedComposable(route = "${RouteName.READING}/{articleId}") {
-                ReadPage(navController = navController)
+                ReadingPage(navController = navController)
             }
 
             // Settings

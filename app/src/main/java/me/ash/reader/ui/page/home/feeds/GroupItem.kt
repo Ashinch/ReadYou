@@ -28,7 +28,6 @@ import me.ash.reader.R
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.entity.Group
 import me.ash.reader.ui.ext.alphaLN
-import me.ash.reader.ui.page.home.feeds.drawer.group.GroupOptionViewAction
 import me.ash.reader.ui.page.home.feeds.drawer.group.GroupOptionViewModel
 
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
@@ -61,7 +60,7 @@ fun GroupItem(
                 },
                 onLongClick = {
                     view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                    groupOptionViewModel.dispatch(GroupOptionViewAction.Show(scope, group.id))
+                    groupOptionViewModel.showDrawer(scope, group.id)
                 }
             )
             .padding(top = 22.dp)

@@ -7,7 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,20 +17,21 @@ import me.ash.reader.ui.ext.showToast
 
 @Composable
 fun AllMoveToGroupDialog(
-    modifier: Modifier = Modifier,
     groupName: String,
-    viewModel: GroupOptionViewModel = hiltViewModel(),
+    groupOptionViewModel: GroupOptionViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val viewState = viewModel.viewState.collectAsStateValue()
+    val groupOptionUiState = groupOptionViewModel.groupOptionUiState.collectAsStateValue()
     val scope = rememberCoroutineScope()
-    val toastString =
-        stringResource(R.string.all_move_to_group_toast, viewState.targetGroup?.name ?: "")
+    val toastString = stringResource(
+        R.string.all_move_to_group_toast,
+        groupOptionUiState.targetGroup?.name ?: ""
+    )
 
     Dialog(
-        visible = viewState.allMoveToGroupDialogVisible,
+        visible = groupOptionUiState.allMoveToGroupDialogVisible,
         onDismissRequest = {
-            viewModel.dispatch(GroupOptionViewAction.HideAllMoveToGroupDialog)
+            groupOptionViewModel.hideAllMoveToGroupDialog()
         },
         icon = {
             Icon(
@@ -47,18 +47,18 @@ fun AllMoveToGroupDialog(
                 text = stringResource(
                     R.string.all_move_to_group_tips,
                     groupName,
-                    viewState.targetGroup?.name ?: "",
+                    groupOptionUiState.targetGroup?.name ?: "",
                 )
             )
         },
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.AllMoveToGroup {
-                        viewModel.dispatch(GroupOptionViewAction.HideAllMoveToGroupDialog)
-                        viewModel.dispatch(GroupOptionViewAction.Hide(scope))
+                    groupOptionViewModel.allMoveToGroup {
+                        groupOptionViewModel.hideAllMoveToGroupDialog()
+                        groupOptionViewModel.hideDrawer(scope)
                         context.showToast(toastString)
-                    })
+                    }
                 }
             ) {
                 Text(
@@ -69,7 +69,7 @@ fun AllMoveToGroupDialog(
         dismissButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.HideAllMoveToGroupDialog)
+                    groupOptionViewModel.hideAllMoveToGroupDialog()
                 }
             ) {
                 Text(

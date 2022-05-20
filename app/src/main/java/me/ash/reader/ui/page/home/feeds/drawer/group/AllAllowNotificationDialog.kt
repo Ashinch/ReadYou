@@ -7,7 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,20 +17,19 @@ import me.ash.reader.ui.ext.showToast
 
 @Composable
 fun AllAllowNotificationDialog(
-    modifier: Modifier = Modifier,
     groupName: String,
-    viewModel: GroupOptionViewModel = hiltViewModel(),
+    groupOptionViewModel: GroupOptionViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val viewState = viewModel.viewState.collectAsStateValue()
+    val groupOptionUiState = groupOptionViewModel.groupOptionUiState.collectAsStateValue()
     val scope = rememberCoroutineScope()
     val allowToastString = stringResource(R.string.all_allow_notification_toast, groupName)
     val denyToastString = stringResource(R.string.all_deny_notification_toast, groupName)
 
     Dialog(
-        visible = viewState.allAllowNotificationDialogVisible,
+        visible = groupOptionUiState.allAllowNotificationDialogVisible,
         onDismissRequest = {
-            viewModel.dispatch(GroupOptionViewAction.HideAllAllowNotificationDialog)
+            groupOptionViewModel.hideAllAllowNotificationDialog()
         },
         icon = {
             Icon(
@@ -48,11 +46,11 @@ fun AllAllowNotificationDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.AllAllowNotification(true) {
-                        viewModel.dispatch(GroupOptionViewAction.HideAllAllowNotificationDialog)
-                        viewModel.dispatch(GroupOptionViewAction.Hide(scope))
+                    groupOptionViewModel.allAllowNotification(true) {
+                        groupOptionViewModel.hideAllAllowNotificationDialog()
+                        groupOptionViewModel.hideDrawer(scope)
                         context.showToast(allowToastString)
-                    })
+                    }
                 }
             ) {
                 Text(
@@ -63,11 +61,11 @@ fun AllAllowNotificationDialog(
         dismissButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.AllAllowNotification(false) {
-                        viewModel.dispatch(GroupOptionViewAction.HideAllAllowNotificationDialog)
-                        viewModel.dispatch(GroupOptionViewAction.Hide(scope))
+                    groupOptionViewModel.allAllowNotification(false) {
+                        groupOptionViewModel.hideAllAllowNotificationDialog()
+                        groupOptionViewModel.hideDrawer(scope)
                         context.showToast(denyToastString)
-                    })
+                    }
                 }
             ) {
                 Text(

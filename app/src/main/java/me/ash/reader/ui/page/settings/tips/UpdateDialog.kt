@@ -42,8 +42,8 @@ fun UpdateDialog(
     updateViewModel: UpdateViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val viewState = updateViewModel.viewState.collectAsStateValue()
-    val downloadState = viewState.downloadFlow.collectAsState(initial = Download.NotYet).value
+    val updateUiState = updateViewModel.updateUiState.collectAsStateValue()
+    val downloadState = updateUiState.downloadFlow.collectAsState(initial = Download.NotYet).value
     val scope = rememberCoroutineScope { Dispatchers.IO }
     val newVersionNumber = LocalNewVersionNumber.current
     val newVersionPublishDate = LocalNewVersionPublishDate.current
@@ -73,8 +73,8 @@ fun UpdateDialog(
 
     Dialog(
         modifier = Modifier.heightIn(max = 400.dp),
-        visible = viewState.updateDialogVisible,
-        onDismissRequest = { updateViewModel.dispatch(UpdateViewAction.Hide) },
+        visible = updateUiState.updateDialogVisible,
+        onDismissRequest = { updateViewModel.hideDialog() },
         icon = {
             Icon(
                 imageVector = Icons.Rounded.Update,
@@ -147,7 +147,7 @@ fun UpdateDialog(
                 TextButton(
                     onClick = {
                         SkipVersionNumberPreference.put(context, scope, newVersionNumber.toString())
-                        updateViewModel.dispatch(UpdateViewAction.Hide)
+                        updateViewModel.hideDialog()
                     }
                 ) {
                     Text(text = stringResource(R.string.skip_this_version))

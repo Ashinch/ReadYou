@@ -7,7 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,19 +17,18 @@ import me.ash.reader.ui.ext.showToast
 
 @Composable
 fun DeleteGroupDialog(
-    modifier: Modifier = Modifier,
     groupName: String,
-    viewModel: GroupOptionViewModel = hiltViewModel(),
+    groupOptionViewModel: GroupOptionViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val viewState = viewModel.viewState.collectAsStateValue()
+    val groupOptionUiState = groupOptionViewModel.groupOptionUiState.collectAsStateValue()
     val scope = rememberCoroutineScope()
     val toastString = stringResource(R.string.delete_toast, groupName)
 
     Dialog(
-        visible = viewState.deleteDialogVisible,
+        visible = groupOptionUiState.deleteDialogVisible,
         onDismissRequest = {
-            viewModel.dispatch(GroupOptionViewAction.HideDeleteDialog)
+            groupOptionViewModel.hideDeleteDialog()
         },
         icon = {
             Icon(
@@ -47,11 +45,11 @@ fun DeleteGroupDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.Delete {
-                        viewModel.dispatch(GroupOptionViewAction.HideDeleteDialog)
-                        viewModel.dispatch(GroupOptionViewAction.Hide(scope))
+                    groupOptionViewModel.delete {
+                        groupOptionViewModel.hideDeleteDialog()
+                        groupOptionViewModel.hideDrawer(scope)
                         context.showToast(toastString)
-                    })
+                    }
                 }
             ) {
                 Text(
@@ -62,7 +60,7 @@ fun DeleteGroupDialog(
         dismissButton = {
             TextButton(
                 onClick = {
-                    viewModel.dispatch(GroupOptionViewAction.HideDeleteDialog)
+                    groupOptionViewModel.hideDeleteDialog()
                 }
             ) {
                 Text(

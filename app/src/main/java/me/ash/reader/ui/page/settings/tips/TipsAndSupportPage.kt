@@ -103,23 +103,21 @@ fun TipsAndSupportPage(
                                 onTap = {
                                     if (System.currentTimeMillis() - clickTime > 2000) {
                                         clickTime = System.currentTimeMillis()
-                                        updateViewModel.dispatch(
-                                            UpdateViewAction.CheckUpdate(
-                                                {
-                                                    context.showToast(context.getString(R.string.checking_updates))
-                                                    context.dataStore.put(
-                                                        DataStoreKeys.SkipVersionNumber,
-                                                        ""
+                                        updateViewModel.checkUpdate(
+                                            {
+                                                context.showToast(context.getString(R.string.checking_updates))
+                                                context.dataStore.put(
+                                                    DataStoreKeys.SkipVersionNumber,
+                                                    ""
+                                                )
+                                            },
+                                            {
+                                                if (!it) {
+                                                    context.showToast(
+                                                        context.getString(R.string.is_latest_version)
                                                     )
-                                                },
-                                                {
-                                                    if (!it) {
-                                                        context.showToast(
-                                                            context.getString(R.string.is_latest_version)
-                                                        )
-                                                    }
                                                 }
-                                            )
+                                            }
                                         )
                                     } else {
                                         clickTime = System.currentTimeMillis()

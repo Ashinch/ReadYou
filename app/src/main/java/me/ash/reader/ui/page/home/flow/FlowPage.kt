@@ -34,7 +34,6 @@ import me.ash.reader.ui.component.base.SwipeRefresh
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterState
-import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
 
 @OptIn(
@@ -47,8 +46,6 @@ fun FlowPage(
     flowViewModel: FlowViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel,
 ) {
-    val homeViewView = homeViewModel.viewState.collectAsStateValue()
-    val pagingItems = homeViewView.pagingData.collectAsLazyPagingItems()
     val keyboardController = LocalSoftwareKeyboardController.current
     val topBarTonalElevation = LocalFlowTopBarTonalElevation.current
     val articleListTonalElevation = LocalFlowArticleListTonalElevation.current
@@ -59,15 +56,17 @@ fun FlowPage(
     val filterBarPadding = LocalFlowFilterBarPadding.current
     val filterBarTonalElevation = LocalFlowFilterBarTonalElevation.current
 
+    val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
+    val flowUiState = flowViewModel.flowUiState.collectAsStateValue()
+    val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
+    val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems()
+    val listState =
+        if (pagingItems.itemCount > 0) flowUiState.listState else rememberLazyListState()
+
     val scope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
     var markAsRead by remember { mutableStateOf(false) }
     var onSearch by remember { mutableStateOf(false) }
-
-    val viewState = flowViewModel.viewState.collectAsStateValue()
-    val filterState = homeViewModel.filterState.collectAsStateValue()
-    val homeViewState = homeViewModel.viewState.collectAsStateValue()
-    val listState = if (pagingItems.itemCount > 0) viewState.listState else rememberLazyListState()
 
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
@@ -82,15 +81,15 @@ fun FlowPage(
                 focusRequester.requestFocus()
             } else {
                 keyboardController?.hide()
-                if (homeViewState.searchContent.isNotBlank()) {
-                    homeViewModel.dispatch(HomeViewAction.InputSearchContent(""))
+                if (homeUiState.searchContent.isNotBlank()) {
+                    homeViewModel.inputSearchContent("")
                 }
             }
         }
     }
 
-    LaunchedEffect(viewState.listState) {
-        snapshotFlow { viewState.listState.firstVisibleItemIndex }.collect {
+    LaunchedEffect(flowUiState.listState) {
+        snapshotFlow { flowUiState.listState.firstVisibleItemIndex }.collect {
             if (it > 0) {
                 keyboardController?.hide()
             }
@@ -122,7 +121,7 @@ fun FlowPage(
         },
         actions = {
             AnimatedVisibility(
-                visible = !filterState.filter.isStarred(),
+                visible = !filterUiState.filter.isStarred(),
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut() + shrinkVertically(),
             ) {
@@ -136,7 +135,7 @@ fun FlowPage(
                     },
                 ) {
                     scope.launch {
-                        viewState.listState.scrollToItem(0)
+                        flowUiState.listState.scrollToItem(0)
                         markAsRead = !markAsRead
                         onSearch = false
                     }
@@ -152,7 +151,7 @@ fun FlowPage(
                 },
             ) {
                 scope.launch {
-                    viewState.listState.scrollToItem(0)
+                    flowUiState.listState.scrollToItem(0)
                     onSearch = !onSearch
                 }
             }
@@ -161,7 +160,7 @@ fun FlowPage(
             SwipeRefresh(
                 onRefresh = {
                     if (!isSyncing) {
-                        flowViewModel.dispatch(FlowViewAction.Sync)
+                        flowViewModel.sync()
                     }
                 }
             ) {
@@ -170,7 +169,7 @@ fun FlowPage(
                     state = listState,
                 ) {
                     item {
-                        DisplayTextHeader(filterState, isSyncing, articleListFeedIcon.value)
+                        DisplayTextHeader(filterUiState, isSyncing, articleListFeedIcon.value)
                         AnimatedVisibility(
                             visible = markAsRead,
                             enter = fadeIn() + expandVertically(),
@@ -186,13 +185,11 @@ fun FlowPage(
                             },
                         ) {
                             markAsRead = false
-                            flowViewModel.dispatch(
-                                FlowViewAction.MarkAsRead(
-                                    groupId = filterState.group?.id,
-                                    feedId = filterState.feed?.id,
-                                    articleId = null,
-                                    markAsReadBefore = it,
-                                )
+                            flowViewModel.markAsRead(
+                                groupId = filterUiState.group?.id,
+                                feedId = filterUiState.feed?.id,
+                                articleId = null,
+                                markAsReadBefore = it,
                             )
                         }
                         AnimatedVisibility(
@@ -201,30 +198,30 @@ fun FlowPage(
                             exit = fadeOut() + shrinkVertically(),
                         ) {
                             SearchBar(
-                                value = homeViewState.searchContent,
+                                value = homeUiState.searchContent,
                                 placeholder = when {
-                                    filterState.group != null -> stringResource(
+                                    filterUiState.group != null -> stringResource(
                                         R.string.search_for_in,
-                                        filterState.filter.getName(),
-                                        filterState.group.name
+                                        filterUiState.filter.getName(),
+                                        filterUiState.group.name
                                     )
-                                    filterState.feed != null -> stringResource(
+                                    filterUiState.feed != null -> stringResource(
                                         R.string.search_for_in,
-                                        filterState.filter.getName(),
-                                        filterState.feed.name
+                                        filterUiState.filter.getName(),
+                                        filterUiState.feed.name
                                     )
                                     else -> stringResource(
                                         R.string.search_for,
-                                        filterState.filter.getName()
+                                        filterUiState.filter.getName()
                                     )
                                 },
                                 focusRequester = focusRequester,
                                 onValueChange = {
-                                    homeViewModel.dispatch(HomeViewAction.InputSearchContent(it))
+                                    homeViewModel.inputSearchContent(it)
                                 },
                                 onClose = {
                                     onSearch = false
-                                    homeViewModel.dispatch(HomeViewAction.InputSearchContent(""))
+                                    homeViewModel.inputSearchContent("")
                                 }
                             )
                             Spacer(modifier = Modifier.height((56 + 24 + 10).dp))
@@ -253,15 +250,15 @@ fun FlowPage(
         },
         bottomBar = {
             FilterBar(
-                filter = filterState.filter,
+                filter = filterUiState.filter,
                 filterBarStyle = filterBarStyle.value,
                 filterBarFilled = filterBarFilled.value,
                 filterBarPadding = filterBarPadding.dp,
                 filterBarTonalElevation = filterBarTonalElevation.value.dp,
             ) {
-                flowViewModel.dispatch(FlowViewAction.ScrollToItem(0))
-                homeViewModel.dispatch(HomeViewAction.ChangeFilter(filterState.copy(filter = it)))
-                homeViewModel.dispatch(HomeViewAction.FetchArticles)
+                flowViewModel.scrollToItem(0)
+                homeViewModel.changeFilter(filterUiState.copy(filter = it))
+                homeViewModel.fetchArticles()
             }
         }
     )
