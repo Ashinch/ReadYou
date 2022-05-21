@@ -58,7 +58,7 @@ fun FeedsPageStylePage(
 
     var filterBarPaddingValue: Int? by remember { mutableStateOf(filterBarPadding) }
 
-    me.ash.reader.ui.component.base.Scaffold(
+    RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -132,7 +132,7 @@ fun FeedsPageStylePage(
                             (!groupListExpand).put(context, scope)
                         },
                     ) {
-                        Switch(activated = groupListExpand.value) {
+                        RYSwitch(activated = groupListExpand.value) {
                             (!groupListExpand).put(context, scope)
                         }
                     }
@@ -166,7 +166,7 @@ fun FeedsPageStylePage(
                             (!filterBarFilled).put(context, scope)
                         },
                     ) {
-                        Switch(activated = filterBarFilled.value) {
+                        RYSwitch(activated = filterBarFilled.value) {
                             (!filterBarFilled).put(context, scope)
                         }
                     }

@@ -18,7 +18,7 @@ import me.ash.reader.ui.theme.palette.onDark
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Scaffold(
+fun RYScaffold(
     containerColor: Color = MaterialTheme.colorScheme.surface,
     topBarTonalElevation: Dp = 0.dp,
     containerTonalElevation: Dp = 0.dp,

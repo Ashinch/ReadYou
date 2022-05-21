@@ -31,7 +31,7 @@ import me.ash.reader.ui.theme.palette.onDark
 
 // TODO: ripple & swipe
 @Composable
-fun Switch(
+fun RYSwitch(
     modifier: Modifier = Modifier,
     activated: Boolean,
     enable: Boolean = true,
@@ -101,7 +101,7 @@ fun SwitchHeadline(
                 )
             }
             Box(Modifier.padding(start = 20.dp)) {
-                Switch(activated = activated)
+                RYSwitch(activated = activated)
             }
         }
     }

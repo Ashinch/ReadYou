@@ -19,7 +19,7 @@ import kotlinx.coroutines.delay
 import me.ash.reader.R
 
 @Composable
-fun TextField(
+fun RYTextField(
     readOnly: Boolean,
     value: String,
     onValueChange: (String) -> Unit,

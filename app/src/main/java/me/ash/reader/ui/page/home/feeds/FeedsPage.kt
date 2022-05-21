@@ -30,10 +30,7 @@ import me.ash.reader.data.model.getName
 import me.ash.reader.data.preference.*
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.FilterBar
-import me.ash.reader.ui.component.base.Banner
-import me.ash.reader.ui.component.base.DisplayText
-import me.ash.reader.ui.component.base.FeedbackIconButton
-import me.ash.reader.ui.component.base.Subtitle
+import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.findActivity
 import me.ash.reader.ui.ext.getCurrentVersion
@@ -113,7 +110,7 @@ fun FeedsPage(
         context.findActivity()?.moveTaskToBack(false)
     }
 
-    me.ash.reader.ui.component.base.Scaffold(
+    RYScaffold(
         topBarTonalElevation = topBarTonalElevation.value.dp,
         containerTonalElevation = groupListTonalElevation.value.dp,
         navigationIcon = {

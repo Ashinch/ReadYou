@@ -51,7 +51,7 @@ import coil.size.Precision
 import coil.size.Size
 import coil.size.pxOrElse
 import me.ash.reader.R
-import me.ash.reader.ui.component.base.AsyncImage
+import me.ash.reader.ui.component.base.RYAsyncImage
 import org.jsoup.Jsoup
 import org.jsoup.helper.StringUtil
 import org.jsoup.nodes.Element
@@ -465,7 +465,7 @@ private fun TextComposer.appendTextChildren(
 //                                            }
                                             ) {
                                                 val imageSize = maxImageSize()
-                                                AsyncImage(
+                                                RYAsyncImage(
                                                     modifier = Modifier.fillMaxWidth(),
                                                     data = imageCandidates.getBestImageForMaxSize(
                                                         pixelDensity = pixelDensity(),
@@ -591,7 +591,7 @@ private fun TextComposer.appendTextChildren(
                                             BoxWithConstraints(
                                                 modifier = Modifier.fillMaxWidth()
                                             ) {
-                                                AsyncImage(
+                                                RYAsyncImage(
                                                     modifier = Modifier
                                                         .clickable {
                                                             onLinkClick(video.link)

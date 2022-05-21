@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.DynamicSVGImage
+import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.component.base.Tips
 import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
@@ -36,7 +37,7 @@ fun StartupPage(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    me.ash.reader.ui.component.base.Scaffold(
+    RYScaffold(
         content = {
             LazyColumn {
                 item {

@@ -33,7 +33,7 @@ fun InteractionPage(
     var initialPageDialogVisible by remember { mutableStateOf(false) }
     var initialFilterDialogVisible by remember { mutableStateOf(false) }
 
-    me.ash.reader.ui.component.base.Scaffold(
+    RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(

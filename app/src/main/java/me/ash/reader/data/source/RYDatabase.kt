@@ -18,21 +18,21 @@ import java.util.*
     entities = [Account::class, Feed::class, Article::class, Group::class],
     version = 2,
 )
-@TypeConverters(ReaderDatabase.Converters::class)
-abstract class ReaderDatabase : RoomDatabase() {
+@TypeConverters(RYDatabase.Converters::class)
+abstract class RYDatabase : RoomDatabase() {
     abstract fun accountDao(): AccountDao
     abstract fun feedDao(): FeedDao
     abstract fun articleDao(): ArticleDao
     abstract fun groupDao(): GroupDao
 
     companion object {
-        private var instance: ReaderDatabase? = null
+        private var instance: RYDatabase? = null
 
-        fun getInstance(context: Context): ReaderDatabase {
+        fun getInstance(context: Context): RYDatabase {
             return instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
-                    ReaderDatabase::class.java,
+                    RYDatabase::class.java,
                     "Reader"
                 ).addMigrations(*allMigrations).build().also {
                     instance = it

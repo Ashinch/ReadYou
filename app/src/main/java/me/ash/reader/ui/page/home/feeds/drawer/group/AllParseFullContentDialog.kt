@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.R
-import me.ash.reader.ui.component.base.Dialog
+import me.ash.reader.ui.component.base.RYDialog
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
 
@@ -26,7 +26,7 @@ fun AllParseFullContentDialog(
     val allowToastString = stringResource(R.string.all_parse_full_content_toast, groupName)
     val denyToastString = stringResource(R.string.all_deny_parse_full_content_toast, groupName)
 
-    Dialog(
+    RYDialog(
         visible = groupOptionUiState.allParseFullContentDialogVisible,
         onDismissRequest = {
             groupOptionViewModel.hideAllParseFullContentDialog()

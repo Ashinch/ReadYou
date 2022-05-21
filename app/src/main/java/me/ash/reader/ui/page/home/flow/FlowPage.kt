@@ -30,6 +30,7 @@ import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
+import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.component.base.SwipeRefresh
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.page.common.RouteName
@@ -100,7 +101,7 @@ fun FlowPage(
         onSearch = false
     }
 
-    me.ash.reader.ui.component.base.Scaffold(
+    RYScaffold(
         topBarTonalElevation = topBarTonalElevation.value.dp,
         containerTonalElevation = articleListTonalElevation.value.dp,
         navigationIcon = {

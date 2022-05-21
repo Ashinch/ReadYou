@@ -26,7 +26,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.R
 import me.ash.reader.ui.component.base.ClipboardTextField
-import me.ash.reader.ui.component.base.Dialog
+import me.ash.reader.ui.component.base.RYDialog
 import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.ext.collectAsStateValue
 
@@ -60,7 +60,7 @@ fun SubscribeDialog(
         }
     }
 
-    Dialog(
+    RYDialog(
         modifier = Modifier.padding(horizontal = 44.dp),
         visible = subscribeUiState.visible,
         properties = DialogProperties(usePlatformDefaultWidth = false),

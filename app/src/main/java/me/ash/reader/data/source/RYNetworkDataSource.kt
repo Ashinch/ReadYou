@@ -14,7 +14,7 @@ import retrofit2.http.Streaming
 import retrofit2.http.Url
 import java.io.File
 
-interface AppNetworkDataSource {
+interface RYNetworkDataSource {
     @GET
     suspend fun getReleaseLatest(@Url url: String): Response<LatestRelease>
 
@@ -23,14 +23,14 @@ interface AppNetworkDataSource {
     suspend fun downloadFile(@Url url: String): ResponseBody
 
     companion object {
-        private var instance: AppNetworkDataSource? = null
+        private var instance: RYNetworkDataSource? = null
 
-        fun getInstance(): AppNetworkDataSource {
+        fun getInstance(): RYNetworkDataSource {
             return instance ?: synchronized(this) {
                 instance ?: Retrofit.Builder()
                     .baseUrl("https://api.github.com/")
                     .addConverterFactory(GsonConverterFactory.create())
-                    .build().create(AppNetworkDataSource::class.java).also {
+                    .build().create(RYNetworkDataSource::class.java).also {
                         instance = it
                     }
             }

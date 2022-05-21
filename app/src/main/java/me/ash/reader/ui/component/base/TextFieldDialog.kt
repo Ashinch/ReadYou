@@ -35,7 +35,7 @@ fun TextFieldDialog(
 ) {
     val focusManager = LocalFocusManager.current
 
-    Dialog(
+    RYDialog(
         modifier = modifier,
         visible = visible,
         onDismissRequest = onDismissRequest,

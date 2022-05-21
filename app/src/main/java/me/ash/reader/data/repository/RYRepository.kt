@@ -13,8 +13,8 @@ import me.ash.reader.data.module.DispatcherIO
 import me.ash.reader.data.module.DispatcherMain
 import me.ash.reader.data.preference.*
 import me.ash.reader.data.preference.NewVersionSizePreference.formatSize
-import me.ash.reader.data.source.AppNetworkDataSource
 import me.ash.reader.data.source.Download
+import me.ash.reader.data.source.RYNetworkDataSource
 import me.ash.reader.data.source.downloadToFileWithProgress
 import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.ext.getLatestApk
@@ -22,10 +22,10 @@ import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.ext.skipVersionNumber
 import javax.inject.Inject
 
-class AppRepository @Inject constructor(
+class RYRepository @Inject constructor(
     @ApplicationContext
     private val context: Context,
-    private val appNetworkDataSource: AppNetworkDataSource,
+    private val RYNetworkDataSource: RYNetworkDataSource,
     @DispatcherIO
     private val dispatcherIO: CoroutineDispatcher,
     @DispatcherMain
@@ -34,7 +34,7 @@ class AppRepository @Inject constructor(
     suspend fun checkUpdate(showToast: Boolean = true): Boolean? = withContext(dispatcherIO) {
         try {
             val response =
-                appNetworkDataSource.getReleaseLatest(context.getString(R.string.update_link))
+                RYNetworkDataSource.getReleaseLatest(context.getString(R.string.update_link))
             when {
                 response.code() == 403 -> {
                     withContext(dispatcherMain) {
@@ -85,7 +85,7 @@ class AppRepository @Inject constructor(
         withContext(dispatcherIO) {
             Log.i("RLog", "downloadFile start: $url")
             try {
-                return@withContext appNetworkDataSource.downloadFile(url)
+                return@withContext RYNetworkDataSource.downloadFile(url)
                     .downloadToFileWithProgress(context.getLatestApk())
             } catch (e: Exception) {
                 e.printStackTrace()

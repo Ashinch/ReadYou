@@ -10,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -66,7 +65,7 @@ fun FlowPageStylePage(
 
     var filterBarPaddingValue: Int? by remember { mutableStateOf(filterBarPadding) }
 
-    me.ash.reader.ui.component.base.Scaffold(
+    RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -145,7 +144,7 @@ fun FlowPageStylePage(
                             (!articleListFeedIcon).put(context, scope)
                         },
                     ) {
-                        me.ash.reader.ui.component.base.Switch(activated = articleListFeedIcon.value) {
+                        RYSwitch(activated = articleListFeedIcon.value) {
                             (!articleListFeedIcon).put(context, scope)
                         }
                     }
@@ -155,7 +154,7 @@ fun FlowPageStylePage(
                             (!articleListFeedName).put(context, scope)
                         },
                     ) {
-                        me.ash.reader.ui.component.base.Switch(activated = articleListFeedName.value) {
+                        RYSwitch(activated = articleListFeedName.value) {
                             (!articleListFeedName).put(context, scope)
                         }
                     }
@@ -165,7 +164,7 @@ fun FlowPageStylePage(
                             (!articleListImage).put(context, scope)
                         },
                     ) {
-                        me.ash.reader.ui.component.base.Switch(activated = articleListImage.value) {
+                        RYSwitch(activated = articleListImage.value) {
                             (!articleListImage).put(context, scope)
                         }
                     }
@@ -175,7 +174,7 @@ fun FlowPageStylePage(
                             (!articleListDesc).put(context, scope)
                         },
                     ) {
-                        me.ash.reader.ui.component.base.Switch(activated = articleListDesc.value) {
+                        RYSwitch(activated = articleListDesc.value) {
                             (!articleListDesc).put(context, scope)
                         }
                     }
@@ -185,7 +184,7 @@ fun FlowPageStylePage(
                             (!articleListTime).put(context, scope)
                         },
                     ) {
-                        me.ash.reader.ui.component.base.Switch(activated = articleListTime.value) {
+                        RYSwitch(activated = articleListTime.value) {
                             (!articleListTime).put(context, scope)
                         }
                     }
@@ -195,7 +194,7 @@ fun FlowPageStylePage(
                             (!articleListStickyDate).put(context, scope)
                         },
                     ) {
-                        me.ash.reader.ui.component.base.Switch(activated = articleListStickyDate.value) {
+                        RYSwitch(activated = articleListStickyDate.value) {
                             (!articleListStickyDate).put(context, scope)
                         }
                     }
@@ -229,7 +228,7 @@ fun FlowPageStylePage(
                             (!filterBarFilled).put(context, scope)
                         },
                     ) {
-                        me.ash.reader.ui.component.base.Switch(activated = filterBarFilled.value) {
+                        RYSwitch(activated = filterBarFilled.value) {
                             (!filterBarFilled).put(context, scope)
                         }
                     }

@@ -50,7 +50,7 @@ fun ColorAndStylePage(
     val wallpaperTonalPalettes = extractTonalPalettesFromUserWallpaper()
     var radioButtonSelected by remember { mutableStateOf(if (themeIndex > 4) 0 else 1) }
 
-    me.ash.reader.ui.component.base.Scaffold(
+    RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -90,7 +90,7 @@ fun ColorAndStylePage(
                     Spacer(modifier = Modifier.height(24.dp))
                 }
                 item {
-                    BlockRadioGroupButton(
+                    BlockRadioButton(
                         selected = radioButtonSelected,
                         onSelected = { radioButtonSelected = it },
                         itemRadioGroups = listOf(
@@ -142,7 +142,7 @@ fun ColorAndStylePage(
                             }
                         },
                     ) {
-                        me.ash.reader.ui.component.base.Switch(
+                        RYSwitch(
                             activated = darkTheme.isDarkTheme()
                         ) {
                             darkThemeNot.put(context, scope)

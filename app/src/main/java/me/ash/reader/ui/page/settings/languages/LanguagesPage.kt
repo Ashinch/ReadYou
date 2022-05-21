@@ -26,6 +26,7 @@ import me.ash.reader.data.preference.LocalLanguages
 import me.ash.reader.ui.component.base.Banner
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
+import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
 
@@ -38,7 +39,7 @@ fun LanguagesPage(
     val languages = LocalLanguages.current
     val scope = rememberCoroutineScope()
 
-    me.ash.reader.ui.component.base.Scaffold(
+    RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(

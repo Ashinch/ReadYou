@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BlockRadioGroupButton(
+fun BlockRadioButton(
     modifier: Modifier = Modifier,
     selected: Int = 0,
     onSelected: (Int) -> Unit,

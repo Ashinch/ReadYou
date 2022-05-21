@@ -41,7 +41,7 @@ fun DynamicSVGImage(
             },
     ) {
         Crossfade(targetState = pic) {
-            AsyncImage(
+            RYAsyncImage(
                 contentDescription = contentDescription,
                 data = it,
                 placeholder = null,

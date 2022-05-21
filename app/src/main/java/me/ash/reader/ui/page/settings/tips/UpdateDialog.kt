@@ -33,7 +33,7 @@ import kotlinx.coroutines.Dispatchers
 import me.ash.reader.R
 import me.ash.reader.data.preference.*
 import me.ash.reader.data.source.Download
-import me.ash.reader.ui.component.base.Dialog
+import me.ash.reader.ui.component.base.RYDialog
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.installLatestApk
 
@@ -71,7 +71,7 @@ fun UpdateDialog(
         }
     }
 
-    Dialog(
+    RYDialog(
         modifier = Modifier.heightIn(max = 400.dp),
         visible = updateUiState.updateDialogVisible,
         onDismissRequest = { updateViewModel.hideDialog() },

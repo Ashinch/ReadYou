@@ -38,6 +38,7 @@ import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.ui.component.base.CurlyCornerShape
 import me.ash.reader.ui.component.base.FeedbackIconButton
+import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.theme.palette.alwaysLight
 import me.ash.reader.ui.theme.palette.onLight
@@ -61,7 +62,7 @@ fun TipsAndSupportPage(
         currentVersion = context.getCurrentVersion().toString()
     }
 
-    me.ash.reader.ui.component.base.Scaffold(
+    RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(

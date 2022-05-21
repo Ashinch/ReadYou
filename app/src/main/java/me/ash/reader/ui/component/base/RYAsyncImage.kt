@@ -22,7 +22,7 @@ import me.ash.reader.R
 val Size_1000 = Size(1000, 1000)
 
 @Composable
-fun AsyncImage(
+fun RYAsyncImage(
     modifier: Modifier = Modifier,
     data: Any? = null,
     size: Size = Size.ORIGINAL,

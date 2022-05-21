@@ -12,9 +12,9 @@ import kotlinx.coroutines.launch
 import me.ash.reader.data.module.ApplicationScope
 import me.ash.reader.data.module.DispatcherDefault
 import me.ash.reader.data.repository.*
-import me.ash.reader.data.source.AppNetworkDataSource
 import me.ash.reader.data.source.OpmlLocalDataSource
-import me.ash.reader.data.source.ReaderDatabase
+import me.ash.reader.data.source.RYDatabase
+import me.ash.reader.data.source.RYNetworkDataSource
 import me.ash.reader.ui.ext.*
 import okhttp3.OkHttpClient
 import org.conscrypt.Conscrypt
@@ -22,7 +22,7 @@ import java.security.Security
 import javax.inject.Inject
 
 @HiltAndroidApp
-class App : Application(), Configuration.Provider {
+class RYApp : Application(), Configuration.Provider {
     init {
         // From: https://gitlab.com/spacecowboy/Feeder
         // Install Conscrypt to handle TLSv1.3 pre Android10
@@ -30,7 +30,7 @@ class App : Application(), Configuration.Provider {
     }
 
     @Inject
-    lateinit var readerDatabase: ReaderDatabase
+    lateinit var RYDatabase: RYDatabase
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
@@ -39,7 +39,7 @@ class App : Application(), Configuration.Provider {
     lateinit var workManager: WorkManager
 
     @Inject
-    lateinit var appNetworkDataSource: AppNetworkDataSource
+    lateinit var RYNetworkDataSource: RYNetworkDataSource
 
     @Inject
     lateinit var opmlLocalDataSource: OpmlLocalDataSource
@@ -51,7 +51,7 @@ class App : Application(), Configuration.Provider {
     lateinit var notificationHelper: NotificationHelper
 
     @Inject
-    lateinit var appRepository: AppRepository
+    lateinit var ryRepository: RYRepository
 
     @Inject
     lateinit var stringsRepository: StringsRepository
@@ -116,7 +116,7 @@ class App : Application(), Configuration.Provider {
                 it.del()
             }
         }
-        appRepository.checkUpdate(showToast = false)
+        ryRepository.checkUpdate(showToast = false)
     }
 
     override fun getWorkManagerConfiguration(): Configuration =

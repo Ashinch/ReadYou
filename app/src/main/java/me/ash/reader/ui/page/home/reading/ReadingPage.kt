@@ -27,6 +27,7 @@ import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.ui.component.base.FeedbackIconButton
+import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.component.reader.reader
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.drawVerticalScrollbar
@@ -56,7 +57,7 @@ fun ReadingPage(
         }
     }
 
-    me.ash.reader.ui.component.base.Scaffold(
+    RYScaffold(
         content = {
             Box(Modifier.fillMaxSize()) {
                 Box(
