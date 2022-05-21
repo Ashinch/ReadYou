@@ -39,7 +39,7 @@ fun RYTextField(
     TextField(
         modifier = Modifier.focusRequester(focusRequester),
         colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color.Transparent,
+            containerColor = Color.Transparent,
         ),
         maxLines = 1,
         enabled = !readOnly,

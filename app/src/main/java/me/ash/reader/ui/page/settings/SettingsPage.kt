@@ -138,6 +138,8 @@ fun SettingsPage(
                             launchSingleTop = true
                         }
                     }
+                }
+                item {
                     Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }

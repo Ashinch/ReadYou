@@ -1,6 +1,6 @@
 package me.ash.reader.ui.page.settings.color
 
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -76,6 +76,9 @@ fun DarkThemePage(
                             (!amoledDarkTheme).put(context, scope)
                         }
                     }
+                }
+                item {
+                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }
         }

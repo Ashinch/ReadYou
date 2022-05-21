@@ -182,7 +182,9 @@ fun ColorAndStylePage(
                         enable = false,
                         onClick = {},
                     ) {}
-                    Spacer(modifier = Modifier.height(24.dp))
+                }
+                item {
+                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }
         }

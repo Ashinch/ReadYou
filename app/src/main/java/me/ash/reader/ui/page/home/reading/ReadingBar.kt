@@ -26,7 +26,7 @@ import me.ash.reader.R
 import me.ash.reader.ui.component.base.CanBeDisabledIconButton
 
 @Composable
-fun ReadBar(
+fun ReadingBar(
     modifier: Modifier = Modifier,
     disabled: Boolean,
     isUnread: Boolean,
@@ -40,9 +40,7 @@ fun ReadBar(
     var fullContent by remember { mutableStateOf(isFullContent) }
 
     Surface(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .navigationBarsPadding(),
+        modifier = modifier.background(MaterialTheme.colorScheme.surface),
         tonalElevation = 0.dp,
     ) {
         Box(

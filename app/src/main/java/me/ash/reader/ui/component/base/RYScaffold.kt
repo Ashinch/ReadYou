@@ -1,13 +1,8 @@
 package me.ash.reader.ui.component.base
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SmallTopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,7 +23,7 @@ fun RYScaffold(
     floatingActionButton: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit = {},
 ) {
-    androidx.compose.material3.Scaffold(
+    Scaffold(
         modifier = Modifier
             .background(
                 MaterialTheme.colorScheme.surfaceColorAtElevation(
@@ -62,7 +57,12 @@ fun RYScaffold(
                 )
             }
         },
-        content = { content() },
+        content = {
+            Column {
+                Spacer(modifier = Modifier.height(it.calculateTopPadding()))
+                content()
+            }
+        },
         bottomBar = { bottomBar?.invoke() },
         floatingActionButton = { floatingActionButton?.invoke() },
     )

@@ -240,10 +240,7 @@ fun FlowPage(
                         }
                     }
                     item {
-                        Spacer(modifier = Modifier.height(64.dp))
-                        if (pagingItems.loadState.source.refresh is LoadState.NotLoading && pagingItems.itemCount != 0) {
-                            Spacer(modifier = Modifier.height(64.dp))
-                        }
+                        Spacer(modifier = Modifier.height(128.dp))
                         Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                     }
                 }

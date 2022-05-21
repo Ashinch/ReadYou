@@ -185,7 +185,9 @@ fun FeedsPageStylePage(
                             filterBarTonalElevationDialogVisible = true
                         },
                     ) {}
-                    Spacer(modifier = Modifier.height(24.dp))
+                }
+                item {
+                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }
         }

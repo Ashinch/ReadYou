@@ -67,7 +67,7 @@ fun FeedsPage(
 
     val newVersion = LocalNewVersionNumber.current
     val skipVersion = LocalSkipVersionNumber.current
-    val currentVersion by remember { mutableStateOf(context.getCurrentVersion()) }
+    val currentVersion = remember { context.getCurrentVersion() }
 
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
@@ -89,7 +89,7 @@ fun FeedsPage(
     ) { result ->
         feedsViewModel.exportAsOpml { string ->
             result?.let { uri ->
-                context.contentResolver.openOutputStream(uri)?.let { outputStream ->
+                context.contentResolver.openOutputStream(uri)?.use { outputStream ->
                     outputStream.write(string.toByteArray())
                 }
             }

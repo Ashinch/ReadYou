@@ -62,7 +62,7 @@ fun SearchBar(
                         .fillMaxWidth()
                         .focusRequester(focusRequester),
                     colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = Color.Transparent,
+                        containerColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                     ),

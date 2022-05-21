@@ -2,8 +2,7 @@ package me.ash.reader.ui.page.settings.languages
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
@@ -87,6 +86,9 @@ fun LanguagesPage(
                             })
                         }
                     }
+                }
+                item {
+                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }
         }

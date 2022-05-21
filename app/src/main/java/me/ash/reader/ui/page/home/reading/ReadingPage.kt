@@ -80,6 +80,7 @@ fun ReadingPage(
                     articleWithFeed = readingUiState.articleWithFeed,
                     isLoading = readingUiState.isLoading,
                     listState = readingUiState.listState,
+                    isShowToolBar = readingUiState.articleWithFeed == null || !isScrollDown,
                 )
                 Box(
                     modifier = Modifier
@@ -186,6 +187,7 @@ private fun Content(
     articleWithFeed: ArticleWithFeed?,
     listState: LazyListState,
     isLoading: Boolean,
+    isShowToolBar: Boolean,
 ) {
     if (articleWithFeed == null) return
     val context = LocalContext.current
@@ -195,7 +197,13 @@ private fun Content(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
-                .navigationBarsPadding()
+                .run {
+                    if (isShowToolBar) {
+                        navigationBarsPadding()
+                    } else {
+                        this
+                    }
+                }
                 .drawVerticalScrollbar(listState),
             state = listState,
         ) {
@@ -242,8 +250,8 @@ private fun Content(
                 )
             }
             item {
-                Spacer(modifier = Modifier.height(64.dp))
-                Spacer(modifier = Modifier.height(64.dp))
+                Spacer(modifier = Modifier.height(128.dp))
+                Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
             }
         }
     }
@@ -263,7 +271,8 @@ private fun BottomBar(
             enter = fadeIn() + expandVertically(),
             exit = fadeOut() + shrinkVertically(),
         ) {
-            ReadBar(
+            ReadingBar(
+                modifier = Modifier.navigationBarsPadding(),
                 disabled = false,
                 isUnread = articleWithFeed.article.isUnread,
                 isStarred = articleWithFeed.article.isStarred,
