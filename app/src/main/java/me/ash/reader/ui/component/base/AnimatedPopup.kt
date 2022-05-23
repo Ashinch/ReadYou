@@ -1,6 +1,6 @@
 package me.ash.reader.ui.component.base
 
-import androidx.compose.animation.*
+import RYExtensibleVisibility
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
@@ -38,11 +38,7 @@ fun AnimatedPopup(
             }
         },
     ) {
-        AnimatedVisibility(
-            visible = visible,
-            enter = fadeIn() + expandVertically(),
-            exit = fadeOut() + shrinkVertically(),
-        ) {
+        RYExtensibleVisibility(visible = visible) {
             content()
         }
     }

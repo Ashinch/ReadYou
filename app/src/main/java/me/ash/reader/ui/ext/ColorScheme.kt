@@ -1,16 +1,19 @@
 package me.ash.reader.ui.ext
 
 import androidx.compose.material3.ColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.ln
 
+@Composable
 fun ColorScheme.surfaceColorAtElevation(
     elevation: Dp,
     color: Color = surface,
-): Color = color.atElevation(surfaceTint, elevation)
+): Color = remember(this, elevation, color) { color.atElevation(surfaceTint, elevation) }
 
 fun Color.atElevation(
     sourceColor: Color,

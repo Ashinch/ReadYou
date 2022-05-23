@@ -1,7 +1,7 @@
 package me.ash.reader.ui.page.home.feeds
 
+import RYExtensibleVisibility
 import android.view.HapticFeedbackConstants
-import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -104,11 +104,7 @@ fun GroupItem(
             }
         }
         Spacer(modifier = Modifier.height(22.dp))
-        AnimatedVisibility(
-            visible = expanded,
-            enter = fadeIn() + expandVertically(),
-            exit = fadeOut() + shrinkVertically(),
-        ) {
+        RYExtensibleVisibility(visible = expanded) {
             Column {
                 feeds.forEach { feed ->
                     FeedItem(

@@ -4,9 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.FileProvider
+import me.ash.reader.R
 import me.ash.reader.data.model.Version
 import me.ash.reader.data.model.toVersion
 import java.io.File
@@ -53,4 +55,19 @@ fun Context.showToast(message: String?, duration: Int = Toast.LENGTH_SHORT) {
 
 fun Context.showToastLong(message: String?) {
     showToast(message, Toast.LENGTH_LONG)
+}
+
+fun Context.share(content: String) {
+    startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
+        putExtra(
+            Intent.EXTRA_TEXT,
+            content,
+        )
+        type = "text/plain"
+    }, getString(R.string.share)))
+}
+
+fun Context.openURL(url: String? = null) {
+    url?.takeIf { it.trim().isNotEmpty() }
+        ?.let { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it))) }
 }

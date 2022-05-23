@@ -1,7 +1,7 @@
 package me.ash.reader.ui.page.home.flow
 
+import RYExtensibleVisibility
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -121,11 +120,7 @@ fun FlowPage(
             }
         },
         actions = {
-            AnimatedVisibility(
-                visible = !filterUiState.filter.isStarred(),
-                enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically(),
-            ) {
+            RYExtensibleVisibility(visible = !filterUiState.filter.isStarred()) {
                 FeedbackIconButton(
                     imageVector = Icons.Rounded.DoneAll,
                     contentDescription = stringResource(R.string.mark_all_as_read),
@@ -171,11 +166,7 @@ fun FlowPage(
                 ) {
                     item {
                         DisplayTextHeader(filterUiState, isSyncing, articleListFeedIcon.value)
-                        AnimatedVisibility(
-                            visible = markAsRead,
-                            enter = fadeIn() + expandVertically(),
-                            exit = fadeOut() + shrinkVertically(),
-                        ) {
+                        RYExtensibleVisibility(visible = markAsRead) {
                             Spacer(modifier = Modifier.height((56 + 24 + 10).dp))
                         }
                         MarkAsReadBar(
@@ -193,11 +184,7 @@ fun FlowPage(
                                 markAsReadBefore = it,
                             )
                         }
-                        AnimatedVisibility(
-                            visible = onSearch,
-                            enter = fadeIn() + expandVertically(),
-                            exit = fadeOut() + shrinkVertically(),
-                        ) {
+                        RYExtensibleVisibility(visible = onSearch) {
                             SearchBar(
                                 value = homeUiState.searchContent,
                                 placeholder = when {

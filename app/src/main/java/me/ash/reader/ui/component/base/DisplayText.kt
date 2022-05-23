@@ -1,6 +1,6 @@
 package me.ash.reader.ui.component.base
 
-import androidx.compose.animation.*
+import RYExtensibleVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -41,11 +41,7 @@ fun DisplayText(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
-        AnimatedVisibility(
-            visible = desc.isNotEmpty(),
-            enter = fadeIn() + expandVertically(),
-            exit = fadeOut() + shrinkVertically(),
-        ) {
+        RYExtensibleVisibility(visible = desc.isNotEmpty()) {
             Text(
                 modifier = Modifier.height(16.dp),
                 text = desc,

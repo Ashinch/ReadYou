@@ -1,7 +1,7 @@
 package me.ash.reader.ui.component.base
 
 import androidx.annotation.DrawableRes
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
@@ -10,10 +10,7 @@ import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import coil.compose.LocalImageLoader
-import coil.request.ImageRequest
+import coil.compose.rememberImagePainter
 import coil.size.Precision
 import coil.size.Scale
 import coil.size.Size
@@ -33,34 +30,51 @@ fun RYAsyncImage(
     @DrawableRes placeholder: Int? = R.drawable.ic_hourglass_empty_black_24dp,
     @DrawableRes error: Int? = R.drawable.ic_broken_image_black_24dp,
 ) {
-    coil.compose.AsyncImage(
-        modifier = modifier,
-        model = ImageRequest
-            .Builder(LocalContext.current)
-            .data(data)
-            .crossfade(true)
-            .scale(scale)
-            .precision(precision)
-            .size(size)
-            .build(),
+    Image(
+        painter = rememberImagePainter(
+            data = data,
+            builder = {
+                if (placeholder != null) placeholder(placeholder)
+                if (error != null) error(error)
+                crossfade(true)
+                scale(scale)
+                precision(precision)
+                size(size)
+            },
+        ),
         contentDescription = contentDescription,
         contentScale = contentScale,
-        imageLoader = LocalImageLoader.current,
-        placeholder = placeholder?.run {
-            forwardingPainter(
-                painter = painterResource(this),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
-                alpha = 0.1f,
-            )
-        },
-        error = error?.run {
-            forwardingPainter(
-                painter = painterResource(this),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
-                alpha = 0.1f,
-            )
-        },
+        modifier = modifier,
     )
+
+//    coil.compose.AsyncImage(
+//        modifier = modifier,
+//        model = ImageRequest
+//            .Builder(LocalContext.current)
+//            .data(data)
+//            .crossfade(true)
+//            .scale(scale)
+//            .precision(precision)
+//            .size(size)
+//            .build(),
+//        contentDescription = contentDescription,
+//        contentScale = contentScale,
+//        imageLoader = LocalImageLoader.current,
+//        placeholder = placeholder?.run {
+//            forwardingPainter(
+//                painter = painterResource(this),
+//                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
+//                alpha = 0.1f,
+//            )
+//        },
+//        error = error?.run {
+//            forwardingPainter(
+//                painter = painterResource(this),
+//                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
+//                alpha = 0.1f,
+//            )
+//        },
+//    )
 }
 
 // From: https://gist.github.com/colinrtwhite/c2966e0b8584b4cdf0a5b05786b20ae1

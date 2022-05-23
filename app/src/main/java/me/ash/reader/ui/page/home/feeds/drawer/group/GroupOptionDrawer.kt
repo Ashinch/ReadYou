@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.data.entity.Group
 import me.ash.reader.ui.component.base.BottomDrawer
-import me.ash.reader.ui.component.base.SelectionChip
+import me.ash.reader.ui.component.base.RYSelectionChip
 import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.ext.*
@@ -162,7 +162,7 @@ private fun Preset(
         crossAxisSpacing = 10.dp,
         mainAxisSpacing = 10.dp,
     ) {
-        SelectionChip(
+        RYSelectionChip(
             modifier = Modifier.animateContentSize(),
             content = stringResource(R.string.allow_notification),
             selected = false,
@@ -178,7 +178,7 @@ private fun Preset(
         ) {
             groupOptionViewModel.showAllAllowNotificationDialog()
         }
-        SelectionChip(
+        RYSelectionChip(
             modifier = Modifier.animateContentSize(),
             content = stringResource(R.string.parse_full_content),
             selected = false,
@@ -194,7 +194,7 @@ private fun Preset(
         ) {
             groupOptionViewModel.showAllParseFullContentDialog()
         }
-        SelectionChip(
+        RYSelectionChip(
             modifier = Modifier.animateContentSize(),
             content = stringResource(R.string.clear_articles),
             selected = false,
@@ -202,7 +202,7 @@ private fun Preset(
             groupOptionViewModel.showClearDialog()
         }
         if (group?.id != context.currentAccountId.getDefaultGroupId()) {
-            SelectionChip(
+            RYSelectionChip(
                 modifier = Modifier.animateContentSize(),
                 content = stringResource(R.string.delete_group),
                 selected = false,
@@ -227,7 +227,7 @@ private fun FlowRowGroups(
     ) {
         groupOptionUiState.groups.forEach {
             if (it.id != group?.id) {
-                SelectionChip(
+                RYSelectionChip(
                     modifier = Modifier.animateContentSize(),
                     content = it.name,
                     selected = false,
@@ -248,7 +248,7 @@ private fun LazyRowGroups(
     LazyRow {
         items(groupOptionUiState.groups) {
             if (it.id != group?.id) {
-                SelectionChip(
+                RYSelectionChip(
                     modifier = Modifier.animateContentSize(),
                     content = it.name,
                     selected = false,

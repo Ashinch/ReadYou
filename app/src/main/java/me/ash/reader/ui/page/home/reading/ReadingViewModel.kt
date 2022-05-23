@@ -28,7 +28,9 @@ class ReadingViewModel @Inject constructor(
         showLoading()
         viewModelScope.launch {
             _readingUiState.update {
-                it.copy(articleWithFeed = rssRepository.get().findArticleById(articleId))
+                it.copy(
+                    articleWithFeed = rssRepository.get().findArticleById(articleId)
+                )
             }
             _readingUiState.value.articleWithFeed?.let {
                 if (it.feed.isFullContent) internalRenderFullContent()
@@ -43,6 +45,7 @@ class ReadingViewModel @Inject constructor(
             it.copy(
                 content = it.articleWithFeed?.article?.fullContent
                     ?: it.articleWithFeed?.article?.rawDescription ?: "",
+                isFullContent = false
             )
         }
     }
@@ -53,7 +56,7 @@ class ReadingViewModel @Inject constructor(
         }
     }
 
-    suspend fun internalRenderFullContent() {
+    private suspend fun internalRenderFullContent() {
         showLoading()
         try {
             _readingUiState.update {
@@ -61,7 +64,8 @@ class ReadingViewModel @Inject constructor(
                     content = rssHelper.parseFullContent(
                         _readingUiState.value.articleWithFeed?.article?.link ?: "",
                         _readingUiState.value.articleWithFeed?.article?.title ?: ""
-                    )
+                    ),
+                    isFullContent = true
                 )
             }
         } catch (e: Exception) {
@@ -133,6 +137,7 @@ class ReadingViewModel @Inject constructor(
 data class ReadingUiState(
     val articleWithFeed: ArticleWithFeed? = null,
     val content: String? = null,
+    val isFullContent: Boolean = false,
     val isLoading: Boolean = true,
     val listState: LazyListState = LazyListState(),
 )
