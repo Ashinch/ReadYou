@@ -33,7 +33,6 @@ import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.component.base.SwipeRefresh
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.page.common.RouteName
-import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.HomeViewModel
 
 @OptIn(
@@ -165,7 +164,15 @@ fun FlowPage(
                     state = listState,
                 ) {
                     item {
-                        DisplayTextHeader(filterUiState, isSyncing, articleListFeedIcon.value)
+                        DisplayText(
+                            modifier = Modifier.padding(start = if (articleListFeedIcon.value) 30.dp else 0.dp),
+                            text = when {
+                                filterUiState.group != null -> filterUiState.group.name
+                                filterUiState.feed != null -> filterUiState.feed.name
+                                else -> filterUiState.filter.getName()
+                            },
+                            desc = if (isSyncing) stringResource(R.string.syncing) else "",
+                        )
                         RYExtensibleVisibility(visible = markAsRead) {
                             Spacer(modifier = Modifier.height((56 + 24 + 10).dp))
                         }
@@ -217,8 +224,8 @@ fun FlowPage(
                     }
                     ArticleList(
                         pagingItems = pagingItems,
-                        articleListFeedIcon = articleListFeedIcon.value,
-                        articleListDateStickyHeader = articleListDateStickyHeader.value,
+                        isShowFeedIcon = articleListFeedIcon.value,
+                        isShowStickyHeader = articleListDateStickyHeader.value,
                         articleListTonalElevation = articleListTonalElevation.value,
                     ) {
                         onSearch = false
@@ -246,22 +253,5 @@ fun FlowPage(
                 homeViewModel.fetchArticles()
             }
         }
-    )
-}
-
-@Composable
-private fun DisplayTextHeader(
-    filterState: FilterState,
-    isSyncing: Boolean,
-    articleListFeedIcon: Boolean,
-) {
-    DisplayText(
-        modifier = Modifier.padding(start = if (articleListFeedIcon) 30.dp else 0.dp),
-        text = when {
-            filterState.group != null -> filterState.group.name
-            filterState.feed != null -> filterState.feed.name
-            else -> filterState.filter.getName()
-        },
-        desc = if (isSyncing) stringResource(R.string.syncing) else "",
     )
 }

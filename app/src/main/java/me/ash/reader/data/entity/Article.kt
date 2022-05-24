@@ -1,9 +1,6 @@
 package me.ash.reader.data.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import java.util.*
 
 @Entity(
@@ -45,4 +42,7 @@ data class Article(
     var isStarred: Boolean = false,
     @ColumnInfo(defaultValue = "false")
     var isReadLater: Boolean = false,
-)
+) {
+    @Ignore
+    var dateString: String? = null
+}

@@ -4,16 +4,13 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.data.entity.Article
 import me.ash.reader.data.entity.Feed
 import me.ash.reader.data.entity.Group
-import me.ash.reader.data.module.DispatcherIO
 import me.ash.reader.data.repository.OpmlRepository
 import me.ash.reader.data.repository.RssHelper
 import me.ash.reader.data.repository.RssRepository
@@ -28,8 +25,6 @@ class SubscribeViewModel @Inject constructor(
     private val rssRepository: RssRepository,
     private val rssHelper: RssHelper,
     private val stringsRepository: StringsRepository,
-    @DispatcherIO
-    private val dispatcherIO: CoroutineDispatcher,
 ) : ViewModel() {
     private val _subscribeUiState = MutableStateFlow(SubscribeUiState())
     val subscribeUiState: StateFlow<SubscribeUiState> = _subscribeUiState.asStateFlow()
@@ -55,7 +50,7 @@ class SubscribeViewModel @Inject constructor(
     }
 
     fun importFromInputStream(inputStream: InputStream) {
-        viewModelScope.launch(dispatcherIO) {
+        viewModelScope.launch {
             try {
                 opmlRepository.saveToDatabase(inputStream)
                 rssRepository.get().doSync()
@@ -68,13 +63,10 @@ class SubscribeViewModel @Inject constructor(
     fun subscribe() {
         val feed = _subscribeUiState.value.feed ?: return
         val articles = _subscribeUiState.value.articles
-        viewModelScope.launch(dispatcherIO) {
-            val groupId = async {
-                _subscribeUiState.value.selectedGroupId
-            }
+        viewModelScope.launch {
             rssRepository.get().subscribe(
                 feed.copy(
-                    groupId = groupId.await(),
+                    groupId = _subscribeUiState.value.selectedGroupId,
                     isNotification = _subscribeUiState.value.allowNotificationPreset,
                     isFullContent = _subscribeUiState.value.parseFullContentPreset,
                 ), articles
@@ -123,7 +115,7 @@ class SubscribeViewModel @Inject constructor(
 
     fun search() {
         searchJob?.cancel()
-        viewModelScope.launch(dispatcherIO) {
+        viewModelScope.launch {
             try {
                 _subscribeUiState.update {
                     it.copy(

@@ -16,7 +16,7 @@ import coil.size.Scale
 import coil.size.Size
 import me.ash.reader.R
 
-val Size_1000 = Size(1000, 1000)
+val SIZE_1000 = Size(1000, 1000)
 
 @Composable
 fun RYAsyncImage(

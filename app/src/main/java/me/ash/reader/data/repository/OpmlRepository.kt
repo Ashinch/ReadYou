@@ -54,7 +54,7 @@ class OpmlRepository @Inject constructor(
             Opml(
                 "2.0",
                 Head(
-                    accountDao.queryById(context.currentAccountId).name,
+                    accountDao.queryById(context.currentAccountId)?.name,
                     Date().toString(), null, null, null,
                     null, null, null, null,
                     null, null, null, null,

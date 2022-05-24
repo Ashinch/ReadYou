@@ -50,7 +50,12 @@ class HomeViewModel @Inject constructor(
     fun fetchArticles() {
         _homeUiState.update {
             it.copy(
-                pagingData = Pager(PagingConfig(pageSize = 50)) {
+                pagingData = Pager(
+                    config = PagingConfig(
+                        pageSize = 100,
+                        enablePlaceholders = false,
+                    )
+                ) {
                     if (_homeUiState.value.searchContent.isNotBlank()) {
                         rssRepository.get().searchArticles(
                             content = _homeUiState.value.searchContent.trim(),
@@ -68,7 +73,14 @@ class HomeViewModel @Inject constructor(
                         )
                     }
                 }.flow.map {
-                    it.map { FlowItemView.Article(it) }.insertSeparators { before, after ->
+                    it.map {
+                        FlowItemView.Article(it.apply {
+                            article.dateString = stringsRepository.formatAsString(
+                                date = article.date,
+                                onlyHourMinute = true
+                            )
+                        })
+                    }.insertSeparators { before, after ->
                         val beforeDate =
                             stringsRepository.formatAsString(before?.articleWithFeed?.article?.date)
                         val afterDate =

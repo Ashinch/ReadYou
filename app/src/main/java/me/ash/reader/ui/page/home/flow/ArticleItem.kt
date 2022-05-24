@@ -2,7 +2,6 @@ package me.ash.reader.ui.page.home.flow
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Icon
@@ -23,10 +22,10 @@ import coil.size.Scale
 import me.ash.reader.R
 import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.preference.*
-import me.ash.reader.ui.component.base.RYAsyncImage
-import me.ash.reader.ui.ext.formatAsString
 import me.ash.reader.ui.component.FeedIcon
-import me.ash.reader.ui.component.base.Size_1000
+import me.ash.reader.ui.component.base.RYAsyncImage
+import me.ash.reader.ui.component.base.SIZE_1000
+import me.ash.reader.ui.theme.SHAPE_20
 
 @Composable
 fun ArticleItem(
@@ -43,7 +42,7 @@ fun ArticleItem(
     Column(
         modifier = Modifier
             .padding(horizontal = 12.dp)
-            .clip(RoundedCornerShape(20.dp))
+            .clip(SHAPE_20)
             .clickable { onClick(articleWithFeed) }
             .padding(horizontal = 12.dp, vertical = 12.dp)
             .alpha(if (articleWithFeed.article.isStarred || articleWithFeed.article.isUnread) 1f else 0.5f),
@@ -80,21 +79,20 @@ fun ArticleItem(
                     if (articleWithFeed.article.isStarred) {
                         Icon(
                             modifier = Modifier
+                                .alpha(0.7f)
                                 .size(14.dp)
                                 .padding(end = 2.dp),
                             imageVector = Icons.Rounded.Star,
                             contentDescription = stringResource(R.string.starred),
-                            tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                            tint = MaterialTheme.colorScheme.outline,
                         )
                     }
 
                     // Date
                     Text(
-                        text = articleWithFeed.article.date.formatAsString(
-                            context,
-                            onlyHourMinute = true
-                        ),
-                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                        modifier = Modifier.alpha(0.7f),
+                        text = articleWithFeed.article.dateString ?: "",
+                        color = MaterialTheme.colorScheme.outline,
                         style = MaterialTheme.typography.labelMedium,
                     )
                 }
@@ -128,8 +126,9 @@ fun ArticleItem(
                 // Description
                 if (articleListDesc.value && articleWithFeed.article.shortDescription.isNotBlank()) {
                     Text(
+                        modifier = Modifier.alpha(0.7f),
                         text = articleWithFeed.article.shortDescription,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
@@ -143,11 +142,11 @@ fun ArticleItem(
                     modifier = Modifier
                         .padding(start = 10.dp)
                         .size(80.dp)
-                        .clip(RoundedCornerShape(20.dp)),
+                        .clip(SHAPE_20),
                     data = articleWithFeed.article.img,
                     scale = Scale.FILL,
                     precision = Precision.INEXACT,
-                    size = Size_1000,
+                    size = SIZE_1000,
                     contentScale = ContentScale.Crop,
                 )
             }

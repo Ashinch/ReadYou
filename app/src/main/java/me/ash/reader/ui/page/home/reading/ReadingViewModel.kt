@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReadingViewModel @Inject constructor(
-    val rssRepository: RssRepository,
+    private val rssRepository: RssRepository,
     private val rssHelper: RssHelper,
 ) : ViewModel() {
     private val _readingUiState = MutableStateFlow(ReadingUiState())

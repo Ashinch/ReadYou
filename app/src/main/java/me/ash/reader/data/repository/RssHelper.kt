@@ -21,8 +21,6 @@ import net.dankito.readability4j.extended.Readability4JExtended
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.net.URL
-import java.text.ParsePosition
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -86,7 +84,12 @@ class RssHelper @Inject constructor(
         return withContext(dispatcherIO) {
             val a = mutableListOf<Article>()
             val accountId = context.currentAccountId
-            val parseRss: SyndFeed = SyndFeedInput().build(XmlReader(URL(feed.url)))
+            val parseRss: SyndFeed = SyndFeedInput().build(
+                XmlReader(URL(feed.url).openConnection().apply {
+                    connectTimeout = 5000
+                    readTimeout = 5000
+                })
+            )
             parseRss.entries.forEach {
                 if (latestLink != null && latestLink == it.link) return@withContext a
                 val desc = it.description?.value
@@ -111,13 +114,13 @@ class RssHelper @Inject constructor(
                         date = it.publishedDate ?: it.updatedDate ?: Date(),
                         title = Html.fromHtml(it.title.toString()).toString(),
                         author = it.author,
-                        rawDescription = (desc ?: content) ?: "",
+                        rawDescription = (content ?: desc) ?: "",
                         shortDescription = (Readability4JExtended("", desc ?: content ?: "")
                             .parse().textContent ?: "")
                             .take(100)
                             .trim(),
                         fullContent = content,
-                        img = findImg((desc ?: content) ?: ""),
+                        img = findImg((content ?: desc) ?: ""),
                         link = it.link ?: "",
                     )
                 )
