@@ -238,7 +238,7 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h5Style().toSpanStyle() }
                             ) {
-                                append(element.text())
+                                append("\n${element.text()}")
                             }
                         }
                     }
@@ -247,7 +247,7 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h5Style().toSpanStyle() }
                             ) {
-                                append(element.text())
+                                append("\n${element.text()}")
                             }
                         }
                     }
@@ -256,7 +256,7 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h5Style().toSpanStyle() }
                             ) {
-                                append(element.text())
+                                append("\n${element.text()}")
                             }
                         }
                     }
@@ -265,7 +265,7 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h5Style().toSpanStyle() }
                             ) {
-                                append(element.text())
+                                append("\n${element.text()}")
                             }
                         }
                     }
@@ -274,7 +274,7 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h5Style().toSpanStyle() }
                             ) {
-                                append(element.text())
+                                append("\n${element.text()}")
                             }
                         }
                     }
@@ -283,7 +283,7 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h5Style().toSpanStyle() }
                             ) {
-                                append(element.text())
+                                append("\n${element.text()}")
                             }
                         }
                     }
@@ -442,6 +442,7 @@ private fun TextComposer.appendTextChildren(
 //                                            .padding(horizontal = PADDING_HORIZONTAL.dp)
                                             .width(MAX_CONTENT_WIDTH.dp)
                                     ) {
+                                        Spacer(modifier = Modifier.height(PADDING_HORIZONTAL.dp))
                                         DisableSelection {
                                             BoxWithConstraints(
                                                 modifier = Modifier
@@ -466,7 +467,11 @@ private fun TextComposer.appendTextChildren(
                                             ) {
                                                 val imageSize = maxImageSize()
                                                 RYAsyncImage(
-                                                    modifier = Modifier.fillMaxWidth(),
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .padding(horizontal = PADDING_HORIZONTAL.dp)
+                                                        .clip(IMAGE_SHAPE)
+                                                        .clickable { },
                                                     data = imageCandidates.getBestImageForMaxSize(
                                                         pixelDensity = pixelDensity(),
                                                         maxSize = imageSize,
@@ -593,10 +598,12 @@ private fun TextComposer.appendTextChildren(
                                             ) {
                                                 RYAsyncImage(
                                                     modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .padding(horizontal = PADDING_HORIZONTAL.dp)
+                                                        .clip(IMAGE_SHAPE)
                                                         .clickable {
                                                             onLinkClick(video.link)
-                                                        }
-                                                        .fillMaxWidth(),
+                                                        },
                                                     data = video.imageUrl,
                                                     size = maxImageSize(),
                                                     contentDescription = stringResource(R.string.touch_to_play_video),
