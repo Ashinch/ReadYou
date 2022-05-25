@@ -18,11 +18,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.size.Precision
 import coil.size.Scale
 import me.ash.reader.R
 import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.preference.*
 import me.ash.reader.ui.component.AsyncImage
+import me.ash.reader.ui.component.Size_1000
 import me.ash.reader.ui.ext.formatAsString
 import me.ash.reader.ui.page.home.FeedIcon
 
@@ -144,6 +146,8 @@ fun ArticleItem(
                         .clip(RoundedCornerShape(20.dp)),
                     data = articleWithFeed.article.img,
                     scale = Scale.FILL,
+                    precision = Precision.INEXACT,
+                    size = Size_1000,
                     contentScale = ContentScale.Crop,
                 )
             }
