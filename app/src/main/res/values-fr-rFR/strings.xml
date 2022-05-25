@@ -1,19 +1,21 @@
 <resources>
-    <string name="read_you" translatable="false">Read You</string>
     <string name="all">Tout</string>
     <plurals name="all_desc">
         <item quantity="one">%1$d élément archivé</item>
         <item quantity="other">%1$d éléments archivés</item>
+        <item quantity="many">%1$d éléments archivés</item>
     </plurals>
     <string name="unread">Non lus</string>
     <plurals name="unread_desc">
         <item quantity="one">%1$d élément non lu</item>
         <item quantity="other">%1$d éléments non lus</item>
+        <item quantity="many">%1$d éléments non lus</item>
     </plurals>
     <string name="starred">Favoris</string>
     <plurals name="starred_desc">
         <item quantity="one">%1$d élément favori</item>
         <item quantity="other">%1$d éléments favoris</item>
+        <item quantity="many">%1$d éléments favoris</item>
     </plurals>
     <string name="feeds">Flux</string>
     <string name="syncing">Synchronisation…</string>
@@ -32,7 +34,7 @@
     <string name="refresh">Actualiser</string>
     <string name="search">Rechercher</string>
     <string name="searching">Recherche…</string>
-    <string name="subscribe">S'abonner</string>
+    <string name="subscribe">S\'abonner</string>
     <string name="already_subscribed">Déjà abonné</string>
     <string name="clear">Vider</string>
     <string name="paste">Coller</string>
@@ -41,25 +43,24 @@
     <string name="preset">Préréglages</string>
     <string name="selected">Sélectionné</string>
     <string name="allow_notification">Autoriser les notifications</string>
-    <string name="all_allow_notification_tips">Vous êtes sur le point d'autoriser tous les flux dans le groupe \"%1$s\" à vous envoyer des notifications.</string>
+    <string name="all_allow_notification_tips">Vous êtes sur le point d\'autoriser tous les flux dans le groupe \"%1$s\" à vous envoyer des notifications.</string>
     <string name="all_allow_notification_toast">Toutes les notifications du groupe \"%1$s\" sont autorisées</string>
     <string name="all_deny_notification_toast">Toutes les notifications du groupe \"%1$s\" sont bloquées</string>
     <string name="parse_full_content">Analyser tout le contenu</string>
-    <string name="all_parse_full_content_tips">Vous êtes sur le point d'autoriser l'analyse de tout le contenu de tous les articles du groupe \"%1$s\".</string>
+    <string name="all_parse_full_content_tips">Vous êtes sur le point d\'autoriser l\'analyse de tout le contenu de tous les articles du groupe \"%1$s\".</string>
     <string name="all_parse_full_content_toast">Le contenu de tous les articles du groupe \"%1$s\" est maintenant analysé</string>
-    <string name="all_deny_parse_full_content_toast">Le contenu de tous les articles du groupe \"%1$s\" n'est plus analysé</string>
+    <string name="all_deny_parse_full_content_toast">Le contenu de tous les articles du groupe \"%1$s\" n\'est plus analysé</string>
     <string name="clear_articles">Vider les articles</string>
     <string name="clear_articles_in_feed_toast">Tous les articles archivés du flux \"%1$s\" ont été effacés</string>
     <string name="clear_articles_in_group_toast">Tous les articles archivés du groupe \"%1$s\" ont été effacés</string>
-    <string name="clear_articles_feed_tips">Vous êtes sur le point d'effacer tous les articles archivés du flux \"%1$s\".</string>
-    <string name="clear_articles_group_tips">Vous êtes sur le point d'effacer tous les articles archivés du groupe \"%1$s\".</string>
+    <string name="clear_articles_feed_tips">Vous êtes sur le point d\'effacer tous les articles archivés du flux \"%1$s\".</string>
+    <string name="clear_articles_group_tips">Vous êtes sur le point d\'effacer tous les articles archivés du groupe \"%1$s\".</string>
     <string name="add_to_group">Ajouter au groupe</string>
     <string name="move_to_group">Déplacer vers le groupe</string>
     <string name="all_move_to_group_tips">Voulez-vous vraiment déplacer tous les flux du groupe \"%1$s\" vers le groupe \"%2$s\" ?</string>
     <string name="all_move_to_group_toast">Déplacé vers le groupe \"%1$s\"</string>
     <string name="rename">Renommer</string>
-    <string name="change_url">Modifier l'URL</string>
-    <string name="feed_url_placeholder" translatable="false">http://example.com/feed.rss</string>
+    <string name="change_url">Modifier l\'URL</string>
     <string name="rename_toast">Renommé en \"%1$s\"</string>
     <string name="create_new_group">Créer un nouveau groupe</string>
     <string name="name">Nom</string>
@@ -72,7 +73,7 @@
     <string name="delete_group">Supprimer le groupe</string>
     <string name="delete_group_tips">Supprimer le groupe \"%1$s\" et tous ses articles archivés ?</string>
     <string name="group_option_tips">Les options suivantes seront appliqués à tous les flux du groupe.</string>
-    <string name="today">Aujourd'hui</string>
+    <string name="today">Aujourd\'hui</string>
     <string name="yesterday">Hier</string>
     <string name="date_at_time">%1$s à %2$s</string>
     <string name="search_for_in">Rechercher dans %1$s du flux \"%2$s\"</string>
@@ -82,9 +83,9 @@
     <string name="mark_as_unread">Marquer comme non lu</string>
     <string name="mark_as_starred">Ajouter aux favoris</string>
     <string name="mark_as_unstar">Retirer des favoris</string>
-    <string name="mark_as_read_one_day">Marquer comme lu les articles jusqu'à 1 jour</string>
-    <string name="mark_as_read_three_days">Marquer comme lu les articles jusqu'à 3 jours</string>
-    <string name="mark_as_read_seven_days">Marquer comme lu les articles jusqu'à 7 jours</string>
+    <string name="mark_as_read_one_day">Marquer comme lu les articles jusqu\'à 1 jour</string>
+    <string name="mark_as_read_three_days">Marquer comme lu les articles jusqu\'à 3 jours</string>
+    <string name="mark_as_read_seven_days">Marquer comme lu les articles jusqu\'à 7 jours</string>
     <string name="one_day">1j</string>
     <string name="three_days">3j</string>
     <string name="seven_days">7j</string>
@@ -103,18 +104,14 @@
     <string name="languages_desc">Français, English, 简体中文, Deutsch</string>
     <string name="help_translate">Aidez-nous à traduire</string>
     <string name="use_device_languages">Utiliser la langue du système</string>
-    <string name="english" translatable="false">English</string>
-    <string name="chinese_simplified" translatable="false">简体中文</string>
-    <string name="german" translatable="false">Deutsch</string>
-    <string name="french" translatable="false">Français</string>
     <string name="tips_and_support">Aide et assistance</string>
     <string name="tips_and_support_desc">À propos, Open Source</string>
     <string name="welcome">Bienvenue</string>
-    <string name="agree_terms">Avant de continuer, vous devez accepter les conditions d'utilisation et la politique de confidentialité de Read You.</string>
-    <string name="view_terms">Lire les &lt;i&gt;&lt;u&gt;conditions d'utilisation et la politique de confidentialité&lt;/u&gt;&lt;/i&gt;</string>
+    <string name="agree_terms">Avant de continuer, vous devez accepter les conditions d\'utilisation et la politique de confidentialité de Read You.</string>
+    <string name="view_terms">Lire les &lt;i&gt;&lt;u&gt;conditions d\'utilisation et la politique de confidentialité&lt;/u&gt;&lt;/i&gt;</string>
     <string name="terms_link">https://github.com/Ashinch/ReadYou/blob/main/TERMS_OF_SERVICE_AND_PRIVACY_POLICY.md</string>
-    <string name="agree_and_continue">J'accepte</string>
-    <string name="wallpaper_colors">Couleurs du fond d'écran</string>
+    <string name="agree_and_continue">J\'accepte</string>
+    <string name="wallpaper_colors">Couleurs du fond d\'écran</string>
     <string name="no_palettes">Aucune palette</string>
     <string name="only_android_8.1_plus">Android 8.1+ uniquement</string>
     <string name="basic_colors">Couleurs de base</string>
@@ -136,8 +133,6 @@
     <string name="reading_page">Page de lecture</string>
     <string name="sponsor">Sponsor</string>
     <string name="open_source_licenses">Licences Open Source</string>
-    <string name="github_link" translatable="false">https://github.com/Ashinch/ReadYou</string>
-    <string name="telegram_link" translatable="false">https://t.me/ReadYouApp</string>
     <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
     <string name="change_log">Nouveautés</string>
     <string name="update">Mettre à jour</string>
@@ -161,21 +156,21 @@
     <string name="article_images">Images des articles</string>
     <string name="feed_names">Noms des flux</string>
     <string name="feed_favicons">Favicons des flux</string>
-    <string name="article_date_sticky_header">En-tête fixe de l'heure de publication des articles (Expérimental)</string>
-    <string name="article_list">Liste d'articles</string>
+    <string name="article_date_sticky_header">En-tête fixe de l\'heure de publication des articles (Expérimental)</string>
+    <string name="article_list">Liste d\'articles</string>
     <string name="group_list">Liste des groupes</string>
     <string name="always_expand">Toujours développer</string>
     <string name="top">Haut</string>
     <string name="mark_as_read_button_position">Position du bouton \"Marquer comme lu\"</string>
     <string name="top_bar">Barre supérieure</string>
-    <string name="fill_selected_icon">Remplir l'icône sélectionné</string>
+    <string name="fill_selected_icon">Remplir l\'icône sélectionné</string>
     <string name="filter_bar">Barre de filtre</string>
     <string name="icons">Icônes</string>
     <string name="icons_and_labels">Icônes et étiquettes</string>
     <string name="icons_and_label_only_selected">Icônes et étiquettes (sélectionné uniquement)</string>
-    <string name="tips_top_bar_tonal_elevation">L'intensité de l'en-tête est valable uniquement lors du défilement.</string>
-    <string name="tips_article_list_tonal_elevation">L'intensité de la liste d'articles est uniquement disponible pour le thème clair.</string>
-    <string name="tips_group_list_tonal_elevation">L'intensité de la liste des groupes est uniquement disponible pour le thème clair.</string>
+    <string name="tips_top_bar_tonal_elevation">L\'intensité de l\'en-tête est valable uniquement lors du défilement.</string>
+    <string name="tips_article_list_tonal_elevation">L\'intensité de la liste d\'articles est uniquement disponible pour le thème clair.</string>
+    <string name="tips_group_list_tonal_elevation">L\'intensité de la liste des groupes est uniquement disponible pour le thème clair.</string>
     <string name="share">Partager</string>
     <string name="touch_to_play_video">Appuyer pour lancer la lecture</string>
 </resources>

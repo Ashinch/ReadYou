@@ -17,6 +17,8 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
     object English : LanguagesPreference(1)
     object ChineseSimplified : LanguagesPreference(2)
     object German : LanguagesPreference(3)
+    object French : LanguagesPreference(4)
+    object Czech : LanguagesPreference(5)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
@@ -34,6 +36,8 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
             English -> context.getString(R.string.english)
             ChineseSimplified -> context.getString(R.string.chinese_simplified)
             German -> context.getString(R.string.german)
+            French -> context.getString(R.string.french)
+            Czech -> context.getString(R.string.czech)
         }
 
     fun getLocale(): Locale =
@@ -42,6 +46,8 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
             English -> Locale("en", "US")
             ChineseSimplified -> Locale("zh", "CN")
             German -> Locale("de", "DE")
+            French -> Locale("fr", "FR")
+            Czech -> Locale("cs", "CZ")
         }
 
     fun setLocale(context: Context) {
@@ -68,7 +74,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
 
     companion object {
         val default = UseDeviceLanguages
-        val values = listOf(UseDeviceLanguages, English, ChineseSimplified, German)
+        val values = listOf(UseDeviceLanguages, English, ChineseSimplified, German, French, Czech)
 
         fun fromPreferences(preferences: Preferences): LanguagesPreference =
             when (preferences[DataStoreKeys.Languages.key]) {
@@ -76,6 +82,8 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
                 1 -> English
                 2 -> ChineseSimplified
                 3 -> German
+                4 -> French
+                5 -> Czech
                 else -> default
             }
 
@@ -85,6 +93,8 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
                 1 -> English
                 2 -> ChineseSimplified
                 3 -> German
+                4 -> French
+                5 -> Czech
                 else -> default
             }
     }
