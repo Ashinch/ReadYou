@@ -116,7 +116,8 @@ dependencies {
     implementation "org.conscrypt:conscrypt-android:2.5.2"
 
     // https://square.github.io/okhttp/changelogs/changelog/
-    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.6"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp3"
+    implementation "com.squareup.okhttp3:okhttp-coroutines-jvm:$okhttp3"
     implementation "com.squareup.retrofit2:retrofit:$retrofit2"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit2"
 
