@@ -20,7 +20,8 @@ import net.dankito.readability4j.Readability4J
 import net.dankito.readability4j.extended.Readability4JExtended
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.net.URL
+import okhttp3.executeAsync
+import java.io.InputStream
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,12 +32,13 @@ class RssHelper @Inject constructor(
     private val context: Context,
     @DispatcherIO
     private val dispatcherIO: CoroutineDispatcher,
+    private val client: OkHttpClient
 ) {
     @Throws(Exception::class)
     suspend fun searchFeed(feedLink: String): FeedWithArticle {
         return withContext(dispatcherIO) {
             val accountId = context.currentAccountId
-            val parseRss: SyndFeed = SyndFeedInput().build(XmlReader(URL(feedLink)))
+            val parseRss: SyndFeed = SyndFeedInput().build(XmlReader(inputStream(client, feedLink)))
             val feed = Feed(
                 id = accountId.spacerDollar(UUID.randomUUID().toString()),
                 name = parseRss.title!!,
@@ -85,7 +87,7 @@ class RssHelper @Inject constructor(
         return withContext(dispatcherIO) {
             val a = mutableListOf<Article>()
             val accountId = context.currentAccountId
-            val parseRss: SyndFeed = SyndFeedInput().build(XmlReader(URL(feed.url)))
+            val parseRss: SyndFeed = SyndFeedInput().build(XmlReader(inputStream(client, feed.url)))
             parseRss.entries.forEach {
                 if (latestLink != null && latestLink == it.link) return@withContext a
                 val desc = it.description?.value
@@ -205,4 +207,10 @@ class RssHelper @Inject constructor(
         }
         return null
     }
+
+    private suspend fun inputStream(
+        client: OkHttpClient,
+        feedLink: String
+    ): InputStream =
+        client.newCall(Request.Builder().url(feedLink).build()).executeAsync().body!!.byteStream()
 }

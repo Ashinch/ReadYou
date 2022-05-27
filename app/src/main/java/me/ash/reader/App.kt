@@ -17,6 +17,7 @@ import me.ash.reader.data.source.OpmlLocalDataSource
 import me.ash.reader.data.source.ReaderDatabase
 import me.ash.reader.ui.ext.*
 import okhttp3.Cache
+import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import org.conscrypt.Conscrypt
 import java.io.File
@@ -131,7 +132,8 @@ fun cachingHttpClient(
     cacheSize: Long = 10L * 1024L * 1024L,
     trustAllCerts: Boolean = true,
     connectTimeoutSecs: Long = 30L,
-    readTimeoutSecs: Long = 30L
+    readTimeoutSecs: Long = 30L,
+    httpClientDispatcher: Dispatcher = Dispatcher()
 ): OkHttpClient {
     val builder: OkHttpClient.Builder = OkHttpClient.Builder()
 
@@ -143,6 +145,7 @@ fun cachingHttpClient(
         .connectTimeout(connectTimeoutSecs, TimeUnit.SECONDS)
         .readTimeout(readTimeoutSecs, TimeUnit.SECONDS)
         .followRedirects(true)
+        .dispatcher(httpClientDispatcher)
 
 //    if (trustAllCerts) {
 //        builder.trustAllCerts()

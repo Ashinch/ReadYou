@@ -16,6 +16,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import me.ash.reader.cachingHttpClient
+import okhttp3.Dispatcher
 import javax.inject.Singleton
 
 @Module
@@ -25,12 +26,14 @@ object ImageLoaderModule {
     @Provides
     @Singleton
     fun provideImageLoader(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
+        httpClientDispatcher: Dispatcher
     ): ImageLoader {
         return ImageLoader.Builder(context)
             .okHttpClient(
                 okHttpClient = cachingHttpClient(
-                    cacheDirectory = context.cacheDir.resolve("http")
+                    cacheDirectory = context.cacheDir.resolve("http"),
+                    httpClientDispatcher = httpClientDispatcher
                 ).newBuilder()
                     //.addNetworkInterceptor(UserAgentInterceptor)
                     .build()
