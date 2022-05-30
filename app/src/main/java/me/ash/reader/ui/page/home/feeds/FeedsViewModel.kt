@@ -2,6 +2,7 @@ package me.ash.reader.ui.page.home.feeds
 
 import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.ui.util.fastForEach
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,7 +11,6 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.data.entity.Account
-import me.ash.reader.data.entity.GroupWithFeed
 import me.ash.reader.data.module.DispatcherDefault
 import me.ash.reader.data.module.DispatcherIO
 import me.ash.reader.data.repository.AccountRepository
@@ -67,42 +67,20 @@ class FeedsViewModel @Inject constructor(
         combine(
             rssRepository.get().pullFeeds(),
             rssRepository.get().pullImportant(isStarred, isUnread),
-        ) { groupWithFeedList, importantList ->
-            val groupImportantMap = mutableMapOf<String, Int>()
-            val feedImportantMap = mutableMapOf<String, Int>()
-            importantList.groupBy { it.groupId }.forEach { (i, list) ->
-                var groupImportantSum = 0
-                list.forEach {
-                    feedImportantMap[it.feedId] = it.important
-                    groupImportantSum += it.important
+        ) { groupWithFeedList, importantMap ->
+            groupWithFeedList.fastForEach {
+                var groupImportant = 0
+                it.feeds.fastForEach {
+                    it.important = importantMap[it.id]
+                    groupImportant += it.important ?: 0
                 }
-                groupImportantMap[i] = groupImportantSum
-            }
-            val groupsIt = groupWithFeedList.iterator()
-            while (groupsIt.hasNext()) {
-                val groupWithFeed = groupsIt.next()
-                val groupImportant = groupImportantMap[groupWithFeed.group.id]
-                if (groupImportant == null && (isStarred || isUnread)) {
-                    groupsIt.remove()
-                } else {
-                    groupWithFeed.group.important = groupImportant
-                    val feedsIt = groupWithFeed.feeds.iterator()
-                    while (feedsIt.hasNext()) {
-                        val feed = feedsIt.next()
-                        val feedImportant = feedImportantMap[feed.id]
-                        if (feedImportant == null && (isStarred || isUnread)) {
-                            feedsIt.remove()
-                        } else {
-                            feed.important = feedImportant
-                        }
-                    }
-                }
+                it.group.important = groupImportant
             }
             groupWithFeedList
-        }.onEach { groupWithFeedList ->
+        }.mapLatest { groupWithFeedList ->
             _feedsUiState.update {
                 it.copy(
-                    importantCount = groupWithFeedList.sumOf { it.group.important ?: 0 }.run {
+                    importantSum = groupWithFeedList.sumOf { it.group.important ?: 0 }.run {
                         when {
                             isStarred -> stringsRepository.getQuantityString(
                                 R.plurals.starred_desc,
@@ -121,8 +99,15 @@ class FeedsViewModel @Inject constructor(
                             )
                         }
                     },
-                    groupWithFeedList = groupWithFeedList,
-                    feedsVisible = List(groupWithFeedList.size, init = { true })
+                    groupWithFeedList = groupWithFeedList.map {
+                        mutableListOf<GroupFeedsView>(GroupFeedsView.Group(it.group)).apply {
+                            addAll(
+                                it.feeds.map {
+                                    GroupFeedsView.Feed(it)
+                                }
+                            )
+                        }
+                    }.flatten(),
                 )
             }
         }.catch {
@@ -133,9 +118,13 @@ class FeedsViewModel @Inject constructor(
 
 data class FeedsUiState(
     val account: Account? = null,
-    val importantCount: String = "",
-    val groupWithFeedList: List<GroupWithFeed> = emptyList(),
-    val feedsVisible: List<Boolean> = emptyList(),
+    val importantSum: String = "",
+    val groupWithFeedList: List<GroupFeedsView> = emptyList(),
     val listState: LazyListState = LazyListState(),
     val groupsVisible: Boolean = true,
 )
+
+sealed class GroupFeedsView {
+    class Group(val group: me.ash.reader.data.entity.Group) : GroupFeedsView()
+    class Feed(val feed: me.ash.reader.data.entity.Feed) : GroupFeedsView()
+}

@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -25,14 +24,13 @@ import me.ash.reader.data.preference.*
 import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.base.RYAsyncImage
 import me.ash.reader.ui.component.base.SIZE_1000
-import me.ash.reader.ui.theme.SHAPE_20
+import me.ash.reader.ui.theme.Shape20
 
 @Composable
 fun ArticleItem(
     articleWithFeed: ArticleWithFeed,
     onClick: (ArticleWithFeed) -> Unit = {},
 ) {
-    val context = LocalContext.current
     val articleListFeedIcon = LocalFlowArticleListFeedIcon.current
     val articleListFeedName = LocalFlowArticleListFeedName.current
     val articleListImage = LocalFlowArticleListImage.current
@@ -42,12 +40,12 @@ fun ArticleItem(
     Column(
         modifier = Modifier
             .padding(horizontal = 12.dp)
-            .clip(SHAPE_20)
+            .clip(Shape20)
             .clickable { onClick(articleWithFeed) }
             .padding(horizontal = 12.dp, vertical = 12.dp)
             .alpha(if (articleWithFeed.article.isStarred || articleWithFeed.article.isUnread) 1f else 0.5f),
     ) {
-        // Upper
+        // Top
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -99,7 +97,7 @@ fun ArticleItem(
             }
         }
 
-        // Lower
+        // Bottom
         Row(
             modifier = Modifier.fillMaxWidth(),
         ) {
@@ -142,7 +140,7 @@ fun ArticleItem(
                     modifier = Modifier
                         .padding(start = 10.dp)
                         .size(80.dp)
-                        .clip(SHAPE_20),
+                        .clip(Shape20),
                     data = articleWithFeed.article.img,
                     scale = Scale.FILL,
                     precision = Precision.INEXACT,

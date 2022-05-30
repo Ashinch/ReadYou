@@ -31,6 +31,7 @@ import me.ash.reader.data.preference.*
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.*
+import me.ash.reader.ui.ext.alphaLN
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.findActivity
 import me.ash.reader.ui.ext.getCurrentVersion
@@ -41,9 +42,9 @@ import me.ash.reader.ui.page.home.feeds.drawer.feed.FeedOptionDrawer
 import me.ash.reader.ui.page.home.feeds.drawer.group.GroupOptionDrawer
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
+import kotlin.math.ln
 
 @OptIn(
-    com.google.accompanist.pager.ExperimentalPagerApi::class,
     androidx.compose.foundation.ExperimentalFoundationApi::class
 )
 @Composable
@@ -94,6 +95,24 @@ fun FeedsPage(
                 }
             }
         }
+    }
+
+    val feedBadgeAlpha by remember { derivedStateOf { (ln(groupListTonalElevation.value + 1.4f) + 2f) / 100f } }
+    val groupAlpha by remember { derivedStateOf { groupListTonalElevation.value.dp.alphaLN(weight = 1.2f) } }
+    val groupIndicatorAlpha by remember {
+        derivedStateOf {
+            groupListTonalElevation.value.dp.alphaLN(
+                weight = 1.4f
+            )
+        }
+    }
+
+    val groupsVisible = remember(feedsUiState.groupWithFeedList) {
+        mutableStateMapOf(
+            *(feedsUiState.groupWithFeedList.filterIsInstance<GroupFeedsView.Group>().map {
+                it.group.id to groupListExpand.value
+            }.toTypedArray())
+        )
     }
 
     LaunchedEffect(Unit) {
@@ -161,7 +180,7 @@ fun FeedsPage(
                 item {
                     Banner(
                         title = filterUiState.filter.getName(),
-                        desc = feedsUiState.importantCount.ifEmpty { stringResource(R.string.loading) },
+                        desc = feedsUiState.importantSum.ifEmpty { stringResource(R.string.loading) },
                         icon = filterUiState.filter.iconOutline,
                         action = {
                             Icon(
@@ -189,14 +208,21 @@ fun FeedsPage(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
                 itemsIndexed(feedsUiState.groupWithFeedList) { index, groupWithFeed ->
-//                    Crossfade(targetState = groupWithFeed) { groupWithFeed ->
-                    Column {
-                        GroupItem(
-                            isExpanded = groupListExpand.value,
-                            tonalElevation = groupListTonalElevation.value.dp,
-                            group = groupWithFeed.group,
-                            feeds = groupWithFeed.feeds,
-                            groupOnClick = {
+                    when (groupWithFeed) {
+                        is GroupFeedsView.Group -> {
+                            if (index != 0) {
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
+                            GroupItem(
+                                isExpanded = { groupsVisible[groupWithFeed.group.id] ?: false },
+                                group = groupWithFeed.group,
+                                alpha = groupAlpha,
+                                indicatorAlpha = groupIndicatorAlpha,
+                                onExpanded = {
+                                    groupsVisible[groupWithFeed.group.id] =
+                                        !(groupsVisible[groupWithFeed.group.id] ?: false)
+                                }
+                            ) {
                                 filterChange(
                                     navController = navController,
                                     homeViewModel = homeViewModel,
@@ -205,23 +231,27 @@ fun FeedsPage(
                                         feed = null,
                                     )
                                 )
-                            },
-                            feedOnClick = { feed ->
+                            }
+                        }
+                        is GroupFeedsView.Feed -> {
+                            FeedItem(
+                                feed = groupWithFeed.feed,
+                                alpha = groupAlpha,
+                                badgeAlpha = feedBadgeAlpha,
+                                isEnded = index != feedsUiState.groupWithFeedList.lastIndex && feedsUiState.groupWithFeedList[index + 1] is GroupFeedsView.Group,
+                                isExpanded = { groupsVisible[groupWithFeed.feed.groupId] ?: false },
+                            ) {
                                 filterChange(
                                     navController = navController,
                                     homeViewModel = homeViewModel,
                                     filterState = filterUiState.copy(
                                         group = null,
-                                        feed = feed,
+                                        feed = groupWithFeed.feed,
                                     )
                                 )
                             }
-                        )
-                        if (index != feedsUiState.groupWithFeedList.lastIndex) {
-                            Spacer(modifier = Modifier.height(8.dp))
                         }
                     }
-//                    }
                 }
                 item {
                     Spacer(modifier = Modifier.height(128.dp))

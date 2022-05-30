@@ -10,12 +10,12 @@ import androidx.work.WorkManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.mapLatest
 import me.ash.reader.data.dao.AccountDao
 import me.ash.reader.data.dao.ArticleDao
 import me.ash.reader.data.dao.FeedDao
 import me.ash.reader.data.dao.GroupDao
 import me.ash.reader.data.entity.*
-import me.ash.reader.data.model.ImportantCount
 import me.ash.reader.ui.ext.currentAccountId
 import java.util.*
 
@@ -99,7 +99,7 @@ abstract class AbstractRssRepository constructor(
     fun pullImportant(
         isStarred: Boolean = false,
         isUnread: Boolean = false,
-    ): Flow<List<ImportantCount>> {
+    ): Flow<Map<String, Int>> {
         val accountId = context.currentAccountId
         Log.i(
             "RLog",
@@ -111,6 +111,12 @@ abstract class AbstractRssRepository constructor(
             isUnread -> articleDao
                 .queryImportantCountWhenIsUnread(accountId, isUnread)
             else -> articleDao.queryImportantCountWhenIsAll(accountId)
+        }.mapLatest {
+            mapOf(
+                *(it.map {
+                    it.feedId to it.important
+                }.toTypedArray())
+            )
         }.flowOn(dispatcherIO)
     }
 

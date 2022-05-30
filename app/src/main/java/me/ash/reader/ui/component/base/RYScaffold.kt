@@ -31,14 +31,14 @@ fun RYScaffold(
                     color = containerColor
                 )
             )
-            .statusBarsPadding()
-            .run {
-                if (bottomBar != null || floatingActionButton != null) {
-                    navigationBarsPadding()
-                } else {
-                    this
-                }
-            },
+            .statusBarsPadding(),
+//            .run {
+//                if (bottomBar != null || floatingActionButton != null) {
+//                    navigationBarsPadding()
+//                } else {
+//                    this
+//                }
+//            },
         containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
             containerTonalElevation,
             color = containerColor

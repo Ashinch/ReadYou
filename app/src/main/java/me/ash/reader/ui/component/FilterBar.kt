@@ -4,6 +4,7 @@ import android.os.Build
 import android.view.SoundEffectConstants
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -20,7 +21,6 @@ import me.ash.reader.ui.theme.palette.onDark
 
 @Composable
 fun FilterBar(
-    modifier: Modifier = Modifier,
     filter: Filter,
     filterBarStyle: Int,
     filterBarFilled: Boolean,
@@ -33,7 +33,8 @@ fun FilterBar(
 
     NavigationBar(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(filterBarTonalElevation)),
+            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(filterBarTonalElevation))
+            .navigationBarsPadding(),
         tonalElevation = filterBarTonalElevation,
     ) {
         Spacer(modifier = Modifier.width(filterBarPadding))
