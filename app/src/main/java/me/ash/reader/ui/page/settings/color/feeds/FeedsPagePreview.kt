@@ -94,6 +94,7 @@ fun FeedsPagePreview(
         )
         Spacer(modifier = Modifier.height(12.dp))
         GroupItem(
+            isEnded = { false },
             isExpanded = { groupListExpand.value },
             group = generateGroupPreview(),
             alpha = groupAlpha,
@@ -103,7 +104,7 @@ fun FeedsPagePreview(
             feed = generateFeedPreview(),
             alpha = groupAlpha,
             badgeAlpha = feedBadgeAlpha,
-            isEnded = true,
+            isEnded = { true },
             isExpanded = { true },
         )
         Spacer(modifier = Modifier.height(12.dp))

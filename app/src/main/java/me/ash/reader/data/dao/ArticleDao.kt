@@ -494,6 +494,20 @@ interface ArticleDao {
     )
     suspend fun queryLatestByFeedId(accountId: Int, feedId: String): Article?
 
+    @Query(
+        """
+        SELECT * from article 
+        WHERE link = :link
+        AND feedId = :feedId
+        AND accountId = :accountId
+        """
+    )
+    suspend fun queryArticleByLink(
+        link: String,
+        feedId: String,
+        accountId: Int,
+    ): Article?
+
     @Transaction
     @Query(
         """
@@ -509,56 +523,17 @@ interface ArticleDao {
     @Update
     suspend fun update(vararg article: Article)
 
-    @RewriteQueriesToDropUnusedColumns
     @Transaction
-    @Query(
-        """
-        INSERT INTO article
-        SELECT :id, :date, :title, :author, :rawDescription, 
-        :shortDescription, :fullContent, :link, :feedId, 
-        :accountId, :isUnread, :isStarred, :isReadLater, :img
-        WHERE NOT EXISTS(SELECT 1 FROM article WHERE link = :link AND accountId = :accountId)
-        """
-    )
-    suspend fun insertIfNotExist(
-        id: String,
-        date: Date,
-        title: String,
-        author: String? = null,
-        rawDescription: String,
-        shortDescription: String,
-        fullContent: String? = null,
-        img: String? = null,
-        link: String,
-        feedId: String,
-        accountId: Int,
-        isUnread: Boolean = true,
-        isStarred: Boolean = false,
-        isReadLater: Boolean = false,
-    ): Long
-
-    @Transaction
-    suspend fun insertIfNotExist(article: Article): Long {
-        return insertIfNotExist(
-            article.id,
-            article.date,
-            article.title,
-            article.author,
-            article.rawDescription,
-            article.shortDescription,
-            article.fullContent,
-            article.img,
-            article.link,
-            article.feedId,
-            article.accountId,
-            article.isUnread,
-            article.isStarred,
-            article.isReadLater,
-        )
-    }
-
-    @Transaction
-    suspend fun insertIfNotExist(articles: List<Article>): List<Article> {
-        return articles.mapNotNull { if (insertIfNotExist(it) > 0) it else null }
+    suspend fun insertListIfNotExist(articles: List<Article>): List<Article> {
+        return articles.mapNotNull {
+            if (queryArticleByLink(
+                    link = it.link,
+                    feedId = it.feedId,
+                    accountId = it.accountId
+                ) == null
+            ) it else null
+        }.also {
+            insertList(it)
+        }
     }
 }

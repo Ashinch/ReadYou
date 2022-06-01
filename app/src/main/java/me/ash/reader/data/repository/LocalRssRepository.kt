@@ -83,11 +83,11 @@ class LocalRssRepository @Inject constructor(
                         notificationHelper.notify(
                             FeedWithArticle(
                                 it.feedWithArticle.feed,
-                                articleDao.insertIfNotExist(it.feedWithArticle.articles)
+                                articleDao.insertListIfNotExist(it.feedWithArticle.articles)
                             )
                         )
                     } else {
-                        articleDao.insertIfNotExist(it.feedWithArticle.articles)
+                        articleDao.insertListIfNotExist(it.feedWithArticle.articles)
                     }
                 }
             Log.i("RlOG", "onCompletion: ${System.currentTimeMillis() - preTime}")
