@@ -2,14 +2,15 @@ package me.ash.reader.data.repository
 
 import android.content.Context
 import android.util.Log
-import androidx.hilt.work.HiltWorker
 import androidx.paging.PagingSource
-import androidx.work.*
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import androidx.work.CoroutineWorker
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ListenableWorker
+import androidx.work.WorkManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.mapLatest
 import me.ash.reader.data.dao.AccountDao
 import me.ash.reader.data.dao.ArticleDao
 import me.ash.reader.data.dao.FeedDao
@@ -17,7 +18,6 @@ import me.ash.reader.data.dao.GroupDao
 import me.ash.reader.data.entity.*
 import me.ash.reader.ui.ext.currentAccountId
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 abstract class AbstractRssRepository constructor(
     private val context: Context,
@@ -99,7 +99,7 @@ abstract class AbstractRssRepository constructor(
     fun pullImportant(
         isStarred: Boolean = false,
         isUnread: Boolean = false,
-    ): Flow<List<ImportantCount>> {
+    ): Flow<Map<String, Int>> {
         val accountId = context.currentAccountId
         Log.i(
             "RLog",
@@ -111,6 +111,12 @@ abstract class AbstractRssRepository constructor(
             isUnread -> articleDao
                 .queryImportantCountWhenIsUnread(accountId, isUnread)
             else -> articleDao.queryImportantCountWhenIsAll(accountId)
+        }.mapLatest {
+            mapOf(
+                *(it.map {
+                    it.feedId to it.important
+                }.toTypedArray())
+            )
         }.flowOn(dispatcherIO)
     }
 
@@ -128,10 +134,6 @@ abstract class AbstractRssRepository constructor(
 
     suspend fun isFeedExist(url: String): Boolean {
         return feedDao.queryByLink(context.currentAccountId, url).isNotEmpty()
-    }
-
-    fun peekWork(): String {
-        return workManager.getWorkInfosByTag("sync").get().size.toString()
     }
 
     suspend fun updateGroup(group: Group) {
@@ -205,36 +207,5 @@ abstract class AbstractRssRepository constructor(
                 else -> articleDao.searchArticleWhenAll(accountId, content)
             }
         }
-    }
-}
-
-@HiltWorker
-class SyncWorker @AssistedInject constructor(
-    @Assisted context: Context,
-    @Assisted workerParams: WorkerParameters,
-    private val rssRepository: RssRepository,
-) : CoroutineWorker(context, workerParams) {
-
-    override suspend fun doWork(): Result {
-        Log.i("RLog", "doWork: ")
-        return rssRepository.get().sync(this)
-    }
-
-    companion object {
-        const val WORK_NAME = "article.sync"
-
-        val UUID: UUID
-
-        val repeatingRequest = PeriodicWorkRequestBuilder<SyncWorker>(
-            15, TimeUnit.MINUTES
-        ).setConstraints(
-            Constraints.Builder()
-                .build()
-        ).addTag(WORK_NAME).build().also {
-            UUID = it.id
-        }
-
-        fun setIsSyncing(boolean: Boolean) = workDataOf("isSyncing" to boolean)
-        fun Data.getIsSyncing(): Boolean = getBoolean("isSyncing", false)
     }
 }

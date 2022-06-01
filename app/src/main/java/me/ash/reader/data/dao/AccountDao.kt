@@ -18,7 +18,7 @@ interface AccountDao {
         WHERE id = :id
         """
     )
-    suspend fun queryById(id: Int): Account
+    suspend fun queryById(id: Int): Account?
 
     @Insert
     suspend fun insert(account: Account): Long

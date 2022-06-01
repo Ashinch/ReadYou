@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import me.ash.reader.R
-import me.ash.reader.ui.component.AnimatedPopup
+import me.ash.reader.ui.component.base.AnimatedPopup
 import me.ash.reader.ui.theme.palette.alwaysLight
 
 @Composable

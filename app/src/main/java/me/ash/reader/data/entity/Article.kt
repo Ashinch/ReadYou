@@ -1,9 +1,6 @@
 package me.ash.reader.data.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import java.util.*
 
 @Entity(
@@ -18,13 +15,13 @@ import java.util.*
 )
 data class Article(
     @PrimaryKey
-    val id: String,
+    var id: String,
     @ColumnInfo
-    val date: Date,
+    var date: Date,
     @ColumnInfo
-    val title: String,
+    var title: String,
     @ColumnInfo
-    val author: String? = null,
+    var author: String? = null,
     @ColumnInfo
     var rawDescription: String,
     @ColumnInfo
@@ -32,17 +29,20 @@ data class Article(
     @ColumnInfo
     var fullContent: String? = null,
     @ColumnInfo
-    val img: String? = null,
+    var img: String? = null,
     @ColumnInfo
-    val link: String,
+    var link: String,
     @ColumnInfo(index = true)
-    val feedId: String,
+    var feedId: String,
     @ColumnInfo(index = true)
-    val accountId: Int,
+    var accountId: Int,
     @ColumnInfo(defaultValue = "true")
     var isUnread: Boolean = true,
     @ColumnInfo(defaultValue = "false")
     var isStarred: Boolean = false,
     @ColumnInfo(defaultValue = "false")
     var isReadLater: Boolean = false,
-)
+) {
+    @Ignore
+    var dateString: String? = null
+}

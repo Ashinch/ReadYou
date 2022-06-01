@@ -52,6 +52,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.CacheDrawScope
 import androidx.compose.ui.draw.DrawResult
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -173,11 +174,15 @@ private fun CacheDrawScope.onDrawScrollbar(
 
     return {
         if (showScrollbar) {
-            drawRect(
+            drawRoundRect(
                 color = color,
                 topLeft = topLeft,
                 size = size,
-                alpha = alpha()
+                alpha = alpha(),
+                cornerRadius = CornerRadius(
+                    x = size.width,
+                    y = size.width,
+                )
             )
         }
     }
@@ -217,7 +222,7 @@ private fun Modifier.drawScrollbar(
     val alpha = remember { Animatable(0f) }
     LaunchedEffect(scrolled, alpha) {
         scrolled.collectLatest {
-            alpha.snapTo(1f)
+            alpha.snapTo(0.3f)
             delay(ViewConfiguration.getScrollDefaultDelay().toLong())
             alpha.animateTo(0f, animationSpec = FadeOutAnimationSpec)
         }
@@ -231,7 +236,7 @@ private fun Modifier.drawScrollbar(
 
     // Calculate thickness here to workaround https://issuetracker.google.com/issues/206972664
     val thickness = with(LocalDensity.current) { Thickness.toPx() }
-    val color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+    val color = MaterialTheme.colorScheme.onSurfaceVariant
     Modifier
         .nestedScroll(nestedScrollConnection)
         .drawWithCache {

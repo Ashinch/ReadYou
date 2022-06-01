@@ -33,7 +33,6 @@ import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.material.Text
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ExperimentalComposeApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
@@ -48,12 +47,11 @@ import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
 import coil.size.Precision
 import coil.size.Size
 import coil.size.pxOrElse
 import me.ash.reader.R
-import me.ash.reader.ui.component.AsyncImage
+import me.ash.reader.ui.component.base.RYAsyncImage
 import org.jsoup.Jsoup
 import org.jsoup.helper.StringUtil
 import org.jsoup.nodes.Element
@@ -178,7 +176,6 @@ private fun LazyListScope.formatCodeBlock(
     composer.terminateCurrentText()
 }
 
-@OptIn(ExperimentalComposeApi::class, ExperimentalCoilApi::class)
 private fun TextComposer.appendTextChildren(
     nodes: List<Node>,
     preFormatted: Boolean = false,
@@ -241,7 +238,7 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h5Style().toSpanStyle() }
                             ) {
-                                append(element.text())
+                                append("\n${element.text()}")
                             }
                         }
                     }
@@ -250,7 +247,7 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h5Style().toSpanStyle() }
                             ) {
-                                append(element.text())
+                                append("\n${element.text()}")
                             }
                         }
                     }
@@ -259,7 +256,7 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h5Style().toSpanStyle() }
                             ) {
-                                append(element.text())
+                                append("\n${element.text()}")
                             }
                         }
                     }
@@ -268,7 +265,7 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h5Style().toSpanStyle() }
                             ) {
-                                append(element.text())
+                                append("\n${element.text()}")
                             }
                         }
                     }
@@ -277,7 +274,7 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h5Style().toSpanStyle() }
                             ) {
-                                append(element.text())
+                                append("\n${element.text()}")
                             }
                         }
                     }
@@ -286,7 +283,7 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h5Style().toSpanStyle() }
                             ) {
-                                append(element.text())
+                                append("\n${element.text()}")
                             }
                         }
                     }
@@ -445,6 +442,7 @@ private fun TextComposer.appendTextChildren(
 //                                            .padding(horizontal = PADDING_HORIZONTAL.dp)
                                             .width(MAX_CONTENT_WIDTH.dp)
                                     ) {
+                                        Spacer(modifier = Modifier.height(PADDING_HORIZONTAL.dp))
                                         DisableSelection {
                                             BoxWithConstraints(
                                                 modifier = Modifier
@@ -468,8 +466,12 @@ private fun TextComposer.appendTextChildren(
 //                                            }
                                             ) {
                                                 val imageSize = maxImageSize()
-                                                AsyncImage(
-                                                    modifier = Modifier.fillMaxWidth(),
+                                                RYAsyncImage(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .padding(horizontal = PADDING_HORIZONTAL.dp)
+                                                        .clip(IMAGE_SHAPE)
+                                                        .clickable { },
                                                     data = imageCandidates.getBestImageForMaxSize(
                                                         pixelDensity = pixelDensity(),
                                                         maxSize = imageSize,
@@ -594,12 +596,14 @@ private fun TextComposer.appendTextChildren(
                                             BoxWithConstraints(
                                                 modifier = Modifier.fillMaxWidth()
                                             ) {
-                                                AsyncImage(
+                                                RYAsyncImage(
                                                     modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .padding(horizontal = PADDING_HORIZONTAL.dp)
+                                                        .clip(IMAGE_SHAPE)
                                                         .clickable {
                                                             onLinkClick(video.link)
-                                                        }
-                                                        .fillMaxWidth(),
+                                                        },
                                                     data = video.imageUrl,
                                                     size = maxImageSize(),
                                                     contentDescription = stringResource(R.string.touch_to_play_video),
@@ -646,7 +650,6 @@ private fun TextComposer.appendTextChildren(
     }
 }
 
-@OptIn(ExperimentalStdlibApi::class)
 private fun String.asFontFamily(): FontFamily? = when (this.lowercase()) {
     "monospace" -> FontFamily.Monospace
     "serif" -> FontFamily.Serif

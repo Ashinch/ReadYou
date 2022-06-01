@@ -22,8 +22,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.executeAsync
 import java.io.InputStream
-import java.text.ParsePosition
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -32,13 +30,14 @@ class RssHelper @Inject constructor(
     private val context: Context,
     @DispatcherIO
     private val dispatcherIO: CoroutineDispatcher,
-    private val client: OkHttpClient
+    private val okHttpClient: OkHttpClient,
 ) {
     @Throws(Exception::class)
     suspend fun searchFeed(feedLink: String): FeedWithArticle {
         return withContext(dispatcherIO) {
             val accountId = context.currentAccountId
-            val parseRss: SyndFeed = SyndFeedInput().build(XmlReader(inputStream(client, feedLink)))
+            val parseRss: SyndFeed =
+                SyndFeedInput().build(XmlReader(inputStream(okHttpClient, feedLink)))
             val feed = Feed(
                 id = accountId.spacerDollar(UUID.randomUUID().toString()),
                 name = parseRss.title!!,
@@ -60,7 +59,7 @@ class RssHelper @Inject constructor(
     @Throws(Exception::class)
     suspend fun parseFullContent(link: String, title: String): String {
         return withContext(dispatcherIO) {
-            val response = OkHttpClient()
+            val response = okHttpClient
                 .newCall(Request.Builder().url(link).build())
                 .execute()
             val content = response.body!!.string()
@@ -87,7 +86,9 @@ class RssHelper @Inject constructor(
         return withContext(dispatcherIO) {
             val a = mutableListOf<Article>()
             val accountId = context.currentAccountId
-            val parseRss: SyndFeed = SyndFeedInput().build(XmlReader(inputStream(client, feed.url)))
+            val parseRss: SyndFeed = SyndFeedInput().build(
+                XmlReader(inputStream(okHttpClient, feed.url))
+            )
             parseRss.entries.forEach {
                 if (latestLink != null && latestLink == it.link) return@withContext a
                 val desc = it.description?.value
@@ -112,13 +113,13 @@ class RssHelper @Inject constructor(
                         date = it.publishedDate ?: it.updatedDate ?: Date(),
                         title = Html.fromHtml(it.title.toString()).toString(),
                         author = it.author,
-                        rawDescription = (desc ?: content) ?: "",
+                        rawDescription = (content ?: desc) ?: "",
                         shortDescription = (Readability4JExtended("", desc ?: content ?: "")
                             .parse().textContent ?: "")
                             .take(100)
                             .trim(),
                         fullContent = content,
-                        img = findImg((desc ?: content) ?: ""),
+                        img = findImg((content ?: desc) ?: ""),
                         link = it.link ?: "",
                     )
                 )
@@ -144,9 +145,7 @@ class RssHelper @Inject constructor(
     ) {
         withContext(dispatcherIO) {
             val domainRegex = Regex("(http|https)://(www.)?(\\w+(\\.)?)+")
-            val request = OkHttpClient()
-                .newCall(Request.Builder().url(articleLink).build())
-                .execute()
+            val request = response(okHttpClient, articleLink)
             val content = request.body!!.string()
             val regex =
                 Regex("""<link(.+?)rel="shortcut icon"(.+?)href="(.+?)"""")
@@ -166,10 +165,7 @@ class RssHelper @Inject constructor(
             } else {
                 domainRegex.find(articleLink)?.value?.let {
                     Log.i("RLog", "favicon: ${it}")
-                    val request = OkHttpClient()
-                        .newCall(Request.Builder().url("$it/favicon.ico").build())
-                        .execute()
-                    if (request.isSuccessful) {
+                    if (response(okHttpClient, "$it/favicon.ico").isSuccessful) {
                         saveRssIcon(feedDao, feed, it)
                     }
                 }
@@ -185,32 +181,13 @@ class RssHelper @Inject constructor(
         )
     }
 
-    private fun parseDate(
-        inputDate: String, patterns: Array<String> = arrayOf(
-            "yyyy-MM-dd'T'HH:mm:ss'Z'",
-            "yyyy-MM-dd",
-            "yyyy-MM-dd HH:mm:ss",
-            "yyyyMMdd",
-            "yyyy/MM/dd",
-            "yyyy年MM月dd日",
-            "yyyy MM dd",
-        )
-    ): Date? {
-        val df = SimpleDateFormat()
-        for (pattern in patterns) {
-            df.applyPattern(pattern)
-            df.isLenient = false
-            val date = df.parse(inputDate, ParsePosition(0))
-            if (date != null) {
-                return date
-            }
-        }
-        return null
-    }
-
     private suspend fun inputStream(
         client: OkHttpClient,
-        feedLink: String
-    ): InputStream =
-        client.newCall(Request.Builder().url(feedLink).build()).executeAsync().body!!.byteStream()
+        url: String
+    ): InputStream = response(client, url).body!!.byteStream()
+
+    private suspend fun response(
+        client: OkHttpClient,
+        url: String
+    ) = client.newCall(Request.Builder().url(url).build()).executeAsync()
 }

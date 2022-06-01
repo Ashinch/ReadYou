@@ -1,15 +1,11 @@
 package me.ash.reader.ui.page.home.feeds.subscribe
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Article
@@ -30,9 +26,8 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import me.ash.reader.R
 import me.ash.reader.data.entity.Group
-import me.ash.reader.ui.component.SelectionChip
-import me.ash.reader.ui.component.Subtitle
-import me.ash.reader.ui.ext.roundClick
+import me.ash.reader.ui.component.base.RYSelectionChip
+import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.theme.palette.alwaysLight
 
 @Composable
@@ -51,7 +46,8 @@ fun ResultView(
     unsubscribeOnClick: () -> Unit = {},
     onGroupClick: (groupId: String) -> Unit = {},
     onAddNewGroup: () -> Unit = {},
-    onFeedUrlClick: () -> Unit = {}
+    onFeedUrlClick: () -> Unit = {},
+    onFeedUrlLongClick: () -> Unit = {},
 ) {
     LaunchedEffect(Unit) {
         if (groups.isNotEmpty() && selectedGroupId.isEmpty()) onGroupClick(groups.first().id)
@@ -60,7 +56,11 @@ fun ResultView(
     Column(
         modifier = modifier.verticalScroll(rememberScrollState())
     ) {
-        EditableUrl(text = link, onFeedUrlClick)
+        EditableUrl(
+            text = link,
+            onClick = onFeedUrlClick,
+            onLongClick = onFeedUrlLongClick,
+        )
         Spacer(modifier = Modifier.height(26.dp))
 
         Preset(
@@ -85,27 +85,30 @@ fun ResultView(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun EditableUrl(
     text: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
-        SelectionContainer {
-            Text(
-                modifier = Modifier.roundClick {
-                    onClick()
-                },
-                text = text,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
+        Text(
+            modifier = Modifier
+                .clip(MaterialTheme.shapes.small)
+                .combinedClickable(
+                    onClick = onClick,
+                    onLongClick = onLongClick,
+                ),
+            text = text,
+            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+            style = MaterialTheme.typography.bodyMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
@@ -127,7 +130,7 @@ private fun Preset(
         crossAxisSpacing = 10.dp,
         mainAxisSpacing = 10.dp,
     ) {
-        SelectionChip(
+        RYSelectionChip(
             modifier = Modifier.animateContentSize(),
             content = stringResource(R.string.allow_notification),
             selected = selectedAllowNotificationPreset,
@@ -144,7 +147,7 @@ private fun Preset(
         ) {
             allowNotificationPresetOnClick()
         }
-        SelectionChip(
+        RYSelectionChip(
             modifier = Modifier.animateContentSize(),
             content = stringResource(R.string.parse_full_content),
             selected = selectedParseFullContentPreset,
@@ -162,14 +165,14 @@ private fun Preset(
             parseFullContentPresetOnClick()
         }
         if (showUnsubscribe) {
-            SelectionChip(
+            RYSelectionChip(
                 modifier = Modifier.animateContentSize(),
                 content = stringResource(R.string.clear_articles),
                 selected = false,
             ) {
                 clearArticlesOnClick()
             }
-            SelectionChip(
+            RYSelectionChip(
                 modifier = Modifier.animateContentSize(),
                 content = stringResource(R.string.unsubscribe),
                 selected = false,
@@ -196,7 +199,7 @@ private fun AddToGroup(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             items(groups) {
-                SelectionChip(
+                RYSelectionChip(
                     modifier = Modifier.animateContentSize(),
                     content = it.name,
                     selected = it.id == selectedGroupId,
@@ -215,7 +218,7 @@ private fun AddToGroup(
             mainAxisSpacing = 10.dp,
         ) {
             groups.forEach {
-                SelectionChip(
+                RYSelectionChip(
                     modifier = Modifier.animateContentSize(),
                     content = it.name,
                     selected = it.id == selectedGroupId,

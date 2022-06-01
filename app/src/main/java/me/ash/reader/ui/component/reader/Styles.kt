@@ -20,6 +20,7 @@
 
 package me.ash.reader.ui.component.reader
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -27,12 +28,14 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import me.ash.reader.ui.ext.alphaLN
 
 const val PADDING_HORIZONTAL = 24.0
 const val MAX_CONTENT_WIDTH = 840.0
+val IMAGE_SHAPE = RoundedCornerShape(32.dp)
 
 @Composable
 fun bodyForeground(): Color =
@@ -71,7 +74,7 @@ fun h4Style(): TextStyle =
 @Composable
 fun h5Style(): TextStyle =
     MaterialTheme.typography.headlineSmall.copy(
-        color = bodyForeground()
+        color = bodyForeground(),
     )
 
 @Composable
@@ -83,7 +86,8 @@ fun h6Style(): TextStyle =
 @Composable
 fun captionStyle(): TextStyle =
     MaterialTheme.typography.bodySmall.copy(
-        color = bodyForeground().copy(alpha = 0.6f)
+        color = bodyForeground().copy(alpha = 0.6f),
+        textAlign = TextAlign.Center,
     )
 
 @Composable

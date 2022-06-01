@@ -40,7 +40,8 @@ fun AppTheme(
                 if (useDarkTheme) dynamicDarkColorScheme()
                 else dynamicLightColorScheme(),
                 typography = AppTypography,
-                content = content
+                shapes = Shapes,
+                content = content,
             )
         }
     }
