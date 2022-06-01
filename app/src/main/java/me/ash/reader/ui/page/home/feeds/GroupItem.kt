@@ -50,9 +50,7 @@ fun GroupItem(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(if (isExpanded() && !isEnded()) ShapeTop32 else Shape32)
-            .background(
-                MaterialTheme.colorScheme.secondary.copy(alpha = alpha)
-            )
+            .background(MaterialTheme.colorScheme.secondary.copy(alpha = alpha))
             .combinedClickable(
                 onClick = {
                     groupOnClick()
@@ -84,12 +82,8 @@ fun GroupItem(
                     .padding(end = 20.dp)
                     .size(24.dp)
                     .clip(CircleShape)
-                    .background(
-                        MaterialTheme.colorScheme.surfaceTint.copy(alpha = indicatorAlpha)
-                    )
-                    .clickable {
-                        onExpanded()
-                    },
+                    .background(MaterialTheme.colorScheme.surfaceTint.copy(alpha = indicatorAlpha))
+                    .clickable { onExpanded() },
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {

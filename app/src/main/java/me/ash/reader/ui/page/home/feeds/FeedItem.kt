@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,10 +47,8 @@ fun FeedItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.secondary.copy(alpha = alpha),
-                    shape = if (isEnded()) ShapeBottom32 else RectangleShape,
-                )
+                .clip(if (isEnded()) ShapeBottom32 else RectangleShape)
+                .background(MaterialTheme.colorScheme.secondary.copy(alpha = alpha))
                 .combinedClickable(
                     onClick = {
                         onClick()
