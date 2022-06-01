@@ -14,17 +14,17 @@ import androidx.room.*
 )
 data class Feed(
     @PrimaryKey
-    val id: String,
+    var id: String,
     @ColumnInfo
-    val name: String,
+    var name: String,
     @ColumnInfo
     var icon: String? = null,
     @ColumnInfo
-    val url: String,
+    var url: String,
     @ColumnInfo(index = true)
     var groupId: String,
     @ColumnInfo(index = true)
-    val accountId: Int,
+    var accountId: Int,
     @ColumnInfo(defaultValue = "false")
     var isNotification: Boolean = false,
     @ColumnInfo(defaultValue = "false")

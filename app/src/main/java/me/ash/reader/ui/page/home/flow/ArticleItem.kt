@@ -2,7 +2,6 @@ package me.ash.reader.ui.page.home.flow
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Icon
@@ -14,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -23,17 +21,16 @@ import coil.size.Scale
 import me.ash.reader.R
 import me.ash.reader.data.entity.ArticleWithFeed
 import me.ash.reader.data.preference.*
-import me.ash.reader.ui.component.AsyncImage
-import me.ash.reader.ui.component.Size_1000
-import me.ash.reader.ui.ext.formatAsString
-import me.ash.reader.ui.page.home.FeedIcon
+import me.ash.reader.ui.component.FeedIcon
+import me.ash.reader.ui.component.base.RYAsyncImage
+import me.ash.reader.ui.component.base.SIZE_1000
+import me.ash.reader.ui.theme.Shape20
 
 @Composable
 fun ArticleItem(
     articleWithFeed: ArticleWithFeed,
     onClick: (ArticleWithFeed) -> Unit = {},
 ) {
-    val context = LocalContext.current
     val articleListFeedIcon = LocalFlowArticleListFeedIcon.current
     val articleListFeedName = LocalFlowArticleListFeedName.current
     val articleListImage = LocalFlowArticleListImage.current
@@ -43,12 +40,12 @@ fun ArticleItem(
     Column(
         modifier = Modifier
             .padding(horizontal = 12.dp)
-            .clip(RoundedCornerShape(20.dp))
+            .clip(Shape20)
             .clickable { onClick(articleWithFeed) }
             .padding(horizontal = 12.dp, vertical = 12.dp)
             .alpha(if (articleWithFeed.article.isStarred || articleWithFeed.article.isUnread) 1f else 0.5f),
     ) {
-        // Upper
+        // Top
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -80,28 +77,27 @@ fun ArticleItem(
                     if (articleWithFeed.article.isStarred) {
                         Icon(
                             modifier = Modifier
+                                .alpha(0.7f)
                                 .size(14.dp)
                                 .padding(end = 2.dp),
                             imageVector = Icons.Rounded.Star,
                             contentDescription = stringResource(R.string.starred),
-                            tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                            tint = MaterialTheme.colorScheme.outline,
                         )
                     }
 
                     // Date
                     Text(
-                        text = articleWithFeed.article.date.formatAsString(
-                            context,
-                            onlyHourMinute = true
-                        ),
-                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                        modifier = Modifier.alpha(0.7f),
+                        text = articleWithFeed.article.dateString ?: "",
+                        color = MaterialTheme.colorScheme.outline,
                         style = MaterialTheme.typography.labelMedium,
                     )
                 }
             }
         }
 
-        // Lower
+        // Bottom
         Row(
             modifier = Modifier.fillMaxWidth(),
         ) {
@@ -128,8 +124,9 @@ fun ArticleItem(
                 // Description
                 if (articleListDesc.value && articleWithFeed.article.shortDescription.isNotBlank()) {
                     Text(
+                        modifier = Modifier.alpha(0.7f),
                         text = articleWithFeed.article.shortDescription,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
@@ -139,15 +136,15 @@ fun ArticleItem(
 
             // Image
             if (articleWithFeed.article.img != null && articleListImage.value) {
-                AsyncImage(
+                RYAsyncImage(
                     modifier = Modifier
                         .padding(start = 10.dp)
                         .size(80.dp)
-                        .clip(RoundedCornerShape(20.dp)),
+                        .clip(Shape20),
                     data = articleWithFeed.article.img,
                     scale = Scale.FILL,
                     precision = Precision.INEXACT,
-                    size = Size_1000,
+                    size = SIZE_1000,
                     contentScale = ContentScale.Crop,
                 )
             }

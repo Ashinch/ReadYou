@@ -79,7 +79,7 @@ class TextComposer(
         ) -> R
     ): R {
         val url = link ?: findClosestLink()
-        builder.ensureDoubleNewline()
+        //builder.ensureDoubleNewline()
         terminateCurrentText()
         val onClick: (() -> Unit)? = if (url?.isNotBlank() == true) {
             {

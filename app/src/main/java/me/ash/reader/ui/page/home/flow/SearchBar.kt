@@ -12,19 +12,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.unit.dp
 import me.ash.reader.R
+import me.ash.reader.data.constant.ElevationTokens
 
 @Composable
 fun SearchBar(
-    modifier: Modifier = Modifier,
     value: String,
     placeholder: String = "",
     focusRequester: FocusRequester = remember { FocusRequester() },
@@ -39,7 +39,7 @@ fun SearchBar(
             .padding(horizontal = 24.dp)
             .fillMaxWidth(),
         shape = CircleShape,
-        tonalElevation = 3.dp
+        tonalElevation = ElevationTokens.Level2.dp
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -62,7 +62,8 @@ fun SearchBar(
                         .fillMaxWidth()
                         .focusRequester(focusRequester),
                     colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = Color.Transparent,
+                        textColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        containerColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                     ),
@@ -70,17 +71,13 @@ fun SearchBar(
                     onValueChange = { onValueChange(it) },
                     placeholder = {
                         Text(
+                            modifier = Modifier.alpha(0.7f),
                             text = placeholder,
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                                alpha = 0.7f
-                            ),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     },
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        baselineShift = BaselineShift(0.1f)
-                    ),
+                    textStyle = MaterialTheme.typography.bodyLarge,
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Done

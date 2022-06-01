@@ -3,6 +3,7 @@ package me.ash.reader.data.preference
 import android.content.Context
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -33,6 +34,7 @@ sealed class DarkThemePreference(val value: Int) : Preference() {
         }
 
     @Composable
+    @ReadOnlyComposable
     fun isDarkTheme(): Boolean = when (this) {
         UseDeviceTheme -> isSystemInDarkTheme()
         ON -> true

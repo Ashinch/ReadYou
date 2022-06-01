@@ -5,7 +5,7 @@ import androidx.room.Relation
 
 data class ArticleWithFeed(
     @Embedded
-    val article: Article,
+    var article: Article,
     @Relation(parentColumn = "feedId", entityColumn = "id")
-    val feed: Feed,
+    var feed: Feed,
 )
