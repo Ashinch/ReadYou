@@ -59,9 +59,7 @@ class RssHelper @Inject constructor(
     @Throws(Exception::class)
     suspend fun parseFullContent(link: String, title: String): String {
         return withContext(dispatcherIO) {
-            val response = okHttpClient
-                .newCall(Request.Builder().url(link).build())
-                .execute()
+            val response = response(okHttpClient, link)
             val content = response.body!!.string()
             val readability4J: Readability4J =
                 Readability4JExtended(link, content)
