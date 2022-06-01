@@ -3,6 +3,7 @@ package me.ash.reader.data.repository
 import android.content.Context
 import android.text.Html
 import android.util.Log
+import com.rometools.rome.feed.synd.SyndEntry
 import com.rometools.rome.feed.synd.SyndFeed
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
@@ -45,7 +46,8 @@ class RssHelper @Inject constructor(
                 groupId = "",
                 accountId = accountId,
             )
-            FeedWithArticle(feed, queryRssXml(feed))
+            val list = parseRss.entries.map { article(feed, context.currentAccountId, it) }
+            FeedWithArticle(feed, list)
         }
     }
 
@@ -82,48 +84,52 @@ class RssHelper @Inject constructor(
         latestLink: String? = null,
     ): List<Article> {
         return withContext(dispatcherIO) {
-            val a = mutableListOf<Article>()
             val accountId = context.currentAccountId
             val parseRss: SyndFeed = SyndFeedInput().build(
                 XmlReader(inputStream(okHttpClient, feed.url))
             )
-            parseRss.entries.forEach {
-                if (latestLink != null && latestLink == it.link) return@withContext a
-                val desc = it.description?.value
-                val content = it.contents
-                    .takeIf { it.isNotEmpty() }
-                    ?.let { it.joinToString("\n") { it.value } }
-                Log.i(
-                    "RLog",
-                    "request rss:\n" +
-                            "name: ${feed.name}\n" +
-                            "feedUrl: ${feed.url}\n" +
-                            "url: ${it.link}\n" +
-                            "title: ${it.title}\n" +
-                            "desc: ${desc}\n" +
-                            "content: ${content}\n"
-                )
-                a.add(
-                    Article(
-                        id = accountId.spacerDollar(UUID.randomUUID().toString()),
-                        accountId = accountId,
-                        feedId = feed.id,
-                        date = it.publishedDate ?: it.updatedDate ?: Date(),
-                        title = Html.fromHtml(it.title.toString()).toString(),
-                        author = it.author,
-                        rawDescription = (content ?: desc) ?: "",
-                        shortDescription = (Readability4JExtended("", desc ?: content ?: "")
-                            .parse().textContent ?: "")
-                            .take(100)
-                            .trim(),
-                        fullContent = content,
-                        img = findImg((content ?: desc) ?: ""),
-                        link = it.link ?: "",
-                    )
-                )
-            }
-            a
+            parseRss.entries.asSequence()
+                .takeWhile { latestLink == null || latestLink != it.link }
+                .map { article(feed, accountId, it) }
+                .toList()
         }
+    }
+
+    private fun article(
+        feed: Feed,
+        accountId: Int,
+        syndEntry: SyndEntry
+    ): Article {
+        val desc = syndEntry.description?.value
+        val content = syndEntry.contents
+            .takeIf { it.isNotEmpty() }
+            ?.let { it.joinToString("\n") { it.value } }
+        Log.i(
+            "RLog",
+            "request rss:\n" +
+                    "name: ${feed.name}\n" +
+                    "feedUrl: ${feed.url}\n" +
+                    "url: ${syndEntry.link}\n" +
+                    "title: ${syndEntry.title}\n" +
+                    "desc: ${desc}\n" +
+                    "content: ${content}\n"
+        )
+        return Article(
+            id = accountId.spacerDollar(UUID.randomUUID().toString()),
+            accountId = accountId,
+            feedId = feed.id,
+            date = syndEntry.publishedDate ?: syndEntry.updatedDate ?: Date(),
+            title = Html.fromHtml(syndEntry.title.toString()).toString(),
+            author = syndEntry.author,
+            rawDescription = (content ?: desc) ?: "",
+            shortDescription = (Readability4JExtended("", desc ?: content ?: "")
+                .parse().textContent ?: "")
+                .take(100)
+                .trim(),
+            fullContent = content,
+            img = findImg((content ?: desc) ?: ""),
+            link = syndEntry.link ?: "",
+        )
     }
 
     private fun findImg(rawDescription: String): String? {
