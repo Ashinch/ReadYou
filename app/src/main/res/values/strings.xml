@@ -100,7 +100,7 @@
     <string name="interaction">Interaction</string>
     <string name="interaction_desc">On start, haptic feedback</string>
     <string name="languages">Languages</string>
-    <string name="languages_desc">English, 简体中文, Deutsch</string>
+    <string name="languages_desc">English, Chinese, more</string>
     <string name="help_translate">Help translate</string>
     <string name="use_device_languages">Use device language</string>
     <string name="english" translatable="false">English</string>

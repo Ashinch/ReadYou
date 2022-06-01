@@ -101,7 +101,7 @@
     <string name="interaction">Comportement</string>
     <string name="interaction_desc">Au démarrage, retour haptique</string>
     <string name="languages">Langues</string>
-    <string name="languages_desc">Français, English, 简体中文, Deutsch</string>
+    <string name="languages_desc">Français, English, plus</string>
     <string name="help_translate">Aidez-nous à traduire</string>
     <string name="use_device_languages">Utiliser la langue du système</string>
     <string name="tips_and_support">Aide et assistance</string>
