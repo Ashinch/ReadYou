@@ -33,7 +33,7 @@ fun FeedItem(
     feed: Feed,
     alpha: Float = 1f,
     badgeAlpha: Float = 1f,
-    isEnded: Boolean = false,
+    isEnded: () -> Boolean,
     isExpanded: () -> Boolean,
     feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
     onClick: () -> Unit = {},
@@ -48,7 +48,7 @@ fun FeedItem(
                 .padding(horizontal = 16.dp)
                 .background(
                     color = MaterialTheme.colorScheme.secondary.copy(alpha = alpha),
-                    shape = if (isEnded) ShapeBottom32 else RectangleShape,
+                    shape = if (isEnded()) ShapeBottom32 else RectangleShape,
                 )
                 .combinedClickable(
                     onClick = {
@@ -60,7 +60,7 @@ fun FeedItem(
                     }
                 )
                 .padding(horizontal = 14.dp)
-                .padding(top = 14.dp, bottom = if (isEnded) 22.dp else 14.dp),
+                .padding(top = 14.dp, bottom = if (isEnded()) 22.dp else 14.dp),
         ) {
             Row(
                 modifier = Modifier

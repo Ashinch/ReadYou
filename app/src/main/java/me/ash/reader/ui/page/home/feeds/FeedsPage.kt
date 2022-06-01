@@ -218,6 +218,7 @@ fun FeedsPage(
                                 group = groupWithFeed.group,
                                 alpha = groupAlpha,
                                 indicatorAlpha = groupIndicatorAlpha,
+                                isEnded = { index == feedsUiState.groupWithFeedList.lastIndex },
                                 onExpanded = {
                                     groupsVisible[groupWithFeed.group.id] =
                                         !(groupsVisible[groupWithFeed.group.id] ?: false)
@@ -238,7 +239,7 @@ fun FeedsPage(
                                 feed = groupWithFeed.feed,
                                 alpha = groupAlpha,
                                 badgeAlpha = feedBadgeAlpha,
-                                isEnded = index != feedsUiState.groupWithFeedList.lastIndex && feedsUiState.groupWithFeedList[index + 1] is GroupFeedsView.Group,
+                                isEnded = { index == feedsUiState.groupWithFeedList.lastIndex || feedsUiState.groupWithFeedList[index + 1] is GroupFeedsView.Group },
                                 isExpanded = { groupsVisible[groupWithFeed.feed.groupId] ?: false },
                             ) {
                                 filterChange(
