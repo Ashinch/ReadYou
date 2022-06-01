@@ -1,7 +1,6 @@
 package me.ash.reader.ui.page.settings.tips
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -30,43 +29,26 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.data.preference.*
 import me.ash.reader.data.source.Download
-import me.ash.reader.ui.component.Dialog
-import me.ash.reader.ui.ext.*
+import me.ash.reader.ui.component.base.RYDialog
+import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.installLatestApk
 
-@SuppressLint("FlowOperatorInvokedInComposition")
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun UpdateDialog(
     updateViewModel: UpdateViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val viewState = updateViewModel.viewState.collectAsStateValue()
-    val downloadState = viewState.downloadFlow.collectAsState(initial = Download.NotYet).value
+    val updateUiState = updateViewModel.updateUiState.collectAsStateValue()
+    val downloadState = updateUiState.downloadFlow.collectAsState(initial = Download.NotYet).value
     val scope = rememberCoroutineScope { Dispatchers.IO }
-    val newVersionNumber = context.dataStore.data
-        .map { it[DataStoreKeys.NewVersionNumber.key] ?: "" }
-        .collectAsState(initial = "")
-        .value
-    val newVersionPublishDate = context.dataStore.data
-        .map { it[DataStoreKeys.NewVersionPublishDate.key] ?: "" }
-        .collectAsState(initial = "")
-        .value
-    val newVersionLog = context.dataStore.data
-        .map { it[DataStoreKeys.NewVersionLog.key] ?: "" }
-        .collectAsState(initial = "")
-        .value
-    val newVersionSize = " " + context.dataStore.data
-        .map { it[DataStoreKeys.NewVersionSize.key] ?: 0 }
-        .map { it / 1024f / 1024f }
-        .map { if (it > 0f) " ${String.format("%.2f", it)} MB" else "" }
-        .collectAsState(initial = 0)
-        .value
+    val newVersionNumber = LocalNewVersionNumber.current
+    val newVersionPublishDate = LocalNewVersionPublishDate.current
+    val newVersionLog = LocalNewVersionLog.current
+    val newVersionSize = LocalNewVersionSize.current
 
     val settings = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -89,10 +71,10 @@ fun UpdateDialog(
         }
     }
 
-    Dialog(
+    RYDialog(
         modifier = Modifier.heightIn(max = 400.dp),
-        visible = viewState.updateDialogVisible,
-        onDismissRequest = { updateViewModel.dispatch(UpdateViewAction.Hide) },
+        visible = updateUiState.updateDialogVisible,
+        onDismissRequest = { updateViewModel.hideDialog() },
         icon = {
             Icon(
                 imageVector = Icons.Rounded.Update,
@@ -106,7 +88,7 @@ fun UpdateDialog(
                 Text(text = stringResource(R.string.change_log))
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "$newVersionPublishDate$newVersionSize",
+                    text = "$newVersionPublishDate $newVersionSize",
                     color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
                     style = MaterialTheme.typography.bodyMedium,
                 )
@@ -127,7 +109,7 @@ fun UpdateDialog(
                     context.startActivity(
                         Intent(
                             Intent.ACTION_VIEW,
-                            Uri.parse(context.getString(R.string.github_link)),
+                            Uri.parse("${context.getString(R.string.github_link)}/releases/latest"),
                         )
                     )
                     // Disable automatic updates in F-Droid
@@ -164,10 +146,8 @@ fun UpdateDialog(
             if (downloadState !is Download.Progress) {
                 TextButton(
                     onClick = {
-                        scope.launch {
-                            context.dataStore.put(DataStoreKeys.SkipVersionNumber, newVersionNumber)
-                            updateViewModel.dispatch(UpdateViewAction.Hide)
-                        }
+                        SkipVersionNumberPreference.put(context, scope, newVersionNumber.toString())
+                        updateViewModel.hideDialog()
                     }
                 ) {
                     Text(text = stringResource(R.string.skip_this_version))

@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import me.ash.reader.data.source.AppNetworkDataSource
+import me.ash.reader.data.source.RYNetworkDataSource
 import me.ash.reader.data.source.FeverApiDataSource
 import me.ash.reader.data.source.GoogleReaderApiDataSource
 import javax.inject.Singleton
@@ -15,8 +15,8 @@ object RetrofitModule {
 
     @Provides
     @Singleton
-    fun provideAppNetworkDataSource(): AppNetworkDataSource =
-        AppNetworkDataSource.getInstance()
+    fun provideAppNetworkDataSource(): RYNetworkDataSource =
+        RYNetworkDataSource.getInstance()
 
     @Provides
     @Singleton

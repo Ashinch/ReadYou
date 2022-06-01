@@ -15,8 +15,8 @@ import me.ash.reader.ui.theme.palette.onDark
 
 @Composable
 fun StickyHeader(
-    currentItemDay: String,
-    articleListFeedIcon: Boolean,
+    dateString: String,
+    isShowFeedIcon: Boolean,
     articleListTonalElevation: Int,
 ) {
     Row(
@@ -30,10 +30,10 @@ fun StickyHeader(
     ) {
         Text(
             modifier = Modifier.padding(
-                start = if (articleListFeedIcon) 54.dp else 24.dp,
+                start = if (isShowFeedIcon) 54.dp else 24.dp,
                 bottom = 4.dp
             ),
-            text = currentItemDay,
+            text = dateString,
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.labelLarge,
         )

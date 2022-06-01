@@ -27,7 +27,8 @@ import android.util.Log
 import androidx.compose.foundation.lazy.LazyListScope
 import me.ash.reader.R
 
-fun LazyListScope.reader(
+@Suppress("FunctionName")
+fun LazyListScope.Reader(
     context: Context,
     link: String,
     content: String,

@@ -5,7 +5,7 @@ import androidx.room.Relation
 
 data class GroupWithFeed(
     @Embedded
-    val group: Group,
+    var group: Group,
     @Relation(parentColumn = "id", entityColumn = "groupId")
-    val feeds: MutableList<Feed>
+    var feeds: MutableList<Feed>
 )

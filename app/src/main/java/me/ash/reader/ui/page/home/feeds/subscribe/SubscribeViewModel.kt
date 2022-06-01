@@ -3,11 +3,8 @@ package me.ash.reader.ui.page.home.feeds.subscribe
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.R
@@ -22,7 +19,6 @@ import me.ash.reader.ui.ext.formatUrl
 import java.io.InputStream
 import javax.inject.Inject
 
-@OptIn(ExperimentalPagerApi::class)
 @HiltViewModel
 class SubscribeViewModel @Inject constructor(
     private val opmlRepository: OpmlRepository,
@@ -30,35 +26,12 @@ class SubscribeViewModel @Inject constructor(
     private val rssHelper: RssHelper,
     private val stringsRepository: StringsRepository,
 ) : ViewModel() {
-    private val _viewState = MutableStateFlow(SubscribeViewState())
-    val viewState: StateFlow<SubscribeViewState> = _viewState.asStateFlow()
+    private val _subscribeUiState = MutableStateFlow(SubscribeUiState())
+    val subscribeUiState: StateFlow<SubscribeUiState> = _subscribeUiState.asStateFlow()
     private var searchJob: Job? = null
 
-    fun dispatch(action: SubscribeViewAction) {
-        when (action) {
-            is SubscribeViewAction.Init -> init()
-            is SubscribeViewAction.Reset -> reset()
-            is SubscribeViewAction.Show -> changeVisible(true)
-            is SubscribeViewAction.Hide -> changeVisible(false)
-            is SubscribeViewAction.ShowNewGroupDialog -> changeNewGroupDialogVisible(true)
-            is SubscribeViewAction.HideNewGroupDialog -> changeNewGroupDialogVisible(false)
-            is SubscribeViewAction.SwitchPage -> switchPage(action.isSearchPage)
-            is SubscribeViewAction.ImportFromInputStream -> importFromInputStream(action.inputStream)
-            is SubscribeViewAction.InputLink -> inputLink(action.content)
-            is SubscribeViewAction.Search -> search()
-            is SubscribeViewAction.ChangeAllowNotificationPreset ->
-                changeAllowNotificationPreset()
-            is SubscribeViewAction.ChangeParseFullContentPreset ->
-                changeParseFullContentPreset()
-            is SubscribeViewAction.SelectedGroup -> selectedGroup(action.groupId)
-            is SubscribeViewAction.InputNewGroup -> inputNewGroup(action.content)
-            is SubscribeViewAction.AddNewGroup -> addNewGroup()
-            is SubscribeViewAction.Subscribe -> subscribe()
-        }
-    }
-
-    private fun init() {
-        _viewState.update {
+    fun init() {
+        _subscribeUiState.update {
             it.copy(
                 title = stringsRepository.getString(R.string.subscribe),
                 groups = rssRepository.get().pullGroups(),
@@ -66,18 +39,18 @@ class SubscribeViewModel @Inject constructor(
         }
     }
 
-    private fun reset() {
+    fun reset() {
         searchJob?.cancel()
         searchJob = null
-        _viewState.update {
-            SubscribeViewState().copy(
+        _subscribeUiState.update {
+            SubscribeUiState().copy(
                 title = stringsRepository.getString(R.string.subscribe),
             )
         }
     }
 
-    private fun importFromInputStream(inputStream: InputStream) {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun importFromInputStream(inputStream: InputStream) {
+        viewModelScope.launch {
             try {
                 opmlRepository.saveToDatabase(inputStream)
                 rssRepository.get().doSync()
@@ -87,38 +60,35 @@ class SubscribeViewModel @Inject constructor(
         }
     }
 
-    private fun subscribe() {
-        val feed = _viewState.value.feed ?: return
-        val articles = _viewState.value.articles
-        viewModelScope.launch(Dispatchers.IO) {
-            val groupId = async {
-                _viewState.value.selectedGroupId
-            }
+    fun subscribe() {
+        val feed = _subscribeUiState.value.feed ?: return
+        val articles = _subscribeUiState.value.articles
+        viewModelScope.launch {
             rssRepository.get().subscribe(
                 feed.copy(
-                    groupId = groupId.await(),
-                    isNotification = _viewState.value.allowNotificationPreset,
-                    isFullContent = _viewState.value.parseFullContentPreset,
+                    groupId = _subscribeUiState.value.selectedGroupId,
+                    isNotification = _subscribeUiState.value.allowNotificationPreset,
+                    isFullContent = _subscribeUiState.value.parseFullContentPreset,
                 ), articles
             )
-            changeVisible(false)
+            hideDrawer()
         }
     }
 
-    private fun selectedGroup(groupId: String) {
-        _viewState.update {
+    fun selectedGroup(groupId: String) {
+        _subscribeUiState.update {
             it.copy(
                 selectedGroupId = groupId,
             )
         }
     }
 
-    private fun addNewGroup() {
-        if (_viewState.value.newGroupContent.isNotBlank()) {
+    fun addNewGroup() {
+        if (_subscribeUiState.value.newGroupContent.isNotBlank()) {
             viewModelScope.launch {
-                selectedGroup(rssRepository.get().addGroup(_viewState.value.newGroupContent))
-                changeNewGroupDialogVisible(false)
-                _viewState.update {
+                selectedGroup(rssRepository.get().addGroup(_subscribeUiState.value.newGroupContent))
+                hideNewGroupDialog()
+                _subscribeUiState.update {
                     it.copy(
                         newGroupContent = "",
                     )
@@ -127,48 +97,48 @@ class SubscribeViewModel @Inject constructor(
         }
     }
 
-    private fun changeParseFullContentPreset() {
-        _viewState.update {
+    fun changeParseFullContentPreset() {
+        _subscribeUiState.update {
             it.copy(
-                parseFullContentPreset = !_viewState.value.parseFullContentPreset
+                parseFullContentPreset = !_subscribeUiState.value.parseFullContentPreset
             )
         }
     }
 
-    private fun changeAllowNotificationPreset() {
-        _viewState.update {
+    fun changeAllowNotificationPreset() {
+        _subscribeUiState.update {
             it.copy(
-                allowNotificationPreset = !_viewState.value.allowNotificationPreset
+                allowNotificationPreset = !_subscribeUiState.value.allowNotificationPreset
             )
         }
     }
 
-    private fun search() {
+    fun search() {
         searchJob?.cancel()
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             try {
-                _viewState.update {
+                _subscribeUiState.update {
                     it.copy(
                         errorMessage = "",
                     )
                 }
-                _viewState.value.linkContent.formatUrl().let { str ->
-                    if (str != _viewState.value.linkContent) {
-                        _viewState.update {
+                _subscribeUiState.value.linkContent.formatUrl().let { str ->
+                    if (str != _subscribeUiState.value.linkContent) {
+                        _subscribeUiState.update {
                             it.copy(
                                 linkContent = str
                             )
                         }
                     }
                 }
-                _viewState.update {
+                _subscribeUiState.update {
                     it.copy(
                         title = stringsRepository.getString(R.string.searching),
                         lockLinkInput = true,
                     )
                 }
-                if (rssRepository.get().isFeedExist(_viewState.value.linkContent)) {
-                    _viewState.update {
+                if (rssRepository.get().isFeedExist(_subscribeUiState.value.linkContent)) {
+                    _subscribeUiState.update {
                         it.copy(
                             title = stringsRepository.getString(R.string.subscribe),
                             errorMessage = stringsRepository.getString(R.string.already_subscribed),
@@ -177,8 +147,8 @@ class SubscribeViewModel @Inject constructor(
                     }
                     return@launch
                 }
-                val feedWithArticle = rssHelper.searchFeed(_viewState.value.linkContent)
-                _viewState.update {
+                val feedWithArticle = rssHelper.searchFeed(_subscribeUiState.value.linkContent)
+                _subscribeUiState.update {
                     it.copy(
                         feed = feedWithArticle.feed,
                         articles = feedWithArticle.articles,
@@ -187,7 +157,7 @@ class SubscribeViewModel @Inject constructor(
                 switchPage(false)
             } catch (e: Exception) {
                 e.printStackTrace()
-                _viewState.update {
+                _subscribeUiState.update {
                     it.copy(
                         title = stringsRepository.getString(R.string.subscribe),
                         errorMessage = e.message ?: stringsRepository.getString(R.string.unknown),
@@ -200,8 +170,8 @@ class SubscribeViewModel @Inject constructor(
         }
     }
 
-    private fun inputLink(content: String) {
-        _viewState.update {
+    fun inputLink(content: String) {
+        _subscribeUiState.update {
             it.copy(
                 linkContent = content,
                 errorMessage = "",
@@ -209,32 +179,48 @@ class SubscribeViewModel @Inject constructor(
         }
     }
 
-    private fun inputNewGroup(content: String) {
-        _viewState.update {
+    fun inputNewGroup(content: String) {
+        _subscribeUiState.update {
             it.copy(
                 newGroupContent = content
             )
         }
     }
 
-    private fun changeVisible(visible: Boolean) {
-        _viewState.update {
+    fun showDrawer() {
+        _subscribeUiState.update {
             it.copy(
-                visible = visible
+                visible = true
             )
         }
     }
 
-    private fun changeNewGroupDialogVisible(visible: Boolean) {
-        _viewState.update {
+    fun hideDrawer() {
+        _subscribeUiState.update {
             it.copy(
-                newGroupDialogVisible = visible,
+                visible = false
             )
         }
     }
 
-    private fun switchPage(isSearchPage: Boolean) {
-        _viewState.update {
+    fun showNewGroupDialog() {
+        _subscribeUiState.update {
+            it.copy(
+                newGroupDialogVisible = true,
+            )
+        }
+    }
+
+    fun hideNewGroupDialog() {
+        _subscribeUiState.update {
+            it.copy(
+                newGroupDialogVisible = false,
+            )
+        }
+    }
+
+    fun switchPage(isSearchPage: Boolean) {
+        _subscribeUiState.update {
             it.copy(
                 isSearchPage = isSearchPage
             )
@@ -242,8 +228,7 @@ class SubscribeViewModel @Inject constructor(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
-data class SubscribeViewState(
+data class SubscribeUiState(
     val visible: Boolean = false,
     val title: String = "",
     val errorMessage: String = "",
@@ -259,42 +244,3 @@ data class SubscribeViewState(
     val groups: Flow<List<Group>> = emptyFlow(),
     val isSearchPage: Boolean = true,
 )
-
-sealed class SubscribeViewAction {
-    object Init : SubscribeViewAction()
-    object Reset : SubscribeViewAction()
-
-    object Show : SubscribeViewAction()
-    object Hide : SubscribeViewAction()
-
-    object ShowNewGroupDialog : SubscribeViewAction()
-    object HideNewGroupDialog : SubscribeViewAction()
-    object AddNewGroup : SubscribeViewAction()
-
-    data class SwitchPage(
-        val isSearchPage: Boolean
-    ) : SubscribeViewAction()
-
-    data class ImportFromInputStream(
-        val inputStream: InputStream
-    ) : SubscribeViewAction()
-
-    data class InputLink(
-        val content: String
-    ) : SubscribeViewAction()
-
-    object Search : SubscribeViewAction()
-
-    object ChangeAllowNotificationPreset : SubscribeViewAction()
-    object ChangeParseFullContentPreset : SubscribeViewAction()
-
-    data class SelectedGroup(
-        val groupId: String
-    ) : SubscribeViewAction()
-
-    data class InputNewGroup(
-        val content: String
-    ) : SubscribeViewAction()
-
-    object Subscribe : SubscribeViewAction()
-}

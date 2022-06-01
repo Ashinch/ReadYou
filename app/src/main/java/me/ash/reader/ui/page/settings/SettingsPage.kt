@@ -1,15 +1,17 @@
 package me.ash.reader.ui.page.settings
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -17,62 +19,39 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.flow.map
 import me.ash.reader.R
-import me.ash.reader.data.entity.toVersion
-import me.ash.reader.ui.component.Banner
-import me.ash.reader.ui.component.DisplayText
-import me.ash.reader.ui.component.FeedbackIconButton
-import me.ash.reader.ui.ext.DataStoreKeys
-import me.ash.reader.ui.ext.dataStore
+import me.ash.reader.data.preference.LocalNewVersionNumber
+import me.ash.reader.data.preference.LocalSkipVersionNumber
+import me.ash.reader.ui.component.base.Banner
+import me.ash.reader.ui.component.base.DisplayText
+import me.ash.reader.ui.component.base.FeedbackIconButton
+import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.tips.UpdateDialog
-import me.ash.reader.ui.page.settings.tips.UpdateViewAction
 import me.ash.reader.ui.page.settings.tips.UpdateViewModel
 import me.ash.reader.ui.theme.palette.onLight
 
-@SuppressLint("FlowOperatorInvokedInComposition")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPage(
     navController: NavHostController,
     updateViewModel: UpdateViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val skipVersion = context.dataStore.data
-        .map { it[DataStoreKeys.SkipVersionNumber.key] ?: "" }
-        .collectAsState(initial = "")
-        .value
-        .toVersion()
-    val latestVersion = context.dataStore.data
-        .map { it[DataStoreKeys.NewVersionNumber.key] ?: "" }
-        .collectAsState(initial = "")
-        .value
-        .toVersion()
+    val newVersion = LocalNewVersionNumber.current
+    val skipVersion = LocalSkipVersionNumber.current
     val currentVersion by remember { mutableStateOf(context.getCurrentVersion()) }
 
-    Scaffold(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
+    RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
-        topBar = {
-            SmallTopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface),
-                title = {},
-                navigationIcon = {
-                    FeedbackIconButton(
-                        imageVector = Icons.Rounded.ArrowBack,
-                        contentDescription = stringResource(R.string.back),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    ) {
-                        navController.popBackStack()
-                    }
-                },
-                actions = {}
-            )
+        navigationIcon = {
+            FeedbackIconButton(
+                imageVector = Icons.Rounded.ArrowBack,
+                contentDescription = stringResource(R.string.back),
+                tint = MaterialTheme.colorScheme.onSurface
+            ) {
+                navController.popBackStack()
+            }
         },
         content = {
             LazyColumn {
@@ -81,13 +60,13 @@ fun SettingsPage(
                 }
                 item {
                     Box {
-                        if (latestVersion.whetherNeedUpdate(currentVersion, skipVersion)) {
+                        if (newVersion.whetherNeedUpdate(currentVersion, skipVersion)) {
                             Banner(
                                 modifier = Modifier.zIndex(1f),
                                 title = stringResource(R.string.get_new_updates),
                                 desc = stringResource(
                                     R.string.get_new_updates_desc,
-                                    latestVersion.toString(),
+                                    newVersion.toString(),
                                 ),
                                 icon = Icons.Outlined.Lightbulb,
                                 action = {
@@ -97,7 +76,7 @@ fun SettingsPage(
                                     )
                                 },
                             ) {
-                                updateViewModel.dispatch(UpdateViewAction.Show)
+                                updateViewModel.showDialog()
                             }
                         }
                         Banner(
@@ -159,6 +138,8 @@ fun SettingsPage(
                             launchSingleTop = true
                         }
                     }
+                }
+                item {
                     Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }

@@ -1,19 +1,24 @@
 <resources>
-    <string name="read_you" translatable="false">Read You</string>
     <string name="all">Vše</string>
     <plurals name="all_desc">
         <item quantity="one">%1$d archivovaná položka</item>
         <item quantity="other">%1$d archivovaných položek</item>
+        <item quantity="many">%1$d archivovaných položek</item>
+        <item quantity="few">%1$d archivovaných položek</item>
     </plurals>
     <string name="unread">Nepřečtené</string>
     <plurals name="unread_desc">
         <item quantity="one">%1$d nepřečtená položka</item>
         <item quantity="other">%1$d nepřečtených položek</item>
+        <item quantity="many">%1$d nepřečtených položek</item>
+        <item quantity="few">%1$d nepřečtených položek</item>
     </plurals>
     <string name="starred">Oblíbené</string>
     <plurals name="starred_desc">
         <item quantity="one">%1$d oblíbená položka</item>
         <item quantity="other">%1$d oblíbených položek</item>
+        <item quantity="many">%1$d oblíbených položek</item>
+        <item quantity="few">%1$d oblíbených položek</item>
     </plurals>
     <string name="feeds">Zdroje</string>
     <string name="syncing">Synchronizace…</string>
@@ -59,7 +64,6 @@
     <string name="all_move_to_group_toast">Vše přesunuto do skupiny \"%1$s\"</string>
     <string name="rename">Přejmenovat</string>
     <string name="change_url">Změnit URL</string>
-    <string name="feed_url_placeholder" translatable="false">http://example.com/feed.rss</string>
     <string name="rename_toast">Přejmenováno na \"%1$s\"</string>
     <string name="create_new_group">Vytvořit novou skupinu</string>
     <string name="name">Název</string>
@@ -103,9 +107,6 @@
     <string name="languages_desc">Angličtina, zj. čínština, němčina</string>
     <string name="help_translate">Pomozte nám s překladem</string>
     <string name="use_device_languages">Použít jazyk zařízení</string>
-    <string name="english" translatable="false">English</string>
-    <string name="chinese_simplified" translatable="false">简体中文</string>
-    <string name="german" translatable="false">Deutsch</string>
     <string name="tips_and_support">Tipy a podpora</string>
     <string name="tips_and_support_desc">O aplikaci, open source</string>
     <string name="welcome">Vítejte</string>
@@ -135,8 +136,6 @@
     <string name="reading_page">Čtecí stránka</string>
     <string name="sponsor">Sponzor</string>
     <string name="open_source_licenses">Licence open source</string>
-    <string name="github_link" translatable="false">https://github.com/Ashinch/ReadYou</string>
-    <string name="telegram_link" translatable="false">https://t.me/ReadYouApp</string>
     <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
     <string name="change_log">Seznam změn</string>
     <string name="update">Aktualizovat</string>

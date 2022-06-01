@@ -5,40 +5,32 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import me.ash.reader.BuildConfig
-import me.ash.reader.data.repository.AppRepository
+import me.ash.reader.data.repository.RYRepository
 import me.ash.reader.data.source.Download
+import me.ash.reader.ui.ext.notFdroid
 import javax.inject.Inject
 
 @HiltViewModel
 class UpdateViewModel @Inject constructor(
-    private val appRepository: AppRepository,
+    private val ryRepository: RYRepository,
 ) : ViewModel() {
-    private val _viewState = MutableStateFlow(UpdateViewState())
-    val viewState: StateFlow<UpdateViewState> = _viewState.asStateFlow()
+    private val _updateUiState = MutableStateFlow(UpdateUiState())
+    val updateUiState: StateFlow<UpdateUiState> = _updateUiState.asStateFlow()
 
-    fun dispatch(action: UpdateViewAction) {
-        when (action) {
-            is UpdateViewAction.Show -> changeUpdateDialogVisible(true)
-            is UpdateViewAction.Hide -> changeUpdateDialogVisible(false)
-            is UpdateViewAction.CheckUpdate -> checkUpdate(
-                action.preProcessor,
-                action.postProcessor
-            )
-            is UpdateViewAction.DownloadUpdate -> downloadUpdate(action.url)
-        }
-    }
-
-    private fun checkUpdate(
+    fun checkUpdate(
         preProcessor: suspend () -> Unit = {},
         postProcessor: suspend (Boolean) -> Unit = {}
     ) {
-        if (BuildConfig.FLAVOR != "fdroid") {
+        if (notFdroid) {
             viewModelScope.launch {
                 preProcessor()
-                appRepository.checkUpdate().let {
+                ryRepository.checkUpdate().let {
                     it?.let {
-                        changeUpdateDialogVisible(it)
+                        if (it) {
+                            showDialog()
+                        } else {
+                            hideDialog()
+                        }
                         postProcessor(it)
                     }
                 }
@@ -46,45 +38,39 @@ class UpdateViewModel @Inject constructor(
         }
     }
 
-    private fun changeUpdateDialogVisible(visible: Boolean) {
-        _viewState.update {
+    fun showDialog() {
+        _updateUiState.update {
             it.copy(
-                updateDialogVisible = visible
+                updateDialogVisible = true
             )
         }
     }
 
-    private fun downloadUpdate(url: String) {
+    fun hideDialog() {
+        _updateUiState.update {
+            it.copy(
+                updateDialogVisible = false
+            )
+        }
+    }
+
+    fun downloadUpdate(url: String) {
         viewModelScope.launch {
-            _viewState.update {
+            _updateUiState.update {
                 it.copy(
                     downloadFlow = flow { emit(Download.Progress(0)) }
                 )
             }
-            _viewState.update {
+            _updateUiState.update {
                 it.copy(
-                    downloadFlow = appRepository.downloadFile(url)
+                    downloadFlow = ryRepository.downloadFile(url)
                 )
             }
         }
     }
 }
 
-data class UpdateViewState(
+data class UpdateUiState(
     val updateDialogVisible: Boolean = false,
     val downloadFlow: Flow<Download> = emptyFlow(),
 )
-
-sealed class UpdateViewAction {
-    object Show : UpdateViewAction()
-    object Hide : UpdateViewAction()
-
-    data class CheckUpdate(
-        val preProcessor: suspend () -> Unit = {},
-        val postProcessor: suspend (Boolean) -> Unit = {}
-    ) : UpdateViewAction()
-
-    data class DownloadUpdate(
-        val url: String,
-    ) : UpdateViewAction()
-}
