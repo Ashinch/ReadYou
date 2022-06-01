@@ -10,7 +10,7 @@ import me.ash.reader.data.dao.AccountDao
 import me.ash.reader.data.dao.ArticleDao
 import me.ash.reader.data.dao.FeedDao
 import me.ash.reader.data.dao.GroupDao
-import me.ash.reader.data.source.ReaderDatabase
+import me.ash.reader.data.source.RYDatabase
 import javax.inject.Singleton
 
 @Module
@@ -19,26 +19,26 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideArticleDao(readerDatabase: ReaderDatabase): ArticleDao =
-        readerDatabase.articleDao()
+    fun provideArticleDao(RYDatabase: RYDatabase): ArticleDao =
+        RYDatabase.articleDao()
 
     @Provides
     @Singleton
-    fun provideFeedDao(readerDatabase: ReaderDatabase): FeedDao =
-        readerDatabase.feedDao()
+    fun provideFeedDao(RYDatabase: RYDatabase): FeedDao =
+        RYDatabase.feedDao()
 
     @Provides
     @Singleton
-    fun provideGroupDao(readerDatabase: ReaderDatabase): GroupDao =
-        readerDatabase.groupDao()
+    fun provideGroupDao(RYDatabase: RYDatabase): GroupDao =
+        RYDatabase.groupDao()
 
     @Provides
     @Singleton
-    fun provideAccountDao(readerDatabase: ReaderDatabase): AccountDao =
-        readerDatabase.accountDao()
+    fun provideAccountDao(RYDatabase: RYDatabase): AccountDao =
+        RYDatabase.accountDao()
 
     @Provides
     @Singleton
-    fun provideReaderDatabase(@ApplicationContext context: Context): ReaderDatabase =
-        ReaderDatabase.getInstance(context)
+    fun provideReaderDatabase(@ApplicationContext context: Context): RYDatabase =
+        RYDatabase.getInstance(context)
 }

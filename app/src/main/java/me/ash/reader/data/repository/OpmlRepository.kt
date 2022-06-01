@@ -43,7 +43,7 @@ class OpmlRepository @Inject constructor(
                     repeatList.add(it)
                 }
             }
-            feedDao.insertList((groupWithFeed.feeds subtract repeatList).toList())
+            feedDao.insertList((groupWithFeed.feeds subtract repeatList.toSet()).toList())
         }
     }
 
@@ -54,7 +54,7 @@ class OpmlRepository @Inject constructor(
             Opml(
                 "2.0",
                 Head(
-                    accountDao.queryById(context.currentAccountId).name,
+                    accountDao.queryById(context.currentAccountId)?.name,
                     Date().toString(), null, null, null,
                     null, null, null, null,
                     null, null, null, null,

@@ -2,8 +2,9 @@ package me.ash.reader.ui.page.startup
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircleOutline
@@ -18,9 +19,10 @@ import androidx.navigation.NavHostController
 import com.ireward.htmlcompose.HtmlText
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.ui.component.DisplayText
-import me.ash.reader.ui.component.DynamicSVGImage
-import me.ash.reader.ui.component.Tips
+import me.ash.reader.ui.component.base.DisplayText
+import me.ash.reader.ui.component.base.DynamicSVGImage
+import me.ash.reader.ui.component.base.RYScaffold
+import me.ash.reader.ui.component.base.Tips
 import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
@@ -28,7 +30,6 @@ import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.svg.SVGString
 import me.ash.reader.ui.svg.WELCOME
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StartupPage(
     navController: NavHostController,
@@ -36,12 +37,7 @@ fun StartupPage(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    Scaffold(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        topBar = {},
+    RYScaffold(
         content = {
             LazyColumn {
                 item {
@@ -87,16 +83,7 @@ fun StartupPage(
                 }
             }
         },
-        bottomBar = {
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(24.dp),
-//                horizontalArrangement = Arrangement.End,
-//                verticalAlignment = Alignment.CenterVertically,
-//            ) {
-//            }
-        },
+        bottomBar = null,
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = {

@@ -12,22 +12,21 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import me.ash.reader.data.entity.Filter
+import me.ash.reader.data.model.Filter
 import me.ash.reader.data.preference.LocalDarkTheme
 import me.ash.reader.ui.ext.*
-import me.ash.reader.ui.page.home.HomeViewAction
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.flow.FlowPage
-import me.ash.reader.ui.page.home.read.ReadPage
+import me.ash.reader.ui.page.home.reading.ReadingPage
 import me.ash.reader.ui.page.settings.SettingsPage
-import me.ash.reader.ui.page.settings.color.ColorAndStyle
-import me.ash.reader.ui.page.settings.color.DarkTheme
-import me.ash.reader.ui.page.settings.color.feeds.FeedsPageStyle
-import me.ash.reader.ui.page.settings.color.flow.FlowPageStyle
-import me.ash.reader.ui.page.settings.interaction.Interaction
-import me.ash.reader.ui.page.settings.languages.Languages
-import me.ash.reader.ui.page.settings.tips.TipsAndSupport
+import me.ash.reader.ui.page.settings.color.ColorAndStylePage
+import me.ash.reader.ui.page.settings.color.DarkThemePage
+import me.ash.reader.ui.page.settings.color.feeds.FeedsPageStylePage
+import me.ash.reader.ui.page.settings.color.flow.FlowPageStylePage
+import me.ash.reader.ui.page.settings.interaction.InteractionPage
+import me.ash.reader.ui.page.settings.languages.LanguagesPage
+import me.ash.reader.ui.page.settings.tips.TipsAndSupportPage
 import me.ash.reader.ui.page.startup.StartupPage
 import me.ash.reader.ui.theme.AppTheme
 
@@ -37,7 +36,7 @@ fun HomeEntry(
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val filterState = homeViewModel.filterState.collectAsStateValue()
+    val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
     val navController = rememberAnimatedNavController()
 
     val intent by rememberSaveable { mutableStateOf(context.findActivity()?.intent) }
@@ -57,16 +56,14 @@ fun HomeEntry(
             // Other initial pages
         }
 
-        homeViewModel.dispatch(
-            HomeViewAction.ChangeFilter(
-                filterState.copy(
-                    filter = when (context.initialFilter) {
-                        0 -> Filter.Starred
-                        1 -> Filter.Unread
-                        2 -> Filter.All
-                        else -> Filter.All
-                    }
-                )
+        homeViewModel.changeFilter(
+            filterUiState.copy(
+                filter = when (context.initialFilter) {
+                    0 -> Filter.Starred
+                    1 -> Filter.Unread
+                    2 -> Filter.All
+                    else -> Filter.All
+                }
             )
         )
     }
@@ -114,7 +111,7 @@ fun HomeEntry(
                 )
             }
             animatedComposable(route = "${RouteName.READING}/{articleId}") {
-                ReadPage(navController = navController)
+                ReadingPage(navController = navController)
             }
 
             // Settings
@@ -124,31 +121,31 @@ fun HomeEntry(
 
             // Color & Style
             animatedComposable(route = RouteName.COLOR_AND_STYLE) {
-                ColorAndStyle(navController)
+                ColorAndStylePage(navController)
             }
             animatedComposable(route = RouteName.DARK_THEME) {
-                DarkTheme(navController)
+                DarkThemePage(navController)
             }
             animatedComposable(route = RouteName.FEEDS_PAGE_STYLE) {
-                FeedsPageStyle(navController)
+                FeedsPageStylePage(navController)
             }
             animatedComposable(route = RouteName.FLOW_PAGE_STYLE) {
-                FlowPageStyle(navController)
+                FlowPageStylePage(navController)
             }
 
             // Interaction
             animatedComposable(route = RouteName.INTERACTION) {
-                Interaction(navController)
+                InteractionPage(navController)
             }
 
             // Languages
             animatedComposable(route = RouteName.LANGUAGES) {
-                Languages(navController = navController)
+                LanguagesPage(navController = navController)
             }
 
             // Tips & Support
             animatedComposable(route = RouteName.TIPS_AND_SUPPORT) {
-                TipsAndSupport(navController)
+                TipsAndSupportPage(navController)
             }
         }
     }

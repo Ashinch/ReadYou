@@ -13,8 +13,8 @@ import me.ash.reader.data.entity.ArticleWithFeed
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.ArticleList(
     pagingItems: LazyPagingItems<FlowItemView>,
-    articleListFeedIcon: Boolean,
-    articleListDateStickyHeader: Boolean,
+    isShowFeedIcon: Boolean,
+    isShowStickyHeader: Boolean,
     articleListTonalElevation: Int,
     onClick: (ArticleWithFeed) -> Unit = {},
 ) {
@@ -31,13 +31,13 @@ fun LazyListScope.ArticleList(
             }
             is FlowItemView.Date -> {
                 if (item.showSpacer) item { Spacer(modifier = Modifier.height(40.dp)) }
-                if (articleListDateStickyHeader) {
+                if (isShowStickyHeader) {
                     stickyHeader(key = item.date) {
-                        StickyHeader(item.date, articleListFeedIcon, articleListTonalElevation)
+                        StickyHeader(item.date, isShowFeedIcon, articleListTonalElevation)
                     }
                 } else {
                     item(key = item.date) {
-                        StickyHeader(item.date, articleListFeedIcon, articleListTonalElevation)
+                        StickyHeader(item.date, isShowFeedIcon, articleListTonalElevation)
                     }
                 }
             }

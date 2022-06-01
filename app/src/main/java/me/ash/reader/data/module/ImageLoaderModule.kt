@@ -15,7 +15,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
-import me.ash.reader.cachingHttpClient
+import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 @Module
@@ -25,16 +25,11 @@ object ImageLoaderModule {
     @Provides
     @Singleton
     fun provideImageLoader(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
+        okHttpClient: OkHttpClient,
     ): ImageLoader {
         return ImageLoader.Builder(context)
-            .okHttpClient(
-                okHttpClient = cachingHttpClient(
-                    cacheDirectory = context.cacheDir.resolve("http")
-                ).newBuilder()
-                    //.addNetworkInterceptor(UserAgentInterceptor)
-                    .build()
-            )
+            .okHttpClient(okHttpClient)
             .dispatcher(Dispatchers.Default) // This slightly improves scrolling performance
             .components{
                 add(SvgDecoder.Factory())

@@ -8,11 +8,11 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "group")
 data class Group(
     @PrimaryKey
-    val id: String,
+    var id: String,
     @ColumnInfo
-    val name: String,
+    var name: String,
     @ColumnInfo(index = true)
-    val accountId: Int,
+    var accountId: Int,
 ) {
     @Ignore
     var important: Int? = 0

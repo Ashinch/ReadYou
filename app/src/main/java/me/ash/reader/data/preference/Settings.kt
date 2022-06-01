@@ -6,12 +6,19 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.flow.map
+import me.ash.reader.data.model.Version
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.dataStore
 
 data class Settings(
+    val newVersionNumber: Version = NewVersionNumberPreference.default,
+    val skipVersionNumber: Version = SkipVersionNumberPreference.default,
+    val newVersionPublishDate: String = NewVersionPublishDatePreference.default,
+    val newVersionLog: String = NewVersionLogPreference.default,
+    val newVersionSize: String = NewVersionSizePreference.default,
+    val newVersionDownloadUrl: String = NewVersionDownloadUrlPreference.default,
+
     val themeIndex: Int = ThemeIndexPreference.default,
     val customPrimaryColor: String = CustomPrimaryColorPreference.default,
     val darkTheme: DarkThemePreference = DarkThemePreference.default,
@@ -38,42 +45,11 @@ data class Settings(
     val flowArticleListDateStickyHeader: FlowArticleListDateStickyHeaderPreference = FlowArticleListDateStickyHeaderPreference.default,
     val flowArticleListTonalElevation: FlowArticleListTonalElevationPreference = FlowArticleListTonalElevationPreference.default,
 
+    val initialPage: InitialPagePreference = InitialPagePreference.default,
+    val initialFilter: InitialFilterPreference = InitialFilterPreference.default,
+
     val languages: LanguagesPreference = LanguagesPreference.default,
 )
-
-fun Preferences.toSettings(): Settings {
-    return Settings(
-        themeIndex = ThemeIndexPreference.fromPreferences(this),
-        customPrimaryColor = CustomPrimaryColorPreference.fromPreferences(this),
-        darkTheme = DarkThemePreference.fromPreferences(this),
-        amoledDarkTheme = AmoledDarkThemePreference.fromPreferences(this),
-
-        feedsFilterBarStyle = FeedsFilterBarStylePreference.fromPreferences(this),
-        feedsFilterBarFilled = FeedsFilterBarFilledPreference.fromPreferences(this),
-        feedsFilterBarPadding = FeedsFilterBarPaddingPreference.fromPreferences(this),
-        feedsFilterBarTonalElevation = FeedsFilterBarTonalElevationPreference.fromPreferences(this),
-        feedsTopBarTonalElevation = FeedsTopBarTonalElevationPreference.fromPreferences(this),
-        feedsGroupListExpand = FeedsGroupListExpandPreference.fromPreferences(this),
-        feedsGroupListTonalElevation = FeedsGroupListTonalElevationPreference.fromPreferences(this),
-
-        flowFilterBarStyle = FlowFilterBarStylePreference.fromPreferences(this),
-        flowFilterBarFilled = FlowFilterBarFilledPreference.fromPreferences(this),
-        flowFilterBarPadding = FlowFilterBarPaddingPreference.fromPreferences(this),
-        flowFilterBarTonalElevation = FlowFilterBarTonalElevationPreference.fromPreferences(this),
-        flowTopBarTonalElevation = FlowTopBarTonalElevationPreference.fromPreferences(this),
-        flowArticleListFeedIcon = FlowArticleListFeedIconPreference.fromPreferences(this),
-        flowArticleListFeedName = FlowArticleListFeedNamePreference.fromPreferences(this),
-        flowArticleListImage = FlowArticleListImagePreference.fromPreferences(this),
-        flowArticleListDesc = FlowArticleListDescPreference.fromPreferences(this),
-        flowArticleListTime = FlowArticleListTimePreference.fromPreferences(this),
-        flowArticleListDateStickyHeader = FlowArticleListDateStickyHeaderPreference.fromPreferences(
-            this
-        ),
-        flowArticleListTonalElevation = FlowArticleListTonalElevationPreference.fromPreferences(this),
-
-        languages = LanguagesPreference.fromPreferences(this),
-    )
-}
 
 @Composable
 fun SettingsProvider(
@@ -88,6 +64,13 @@ fun SettingsProvider(
     }.collectAsStateValue(initial = Settings())
 
     CompositionLocalProvider(
+        LocalNewVersionNumber provides settings.newVersionNumber,
+        LocalSkipVersionNumber provides settings.skipVersionNumber,
+        LocalNewVersionPublishDate provides settings.newVersionPublishDate,
+        LocalNewVersionLog provides settings.newVersionLog,
+        LocalNewVersionSize provides settings.newVersionSize,
+        LocalNewVersionDownloadUrl provides settings.newVersionDownloadUrl,
+
         LocalThemeIndex provides settings.themeIndex,
         LocalCustomPrimaryColor provides settings.customPrimaryColor,
         LocalDarkTheme provides settings.darkTheme,
@@ -114,11 +97,21 @@ fun SettingsProvider(
         LocalFlowFilterBarPadding provides settings.flowFilterBarPadding,
         LocalFlowFilterBarTonalElevation provides settings.flowFilterBarTonalElevation,
 
+        LocalInitialPage provides settings.initialPage,
+        LocalInitialFilter provides settings.initialFilter,
+
         LocalLanguages provides settings.languages,
     ) {
         content()
     }
 }
+
+val LocalNewVersionNumber = compositionLocalOf { NewVersionNumberPreference.default }
+val LocalSkipVersionNumber = compositionLocalOf { SkipVersionNumberPreference.default }
+val LocalNewVersionPublishDate = compositionLocalOf { NewVersionPublishDatePreference.default }
+val LocalNewVersionLog = compositionLocalOf { NewVersionLogPreference.default }
+val LocalNewVersionSize = compositionLocalOf { NewVersionSizePreference.default }
+val LocalNewVersionDownloadUrl = compositionLocalOf { NewVersionDownloadUrlPreference.default }
 
 val LocalThemeIndex =
     compositionLocalOf { ThemeIndexPreference.default }
@@ -168,6 +161,10 @@ val LocalFlowArticleListDateStickyHeader =
     compositionLocalOf<FlowArticleListDateStickyHeaderPreference> { FlowArticleListDateStickyHeaderPreference.default }
 val LocalFlowArticleListTonalElevation =
     compositionLocalOf<FlowArticleListTonalElevationPreference> { FlowArticleListTonalElevationPreference.default }
+
+val LocalInitialPage = compositionLocalOf<InitialPagePreference> { InitialPagePreference.default }
+val LocalInitialFilter =
+    compositionLocalOf<InitialFilterPreference> { InitialFilterPreference.default }
 
 val LocalLanguages =
     compositionLocalOf<LanguagesPreference> { LanguagesPreference.default }

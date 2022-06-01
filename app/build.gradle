@@ -116,7 +116,7 @@ dependencies {
     implementation "org.conscrypt:conscrypt-android:2.5.2"
 
     // https://square.github.io/okhttp/changelogs/changelog/
-    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.6"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp"
     implementation "com.squareup.retrofit2:retrofit:$retrofit2"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit2"
 
@@ -166,9 +166,9 @@ dependencies {
     // https://developer.android.com/jetpack/androidx/releases/compose-material
     implementation "androidx.compose.material:material:$compose"
     implementation "androidx.compose.material:material-icons-extended:$compose"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose"
 
     // hilt
     implementation "androidx.hilt:hilt-work:1.0.0"

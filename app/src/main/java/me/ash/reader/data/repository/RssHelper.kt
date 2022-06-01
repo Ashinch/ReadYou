@@ -21,8 +21,6 @@ import net.dankito.readability4j.extended.Readability4JExtended
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.net.URL
-import java.text.ParsePosition
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -31,6 +29,7 @@ class RssHelper @Inject constructor(
     private val context: Context,
     @DispatcherIO
     private val dispatcherIO: CoroutineDispatcher,
+    private val okHttpClient: OkHttpClient,
 ) {
     @Throws(Exception::class)
     suspend fun searchFeed(feedLink: String): FeedWithArticle {
@@ -58,7 +57,7 @@ class RssHelper @Inject constructor(
     @Throws(Exception::class)
     suspend fun parseFullContent(link: String, title: String): String {
         return withContext(dispatcherIO) {
-            val response = OkHttpClient()
+            val response = okHttpClient
                 .newCall(Request.Builder().url(link).build())
                 .execute()
             val content = response.body!!.string()
@@ -85,7 +84,12 @@ class RssHelper @Inject constructor(
         return withContext(dispatcherIO) {
             val a = mutableListOf<Article>()
             val accountId = context.currentAccountId
-            val parseRss: SyndFeed = SyndFeedInput().build(XmlReader(URL(feed.url)))
+            val parseRss: SyndFeed = SyndFeedInput().build(
+                XmlReader(URL(feed.url).openConnection().apply {
+                    connectTimeout = 5000
+                    readTimeout = 5000
+                })
+            )
             parseRss.entries.forEach {
                 if (latestLink != null && latestLink == it.link) return@withContext a
                 val desc = it.description?.value
@@ -110,13 +114,13 @@ class RssHelper @Inject constructor(
                         date = it.publishedDate ?: it.updatedDate ?: Date(),
                         title = Html.fromHtml(it.title.toString()).toString(),
                         author = it.author,
-                        rawDescription = (desc ?: content) ?: "",
+                        rawDescription = (content ?: desc) ?: "",
                         shortDescription = (Readability4JExtended("", desc ?: content ?: "")
                             .parse().textContent ?: "")
                             .take(100)
                             .trim(),
                         fullContent = content,
-                        img = findImg((desc ?: content) ?: ""),
+                        img = findImg((content ?: desc) ?: ""),
                         link = it.link ?: "",
                     )
                 )
@@ -181,28 +185,5 @@ class RssHelper @Inject constructor(
                 icon = iconLink
             }
         )
-    }
-
-    private fun parseDate(
-        inputDate: String, patterns: Array<String> = arrayOf(
-            "yyyy-MM-dd'T'HH:mm:ss'Z'",
-            "yyyy-MM-dd",
-            "yyyy-MM-dd HH:mm:ss",
-            "yyyyMMdd",
-            "yyyy/MM/dd",
-            "yyyy年MM月dd日",
-            "yyyy MM dd",
-        )
-    ): Date? {
-        val df = SimpleDateFormat()
-        for (pattern in patterns) {
-            df.applyPattern(pattern)
-            df.isLenient = false
-            val date = df.parse(inputDate, ParsePosition(0))
-            if (date != null) {
-                return date
-            }
-        }
-        return null
     }
 }

@@ -7,8 +7,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import me.ash.reader.data.entity.Feed
-import me.ash.reader.data.entity.Filter
 import me.ash.reader.data.entity.Group
+import me.ash.reader.data.model.Filter
 import me.ash.reader.data.module.ApplicationScope
 import me.ash.reader.data.repository.RssRepository
 import me.ash.reader.data.repository.StringsRepository
@@ -24,30 +24,20 @@ class HomeViewModel @Inject constructor(
     private val applicationScope: CoroutineScope,
     private val workManager: WorkManager,
 ) : ViewModel() {
+    private val _homeUiState = MutableStateFlow(HomeUiState())
+    val homeUiState: StateFlow<HomeUiState> = _homeUiState.asStateFlow()
 
-    private val _viewState = MutableStateFlow(HomeViewState())
-    val viewState: StateFlow<HomeViewState> = _viewState.asStateFlow()
-
-    private val _filterState = MutableStateFlow(FilterState())
-    val filterState = _filterState.asStateFlow()
+    private val _filterUiState = MutableStateFlow(FilterState())
+    val filterUiState = _filterUiState.asStateFlow()
 
     val syncWorkLiveData = workManager.getWorkInfoByIdLiveData(SyncWorker.UUID)
 
-    fun dispatch(action: HomeViewAction) {
-        when (action) {
-            is HomeViewAction.Sync -> sync()
-            is HomeViewAction.ChangeFilter -> changeFilter(action.filterState)
-            is HomeViewAction.FetchArticles -> fetchArticles()
-            is HomeViewAction.InputSearchContent -> inputSearchContent(action.content)
-        }
-    }
-
-    private fun sync() {
+    fun sync() {
         rssRepository.get().doSync()
     }
 
-    private fun changeFilter(filterState: FilterState) {
-        _filterState.update {
+    fun changeFilter(filterState: FilterState) {
+        _filterUiState.update {
             it.copy(
                 group = filterState.group,
                 feed = filterState.feed,
@@ -57,28 +47,40 @@ class HomeViewModel @Inject constructor(
         fetchArticles()
     }
 
-    private fun fetchArticles() {
-        _viewState.update {
+    fun fetchArticles() {
+        _homeUiState.update {
             it.copy(
-                pagingData = Pager(PagingConfig(pageSize = 50)) {
-                    if (_viewState.value.searchContent.isNotBlank()) {
+                pagingData = Pager(
+                    config = PagingConfig(
+                        pageSize = 100,
+                        enablePlaceholders = false,
+                    )
+                ) {
+                    if (_homeUiState.value.searchContent.isNotBlank()) {
                         rssRepository.get().searchArticles(
-                            content = _viewState.value.searchContent.trim(),
-                            groupId = _filterState.value.group?.id,
-                            feedId = _filterState.value.feed?.id,
-                            isStarred = _filterState.value.filter.isStarred(),
-                            isUnread = _filterState.value.filter.isUnread(),
+                            content = _homeUiState.value.searchContent.trim(),
+                            groupId = _filterUiState.value.group?.id,
+                            feedId = _filterUiState.value.feed?.id,
+                            isStarred = _filterUiState.value.filter.isStarred(),
+                            isUnread = _filterUiState.value.filter.isUnread(),
                         )
                     } else {
                         rssRepository.get().pullArticles(
-                            groupId = _filterState.value.group?.id,
-                            feedId = _filterState.value.feed?.id,
-                            isStarred = _filterState.value.filter.isStarred(),
-                            isUnread = _filterState.value.filter.isUnread(),
+                            groupId = _filterUiState.value.group?.id,
+                            feedId = _filterUiState.value.feed?.id,
+                            isStarred = _filterUiState.value.filter.isStarred(),
+                            isUnread = _filterUiState.value.filter.isUnread(),
                         )
                     }
                 }.flow.map {
-                    it.map { FlowItemView.Article(it) }.insertSeparators { before, after ->
+                    it.map {
+                        FlowItemView.Article(it.apply {
+                            article.dateString = stringsRepository.formatAsString(
+                                date = article.date,
+                                onlyHourMinute = true
+                            )
+                        })
+                    }.insertSeparators { before, after ->
                         val beforeDate =
                             stringsRepository.formatAsString(before?.articleWithFeed?.article?.date)
                         val afterDate =
@@ -94,8 +96,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun inputSearchContent(content: String) {
-        _viewState.update {
+    fun inputSearchContent(content: String) {
+        _homeUiState.update {
             it.copy(
                 searchContent = content,
             )
@@ -110,21 +112,7 @@ data class FilterState(
     val filter: Filter = Filter.All,
 )
 
-data class HomeViewState(
+data class HomeUiState(
     val pagingData: Flow<PagingData<FlowItemView>> = emptyFlow(),
     val searchContent: String = "",
 )
-
-sealed class HomeViewAction {
-    object Sync : HomeViewAction()
-
-    data class ChangeFilter(
-        val filterState: FilterState
-    ) : HomeViewAction()
-
-    object FetchArticles : HomeViewAction()
-
-    data class InputSearchContent(
-        val content: String,
-    ) : HomeViewAction()
-}
