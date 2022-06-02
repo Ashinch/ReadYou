@@ -44,43 +44,50 @@ fun bodyForeground(): Color =
 @Composable
 fun bodyStyle(): TextStyle =
     MaterialTheme.typography.bodyLarge.copy(
-        color = bodyForeground()
+        color = bodyForeground(),
+        textAlign = TextAlign.Start,
     )
 
 @Composable
 fun h1Style(): TextStyle =
     MaterialTheme.typography.displayMedium.copy(
-        color = bodyForeground()
+        color = bodyForeground(),
+        textAlign = TextAlign.Start,
     )
 
 @Composable
 fun h2Style(): TextStyle =
     MaterialTheme.typography.displaySmall.copy(
-        color = bodyForeground()
+        color = bodyForeground(),
+        textAlign = TextAlign.Start,
     )
 
 @Composable
 fun h3Style(): TextStyle =
     MaterialTheme.typography.headlineLarge.copy(
-        color = bodyForeground()
+        color = bodyForeground(),
+        textAlign = TextAlign.Start,
     )
 
 @Composable
 fun h4Style(): TextStyle =
     MaterialTheme.typography.headlineMedium.copy(
-        color = bodyForeground()
+        color = bodyForeground(),
+        textAlign = TextAlign.Start,
     )
 
 @Composable
 fun h5Style(): TextStyle =
     MaterialTheme.typography.headlineSmall.copy(
         color = bodyForeground(),
+        textAlign = TextAlign.Start,
     )
 
 @Composable
 fun h6Style(): TextStyle =
     MaterialTheme.typography.titleLarge.copy(
-        color = bodyForeground()
+        color = bodyForeground(),
+        textAlign = TextAlign.Start,
     )
 
 @Composable

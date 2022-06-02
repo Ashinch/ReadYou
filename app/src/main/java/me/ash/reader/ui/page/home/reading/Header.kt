@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import me.ash.reader.ui.ext.formatAsString
 import me.ash.reader.ui.ext.openURL
@@ -40,12 +41,14 @@ fun Header(
             text = dateString,
             color = MaterialTheme.colorScheme.outline,
             style = MaterialTheme.typography.labelMedium,
+            textAlign = TextAlign.Start,
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = title,
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.headlineLarge,
+            textAlign = TextAlign.Start,
         )
         Spacer(modifier = Modifier.height(4.dp))
         author?.let {
@@ -55,6 +58,7 @@ fun Header(
                     text = it,
                     color = MaterialTheme.colorScheme.outline,
                     style = MaterialTheme.typography.labelMedium,
+                    textAlign = TextAlign.Start,
                 )
             }
         }
@@ -63,6 +67,7 @@ fun Header(
             text = feedName,
             color = MaterialTheme.colorScheme.outline,
             style = MaterialTheme.typography.labelMedium,
+            textAlign = TextAlign.Start,
         )
     }
 }
