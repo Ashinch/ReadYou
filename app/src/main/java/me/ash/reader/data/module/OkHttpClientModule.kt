@@ -45,7 +45,6 @@ import javax.net.ssl.X509TrustManager
 @Module
 @InstallIn(SingletonComponent::class)
 object OkHttpClientModule {
-
     @Provides
     @Singleton
     fun provideOkHttpClient(

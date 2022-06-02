@@ -113,10 +113,11 @@ dependencies {
     implementation("io.coil-kt:coil-svg:$coil")
     implementation("io.coil-kt:coil-gif:$coil")
 
-    implementation "org.conscrypt:conscrypt-android:2.5.2"
+    implementation 'org.conscrypt:conscrypt-android:2.5.2'
 
     // https://square.github.io/okhttp/changelogs/changelog/
     implementation "com.squareup.okhttp3:okhttp:$okhttp"
+    implementation "com.squareup.okhttp3:okhttp-coroutines-jvm:$okhttp"
     implementation "com.squareup.retrofit2:retrofit:$retrofit2"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit2"
 

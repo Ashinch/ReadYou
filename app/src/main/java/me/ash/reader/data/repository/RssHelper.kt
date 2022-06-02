@@ -3,6 +3,7 @@ package me.ash.reader.data.repository
 import android.content.Context
 import android.text.Html
 import android.util.Log
+import com.rometools.rome.feed.synd.SyndEntry
 import com.rometools.rome.feed.synd.SyndFeed
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
@@ -20,7 +21,8 @@ import net.dankito.readability4j.Readability4J
 import net.dankito.readability4j.extended.Readability4JExtended
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.net.URL
+import okhttp3.executeAsync
+import java.io.InputStream
 import java.util.*
 import javax.inject.Inject
 
@@ -35,7 +37,8 @@ class RssHelper @Inject constructor(
     suspend fun searchFeed(feedLink: String): FeedWithArticle {
         return withContext(dispatcherIO) {
             val accountId = context.currentAccountId
-            val parseRss: SyndFeed = SyndFeedInput().build(XmlReader(URL(feedLink)))
+            val parseRss: SyndFeed =
+                SyndFeedInput().build(XmlReader(inputStream(okHttpClient, feedLink)))
             val feed = Feed(
                 id = accountId.spacerDollar(UUID.randomUUID().toString()),
                 name = parseRss.title!!,
@@ -43,7 +46,8 @@ class RssHelper @Inject constructor(
                 groupId = "",
                 accountId = accountId,
             )
-            FeedWithArticle(feed, queryRssXml(feed))
+            val list = parseRss.entries.map { article(feed, context.currentAccountId, it) }
+            FeedWithArticle(feed, list)
         }
     }
 
@@ -57,9 +61,7 @@ class RssHelper @Inject constructor(
     @Throws(Exception::class)
     suspend fun parseFullContent(link: String, title: String): String {
         return withContext(dispatcherIO) {
-            val response = okHttpClient
-                .newCall(Request.Builder().url(link).build())
-                .execute()
+            val response = response(okHttpClient, link)
             val content = response.body!!.string()
             val readability4J: Readability4J =
                 Readability4JExtended(link, content)
@@ -82,51 +84,52 @@ class RssHelper @Inject constructor(
         latestLink: String? = null,
     ): List<Article> {
         return withContext(dispatcherIO) {
-            val a = mutableListOf<Article>()
             val accountId = context.currentAccountId
             val parseRss: SyndFeed = SyndFeedInput().build(
-                XmlReader(URL(feed.url).openConnection().apply {
-                    connectTimeout = 5000
-                    readTimeout = 5000
-                })
+                XmlReader(inputStream(okHttpClient, feed.url))
             )
-            parseRss.entries.forEach {
-                if (latestLink != null && latestLink == it.link) return@withContext a
-                val desc = it.description?.value
-                val content = it.contents
-                    .takeIf { it.isNotEmpty() }
-                    ?.let { it.joinToString("\n") { it.value } }
-                Log.i(
-                    "RLog",
-                    "request rss:\n" +
-                            "name: ${feed.name}\n" +
-                            "feedUrl: ${feed.url}\n" +
-                            "url: ${it.link}\n" +
-                            "title: ${it.title}\n" +
-                            "desc: ${desc}\n" +
-                            "content: ${content}\n"
-                )
-                a.add(
-                    Article(
-                        id = accountId.spacerDollar(UUID.randomUUID().toString()),
-                        accountId = accountId,
-                        feedId = feed.id,
-                        date = it.publishedDate ?: it.updatedDate ?: Date(),
-                        title = Html.fromHtml(it.title.toString()).toString(),
-                        author = it.author,
-                        rawDescription = (content ?: desc) ?: "",
-                        shortDescription = (Readability4JExtended("", desc ?: content ?: "")
-                            .parse().textContent ?: "")
-                            .take(100)
-                            .trim(),
-                        fullContent = content,
-                        img = findImg((content ?: desc) ?: ""),
-                        link = it.link ?: "",
-                    )
-                )
-            }
-            a
+            parseRss.entries.asSequence()
+                .takeWhile { latestLink == null || latestLink != it.link }
+                .map { article(feed, accountId, it) }
+                .toList()
         }
+    }
+
+    private fun article(
+        feed: Feed,
+        accountId: Int,
+        syndEntry: SyndEntry
+    ): Article {
+        val desc = syndEntry.description?.value
+        val content = syndEntry.contents
+            .takeIf { it.isNotEmpty() }
+            ?.let { it.joinToString("\n") { it.value } }
+        Log.i(
+            "RLog",
+            "request rss:\n" +
+                    "name: ${feed.name}\n" +
+                    "feedUrl: ${feed.url}\n" +
+                    "url: ${syndEntry.link}\n" +
+                    "title: ${syndEntry.title}\n" +
+                    "desc: ${desc}\n" +
+                    "content: ${content}\n"
+        )
+        return Article(
+            id = accountId.spacerDollar(UUID.randomUUID().toString()),
+            accountId = accountId,
+            feedId = feed.id,
+            date = syndEntry.publishedDate ?: syndEntry.updatedDate ?: Date(),
+            title = Html.fromHtml(syndEntry.title.toString()).toString(),
+            author = syndEntry.author,
+            rawDescription = (content ?: desc) ?: "",
+            shortDescription = (Readability4JExtended("", desc ?: content ?: "")
+                .parse().textContent ?: "")
+                .take(100)
+                .trim(),
+            fullContent = content,
+            img = findImg((content ?: desc) ?: ""),
+            link = syndEntry.link ?: "",
+        )
     }
 
     private fun findImg(rawDescription: String): String? {
@@ -146,9 +149,7 @@ class RssHelper @Inject constructor(
     ) {
         withContext(dispatcherIO) {
             val domainRegex = Regex("(http|https)://(www.)?(\\w+(\\.)?)+")
-            val request = OkHttpClient()
-                .newCall(Request.Builder().url(articleLink).build())
-                .execute()
+            val request = response(okHttpClient, articleLink)
             val content = request.body!!.string()
             val regex =
                 Regex("""<link(.+?)rel="shortcut icon"(.+?)href="(.+?)"""")
@@ -168,10 +169,7 @@ class RssHelper @Inject constructor(
             } else {
                 domainRegex.find(articleLink)?.value?.let {
                     Log.i("RLog", "favicon: ${it}")
-                    val request = OkHttpClient()
-                        .newCall(Request.Builder().url("$it/favicon.ico").build())
-                        .execute()
-                    if (request.isSuccessful) {
+                    if (response(okHttpClient, "$it/favicon.ico").isSuccessful) {
                         saveRssIcon(feedDao, feed, it)
                     }
                 }
@@ -186,4 +184,14 @@ class RssHelper @Inject constructor(
             }
         )
     }
+
+    private suspend fun inputStream(
+        client: OkHttpClient,
+        url: String
+    ): InputStream = response(client, url).body!!.byteStream()
+
+    private suspend fun response(
+        client: OkHttpClient,
+        url: String
+    ) = client.newCall(Request.Builder().url(url).build()).executeAsync()
 }
