@@ -2,7 +2,6 @@ package me.ash.reader.ui.page.home.feeds
 
 import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.ui.util.fastForEach
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -54,52 +53,52 @@ class FeedsViewModel @Inject constructor(
         }
     }
 
-    fun fetchData(filterState: FilterState) {
-        viewModelScope.launch(dispatcherIO) {
-            pullFeeds(
-                isStarred = filterState.filter.isStarred(),
-                isUnread = filterState.filter.isUnread(),
-            )
-        }
-    }
-
-    private suspend fun pullFeeds(isStarred: Boolean, isUnread: Boolean) {
-        combine(
-            rssRepository.get().pullFeeds(),
-            rssRepository.get().pullImportant(isStarred, isUnread),
-        ) { groupWithFeedList, importantMap ->
-            groupWithFeedList.fastForEach {
-                var groupImportant = 0
-                it.feeds.fastForEach {
-                    it.important = importantMap[it.id]
-                    groupImportant += it.important ?: 0
-                }
-                it.group.important = groupImportant
-            }
-            groupWithFeedList
-        }.mapLatest { groupWithFeedList ->
-            _feedsUiState.update {
-                it.copy(
-                    importantSum = groupWithFeedList.sumOf { it.group.important ?: 0 }.run {
-                        when {
-                            isStarred -> stringsRepository.getQuantityString(
-                                R.plurals.starred_desc,
-                                this,
-                                this
-                            )
-                            isUnread -> stringsRepository.getQuantityString(
-                                R.plurals.unread_desc,
-                                this,
-                                this
-                            )
-                            else -> stringsRepository.getQuantityString(
-                                R.plurals.all_desc,
+    fun pullFeeds(filterState: FilterState) {
+        val isStarred = filterState.filter.isStarred()
+        val isUnread = filterState.filter.isUnread()
+        _feedsUiState.update {
+            it.copy(
+                importantSum = rssRepository.get().pullImportant(isStarred, isUnread)
+                    .mapLatest {
+                        (it["sum"] ?: 0).run {
+                            stringsRepository.getQuantityString(
+                                when {
+                                    isStarred -> R.plurals.starred_desc
+                                    isUnread -> R.plurals.unread_desc
+                                    else -> R.plurals.all_desc
+                                },
                                 this,
                                 this
                             )
                         }
-                    },
-                    groupWithFeedList = groupWithFeedList.map {
+                    }.flowOn(dispatcherDefault),
+                groupWithFeedList = combine(
+                    rssRepository.get().pullImportant(isStarred, isUnread),
+                    rssRepository.get().pullFeeds()
+                ) { importantMap, groupWithFeedList ->
+                    val groupIterator = groupWithFeedList.iterator()
+                    while (groupIterator.hasNext()) {
+                        val groupWithFeed = groupIterator.next()
+                        val groupImportant = importantMap[groupWithFeed.group.id] ?: 0
+                        if ((isStarred || isUnread) && groupImportant == 0) {
+                            groupIterator.remove()
+                            continue
+                        }
+                        groupWithFeed.group.important = groupImportant
+                        val feedIterator = groupWithFeed.feeds.iterator()
+                        while (feedIterator.hasNext()) {
+                            val feed = feedIterator.next()
+                            val feedImportant = importantMap[feed.id] ?: 0
+                            if ((isStarred || isUnread) && feedImportant == 0) {
+                                feedIterator.remove()
+                                continue
+                            }
+                            feed.important = feedImportant
+                        }
+                    }
+                    groupWithFeedList
+                }.mapLatest { groupWithFeedList ->
+                    groupWithFeedList.map {
                         mutableListOf<GroupFeedsView>(GroupFeedsView.Group(it.group)).apply {
                             addAll(
                                 it.feeds.map {
@@ -107,19 +106,17 @@ class FeedsViewModel @Inject constructor(
                                 }
                             )
                         }
-                    }.flatten(),
-                )
-            }
-        }.catch {
-            Log.e("RLog", "catch in articleRepository.pullFeeds(): ${it.message}")
-        }.flowOn(dispatcherDefault).collect()
+                    }.flatten()
+                }.flowOn(dispatcherDefault),
+            )
+        }
     }
 }
 
 data class FeedsUiState(
     val account: Account? = null,
-    val importantSum: String = "",
-    val groupWithFeedList: List<GroupFeedsView> = emptyList(),
+    val importantSum: Flow<String> = emptyFlow(),
+    val groupWithFeedList: Flow<List<GroupFeedsView>> = emptyFlow(),
     val listState: LazyListState = LazyListState(),
     val groupsVisible: Boolean = true,
 )

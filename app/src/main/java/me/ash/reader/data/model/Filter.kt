@@ -7,7 +7,10 @@ import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.StarOutline
 import androidx.compose.material.icons.rounded.Subject
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import me.ash.reader.R
 
@@ -40,9 +43,19 @@ class Filter(
     }
 }
 
+@Stable
 @Composable
 fun Filter.getName(): String = when (this) {
     Filter.Unread -> stringResource(R.string.unread)
     Filter.Starred -> stringResource(R.string.starred)
     else -> stringResource(R.string.all)
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Stable
+@Composable
+fun Filter.getDesc(important: Int): String = when (this) {
+    Filter.Starred -> pluralStringResource(R.plurals.starred_desc, important, important)
+    Filter.Unread -> pluralStringResource(R.plurals.unread_desc, important, important)
+    else -> pluralStringResource(R.plurals.all_desc, important, important)
 }

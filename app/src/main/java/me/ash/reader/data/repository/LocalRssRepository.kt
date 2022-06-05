@@ -9,7 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.supervisorScope
 import me.ash.reader.data.dao.AccountDao
 import me.ash.reader.data.dao.ArticleDao
 import me.ash.reader.data.dao.FeedDao
@@ -35,14 +35,14 @@ class LocalRssRepository @Inject constructor(
     private val notificationHelper: NotificationHelper,
     private val accountDao: AccountDao,
     private val groupDao: GroupDao,
-    @DispatcherDefault
-    private val dispatcherDefault: CoroutineDispatcher,
     @DispatcherIO
     private val dispatcherIO: CoroutineDispatcher,
+    @DispatcherDefault
+    private val dispatcherDefault: CoroutineDispatcher,
     workManager: WorkManager,
 ) : AbstractRssRepository(
     context, accountDao, articleDao, groupDao,
-    feedDao, workManager, dispatcherIO
+    feedDao, workManager, dispatcherIO, dispatcherDefault
 ) {
 
     override suspend fun updateArticleInfo(article: Article) {
@@ -71,25 +71,29 @@ class LocalRssRepository @Inject constructor(
     }
 
     override suspend fun sync(coroutineWorker: CoroutineWorker): ListenableWorker.Result {
-        return withContext(dispatcherDefault) {
+        return supervisorScope {
             val preTime = System.currentTimeMillis()
             val accountId = context.currentAccountId
             feedDao.queryAll(accountId)
                 .also { coroutineWorker.setProgress(setIsSyncing(true)) }
-                .map { feed -> async { syncFeed(feed) } }
-                .awaitAll()
+                .chunked(16)
                 .forEach {
-                    if (it.isNotify) {
-                        notificationHelper.notify(
-                            FeedWithArticle(
-                                it.feedWithArticle.feed,
+                    it.map { feed -> async { syncFeed(feed) } }
+                        .awaitAll()
+                        .forEach {
+                            if (it.isNotify) {
+                                notificationHelper.notify(
+                                    FeedWithArticle(
+                                        it.feedWithArticle.feed,
+                                        articleDao.insertListIfNotExist(it.feedWithArticle.articles)
+                                    )
+                                )
+                            } else {
                                 articleDao.insertListIfNotExist(it.feedWithArticle.articles)
-                            )
-                        )
-                    } else {
-                        articleDao.insertListIfNotExist(it.feedWithArticle.articles)
-                    }
+                            }
+                        }
                 }
+
             Log.i("RlOG", "onCompletion: ${System.currentTimeMillis() - preTime}")
             accountDao.queryById(accountId)?.let { account ->
                 accountDao.update(

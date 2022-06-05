@@ -65,6 +65,10 @@ fun FeedsPage(
 
     val feedsUiState = feedsViewModel.feedsUiState.collectAsStateValue()
     val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
+    val importantSum =
+        feedsUiState.importantSum.collectAsStateValue(initial = stringResource(R.string.loading))
+    val groupWithFeedList =
+        feedsUiState.groupWithFeedList.collectAsStateValue(initial = emptyList())
 
     val newVersion = LocalNewVersionNumber.current
     val skipVersion = LocalSkipVersionNumber.current
@@ -107,9 +111,9 @@ fun FeedsPage(
         }
     }
 
-    val groupsVisible = remember(feedsUiState.groupWithFeedList) {
+    val groupsVisible = remember(groupWithFeedList) {
         mutableStateMapOf(
-            *(feedsUiState.groupWithFeedList.filterIsInstance<GroupFeedsView.Group>().map {
+            *(groupWithFeedList.filterIsInstance<GroupFeedsView.Group>().map {
                 it.group.id to groupListExpand.value
             }.toTypedArray())
         )
@@ -121,7 +125,7 @@ fun FeedsPage(
 
     LaunchedEffect(filterUiState) {
         snapshotFlow { filterUiState }.collect {
-            feedsViewModel.fetchData(it)
+            feedsViewModel.pullFeeds(it)
         }
     }
 
@@ -180,7 +184,7 @@ fun FeedsPage(
                 item {
                     Banner(
                         title = filterUiState.filter.getName(),
-                        desc = feedsUiState.importantSum.ifEmpty { stringResource(R.string.loading) },
+                        desc = importantSum,
                         icon = filterUiState.filter.iconOutline,
                         action = {
                             Icon(
@@ -207,7 +211,7 @@ fun FeedsPage(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
-                itemsIndexed(feedsUiState.groupWithFeedList) { index, groupWithFeed ->
+                itemsIndexed(groupWithFeedList) { index, groupWithFeed ->
                     when (groupWithFeed) {
                         is GroupFeedsView.Group -> {
                             if (index != 0) {
@@ -218,7 +222,7 @@ fun FeedsPage(
                                 group = groupWithFeed.group,
                                 alpha = groupAlpha,
                                 indicatorAlpha = groupIndicatorAlpha,
-                                isEnded = { index == feedsUiState.groupWithFeedList.lastIndex },
+                                isEnded = { index == groupWithFeedList.lastIndex },
                                 onExpanded = {
                                     groupsVisible[groupWithFeed.group.id] =
                                         !(groupsVisible[groupWithFeed.group.id] ?: false)
@@ -239,7 +243,7 @@ fun FeedsPage(
                                 feed = groupWithFeed.feed,
                                 alpha = groupAlpha,
                                 badgeAlpha = feedBadgeAlpha,
-                                isEnded = { index == feedsUiState.groupWithFeedList.lastIndex || feedsUiState.groupWithFeedList[index + 1] is GroupFeedsView.Group },
+                                isEnded = { index == groupWithFeedList.lastIndex || groupWithFeedList[index + 1] is GroupFeedsView.Group },
                                 isExpanded = { groupsVisible[groupWithFeed.feed.groupId] ?: false },
                             ) {
                                 filterChange(

@@ -80,10 +80,12 @@ class RssHelper @Inject constructor(
         feed: Feed,
         latestLink: String? = null,
     ): List<Article> {
-        return withContext(dispatcherIO) {
-            val accountId = context.currentAccountId
-            val syndFeed = SyndFeedInput().build(XmlReader(inputStream(okHttpClient, feed.url)))
-            syndFeed.entries.asSequence()
+        val accountId = context.currentAccountId
+        return inputStream(okHttpClient, feed.url).use {
+            SyndFeedInput().apply { isPreserveWireFeed = true }
+                .build(XmlReader(it))
+                .entries
+                .asSequence()
                 .takeWhile { latestLink == null || latestLink != it.link }
                 .map { article(feed, accountId, it) }
                 .toList()

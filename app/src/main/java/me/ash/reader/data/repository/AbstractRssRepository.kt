@@ -27,6 +27,7 @@ abstract class AbstractRssRepository constructor(
     private val feedDao: FeedDao,
     private val workManager: WorkManager,
     private val dispatcherIO: CoroutineDispatcher,
+    private val dispatcherDefault: CoroutineDispatcher,
 ) {
     abstract suspend fun updateArticleInfo(article: Article)
 
@@ -113,11 +114,18 @@ abstract class AbstractRssRepository constructor(
             else -> articleDao.queryImportantCountWhenIsAll(accountId)
         }.mapLatest {
             mapOf(
+                // Groups
+                *(it.groupBy { it.groupId }.map {
+                    it.key to it.value.sumOf { it.important }
+                }.toTypedArray()),
+                // Feeds
                 *(it.map {
                     it.feedId to it.important
-                }.toTypedArray())
+                }.toTypedArray()),
+                // All summary
+                "sum" to it.sumOf { it.important }
             )
-        }.flowOn(dispatcherIO)
+        }.flowOn(dispatcherDefault)
     }
 
     suspend fun findFeedById(id: String): Feed? {

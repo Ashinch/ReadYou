@@ -6,6 +6,8 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.*
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -18,7 +20,9 @@ class SyncWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         Log.i("RLog", "doWork: ")
-        return rssRepository.get().sync(this)
+        return withContext(Dispatchers.Default) {
+            rssRepository.get().sync(this@SyncWorker)
+        }
     }
 
     companion object {
