@@ -1,0 +1,16 @@
+<i>Read You</i> Un lettore RSS moderno ed elegante con Design <a href='https://m3.material.io/' target='_blank' rel='nofollow'>Material You</a>
+
+<b>Caratteristiche:</b>
+
+* Iscriviti a link di feed
+* Importa da OPML
+* Sincronizza articoli
+* Notifica per aggiornamenti di articoli
+* Analizza il contenuto completo
+* Filtra Non letti e Salvati
+* Raggruppa i feed
+* Localizzazione
+* Esporta come OPML
+* Cerca articoli
+
+E altro, prossimamente…
