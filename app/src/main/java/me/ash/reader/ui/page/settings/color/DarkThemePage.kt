@@ -15,10 +15,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.data.preference.DarkThemePreference
-import me.ash.reader.data.preference.LocalAmoledDarkTheme
-import me.ash.reader.data.preference.LocalDarkTheme
-import me.ash.reader.data.preference.not
+import me.ash.reader.data.model.preference.DarkThemePreference
+import me.ash.reader.data.model.preference.LocalAmoledDarkTheme
+import me.ash.reader.data.model.preference.LocalDarkTheme
+import me.ash.reader.data.model.preference.not
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
@@ -52,7 +52,7 @@ fun DarkThemePage(
                 item {
                     DarkThemePreference.values.map {
                         SettingItem(
-                            title = it.getDesc(context),
+                            title = it.toDesc(context),
                             onClick = {
                                 it.put(context, scope)
                             },

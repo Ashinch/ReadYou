@@ -8,6 +8,7 @@
 package me.ash.reader.ui.theme.palette
 
 object MaterialYouStandard {
+
     // TODO: support RGB color spaces
     // calculated with error = 0.001, chroma = 100, hue in 0 until 360, hue step = 1
     val sRGBLightnessChromaMap = mapOf(

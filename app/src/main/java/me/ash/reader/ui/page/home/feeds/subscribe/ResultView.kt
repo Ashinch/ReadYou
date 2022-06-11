@@ -25,7 +25,7 @@ import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import me.ash.reader.R
-import me.ash.reader.data.entity.Group
+import me.ash.reader.data.model.group.Group
 import me.ash.reader.ui.component.base.RYSelectionChip
 import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.theme.palette.alwaysLight

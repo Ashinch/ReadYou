@@ -19,6 +19,7 @@ fun Date.formatAsString(
         onlyHourMinute == true -> {
             SimpleDateFormat("HH:mm", locale).format(this)
         }
+
         atHourMinute == true -> {
             context.getString(
                 R.string.date_at_time,
@@ -26,6 +27,7 @@ fun Date.formatAsString(
                 SimpleDateFormat("HH:mm", locale).format(this),
             )
         }
+
         else -> {
             df.format(this).run {
                 when (this) {
@@ -35,7 +37,9 @@ fun Date.formatAsString(
                             time = Date()
                             add(Calendar.DAY_OF_MONTH, -1)
                         }.time
-                    ) -> context.getString(R.string.yesterday)
+                    ),
+                    -> context.getString(R.string.yesterday)
+
                     else -> this
                 }
             }
@@ -52,7 +56,7 @@ private fun String.parseToDate(
         "yyyy/MM/dd",
         "yyyy年MM月dd日",
         "yyyy MM dd",
-    )
+    ),
 ): Date? {
     val df = SimpleDateFormat()
     for (pattern in patterns) {

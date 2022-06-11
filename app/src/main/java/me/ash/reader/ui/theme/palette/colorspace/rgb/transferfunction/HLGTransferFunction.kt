@@ -16,7 +16,9 @@ import kotlin.math.sqrt
  * [Rec. 2100](https://www.itu.int/rec/R-REC-BT.2100)
  */
 class HLGTransferFunction : TransferFunction {
+
     companion object {
+
         private val a = 0.17883277
         private val b = 1.0 - 4.0 * a // 0.28466892
         private val c = 0.5 - a * ln(4.0 * a) // 0.55991073

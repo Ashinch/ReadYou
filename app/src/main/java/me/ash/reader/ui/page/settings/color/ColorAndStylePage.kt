@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.data.preference.*
+import me.ash.reader.data.model.preference.*
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
@@ -134,7 +134,7 @@ fun ColorAndStylePage(
                     )
                     SettingItem(
                         title = stringResource(R.string.dark_theme),
-                        desc = darkTheme.getDesc(context),
+                        desc = darkTheme.toDesc(context),
                         separatedActions = true,
                         onClick = {
                             navController.navigate(RouteName.DARK_THEME) {
@@ -193,7 +193,6 @@ fun ColorAndStylePage(
 
 @Composable
 fun Palettes(
-    modifier: Modifier = Modifier,
     context: Context,
     palettes: List<TonalPalettes>,
     themeIndex: Int = 0,

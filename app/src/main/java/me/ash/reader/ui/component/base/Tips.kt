@@ -21,7 +21,7 @@ fun Tips(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal =  24.dp, vertical = 16.dp),
+            .padding(horizontal = 24.dp, vertical = 16.dp),
     ) {
         Icon(
             imageVector = Icons.Outlined.Info,

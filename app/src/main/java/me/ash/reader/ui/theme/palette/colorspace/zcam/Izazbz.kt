@@ -16,6 +16,7 @@ data class Izazbz(
     val az: Double,
     val bz: Double,
 ) {
+
     fun toXyz(): CieXyz {
         val (x_, y_, z) = lmsToXyz * (IzazbzToLms * doubleArrayOf(Iz + epsilon, az, bz)).map {
             10000.0 * ((c_1 - it.pow(1.0 / rho)) / (c_3 * it.pow(1.0 / rho) - c_2)).pow(1.0 / eta)
@@ -30,6 +31,7 @@ data class Izazbz(
     }
 
     companion object {
+
         private const val b = 1.15
         private const val g = 0.66
         private const val c_1 = 3424.0 / 4096.0

@@ -7,8 +7,8 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
-import me.ash.reader.data.preference.LocalAmoledDarkTheme
-import me.ash.reader.data.preference.LocalDarkTheme
+import me.ash.reader.data.model.preference.LocalAmoledDarkTheme
+import me.ash.reader.data.model.preference.LocalDarkTheme
 
 @Composable
 fun dynamicLightColorScheme(): ColorScheme {

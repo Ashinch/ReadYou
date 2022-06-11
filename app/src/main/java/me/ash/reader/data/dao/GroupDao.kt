@@ -2,11 +2,12 @@ package me.ash.reader.data.dao
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import me.ash.reader.data.entity.Group
-import me.ash.reader.data.entity.GroupWithFeed
+import me.ash.reader.data.model.group.Group
+import me.ash.reader.data.model.group.GroupWithFeed
 
 @Dao
 interface GroupDao {
+
     @Query(
         """
         SELECT * FROM `group`

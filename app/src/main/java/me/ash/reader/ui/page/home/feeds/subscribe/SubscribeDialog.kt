@@ -36,7 +36,6 @@ import me.ash.reader.ui.ext.collectAsStateValue
 )
 @Composable
 fun SubscribeDialog(
-    modifier: Modifier = Modifier,
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current

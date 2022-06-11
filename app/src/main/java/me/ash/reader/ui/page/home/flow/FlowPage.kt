@@ -23,8 +23,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.data.model.getName
-import me.ash.reader.data.preference.*
+import me.ash.reader.data.model.preference.*
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.DisplayText
@@ -169,7 +168,7 @@ fun FlowPage(
                             text = when {
                                 filterUiState.group != null -> filterUiState.group.name
                                 filterUiState.feed != null -> filterUiState.feed.name
-                                else -> filterUiState.filter.getName()
+                                else -> filterUiState.filter.toName()
                             },
                             desc = if (isSyncing) stringResource(R.string.syncing) else "",
                         )
@@ -188,7 +187,7 @@ fun FlowPage(
                                 groupId = filterUiState.group?.id,
                                 feedId = filterUiState.feed?.id,
                                 articleId = null,
-                                markAsReadBefore = it,
+                                conditions = it,
                             )
                         }
                         RYExtensibleVisibility(visible = onSearch) {
@@ -197,17 +196,19 @@ fun FlowPage(
                                 placeholder = when {
                                     filterUiState.group != null -> stringResource(
                                         R.string.search_for_in,
-                                        filterUiState.filter.getName(),
+                                        filterUiState.filter.toName(),
                                         filterUiState.group.name
                                     )
+
                                     filterUiState.feed != null -> stringResource(
                                         R.string.search_for_in,
-                                        filterUiState.filter.getName(),
+                                        filterUiState.filter.toName(),
                                         filterUiState.feed.name
                                     )
+
                                     else -> stringResource(
                                         R.string.search_for,
-                                        filterUiState.filter.getName()
+                                        filterUiState.filter.toName()
                                     )
                                 },
                                 focusRequester = focusRequester,

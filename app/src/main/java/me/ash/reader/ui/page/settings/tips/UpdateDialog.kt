@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.Dispatchers
 import me.ash.reader.R
-import me.ash.reader.data.preference.*
+import me.ash.reader.data.model.preference.*
 import me.ash.reader.data.source.Download
 import me.ash.reader.ui.component.base.RYDialog
 import me.ash.reader.ui.ext.collectAsStateValue

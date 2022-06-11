@@ -19,23 +19,23 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideArticleDao(RYDatabase: RYDatabase): ArticleDao =
-        RYDatabase.articleDao()
+    fun provideArticleDao(ryDatabase: RYDatabase): ArticleDao =
+        ryDatabase.articleDao()
 
     @Provides
     @Singleton
-    fun provideFeedDao(RYDatabase: RYDatabase): FeedDao =
-        RYDatabase.feedDao()
+    fun provideFeedDao(ryDatabase: RYDatabase): FeedDao =
+        ryDatabase.feedDao()
 
     @Provides
     @Singleton
-    fun provideGroupDao(RYDatabase: RYDatabase): GroupDao =
-        RYDatabase.groupDao()
+    fun provideGroupDao(ryDatabase: RYDatabase): GroupDao =
+        ryDatabase.groupDao()
 
     @Provides
     @Singleton
-    fun provideAccountDao(RYDatabase: RYDatabase): AccountDao =
-        RYDatabase.accountDao()
+    fun provideAccountDao(ryDatabase: RYDatabase): AccountDao =
+        ryDatabase.accountDao()
 
     @Provides
     @Singleton

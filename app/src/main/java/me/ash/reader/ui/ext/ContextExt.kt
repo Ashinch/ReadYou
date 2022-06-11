@@ -9,8 +9,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import me.ash.reader.R
-import me.ash.reader.data.model.Version
-import me.ash.reader.data.model.toVersion
+import me.ash.reader.data.model.general.Version
+import me.ash.reader.data.model.general.toVersion
 import java.io.File
 
 fun Context.findActivity(): Activity? = when (this) {

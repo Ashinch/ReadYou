@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun FeedIcon(
     feedName: String,
-    size: Dp = 20.dp
+    size: Dp = 20.dp,
 ) {
     Row(
         modifier = Modifier

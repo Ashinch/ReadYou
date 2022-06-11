@@ -23,6 +23,7 @@ data class Oklch(
     val C: Double,
     val h: Double,
 ) {
+
     fun toOklab(): Oklab {
         val hRad = h.toRadians()
         return Oklab(
@@ -42,7 +43,7 @@ data class Oklch(
 
     private fun findChromaBoundaryInRgb(
         colorSpace: RgbColorSpace,
-        error: Double
+        error: Double,
     ): Double = chromaBoundary.getOrPut(Triple(colorSpace.hashCode(), h, L)) {
         var low = 0.0
         var high = C
@@ -65,6 +66,7 @@ data class Oklch(
     }
 
     companion object {
+
         fun Oklab.toOklch(): Oklch = Oklch(
             L = L,
             C = sqrt(square(a) + square(b)),

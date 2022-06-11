@@ -17,6 +17,7 @@ data class Rgb(
     val b: Double,
     val colorSpace: RgbColorSpace,
 ) {
+
     inline val rgb: DoubleArray
         get() = doubleArrayOf(r, g, b)
 
@@ -34,9 +35,10 @@ data class Rgb(
     override fun toString(): String = "Rgb(r=$r, g=$g, b=$b, colorSpace=${colorSpace.name})"
 
     companion object {
+
         fun CieXyz.toRgb(
             luminance: Double,
-            colorSpace: RgbColorSpace
+            colorSpace: RgbColorSpace,
         ): Rgb = (colorSpace.rgbToXyzMatrix.inverse() * (xyz / luminance))
             .map { colorSpace.transferFunction.OETF(it) }
             .toDoubleArray().asRgb(colorSpace)

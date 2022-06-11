@@ -1,10 +1,11 @@
 package me.ash.reader.data.dao
 
 import androidx.room.*
-import me.ash.reader.data.entity.Feed
+import me.ash.reader.data.model.feed.Feed
 
 @Dao
 interface FeedDao {
+
     @Query(
         """
         UPDATE feed SET groupId = :targetGroupId
@@ -15,7 +16,7 @@ interface FeedDao {
     suspend fun updateTargetGroupIdByGroupId(
         accountId: Int,
         groupId: String,
-        targetGroupId: String
+        targetGroupId: String,
     )
 
     @Query(
@@ -28,7 +29,7 @@ interface FeedDao {
     suspend fun updateIsFullContentByGroupId(
         accountId: Int,
         groupId: String,
-        isFullContent: Boolean
+        isFullContent: Boolean,
     )
 
     @Query(
@@ -41,7 +42,7 @@ interface FeedDao {
     suspend fun updateIsNotificationByGroupId(
         accountId: Int,
         groupId: String,
-        isNotification: Boolean
+        isNotification: Boolean,
     )
 
     @Query(

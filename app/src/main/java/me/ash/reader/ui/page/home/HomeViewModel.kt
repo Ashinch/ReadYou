@@ -1,19 +1,23 @@
 package me.ash.reader.ui.page.home
 
 import androidx.lifecycle.ViewModel
-import androidx.paging.*
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
-import me.ash.reader.data.entity.Feed
-import me.ash.reader.data.entity.Group
-import me.ash.reader.data.model.Filter
+import me.ash.reader.data.model.article.ArticleFlowItem
+import me.ash.reader.data.model.article.mapPagingFlowItem
+import me.ash.reader.data.model.feed.Feed
+import me.ash.reader.data.model.general.Filter
+import me.ash.reader.data.model.group.Group
 import me.ash.reader.data.module.ApplicationScope
 import me.ash.reader.data.repository.RssRepository
 import me.ash.reader.data.repository.StringsRepository
 import me.ash.reader.data.repository.SyncWorker
-import me.ash.reader.ui.page.home.flow.FlowItemView
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,13 +28,14 @@ class HomeViewModel @Inject constructor(
     private val applicationScope: CoroutineScope,
     private val workManager: WorkManager,
 ) : ViewModel() {
+
     private val _homeUiState = MutableStateFlow(HomeUiState())
     val homeUiState: StateFlow<HomeUiState> = _homeUiState.asStateFlow()
 
     private val _filterUiState = MutableStateFlow(FilterState())
     val filterUiState = _filterUiState.asStateFlow()
 
-    val syncWorkLiveData = workManager.getWorkInfoByIdLiveData(SyncWorker.UUID)
+    val syncWorkLiveData = workManager.getWorkInfoByIdLiveData(SyncWorker.uuid)
 
     fun sync() {
         rssRepository.get().doSync()
@@ -73,35 +78,14 @@ class HomeViewModel @Inject constructor(
                         )
                     }
                 }.flow.map {
-                    it.map {
-                        FlowItemView.Article(it.apply {
-                            article.dateString = stringsRepository.formatAsString(
-                                date = article.date,
-                                onlyHourMinute = true
-                            )
-                        })
-                    }.insertSeparators { before, after ->
-                        val beforeDate =
-                            stringsRepository.formatAsString(before?.articleWithFeed?.article?.date)
-                        val afterDate =
-                            stringsRepository.formatAsString(after?.articleWithFeed?.article?.date)
-                        if (beforeDate != afterDate) {
-                            afterDate?.let { FlowItemView.Date(it, beforeDate != null) }
-                        } else {
-                            null
-                        }
-                    }
+                    it.mapPagingFlowItem(stringsRepository)
                 }.cachedIn(applicationScope)
             )
         }
     }
 
     fun inputSearchContent(content: String) {
-        _homeUiState.update {
-            it.copy(
-                searchContent = content,
-            )
-        }
+        _homeUiState.update { it.copy(searchContent = content) }
         fetchArticles()
     }
 }
@@ -113,6 +97,6 @@ data class FilterState(
 )
 
 data class HomeUiState(
-    val pagingData: Flow<PagingData<FlowItemView>> = emptyFlow(),
+    val pagingData: Flow<PagingData<ArticleFlowItem>> = emptyFlow(),
     val searchContent: String = "",
 )

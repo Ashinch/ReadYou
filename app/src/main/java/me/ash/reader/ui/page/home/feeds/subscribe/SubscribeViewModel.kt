@@ -8,9 +8,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.data.entity.Article
-import me.ash.reader.data.entity.Feed
-import me.ash.reader.data.entity.Group
+import me.ash.reader.data.model.article.Article
+import me.ash.reader.data.model.feed.Feed
+import me.ash.reader.data.model.group.Group
 import me.ash.reader.data.repository.OpmlRepository
 import me.ash.reader.data.repository.RssHelper
 import me.ash.reader.data.repository.RssRepository
@@ -26,6 +26,7 @@ class SubscribeViewModel @Inject constructor(
     private val rssHelper: RssHelper,
     private val stringsRepository: StringsRepository,
 ) : ViewModel() {
+
     private val _subscribeUiState = MutableStateFlow(SubscribeUiState())
     val subscribeUiState: StateFlow<SubscribeUiState> = _subscribeUiState.asStateFlow()
     private var searchJob: Job? = null
@@ -43,9 +44,7 @@ class SubscribeViewModel @Inject constructor(
         searchJob?.cancel()
         searchJob = null
         _subscribeUiState.update {
-            SubscribeUiState().copy(
-                title = stringsRepository.getString(R.string.subscribe),
-            )
+            SubscribeUiState().copy(title = stringsRepository.getString(R.string.subscribe))
         }
     }
 
@@ -76,11 +75,7 @@ class SubscribeViewModel @Inject constructor(
     }
 
     fun selectedGroup(groupId: String) {
-        _subscribeUiState.update {
-            it.copy(
-                selectedGroupId = groupId,
-            )
-        }
+        _subscribeUiState.update { it.copy(selectedGroupId = groupId) }
     }
 
     fun addNewGroup() {
@@ -88,28 +83,20 @@ class SubscribeViewModel @Inject constructor(
             viewModelScope.launch {
                 selectedGroup(rssRepository.get().addGroup(_subscribeUiState.value.newGroupContent))
                 hideNewGroupDialog()
-                _subscribeUiState.update {
-                    it.copy(
-                        newGroupContent = "",
-                    )
-                }
+                _subscribeUiState.update { it.copy(newGroupContent = "") }
             }
         }
     }
 
     fun changeParseFullContentPreset() {
         _subscribeUiState.update {
-            it.copy(
-                parseFullContentPreset = !_subscribeUiState.value.parseFullContentPreset
-            )
+            it.copy(parseFullContentPreset = !_subscribeUiState.value.parseFullContentPreset)
         }
     }
 
     fun changeAllowNotificationPreset() {
         _subscribeUiState.update {
-            it.copy(
-                allowNotificationPreset = !_subscribeUiState.value.allowNotificationPreset
-            )
+            it.copy(allowNotificationPreset = !_subscribeUiState.value.allowNotificationPreset)
         }
     }
 
@@ -180,51 +167,27 @@ class SubscribeViewModel @Inject constructor(
     }
 
     fun inputNewGroup(content: String) {
-        _subscribeUiState.update {
-            it.copy(
-                newGroupContent = content
-            )
-        }
+        _subscribeUiState.update { it.copy(newGroupContent = content) }
     }
 
     fun showDrawer() {
-        _subscribeUiState.update {
-            it.copy(
-                visible = true
-            )
-        }
+        _subscribeUiState.update { it.copy(visible = true) }
     }
 
     fun hideDrawer() {
-        _subscribeUiState.update {
-            it.copy(
-                visible = false
-            )
-        }
+        _subscribeUiState.update { it.copy(visible = false) }
     }
 
     fun showNewGroupDialog() {
-        _subscribeUiState.update {
-            it.copy(
-                newGroupDialogVisible = true,
-            )
-        }
+        _subscribeUiState.update { it.copy(newGroupDialogVisible = true) }
     }
 
     fun hideNewGroupDialog() {
-        _subscribeUiState.update {
-            it.copy(
-                newGroupDialogVisible = false,
-            )
-        }
+        _subscribeUiState.update { it.copy(newGroupDialogVisible = false) }
     }
 
     fun switchPage(isSearchPage: Boolean) {
-        _subscribeUiState.update {
-            it.copy(
-                isSearchPage = isSearchPage
-            )
-        }
+        _subscribeUiState.update { it.copy(isSearchPage = isSearchPage) }
     }
 }
 

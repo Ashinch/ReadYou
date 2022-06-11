@@ -7,6 +7,7 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface GoogleReaderApiDataSource {
+
     @POST("accounts/ClientLogin")
     fun login(Email: String, Passwd: String): Call<String>
 
@@ -27,6 +28,7 @@ interface GoogleReaderApiDataSource {
     fun readingList(): Call<GoogleReaderApiDto.ReadingList>
 
     companion object {
+
         private var instance: GoogleReaderApiDataSource? = null
 
         fun getInstance(): GoogleReaderApiDataSource {

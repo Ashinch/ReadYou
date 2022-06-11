@@ -16,9 +16,10 @@ data class CieLab(
     val a: Double,
     val b: Double,
 ) {
+
     fun toXyz(
         whitePoint: CieXyz,
-        luminance: Double
+        luminance: Double,
     ): CieXyz {
         val lp = (L + 16.0) / 116.0
         val absoluteWhitePoint = whitePoint * luminance
@@ -30,6 +31,7 @@ data class CieLab(
     }
 
     companion object {
+
         private fun f(x: Double) = when {
             x > 216.0 / 24389.0 -> x.pow(1.0 / 3.0)
             else -> x / (108.0 / 841.0) + 4.0 / 29.0
@@ -42,7 +44,7 @@ data class CieLab(
 
         fun CieXyz.toCieLab(
             whitePoint: CieXyz,
-            luminance: Double
+            luminance: Double,
         ): CieLab {
             val relativeWhitePoint = whitePoint / luminance
             return CieLab(

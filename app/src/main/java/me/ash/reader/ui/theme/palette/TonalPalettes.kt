@@ -49,6 +49,7 @@ data class TonalPalettes(
     val neutralVariant: TonalPalette = mutableMapOf(),
     val error: TonalPalette = mutableMapOf(),
 ) {
+
     @Composable
     infix fun primary(tone: TonalValue): Color = primary.getOrPut(tone) {
         zcamLch(
@@ -205,6 +206,7 @@ data class TonalPalettes(
     }
 
     companion object {
+
         @Composable
         @Stable
         fun Color.toTonalPalettes(): TonalPalettes {
@@ -242,6 +244,7 @@ data class TonalPalettes(
 
 @RequiresApi(23)
 object ColorResourceHelper {
+
     @DoNotInline
     fun getColor(context: Context, @ColorRes id: Int): Color {
         return Color(context.resources.getColor(id, context.theme))

@@ -10,7 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import me.ash.reader.data.dao.AccountDao
 import me.ash.reader.data.dao.FeedDao
 import me.ash.reader.data.dao.GroupDao
-import me.ash.reader.data.entity.Feed
+import me.ash.reader.data.model.feed.Feed
 import me.ash.reader.data.source.OpmlLocalDataSource
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.getDefaultGroupId
@@ -27,6 +27,7 @@ class OpmlRepository @Inject constructor(
     private val rssRepository: RssRepository,
     private val opmlLocalDataSource: OpmlLocalDataSource,
 ) {
+
     @Throws(Exception::class)
     suspend fun saveToDatabase(inputStream: InputStream) {
         val defaultGroup = groupDao.queryById(getDefaultGroupId())!!
@@ -85,7 +86,5 @@ class OpmlRepository @Inject constructor(
         )!!
     }
 
-    private fun getDefaultGroupId(): String {
-        return context.currentAccountId.getDefaultGroupId()
-    }
+    private fun getDefaultGroupId(): String = context.currentAccountId.getDefaultGroupId()
 }

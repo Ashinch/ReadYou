@@ -25,6 +25,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 
 class AnnotatedParagraphStringBuilder {
+
     // Private for a reason
     private val builder: AnnotatedString.Builder = AnnotatedString.Builder()
 
@@ -60,7 +61,7 @@ class AnnotatedParagraphStringBuilder {
         builder.pushStringAnnotation(tag = tag, annotation = annotation)
 
     fun pushComposableStyle(
-        style: @Composable () -> SpanStyle
+        style: @Composable () -> SpanStyle,
     ): Int {
         composableStyles.add(
             ComposableStyleWithStartEnd(
@@ -72,7 +73,7 @@ class AnnotatedParagraphStringBuilder {
     }
 
     fun popComposableStyle(
-        index: Int
+        index: Int,
     ) {
         poppedComposableStyles.add(
             composableStyles.removeAt(index).copy(end = builder.length)
@@ -122,20 +123,25 @@ fun AnnotatedParagraphStringBuilder.ensureDoubleNewline() {
         lastTwoChars.isEmpty() -> {
             // Nothing to do
         }
+
         length == 1 && lastTwoChars.peekLatest()?.isWhitespace() == true -> {
             // Nothing to do
         }
+
         length == 2 &&
                 lastTwoChars.peekLatest()?.isWhitespace() == true &&
                 lastTwoChars.peekSecondLatest()?.isWhitespace() == true -> {
             // Nothing to do
         }
+
         lastTwoChars.peekLatest() == '\n' && lastTwoChars.peekSecondLatest() == '\n' -> {
             // Nothing to do
         }
+
         lastTwoChars.peekLatest() == '\n' -> {
             append('\n')
         }
+
         else -> {
             append("\n\n")
         }
@@ -147,12 +153,15 @@ private fun AnnotatedParagraphStringBuilder.ensureSingleNewline() {
         lastTwoChars.isEmpty() -> {
             // Nothing to do
         }
+
         length == 1 && lastTwoChars.peekLatest()?.isWhitespace() == true -> {
             // Nothing to do
         }
+
         lastTwoChars.peekLatest() == '\n' -> {
             // Nothing to do
         }
+
         else -> {
             append('\n')
         }
@@ -187,5 +196,5 @@ private fun <T> List<T>.peekSecondLatest(): T? {
 data class ComposableStyleWithStartEnd(
     val style: @Composable () -> SpanStyle,
     val start: Int,
-    val end: Int = -1
+    val end: Int = -1,
 )

@@ -18,17 +18,17 @@ class SyncWorker @AssistedInject constructor(
     private val rssRepository: RssRepository,
 ) : CoroutineWorker(context, workerParams) {
 
-    override suspend fun doWork(): Result {
-        Log.i("RLog", "doWork: ")
-        return withContext(Dispatchers.Default) {
+    override suspend fun doWork(): Result =
+        withContext(Dispatchers.Default) {
+            Log.i("RLog", "doWork: ")
             rssRepository.get().sync(this@SyncWorker)
         }
-    }
 
     companion object {
+
         const val WORK_NAME = "article.sync"
 
-        val UUID: UUID
+        val uuid: UUID
 
         val repeatingRequest = PeriodicWorkRequestBuilder<SyncWorker>(
             15, TimeUnit.MINUTES
@@ -36,7 +36,7 @@ class SyncWorker @AssistedInject constructor(
             Constraints.Builder()
                 .build()
         ).addTag(WORK_NAME).build().also {
-            UUID = it.id
+            uuid = it.id
         }
 
         fun setIsSyncing(boolean: Boolean) = workDataOf("isSyncing" to boolean)

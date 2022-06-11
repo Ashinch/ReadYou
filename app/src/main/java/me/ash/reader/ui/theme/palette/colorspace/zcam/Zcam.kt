@@ -29,6 +29,7 @@ data class Zcam(
     val Wz: Double = Double.NaN,
     val cond: ViewingConditions,
 ) {
+
     fun toIzazbz(): Izazbz {
         require(!hz.isNaN()) { "Must provide hz." }
         require(!Qz.isNaN() || !Jz.isNaN()) { "Must provide Qz or Jz." }
@@ -87,7 +88,7 @@ data class Zcam(
 
     private fun findChromaBoundaryInRgb(
         colorSpace: RgbColorSpace,
-        error: Double
+        error: Double,
     ): Double = chromaBoundary.getOrPut(Triple(colorSpace.hashCode(), hz, Jz)) {
         var low = 0.0
         var high = Cz
@@ -111,6 +112,7 @@ data class Zcam(
     }
 
     companion object {
+
         private val chromaBoundary: MutableMap<Triple<Int, Double, Double>, Double> = mutableMapOf()
 
         data class ViewingConditions(
@@ -120,6 +122,7 @@ data class Zcam(
             val L_a: Double,
             val Y_b: Double,
         ) {
+
             private val absoluteWhitePoint = whitePoint * luminance
             private val Y_w = absoluteWhitePoint.luminance
             val F_b = sqrt(Y_b / Y_w)

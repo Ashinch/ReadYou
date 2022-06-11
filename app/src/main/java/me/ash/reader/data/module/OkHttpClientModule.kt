@@ -45,10 +45,11 @@ import javax.net.ssl.X509TrustManager
 @Module
 @InstallIn(SingletonComponent::class)
 object OkHttpClientModule {
+
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): OkHttpClient = cachingHttpClient(
         cacheDirectory = context.cacheDir.resolve("http")
     ).newBuilder()
@@ -61,7 +62,7 @@ fun cachingHttpClient(
     cacheSize: Long = 10L * 1024L * 1024L,
     trustAllCerts: Boolean = true,
     connectTimeoutSecs: Long = 30L,
-    readTimeoutSecs: Long = 30L
+    readTimeoutSecs: Long = 30L,
 ): OkHttpClient {
     val builder: OkHttpClient.Builder = OkHttpClient.Builder()
 
@@ -107,6 +108,7 @@ fun OkHttpClient.Builder.trustAllCerts() {
 }
 
 object UserAgentInterceptor : Interceptor {
+
     override fun intercept(chain: Interceptor.Chain): Response {
         return chain.proceed(
             chain.request()

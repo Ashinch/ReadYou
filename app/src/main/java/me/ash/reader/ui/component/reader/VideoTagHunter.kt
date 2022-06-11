@@ -44,8 +44,9 @@ data class Video(
     val src: String,
     val imageUrl: String,
     // Youtube needs a different link than embed links
-    val link: String
+    val link: String,
 ) {
+
     val width: Int
         get() = 480
 

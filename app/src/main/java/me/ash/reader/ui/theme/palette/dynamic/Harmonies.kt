@@ -15,7 +15,7 @@ import kotlin.math.sign
 fun Zcam.harmonizeTowards(
     target: Zcam,
     factor: Double = 0.5,
-    maxHueShift: Double = 15.0
+    maxHueShift: Double = 15.0,
 ): Zcam = copy(
     hz = hz + (
             ((180.0 - abs(abs(hz - target.hz) - 180.0)) * factor).coerceAtMost(maxHueShift)

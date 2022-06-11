@@ -15,13 +15,14 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import me.ash.reader.data.preference.LocalCustomPrimaryColor
+import me.ash.reader.data.model.preference.LocalCustomPrimaryColor
 import me.ash.reader.ui.theme.palette.TonalPalettes
 import me.ash.reader.ui.theme.palette.TonalPalettes.Companion.getSystemTonalPalettes
 import me.ash.reader.ui.theme.palette.TonalPalettes.Companion.toTonalPalettes
 import me.ash.reader.ui.theme.palette.safeHexToColor
 
 object PresetColor {
+
     val blue = Color(0xFF80BBFF)
     val pink = Color(0xFFFFD8E4)
     val purple = Color(0xFF62539f)

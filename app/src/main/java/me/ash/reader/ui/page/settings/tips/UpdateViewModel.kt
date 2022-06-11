@@ -14,12 +14,13 @@ import javax.inject.Inject
 class UpdateViewModel @Inject constructor(
     private val ryRepository: RYRepository,
 ) : ViewModel() {
+
     private val _updateUiState = MutableStateFlow(UpdateUiState())
     val updateUiState: StateFlow<UpdateUiState> = _updateUiState.asStateFlow()
 
     fun checkUpdate(
         preProcessor: suspend () -> Unit = {},
-        postProcessor: suspend (Boolean) -> Unit = {}
+        postProcessor: suspend (Boolean) -> Unit = {},
     ) {
         if (notFdroid) {
             viewModelScope.launch {

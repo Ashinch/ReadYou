@@ -15,6 +15,7 @@ class GammaTransferFunction(
     val beta: Double, // linear-domain threshold β = K_0 / φ = E_t
     val delta: Double, // linear gain δ = φ
 ) : TransferFunction {
+
     override fun EOTF(x: Double): Double = when {
         x >= beta * delta -> ((x + alpha - 1.0) / alpha).pow(gamma) // transition point βδ = K_0
         else -> x / delta
@@ -26,6 +27,7 @@ class GammaTransferFunction(
     }
 
     companion object {
+
         /**
          * [Wikipedia: sRGB - Computing the transfer function](https://en.wikipedia.org/wiki/SRGB#Computing_the_transfer_function)
          */

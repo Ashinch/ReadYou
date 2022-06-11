@@ -10,10 +10,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import me.ash.reader.data.dao.FeedDao
-import me.ash.reader.data.entity.Article
-import me.ash.reader.data.entity.Feed
-import me.ash.reader.data.entity.FeedWithArticle
-import me.ash.reader.data.module.DispatcherIO
+import me.ash.reader.data.model.article.Article
+import me.ash.reader.data.model.feed.Feed
+import me.ash.reader.data.model.feed.FeedWithArticle
+import me.ash.reader.data.module.IODispatcher
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.spacerDollar
 import net.dankito.readability4j.Readability4J
@@ -28,13 +28,14 @@ import javax.inject.Inject
 class RssHelper @Inject constructor(
     @ApplicationContext
     private val context: Context,
-    @DispatcherIO
-    private val dispatcherIO: CoroutineDispatcher,
+    @IODispatcher
+    private val ioDispatcher: CoroutineDispatcher,
     private val okHttpClient: OkHttpClient,
 ) {
+
     @Throws(Exception::class)
     suspend fun searchFeed(feedLink: String): FeedWithArticle {
-        return withContext(dispatcherIO) {
+        return withContext(ioDispatcher) {
             val accountId = context.currentAccountId
             val syndFeed = SyndFeedInput().build(XmlReader(inputStream(okHttpClient, feedLink)))
             val feed = Feed(
@@ -58,7 +59,7 @@ class RssHelper @Inject constructor(
 
     @Throws(Exception::class)
     suspend fun parseFullContent(link: String, title: String): String {
-        return withContext(dispatcherIO) {
+        return withContext(ioDispatcher) {
             val response = response(okHttpClient, link)
             val content = response.body.string()
             val readability4J = Readability4JExtended(link, content)
@@ -75,27 +76,31 @@ class RssHelper @Inject constructor(
         }
     }
 
-    @Throws(Exception::class)
     suspend fun queryRssXml(
         feed: Feed,
-        latestLink: String? = null,
-    ): List<Article> {
-        val accountId = context.currentAccountId
-        return inputStream(okHttpClient, feed.url).use {
-            SyndFeedInput().apply { isPreserveWireFeed = true }
-                .build(XmlReader(it))
-                .entries
-                .asSequence()
-                .takeWhile { latestLink == null || latestLink != it.link }
-                .map { article(feed, accountId, it) }
-                .toList()
+        latestLink: String?,
+    ): List<Article> =
+        try {
+            val accountId = context.currentAccountId
+            inputStream(okHttpClient, feed.url).use {
+                SyndFeedInput().apply { isPreserveWireFeed = true }
+                    .build(XmlReader(it))
+                    .entries
+                    .asSequence()
+                    .takeWhile { latestLink == null || latestLink != it.link }
+                    .map { article(feed, accountId, it) }
+                    .toList()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("RLog", "queryRssXml[${feed.name}]: ${e.message}")
+            listOf()
         }
-    }
 
     private fun article(
         feed: Feed,
         accountId: Int,
-        syndEntry: SyndEntry
+        syndEntry: SyndEntry,
     ): Article {
         val desc = syndEntry.description?.value
         val content = syndEntry.contents
@@ -144,7 +149,7 @@ class RssHelper @Inject constructor(
         feed: Feed,
         articleLink: String,
     ) {
-        withContext(dispatcherIO) {
+        withContext(ioDispatcher) {
             val domainRegex = Regex("(http|https)://(www.)?(\\w+(\\.)?)+")
             val request = response(okHttpClient, articleLink)
             val content = request.body.string()
@@ -183,11 +188,11 @@ class RssHelper @Inject constructor(
 
     private suspend fun inputStream(
         client: OkHttpClient,
-        url: String
+        url: String,
     ): InputStream = response(client, url).body.byteStream()
 
     private suspend fun response(
         client: OkHttpClient,
-        url: String
+        url: String,
     ) = client.newCall(Request.Builder().url(url).build()).executeAsync()
 }

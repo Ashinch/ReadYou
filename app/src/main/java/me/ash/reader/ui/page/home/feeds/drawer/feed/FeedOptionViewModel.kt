@@ -14,10 +14,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.ash.reader.data.entity.Feed
-import me.ash.reader.data.entity.Group
-import me.ash.reader.data.module.DispatcherIO
-import me.ash.reader.data.module.DispatcherMain
+import me.ash.reader.data.model.feed.Feed
+import me.ash.reader.data.model.group.Group
+import me.ash.reader.data.module.IODispatcher
+import me.ash.reader.data.module.MainDispatcher
 import me.ash.reader.data.repository.RssRepository
 import javax.inject.Inject
 
@@ -25,22 +25,19 @@ import javax.inject.Inject
 @HiltViewModel
 class FeedOptionViewModel @Inject constructor(
     private val rssRepository: RssRepository,
-    @DispatcherMain
-    private val dispatcherMain: CoroutineDispatcher,
-    @DispatcherIO
-    private val dispatcherIO: CoroutineDispatcher,
+    @MainDispatcher
+    private val mainDispatcher: CoroutineDispatcher,
+    @IODispatcher
+    private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
+
     private val _feedOptionUiState = MutableStateFlow(FeedOptionUiState())
     val feedOptionUiState: StateFlow<FeedOptionUiState> = _feedOptionUiState.asStateFlow()
 
     init {
-        viewModelScope.launch(dispatcherIO) {
+        viewModelScope.launch(ioDispatcher) {
             rssRepository.get().pullGroups().collect { groups ->
-                _feedOptionUiState.update {
-                    it.copy(
-                        groups = groups
-                    )
-                }
+                _feedOptionUiState.update { it.copy(groups = groups) }
             }
         }
     }
@@ -63,9 +60,7 @@ class FeedOptionViewModel @Inject constructor(
     }
 
     fun hideDrawer(scope: CoroutineScope) {
-        scope.launch {
-            _feedOptionUiState.value.drawerState.hide()
-        }
+        scope.launch { _feedOptionUiState.value.drawerState.hide() }
     }
 
     fun showNewGroupDialog() {
@@ -87,11 +82,7 @@ class FeedOptionViewModel @Inject constructor(
     }
 
     fun inputNewGroup(content: String) {
-        _feedOptionUiState.update {
-            it.copy(
-                newGroupContent = content
-            )
-        }
+        _feedOptionUiState.update { it.copy(newGroupContent = content) }
     }
 
     fun addNewGroup() {
@@ -104,39 +95,27 @@ class FeedOptionViewModel @Inject constructor(
     }
 
     fun selectedGroup(groupId: String) {
-        viewModelScope.launch(dispatcherIO) {
+        viewModelScope.launch(ioDispatcher) {
             _feedOptionUiState.value.feed?.let {
-                rssRepository.get().updateFeed(
-                    it.copy(
-                        groupId = groupId
-                    )
-                )
+                rssRepository.get().updateFeed(it.copy(groupId = groupId))
                 fetchFeed(it.id)
             }
         }
     }
 
     fun changeParseFullContentPreset() {
-        viewModelScope.launch(dispatcherIO) {
+        viewModelScope.launch(ioDispatcher) {
             _feedOptionUiState.value.feed?.let {
-                rssRepository.get().updateFeed(
-                    it.copy(
-                        isFullContent = !it.isFullContent
-                    )
-                )
+                rssRepository.get().updateFeed(it.copy(isFullContent = !it.isFullContent))
                 fetchFeed(it.id)
             }
         }
     }
 
     fun changeAllowNotificationPreset() {
-        viewModelScope.launch(dispatcherIO) {
+        viewModelScope.launch(ioDispatcher) {
             _feedOptionUiState.value.feed?.let {
-                rssRepository.get().updateFeed(
-                    it.copy(
-                        isNotification = !it.isNotification
-                    )
-                )
+                rssRepository.get().updateFeed(it.copy(isNotification = !it.isNotification))
                 fetchFeed(it.id)
             }
         }
@@ -144,9 +123,9 @@ class FeedOptionViewModel @Inject constructor(
 
     fun delete(callback: () -> Unit = {}) {
         _feedOptionUiState.value.feed?.let {
-            viewModelScope.launch(dispatcherIO) {
+            viewModelScope.launch(ioDispatcher) {
                 rssRepository.get().deleteFeed(it)
-                withContext(dispatcherMain) {
+                withContext(mainDispatcher) {
                     callback()
                 }
             }
@@ -154,42 +133,26 @@ class FeedOptionViewModel @Inject constructor(
     }
 
     fun hideDeleteDialog() {
-        _feedOptionUiState.update {
-            it.copy(
-                deleteDialogVisible = false,
-            )
-        }
+        _feedOptionUiState.update { it.copy(deleteDialogVisible = false) }
     }
 
     fun showDeleteDialog() {
-        _feedOptionUiState.update {
-            it.copy(
-                deleteDialogVisible = true,
-            )
-        }
+        _feedOptionUiState.update { it.copy(deleteDialogVisible = true) }
     }
 
     fun showClearDialog() {
-        _feedOptionUiState.update {
-            it.copy(
-                clearDialogVisible = true,
-            )
-        }
+        _feedOptionUiState.update { it.copy(clearDialogVisible = true) }
     }
 
     fun hideClearDialog() {
-        _feedOptionUiState.update {
-            it.copy(
-                clearDialogVisible = false,
-            )
-        }
+        _feedOptionUiState.update { it.copy(clearDialogVisible = false) }
     }
 
     fun clearFeed(callback: () -> Unit = {}) {
         _feedOptionUiState.value.feed?.let {
-            viewModelScope.launch(dispatcherIO) {
+            viewModelScope.launch(ioDispatcher) {
                 rssRepository.get().deleteArticles(feed = it)
-                withContext(dispatcherMain) {
+                withContext(mainDispatcher) {
                     callback()
                 }
             }
@@ -199,16 +162,8 @@ class FeedOptionViewModel @Inject constructor(
     fun renameFeed() {
         _feedOptionUiState.value.feed?.let {
             viewModelScope.launch {
-                rssRepository.get().updateFeed(
-                    it.copy(
-                        name = _feedOptionUiState.value.newName
-                    )
-                )
-                _feedOptionUiState.update {
-                    it.copy(
-                        renameDialogVisible = false,
-                    )
-                }
+                rssRepository.get().updateFeed(it.copy(name = _feedOptionUiState.value.newName))
+                _feedOptionUiState.update { it.copy(renameDialogVisible = false) }
             }
         }
     }
@@ -232,11 +187,7 @@ class FeedOptionViewModel @Inject constructor(
     }
 
     fun inputNewName(content: String) {
-        _feedOptionUiState.update {
-            it.copy(
-                newName = content
-            )
-        }
+        _feedOptionUiState.update { it.copy(newName = content) }
     }
 
     fun showFeedUrlDialog() {
@@ -258,26 +209,14 @@ class FeedOptionViewModel @Inject constructor(
     }
 
     fun inputNewUrl(content: String) {
-        _feedOptionUiState.update {
-            it.copy(
-                newUrl = content
-            )
-        }
+        _feedOptionUiState.update { it.copy(newUrl = content) }
     }
 
     fun changeFeedUrl() {
         _feedOptionUiState.value.feed?.let {
             viewModelScope.launch {
-                rssRepository.get().updateFeed(
-                    it.copy(
-                        url = _feedOptionUiState.value.newUrl
-                    )
-                )
-                _feedOptionUiState.update {
-                    it.copy(
-                        changeUrlDialogVisible = false,
-                    )
-                }
+                rssRepository.get().updateFeed(it.copy(url = _feedOptionUiState.value.newUrl))
+                _feedOptionUiState.update { it.copy(changeUrlDialogVisible = false) }
             }
         }
     }

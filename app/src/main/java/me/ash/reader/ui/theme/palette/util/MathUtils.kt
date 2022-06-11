@@ -15,6 +15,7 @@ class Matrix3(
     private val y: DoubleArray,
     private val z: DoubleArray,
 ) {
+
     fun inverse(): Matrix3 {
         val det = determinant()
         return Matrix3(

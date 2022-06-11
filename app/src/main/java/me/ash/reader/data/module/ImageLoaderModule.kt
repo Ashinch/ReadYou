@@ -31,7 +31,7 @@ object ImageLoaderModule {
         return ImageLoader.Builder(context)
             .okHttpClient(okHttpClient)
             .dispatcher(Dispatchers.Default) // This slightly improves scrolling performance
-            .components{
+            .components {
                 add(SvgDecoder.Factory())
                 add(
                     if (SDK_INT >= Build.VERSION_CODES.P) {

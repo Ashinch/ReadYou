@@ -15,7 +15,11 @@ import me.ash.reader.data.dao.AccountDao
 import me.ash.reader.data.dao.ArticleDao
 import me.ash.reader.data.dao.FeedDao
 import me.ash.reader.data.dao.GroupDao
-import me.ash.reader.data.entity.*
+import me.ash.reader.data.model.article.Article
+import me.ash.reader.data.model.article.ArticleWithFeed
+import me.ash.reader.data.model.feed.Feed
+import me.ash.reader.data.model.group.Group
+import me.ash.reader.data.model.group.GroupWithFeed
 import me.ash.reader.ui.ext.currentAccountId
 import java.util.*
 
@@ -29,6 +33,7 @@ abstract class AbstractRssRepository constructor(
     private val dispatcherIO: CoroutineDispatcher,
     private val dispatcherDefault: CoroutineDispatcher,
 ) {
+
     abstract suspend fun updateArticleInfo(article: Article)
 
     abstract suspend fun subscribe(feed: Feed, articles: List<Article>)
@@ -53,19 +58,17 @@ abstract class AbstractRssRepository constructor(
         )
     }
 
-    fun pullGroups(): Flow<MutableList<Group>> {
-        return groupDao.queryAllGroup(context.currentAccountId).flowOn(dispatcherIO)
-    }
+    fun pullGroups(): Flow<MutableList<Group>> =
+        groupDao.queryAllGroup(context.currentAccountId).flowOn(dispatcherIO)
 
-    fun pullFeeds(): Flow<MutableList<GroupWithFeed>> {
-        return groupDao.queryAllGroupWithFeedAsFlow(context.currentAccountId).flowOn(dispatcherIO)
-    }
+    fun pullFeeds(): Flow<MutableList<GroupWithFeed>> =
+        groupDao.queryAllGroupWithFeedAsFlow(context.currentAccountId).flowOn(dispatcherIO)
 
     fun pullArticles(
-        groupId: String? = null,
-        feedId: String? = null,
-        isStarred: Boolean = false,
-        isUnread: Boolean = false,
+        groupId: String?,
+        feedId: String?,
+        isStarred: Boolean,
+        isUnread: Boolean,
     ): PagingSource<Int, ArticleWithFeed> {
         val accountId = context.currentAccountId
         Log.i(
@@ -74,32 +77,28 @@ abstract class AbstractRssRepository constructor(
         )
         return when {
             groupId != null -> when {
-                isStarred -> articleDao
-                    .queryArticleWithFeedByGroupIdWhenIsStarred(accountId, groupId, isStarred)
-                isUnread -> articleDao
-                    .queryArticleWithFeedByGroupIdWhenIsUnread(accountId, groupId, isUnread)
+                isStarred -> articleDao.queryArticleWithFeedByGroupIdWhenIsStarred(accountId, groupId, true)
+                isUnread -> articleDao.queryArticleWithFeedByGroupIdWhenIsUnread(accountId, groupId, true)
                 else -> articleDao.queryArticleWithFeedByGroupIdWhenIsAll(accountId, groupId)
             }
+
             feedId != null -> when {
-                isStarred -> articleDao
-                    .queryArticleWithFeedByFeedIdWhenIsStarred(accountId, feedId, isStarred)
-                isUnread -> articleDao
-                    .queryArticleWithFeedByFeedIdWhenIsUnread(accountId, feedId, isUnread)
+                isStarred -> articleDao.queryArticleWithFeedByFeedIdWhenIsStarred(accountId, feedId, true)
+                isUnread -> articleDao.queryArticleWithFeedByFeedIdWhenIsUnread(accountId, feedId, true)
                 else -> articleDao.queryArticleWithFeedByFeedIdWhenIsAll(accountId, feedId)
             }
+
             else -> when {
-                isStarred -> articleDao
-                    .queryArticleWithFeedWhenIsStarred(accountId, isStarred)
-                isUnread -> articleDao
-                    .queryArticleWithFeedWhenIsUnread(accountId, isUnread)
+                isStarred -> articleDao.queryArticleWithFeedWhenIsStarred(accountId, true)
+                isUnread -> articleDao.queryArticleWithFeedWhenIsUnread(accountId, true)
                 else -> articleDao.queryArticleWithFeedWhenIsAll(accountId)
             }
         }
     }
 
     fun pullImportant(
-        isStarred: Boolean = false,
-        isUnread: Boolean = false,
+        isStarred: Boolean,
+        isUnread: Boolean,
     ): Flow<Map<String, Int>> {
         val accountId = context.currentAccountId
         Log.i(
@@ -107,42 +106,28 @@ abstract class AbstractRssRepository constructor(
             "pullImportant: accountId: ${accountId}, isStarred: ${isStarred}, isUnread: ${isUnread}"
         )
         return when {
-            isStarred -> articleDao
-                .queryImportantCountWhenIsStarred(accountId, isStarred)
-            isUnread -> articleDao
-                .queryImportantCountWhenIsUnread(accountId, isUnread)
+            isStarred -> articleDao.queryImportantCountWhenIsStarred(accountId, true)
+            isUnread -> articleDao.queryImportantCountWhenIsUnread(accountId, true)
             else -> articleDao.queryImportantCountWhenIsAll(accountId)
         }.mapLatest {
             mapOf(
                 // Groups
-                *(it.groupBy { it.groupId }.map {
-                    it.key to it.value.sumOf { it.important }
-                }.toTypedArray()),
+                *(it.groupBy { it.groupId }.map { it.key to it.value.sumOf { it.important } }.toTypedArray()),
                 // Feeds
-                *(it.map {
-                    it.feedId to it.important
-                }.toTypedArray()),
+                *(it.map { it.feedId to it.important }.toTypedArray()),
                 // All summary
                 "sum" to it.sumOf { it.important }
             )
         }.flowOn(dispatcherDefault)
     }
 
-    suspend fun findFeedById(id: String): Feed? {
-        return feedDao.queryById(id)
-    }
+    suspend fun findFeedById(id: String): Feed? = feedDao.queryById(id)
 
-    suspend fun findGroupById(id: String): Group? {
-        return groupDao.queryById(id)
-    }
+    suspend fun findGroupById(id: String): Group? = groupDao.queryById(id)
 
-    suspend fun findArticleById(id: String): ArticleWithFeed? {
-        return articleDao.queryById(id)
-    }
+    suspend fun findArticleById(id: String): ArticleWithFeed? = articleDao.queryById(id)
 
-    suspend fun isFeedExist(url: String): Boolean {
-        return feedDao.queryByLink(context.currentAccountId, url).isNotEmpty()
-    }
+    suspend fun isFeedExist(url: String): Boolean = feedDao.queryByLink(context.currentAccountId, url).isNotEmpty()
 
     suspend fun updateGroup(group: Group) {
         groupDao.update(group)
@@ -184,10 +169,10 @@ abstract class AbstractRssRepository constructor(
 
     fun searchArticles(
         content: String,
-        groupId: String? = null,
-        feedId: String? = null,
-        isStarred: Boolean = false,
-        isUnread: Boolean = false,
+        groupId: String?,
+        feedId: String?,
+        isStarred: Boolean,
+        isUnread: Boolean,
     ): PagingSource<Int, ArticleWithFeed> {
         val accountId = context.currentAccountId
         Log.i(
@@ -196,22 +181,20 @@ abstract class AbstractRssRepository constructor(
         )
         return when {
             groupId != null -> when {
-                isStarred -> articleDao
-                    .searchArticleByGroupIdWhenIsStarred(accountId, content, groupId, isStarred)
-                isUnread -> articleDao
-                    .searchArticleByGroupIdWhenIsUnread(accountId, content, groupId, isUnread)
+                isStarred -> articleDao.searchArticleByGroupIdWhenIsStarred(accountId, content, groupId, true)
+                isUnread -> articleDao.searchArticleByGroupIdWhenIsUnread(accountId, content, groupId, true)
                 else -> articleDao.searchArticleByGroupIdWhenAll(accountId, content, groupId)
             }
+
             feedId != null -> when {
-                isStarred -> articleDao
-                    .searchArticleByFeedIdWhenIsStarred(accountId, content, feedId, isStarred)
-                isUnread -> articleDao
-                    .searchArticleByFeedIdWhenIsUnread(accountId, content, feedId, isUnread)
+                isStarred -> articleDao.searchArticleByFeedIdWhenIsStarred(accountId, content, feedId, true)
+                isUnread -> articleDao.searchArticleByFeedIdWhenIsUnread(accountId, content, feedId, true)
                 else -> articleDao.searchArticleByFeedIdWhenAll(accountId, content, feedId)
             }
+
             else -> when {
-                isStarred -> articleDao.searchArticleWhenIsStarred(accountId, content, isStarred)
-                isUnread -> articleDao.searchArticleWhenIsUnread(accountId, content, isUnread)
+                isStarred -> articleDao.searchArticleWhenIsStarred(accountId, content, true)
+                isUnread -> articleDao.searchArticleWhenIsUnread(accountId, content, true)
                 else -> articleDao.searchArticleWhenAll(accountId, content)
             }
         }

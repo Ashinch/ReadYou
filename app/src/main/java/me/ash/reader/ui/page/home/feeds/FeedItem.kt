@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import me.ash.reader.data.entity.Feed
+import me.ash.reader.data.model.feed.Feed
 import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.page.home.feeds.drawer.feed.FeedOptionViewModel
 import me.ash.reader.ui.theme.ShapeBottom32

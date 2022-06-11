@@ -12,10 +12,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.data.preference.InitialFilterPreference
-import me.ash.reader.data.preference.InitialPagePreference
-import me.ash.reader.data.preference.LocalInitialFilter
-import me.ash.reader.data.preference.LocalInitialPage
+import me.ash.reader.data.model.preference.InitialFilterPreference
+import me.ash.reader.data.model.preference.InitialPagePreference
+import me.ash.reader.data.model.preference.LocalInitialFilter
+import me.ash.reader.data.model.preference.LocalInitialPage
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
@@ -55,14 +55,14 @@ fun InteractionPage(
                     )
                     SettingItem(
                         title = stringResource(R.string.initial_page),
-                        desc = initialPage.getDesc(context),
+                        desc = initialPage.toDesc(context),
                         onClick = {
                             initialPageDialogVisible = true
                         },
                     ) {}
                     SettingItem(
                         title = stringResource(R.string.initial_filter),
-                        desc = initialFilter.getDesc(context),
+                        desc = initialFilter.toDesc(context),
                         onClick = {
                             initialFilterDialogVisible = true
                         },
@@ -80,7 +80,7 @@ fun InteractionPage(
         title = stringResource(R.string.initial_page),
         options = InitialPagePreference.values.map {
             RadioDialogOption(
-                text = it.getDesc(context),
+                text = it.toDesc(context),
                 selected = it == initialPage,
             ) {
                 it.put(context, scope)
@@ -95,7 +95,7 @@ fun InteractionPage(
         title = stringResource(R.string.initial_filter),
         options = InitialFilterPreference.values.map {
             RadioDialogOption(
-                text = it.getDesc(context),
+                text = it.toDesc(context),
                 selected = it == initialFilter,
             ) {
                 it.put(context, scope)

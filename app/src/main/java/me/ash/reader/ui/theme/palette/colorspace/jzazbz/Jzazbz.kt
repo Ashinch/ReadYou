@@ -16,6 +16,7 @@ data class Jzazbz(
     val az: Double,
     val bz: Double,
 ) {
+
     fun toXyz(): CieXyz {
         val (x_, y_, z) = lmsToXyz * (
                 IzazbzToLms * doubleArrayOf(
@@ -36,6 +37,7 @@ data class Jzazbz(
     }
 
     companion object {
+
         private const val b = 1.15
         private const val g = 0.66
         private const val c_1 = 3424.0 / 4096.0

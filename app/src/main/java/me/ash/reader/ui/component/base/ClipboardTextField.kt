@@ -76,7 +76,7 @@ fun ClipboardTextField(
 private fun action(
     focusManager: FocusManager?,
     onConfirm: (String) -> Unit,
-    value: String
+    value: String,
 ): KeyboardActionScope.() -> Unit = {
     focusManager?.clearFocus()
     onConfirm(value)

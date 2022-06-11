@@ -18,7 +18,7 @@ const val INJECTION_TOKEN = "/android_asset_font/"
 fun WebView(
     modifier: Modifier = Modifier,
     content: String,
-    onReceivedError: (error: WebResourceError?) -> Unit = {}
+    onReceivedError: (error: WebResourceError?) -> Unit = {},
 ) {
     val context = LocalContext.current
     val color = MaterialTheme.colorScheme.onSurfaceVariant.toArgb()
@@ -28,7 +28,7 @@ fun WebView(
 
             override fun shouldInterceptRequest(
                 view: WebView?,
-                url: String?
+                url: String?,
             ): WebResourceResponse? {
                 if (url != null && url.contains(INJECTION_TOKEN)) {
                     try {
@@ -63,7 +63,7 @@ fun WebView(
 
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
-                request: WebResourceRequest?
+                request: WebResourceRequest?,
             ): Boolean {
                 if (null == request?.url) return false
                 val url = request.url.toString()
@@ -79,7 +79,7 @@ fun WebView(
             override fun onReceivedError(
                 view: WebView?,
                 request: WebResourceRequest?,
-                error: WebResourceError?
+                error: WebResourceError?,
             ) {
                 super.onReceivedError(view, request, error)
                 onReceivedError(error)
@@ -88,7 +88,7 @@ fun WebView(
             override fun onReceivedSslError(
                 view: WebView?,
                 handler: SslErrorHandler?,
-                error: SslError?
+                error: SslError?,
             ) {
                 handler?.cancel()
             }

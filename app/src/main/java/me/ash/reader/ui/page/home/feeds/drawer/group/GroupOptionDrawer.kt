@@ -32,7 +32,7 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.data.entity.Group
+import me.ash.reader.data.model.group.Group
 import me.ash.reader.ui.component.base.BottomDrawer
 import me.ash.reader.ui.component.base.RYSelectionChip
 import me.ash.reader.ui.component.base.Subtitle
@@ -154,7 +154,7 @@ fun GroupOptionDrawer(
 private fun Preset(
     groupOptionViewModel: GroupOptionViewModel,
     group: Group?,
-    context: Context
+    context: Context,
 ) {
     FlowRow(
         mainAxisAlignment = MainAxisAlignment.Start,
@@ -217,7 +217,7 @@ private fun Preset(
 private fun FlowRowGroups(
     groupOptionUiState: GroupOptionUiState,
     group: Group?,
-    groupOptionViewModel: GroupOptionViewModel
+    groupOptionViewModel: GroupOptionViewModel,
 ) {
     FlowRow(
         mainAxisAlignment = MainAxisAlignment.Start,
@@ -243,7 +243,7 @@ private fun FlowRowGroups(
 private fun LazyRowGroups(
     groupOptionUiState: GroupOptionUiState,
     group: Group?,
-    groupOptionViewModel: GroupOptionViewModel
+    groupOptionViewModel: GroupOptionViewModel,
 ) {
     LazyRow {
         items(groupOptionUiState.groups) {

@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import me.ash.reader.R
+import me.ash.reader.data.model.general.MarkAsReadConditions
 import me.ash.reader.ui.component.base.AnimatedPopup
 import me.ash.reader.ui.theme.palette.alwaysLight
 
@@ -31,7 +32,7 @@ fun MarkAsReadBar(
     visible: Boolean = false,
     absoluteY: Dp = Dp.Hairline,
     onDismissRequest: () -> Unit = {},
-    onItemClick: (MarkAsReadBefore) -> Unit = {},
+    onItemClick: (MarkAsReadConditions) -> Unit = {},
 ) {
     val animated = remember { Animatable(absoluteY.value) }
 
@@ -56,26 +57,26 @@ fun MarkAsReadBar(
                 modifier = Modifier.width(56.dp),
                 text = stringResource(R.string.seven_days),
             ) {
-                onItemClick(MarkAsReadBefore.SevenDays)
+                onItemClick(MarkAsReadConditions.SevenDays)
             }
             MarkAsReadBarItem(
                 modifier = Modifier.width(56.dp),
                 text = stringResource(R.string.three_days),
             ) {
-                onItemClick(MarkAsReadBefore.ThreeDays)
+                onItemClick(MarkAsReadConditions.ThreeDays)
             }
             MarkAsReadBarItem(
                 modifier = Modifier.width(56.dp),
                 text = stringResource(R.string.one_day),
             ) {
-                onItemClick(MarkAsReadBefore.OneDay)
+                onItemClick(MarkAsReadConditions.OneDay)
             }
             MarkAsReadBarItem(
                 modifier = Modifier.weight(1f),
                 text = stringResource(R.string.mark_all_as_read),
                 isPrimary = true,
             ) {
-                onItemClick(MarkAsReadBefore.All)
+                onItemClick(MarkAsReadConditions.All)
             }
         }
     }
