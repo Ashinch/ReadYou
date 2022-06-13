@@ -42,6 +42,9 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
+/**
+ * Provides singleton [OkHttpClient] for the application.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object OkHttpClientModule {

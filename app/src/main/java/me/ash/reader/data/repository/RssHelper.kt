@@ -16,7 +16,6 @@ import me.ash.reader.data.model.feed.FeedWithArticle
 import me.ash.reader.data.module.IODispatcher
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.spacerDollar
-import net.dankito.readability4j.Readability4J
 import net.dankito.readability4j.extended.Readability4JExtended
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -25,6 +24,9 @@ import java.io.InputStream
 import java.util.*
 import javax.inject.Inject
 
+/**
+ * Some operations on RSS.
+ */
 class RssHelper @Inject constructor(
     @ApplicationContext
     private val context: Context,
@@ -48,13 +50,6 @@ class RssHelper @Inject constructor(
             val list = syndFeed.entries.map { article(feed, context.currentAccountId, it) }
             FeedWithArticle(feed, list)
         }
-    }
-
-    fun parseDescriptionContent(link: String, content: String): String {
-        val readability4J: Readability4J = Readability4JExtended(link, content)
-        val article = readability4J.parse()
-        val element = article.articleContent
-        return element.toString()
     }
 
     @Throws(Exception::class)

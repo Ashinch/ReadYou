@@ -4,6 +4,9 @@ import androidx.room.*
 import me.ash.reader.data.model.feed.Feed
 import java.util.*
 
+/**
+ * TODO: Add class description
+ */
 @Entity(
     tableName = "article",
     foreignKeys = [ForeignKey(

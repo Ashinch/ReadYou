@@ -59,21 +59,6 @@ class SubscribeViewModel @Inject constructor(
         }
     }
 
-    fun subscribe() {
-        val feed = _subscribeUiState.value.feed ?: return
-        val articles = _subscribeUiState.value.articles
-        viewModelScope.launch {
-            rssRepository.get().subscribe(
-                feed.copy(
-                    groupId = _subscribeUiState.value.selectedGroupId,
-                    isNotification = _subscribeUiState.value.allowNotificationPreset,
-                    isFullContent = _subscribeUiState.value.parseFullContentPreset,
-                ), articles
-            )
-            hideDrawer()
-        }
-    }
-
     fun selectedGroup(groupId: String) {
         _subscribeUiState.update { it.copy(selectedGroupId = groupId) }
     }
@@ -154,6 +139,21 @@ class SubscribeViewModel @Inject constructor(
             }
         }.also {
             searchJob = it
+        }
+    }
+
+    fun subscribe() {
+        val feed = _subscribeUiState.value.feed ?: return
+        val articles = _subscribeUiState.value.articles
+        viewModelScope.launch {
+            rssRepository.get().subscribe(
+                feed.copy(
+                    groupId = _subscribeUiState.value.selectedGroupId,
+                    isNotification = _subscribeUiState.value.allowNotificationPreset,
+                    isFullContent = _subscribeUiState.value.parseFullContentPreset,
+                ), articles
+            )
+            hideDrawer()
         }
     }
 

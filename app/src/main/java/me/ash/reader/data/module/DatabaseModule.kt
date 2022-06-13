@@ -13,6 +13,14 @@ import me.ash.reader.data.dao.GroupDao
 import me.ash.reader.data.source.RYDatabase
 import javax.inject.Singleton
 
+/**
+ * Provides Data Access Objects for database.
+ *
+ * - [ArticleDao]
+ * - [FeedDao]
+ * - [GroupDao]
+ * - [AccountDao]
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {

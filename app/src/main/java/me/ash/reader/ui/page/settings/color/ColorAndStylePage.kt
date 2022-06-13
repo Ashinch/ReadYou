@@ -15,7 +15,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +38,6 @@ import me.ash.reader.ui.theme.palette.*
 import me.ash.reader.ui.theme.palette.TonalPalettes.Companion.toTonalPalettes
 import me.ash.reader.ui.theme.palette.dynamic.extractTonalPalettesFromUserWallpaper
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ColorAndStylePage(
     navController: NavHostController,

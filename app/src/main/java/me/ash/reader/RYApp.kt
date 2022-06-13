@@ -22,12 +22,18 @@ import org.conscrypt.Conscrypt
 import java.security.Security
 import javax.inject.Inject
 
+/**
+ * The Application class, where the Dagger components is generated.
+ */
 @HiltAndroidApp
 class RYApp : Application(), Configuration.Provider {
 
+    /**
+     * From: [Feeder](https://gitlab.com/spacecowboy/Feeder).
+     *
+     * Install Conscrypt to handle TLSv1.3 pre Android10.
+     */
     init {
-        // From: https://gitlab.com/spacecowboy/Feeder
-        // Install Conscrypt to handle TLSv1.3 pre Android10
         Security.insertProviderAt(Conscrypt.newProvider(), 1)
     }
 
@@ -84,10 +90,17 @@ class RYApp : Application(), Configuration.Provider {
     @Inject
     lateinit var imageLoader: ImageLoader
 
+    /**
+     * When the application startup.
+     *
+     * 1. Set the uncaught exception handler
+     * 2. Initialize the default account if there is none
+     * 3. Synchronize once
+     * 4. Check for new version
+     */
     override fun onCreate() {
         super.onCreate()
         CrashHandler(this)
-        dataStoreInit()
         applicationScope.launch {
             accountInit()
             workerInit()
@@ -95,8 +108,14 @@ class RYApp : Application(), Configuration.Provider {
         }
     }
 
-    private fun dataStoreInit() {
-    }
+    /**
+     * Override the [Configuration.Builder] to provide the [HiltWorkerFactory].
+     */
+    override fun getWorkManagerConfiguration(): Configuration =
+        Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .setMinimumLoggingLevel(android.util.Log.DEBUG)
+            .build()
 
     private suspend fun accountInit() {
         withContext(ioDispatcher) {
@@ -120,10 +139,4 @@ class RYApp : Application(), Configuration.Provider {
         }
         ryRepository.checkUpdate(showToast = false)
     }
-
-    override fun getWorkManagerConfiguration(): Configuration =
-        Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .setMinimumLoggingLevel(android.util.Log.DEBUG)
-            .build()
 }

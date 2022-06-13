@@ -5,6 +5,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
+/**
+ * In the application, at least one account exists and different accounts
+ * can have the same feeds and articles.
+ */
 @Entity(tableName = "account")
 data class Account(
     @PrimaryKey(autoGenerate = true)

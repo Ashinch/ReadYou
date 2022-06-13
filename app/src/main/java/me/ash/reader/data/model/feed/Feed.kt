@@ -3,6 +3,9 @@ package me.ash.reader.data.model.feed
 import androidx.room.*
 import me.ash.reader.data.model.group.Group
 
+/**
+ * TODO: Add class description
+ */
 @Entity(
     tableName = "feed",
     foreignKeys = [ForeignKey(

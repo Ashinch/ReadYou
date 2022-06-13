@@ -1,4 +1,4 @@
-package me.ash.reader.ui.page.home.feeds.subscribe
+package me.ash.reader.ui.page.home.feeds
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.*
@@ -31,7 +31,7 @@ import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.theme.palette.alwaysLight
 
 @Composable
-fun ResultView(
+fun FeedOptionView(
     modifier: Modifier = Modifier,
     link: String = "",
     groups: List<Group> = emptyList(),

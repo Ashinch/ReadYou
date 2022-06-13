@@ -1,7 +1,16 @@
 package me.ash.reader.data.model.general
 
+import me.ash.reader.data.model.general.MarkAsReadConditions.*
 import java.util.*
 
+/**
+ * Mark as read conditions.
+ *
+ * - [SevenDays]: Mark as read if more than 7 days old
+ * - [ThreeDays]: Mark as read if more than 3 days old
+ * - [OneDay]: Mark as read if more than 1 day old
+ * - [All]: Mark all as read
+ */
 enum class MarkAsReadConditions {
     SevenDays,
     ThreeDays,

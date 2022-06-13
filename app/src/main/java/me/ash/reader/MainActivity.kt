@@ -16,6 +16,9 @@ import me.ash.reader.ui.ext.languages
 import me.ash.reader.ui.page.common.HomeEntry
 import javax.inject.Inject
 
+/**
+ * The Single-Activity Architecture.
+ */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 

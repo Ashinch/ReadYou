@@ -29,6 +29,7 @@ import me.ash.reader.ui.component.base.ClipboardTextField
 import me.ash.reader.ui.component.base.RYDialog
 import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.page.home.feeds.FeedOptionView
 
 @OptIn(
     androidx.compose.ui.ExperimentalComposeUiApi::class,
@@ -108,7 +109,7 @@ fun SubscribeDialog(
                         },
                     )
                 } else {
-                    ResultView(
+                    FeedOptionView(
                         link = subscribeUiState.linkContent,
                         groups = groupsState.value,
                         selectedAllowNotificationPreset = subscribeUiState.allowNotificationPreset,

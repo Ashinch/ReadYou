@@ -7,6 +7,14 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
+/**
+ * Provides global coroutine dispatcher.
+ *
+ * - [Dispatchers.Main]
+ * - [Dispatchers.Main.immediate]
+ * - [Dispatchers.IO]
+ * - [Dispatchers.Default]
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object CoroutineDispatcherModule {

@@ -5,6 +5,9 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
+/**
+ * TODO: Add class description
+ */
 @Entity(tableName = "group")
 data class Group(
     @PrimaryKey

@@ -18,6 +18,9 @@ import java.io.InputStream
 import java.util.*
 import javax.inject.Inject
 
+/**
+ * Supports import and export from OPML files.
+ */
 class OpmlRepository @Inject constructor(
     @ApplicationContext
     private val context: Context,
@@ -28,6 +31,11 @@ class OpmlRepository @Inject constructor(
     private val opmlLocalDataSource: OpmlLocalDataSource,
 ) {
 
+    /**
+     * Imports OPML file.
+     *
+     * @param [inputStream] input stream of OPML file
+     */
     @Throws(Exception::class)
     suspend fun saveToDatabase(inputStream: InputStream) {
         val defaultGroup = groupDao.queryById(getDefaultGroupId())!!
@@ -48,6 +56,9 @@ class OpmlRepository @Inject constructor(
         }
     }
 
+    /**
+     * Exports OPML file.
+     */
     @Throws(Exception::class)
     suspend fun saveToString(): String {
         val defaultGroup = groupDao.queryById(getDefaultGroupId())!!

@@ -13,7 +13,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import me.ash.reader.R
+import me.ash.reader.data.model.general.Filter.Companion.All
+import me.ash.reader.data.model.general.Filter.Companion.Starred
+import me.ash.reader.data.model.general.Filter.Companion.Unread
 
+/**
+ * Indicates filter conditions.
+ *
+ * - [All]: all items
+ * - [Unread]: unread items
+ * - [Starred]: starred items
+ */
 class Filter private constructor(
     val index: Int,
     val iconOutline: ImageVector,

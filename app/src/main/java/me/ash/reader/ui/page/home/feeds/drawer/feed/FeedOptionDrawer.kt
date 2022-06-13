@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CreateNewFolder
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,14 +20,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.ui.component.ChangeUrlDialog
 import me.ash.reader.ui.component.FeedIcon
+import me.ash.reader.ui.component.RenameDialog
 import me.ash.reader.ui.component.base.BottomDrawer
 import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.ext.roundClick
 import me.ash.reader.ui.ext.showToast
-import me.ash.reader.ui.page.home.feeds.subscribe.ResultView
+import me.ash.reader.ui.page.home.feeds.FeedOptionView
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -78,7 +79,7 @@ fun FeedOptionDrawer(
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                ResultView(
+                FeedOptionView(
                     link = feed?.url ?: stringResource(R.string.unknown),
                     groups = feedOptionUiState.groups,
                     selectedAllowNotificationPreset = feedOptionUiState.feed?.isNotification
@@ -140,12 +141,9 @@ fun FeedOptionDrawer(
         }
     )
 
-    TextFieldDialog(
+    RenameDialog(
         visible = feedOptionUiState.renameDialogVisible,
-        title = stringResource(R.string.rename),
-        icon = Icons.Outlined.Edit,
         value = feedOptionUiState.newName,
-        placeholder = stringResource(R.string.name),
         onValueChange = {
             feedOptionViewModel.inputNewName(it)
         },
@@ -159,12 +157,9 @@ fun FeedOptionDrawer(
         }
     )
 
-    TextFieldDialog(
+    ChangeUrlDialog(
         visible = feedOptionUiState.changeUrlDialogVisible,
-        title = stringResource(R.string.change_url),
-        icon = Icons.Outlined.Edit,
         value = feedOptionUiState.newUrl,
-        placeholder = stringResource(R.string.feed_url_placeholder),
         onValueChange = {
             feedOptionViewModel.inputNewUrl(it)
         },
