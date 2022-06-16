@@ -104,10 +104,120 @@
     <string name="tips_and_support">Trucchi e supporto</string>
     <string name="tips_and_support_desc">Info, licenze open source</string>
     <string name="welcome">Benvenuto</string>
-    <string name="agree_terms">Leggi e accetta i Termini di servizio e l\'Informativa sulla privacy di Read You per continuare.</string>
-    <string name="view_terms">Sfoglia i&lt;i&gt;&lt;u&gt;Termini di servizio e l\'Informativa sulla privacy&lt;/u&gt;&lt;/i&gt;</string>
-    <string name="terms_link">https://github.com/Ashinch/ReadYou/blob/main/TERMS_OF_SERVICE_AND_PRIVACY_POLICY.md</string>
-    <string name="agree_and_continue">Accetto</string>
+    <string name="tos_tips">Leggi e accetta i Termini di servizio e l\'Informativa sulla privacy di Read You per continuare.</string>
+    <string name="browse_tos_tips">Sfoglia i&lt;i&gt;&lt;u&gt;Termini di servizio e l\'Informativa sulla privacy&lt;/u&gt;&lt;/i&gt;</string>
+    <string name="terms_of_service">Termini di servizio</string>
+    <string name="tos_content">
+        &lt;h5&gt;
+
+        Privacy Policy
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        I take your privacy very seriously.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        does not collect any user data, and all sensitive information (passwords and other account information) is
+        securely stored in the local application database on your device.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        will use the following permissions to provide you with the service.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        - Access Network permission (for accessing online content as you specify)
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - Get network status permission (for getting whether the device currently has available network conditions)
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - Background service permission (to automatically sync your favorites for you on a regular
+        basis)
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Third Party Services
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        This policy does not apply to third-party services that you use with &lt;b&gt;Read You&lt;/b&gt;. You can review
+        the privacy policies of the third-party services you use on their websites
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Disclaimers
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        is a content collection tool only. Your use of &lt;b&gt;Read You&lt;/b&gt; is subject to the laws and
+        regulations of your country and region, and any liability arising from your actions will be borne by you
+        personally.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Open Source License
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        is an open source project under the GNU GPL 3.0 Open Source License[1], which allows you to use, reference, and
+        modify the source code of &lt;b&gt;Read You&lt;/b&gt; for free, but does not allow the
+        modified and derived code to be distributed and sold as closed-source commercial software. For details, please
+        see the full GNU GPL 3.0 Open Source License[2].
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Appendix
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        - [1] https://github.com/Ashinch/ReadYou
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - [2] https://www.gnu.org/licenses/gpl-3.0.html
+
+        &lt;/p&gt;
+    </string>
+    <string name="agree">Accetto</string>
     <string name="wallpaper_colors">Colori dallo sfondo</string>
     <string name="no_palettes">Nessuna tavolozza</string>
     <string name="only_android_8.1_plus">Solo Android 8.1+</string>
@@ -130,6 +240,7 @@
     <string name="reading_page">Pagina di lettura</string>
     <string name="sponsor">Sponsorizza</string>
     <string name="open_source_licenses">Licenze open source</string>
+    <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
     <string name="change_log">Changelog</string>
     <string name="update">Aggiorna</string>
     <string name="skip_this_version">Salta questa versione</string>
