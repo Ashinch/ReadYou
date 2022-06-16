@@ -189,6 +189,38 @@ class SubscribeViewModel @Inject constructor(
     fun switchPage(isSearchPage: Boolean) {
         _subscribeUiState.update { it.copy(isSearchPage = isSearchPage) }
     }
+
+    fun showRenameDialog() {
+        _subscribeUiState.update {
+            it.copy(
+                renameDialogVisible = true,
+                newName = _subscribeUiState.value.feed?.name ?: "",
+            )
+        }
+    }
+
+    fun hideRenameDialog() {
+        _subscribeUiState.update {
+            it.copy(
+                renameDialogVisible = false,
+                newName = "",
+            )
+        }
+    }
+
+    fun inputNewName(content: String) {
+        _subscribeUiState.update { it.copy(newName = content) }
+    }
+
+    fun renameFeed() {
+        _subscribeUiState.value.feed?.let {
+            _subscribeUiState.update {
+                it.copy(
+                    feed = it.feed?.copy(name = _subscribeUiState.value.newName),
+                )
+            }
+        }
+    }
 }
 
 data class SubscribeUiState(
@@ -206,4 +238,6 @@ data class SubscribeUiState(
     val newGroupContent: String = "",
     val groups: Flow<List<Group>> = emptyFlow(),
     val isSearchPage: Boolean = true,
+    val newName: String = "",
+    val renameDialogVisible: Boolean = false,
 )
