@@ -15,7 +15,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.data.preference.*
+import me.ash.reader.data.model.preference.*
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
@@ -35,7 +38,6 @@ import me.ash.reader.ui.theme.palette.*
 import me.ash.reader.ui.theme.palette.TonalPalettes.Companion.toTonalPalettes
 import me.ash.reader.ui.theme.palette.dynamic.extractTonalPalettesFromUserWallpaper
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ColorAndStylePage(
     navController: NavHostController,
@@ -134,7 +136,7 @@ fun ColorAndStylePage(
                     )
                     SettingItem(
                         title = stringResource(R.string.dark_theme),
-                        desc = darkTheme.getDesc(context),
+                        desc = darkTheme.toDesc(context),
                         separatedActions = true,
                         onClick = {
                             navController.navigate(RouteName.DARK_THEME) {
@@ -193,7 +195,6 @@ fun ColorAndStylePage(
 
 @Composable
 fun Palettes(
-    modifier: Modifier = Modifier,
     context: Context,
     palettes: List<TonalPalettes>,
     themeIndex: Int = 0,

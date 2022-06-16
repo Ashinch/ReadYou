@@ -13,7 +13,9 @@ import kotlin.math.pow
  * [Rec. 2100](https://www.itu.int/rec/R-REC-BT.2100)
  */
 class PQTransferFunction : TransferFunction {
+
     companion object {
+
         private val m_1 = 2610.0 / 16384.0 // 0.1593017578125
         private val m_2 = 2523.0 / 4096.0 * 128.0 // 78.84375
         private val c_1 = 3424.0 / 4096.0 // 0.8359375 = c_3 − c_2 + 1

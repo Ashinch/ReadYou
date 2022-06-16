@@ -35,7 +35,7 @@ fun RYSwitch(
     modifier: Modifier = Modifier,
     activated: Boolean,
     enable: Boolean = true,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
     val tonalPalettes = LocalTonalPalettes.current
 
@@ -74,7 +74,7 @@ fun SwitchHeadline(
     activated: Boolean,
     onClick: () -> Unit,
     title: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val tonalPalettes = LocalTonalPalettes.current
 

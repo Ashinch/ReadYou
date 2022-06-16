@@ -10,6 +10,7 @@ package me.ash.reader.ui.theme.palette.data
 import me.ash.reader.ui.theme.palette.colorspace.ciexyz.CieXyz
 
 object Illuminant {
+
     /** CIE Illuminant D65 - standard 2º observer. 6504 K color temperature.
      * Values are calculated from [this table](https://github.com/gpmarques/colorimetry/blob/master/all_1nm_data.xls).
      */

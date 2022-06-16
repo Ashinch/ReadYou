@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import me.ash.reader.data.entity.ArticleWithFeed
+import me.ash.reader.data.model.article.ArticleWithFeed
 import me.ash.reader.data.repository.RssHelper
 import me.ash.reader.data.repository.RssRepository
 import javax.inject.Inject
@@ -21,6 +21,7 @@ class ReadingViewModel @Inject constructor(
     private val rssRepository: RssRepository,
     private val rssHelper: RssHelper,
 ) : ViewModel() {
+
     private val _readingUiState = MutableStateFlow(ReadingUiState())
     val readingUiState: StateFlow<ReadingUiState> = _readingUiState.asStateFlow()
 
@@ -28,9 +29,7 @@ class ReadingViewModel @Inject constructor(
         showLoading()
         viewModelScope.launch {
             _readingUiState.update {
-                it.copy(
-                    articleWithFeed = rssRepository.get().findArticleById(articleId)
-                )
+                it.copy(articleWithFeed = rssRepository.get().findArticleById(articleId))
             }
             _readingUiState.value.articleWithFeed?.let {
                 if (it.feed.isFullContent) internalRenderFullContent()
@@ -70,11 +69,7 @@ class ReadingViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             Log.i("RLog", "renderFullContent: ${e.message}")
-            _readingUiState.update {
-                it.copy(
-                    content = e.message
-                )
-            }
+            _readingUiState.update { it.copy(content = e.message) }
         }
         hideLoading()
     }
@@ -114,9 +109,7 @@ class ReadingViewModel @Inject constructor(
                 )
             }
             rssRepository.get().updateArticleInfo(
-                articleWithFeed.article.copy(
-                    isStarred = isStarred
-                )
+                articleWithFeed.article.copy(isStarred = isStarred)
             )
         }
     }

@@ -29,6 +29,7 @@ import me.ash.reader.ui.component.base.ClipboardTextField
 import me.ash.reader.ui.component.base.RYDialog
 import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.page.home.feeds.FeedOptionView
 
 @OptIn(
     androidx.compose.ui.ExperimentalComposeUiApi::class,
@@ -36,7 +37,6 @@ import me.ash.reader.ui.ext.collectAsStateValue
 )
 @Composable
 fun SubscribeDialog(
-    modifier: Modifier = Modifier,
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -109,7 +109,7 @@ fun SubscribeDialog(
                         },
                     )
                 } else {
-                    ResultView(
+                    FeedOptionView(
                         link = subscribeUiState.linkContent,
                         groups = groupsState.value,
                         selectedAllowNotificationPreset = subscribeUiState.allowNotificationPreset,

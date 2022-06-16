@@ -1,10 +1,11 @@
 package me.ash.reader.data.dao
 
 import androidx.room.*
-import me.ash.reader.data.entity.Account
+import me.ash.reader.data.model.account.Account
 
 @Dao
 interface AccountDao {
+
     @Query(
         """
         SELECT * FROM account

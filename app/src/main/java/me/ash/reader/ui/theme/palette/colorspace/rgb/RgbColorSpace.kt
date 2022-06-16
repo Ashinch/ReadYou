@@ -22,6 +22,7 @@ data class RgbColorSpace(
     internal val primaries: Matrix3,
     internal val transferFunction: TransferFunction,
 ) {
+
     internal val rgbToXyzMatrix: Matrix3
         get() {
             val M1 = Matrix3(
@@ -46,6 +47,7 @@ data class RgbColorSpace(
         }
 
     companion object {
+
         /**
          * Standard: IEC 61966-2-1
          * - [Wikipedia: sRGB](https://en.wikipedia.org/wiki/SRGB)

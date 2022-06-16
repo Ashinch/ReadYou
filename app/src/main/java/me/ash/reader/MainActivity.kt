@@ -10,14 +10,18 @@ import androidx.profileinstaller.ProfileInstallerInitializer
 import coil.ImageLoader
 import coil.compose.LocalImageLoader
 import dagger.hilt.android.AndroidEntryPoint
-import me.ash.reader.data.preference.LanguagesPreference
-import me.ash.reader.data.preference.SettingsProvider
+import me.ash.reader.data.model.preference.LanguagesPreference
+import me.ash.reader.data.model.preference.SettingsProvider
 import me.ash.reader.ui.ext.languages
 import me.ash.reader.ui.page.common.HomeEntry
 import javax.inject.Inject
 
+/**
+ * The Single-Activity Architecture.
+ */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     @Inject
     lateinit var imageLoader: ImageLoader
 

@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import coil.size.Precision
 import coil.size.Scale
 import me.ash.reader.R
-import me.ash.reader.data.entity.ArticleWithFeed
-import me.ash.reader.data.preference.*
+import me.ash.reader.data.model.article.ArticleWithFeed
+import me.ash.reader.data.model.preference.*
 import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.base.RYAsyncImage
 import me.ash.reader.ui.component.base.SIZE_1000

@@ -31,7 +31,7 @@ fun SettingItem(
     icon: ImageVector? = null,
     separatedActions: Boolean = false,
     onClick: () -> Unit,
-    action: (@Composable () -> Unit)? = null
+    action: (@Composable () -> Unit)? = null,
 ) {
     val tonalPalettes = LocalTonalPalettes.current
 

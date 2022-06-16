@@ -108,6 +108,7 @@
     <string name="german" translatable="false">Deutsch</string>
     <string name="french" translatable="false">français</string>
     <string name="czech" translatable="false">Čeština</string>
+    <string name="italian" translatable="false">italiano</string>
     <string name="tips_and_support">Tips &amp; support</string>
     <string name="tips_and_support_desc">About, open source licenses</string>
     <string name="welcome">Welcome</string>

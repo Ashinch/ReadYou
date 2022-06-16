@@ -12,10 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import me.ash.reader.data.model.Filter
-import me.ash.reader.data.model.getName
-import me.ash.reader.data.preference.FlowFilterBarStylePreference
-import me.ash.reader.data.preference.LocalThemeIndex
+import me.ash.reader.data.model.general.Filter
+import me.ash.reader.data.model.preference.FlowFilterBarStylePreference
+import me.ash.reader.data.model.preference.LocalThemeIndex
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.theme.palette.onDark
 
@@ -54,7 +53,7 @@ fun FilterBar(
                         } else {
                             item.iconOutline
                         },
-                        contentDescription = item.getName()
+                        contentDescription = item.toName()
                     )
                 },
                 label = if (filterBarStyle == FlowFilterBarStylePreference.Icon.value) {
@@ -62,7 +61,7 @@ fun FilterBar(
                 } else {
                     {
                         Text(
-                            text = item.getName(),
+                            text = item.toName(),
                             style = MaterialTheme.typography.labelLarge,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,

@@ -51,7 +51,7 @@ fun Color.toRgb(): Rgb {
 fun animateZcamLchAsState(
     targetValue: ZcamLch,
     animationSpec: AnimationSpec<ZcamLch> = spring(),
-    finishedListener: ((ZcamLch) -> Unit)? = null
+    finishedListener: ((ZcamLch) -> Unit)? = null,
 ): State<ZcamLch> {
     val converter = remember {
         TwoWayConverter<ZcamLch, AnimationVector3D>(

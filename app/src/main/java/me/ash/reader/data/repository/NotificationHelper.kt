@@ -9,7 +9,7 @@ import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import me.ash.reader.MainActivity
 import me.ash.reader.R
-import me.ash.reader.data.entity.FeedWithArticle
+import me.ash.reader.data.model.feed.FeedWithArticle
 import me.ash.reader.ui.page.common.ExtraName
 import me.ash.reader.ui.page.common.NotificationGroupName
 import java.util.*
@@ -19,6 +19,7 @@ class NotificationHelper @Inject constructor(
     @ApplicationContext
     private val context: Context,
 ) {
+
     private val notificationManager: NotificationManagerCompat =
         NotificationManagerCompat.from(context).apply {
             createNotificationChannel(
@@ -30,9 +31,7 @@ class NotificationHelper @Inject constructor(
             )
         }
 
-    fun notify(
-        feedWithArticle: FeedWithArticle,
-    ) {
+    fun notify(feedWithArticle: FeedWithArticle) {
         notificationManager.createNotificationChannelGroup(
             NotificationChannelGroup(
                 feedWithArticle.feed.id,

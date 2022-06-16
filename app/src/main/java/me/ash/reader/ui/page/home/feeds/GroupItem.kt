@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.R
-import me.ash.reader.data.entity.Group
+import me.ash.reader.data.model.group.Group
 import me.ash.reader.ui.page.home.feeds.drawer.group.GroupOptionViewModel
 import me.ash.reader.ui.theme.Shape32
 import me.ash.reader.ui.theme.ShapeTop32

@@ -8,6 +8,7 @@
 package me.ash.reader.ui.theme.palette.colorspace.rgb.transferfunction
 
 interface TransferFunction {
+
     // nonlinear -> linear
     fun EOTF(x: Double): Double
 

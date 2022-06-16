@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 @Composable
 fun RYExtensibleVisibility(
     visible: Boolean,
-    content: @Composable AnimatedVisibilityScope.() -> Unit
+    content: @Composable AnimatedVisibilityScope.() -> Unit,
 ) {
     AnimatedVisibility(
         visible = visible,

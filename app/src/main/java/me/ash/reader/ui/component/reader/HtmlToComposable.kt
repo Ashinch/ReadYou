@@ -206,6 +206,7 @@ private fun TextComposer.appendTextChildren(
                     }
                 }
             }
+
             is Element -> {
                 val element = node
                 when (element.tagName()) {
@@ -232,6 +233,7 @@ private fun TextComposer.appendTextChildren(
                             }
                         }
                     }
+
                     "br" -> append('\n')
                     "h1" -> {
                         withParagraph {
@@ -242,6 +244,7 @@ private fun TextComposer.appendTextChildren(
                             }
                         }
                     }
+
                     "h2" -> {
                         withParagraph {
                             withComposableStyle(
@@ -251,6 +254,7 @@ private fun TextComposer.appendTextChildren(
                             }
                         }
                     }
+
                     "h3" -> {
                         withParagraph {
                             withComposableStyle(
@@ -260,6 +264,7 @@ private fun TextComposer.appendTextChildren(
                             }
                         }
                     }
+
                     "h4" -> {
                         withParagraph {
                             withComposableStyle(
@@ -269,6 +274,7 @@ private fun TextComposer.appendTextChildren(
                             }
                         }
                     }
+
                     "h5" -> {
                         withParagraph {
                             withComposableStyle(
@@ -278,6 +284,7 @@ private fun TextComposer.appendTextChildren(
                             }
                         }
                     }
+
                     "h6" -> {
                         withParagraph {
                             withComposableStyle(
@@ -287,6 +294,7 @@ private fun TextComposer.appendTextChildren(
                             }
                         }
                     }
+
                     "strong", "b" -> {
                         withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
                             appendTextChildren(
@@ -298,6 +306,7 @@ private fun TextComposer.appendTextChildren(
                             )
                         }
                     }
+
                     "i", "em", "cite", "dfn" -> {
                         withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
                             appendTextChildren(
@@ -309,6 +318,7 @@ private fun TextComposer.appendTextChildren(
                             )
                         }
                     }
+
                     "tt" -> {
                         withStyle(SpanStyle(fontFamily = FontFamily.Monospace)) {
                             appendTextChildren(
@@ -320,6 +330,7 @@ private fun TextComposer.appendTextChildren(
                             )
                         }
                     }
+
                     "u" -> {
                         withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
                             appendTextChildren(
@@ -331,6 +342,7 @@ private fun TextComposer.appendTextChildren(
                             )
                         }
                     }
+
                     "sup" -> {
                         withStyle(SpanStyle(baselineShift = BaselineShift.Superscript)) {
                             appendTextChildren(
@@ -342,6 +354,7 @@ private fun TextComposer.appendTextChildren(
                             )
                         }
                     }
+
                     "sub" -> {
                         withStyle(SpanStyle(baselineShift = BaselineShift.Subscript)) {
                             appendTextChildren(
@@ -353,6 +366,7 @@ private fun TextComposer.appendTextChildren(
                             )
                         }
                     }
+
                     "font" -> {
                         val fontFamily: FontFamily? = element.attr("face")?.asFontFamily()
                         withStyle(SpanStyle(fontFamily = fontFamily)) {
@@ -365,6 +379,7 @@ private fun TextComposer.appendTextChildren(
                             )
                         }
                     }
+
                     "pre" -> {
                         appendTextChildren(
                             element.childNodes(),
@@ -375,6 +390,7 @@ private fun TextComposer.appendTextChildren(
                             baseUrl = baseUrl,
                         )
                     }
+
                     "code" -> {
                         if (element.parent()?.tagName() == "pre") {
                             terminateCurrentText()
@@ -400,6 +416,7 @@ private fun TextComposer.appendTextChildren(
                             }
                         }
                     }
+
                     "blockquote" -> {
                         withParagraph {
                             withComposableStyle(
@@ -415,6 +432,7 @@ private fun TextComposer.appendTextChildren(
                             }
                         }
                     }
+
                     "a" -> {
                         withComposableStyle(
                             style = { linkTextStyle().toSpanStyle() }
@@ -430,6 +448,7 @@ private fun TextComposer.appendTextChildren(
                             }
                         }
                     }
+
                     "img" -> {
                         val imageCandidates = getImageSource(baseUrl, element)
                         if (imageCandidates.hasImage) {
@@ -502,6 +521,7 @@ private fun TextComposer.appendTextChildren(
                             }
                         }
                     }
+
                     "ul" -> {
                         element.children()
                             .filter { it.tagName() == "li" }
@@ -519,6 +539,7 @@ private fun TextComposer.appendTextChildren(
                                 }
                             }
                     }
+
                     "ol" -> {
                         element.children()
                             .filter { it.tagName() == "li" }
@@ -536,6 +557,7 @@ private fun TextComposer.appendTextChildren(
                                 }
                             }
                     }
+
                     "table" -> {
                         appendTable {
                             /*
@@ -581,6 +603,7 @@ private fun TextComposer.appendTextChildren(
                             append("\n\n")
                         }
                     }
+
                     "iframe" -> {
                         val video: Video? = getVideo(element.attr("abs:src"))
 
@@ -629,9 +652,11 @@ private fun TextComposer.appendTextChildren(
                             }
                         }
                     }
+
                     "video" -> {
                         // not implemented yet. remember to disable selection
                     }
+
                     else -> {
                         appendTextChildren(
                             nodes = element.childNodes(),
@@ -707,8 +732,9 @@ internal fun getImageSource(baseUrl: String, element: Element) = ImageCandidates
 internal class ImageCandidates(
     val baseUrl: String,
     val srcSet: String,
-    val absSrc: String
+    val absSrc: String,
 ) {
+
     val hasImage: Boolean = srcSet.isNotBlank() || absSrc.isNotBlank()
 
     /**
@@ -728,9 +754,11 @@ internal class ImageCandidates(
                         descriptor.endsWith("w", ignoreCase = true) -> {
                             descriptor.substringBefore("w").toFloat() / maxSize.width.pxOrElse { 1 }
                         }
+
                         descriptor.endsWith("x", ignoreCase = true) -> {
                             descriptor.substringBefore("x").toFloat() / pixelDensity
                         }
+
                         else -> {
                             return@fold acc
                         }

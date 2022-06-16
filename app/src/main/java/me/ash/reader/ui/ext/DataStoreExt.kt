@@ -66,179 +66,215 @@ fun <T> DataStore<Preferences>.get(dataStoreKeys: DataStoreKeys<T>): T? {
 }
 
 sealed class DataStoreKeys<T> {
+
     abstract val key: Preferences.Key<T>
 
     object IsFirstLaunch : DataStoreKeys<Boolean>() {
+
         override val key: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("isFirstLaunch")
     }
 
     object NewVersionPublishDate : DataStoreKeys<String>() {
+
         override val key: Preferences.Key<String>
             get() = stringPreferencesKey("newVersionPublishDate")
     }
 
     object NewVersionLog : DataStoreKeys<String>() {
+
         override val key: Preferences.Key<String>
             get() = stringPreferencesKey("newVersionLog")
     }
 
     object NewVersionSize : DataStoreKeys<String>() {
+
         override val key: Preferences.Key<String>
             get() = stringPreferencesKey("newVersionSizeString")
     }
 
     object NewVersionDownloadUrl : DataStoreKeys<String>() {
+
         override val key: Preferences.Key<String>
             get() = stringPreferencesKey("newVersionDownloadUrl")
     }
 
     object NewVersionNumber : DataStoreKeys<String>() {
+
         override val key: Preferences.Key<String>
             get() = stringPreferencesKey("newVersionNumber")
     }
 
     object SkipVersionNumber : DataStoreKeys<String>() {
+
         override val key: Preferences.Key<String>
             get() = stringPreferencesKey("skipVersionNumber")
     }
 
     object CurrentAccountId : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("currentAccountId")
     }
 
     object CurrentAccountType : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("currentAccountType")
     }
 
     object ThemeIndex : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("themeIndex")
     }
 
     object CustomPrimaryColor : DataStoreKeys<String>() {
+
         override val key: Preferences.Key<String>
             get() = stringPreferencesKey("customPrimaryColor")
     }
 
     object DarkTheme : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("darkTheme")
     }
 
     object AmoledDarkTheme : DataStoreKeys<Boolean>() {
+
         override val key: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("amoledDarkTheme")
     }
 
     object FeedsFilterBarStyle : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("feedsFilterBarStyle")
     }
 
     object FeedsFilterBarFilled : DataStoreKeys<Boolean>() {
+
         override val key: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("feedsFilterBarFilled")
     }
 
     object FeedsFilterBarPadding : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("feedsFilterBarPadding")
     }
 
     object FeedsFilterBarTonalElevation : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("feedsFilterBarTonalElevation")
     }
 
     object FeedsTopBarTonalElevation : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("feedsTopBarTonalElevation")
     }
 
     object FeedsGroupListExpand : DataStoreKeys<Boolean>() {
+
         override val key: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("feedsGroupListExpand")
     }
 
     object FeedsGroupListTonalElevation : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("feedsGroupListTonalElevation")
     }
 
     object FlowFilterBarStyle : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("flowFilterBarStyle")
     }
 
     object FlowFilterBarFilled : DataStoreKeys<Boolean>() {
+
         override val key: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("flowFilterBarFilled")
     }
 
     object FlowFilterBarPadding : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("flowFilterBarPadding")
     }
 
     object FlowFilterBarTonalElevation : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("flowFilterBarTonalElevation")
     }
 
     object FlowTopBarTonalElevation : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("flowTopBarTonalElevation")
     }
 
     object FlowArticleListFeedIcon : DataStoreKeys<Boolean>() {
+
         override val key: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("flowArticleListFeedIcon")
     }
 
     object FlowArticleListFeedName : DataStoreKeys<Boolean>() {
+
         override val key: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("flowArticleListFeedName")
     }
 
     object FlowArticleListImage : DataStoreKeys<Boolean>() {
+
         override val key: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("flowArticleListImage")
     }
 
     object FlowArticleListDesc : DataStoreKeys<Boolean>() {
+
         override val key: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("flowArticleListDesc")
     }
 
     object FlowArticleListTime : DataStoreKeys<Boolean>() {
+
         override val key: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("flowArticleListTime")
     }
 
     object FlowArticleListDateStickyHeader : DataStoreKeys<Boolean>() {
+
         override val key: Preferences.Key<Boolean>
             get() = booleanPreferencesKey("flowArticleListDateStickyHeader")
     }
 
     object FlowArticleListTonalElevation : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("flowArticleListTonalElevation")
     }
 
     object InitialPage : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("initialPage")
     }
 
     object InitialFilter : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("initialFilter")
     }
 
     object Languages : DataStoreKeys<Int>() {
+
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("languages")
     }

@@ -8,24 +8,27 @@ import me.ash.reader.data.dao.AccountDao
 import me.ash.reader.data.dao.ArticleDao
 import me.ash.reader.data.dao.FeedDao
 import me.ash.reader.data.dao.GroupDao
-import me.ash.reader.data.entity.Account
-import me.ash.reader.data.entity.Article
-import me.ash.reader.data.entity.Feed
-import me.ash.reader.data.entity.Group
+import me.ash.reader.data.model.account.Account
+import me.ash.reader.data.model.account.AccountTypeConverters
+import me.ash.reader.data.model.article.Article
+import me.ash.reader.data.model.feed.Feed
+import me.ash.reader.data.model.group.Group
 import java.util.*
 
 @Database(
     entities = [Account::class, Feed::class, Article::class, Group::class],
-    version = 2,
+    version = 2
 )
-@TypeConverters(RYDatabase.Converters::class)
+@TypeConverters(RYDatabase.DateConverters::class, AccountTypeConverters::class)
 abstract class RYDatabase : RoomDatabase() {
+
     abstract fun accountDao(): AccountDao
     abstract fun feedDao(): FeedDao
     abstract fun articleDao(): ArticleDao
     abstract fun groupDao(): GroupDao
 
     companion object {
+
         private var instance: RYDatabase? = null
 
         fun getInstance(context: Context): RYDatabase {
@@ -41,7 +44,7 @@ abstract class RYDatabase : RoomDatabase() {
         }
     }
 
-    class Converters {
+    class DateConverters {
 
         @TypeConverter
         fun toDate(dateLong: Long?): Date? {
@@ -61,6 +64,7 @@ val allMigrations = arrayOf(
 
 @Suppress("ClassName")
 object MIGRATION_1_2 : Migration(1, 2) {
+
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL(
             """

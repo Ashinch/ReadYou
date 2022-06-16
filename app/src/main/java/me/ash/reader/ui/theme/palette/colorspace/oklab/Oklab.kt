@@ -17,10 +17,12 @@ data class Oklab(
     val a: Double,
     val b: Double,
 ) {
+
     fun toXyz(): CieXyz = (lmsToXyz * (oklabToLms * doubleArrayOf(L, a, b)).map { it.pow(3.0) }
         .toDoubleArray()).asXyz()
 
     companion object {
+
         private val xyzToLms: Matrix3 = Matrix3(
             doubleArrayOf(0.8189330101, 0.3618667424, -0.1288597137),
             doubleArrayOf(0.0329845436, 0.9293118715, 0.0361456387),

@@ -1,6 +1,12 @@
 package me.ash.reader.data.constant
 
+/**
+ * The tonal elevation tokens.
+ *
+ * @see androidx.compose.material3.tokens.ElevationTokens
+ */
 object ElevationTokens {
+
     const val Level0 = 0
     const val Level1 = 1
     const val Level2 = 3

@@ -20,8 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.data.preference.LanguagesPreference
-import me.ash.reader.data.preference.LocalLanguages
+import me.ash.reader.data.model.preference.LanguagesPreference
+import me.ash.reader.data.model.preference.LocalLanguages
 import me.ash.reader.ui.component.base.Banner
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
@@ -76,7 +76,7 @@ fun LanguagesPage(
                 item {
                     LanguagesPreference.values.map {
                         SettingItem(
-                            title = it.getDesc(context),
+                            title = it.toDesc(context),
                             onClick = {
                                 it.put(context, scope)
                             },

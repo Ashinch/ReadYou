@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 fun PagerState.animateScrollToPage(
     scope: CoroutineScope,
     targetPage: Int,
-    callback: () -> Unit = {}
+    callback: () -> Unit = {},
 ) {
     scope.launch {
         if (pageCount > targetPage) {

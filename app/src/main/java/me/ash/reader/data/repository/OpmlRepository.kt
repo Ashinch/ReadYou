@@ -10,7 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import me.ash.reader.data.dao.AccountDao
 import me.ash.reader.data.dao.FeedDao
 import me.ash.reader.data.dao.GroupDao
-import me.ash.reader.data.entity.Feed
+import me.ash.reader.data.model.feed.Feed
 import me.ash.reader.data.source.OpmlLocalDataSource
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.getDefaultGroupId
@@ -18,6 +18,9 @@ import java.io.InputStream
 import java.util.*
 import javax.inject.Inject
 
+/**
+ * Supports import and export from OPML files.
+ */
 class OpmlRepository @Inject constructor(
     @ApplicationContext
     private val context: Context,
@@ -27,6 +30,12 @@ class OpmlRepository @Inject constructor(
     private val rssRepository: RssRepository,
     private val opmlLocalDataSource: OpmlLocalDataSource,
 ) {
+
+    /**
+     * Imports OPML file.
+     *
+     * @param [inputStream] input stream of OPML file
+     */
     @Throws(Exception::class)
     suspend fun saveToDatabase(inputStream: InputStream) {
         val defaultGroup = groupDao.queryById(getDefaultGroupId())!!
@@ -47,6 +56,9 @@ class OpmlRepository @Inject constructor(
         }
     }
 
+    /**
+     * Exports OPML file.
+     */
     @Throws(Exception::class)
     suspend fun saveToString(): String {
         val defaultGroup = groupDao.queryById(getDefaultGroupId())!!
@@ -85,7 +97,5 @@ class OpmlRepository @Inject constructor(
         )!!
     }
 
-    private fun getDefaultGroupId(): String {
-        return context.currentAccountId.getDefaultGroupId()
-    }
+    private fun getDefaultGroupId(): String = context.currentAccountId.getDefaultGroupId()
 }

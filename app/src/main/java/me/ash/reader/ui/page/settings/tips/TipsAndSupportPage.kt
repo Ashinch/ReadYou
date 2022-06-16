@@ -246,6 +246,7 @@ sealed class RoundIconButtonType(
     open val backgroundColor: Color = Color.Unspecified,
     open val onClick: () -> Unit = {},
 ) {
+
     @Immutable
     data class Sponsor(
         val desc: Int = R.string.sponsor,
@@ -317,6 +318,7 @@ private fun RoundIconButton(type: RoundIconButtonType) {
                     tint = MaterialTheme.colorScheme.onSurface alwaysLight true,
                 )
             }
+
             is RoundIconButtonType.GitHub, is RoundIconButtonType.Telegram -> {
                 Icon(
                     modifier = type.offset.size(type.size),

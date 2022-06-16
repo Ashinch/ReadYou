@@ -11,6 +11,7 @@ import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface FeverApiDataSource {
+
     @Multipart
     @POST("fever.php/?api=&feeds=")
     fun feeds(@Part("api_key") apiKey: RequestBody? = "1352b707f828a6f502db3768fa8d7151".toRequestBody()): Call<FeverApiDto.Feed>
@@ -23,7 +24,7 @@ interface FeverApiDataSource {
     @POST("fever.php/?api=&items=")
     fun itemsBySince(
         @Query("since_id") since: Long,
-        @Part("api_key") apiKey: RequestBody? = "1352b707f828a6f502db3768fa8d7151".toRequestBody()
+        @Part("api_key") apiKey: RequestBody? = "1352b707f828a6f502db3768fa8d7151".toRequestBody(),
     ): Call<FeverApiDto.Items>
 
     @Multipart
@@ -38,10 +39,11 @@ interface FeverApiDataSource {
     @POST("fever.php/?api=&items=")
     fun itemsByIds(
         @Query("with_ids") ids: String,
-        @Part("api_key") apiKey: RequestBody? = "1352b707f828a6f502db3768fa8d7151".toRequestBody()
+        @Part("api_key") apiKey: RequestBody? = "1352b707f828a6f502db3768fa8d7151".toRequestBody(),
     ): Call<FeverApiDto.Items>
 
     companion object {
+
         private var instance: FeverApiDataSource? = null
 
         fun getInstance(): FeverApiDataSource {

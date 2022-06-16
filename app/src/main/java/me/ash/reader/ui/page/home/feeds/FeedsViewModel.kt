@@ -9,9 +9,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.data.entity.Account
-import me.ash.reader.data.module.DispatcherDefault
-import me.ash.reader.data.module.DispatcherIO
+import me.ash.reader.data.model.account.Account
+import me.ash.reader.data.module.DefaultDispatcher
+import me.ash.reader.data.module.IODispatcher
 import me.ash.reader.data.repository.AccountRepository
 import me.ash.reader.data.repository.OpmlRepository
 import me.ash.reader.data.repository.RssRepository
@@ -25,26 +25,23 @@ class FeedsViewModel @Inject constructor(
     private val rssRepository: RssRepository,
     private val opmlRepository: OpmlRepository,
     private val stringsRepository: StringsRepository,
-    @DispatcherDefault
-    private val dispatcherDefault: CoroutineDispatcher,
-    @DispatcherIO
-    private val dispatcherIO: CoroutineDispatcher,
+    @DefaultDispatcher
+    private val defaultDispatcher: CoroutineDispatcher,
+    @IODispatcher
+    private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
+
     private val _feedsUiState = MutableStateFlow(FeedsUiState())
     val feedsUiState: StateFlow<FeedsUiState> = _feedsUiState.asStateFlow()
 
     fun fetchAccount() {
-        viewModelScope.launch(dispatcherIO) {
-            _feedsUiState.update {
-                it.copy(
-                    account = accountRepository.getCurrentAccount()
-                )
-            }
+        viewModelScope.launch(ioDispatcher) {
+            _feedsUiState.update { it.copy(account = accountRepository.getCurrentAccount()) }
         }
     }
 
     fun exportAsOpml(callback: (String) -> Unit = {}) {
-        viewModelScope.launch(dispatcherDefault) {
+        viewModelScope.launch(defaultDispatcher) {
             try {
                 callback(opmlRepository.saveToString())
             } catch (e: Exception) {
@@ -71,7 +68,7 @@ class FeedsViewModel @Inject constructor(
                                 this
                             )
                         }
-                    }.flowOn(dispatcherDefault),
+                    }.flowOn(defaultDispatcher),
                 groupWithFeedList = combine(
                     rssRepository.get().pullImportant(isStarred, isUnread),
                     rssRepository.get().pullFeeds()
@@ -107,7 +104,7 @@ class FeedsViewModel @Inject constructor(
                             )
                         }
                     }.flatten()
-                }.flowOn(dispatcherDefault),
+                }.flowOn(defaultDispatcher),
             )
         }
     }
@@ -122,6 +119,6 @@ data class FeedsUiState(
 )
 
 sealed class GroupFeedsView {
-    class Group(val group: me.ash.reader.data.entity.Group) : GroupFeedsView()
-    class Feed(val feed: me.ash.reader.data.entity.Feed) : GroupFeedsView()
+    class Group(val group: me.ash.reader.data.model.group.Group) : GroupFeedsView()
+    class Feed(val feed: me.ash.reader.data.model.feed.Feed) : GroupFeedsView()
 }

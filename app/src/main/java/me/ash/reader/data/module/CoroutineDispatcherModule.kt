@@ -7,23 +7,31 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
+/**
+ * Provides global coroutine dispatcher.
+ *
+ * - [Dispatchers.Main]
+ * - [Dispatchers.Main.immediate]
+ * - [Dispatchers.IO]
+ * - [Dispatchers.Default]
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object CoroutineDispatcherModule {
 
     @Provides
-    @DispatcherDefault
-    fun provideDispatcherDefault(): CoroutineDispatcher = Dispatchers.Default
+    @DefaultDispatcher
+    fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
 
     @Provides
-    @DispatcherIO
-    fun provideDispatcherIO(): CoroutineDispatcher = Dispatchers.IO
+    @IODispatcher
+    fun provideIODispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @Provides
-    @DispatcherMain
-    fun provideDispatcherMain(): CoroutineDispatcher = Dispatchers.Main
+    @MainDispatcher
+    fun provideMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 
     @Provides
-    @DispatcherMainImmediate
-    fun provideDispatcherMainImmediate(): CoroutineDispatcher = Dispatchers.Main.immediate
+    @MainImmediateDispatcher
+    fun provideMainImmediateDispatcher(): CoroutineDispatcher = Dispatchers.Main.immediate
 }

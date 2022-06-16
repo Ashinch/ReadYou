@@ -3,13 +3,14 @@ package me.ash.reader.data.dao
 import androidx.paging.PagingSource
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import me.ash.reader.data.entity.Article
-import me.ash.reader.data.entity.ArticleWithFeed
-import me.ash.reader.data.model.ImportantCount
+import me.ash.reader.data.model.article.Article
+import me.ash.reader.data.model.article.ArticleWithFeed
+import me.ash.reader.data.model.feed.ImportantNum
 import java.util.*
 
 @Dao
 interface ArticleDao {
+
     @Transaction
     @Query(
         """
@@ -298,8 +299,8 @@ interface ArticleDao {
     )
     fun queryImportantCountWhenIsUnread(
         accountId: Int,
-        isUnread: Boolean
-    ): Flow<List<ImportantCount>>
+        isUnread: Boolean,
+    ): Flow<List<ImportantNum>>
 
     @Transaction
     @Query(
@@ -315,8 +316,8 @@ interface ArticleDao {
     )
     fun queryImportantCountWhenIsStarred(
         accountId: Int,
-        isStarred: Boolean
-    ): Flow<List<ImportantCount>>
+        isStarred: Boolean,
+    ): Flow<List<ImportantNum>>
 
     @Transaction
     @Query(
@@ -329,7 +330,7 @@ interface ArticleDao {
         GROUP BY a.feedId
         """
     )
-    fun queryImportantCountWhenIsAll(accountId: Int): Flow<List<ImportantCount>>
+    fun queryImportantCountWhenIsAll(accountId: Int): Flow<List<ImportantNum>>
 
     @Transaction
     @Query(
@@ -352,7 +353,7 @@ interface ArticleDao {
     )
     fun queryArticleWithFeedWhenIsStarred(
         accountId: Int,
-        isStarred: Boolean
+        isStarred: Boolean,
     ): PagingSource<Int, ArticleWithFeed>
 
     @Transaction
@@ -366,7 +367,7 @@ interface ArticleDao {
     )
     fun queryArticleWithFeedWhenIsUnread(
         accountId: Int,
-        isUnread: Boolean
+        isUnread: Boolean,
     ): PagingSource<Int, ArticleWithFeed>
 
     @Transaction
@@ -444,7 +445,7 @@ interface ArticleDao {
     )
     fun queryArticleWithFeedByFeedIdWhenIsAll(
         accountId: Int,
-        feedId: String
+        feedId: String,
     ): PagingSource<Int, ArticleWithFeed>
 
     @Transaction

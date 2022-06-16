@@ -11,7 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Article
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
@@ -32,11 +31,11 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.data.entity.Group
+import me.ash.reader.data.model.group.Group
+import me.ash.reader.ui.component.RenameDialog
 import me.ash.reader.ui.component.base.BottomDrawer
 import me.ash.reader.ui.component.base.RYSelectionChip
 import me.ash.reader.ui.component.base.Subtitle
-import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.ext.*
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -130,12 +129,9 @@ fun GroupOptionDrawer(
     AllAllowNotificationDialog(groupName = group?.name ?: "")
     AllParseFullContentDialog(groupName = group?.name ?: "")
     AllMoveToGroupDialog(groupName = group?.name ?: "")
-    TextFieldDialog(
+    RenameDialog(
         visible = groupOptionUiState.renameDialogVisible,
-        title = stringResource(R.string.rename),
-        icon = Icons.Outlined.Edit,
         value = groupOptionUiState.newName,
-        placeholder = stringResource(R.string.name),
         onValueChange = {
             groupOptionViewModel.inputNewName(it)
         },
@@ -154,7 +150,7 @@ fun GroupOptionDrawer(
 private fun Preset(
     groupOptionViewModel: GroupOptionViewModel,
     group: Group?,
-    context: Context
+    context: Context,
 ) {
     FlowRow(
         mainAxisAlignment = MainAxisAlignment.Start,
@@ -217,7 +213,7 @@ private fun Preset(
 private fun FlowRowGroups(
     groupOptionUiState: GroupOptionUiState,
     group: Group?,
-    groupOptionViewModel: GroupOptionViewModel
+    groupOptionViewModel: GroupOptionViewModel,
 ) {
     FlowRow(
         mainAxisAlignment = MainAxisAlignment.Start,
@@ -243,7 +239,7 @@ private fun FlowRowGroups(
 private fun LazyRowGroups(
     groupOptionUiState: GroupOptionUiState,
     group: Group?,
-    groupOptionViewModel: GroupOptionViewModel
+    groupOptionViewModel: GroupOptionViewModel,
 ) {
     LazyRow {
         items(groupOptionUiState.groups) {

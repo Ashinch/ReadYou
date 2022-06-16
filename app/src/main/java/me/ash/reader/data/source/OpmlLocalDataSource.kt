@@ -5,10 +5,10 @@ import be.ceau.opml.OpmlParser
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import me.ash.reader.data.entity.Feed
-import me.ash.reader.data.entity.Group
-import me.ash.reader.data.entity.GroupWithFeed
-import me.ash.reader.data.module.DispatcherIO
+import me.ash.reader.data.model.feed.Feed
+import me.ash.reader.data.model.group.Group
+import me.ash.reader.data.model.group.GroupWithFeed
+import me.ash.reader.data.module.IODispatcher
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.spacerDollar
 import java.io.InputStream
@@ -18,15 +18,16 @@ import javax.inject.Inject
 class OpmlLocalDataSource @Inject constructor(
     @ApplicationContext
     private val context: Context,
-    @DispatcherIO
-    private val dispatcherIO: CoroutineDispatcher,
+    @IODispatcher
+    private val ioDispatcher: CoroutineDispatcher,
 ) {
+
     @Throws(Exception::class)
     suspend fun parseFileInputStream(
         inputStream: InputStream,
-        defaultGroup: Group
+        defaultGroup: Group,
     ): List<GroupWithFeed> {
-        return withContext(dispatcherIO) {
+        return withContext(ioDispatcher) {
             val accountId = context.currentAccountId
             val opml = OpmlParser().parse(inputStream)
             val groupWithFeedList = mutableListOf<GroupWithFeed>().also {

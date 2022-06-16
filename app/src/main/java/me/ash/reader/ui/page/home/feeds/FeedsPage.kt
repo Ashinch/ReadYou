@@ -26,8 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.data.model.getName
-import me.ash.reader.data.preference.*
+import me.ash.reader.data.model.preference.*
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.*
@@ -183,7 +182,7 @@ fun FeedsPage(
                 }
                 item {
                     Banner(
-                        title = filterUiState.filter.getName(),
+                        title = filterUiState.filter.toName(),
                         desc = importantSum,
                         icon = filterUiState.filter.iconOutline,
                         action = {
@@ -238,6 +237,7 @@ fun FeedsPage(
                                 )
                             }
                         }
+
                         is GroupFeedsView.Feed -> {
                             FeedItem(
                                 feed = groupWithFeed.feed,

@@ -1,6 +1,7 @@
 package me.ash.reader.ui.page.common
 
 object RouteName {
+
     // Startup
     const val STARTUP = "startup"
 

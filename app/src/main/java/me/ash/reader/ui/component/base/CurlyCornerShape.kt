@@ -22,13 +22,14 @@ class CurlyCornerShape(
     bottomEnd = ZeroCornerSize,
     bottomStart = ZeroCornerSize
 ) {
+
     private fun sineCircleXYatAngle(
         d1: Double,
         d2: Double,
         d3: Double,
         d4: Double,
         d5: Double,
-        i: Int
+        i: Int,
     ): List<Double> = (i.toDouble() * d5).run {
         listOf(
             (sin(this) * d4 + d3) * cos(d5) + d1,
@@ -42,7 +43,7 @@ class CurlyCornerShape(
         topEnd: Float,
         bottomEnd: Float,
         bottomStart: Float,
-        layoutDirection: LayoutDirection
+        layoutDirection: LayoutDirection,
     ): Outline {
         val d = 2.0
         val r2: Double = size.width / d
@@ -73,7 +74,7 @@ class CurlyCornerShape(
         topStart: CornerSize,
         topEnd: CornerSize,
         bottomEnd: CornerSize,
-        bottomStart: CornerSize
+        bottomStart: CornerSize,
     ) = RoundedCornerShape(
         topStart = topStart,
         topEnd = topEnd,

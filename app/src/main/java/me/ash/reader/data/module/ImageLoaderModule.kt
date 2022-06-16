@@ -18,6 +18,9 @@ import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
+/**
+ * Provides singleton [ImageLoader] for Coil.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object ImageLoaderModule {
@@ -29,10 +32,14 @@ object ImageLoaderModule {
         okHttpClient: OkHttpClient,
     ): ImageLoader {
         return ImageLoader.Builder(context)
+            // Shared OKHttpClient instance.
             .okHttpClient(okHttpClient)
-            .dispatcher(Dispatchers.Default) // This slightly improves scrolling performance
-            .components{
+            // This slightly improves scrolling performance
+            .dispatcher(Dispatchers.Default)
+            .components {
+                // Support SVG decoding
                 add(SvgDecoder.Factory())
+                // Support GIF decoding
                 add(
                     if (SDK_INT >= Build.VERSION_CODES.P) {
                         ImageDecoderDecoder.Factory()
@@ -41,12 +48,14 @@ object ImageLoaderModule {
                     }
                 )
             }
+            // Enable disk cache
             .diskCache(
                 DiskCache.Builder()
                     .directory(context.cacheDir.resolve("images"))
                     .maxSizePercent(0.02)
                     .build()
             )
+            // Enable memory cache
             .memoryCache(
                 MemoryCache.Builder(context)
                     .maxSizePercent(0.25)

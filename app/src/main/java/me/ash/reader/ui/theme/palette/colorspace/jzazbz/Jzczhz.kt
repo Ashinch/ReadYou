@@ -20,6 +20,7 @@ data class Jzczhz(
     val Cz: Double,
     val hz: Double,
 ) {
+
     fun toJzazbz(): Jzazbz {
         val hRad = hz.toRadians()
         return Jzazbz(
@@ -33,6 +34,7 @@ data class Jzczhz(
         sqrt(square(Jz - other.Jz) + square(Cz - other.Cz) + 4.0 * Cz * other.Cz * square(sin((hz - other.hz) / 2.0)))
 
     companion object {
+
         fun Jzazbz.toJzczhz(): Jzczhz = Jzczhz(
             Jz = Jz,
             Cz = sqrt(square(az) + square(bz)),

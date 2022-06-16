@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.withContext
 import me.ash.reader.R
-import me.ash.reader.data.model.toVersion
-import me.ash.reader.data.module.DispatcherIO
-import me.ash.reader.data.module.DispatcherMain
-import me.ash.reader.data.preference.*
-import me.ash.reader.data.preference.NewVersionSizePreference.formatSize
+import me.ash.reader.data.model.general.toVersion
+import me.ash.reader.data.model.preference.*
+import me.ash.reader.data.model.preference.NewVersionSizePreference.formatSize
+import me.ash.reader.data.module.IODispatcher
+import me.ash.reader.data.module.MainDispatcher
 import me.ash.reader.data.source.Download
 import me.ash.reader.data.source.RYNetworkDataSource
 import me.ash.reader.data.source.downloadToFileWithProgress
@@ -26,34 +26,35 @@ class RYRepository @Inject constructor(
     @ApplicationContext
     private val context: Context,
     private val RYNetworkDataSource: RYNetworkDataSource,
-    @DispatcherIO
-    private val dispatcherIO: CoroutineDispatcher,
-    @DispatcherMain
-    private val dispatcherMain: CoroutineDispatcher,
+    @IODispatcher
+    private val ioDispatcher: CoroutineDispatcher,
+    @MainDispatcher
+    private val mainDispatcher: CoroutineDispatcher,
 ) {
-    suspend fun checkUpdate(showToast: Boolean = true): Boolean? = withContext(dispatcherIO) {
+
+    suspend fun checkUpdate(showToast: Boolean = true): Boolean? = withContext(ioDispatcher) {
         try {
-            val response =
-                RYNetworkDataSource.getReleaseLatest(context.getString(R.string.update_link))
+            val response = RYNetworkDataSource.getReleaseLatest(context.getString(R.string.update_link))
             when {
                 response.code() == 403 -> {
-                    withContext(dispatcherMain) {
+                    withContext(mainDispatcher) {
                         if (showToast) context.showToast(context.getString(R.string.rate_limit))
                     }
                     return@withContext null
                 }
+
                 response.body() == null -> {
-                    withContext(dispatcherMain) {
+                    withContext(mainDispatcher) {
                         if (showToast) context.showToast(context.getString(R.string.check_failure))
                     }
                     return@withContext null
                 }
             }
+            val skipVersion = context.skipVersionNumber.toVersion()
+            val currentVersion = context.getCurrentVersion()
             val latest = response.body()!!
             val latestVersion = latest.tag_name.toVersion()
 //            val latestVersion = "1.0.0".toVersion()
-            val skipVersion = context.skipVersionNumber.toVersion()
-            val currentVersion = context.getCurrentVersion()
             val latestLog = latest.body ?: ""
             val latestPublishDate = latest.published_at ?: latest.created_at ?: ""
             val latestSize = latest.assets?.first()?.size ?: 0
@@ -74,7 +75,7 @@ class RYRepository @Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             Log.e("RLog", "checkUpdate: ${e.message}")
-            withContext(dispatcherMain) {
+            withContext(mainDispatcher) {
                 if (showToast) context.showToast(context.getString(R.string.check_failure))
             }
             null
@@ -82,7 +83,7 @@ class RYRepository @Inject constructor(
     }
 
     suspend fun downloadFile(url: String): Flow<Download> =
-        withContext(dispatcherIO) {
+        withContext(ioDispatcher) {
             Log.i("RLog", "downloadFile start: $url")
             try {
                 return@withContext RYNetworkDataSource.downloadFile(url)
@@ -90,7 +91,7 @@ class RYRepository @Inject constructor(
             } catch (e: Exception) {
                 e.printStackTrace()
                 Log.e("RLog", "downloadFile: ${e.message}")
-                withContext(dispatcherMain) {
+                withContext(mainDispatcher) {
                     context.showToast(context.getString(R.string.download_failure))
                 }
             }

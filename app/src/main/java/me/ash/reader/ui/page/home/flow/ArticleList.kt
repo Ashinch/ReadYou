@@ -7,12 +7,13 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import me.ash.reader.data.entity.ArticleWithFeed
+import me.ash.reader.data.model.article.ArticleFlowItem
+import me.ash.reader.data.model.article.ArticleWithFeed
 
 @Suppress("FunctionName")
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.ArticleList(
-    pagingItems: LazyPagingItems<FlowItemView>,
+    pagingItems: LazyPagingItems<ArticleFlowItem>,
     isShowFeedIcon: Boolean,
     isShowStickyHeader: Boolean,
     articleListTonalElevation: Int,
@@ -20,16 +21,17 @@ fun LazyListScope.ArticleList(
 ) {
     for (index in 0 until pagingItems.itemCount) {
         when (val item = pagingItems.peek(index)) {
-            is FlowItemView.Article -> {
+            is ArticleFlowItem.Article -> {
                 item(key = item.articleWithFeed.article.id) {
                     ArticleItem(
-                        articleWithFeed = (pagingItems[index] as FlowItemView.Article).articleWithFeed,
+                        articleWithFeed = (pagingItems[index] as ArticleFlowItem.Article).articleWithFeed,
                     ) {
                         onClick(it)
                     }
                 }
             }
-            is FlowItemView.Date -> {
+
+            is ArticleFlowItem.Date -> {
                 if (item.showSpacer) item { Spacer(modifier = Modifier.height(40.dp)) }
                 if (isShowStickyHeader) {
                     stickyHeader(key = item.date) {
@@ -41,6 +43,7 @@ fun LazyListScope.ArticleList(
                     }
                 }
             }
+
             else -> {}
         }
     }

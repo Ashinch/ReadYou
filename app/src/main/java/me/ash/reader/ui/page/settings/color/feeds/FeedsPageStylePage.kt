@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.data.preference.*
+import me.ash.reader.data.model.preference.*
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
@@ -142,7 +142,7 @@ fun FeedsPageStylePage(
                     )
                     SettingItem(
                         title = stringResource(R.string.style),
-                        desc = filterBarStyle.getDesc(context),
+                        desc = filterBarStyle.toDesc(context),
                         onClick = {
                             filterBarStyleDialogVisible = true
                         },
@@ -185,7 +185,7 @@ fun FeedsPageStylePage(
         title = stringResource(R.string.style),
         options = FeedsFilterBarStylePreference.values.map {
             RadioDialogOption(
-                text = it.getDesc(context),
+                text = it.toDesc(context),
                 selected = filterBarStyle == it,
             ) {
                 it.put(context, scope)
@@ -217,7 +217,7 @@ fun FeedsPageStylePage(
         title = stringResource(R.string.tonal_elevation),
         options = FeedsFilterBarTonalElevationPreference.values.map {
             RadioDialogOption(
-                text = it.getDesc(context),
+                text = it.toDesc(context),
                 selected = it == filterBarTonalElevation,
             ) {
                 it.put(context, scope)
@@ -232,7 +232,7 @@ fun FeedsPageStylePage(
         title = stringResource(R.string.tonal_elevation),
         options = FeedsTopBarTonalElevationPreference.values.map {
             RadioDialogOption(
-                text = it.getDesc(context),
+                text = it.toDesc(context),
                 selected = it == topBarTonalElevation,
             ) {
                 it.put(context, scope)
@@ -247,7 +247,7 @@ fun FeedsPageStylePage(
         title = stringResource(R.string.tonal_elevation),
         options = FeedsGroupListTonalElevationPreference.values.map {
             RadioDialogOption(
-                text = it.getDesc(context),
+                text = it.toDesc(context),
                 selected = it == groupListTonalElevation,
             ) {
                 it.put(context, scope)

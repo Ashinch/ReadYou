@@ -15,6 +15,7 @@ import retrofit2.http.Url
 import java.io.File
 
 interface RYNetworkDataSource {
+
     @GET
     suspend fun getReleaseLatest(@Url url: String): Response<LatestRelease>
 
@@ -23,6 +24,7 @@ interface RYNetworkDataSource {
     suspend fun downloadFile(@Url url: String): ResponseBody
 
     companion object {
+
         private var instance: RYNetworkDataSource? = null
 
         fun getInstance(): RYNetworkDataSource {
@@ -69,8 +71,10 @@ fun ResponseBody.downloadToFileWithProgress(saveFile: File): Flow<Download> =
                     when {
                         progressBytes < totalBytes ->
                             throw Exception("missing bytes")
+
                         progressBytes > totalBytes ->
                             throw Exception("too many bytes")
+
                         else ->
                             deleteFile = false
                     }

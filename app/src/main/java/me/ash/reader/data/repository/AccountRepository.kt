@@ -5,8 +5,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import me.ash.reader.R
 import me.ash.reader.data.dao.AccountDao
 import me.ash.reader.data.dao.GroupDao
-import me.ash.reader.data.entity.Account
-import me.ash.reader.data.entity.Group
+import me.ash.reader.data.model.account.Account
+import me.ash.reader.data.model.account.AccountType
+import me.ash.reader.data.model.group.Group
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.getDefaultGroupId
 import javax.inject.Inject
@@ -18,20 +19,16 @@ class AccountRepository @Inject constructor(
     private val groupDao: GroupDao,
 ) {
 
-    suspend fun getCurrentAccount(): Account? {
-        return accountDao.queryById(context.currentAccountId)
-    }
+    suspend fun getCurrentAccount(): Account? = accountDao.queryById(context.currentAccountId)
 
-    suspend fun isNoAccount(): Boolean {
-        return accountDao.queryAll().isEmpty()
-    }
+    suspend fun isNoAccount(): Boolean = accountDao.queryAll().isEmpty()
 
     suspend fun addDefaultAccount(): Account {
         val readYouString = context.getString(R.string.read_you)
         val defaultString = context.getString(R.string.defaults)
         return Account(
             name = readYouString,
-            type = Account.Type.LOCAL,
+            type = AccountType.Local,
         ).apply {
             id = accountDao.insert(this).toInt()
         }.also {

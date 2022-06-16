@@ -29,7 +29,7 @@ fun AnimatedPopup(
                 anchorBounds: IntRect,
                 windowSize: IntSize,
                 layoutDirection: LayoutDirection,
-                popupContentSize: IntSize
+                popupContentSize: IntSize,
             ): IntOffset {
                 return IntOffset(
                     x = with(density) { (absoluteX).roundToPx() },

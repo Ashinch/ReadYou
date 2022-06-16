@@ -73,28 +73,28 @@ import kotlinx.coroutines.flow.collectLatest
 
 fun Modifier.drawHorizontalScrollbar(
     state: ScrollState,
-    reverseScrolling: Boolean = false
+    reverseScrolling: Boolean = false,
 ): Modifier = drawScrollbar(state, Orientation.Horizontal, reverseScrolling)
 
 fun Modifier.drawVerticalScrollbar(
     state: ScrollState,
-    reverseScrolling: Boolean = false
+    reverseScrolling: Boolean = false,
 ): Modifier = drawScrollbar(state, Orientation.Vertical, reverseScrolling)
 
 fun Modifier.drawHorizontalScrollbar(
     state: LazyListState,
-    reverseScrolling: Boolean = false
+    reverseScrolling: Boolean = false,
 ): Modifier = drawScrollbar(state, Orientation.Horizontal, reverseScrolling)
 
 fun Modifier.drawVerticalScrollbar(
     state: LazyListState,
-    reverseScrolling: Boolean = false
+    reverseScrolling: Boolean = false,
 ): Modifier = drawScrollbar(state, Orientation.Vertical, reverseScrolling)
 
 private fun Modifier.drawScrollbar(
     state: ScrollState,
     orientation: Orientation,
-    reverseScrolling: Boolean
+    reverseScrolling: Boolean,
 ): Modifier = drawScrollbar(
     orientation, reverseScrolling
 ) { reverseDirection, atEnd, thickness, color, alpha ->
@@ -116,7 +116,7 @@ private fun Modifier.drawScrollbar(
 private fun Modifier.drawScrollbar(
     state: LazyListState,
     orientation: Orientation,
-    reverseScrolling: Boolean
+    reverseScrolling: Boolean,
 ): Modifier = drawScrollbar(
     orientation, reverseScrolling
 ) { reverseDirection, atEnd, thickness, color, alpha ->
@@ -153,7 +153,7 @@ private fun CacheDrawScope.onDrawScrollbar(
     color: Color,
     alpha: () -> Float,
     thumbSize: Float,
-    startOffset: Float
+    startOffset: Float,
 ): DrawScope.() -> Unit {
     val topLeft = if (orientation == Orientation.Horizontal) {
         Offset(
@@ -196,8 +196,8 @@ private fun Modifier.drawScrollbar(
         atEnd: Boolean,
         thickness: Float,
         color: Color,
-        alpha: () -> Float
-    ) -> DrawResult
+        alpha: () -> Float,
+    ) -> DrawResult,
 ): Modifier = composed {
     val scrolled = remember {
         MutableSharedFlow<Unit>(
@@ -210,7 +210,7 @@ private fun Modifier.drawScrollbar(
             override fun onPostScroll(
                 consumed: Offset,
                 available: Offset,
-                source: NestedScrollSource
+                source: NestedScrollSource,
             ): Offset {
                 val delta = if (orientation == Orientation.Horizontal) consumed.x else consumed.y
                 if (delta != 0f) scrolled.tryEmit(Unit)

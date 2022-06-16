@@ -2,18 +2,30 @@ package me.ash.reader.data.module
 
 import javax.inject.Qualifier
 
+/**
+ * @see CoroutineDispatcherModule.provideDefaultDispatcher
+ */
 @Retention(AnnotationRetention.RUNTIME)
 @Qualifier
-annotation class DispatcherDefault
+annotation class DefaultDispatcher
 
+/**
+ * @see CoroutineDispatcherModule.provideIODispatcher
+ */
 @Retention(AnnotationRetention.RUNTIME)
 @Qualifier
-annotation class DispatcherIO
+annotation class IODispatcher
 
+/**
+ * @see CoroutineDispatcherModule.provideMainDispatcher
+ */
 @Retention(AnnotationRetention.RUNTIME)
 @Qualifier
-annotation class DispatcherMain
+annotation class MainDispatcher
 
+/**
+ * @see CoroutineDispatcherModule.provideMainImmediateDispatcher
+ */
 @Retention(AnnotationRetention.BINARY)
 @Qualifier
-annotation class DispatcherMainImmediate
+annotation class MainImmediateDispatcher

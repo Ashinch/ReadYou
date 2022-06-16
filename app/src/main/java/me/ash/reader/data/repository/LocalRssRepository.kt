@@ -14,12 +14,12 @@ import me.ash.reader.data.dao.AccountDao
 import me.ash.reader.data.dao.ArticleDao
 import me.ash.reader.data.dao.FeedDao
 import me.ash.reader.data.dao.GroupDao
-import me.ash.reader.data.entity.Article
-import me.ash.reader.data.entity.Feed
-import me.ash.reader.data.entity.FeedWithArticle
-import me.ash.reader.data.entity.Group
-import me.ash.reader.data.module.DispatcherDefault
-import me.ash.reader.data.module.DispatcherIO
+import me.ash.reader.data.model.article.Article
+import me.ash.reader.data.model.feed.Feed
+import me.ash.reader.data.model.feed.FeedWithArticle
+import me.ash.reader.data.model.group.Group
+import me.ash.reader.data.module.DefaultDispatcher
+import me.ash.reader.data.module.IODispatcher
 import me.ash.reader.data.repository.SyncWorker.Companion.setIsSyncing
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.spacerDollar
@@ -35,14 +35,14 @@ class LocalRssRepository @Inject constructor(
     private val notificationHelper: NotificationHelper,
     private val accountDao: AccountDao,
     private val groupDao: GroupDao,
-    @DispatcherIO
-    private val dispatcherIO: CoroutineDispatcher,
-    @DispatcherDefault
-    private val dispatcherDefault: CoroutineDispatcher,
+    @IODispatcher
+    private val ioDispatcher: CoroutineDispatcher,
+    @DefaultDispatcher
+    private val defaultDispatcher: CoroutineDispatcher,
     workManager: WorkManager,
 ) : AbstractRssRepository(
     context, accountDao, articleDao, groupDao,
-    feedDao, workManager, dispatcherIO, dispatcherDefault
+    feedDao, workManager, ioDispatcher, defaultDispatcher
 ) {
 
     override suspend fun updateArticleInfo(article: Article) {
@@ -70,8 +70,8 @@ class LocalRssRepository @Inject constructor(
         }
     }
 
-    override suspend fun sync(coroutineWorker: CoroutineWorker): ListenableWorker.Result {
-        return supervisorScope {
+    override suspend fun sync(coroutineWorker: CoroutineWorker): ListenableWorker.Result =
+        supervisorScope {
             val preTime = System.currentTimeMillis()
             val accountId = context.currentAccountId
             feedDao.queryAll(accountId)
@@ -81,31 +81,23 @@ class LocalRssRepository @Inject constructor(
                     it.map { feed -> async { syncFeed(feed) } }
                         .awaitAll()
                         .forEach {
-                            if (it.isNotify) {
-                                notificationHelper.notify(
-                                    FeedWithArticle(
-                                        it.feedWithArticle.feed,
-                                        articleDao.insertListIfNotExist(it.feedWithArticle.articles)
-                                    )
-                                )
+                            if (it.feed.isNotification) {
+                                notificationHelper.notify(it.apply {
+                                    articles = articleDao.insertListIfNotExist(it.articles)
+                                })
                             } else {
-                                articleDao.insertListIfNotExist(it.feedWithArticle.articles)
+                                articleDao.insertListIfNotExist(it.articles)
                             }
                         }
                 }
 
             Log.i("RlOG", "onCompletion: ${System.currentTimeMillis() - preTime}")
             accountDao.queryById(accountId)?.let { account ->
-                accountDao.update(
-                    account.apply {
-                        updateAt = Date()
-                    }
-                )
+                accountDao.update(account.apply { updateAt = Date() })
             }
             coroutineWorker.setProgress(setIsSyncing(false))
             ListenableWorker.Result.success()
         }
-    }
 
     override suspend fun markAsRead(
         groupId: String?,
@@ -124,6 +116,7 @@ class LocalRssRepository @Inject constructor(
                     before = before ?: Date(Long.MAX_VALUE)
                 )
             }
+
             feedId != null -> {
                 articleDao.markAllAsReadByFeedId(
                     accountId = accountId,
@@ -132,41 +125,34 @@ class LocalRssRepository @Inject constructor(
                     before = before ?: Date(Long.MAX_VALUE)
                 )
             }
+
             articleId != null -> {
                 articleDao.markAsReadByArticleId(accountId, articleId, isUnread)
             }
+
             else -> {
                 articleDao.markAllAsRead(accountId, isUnread, before ?: Date(Long.MAX_VALUE))
             }
         }
     }
 
-    data class ArticleNotify(
-        val feedWithArticle: FeedWithArticle,
-        val isNotify: Boolean,
-    )
-
-    private suspend fun syncFeed(feed: Feed): ArticleNotify {
+    private suspend fun syncFeed(feed: Feed): FeedWithArticle {
         val latest = articleDao.queryLatestByFeedId(context.currentAccountId, feed.id)
-        val articles: List<Article>?
-        try {
-            articles = rssHelper.queryRssXml(feed, latest?.link)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Log.e("RLog", "queryRssXml[${feed.name}]: ${e.message}")
-            return ArticleNotify(FeedWithArticle(feed, listOf()), false)
-        }
-        try {
+        val articles = rssHelper.queryRssXml(feed, latest?.link)
+//        try {
 //            if (feed.icon == null && !articles.isNullOrEmpty()) {
 //                rssHelper.queryRssIcon(feedDao, feed, articles.first().link)
 //            }
-        } catch (e: Exception) {
-            Log.e("RLog", "queryRssIcon[${feed.name}]: ${e.message}")
-            return ArticleNotify(FeedWithArticle(feed, listOf()), false)
-        }
-        return ArticleNotify(
-            feedWithArticle = FeedWithArticle(feed, articles),
-            isNotify = articles.isNotEmpty() && feed.isNotification
+//        } catch (e: Exception) {
+//            Log.e("RLog", "queryRssIcon[${feed.name}]: ${e.message}")
+//            return FeedWithArticle(
+//                feed = feed.apply { isNotification = false },
+//                articles = listOf()
+//            )
+//        }
+        return FeedWithArticle(
+            feed = feed.apply { isNotification = feed.isNotification && articles.isNotEmpty() },
+            articles = articles
         )
     }
 }

@@ -9,6 +9,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * Provides singleton [WorkManager] for the application.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object WorkerModule {

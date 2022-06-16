@@ -9,8 +9,9 @@ import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.ash.reader.data.module.ApplicationScope
-import me.ash.reader.data.module.DispatcherDefault
+import me.ash.reader.data.module.IODispatcher
 import me.ash.reader.data.repository.*
 import me.ash.reader.data.source.OpmlLocalDataSource
 import me.ash.reader.data.source.RYDatabase
@@ -21,16 +22,23 @@ import org.conscrypt.Conscrypt
 import java.security.Security
 import javax.inject.Inject
 
+/**
+ * The Application class, where the Dagger components is generated.
+ */
 @HiltAndroidApp
 class RYApp : Application(), Configuration.Provider {
+
+    /**
+     * From: [Feeder](https://gitlab.com/spacecowboy/Feeder).
+     *
+     * Install Conscrypt to handle TLSv1.3 pre Android10.
+     */
     init {
-        // From: https://gitlab.com/spacecowboy/Feeder
-        // Install Conscrypt to handle TLSv1.3 pre Android10
         Security.insertProviderAt(Conscrypt.newProvider(), 1)
     }
 
     @Inject
-    lateinit var RYDatabase: RYDatabase
+    lateinit var ryDatabase: RYDatabase
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
@@ -39,7 +47,7 @@ class RYApp : Application(), Configuration.Provider {
     lateinit var workManager: WorkManager
 
     @Inject
-    lateinit var RYNetworkDataSource: RYNetworkDataSource
+    lateinit var ryNetworkDataSource: RYNetworkDataSource
 
     @Inject
     lateinit var opmlLocalDataSource: OpmlLocalDataSource
@@ -73,8 +81,8 @@ class RYApp : Application(), Configuration.Provider {
     lateinit var applicationScope: CoroutineScope
 
     @Inject
-    @DispatcherDefault
-    lateinit var dispatcherDefault: CoroutineDispatcher
+    @IODispatcher
+    lateinit var ioDispatcher: CoroutineDispatcher
 
     @Inject
     lateinit var okHttpClient: OkHttpClient
@@ -82,27 +90,40 @@ class RYApp : Application(), Configuration.Provider {
     @Inject
     lateinit var imageLoader: ImageLoader
 
+    /**
+     * When the application startup.
+     *
+     * 1. Set the uncaught exception handler
+     * 2. Initialize the default account if there is none
+     * 3. Synchronize once
+     * 4. Check for new version
+     */
     override fun onCreate() {
         super.onCreate()
         CrashHandler(this)
-        dataStoreInit()
-        applicationScope.launch(dispatcherDefault) {
+        applicationScope.launch {
             accountInit()
             workerInit()
-            if (notFdroid) {
-                checkUpdate()
-            }
+            if (notFdroid) checkUpdate()
         }
     }
 
-    private fun dataStoreInit() {
-    }
+    /**
+     * Override the [Configuration.Builder] to provide the [HiltWorkerFactory].
+     */
+    override fun getWorkManagerConfiguration(): Configuration =
+        Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .setMinimumLoggingLevel(android.util.Log.DEBUG)
+            .build()
 
     private suspend fun accountInit() {
-        if (accountRepository.isNoAccount()) {
-            val account = accountRepository.addDefaultAccount()
-            applicationContext.dataStore.put(DataStoreKeys.CurrentAccountId, account.id!!)
-            applicationContext.dataStore.put(DataStoreKeys.CurrentAccountType, account.type)
+        withContext(ioDispatcher) {
+            if (accountRepository.isNoAccount()) {
+                val account = accountRepository.addDefaultAccount()
+                applicationContext.dataStore.put(DataStoreKeys.CurrentAccountId, account.id!!)
+                applicationContext.dataStore.put(DataStoreKeys.CurrentAccountType, account.type.id)
+            }
         }
     }
 
@@ -111,17 +132,11 @@ class RYApp : Application(), Configuration.Provider {
     }
 
     private suspend fun checkUpdate() {
-        applicationContext.getLatestApk().let {
-            if (it.exists()) {
-                it.del()
+        withContext(ioDispatcher) {
+            applicationContext.getLatestApk().let {
+                if (it.exists()) it.del()
             }
         }
         ryRepository.checkUpdate(showToast = false)
     }
-
-    override fun getWorkManagerConfiguration(): Configuration =
-        Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .setMinimumLoggingLevel(android.util.Log.DEBUG)
-            .build()
 }
