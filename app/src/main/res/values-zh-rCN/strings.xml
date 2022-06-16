@@ -101,10 +101,114 @@
     <string name="tips_and_support">提示和支持</string>
     <string name="tips_and_support_desc">关于、开源</string>
     <string name="welcome">欢迎</string>
-    <string name="agree_terms">在此之前，您需要同意 Read You 的服务条款与隐私政策后才能继续。</string>
-    <string name="view_terms">查看《&lt;u&gt;服务条款与隐私政策&lt;/u&gt;》</string>
-    <string name="terms_link">https://gitee.com/Ashinch/ReadYou/blob/main/TERMS_OF_SERVICE_AND_PRIVACY_POLICY-zh.md</string>
-    <string name="agree_and_continue">同意并继续</string>
+    <string name="tos_tips">在此之前，您需要同意 Read You 的服务条款与隐私政策后才能继续。</string>
+    <string name="browse_tos_tips">查看《&lt;u&gt;服务条款与隐私政策&lt;/u&gt;》</string>
+    <string name="terms_of_service">服务条款</string>
+    <string name="tos_content">
+        &lt;h5&gt;
+
+        隐私政策
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        我非常重视您的隐私。
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        不收集任何用户数据，所有敏感信息（密码和其他账户信息）都安全地存储在您设备上的本地应用数据库中。
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        将使用以下权限为您提供服务：
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        - 访问网络权限（用于访问您所指定的在线内容）
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - 获取网络状态权限（用于获取当前设备是否拥有可用的网络条件）
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - 后台服务权限（用于定时自动地为您同步已收藏的内容）
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        第三方服务
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        本政策不适用于您与 &lt;b&gt;Read You&lt;/b&gt; 一起使用的第三方服务。您可以在所使用的第三方服务的网站上查阅相关的隐私政策。
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        免责声明
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        &lt;b&gt;Read You&lt;/b&gt; 仅是一款内容收藏工具。您在使用 &lt;b&gt;Read You&lt;/b&gt;
+        的过程中，应遵守所在国家和地区的法律法规，因您的行为所产生的一切责任将由您个人承担。
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        开源许可
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        是一个使用 GNU GPL 3.0 开源许可协议的开源项目[1]，允许您免费使用、引用、修改 &lt;b&gt;Read You&lt;/b&gt;
+        的源代码，但不允许修改后和其衍生的代码作为闭源的商业软件进行发布和销售。具体细节请查看完整的 GNU GPL 3.0 开源许可协议
+        [2]。
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        附录
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        - [1] https://github.com/Ashinch/ReadYou
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - [2] https://www.gnu.org/licenses/gpl-3.0.html
+
+        &lt;/p&gt;
+    </string>
+    <string name="agree">同意并继续</string>
     <string name="wallpaper_colors">壁纸颜色</string>
     <string name="no_palettes">暂无色板</string>
     <string name="only_android_8.1_plus">仅限 Android 8.1+</string>

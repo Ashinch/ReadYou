@@ -104,10 +104,120 @@
     <string name="tips_and_support">Tipps &amp; Support</string>
     <string name="tips_and_support_desc">Über, Open Source</string>
     <string name="welcome">Willkommen</string>
-    <string name="agree_terms">Bevor Sie fortfahren können, müssen Sie den Nutzungsbedingungen und der Datenschutzrichtlinie von Read You zustimmen.</string>
-    <string name="view_terms">Siehe die &lt;i&gt;&lt;u&gt;Nutzungsbedingungen &amp; Datenschutzrichtlinie&lt;/u&gt;&lt;/i&gt;</string>
-    <string name="terms_link">https://github.com/Ashinch/ReadYou/blob/main/TERMS_OF_SERVICE_AND_PRIVACY_POLICY-de.md</string>
-    <string name="agree_and_continue">Zustimmen</string>
+    <string name="tos_tips">Bevor Sie fortfahren können, müssen Sie den Nutzungsbedingungen und der Datenschutzrichtlinie von Read You zustimmen.</string>
+    <string name="browse_tos_tips">Siehe die &lt;i&gt;&lt;u&gt;Nutzungsbedingungen &amp; Datenschutzrichtlinie&lt;/u&gt;&lt;/i&gt;</string>
+    <string name="terms_of_service">Nutzungsbedingungen</string>
+    <string name="tos_content">
+        &lt;h5&gt;
+
+        Datenschutzrichtlinie
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        Ich nehme Ihre Privatsphäre sehr ernst.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        sammelt keine Benutzerdaten, und alle sensiblen Informationen (Passwörter und andere Kontoinformationen) werden
+        sicher in der lokalen Anwendungsdatenbank auf Ihrem Gerät gespeichert.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        wird die folgenden Berechtigungen nutzen, um Ihnen den Dienst zur Verfügung zu stellen.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        - Netzwerkzugriffsberechtigung (für den Zugriff auf die von Ihnen angegebenen Online-Inhalte)
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - Berechtigung zum Abrufen des Netzwerkstatus (um festzustellen, ob das Gerät derzeit über ein verfügbares
+        Netzwerk verfügt)
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - Berechtigung für den Hintergrunddienst (um Ihre Favoriten automatisch und regelmäßig zu synchronisieren)
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Dienstleistungen von Dritten
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        Diese Richtlinie gilt nicht für Dienste Dritter, die Sie mit &lt;b&gt;Read You&lt;/b&gt; nutzen. Sie können die
+        Datenschutzrichtlinien der von Ihnen genutzten Dienste Dritter auf den jeweiligen Websites einsehen.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Haftungsausschlüsse
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        ist ein reines Tool zur Sammlung von Inhalten. Ihre Nutzung von &lt;b&gt;Read You&lt;/b&gt; unterliegt den
+        Gesetzen und Vorschriften Ihres Landes und Ihrer Region, und jede Haftung, die sich aus Ihren Handlungen ergibt,
+        wird von Ihnen persönlich getragen.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Open Source Lizenz
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        ist ein Open Source Projekt unter der GNU GPL 3.0 Open Source Lizenz[1], die es Ihnen erlaubt, den Quellcode
+        von Read You kostenlos zu verwenden, zu referenzieren und zu modifizieren, aber nicht erlaubt, den
+        modifizierten und abgeleiteten Code als kommerzielle Closed-Source-Software zu vertreiben und zu verkaufen.
+        Details finden Sie in der vollständigen GNU GPL 3.0 Open Source Lizenz[2].
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Anhang
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        - [1] https://github.com/Ashinch/ReadYou
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - [2] https://www.gnu.org/licenses/gpl-3.0.html
+
+        &lt;/p&gt;
+    </string>
+    <string name="agree">Zustimmen</string>
     <string name="wallpaper_colors">Hintergrundfarben</string>
     <string name="no_palettes">Keine Paletten</string>
     <string name="only_android_8.1_plus">Nur Android 8.1+</string>
