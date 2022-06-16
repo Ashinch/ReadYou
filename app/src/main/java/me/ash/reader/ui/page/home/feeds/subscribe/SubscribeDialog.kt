@@ -25,10 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.R
+import me.ash.reader.ui.component.RenameDialog
 import me.ash.reader.ui.component.base.ClipboardTextField
 import me.ash.reader.ui.component.base.RYDialog
 import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.roundClick
 import me.ash.reader.ui.page.home.feeds.FeedOptionView
 
 @OptIn(
@@ -76,6 +78,9 @@ fun SubscribeDialog(
         },
         title = {
             Text(
+                modifier = Modifier.roundClick {
+                    subscribeViewModel.showRenameDialog()
+                },
                 text = if (subscribeUiState.isSearchPage) {
                     subscribeUiState.title
                 } else {
@@ -183,6 +188,21 @@ fun SubscribeDialog(
                 }
             }
         },
+    )
+
+    RenameDialog(
+        visible = subscribeUiState.renameDialogVisible,
+        value = subscribeUiState.newName,
+        onValueChange = {
+            subscribeViewModel.inputNewName(it)
+        },
+        onDismissRequest = {
+            subscribeViewModel.hideRenameDialog()
+        },
+        onConfirm = {
+            subscribeViewModel.renameFeed()
+            subscribeViewModel.hideRenameDialog()
+        }
     )
 
     TextFieldDialog(
