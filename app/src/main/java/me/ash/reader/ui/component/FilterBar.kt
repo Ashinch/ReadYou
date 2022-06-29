@@ -62,7 +62,7 @@ fun FilterBar(
                     {
                         Text(
                             text = item.toName(),
-                            style = MaterialTheme.typography.labelLarge,
+//                            style = MaterialTheme.typography.labelLarge,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
