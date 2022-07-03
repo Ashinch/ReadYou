@@ -1,0 +1,294 @@
+<resources>
+    <string name="read_you" translatable="false">Read You</string>
+    <string name="all">Wszystkie</string>
+    <plurals name="all_desc">
+        <item quantity="one">%1$d pobrany artykuł</item>
+        <item quantity="other">%1$d pobranych artykułów</item>
+    </plurals>
+    <string name="unread">Nieprzeczytane</string>
+    <plurals name="unread_desc">
+        <item quantity="one">%1$d nieprzeczytany artykuł</item>
+        <item quantity="other">%1$d nieprzeczytanych artykułów</item>
+    </plurals>
+    <string name="starred">Wyróżnione</string>
+    <plurals name="starred_desc">
+        <item quantity="one">%1$d wyróżniony artykuł</item>
+        <item quantity="other">%1$d wyróżnionych artykułów</item>
+    </plurals>
+    <string name="feeds">Kanały</string>
+    <string name="syncing">Synchronizacja…</string>
+    <string name="loading">Ładowanie…</string>
+    <string name="expand_less">Zwiń</string>
+    <string name="expand_more">Rozwiń</string>
+    <string name="confirm">Potwierdź</string>
+    <string name="cancel">Anuluj</string>
+    <string name="allow">Zezwól</string>
+    <string name="deny">Odmów</string>
+    <string name="defaults">Domyślne</string>
+    <string name="unknown">Nieznane</string>
+    <string name="back">Wstecz</string>
+    <string name="go_to">Idź Do</string>
+    <string name="settings">Ustawienia</string>
+    <string name="refresh">Odśwież</string>
+    <string name="search">Wyszukaj</string>
+    <string name="searching">Wyszukiwanie…</string>
+    <string name="subscribe">Subskrybuj</string>
+    <string name="already_subscribed">Już zasubskrybowane</string>
+    <string name="clear">Wyczyść</string>
+    <string name="paste">Wklej</string>
+    <string name="feed_or_site_url">Kanał lub adres URL</string>
+    <string name="import_from_opml">Import pliku OPML</string>
+    <string name="preset">Preset</string>
+    <string name="selected">Zaznaczone</string>
+    <string name="allow_notification">Zezwól na powiadomienia</string>
+    <string name="all_allow_notification_tips">Zezwól wszystkim kanałom w grupie \"%1$s\" na wysyłanie powiadomień.</string>
+    <string name="all_allow_notification_toast">Zezwolono na wszystkie powiadomienia z grupy \"%1$s\"</string>
+    <string name="all_deny_notification_toast">Cofnięto zezwolenie na powiadomienia z grupy \"%1$s\"</string>
+    <string name="parse_full_content">Pobierz pełną treść</string>
+    <string name="all_parse_full_content_tips">Pobieranie pełnej treści artykułów z grupy \"%1$s\"</string>
+    <string name="all_parse_full_content_toast">Zezwolono na pobieranie pełnej treści artykułów z grupy \"%1$s\"</string>
+    <string name="all_deny_parse_full_content_toast">Cofnięto zezwolenie na pobieranie pełnej treści artykułów z grupy \"%1$s\"
+    </string>
+    <string name="clear_articles">Wyczyść Artykuły</string>
+    <string name="clear_articles_in_feed_toast">Wyczyszczono wszystkie pobrane artykuły z kanału \"%1$s\"</string>
+    <string name="clear_articles_in_group_toast">Wyczyszczono wszystkie artykuły z grupy \"%1$s\"</string>
+    <string name="clear_articles_feed_tips">Wyczyść wszystkie pobrane artykułu z kanału \"%1$s\".</string>
+    <string name="clear_articles_group_tips">Wyczyść wszystkie pobrane artykułu z grupy \"%1$s\".</string>
+    <string name="add_to_group">Dodaj do grupy</string>
+    <string name="move_to_group">Przenieś do grupy</string>
+    <string name="all_move_to_group_tips">Przenieś wszystkie kanały z grupy \"%1$s\" do grupy \"%2$s\"</string>
+    <string name="all_move_to_group_toast">Przeniesiono wszystkie kanały do grupy \"%1$s\"</string>
+    <string name="rename">Zmień nazwę</string>
+    <string name="change_url">Zmień adres URL</string>
+    <string name="feed_url_placeholder" translatable="false">http://example.com/feed.rss</string>
+    <string name="rename_toast">Zmieniono nazwę na \"%1$s\"</string>
+    <string name="create_new_group">Utwórz nową grupę</string>
+    <string name="name">Nazwa</string>
+    <string name="open_with">Otwórz %1$s</string>
+    <string name="options">Opcje</string>
+    <string name="delete">Usuń</string>
+    <string name="delete_toast">Usunięto \"%1$s\"</string>
+    <string name="unsubscribe">Odsubskrybuj</string>
+    <string name="unsubscribe_tips">Odsubskrybuj kanał \"%1$s\" i usuń wszystkie zawarte w nim artykuły.</string>
+    <string name="delete_group">Usuń Grupę</string>
+    <string name="delete_group_tips">Usuń grupę \"%1$s\" i wszystkie zawarte w niej artykuły.</string>
+    <string name="group_option_tips">Poniższe zmiany zostaną zastosowane dla wszystkich kanałów w tej grupie</string>
+    <string name="today">Dziś</string>
+    <string name="yesterday">Wczoraj</string>
+    <string name="date_at_time">%1$s o %2$s</string>
+    <string name="search_for_in">Przeszukaj %1$s artykuły w \"%2$s\"</string>
+    <string name="search_for">Przeszukaj %1$s artykuły</string>
+    <string name="mark_as_read">Oznacz jako przeczytane</string>
+    <string name="mark_all_as_read">Zaznacz wszystkie jako przeczytane</string>
+    <string name="mark_as_unread">Oznacz jako nieprzeczytane</string>
+    <string name="mark_as_starred">Oznacz jako wyróżnione</string>
+    <string name="mark_as_unstar">Odznacz jako wyróżnione</string>
+    <string name="mark_as_read_one_day">Oznacz artykuły starsze niż 1 dzień jako przeczytane</string>
+    <string name="mark_as_read_three_days">Oznacz artykuły starsze niż 3 dni jako przeczytane</string>
+    <string name="mark_as_read_seven_days">Oznacz artykuły starsze niż 7 dni jako przeczytane</string>
+    <string name="one_day">1d</string>
+    <string name="three_days">3d</string>
+    <string name="seven_days">7d</string>
+    <string name="close">Zamknij</string>
+    <string name="get_new_updates">Sprawdź aktualizacje</string>
+    <string name="get_new_updates_desc">Dostępna wersja %1$s</string>
+    <string name="in_coding">W trakcie kodowania</string>
+    <string name="coming_soon">Dostępne wkrótce</string>
+    <string name="accounts">Konta</string>
+    <string name="accounts_desc">Lokalne, Fresh RSS</string>
+    <string name="color_and_style">Wygląd</string>
+    <string name="color_and_style_desc">Motyw, style kolorystyczne, rozmiar czcionki</string>
+    <string name="interaction">Interakcje</string>
+    <string name="interaction_desc">Po uruchomieniu, reakcje dotykowe</string>
+    <string name="languages">Język</string>
+    <string name="languages_desc">Angielski, Chiński i więcej </string>
+    <string name="help_translate">Pomóż w tłumaczeniu</string>
+    <string name="use_device_languages">Zgodny z systemem</string>
+    <string name="english" translatable="false">English</string>
+    <string name="chinese_simplified" translatable="false">简体中文</string>
+    <string name="german" translatable="false">Deutsch</string>
+    <string name="french" translatable="false">français</string>
+    <string name="czech" translatable="false">Čeština</string>
+    <string name="italian" translatable="false">italiano</string>
+    <string name="tips_and_support">Porady i wsparcie</string>
+    <string name="tips_and_support_desc">Informacje o aplikacji i licencjach open source</string>
+    <string name="welcome">Witamy</string>
+    <string name="tos_tips">Korzystając z Read You zgadzasz się na Warunki Świadczenia Usług i Politykę Prywatności. Zaakceptuj, aby kontynuować.</string>
+    <string name="browse_tos_tips">Zapoznaj się z &lt;i&gt;&lt;u&gt;Warunkami Świadczenia Usługi oraz Polityką Prywatności&lt;/u&gt;&lt;/i&gt;
+    </string>
+    <string name="terms_of_service">Warunki świadczenia usługi</string>
+    <string name="tos_content">
+        &lt;h5&gt;
+
+        Polityka prywatności
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        Traktujemy kwestię prywatności użytkownika z należytą powagą.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        nie gromadzi danych na temat użytkownika, a wszelkie poufne informacje (hasła i inne informacje dotyczące kont) są
+        bezpiecznie przechowywane w lokalnej bazie danych na twoim urządzeniu. 
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        korzysta z poniższych uprawnień w celu świadczenia usług.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        - Pełny dostęp do sieci (w celu uzyskania dostępu do treści wskazanych przez użytkownika)
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - Wyświetlanie połączeń sieciowych (w celu sprawdzenia czy urządzenie jest w stanie połączyć się z siecią)
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - Uruchom usługę na pierwszym planie (w celu regularnej automatycznej synchronizacji treści)
+ 
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Usługi Stron Trzecich
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        Ta umowa nie tyczy się stron podmiotów trzecich z którymi użytkownik łączy się za pomocą &lt;b&gt;Read You&lt;/b&gt;.
+        Zasady ochrony prywatności tych serwisów można sprawdzić na ich poszczególnych stronach internetowych 
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Oświadczenie
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        jest jedynie agregatem treści. Sposób, w jaki użytkownik korzysta z &lt;b&gt;Read You&lt;/b&gt; podlega lokalnym prawom i
+        przepisom obowiązującym w miejscu zamieszkania. Odpowiedzialność i ewentualne konsekwencje wynikające z niewłaściwego korzystania z oprogramowania są ponoszone osobiście przez użytkownika.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Licencja Open Source
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        jest projektem otwarto-źródłowym na licencji GNU GPL 3.0 Open Source License[1], pozwalającej na darmowe używanie, analizowanie i modyfikowanie kodu źródłowego &lt;b&gt;Read You&lt;/b&gt;. Zabroniona jest
+        dystrybucja i sprzedaż zmodyfikowanego bądź pochodnego kodu w formie komercyjnego oprogramowania własnościowego. W celu uzyskania szczegółowych informacji, proszę odwiedzić stronę pełnej licencji GNU GPL 3.0 Open Source License[2].
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Załączniki
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        - [1] https://github.com/Ashinch/ReadYou
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - [2] https://www.gnu.org/licenses/gpl-3.0.html
+
+        &lt;/p&gt;
+    </string>
+    <string name="agree">Zgadzam się</string>
+    <string name="wallpaper_colors">Kolory tapety</string>
+    <string name="no_palettes">Brak palet</string>
+    <string name="only_android_8.1_plus">Tylko dla Android 8.1 i nowszych</string>
+    <string name="basic_colors">Kolory podstawowe</string>
+    <string name="primary_color">Kolor główny</string>
+    <string name="primary_color_hint">Format: #666666 lub 666666</string>
+    <string name="appearance">Wygląd</string>
+    <string name="style">Style</string>
+    <string name="dark_theme">Ciemny motyw</string>
+    <string name="use_device_theme">Zgodny z systemem</string>
+    <string name="on">Włączono</string>
+    <string name="off">Wyłączono</string>
+    <string name="other">Inne</string>
+    <string name="amoled_dark_theme">Czarny motyw AMOLED</string>
+    <string name="tonal_elevation">Odcień</string>
+    <string name="fonts">Czcionki</string>
+    <string name="basic_fonts">Podstawowe czcionki</string>
+    <string name="feeds_page">Strona kanałów</string>
+    <string name="flow_page">Strona flow</string>
+    <string name="reading_page">Strona czytania</string>
+    <string name="sponsor">Sponsor</string>
+    <string name="open_source_licenses">Licencje open source</string>
+    <string name="github_link" translatable="false">https://github.com/Ashinch/ReadYou</string>
+    <string name="telegram_link" translatable="false">https://t.me/ReadYouApp</string>
+    <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
+    <string name="change_log">Lista zmian</string>
+    <string name="update">Aktualizuj</string>
+    <string name="skip_this_version">Pomiń tą wersję</string>
+    <string name="checking_updates">Sprawdzam aktualizacje…</string>
+    <string name="is_latest_version">Jest to najnowsza wersja</string>
+    <string name="check_failure">Błąd w sprawdzaniu aktualizacji</string>
+    <string name="download_failure">Błąd w pobieraniu aktualizacji</string>
+    <string name="rate_limit">Limit częstotliwości żądań</string>
+    <string name="help">Pomoc</string>
+    <string name="on_start">Po uruchomieniu</string>
+    <string name="initial_page">Pierwsza strona</string>
+    <string name="initial_filter">Domyślny filtr</string>
+    <string name="preview_article_title">Powieść "Władca Tajemnic" zakończyła się</string>
+    <string name="preview_article_desc">Głupiec jest ósmym i zarazem ostatnim tomem serii Władca Tajemnic
+        napisanej przez Mątwę Co Lubi Nurkować.
+    </string>
+    <string name="preview_feed_name">Reddit</string>
+    <string name="value">wartość</string>
+    <string name="padding_on_both_ends">Odstęp od krawędzi</string>
+    <string name="article_date">Data publikacji artykułu</string>
+    <string name="article_desc">Opis artykuły</string>
+    <string name="article_images">Obraz z artykułu</string>
+    <string name="feed_names">Nazwa kanału</string>
+    <string name="feed_favicons">Ikona kanału</string>
+    <string name="article_date_sticky_header">Przypięty nagłówek z datą publikacji (eksperymentalne)</string>
+    <string name="article_list">Artykuły</string>
+    <string name="group_list">Grupy</string>
+    <string name="always_expand">Zawsze rozwiń</string>
+    <string name="top">Góra</string>
+    <string name="mark_as_read_button_position">Pozycja przycisku "Oznacz jako przeczytane"</string>
+    <string name="top_bar">Górny pasek</string>
+    <string name="fill_selected_icon">Wypełnienie zaznaczonej ikony</string>
+    <string name="filter_bar">Pasek filtrów</string>
+    <string name="icons">Ikony</string>
+    <string name="icons_and_labels">Ikony z tekstem</string>
+    <string name="icons_and_label_only_selected">Ikony z tekstem (zaznaczone)</string>
+    <string name="tips_top_bar_tonal_elevation">Ten odcień jest dostępny tylko podczas przewijania</string>
+    <string name="tips_article_list_tonal_elevation">Ten odcień jest dostępny tylko w jasnym motywie.</string>
+    <string name="tips_group_list_tonal_elevation">Ten odcień jest dostępny tylko w jasnym motywie.</string>
+    <string name="share">Udostępnij</string>
+    <string name="touch_to_play_video">Dotknij aby odtworzyć klip</string>
+</resources>
