@@ -3,16 +3,25 @@
     <string name="all">Wszystkie</string>
     <plurals name="all_desc">
         <item quantity="one">%1$d pobrany artykuł</item>
+		<item quantity="two">%1$d pobrane artykuły</item>
+		<item quantity="three">%1$d pobrane artykuły</item>
+		<item quantity="four">%1$d pobrane artykuły</item>
         <item quantity="other">%1$d pobranych artykułów</item>
     </plurals>
     <string name="unread">Nieprzeczytane</string>
     <plurals name="unread_desc">
         <item quantity="one">%1$d nieprzeczytany artykuł</item>
+		<item quantity="two">%1$d nieprzeczytane artykuły</item>
+		<item quantity="three">%1$d nieprzeczytane artykuły</item>
+		<item quantity="four">%1$d nieprzeczytane artykuły</item>
         <item quantity="other">%1$d nieprzeczytanych artykułów</item>
     </plurals>
     <string name="starred">Wyróżnione</string>
     <plurals name="starred_desc">
         <item quantity="one">%1$d wyróżniony artykuł</item>
+		<item quantity="two">%1$d wyróżnione artykuły</item>
+		<item quantity="three">%1$d wyróżnione artykuły</item>
+		<item quantity="four">%1$d wyróżnione artykuły</item>
         <item quantity="other">%1$d wyróżnionych artykułów</item>
     </plurals>
     <string name="feeds">Kanały</string>
