@@ -1,0 +1,297 @@
+<resources>
+    <string name="read_you" translatable="false">Read You</string>
+    <string name="all">Todo</string>
+    <plurals name="all_desc">
+        <item quantity="one">%1$d artículo archivado</item>
+        <item quantity="other">%1$d artículos archivados</item>
+    </plurals>
+    <string name="unread">No leído</string>
+    <plurals name="unread_desc">
+        <item quantity="one">%1$d artículo no leído</item>
+        <item quantity="other">%1$d artículos no leídos</item>
+    </plurals>
+    <string name="starred">Destacado</string>
+    <plurals name="starred_desc">
+        <item quantity="one">%1$d artículo destacado</item>
+        <item quantity="other">%1$d artículos destacados</item>
+    </plurals>
+    <string name="feeds">Fuentes</string>
+    <string name="syncing">Sincronizando…</string>
+    <string name="loading">Cargando…</string>
+    <string name="expand_less">Contraer</string>
+    <string name="expand_more">Expandir</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="allow">Permitir</string>
+    <string name="deny">Denegar</string>
+    <string name="defaults">Defecto</string>
+    <string name="unknown">Desconocido</string>
+    <string name="back">Atrás</string>
+    <string name="go_to">Ir a</string>
+    <string name="settings">Ajustes</string>
+    <string name="refresh">Actualizar</string>
+    <string name="search">Buscar</string>
+    <string name="searching">Buscando…</string>
+    <string name="subscribe">Suscribir</string>
+    <string name="already_subscribed">Suscrito</string>
+    <string name="clear">Limpio</string>
+    <string name="paste">Pegar</string>
+    <string name="feed_or_site_url">Feed o URL</string>
+    <string name="import_from_opml">Importar desde OPML</string>
+    <string name="preset">Prestablecido</string>
+    <string name="selected">Seleccionado</string>
+    <string name="allow_notification">Permitir notificación</string>
+    <string name="all_allow_notification_tips">Permitir que todas las fuentes del grupo \"%1$s\" envíen notificaciones.</string>
+    <string name="all_allow_notification_toast">Todas las notificaciones del grupo \"%1$s\" están permitidas</string>
+    <string name="all_deny_notification_toast">Todas las notificaciones del grupo \"%1$s\" están denegadas</string>
+    <string name="parse_full_content">Analizar todo el contenido</string>
+    <string name="all_parse_full_content_tips">Análisis de contenido completo de los artículos del grupo \"%1$s\".</string>
+    <string name="all_parse_full_content_toast">Análisis de contenido completo de los artículos del grupo \"%1$s\"</string>
+    <string name="all_deny_parse_full_content_toast">No más análisis de contenido completo de los artículos del grupo \"%1$s\"
+    </string>
+    <string name="clear_articles">Borrar artículos</string>
+    <string name="clear_articles_in_feed_toast">Limpiado todo el archivo de artículos en la fuente \"%1$s\".</string>
+    <string name="clear_articles_in_group_toast">Limpiado todo el archivo de artículos en el grupo \"%1$s\".</string>
+    <string name="clear_articles_feed_tips">Borrar todos los artículos archivados en la fuente \"%1$s\".</string>
+    <string name="clear_articles_group_tips">Borrar todo el archivo de los artículos en el grupo \"%1$s\".</string>
+    <string name="add_to_group">Añadir al grupo</string>
+    <string name="move_to_group">Mover al grupo</string>
+    <string name="all_move_to_group_tips">Mover todas las fuentes en el grupo \"%1$s\" al grupo \"%2$s\".</string>
+    <string name="all_move_to_group_toast">Movidas todas las fuentes al grupo \"%1$s\"</string>
+    <string name="rename">Renombrar</string>
+    <string name="change_url">Cambiar URL</string>
+    <string name="feed_url_placeholder" translatable="false">http://example.com/feed.rss</string>
+    <string name="rename_toast">Renombrar a \"%1$s\"</string>
+    <string name="create_new_group">Crear grupo nuevo</string>
+    <string name="name">Nombre</string>
+    <string name="open_with">Abrir %1$s</string>
+    <string name="options">Opciones</string>
+    <string name="delete">Eliminar</string>
+    <string name="delete_toast">Eliminado \"%1$s\"</string>
+    <string name="unsubscribe">Darse de baja</string>
+    <string name="unsubscribe_tips">Darse de baja de \"%1$s\" y eliminar todos los artículos archivados en él.</string>
+    <string name="delete_group">Eliminar grupo</string>
+    <string name="delete_group_tips">Eliminar el grupo \"%1$s\" y todas las fuentes y artículos archivados en él.</string>
+    <string name="group_option_tips">Las siguientes opciones se aplicarán a todas las fuentes de este grupo.</string>
+    <string name="today">Hoy</string>
+    <string name="yesterday">Ayer</string>
+    <string name="date_at_time">%1$s a las %2$s</string>
+    <string name="search_for_in">Búsqueda de %1$s elementos en \"%2$s\"</string>
+    <string name="search_for">Búsqueda de %1$s elementos</string>
+    <string name="mark_as_read">Marcar como leído</string>
+    <string name="mark_all_as_read">Marcar todo como leído</string>
+    <string name="mark_as_unread">Marcar como no leído</string>
+    <string name="mark_as_starred">Marcar como destacado</string>
+    <string name="mark_as_unstar">Marcar como no destacado</string>
+    <string name="mark_as_read_one_day">Marcar como leído más de 1 día</string>
+    <string name="mark_as_read_three_days">Marcar como leído más de 3 días</string>
+    <string name="mark_as_read_seven_days">Marcar como leído más de 7 días</string>
+    <string name="one_day">1 día</string>
+    <string name="three_days">3 días</string>
+    <string name="seven_days">7 días</string>
+    <string name="close">Cerrar</string>
+    <string name="get_new_updates">Obtener nuevas actualizaciones</string>
+    <string name="get_new_updates_desc">La versión %1$s está disponible</string>
+    <string name="in_coding">En codificación</string>
+    <string name="coming_soon">Próximamente</string>
+    <string name="accounts">Cuentas</string>
+    <string name="accounts_desc">Local, FreshRSS</string>
+    <string name="color_and_style">Color &amp; estilo</string>
+    <string name="color_and_style_desc">Tema, estilo de color, tamaño de la letra</string>
+    <string name="interaction">Interacción</string>
+    <string name="interaction_desc">Al inicio, retroalimentación táctil</string>
+    <string name="languages">Idiomas</string>
+    <string name="languages_desc">English, Chinese, more</string>
+    <string name="help_translate">Ayuda para traducir</string>
+    <string name="use_device_languages">Usar idioma del dispositivo</string>
+    <string name="english" translatable="false">English</string>
+    <string name="chinese_simplified" translatable="false">简体中文</string>
+    <string name="german" translatable="false">Deutsch</string>
+    <string name="french" translatable="false">français</string>
+    <string name="czech" translatable="false">Čeština</string>
+    <string name="italian" translatable="false">italiano</string>
+    <string name="tips_and_support">Consejos y ayuda</string>
+    <string name="tips_and_support_desc">Acerca de, licencias de código abierto</string>
+    <string name="welcome">Bienvenido</string>
+    <string name="tos_tips">Lea y acepte las condiciones de servicio y la política de privacidad de Read You para continuar.</string>
+    <string name="browse_tos_tips">Navegue por los &lt;i&gt;&lt;u&gt;Términos de Servicio y la Política de Privacidad&lt;/u&gt;&lt;/i&gt;
+    </string>
+    <string name="terms_of_service">Términos de Servicio</string>
+    <string name="tos_content">
+        &lt;h5&gt;
+
+        Política de Privacidad
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        Tomo tu privacidad muy seriamente
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        no recoge ningún dato de usuario, y toda la información sensible (contraseñas y otra información de cuentas) es
+        almacenados de forma segura en la base de datos de la aplicación local en su dispositivo.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        utilizará los siguientes permisos para proporcionarle el servicio.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        - Permiso de acceso a la red (para acceder a los contenidos en línea que usted especifique)
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - Permiso para obtener el estado de la red (para saber si el dispositivo tiene actualmente condiciones de red disponibles)
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - Permiso de servicio en segundo plano (para sincronizar automáticamente tus favoritos de forma regular
+        regularmente)
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Servicios de terceros
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        Esta política no se aplica a los servicios de terceros que usted utiliza con &lt;b&gt;Read You&lt;/b&gt;. Puede consultar
+        las políticas de privacidad de los servicios de terceros que utiliza en sus sitios web
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Descargo de responsabilidad
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        es sólo una herramienta de recopilación de contenidos. Su uso de &lt;b&gt;Read You&lt;/b&gt; está sujeto a las leyes y
+        de su país y región, y cualquier responsabilidad derivada de sus acciones será asumida por usted
+        personalmente.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Licencia de código abierto
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        es un proyecto de código abierto bajo la licencia GNU GPL 3.0 Open Source[1], que permite utilizar, referenciar y
+        modificar el código fuente de &lt;b&gt;Read You&lt;/b&gt; de forma gratuita, pero no permite que el
+        código modificado y derivado sea distribuido y vendido como software comercial de código cerrado. Para más detalles, por favor
+        consulte la licencia completa de código abierto GNU GPL 3.0[2].
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Apéndice
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        - [1] https://github.com/Ashinch/ReadYou
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - [2] https://www.gnu.org/licenses/gpl-3.0.html
+
+        &lt;/p&gt;
+    </string>
+    <string name="agree">De acuerdo</string>
+    <string name="wallpaper_colors">Colores del fondo de pantalla</string>
+    <string name="no_palettes">No hay paletas</string>
+    <string name="only_android_8.1_plus">Solo Android 8.1+</string>
+    <string name="basic_colors">Colores básicos</string>
+    <string name="primary_color">Colores primarios</string>
+    <string name="primary_color_hint">Como #666666 o 666666</string>
+    <string name="appearance">Apariencia</string>
+    <string name="style">Estilo</string>
+    <string name="dark_theme">Tema oscuro</string>
+    <string name="use_device_theme">Usar tema del dispositivo</string>
+    <string name="on">Encendido</string>
+    <string name="off">Apagado</string>
+    <string name="other">Otros</string>
+    <string name="amoled_dark_theme">Tema oscuro AMOLED</string>
+    <string name="tonal_elevation">Elevación del tono</string>
+    <string name="fonts">Tipos de letras</string>
+    <string name="basic_fonts">Letras básicas</string>
+    <string name="feeds_page">Página de fuentes</string>
+    <string name="flow_page">Página de flujo</string>
+    <string name="reading_page">Página de lectura</string>
+    <string name="sponsor">Patrocinar</string>
+    <string name="open_source_licenses">Licencias de código abierto</string>
+    <string name="github_link" translatable="false">https://github.com/Ashinch/ReadYou</string>
+    <string name="telegram_link" translatable="false">https://t.me/ReadYouApp</string>
+    <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
+    <string name="change_log">Registro de cambios</string>
+    <string name="update">Actualizar</string>
+    <string name="skip_this_version">Saltar esta version</string>
+    <string name="checking_updates">Comprobación si hay actualizaciones…</string>
+    <string name="is_latest_version">Esta es la última versión</string>
+    <string name="check_failure">No se ha podido comprobar si hay actualizaciones</string>
+    <string name="download_failure">No se pueden descargar las actualizaciones</string>
+    <string name="rate_limit">El porcentaje de solicitudes es limitado</string>
+    <string name="help">Ayuda</string>
+    <string name="on_start">Al inicio</string>
+    <string name="initial_page">Página inicial</string>
+    <string name="initial_filter">Filtro inicial</string>
+    <string name="preview_article_title">Finalmente la novela "El Señor de los Misterios" ha llegado a su fin</string>
+    <string name="preview_article_desc">El Loco es el octavo y último volumen de la serie El Señor de los Misterios
+        escrito por el Calamar que ama el buceo.
+    </string>
+    <string name="preview_feed_name">Reddit</string>
+    <string name="value">valor</string>
+    <string name="padding_on_both_ends">Acolchado en ambos extremos</string>
+    <string name="article_date">Fecha de publicación del artículo</string>
+    <string name="article_desc">Descripciones del artículo</string>
+    <string name="article_images">Imágenes del artículo</string>
+    <string name="feed_names">Nombres de la fuente</string>
+    <string name="feed_favicons">Faviconos de la fuente</string>
+    <string name="article_date_sticky_header">Encabezado de la fecha de publicación (experimental)</string>
+    <string name="article_list">Lista de artículo</string>
+    <string name="group_list">Lista de grupo</string>
+    <string name="always_expand">Siempre ampliar</string>
+    <string name="top">Parte superior</string>
+    <string name="mark_as_read_button_position">Posición del botón\"Marcar como leído\"</string>
+    <string name="top_bar">Barra superior</string>
+    <string name="fill_selected_icon">Rellenar el ícono seleccionado</string>
+    <string name="filter_bar">Barra de filtro</string>
+    <string name="icons">Íconos</string>
+    <string name="icons_and_labels">Íconos y etiquetas</string>
+    <string name="icons_and_label_only_selected">Íconos y etiquetas (Solo el seleccionado)</string>
+    <string name="tips_top_bar_tonal_elevation">La elevación del tono solo está disponible al desplazarse.</string>
+    <string name="tips_article_list_tonal_elevation">La elevación del tono solo está disponible para el tema claro.</string>
+    <string name="tips_group_list_tonal_elevation">La elevación del tono solo está disponible para el tema claro.</string>
+    <string name="share">Compartir</string>
+    <string name="touch_to_play_video">Tocar para reproducir el video</string>
+</resources>
