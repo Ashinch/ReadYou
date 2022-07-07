@@ -45,6 +45,7 @@ fun ReadingPage(
             Box(modifier = Modifier.fillMaxSize()) {
                 // Top Bar
                 TopBar(
+                    navController = navController,
                     isShow = isShowToolBar,
                     title = readingUiState.articleWithFeed?.article?.title,
                     link = readingUiState.articleWithFeed?.article?.link,

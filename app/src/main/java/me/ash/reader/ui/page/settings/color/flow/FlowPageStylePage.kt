@@ -218,7 +218,7 @@ fun FlowPageStylePage(
                         }
                     }
                     SettingItem(
-                        title = stringResource(R.string.padding_on_both_ends),
+                        title = stringResource(R.string.horizontal_padding),
                         desc = "${filterBarPadding}dp",
                         onClick = {
                             filterBarPaddingValue = filterBarPadding
@@ -257,7 +257,7 @@ fun FlowPageStylePage(
 
     TextFieldDialog(
         visible = filterBarPaddingDialogVisible,
-        title = stringResource(R.string.padding_on_both_ends),
+        title = stringResource(R.string.horizontal_padding),
         value = (filterBarPaddingValue ?: "").toString(),
         placeholder = stringResource(R.string.value),
         onValueChange = {

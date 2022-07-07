@@ -33,6 +33,7 @@ import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.material.Text
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
@@ -63,6 +64,7 @@ import kotlin.math.roundToInt
 
 fun LazyListScope.htmlFormattedText(
     inputStream: InputStream,
+    subheadUpperCase: Boolean = false,
     baseUrl: String,
     @DrawableRes imagePlaceholder: Int,
     onLinkClick: (String) -> Unit,
@@ -72,6 +74,7 @@ fun LazyListScope.htmlFormattedText(
         ?.let { body ->
             formatBody(
                 element = body,
+                subheadUpperCase = subheadUpperCase,
                 imagePlaceholder = imagePlaceholder,
                 onLinkClick = onLinkClick,
                 baseUrl = baseUrl,
@@ -81,6 +84,7 @@ fun LazyListScope.htmlFormattedText(
 
 private fun LazyListScope.formatBody(
     element: Element,
+    subheadUpperCase: Boolean = false,
     @DrawableRes imagePlaceholder: Int,
     onLinkClick: (String) -> Unit,
     baseUrl: String,
@@ -98,7 +102,7 @@ private fun LazyListScope.formatBody(
                     text = paragraph,
                     style = bodyStyle(),
                     modifier = Modifier
-                        .padding(horizontal = PADDING_HORIZONTAL.dp)
+                        .padding(horizontal = textHorizontalPadding().dp)
                         .width(MAX_CONTENT_WIDTH.dp)
                 ) { offset ->
                     paragraph.getStringAnnotations("URL", offset, offset)
@@ -112,7 +116,7 @@ private fun LazyListScope.formatBody(
                     text = paragraph,
                     style = bodyStyle(),
                     modifier = Modifier
-                        .padding(horizontal = PADDING_HORIZONTAL.dp)
+                        .padding(horizontal = textHorizontalPadding().dp)
                         .width(MAX_CONTENT_WIDTH.dp)
                 )
             }
@@ -121,6 +125,7 @@ private fun LazyListScope.formatBody(
 
     composer.appendTextChildren(
         element.childNodes(),
+        subheadUpperCase = subheadUpperCase,
         lazyListScope = this,
         imagePlaceholder = imagePlaceholder,
         onLinkClick = onLinkClick,
@@ -144,7 +149,7 @@ private fun LazyListScope.formatCodeBlock(
                 color = codeBlockBackground(),
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
-                    .padding(horizontal = PADDING_HORIZONTAL.dp),
+                    .padding(horizontal = textHorizontalPadding().dp),
             ) {
                 Box(
                     modifier = Modifier
@@ -179,6 +184,7 @@ private fun LazyListScope.formatCodeBlock(
 private fun TextComposer.appendTextChildren(
     nodes: List<Node>,
     preFormatted: Boolean = false,
+    subheadUpperCase: Boolean = false,
     lazyListScope: LazyListScope,
     @DrawableRes imagePlaceholder: Int,
     onLinkClick: (String) -> Unit,
@@ -238,9 +244,9 @@ private fun TextComposer.appendTextChildren(
                     "h1" -> {
                         withParagraph {
                             withComposableStyle(
-                                style = { h5Style().toSpanStyle() }
+                                style = { h1Style().toSpanStyle() }
                             ) {
-                                append("\n${element.text()}")
+                                append("\n${if (subheadUpperCase) element.text().uppercase() else element.text()}")
                             }
                         }
                     }
@@ -248,9 +254,9 @@ private fun TextComposer.appendTextChildren(
                     "h2" -> {
                         withParagraph {
                             withComposableStyle(
-                                style = { h5Style().toSpanStyle() }
+                                style = { h2Style().toSpanStyle() }
                             ) {
-                                append("\n${element.text()}")
+                                append("\n${if (subheadUpperCase) element.text().uppercase() else element.text()}")
                             }
                         }
                     }
@@ -258,9 +264,9 @@ private fun TextComposer.appendTextChildren(
                     "h3" -> {
                         withParagraph {
                             withComposableStyle(
-                                style = { h5Style().toSpanStyle() }
+                                style = { h3Style().toSpanStyle() }
                             ) {
-                                append("\n${element.text()}")
+                                append("\n${if (subheadUpperCase) element.text().uppercase() else element.text()}")
                             }
                         }
                     }
@@ -268,9 +274,9 @@ private fun TextComposer.appendTextChildren(
                     "h4" -> {
                         withParagraph {
                             withComposableStyle(
-                                style = { h5Style().toSpanStyle() }
+                                style = { h4Style().toSpanStyle() }
                             ) {
-                                append("\n${element.text()}")
+                                append("\n${if (subheadUpperCase) element.text().uppercase() else element.text()}")
                             }
                         }
                     }
@@ -280,7 +286,7 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h5Style().toSpanStyle() }
                             ) {
-                                append("\n${element.text()}")
+                                append("\n${if (subheadUpperCase) element.text().uppercase() else element.text()}")
                             }
                         }
                     }
@@ -288,15 +294,17 @@ private fun TextComposer.appendTextChildren(
                     "h6" -> {
                         withParagraph {
                             withComposableStyle(
-                                style = { h5Style().toSpanStyle() }
+                                style = { h6Style().toSpanStyle() }
                             ) {
-                                append("\n${element.text()}")
+                                append("\n${if (subheadUpperCase) element.text().uppercase() else element.text()}")
                             }
                         }
                     }
 
                     "strong", "b" -> {
-                        withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                        withComposableStyle(
+                            style = { boldStyle().toSpanStyle() }
+                        ) {
                             appendTextChildren(
                                 element.childNodes(),
                                 lazyListScope = lazyListScope,
@@ -419,8 +427,11 @@ private fun TextComposer.appendTextChildren(
 
                     "blockquote" -> {
                         withParagraph {
-                            withComposableStyle(
-                                style = { blockQuoteStyle() }
+                            withStyle(
+                                SpanStyle(
+                                    fontStyle = FontStyle.Italic,
+                                    fontWeight = FontWeight.Light,
+                                )
                             ) {
                                 appendTextChildren(
                                     element.childNodes(),
@@ -458,10 +469,10 @@ private fun TextComposer.appendTextChildren(
 //                                    val scale = remember { mutableStateOf(1f) }
                                     Column(
                                         modifier = Modifier
-//                                            .padding(horizontal = PADDING_HORIZONTAL.dp)
+//                                            .padding(horizontal = horizontalPadding().dp)
                                             .width(MAX_CONTENT_WIDTH.dp)
                                     ) {
-                                        Spacer(modifier = Modifier.height(PADDING_HORIZONTAL.dp))
+                                        Spacer(modifier = Modifier.height(textHorizontalPadding().dp))
                                         DisableSelection {
                                             BoxWithConstraints(
                                                 modifier = Modifier
@@ -487,9 +498,10 @@ private fun TextComposer.appendTextChildren(
                                                 val imageSize = maxImageSize()
                                                 RYAsyncImage(
                                                     modifier = Modifier
+                                                        .align(Alignment.Center)
                                                         .fillMaxWidth()
-                                                        .padding(horizontal = PADDING_HORIZONTAL.dp)
-                                                        .clip(IMAGE_SHAPE)
+                                                        .padding(horizontal = imageHorizontalPadding().dp)
+                                                        .clip(imageShape())
                                                         .clickable { },
                                                     data = imageCandidates.getBestImageForMaxSize(
                                                         pixelDensity = pixelDensity(),
@@ -504,18 +516,18 @@ private fun TextComposer.appendTextChildren(
                                         }
 
                                         if (alt.isNotBlank()) {
-                                            Spacer(modifier = Modifier.height(PADDING_HORIZONTAL.dp / 2))
+                                            Spacer(modifier = Modifier.height(textHorizontalPadding().dp / 2))
 
                                             Text(
                                                 modifier = Modifier
                                                     .fillMaxWidth()
-                                                    .padding(horizontal = PADDING_HORIZONTAL.dp),
+                                                    .padding(horizontal = textHorizontalPadding().dp),
                                                 text = alt,
                                                 style = captionStyle(),
                                             )
                                         }
 
-                                        Spacer(modifier = Modifier.height(PADDING_HORIZONTAL.dp))
+                                        Spacer(modifier = Modifier.height(textHorizontalPadding().dp))
                                     }
                                 }
                             }
@@ -528,7 +540,7 @@ private fun TextComposer.appendTextChildren(
                             .forEach { listItem ->
                                 withParagraph {
                                     // no break space
-                                    append("• ")
+                                    append("  • ")
                                     appendTextChildren(
                                         listItem.childNodes(),
                                         lazyListScope = lazyListScope,
@@ -612,7 +624,7 @@ private fun TextComposer.appendTextChildren(
                                 lazyListScope.item {
                                     Column(
                                         modifier = Modifier
-                                            .padding(horizontal = PADDING_HORIZONTAL.dp)
+                                            .padding(horizontal = textHorizontalPadding().dp)
                                             .width(MAX_CONTENT_WIDTH.dp)
                                     ) {
                                         DisableSelection {
@@ -622,8 +634,8 @@ private fun TextComposer.appendTextChildren(
                                                 RYAsyncImage(
                                                     modifier = Modifier
                                                         .fillMaxWidth()
-                                                        .padding(horizontal = PADDING_HORIZONTAL.dp)
-                                                        .clip(IMAGE_SHAPE)
+                                                        .padding(horizontal = imageHorizontalPadding().dp)
+                                                        .clip(imageShape())
                                                         .clickable {
                                                             onLinkClick(video.link)
                                                         },
@@ -636,17 +648,17 @@ private fun TextComposer.appendTextChildren(
                                             }
                                         }
 
-                                        Spacer(modifier = Modifier.height(PADDING_HORIZONTAL.dp / 2))
+                                        Spacer(modifier = Modifier.height(textHorizontalPadding().dp / 2))
 
                                         Text(
                                             modifier = Modifier
                                                 .fillMaxWidth()
-                                                .padding(horizontal = PADDING_HORIZONTAL.dp),
+                                                .padding(horizontal = textHorizontalPadding().dp),
                                             text = stringResource(R.string.touch_to_play_video),
                                             style = captionStyle(),
                                         )
 
-                                        Spacer(modifier = Modifier.height(PADDING_HORIZONTAL.dp))
+                                        Spacer(modifier = Modifier.height(textHorizontalPadding().dp))
                                     }
                                 }
                             }
@@ -661,6 +673,7 @@ private fun TextComposer.appendTextChildren(
                         appendTextChildren(
                             nodes = element.childNodes(),
                             preFormatted = preFormatted,
+                            subheadUpperCase = subheadUpperCase,
                             lazyListScope = lazyListScope,
                             imagePlaceholder = imagePlaceholder,
                             onLinkClick = onLinkClick,

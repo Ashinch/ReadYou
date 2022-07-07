@@ -24,6 +24,7 @@ import me.ash.reader.ui.page.settings.color.ColorAndStylePage
 import me.ash.reader.ui.page.settings.color.DarkThemePage
 import me.ash.reader.ui.page.settings.color.feeds.FeedsPageStylePage
 import me.ash.reader.ui.page.settings.color.flow.FlowPageStylePage
+import me.ash.reader.ui.page.settings.color.reading.*
 import me.ash.reader.ui.page.settings.interaction.InteractionPage
 import me.ash.reader.ui.page.settings.languages.LanguagesPage
 import me.ash.reader.ui.page.settings.tips.TipsAndSupportPage
@@ -131,6 +132,24 @@ fun HomeEntry(
             }
             animatedComposable(route = RouteName.FLOW_PAGE_STYLE) {
                 FlowPageStylePage(navController)
+            }
+            animatedComposable(route = RouteName.READING_PAGE_STYLE) {
+                ReadingStylePage(navController)
+            }
+            animatedComposable(route = RouteName.READING_DARK_THEME) {
+                ReadingDarkThemePage(navController)
+            }
+            animatedComposable(route = RouteName.READING_PAGE_TITLE) {
+                ReadingTitlePage(navController)
+            }
+            animatedComposable(route = RouteName.READING_PAGE_TEXT) {
+                ReadingTextPage(navController)
+            }
+            animatedComposable(route = RouteName.READING_PAGE_IMAGE) {
+                ReadingImagePage(navController)
+            }
+            animatedComposable(route = RouteName.READING_PAGE_VIDEO) {
+                ReadingVideoPage(navController)
             }
 
             // Interaction

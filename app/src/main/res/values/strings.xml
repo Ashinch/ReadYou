@@ -244,7 +244,7 @@
     <string name="other">Other</string>
     <string name="amoled_dark_theme">AMOLED dark theme</string>
     <string name="tonal_elevation">Tonal elevation</string>
-    <string name="fonts">Fonts</string>
+    <string name="reading_fonts">Reading fonts</string>
     <string name="basic_fonts">Basic fonts</string>
     <string name="feeds_page">Feeds page</string>
     <string name="flow_page">Flow page</string>
@@ -272,7 +272,7 @@
     </string>
     <string name="preview_feed_name">Reddit</string>
     <string name="value">value</string>
-    <string name="padding_on_both_ends">Padding on both ends</string>
+    <string name="horizontal_padding">Horizontal padding</string>
     <string name="article_date">Article publication time</string>
     <string name="article_desc">Article descriptions</string>
     <string name="article_images">Article images</string>
@@ -295,4 +295,33 @@
     <string name="tips_group_list_tonal_elevation">This tonal elevation is only available in the light theme.</string>
     <string name="share">Share</string>
     <string name="touch_to_play_video">Touch to play video</string>
+    <string name="text">Text</string>
+    <string name="font_size">Font size</string>
+    <string name="letter_spacing">Letter spacing</string>
+    <string name="line_spacing">Line spacing</string>
+    <string name="alignment">Alignment</string>
+    <string name="general">General</string>
+    <string name="auto_hide_toolbars">Auto hide toolbars</string>
+    <string name="rearrange_buttons">Rearrange buttons</string>
+    <string name="bionic_reading">Bionic Reading</string>
+    <string name="images">Images</string>
+    <string name="rounded_corners">Rounded corners</string>
+    <string name="videos">Videos</string>
+    <string name="align_left">Align left</string>
+    <string name="align_right">Align right</string>
+    <string name="center_text">Center text</string>
+    <string name="justify">Justify</string>
+    <string name="external_fonts">External fonts</string>
+    <string name="title">Title</string>
+    <string name="bold">Bold</string>
+    <string name="upper_case">Upper case</string>
+    <string name="subhead">Subhead</string>
+    <string name="use_app_theme">Use app theme</string>
+    <string name="advanced">Advanced</string>
+    <string name="dark_reading_theme">Dark reading theme</string>
+    <string name="title_desc">Bolded, upper case, alignment</string>
+    <string name="text_desc">Font size, letter spacing, alignment</string>
+    <string name="images_desc">Rounded corners, horizontal padding</string>
+    <string name="videos_desc">Rounded corners, horizontal padding</string>
+    <string name="maximize">Maximize</string>
 </resources>

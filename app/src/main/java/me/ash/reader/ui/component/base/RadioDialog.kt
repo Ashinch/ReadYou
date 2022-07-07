@@ -16,6 +16,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -63,7 +64,7 @@ fun RadioDialog(
                             text = option.text,
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 baselineShift = BaselineShift.None
-                            ),
+                            ).merge(other = option.style),
                             color = MaterialTheme.colorScheme.onSurface,
                         )
                     }
@@ -78,6 +79,7 @@ fun RadioDialog(
 @Immutable
 data class RadioDialogOption(
     val text: String = "",
+    val style: TextStyle? = null,
     val selected: Boolean = false,
     val onClick: () -> Unit = {},
 )

@@ -12,6 +12,7 @@ import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.dataStore
 
 data class Settings(
+    // Version
     val newVersionNumber: Version = NewVersionNumberPreference.default,
     val skipVersionNumber: Version = SkipVersionNumberPreference.default,
     val newVersionPublishDate: String = NewVersionPublishDatePreference.default,
@@ -19,11 +20,13 @@ data class Settings(
     val newVersionSize: String = NewVersionSizePreference.default,
     val newVersionDownloadUrl: String = NewVersionDownloadUrlPreference.default,
 
+    // Theme
     val themeIndex: Int = ThemeIndexPreference.default,
     val customPrimaryColor: String = CustomPrimaryColorPreference.default,
     val darkTheme: DarkThemePreference = DarkThemePreference.default,
     val amoledDarkTheme: AmoledDarkThemePreference = AmoledDarkThemePreference.default,
 
+    // Feeds page
     val feedsFilterBarStyle: FeedsFilterBarStylePreference = FeedsFilterBarStylePreference.default,
     val feedsFilterBarFilled: FeedsFilterBarFilledPreference = FeedsFilterBarFilledPreference.default,
     val feedsFilterBarPadding: Int = FeedsFilterBarPaddingPreference.default,
@@ -32,6 +35,7 @@ data class Settings(
     val feedsGroupListExpand: FeedsGroupListExpandPreference = FeedsGroupListExpandPreference.default,
     val feedsGroupListTonalElevation: FeedsGroupListTonalElevationPreference = FeedsGroupListTonalElevationPreference.default,
 
+    // Flow page
     val flowFilterBarStyle: FlowFilterBarStylePreference = FlowFilterBarStylePreference.default,
     val flowFilterBarFilled: FlowFilterBarFilledPreference = FlowFilterBarFilledPreference.default,
     val flowFilterBarPadding: Int = FlowFilterBarPaddingPreference.default,
@@ -45,67 +49,33 @@ data class Settings(
     val flowArticleListDateStickyHeader: FlowArticleListDateStickyHeaderPreference = FlowArticleListDateStickyHeaderPreference.default,
     val flowArticleListTonalElevation: FlowArticleListTonalElevationPreference = FlowArticleListTonalElevationPreference.default,
 
+    // Reading page
+    val readingTheme: ReadingThemePreference = ReadingThemePreference.default,
+    val readingDarkTheme: ReadingDarkThemePreference = ReadingDarkThemePreference.default,
+    val readingFontSize: Int = ReadingFontSizePreference.default,
+    val readingLetterSpacing: Double = ReadingLetterSpacingPreference.default,
+    val readingTextHorizontalPadding: Int = ReadingTextHorizontalPaddingPreference.default,
+    val readingTextAlign: ReadingTextAlignPreference = ReadingTextAlignPreference.default,
+    val readingTextBold: ReadingTextBoldPreference = ReadingTextBoldPreference.default,
+    val readingTitleAlign: ReadingTitleAlignPreference = ReadingTitleAlignPreference.default,
+    val readingSubheadAlign: ReadingSubheadAlignPreference = ReadingSubheadAlignPreference.default,
+    val readingFonts: ReadingFontsPreference = ReadingFontsPreference.default,
+    val readingTitleBold: ReadingTitleBoldPreference = ReadingTitleBoldPreference.default,
+    val readingSubheadBold: ReadingSubheadBoldPreference = ReadingSubheadBoldPreference.default,
+    val readingTitleUpperCase: ReadingTitleUpperCasePreference = ReadingTitleUpperCasePreference.default,
+    val readingSubheadUpperCase: ReadingSubheadUpperCasePreference = ReadingSubheadUpperCasePreference.default,
+    val readingImageHorizontalPadding: Int = ReadingImageHorizontalPaddingPreference.default,
+    val readingImageRoundedCorners: Int = ReadingImageRoundedCornersPreference.default,
+
+    // Interaction
     val initialPage: InitialPagePreference = InitialPagePreference.default,
     val initialFilter: InitialFilterPreference = InitialFilterPreference.default,
 
+    // Languages
     val languages: LanguagesPreference = LanguagesPreference.default,
 )
 
-@Composable
-fun SettingsProvider(
-    content: @Composable () -> Unit,
-) {
-    val context = LocalContext.current
-    val settings = remember {
-        context.dataStore.data.map {
-            Log.i("RLog", "AppTheme: ${it}")
-            it.toSettings()
-        }
-    }.collectAsStateValue(initial = Settings())
-
-    CompositionLocalProvider(
-        LocalNewVersionNumber provides settings.newVersionNumber,
-        LocalSkipVersionNumber provides settings.skipVersionNumber,
-        LocalNewVersionPublishDate provides settings.newVersionPublishDate,
-        LocalNewVersionLog provides settings.newVersionLog,
-        LocalNewVersionSize provides settings.newVersionSize,
-        LocalNewVersionDownloadUrl provides settings.newVersionDownloadUrl,
-
-        LocalThemeIndex provides settings.themeIndex,
-        LocalCustomPrimaryColor provides settings.customPrimaryColor,
-        LocalDarkTheme provides settings.darkTheme,
-        LocalAmoledDarkTheme provides settings.amoledDarkTheme,
-
-        LocalFeedsTopBarTonalElevation provides settings.feedsTopBarTonalElevation,
-        LocalFeedsGroupListExpand provides settings.feedsGroupListExpand,
-        LocalFeedsGroupListTonalElevation provides settings.feedsGroupListTonalElevation,
-        LocalFeedsFilterBarStyle provides settings.feedsFilterBarStyle,
-        LocalFeedsFilterBarFilled provides settings.feedsFilterBarFilled,
-        LocalFeedsFilterBarPadding provides settings.feedsFilterBarPadding,
-        LocalFeedsFilterBarTonalElevation provides settings.feedsFilterBarTonalElevation,
-
-        LocalFlowTopBarTonalElevation provides settings.flowTopBarTonalElevation,
-        LocalFlowArticleListFeedIcon provides settings.flowArticleListFeedIcon,
-        LocalFlowArticleListFeedName provides settings.flowArticleListFeedName,
-        LocalFlowArticleListImage provides settings.flowArticleListImage,
-        LocalFlowArticleListDesc provides settings.flowArticleListDesc,
-        LocalFlowArticleListTime provides settings.flowArticleListTime,
-        LocalFlowArticleListDateStickyHeader provides settings.flowArticleListDateStickyHeader,
-        LocalFlowArticleListTonalElevation provides settings.flowArticleListTonalElevation,
-        LocalFlowFilterBarStyle provides settings.flowFilterBarStyle,
-        LocalFlowFilterBarFilled provides settings.flowFilterBarFilled,
-        LocalFlowFilterBarPadding provides settings.flowFilterBarPadding,
-        LocalFlowFilterBarTonalElevation provides settings.flowFilterBarTonalElevation,
-
-        LocalInitialPage provides settings.initialPage,
-        LocalInitialFilter provides settings.initialFilter,
-
-        LocalLanguages provides settings.languages,
-    ) {
-        content()
-    }
-}
-
+// Version
 val LocalNewVersionNumber = compositionLocalOf { NewVersionNumberPreference.default }
 val LocalSkipVersionNumber = compositionLocalOf { SkipVersionNumberPreference.default }
 val LocalNewVersionPublishDate = compositionLocalOf { NewVersionPublishDatePreference.default }
@@ -113,6 +83,7 @@ val LocalNewVersionLog = compositionLocalOf { NewVersionLogPreference.default }
 val LocalNewVersionSize = compositionLocalOf { NewVersionSizePreference.default }
 val LocalNewVersionDownloadUrl = compositionLocalOf { NewVersionDownloadUrlPreference.default }
 
+// Theme
 val LocalThemeIndex =
     compositionLocalOf { ThemeIndexPreference.default }
 val LocalCustomPrimaryColor =
@@ -122,6 +93,7 @@ val LocalDarkTheme =
 val LocalAmoledDarkTheme =
     compositionLocalOf<AmoledDarkThemePreference> { AmoledDarkThemePreference.default }
 
+// Feeds page
 val LocalFeedsFilterBarStyle =
     compositionLocalOf<FeedsFilterBarStylePreference> { FeedsFilterBarStylePreference.default }
 val LocalFeedsFilterBarFilled =
@@ -137,6 +109,7 @@ val LocalFeedsGroupListExpand =
 val LocalFeedsGroupListTonalElevation =
     compositionLocalOf<FeedsGroupListTonalElevationPreference> { FeedsGroupListTonalElevationPreference.default }
 
+// Flow page
 val LocalFlowFilterBarStyle =
     compositionLocalOf<FlowFilterBarStylePreference> { FlowFilterBarStylePreference.default }
 val LocalFlowFilterBarFilled =
@@ -162,9 +135,113 @@ val LocalFlowArticleListDateStickyHeader =
 val LocalFlowArticleListTonalElevation =
     compositionLocalOf<FlowArticleListTonalElevationPreference> { FlowArticleListTonalElevationPreference.default }
 
+// Reading page
+val LocalReadingTheme = compositionLocalOf<ReadingThemePreference> { ReadingThemePreference.default }
+val LocalReadingDarkTheme = compositionLocalOf<ReadingDarkThemePreference> { ReadingDarkThemePreference.default }
+val LocalReadingFontSize = compositionLocalOf { ReadingFontSizePreference.default }
+val LocalReadingLetterSpacing = compositionLocalOf { ReadingLetterSpacingPreference.default }
+val LocalReadingTextHorizontalPadding = compositionLocalOf { ReadingTextHorizontalPaddingPreference.default }
+val LocalReadingTextAlign = compositionLocalOf<ReadingTextAlignPreference> { ReadingTextAlignPreference.default }
+val LocalReadingTextBold = compositionLocalOf<ReadingTextBoldPreference> { ReadingTextBoldPreference.default }
+val LocalReadingTitleAlign = compositionLocalOf<ReadingTitleAlignPreference> { ReadingTitleAlignPreference.default }
+val LocalReadingSubheadAlign =
+    compositionLocalOf<ReadingSubheadAlignPreference> { ReadingSubheadAlignPreference.default }
+val LocalReadingFonts = compositionLocalOf<ReadingFontsPreference> { ReadingFontsPreference.default }
+val LocalReadingTitleBold = compositionLocalOf<ReadingTitleBoldPreference> { ReadingTitleBoldPreference.default }
+val LocalReadingSubheadBold =
+    compositionLocalOf<ReadingSubheadBoldPreference> { ReadingSubheadBoldPreference.default }
+val LocalReadingTitleUpperCase =
+    compositionLocalOf<ReadingTitleUpperCasePreference> { ReadingTitleUpperCasePreference.default }
+val LocalReadingSubheadUpperCase =
+    compositionLocalOf<ReadingSubheadUpperCasePreference> { ReadingSubheadUpperCasePreference.default }
+val LocalReadingImageHorizontalPadding = compositionLocalOf { ReadingImageHorizontalPaddingPreference.default }
+val LocalReadingImageRoundedCorners = compositionLocalOf { ReadingImageRoundedCornersPreference.default }
+
+// Interaction
 val LocalInitialPage = compositionLocalOf<InitialPagePreference> { InitialPagePreference.default }
 val LocalInitialFilter =
     compositionLocalOf<InitialFilterPreference> { InitialFilterPreference.default }
 
+// Languages
 val LocalLanguages =
     compositionLocalOf<LanguagesPreference> { LanguagesPreference.default }
+
+@Composable
+fun SettingsProvider(
+    content: @Composable () -> Unit,
+) {
+    val context = LocalContext.current
+    val settings = remember {
+        context.dataStore.data.map {
+            Log.i("RLog", "AppTheme: ${it}")
+            it.toSettings()
+        }
+    }.collectAsStateValue(initial = Settings())
+
+    CompositionLocalProvider(
+        // Version
+        LocalNewVersionNumber provides settings.newVersionNumber,
+        LocalSkipVersionNumber provides settings.skipVersionNumber,
+        LocalNewVersionPublishDate provides settings.newVersionPublishDate,
+        LocalNewVersionLog provides settings.newVersionLog,
+        LocalNewVersionSize provides settings.newVersionSize,
+        LocalNewVersionDownloadUrl provides settings.newVersionDownloadUrl,
+
+        // Theme
+        LocalThemeIndex provides settings.themeIndex,
+        LocalCustomPrimaryColor provides settings.customPrimaryColor,
+        LocalDarkTheme provides settings.darkTheme,
+        LocalAmoledDarkTheme provides settings.amoledDarkTheme,
+
+        // Feeds page
+        LocalFeedsTopBarTonalElevation provides settings.feedsTopBarTonalElevation,
+        LocalFeedsGroupListExpand provides settings.feedsGroupListExpand,
+        LocalFeedsGroupListTonalElevation provides settings.feedsGroupListTonalElevation,
+        LocalFeedsFilterBarStyle provides settings.feedsFilterBarStyle,
+        LocalFeedsFilterBarFilled provides settings.feedsFilterBarFilled,
+        LocalFeedsFilterBarPadding provides settings.feedsFilterBarPadding,
+        LocalFeedsFilterBarTonalElevation provides settings.feedsFilterBarTonalElevation,
+
+        // Flow page
+        LocalFlowTopBarTonalElevation provides settings.flowTopBarTonalElevation,
+        LocalFlowArticleListFeedIcon provides settings.flowArticleListFeedIcon,
+        LocalFlowArticleListFeedName provides settings.flowArticleListFeedName,
+        LocalFlowArticleListImage provides settings.flowArticleListImage,
+        LocalFlowArticleListDesc provides settings.flowArticleListDesc,
+        LocalFlowArticleListTime provides settings.flowArticleListTime,
+        LocalFlowArticleListDateStickyHeader provides settings.flowArticleListDateStickyHeader,
+        LocalFlowArticleListTonalElevation provides settings.flowArticleListTonalElevation,
+        LocalFlowFilterBarStyle provides settings.flowFilterBarStyle,
+        LocalFlowFilterBarFilled provides settings.flowFilterBarFilled,
+        LocalFlowFilterBarPadding provides settings.flowFilterBarPadding,
+        LocalFlowFilterBarTonalElevation provides settings.flowFilterBarTonalElevation,
+
+        // Reading page
+        LocalReadingTheme provides settings.readingTheme,
+        LocalReadingDarkTheme provides settings.readingDarkTheme,
+        LocalReadingFontSize provides settings.readingFontSize,
+        LocalReadingLetterSpacing provides settings.readingLetterSpacing,
+        LocalReadingTextHorizontalPadding provides settings.readingTextHorizontalPadding,
+        LocalReadingTextAlign provides settings.readingTextAlign,
+        LocalReadingTextBold provides settings.readingTextBold,
+        LocalReadingTitleAlign provides settings.readingTitleAlign,
+        LocalReadingSubheadAlign provides settings.readingSubheadAlign,
+        LocalReadingFonts provides settings.readingFonts,
+        LocalReadingTitleBold provides settings.readingTitleBold,
+        LocalReadingSubheadBold provides settings.readingSubheadBold,
+        LocalReadingTitleUpperCase provides settings.readingTitleUpperCase,
+        LocalReadingSubheadUpperCase provides settings.readingSubheadUpperCase,
+        LocalReadingImageHorizontalPadding provides settings.readingImageHorizontalPadding,
+        LocalReadingImageRoundedCorners provides settings.readingImageRoundedCorners,
+
+        // Interaction
+        LocalInitialPage provides settings.initialPage,
+        LocalInitialFilter provides settings.initialFilter,
+
+        // Languages
+        LocalLanguages provides settings.languages,
+    ) {
+        content()
+    }
+}
+

@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import me.ash.reader.data.model.preference.LocalReadingSubheadUpperCase
 import me.ash.reader.ui.component.reader.Reader
 import me.ash.reader.ui.ext.drawVerticalScrollbar
 import java.util.*
@@ -30,6 +31,7 @@ fun Content(
     isShowToolBar: Boolean,
 ) {
     val context = LocalContext.current
+    val subheadUpperCase = LocalReadingSubheadUpperCase.current
 
     SelectionContainer {
         LazyColumn(
@@ -56,7 +58,7 @@ fun Content(
                         .padding(horizontal = 12.dp)
                 ) {
                     DisableSelection {
-                        Header(
+                        Metadata(
                             feedName = feedName,
                             title = title,
                             author = author,
@@ -88,6 +90,7 @@ fun Content(
             if (!isLoading) {
                 Reader(
                     context = context,
+                    subheadUpperCase = subheadUpperCase.value,
                     link = link ?: "",
                     content = content
                 )

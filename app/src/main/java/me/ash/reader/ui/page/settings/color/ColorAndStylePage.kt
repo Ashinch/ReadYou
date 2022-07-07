@@ -181,8 +181,11 @@ fun ColorAndStylePage(
                     ) {}
                     SettingItem(
                         title = stringResource(R.string.reading_page),
-                        enable = false,
-                        onClick = {},
+                        onClick = {
+                            navController.navigate(RouteName.READING_PAGE_STYLE) {
+                                launchSingleTop = true
+                            }
+                        },
                     ) {}
                 }
                 item {

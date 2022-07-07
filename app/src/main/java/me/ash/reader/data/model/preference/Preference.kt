@@ -11,6 +11,7 @@ sealed class Preference {
 
 fun Preferences.toSettings(): Settings {
     return Settings(
+        // Version
         newVersionNumber = NewVersionNumberPreference.fromPreferences(this),
         skipVersionNumber = SkipVersionNumberPreference.fromPreferences(this),
         newVersionPublishDate = NewVersionPublishDatePreference.fromPreferences(this),
@@ -18,11 +19,13 @@ fun Preferences.toSettings(): Settings {
         newVersionSize = NewVersionSizePreference.fromPreferences(this),
         newVersionDownloadUrl = NewVersionDownloadUrlPreference.fromPreferences(this),
 
+        // Theme
         themeIndex = ThemeIndexPreference.fromPreferences(this),
         customPrimaryColor = CustomPrimaryColorPreference.fromPreferences(this),
         darkTheme = DarkThemePreference.fromPreferences(this),
         amoledDarkTheme = AmoledDarkThemePreference.fromPreferences(this),
 
+        // Feeds page
         feedsFilterBarStyle = FeedsFilterBarStylePreference.fromPreferences(this),
         feedsFilterBarFilled = FeedsFilterBarFilledPreference.fromPreferences(this),
         feedsFilterBarPadding = FeedsFilterBarPaddingPreference.fromPreferences(this),
@@ -31,6 +34,7 @@ fun Preferences.toSettings(): Settings {
         feedsGroupListExpand = FeedsGroupListExpandPreference.fromPreferences(this),
         feedsGroupListTonalElevation = FeedsGroupListTonalElevationPreference.fromPreferences(this),
 
+        // Flow page
         flowFilterBarStyle = FlowFilterBarStylePreference.fromPreferences(this),
         flowFilterBarFilled = FlowFilterBarFilledPreference.fromPreferences(this),
         flowFilterBarPadding = FlowFilterBarPaddingPreference.fromPreferences(this),
@@ -46,9 +50,29 @@ fun Preferences.toSettings(): Settings {
         ),
         flowArticleListTonalElevation = FlowArticleListTonalElevationPreference.fromPreferences(this),
 
+        // Reading page
+        readingTheme = ReadingThemePreference.fromPreferences(this),
+        readingDarkTheme = ReadingDarkThemePreference.fromPreferences(this),
+        readingFontSize = ReadingFontSizePreference.fromPreferences(this),
+        readingLetterSpacing = ReadingLetterSpacingPreference.fromPreferences(this),
+        readingTextHorizontalPadding = ReadingTextHorizontalPaddingPreference.fromPreferences(this),
+        readingTextAlign = ReadingTextAlignPreference.fromPreferences(this),
+        readingTextBold = ReadingTextBoldPreference.fromPreferences(this),
+        readingTitleAlign = ReadingTitleAlignPreference.fromPreferences(this),
+        readingSubheadAlign = ReadingSubheadAlignPreference.fromPreferences(this),
+        readingFonts = ReadingFontsPreference.fromPreferences(this),
+        readingTitleBold = ReadingTitleBoldPreference.fromPreferences(this),
+        readingSubheadBold = ReadingSubheadBoldPreference.fromPreferences(this),
+        readingTitleUpperCase = ReadingTitleUpperCasePreference.fromPreferences(this),
+        readingSubheadUpperCase = ReadingSubheadUpperCasePreference.fromPreferences(this),
+        readingImageHorizontalPadding = ReadingImageHorizontalPaddingPreference.fromPreferences(this),
+        readingImageRoundedCorners = ReadingImageRoundedCornersPreference.fromPreferences(this),
+
+        // Interaction
         initialPage = InitialPagePreference.fromPreferences(this),
         initialFilter = InitialFilterPreference.fromPreferences(this),
 
+        // Languages
         languages = LanguagesPreference.fromPreferences(this),
     )
 }
