@@ -101,15 +101,15 @@
     <string name="interaction">Interacción</string>
     <string name="interaction_desc">Al inicio, retroalimentación táctil</string>
     <string name="languages">Idiomas</string>
-    <string name="languages_desc">English, Chinese, more</string>
+    <string name="languages_desc">Inglés, Chino, más</string>
     <string name="help_translate">Ayuda para traducir</string>
     <string name="use_device_languages">Usar idioma del dispositivo</string>
     <string name="english" translatable="false">English</string>
     <string name="chinese_simplified" translatable="false">简体中文</string>
     <string name="german" translatable="false">Deutsch</string>
-    <string name="french" translatable="false">français</string>
+    <string name="french" translatable="false">Français</string>
     <string name="czech" translatable="false">Čeština</string>
-    <string name="italian" translatable="false">italiano</string>
+    <string name="italian" translatable="false">Italiano</string>
     <string name="tips_and_support">Consejos y ayuda</string>
     <string name="tips_and_support_desc">Acerca de, licencias de código abierto</string>
     <string name="welcome">Bienvenido</string>
