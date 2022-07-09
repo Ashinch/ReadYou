@@ -14,6 +14,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import me.ash.reader.data.model.general.Filter
 import me.ash.reader.data.model.preference.LocalDarkTheme
+import me.ash.reader.data.model.preference.LocalReadingDarkTheme
 import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage
@@ -81,7 +82,11 @@ fun HomeEntry(
         }
     }
 
-    val useDarkTheme = LocalDarkTheme.current.isDarkTheme()
+    val useDarkTheme = if (navController.currentDestination?.route == RouteName.READING) {
+        LocalReadingDarkTheme.current.isDarkTheme()
+    } else {
+        LocalDarkTheme.current.isDarkTheme()
+    }
 
     AppTheme(useDarkTheme = useDarkTheme) {
 
