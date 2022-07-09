@@ -8,13 +8,13 @@ import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
-sealed class ReadingImageMaximizePreference(val value: Boolean) : Preference() {
-    object ON : ReadingImageMaximizePreference(true)
-    object OFF : ReadingImageMaximizePreference(false)
+sealed class ReadingAutoHideToolbarPreference(val value: Boolean) : Preference() {
+    object ON : ReadingAutoHideToolbarPreference(true)
+    object OFF : ReadingAutoHideToolbarPreference(false)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
-            context.dataStore.put(DataStoreKeys.ReadingImageMaximize, value)
+            context.dataStore.put(DataStoreKeys.ReadingAutoHideToolbar, value)
         }
     }
 
@@ -24,7 +24,7 @@ sealed class ReadingImageMaximizePreference(val value: Boolean) : Preference() {
         val values = listOf(ON, OFF)
 
         fun fromPreferences(preferences: Preferences) =
-            when (preferences[DataStoreKeys.ReadingImageMaximize.key]) {
+            when (preferences[DataStoreKeys.ReadingAutoHideToolbar.key]) {
                 true -> ON
                 false -> OFF
                 else -> default
@@ -32,8 +32,8 @@ sealed class ReadingImageMaximizePreference(val value: Boolean) : Preference() {
     }
 }
 
-operator fun ReadingImageMaximizePreference.not(): ReadingImageMaximizePreference =
+operator fun ReadingAutoHideToolbarPreference.not(): ReadingAutoHideToolbarPreference =
     when (value) {
-        true -> ReadingImageMaximizePreference.OFF
-        false -> ReadingImageMaximizePreference.ON
+        true -> ReadingAutoHideToolbarPreference.OFF
+        false -> ReadingAutoHideToolbarPreference.ON
     }

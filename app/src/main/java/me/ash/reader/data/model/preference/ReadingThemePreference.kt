@@ -20,7 +20,6 @@ sealed class ReadingThemePreference(val value: Int) : Preference() {
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
             context.dataStore.put(DataStoreKeys.ReadingTheme, value)
-            applyTheme(context, scope)
         }
     }
 
@@ -32,7 +31,7 @@ sealed class ReadingThemePreference(val value: Int) : Preference() {
             Custom -> "Custom"
         }
 
-    private fun applyTheme(context: Context, scope: CoroutineScope) {
+    fun applyTheme(context: Context, scope: CoroutineScope) {
         when (this) {
             MaterialYou -> {
                 ReadingTitleBoldPreference.default.put(context, scope)
@@ -46,10 +45,11 @@ sealed class ReadingThemePreference(val value: Int) : Preference() {
                     ReadingTextHorizontalPaddingPreference.default)
                 ReadingTextAlignPreference.default.put(context, scope)
                 ReadingLetterSpacingPreference.put(context, scope, ReadingLetterSpacingPreference.default)
-                ReadingFontSizePreference.put(context, scope, ReadingFontSizePreference.default)
+                ReadingTextFontSizePreference.put(context, scope, ReadingTextFontSizePreference.default)
                 ReadingImageRoundedCornersPreference.put(context, scope, ReadingImageRoundedCornersPreference.default)
                 ReadingImageHorizontalPaddingPreference.put(context, scope,
                     ReadingImageHorizontalPaddingPreference.default)
+                ReadingImageMaximizePreference.default.put(context, scope)
             }
 
             Reeder -> {
@@ -64,9 +64,10 @@ sealed class ReadingThemePreference(val value: Int) : Preference() {
                     ReadingTextHorizontalPaddingPreference.default)
                 ReadingTextAlignPreference.default.put(context, scope)
                 ReadingLetterSpacingPreference.put(context, scope, 1.0)
-                ReadingFontSizePreference.put(context, scope, 18)
+                ReadingTextFontSizePreference.put(context, scope, 18)
                 ReadingImageRoundedCornersPreference.put(context, scope, 0)
                 ReadingImageHorizontalPaddingPreference.put(context, scope, 0)
+                ReadingImageMaximizePreference.default.put(context, scope)
             }
 
             Paper -> {
@@ -81,10 +82,11 @@ sealed class ReadingThemePreference(val value: Int) : Preference() {
                     ReadingTextHorizontalPaddingPreference.default)
                 ReadingTextAlignPreference.Center.put(context, scope)
                 ReadingLetterSpacingPreference.put(context, scope, ReadingLetterSpacingPreference.default)
-                ReadingFontSizePreference.put(context, scope, 20)
+                ReadingTextFontSizePreference.put(context, scope, 20)
                 ReadingImageRoundedCornersPreference.put(context, scope, 0)
                 ReadingImageHorizontalPaddingPreference.put(context, scope,
                     ReadingImageHorizontalPaddingPreference.default)
+                ReadingImageMaximizePreference.default.put(context, scope)
             }
 
             Custom -> {
@@ -99,10 +101,11 @@ sealed class ReadingThemePreference(val value: Int) : Preference() {
                     ReadingTextHorizontalPaddingPreference.default)
                 ReadingTextAlignPreference.default.put(context, scope)
                 ReadingLetterSpacingPreference.put(context, scope, ReadingLetterSpacingPreference.default)
-                ReadingFontSizePreference.put(context, scope, ReadingFontSizePreference.default)
+                ReadingTextFontSizePreference.put(context, scope, ReadingTextFontSizePreference.default)
                 ReadingImageRoundedCornersPreference.put(context, scope, ReadingImageRoundedCornersPreference.default)
                 ReadingImageHorizontalPaddingPreference.put(context, scope,
                     ReadingImageHorizontalPaddingPreference.default)
+                ReadingImageMaximizePreference.default.put(context, scope)
             }
         }
     }

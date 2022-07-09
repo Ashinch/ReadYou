@@ -53,7 +53,8 @@ fun Preferences.toSettings(): Settings {
         // Reading page
         readingTheme = ReadingThemePreference.fromPreferences(this),
         readingDarkTheme = ReadingDarkThemePreference.fromPreferences(this),
-        readingFontSize = ReadingFontSizePreference.fromPreferences(this),
+        readingAutoHideToolbar = ReadingAutoHideToolbarPreference.fromPreferences(this),
+        readingTextFontSize = ReadingTextFontSizePreference.fromPreferences(this),
         readingLetterSpacing = ReadingLetterSpacingPreference.fromPreferences(this),
         readingTextHorizontalPadding = ReadingTextHorizontalPaddingPreference.fromPreferences(this),
         readingTextAlign = ReadingTextAlignPreference.fromPreferences(this),
@@ -67,6 +68,7 @@ fun Preferences.toSettings(): Settings {
         readingSubheadUpperCase = ReadingSubheadUpperCasePreference.fromPreferences(this),
         readingImageHorizontalPadding = ReadingImageHorizontalPaddingPreference.fromPreferences(this),
         readingImageRoundedCorners = ReadingImageRoundedCornersPreference.fromPreferences(this),
+        readingImageMaximize = ReadingImageMaximizePreference.fromPreferences(this),
 
         // Interaction
         initialPage = InitialPagePreference.fromPreferences(this),

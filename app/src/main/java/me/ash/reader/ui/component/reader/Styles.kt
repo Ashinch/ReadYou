@@ -81,7 +81,7 @@ fun bodyStyle(): TextStyle =
     TextStyle(
         fontFamily = LocalReadingFonts.current.asFontFamily(),
         fontWeight = if (LocalReadingTextBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
-        fontSize = LocalReadingFontSize.current.sp,
+        fontSize = LocalReadingTextFontSize.current.sp,
         letterSpacing = LocalReadingLetterSpacing.current.sp,
         color = bodyForeground(),
         textAlign = LocalReadingTextAlign.current.toTextAlign(),
@@ -183,7 +183,7 @@ fun captionStyle(): TextStyle =
 fun linkTextStyle(): TextStyle =
     TextStyle(
         fontFamily = LocalReadingFonts.current.asFontFamily(),
-        fontSize = LocalReadingFontSize.current.sp,
+        fontSize = LocalReadingTextFontSize.current.sp,
         color = MaterialTheme.colorScheme.primary,
         textDecoration = TextDecoration.Underline,
     )

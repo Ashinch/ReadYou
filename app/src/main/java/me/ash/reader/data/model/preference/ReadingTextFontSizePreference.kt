@@ -8,16 +8,16 @@ import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
-object ReadingFontSizePreference {
+object ReadingTextFontSizePreference {
 
     const val default = 17
 
     fun put(context: Context, scope: CoroutineScope, value: Int) {
         scope.launch {
-            context.dataStore.put(DataStoreKeys.ReadingFontSize, value)
+            context.dataStore.put(DataStoreKeys.ReadingTextFontSize, value)
         }
     }
 
     fun fromPreferences(preferences: Preferences) =
-        preferences[DataStoreKeys.ReadingFontSize.key] ?: default
+        preferences[DataStoreKeys.ReadingTextFontSize.key] ?: default
 }

@@ -31,6 +31,7 @@ fun ReadingTitlePage(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
+    val readingTheme = LocalReadingTheme.current
     val titleBold = LocalReadingTitleBold.current
     val subtitleBold = LocalReadingSubheadBold.current
     val titleUpperCase = LocalReadingTitleUpperCase.current
@@ -92,20 +93,24 @@ fun ReadingTitlePage(
                         title = stringResource(R.string.bold),
                         onClick = {
                             (!titleBold).put(context, scope)
+                            ReadingThemePreference.Custom.put(context, scope)
                         },
                     ) {
                         RYSwitch(activated = titleBold.value) {
                             (!titleBold).put(context, scope)
+                            ReadingThemePreference.Custom.put(context, scope)
                         }
                     }
                     SettingItem(
                         title = stringResource(R.string.upper_case),
                         onClick = {
                             (!titleUpperCase).put(context, scope)
+                            ReadingThemePreference.Custom.put(context, scope)
                         },
                     ) {
                         RYSwitch(activated = titleUpperCase.value) {
                             (!titleUpperCase).put(context, scope)
+                            ReadingThemePreference.Custom.put(context, scope)
                         }
                     }
                     SettingItem(
@@ -126,20 +131,24 @@ fun ReadingTitlePage(
                         title = stringResource(R.string.bold),
                         onClick = {
                             (!subtitleBold).put(context, scope)
+                            ReadingThemePreference.Custom.put(context, scope)
                         },
                     ) {
                         RYSwitch(activated = subtitleBold.value) {
                             (!subtitleBold).put(context, scope)
+                            ReadingThemePreference.Custom.put(context, scope)
                         }
                     }
                     SettingItem(
                         title = stringResource(R.string.upper_case),
                         onClick = {
                             (!subtitleUpperCase).put(context, scope)
+                            ReadingThemePreference.Custom.put(context, scope)
                         },
                     ) {
                         RYSwitch(activated = subtitleUpperCase.value) {
                             (!subtitleUpperCase).put(context, scope)
+                            ReadingThemePreference.Custom.put(context, scope)
                         }
                     }
                     SettingItem(
@@ -166,6 +175,7 @@ fun ReadingTitlePage(
                 selected = it == titleAlign,
             ) {
                 it.put(context, scope)
+                ReadingThemePreference.Custom.put(context, scope)
             }
         }
     ) {
@@ -181,6 +191,7 @@ fun ReadingTitlePage(
                 selected = it == subtitleAlign,
             ) {
                 it.put(context, scope)
+                ReadingThemePreference.Custom.put(context, scope)
             }
         }
     ) {

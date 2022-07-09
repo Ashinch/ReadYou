@@ -52,7 +52,8 @@ data class Settings(
     // Reading page
     val readingTheme: ReadingThemePreference = ReadingThemePreference.default,
     val readingDarkTheme: ReadingDarkThemePreference = ReadingDarkThemePreference.default,
-    val readingFontSize: Int = ReadingFontSizePreference.default,
+    val readingAutoHideToolbar: ReadingAutoHideToolbarPreference = ReadingAutoHideToolbarPreference.default,
+    val readingTextFontSize: Int = ReadingTextFontSizePreference.default,
     val readingLetterSpacing: Double = ReadingLetterSpacingPreference.default,
     val readingTextHorizontalPadding: Int = ReadingTextHorizontalPaddingPreference.default,
     val readingTextAlign: ReadingTextAlignPreference = ReadingTextAlignPreference.default,
@@ -66,6 +67,7 @@ data class Settings(
     val readingSubheadUpperCase: ReadingSubheadUpperCasePreference = ReadingSubheadUpperCasePreference.default,
     val readingImageHorizontalPadding: Int = ReadingImageHorizontalPaddingPreference.default,
     val readingImageRoundedCorners: Int = ReadingImageRoundedCornersPreference.default,
+    val readingImageMaximize: ReadingImageMaximizePreference = ReadingImageMaximizePreference.default,
 
     // Interaction
     val initialPage: InitialPagePreference = InitialPagePreference.default,
@@ -138,7 +140,8 @@ val LocalFlowArticleListTonalElevation =
 // Reading page
 val LocalReadingTheme = compositionLocalOf<ReadingThemePreference> { ReadingThemePreference.default }
 val LocalReadingDarkTheme = compositionLocalOf<ReadingDarkThemePreference> { ReadingDarkThemePreference.default }
-val LocalReadingFontSize = compositionLocalOf { ReadingFontSizePreference.default }
+val LocalReadingAutoHideToolbar = compositionLocalOf<ReadingAutoHideToolbarPreference> { ReadingAutoHideToolbarPreference.default }
+val LocalReadingTextFontSize = compositionLocalOf { ReadingTextFontSizePreference.default }
 val LocalReadingLetterSpacing = compositionLocalOf { ReadingLetterSpacingPreference.default }
 val LocalReadingTextHorizontalPadding = compositionLocalOf { ReadingTextHorizontalPaddingPreference.default }
 val LocalReadingTextAlign = compositionLocalOf<ReadingTextAlignPreference> { ReadingTextAlignPreference.default }
@@ -156,6 +159,7 @@ val LocalReadingSubheadUpperCase =
     compositionLocalOf<ReadingSubheadUpperCasePreference> { ReadingSubheadUpperCasePreference.default }
 val LocalReadingImageHorizontalPadding = compositionLocalOf { ReadingImageHorizontalPaddingPreference.default }
 val LocalReadingImageRoundedCorners = compositionLocalOf { ReadingImageRoundedCornersPreference.default }
+val LocalReadingImageMaximize = compositionLocalOf<ReadingImageMaximizePreference> { ReadingImageMaximizePreference.default }
 
 // Interaction
 val LocalInitialPage = compositionLocalOf<InitialPagePreference> { InitialPagePreference.default }
@@ -219,7 +223,8 @@ fun SettingsProvider(
         // Reading page
         LocalReadingTheme provides settings.readingTheme,
         LocalReadingDarkTheme provides settings.readingDarkTheme,
-        LocalReadingFontSize provides settings.readingFontSize,
+        LocalReadingAutoHideToolbar provides settings.readingAutoHideToolbar,
+        LocalReadingTextFontSize provides settings.readingTextFontSize,
         LocalReadingLetterSpacing provides settings.readingLetterSpacing,
         LocalReadingTextHorizontalPadding provides settings.readingTextHorizontalPadding,
         LocalReadingTextAlign provides settings.readingTextAlign,
@@ -233,6 +238,7 @@ fun SettingsProvider(
         LocalReadingSubheadUpperCase provides settings.readingSubheadUpperCase,
         LocalReadingImageHorizontalPadding provides settings.readingImageHorizontalPadding,
         LocalReadingImageRoundedCorners provides settings.readingImageRoundedCorners,
+        LocalReadingImageMaximize provides settings.readingImageMaximize,
 
         // Interaction
         LocalInitialPage provides settings.initialPage,

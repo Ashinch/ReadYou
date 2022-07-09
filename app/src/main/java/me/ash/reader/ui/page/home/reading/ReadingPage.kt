@@ -8,6 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import me.ash.reader.data.model.preference.LocalReadingAutoHideToolbar
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.isScrollDown
@@ -18,9 +19,12 @@ fun ReadingPage(
     readingViewModel: ReadingViewModel = hiltViewModel(),
 ) {
     val readingUiState = readingViewModel.readingUiState.collectAsStateValue()
-    val isShowToolBar =
+    val isShowToolBar = if (LocalReadingAutoHideToolbar.current.value) {
         readingUiState.articleWithFeed != null && !readingUiState.listState.isScrollDown()
-
+    } else {
+        true
+    }
+    
     LaunchedEffect(Unit) {
         navController.currentBackStackEntryFlow.collect {
             it.arguments?.getString("articleId")?.let {

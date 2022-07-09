@@ -38,10 +38,11 @@ fun ReadingStylePage(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    var readingTheme = LocalReadingTheme.current
+    val readingTheme = LocalReadingTheme.current
     val darkTheme = LocalReadingDarkTheme.current
     val darkThemeNot = !darkTheme
     val fonts = LocalReadingFonts.current
+    val autoHideToolbar = LocalReadingAutoHideToolbar.current
 
     var fontsDialogVisible by remember { mutableStateOf(false) }
 
@@ -68,8 +69,13 @@ fun ReadingStylePage(
                     ) {
                         Spacer(modifier = Modifier.width(24.dp))
                         ReadingThemePreference.values.map {
-                            ReadingThemePrev(selected = readingTheme, theme = it) {
-                                it.put(context, scope)
+                            if (readingTheme == ReadingThemePreference.Custom || it != ReadingThemePreference.Custom) {
+                                ReadingThemePrev(selected = readingTheme, theme = it) {
+                                    it.put(context, scope)
+                                    it.applyTheme(context, scope)
+                                }
+                            } else {
+                                Spacer(modifier = Modifier.width(150.dp))
                             }
                             Spacer(modifier = Modifier.width(8.dp))
                         }
@@ -135,11 +141,11 @@ fun ReadingStylePage(
                     SettingItem(
                         title = stringResource(R.string.auto_hide_toolbars),
                         onClick = {
-//                            (!articleListDesc).put(context, scope)
+                            (!autoHideToolbar).put(context, scope)
                         },
                     ) {
-                        RYSwitch(activated = false) {
-//                            (!articleListDesc).put(context, scope)
+                        RYSwitch(activated = autoHideToolbar.value) {
+                            (!autoHideToolbar).put(context, scope)
                         }
                     }
                     SettingItem(

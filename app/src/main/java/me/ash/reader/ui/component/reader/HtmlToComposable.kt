@@ -52,6 +52,7 @@ import coil.size.Precision
 import coil.size.Size
 import coil.size.pxOrElse
 import me.ash.reader.R
+import me.ash.reader.data.model.preference.LocalReadingImageMaximize
 import me.ash.reader.ui.component.base.RYAsyncImage
 import org.jsoup.Jsoup
 import org.jsoup.helper.StringUtil
@@ -510,7 +511,7 @@ private fun TextComposer.appendTextChildren(
                                                     contentDescription = alt,
                                                     size = imageSize,
                                                     precision = Precision.INEXACT,
-                                                    contentScale = ContentScale.FillWidth,
+                                                    contentScale = if (LocalReadingImageMaximize.current.value) ContentScale.FillWidth else ContentScale.Inside,
                                                 )
                                             }
                                         }

@@ -271,10 +271,10 @@ sealed class DataStoreKeys<T> {
             get() = intPreferencesKey("readingDarkTheme")
     }
 
-    object ReadingFontSize : DataStoreKeys<Int>() {
+    object ReadingTextFontSize : DataStoreKeys<Int>() {
 
         override val key: Preferences.Key<Int>
-            get() = intPreferencesKey("readingFontSize")
+            get() = intPreferencesKey("readingTextFontSize")
     }
 
     object ReadingLetterSpacing : DataStoreKeys<Double>() {
@@ -323,6 +323,12 @@ sealed class DataStoreKeys<T> {
 
         override val key: Preferences.Key<Int>
             get() = intPreferencesKey("readingFonts")
+    }
+
+    object ReadingAutoHideToolbar : DataStoreKeys<Boolean>() {
+
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("readingAutoHideToolbar")
     }
 
     object ReadingTitleBold : DataStoreKeys<Boolean>() {

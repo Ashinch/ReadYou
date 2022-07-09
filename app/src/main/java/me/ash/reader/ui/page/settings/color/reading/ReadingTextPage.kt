@@ -31,7 +31,8 @@ fun ReadingTextPage(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    val fontSize = LocalReadingFontSize.current
+    val readingTheme = LocalReadingTheme.current
+    val fontSize = LocalReadingTextFontSize.current
     val letterSpacing = LocalReadingLetterSpacing.current
     val horizontalPadding = LocalReadingTextHorizontalPadding.current
     val align = LocalReadingTextAlign.current
@@ -102,10 +103,12 @@ fun ReadingTextPage(
                         title = stringResource(R.string.bold),
                         onClick = {
                             (!bold).put(context, scope)
+                            ReadingThemePreference.Custom.put(context, scope)
                         },
                     ) {
                         RYSwitch(activated = bold.value) {
                             (!bold).put(context, scope)
+                            ReadingThemePreference.Custom.put(context, scope)
                         }
                     }
                     SettingItem(
@@ -145,7 +148,8 @@ fun ReadingTextPage(
             fontSizeDialogVisible = false
         },
         onConfirm = {
-            ReadingFontSizePreference.put(context, scope, fontSizeValue ?: 0)
+            ReadingTextFontSizePreference.put(context, scope, fontSizeValue ?: 0)
+            ReadingThemePreference.Custom.put(context, scope)
             fontSizeDialogVisible = false
         }
     )
@@ -163,6 +167,7 @@ fun ReadingTextPage(
         },
         onConfirm = {
             ReadingLetterSpacingPreference.put(context, scope, letterSpacingValue ?: 0.0)
+            ReadingThemePreference.Custom.put(context, scope)
             letterSpacingDialogVisible = false
         }
     )
@@ -180,6 +185,7 @@ fun ReadingTextPage(
         },
         onConfirm = {
             ReadingTextHorizontalPaddingPreference.put(context, scope, horizontalPaddingValue ?: 0)
+            ReadingThemePreference.Custom.put(context, scope)
             horizontalPaddingDialogVisible = false
         }
     )
@@ -193,6 +199,7 @@ fun ReadingTextPage(
                 selected = it == align,
             ) {
                 it.put(context, scope)
+                ReadingThemePreference.Custom.put(context, scope)
             }
         }
     ) {
