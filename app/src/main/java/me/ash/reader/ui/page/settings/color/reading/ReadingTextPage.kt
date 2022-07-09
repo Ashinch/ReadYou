@@ -2,10 +2,8 @@ package me.ash.reader.ui.page.settings.color.reading
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -66,10 +64,6 @@ fun ReadingTextPage(
 
                 // Preview
                 item {
-                    Row(modifier = Modifier.horizontalScroll(rememberScrollState())
-                    ) {
-                    }
-
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -83,7 +77,7 @@ fun ReadingTextPage(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-
+                        TitleAndTextPreview()
                     }
                     Spacer(modifier = Modifier.height(24.dp))
                 }

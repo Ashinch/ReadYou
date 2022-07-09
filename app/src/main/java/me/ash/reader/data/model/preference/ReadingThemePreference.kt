@@ -63,7 +63,7 @@ sealed class ReadingThemePreference(val value: Int) : Preference() {
                 ReadingTextHorizontalPaddingPreference.put(context, scope,
                     ReadingTextHorizontalPaddingPreference.default)
                 ReadingTextAlignPreference.default.put(context, scope)
-                ReadingLetterSpacingPreference.put(context, scope, 1.0)
+                ReadingLetterSpacingPreference.put(context, scope, ReadingLetterSpacingPreference.default)
                 ReadingTextFontSizePreference.put(context, scope, 18)
                 ReadingImageRoundedCornersPreference.put(context, scope, 0)
                 ReadingImageHorizontalPaddingPreference.put(context, scope, 0)

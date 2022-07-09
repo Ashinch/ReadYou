@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.common
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
@@ -12,6 +13,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import me.ash.reader.data.model.general.Filter
 import me.ash.reader.data.model.preference.LocalDarkTheme
 import me.ash.reader.data.model.preference.LocalReadingDarkTheme
@@ -38,6 +41,7 @@ fun HomeEntry(
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    var isReadingPage by rememberSaveable { mutableStateOf(false) }
     val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
     val navController = rememberAnimatedNavController()
 
@@ -49,6 +53,11 @@ fun HomeEntry(
     }
 
     LaunchedEffect(Unit) {
+        navController.currentBackStackEntryFlow.collectLatest {
+            Log.i("RLog", "isReadingPage: ${navController.currentDestination?.route}")
+            delay(310L)
+            isReadingPage = navController.currentDestination?.route == "${RouteName.READING}/{articleId}"
+        }
         when (context.initialPage) {
             1 -> {
                 navController.navigate(RouteName.FLOW) {
@@ -82,13 +91,16 @@ fun HomeEntry(
         }
     }
 
-    val useDarkTheme = if (navController.currentDestination?.route == RouteName.READING) {
+    val useDarkTheme = if (isReadingPage) {
         LocalReadingDarkTheme.current.isDarkTheme()
     } else {
         LocalDarkTheme.current.isDarkTheme()
     }
 
-    AppTheme(useDarkTheme = useDarkTheme) {
+    AppTheme(
+        useDarkTheme = if (isReadingPage) LocalReadingDarkTheme.current.isDarkTheme()
+        else LocalDarkTheme.current.isDarkTheme()
+    ) {
 
         rememberSystemUiController().run {
             setStatusBarColor(Color.Transparent, !useDarkTheme)

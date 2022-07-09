@@ -2,10 +2,8 @@ package me.ash.reader.ui.page.settings.color.reading
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -14,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -21,6 +20,8 @@ import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.data.model.preference.*
 import me.ash.reader.ui.component.base.*
+import me.ash.reader.ui.component.reader.imageHorizontalPadding
+import me.ash.reader.ui.component.reader.imageShape
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
 
@@ -61,11 +62,6 @@ fun ReadingImagePage(
 
                 // Preview
                 item {
-                    Row(modifier = Modifier.horizontalScroll(rememberScrollState())
-                    ) {
-
-                    }
-
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -79,7 +75,16 @@ fun ReadingImagePage(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-
+                        RYAsyncImage(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp)
+                                .padding(imageHorizontalPadding().dp)
+                                .clip(imageShape()),
+                            data = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=800&q=60",
+                            contentDescription = stringResource(R.string.images),
+                            contentScale = ContentScale.Inside,
+                        )
                     }
                     Spacer(modifier = Modifier.height(24.dp))
                 }

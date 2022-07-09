@@ -2,10 +2,8 @@ package me.ash.reader.ui.page.settings.color.reading
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -31,13 +29,12 @@ fun ReadingTitlePage(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    val readingTheme = LocalReadingTheme.current
     val titleBold = LocalReadingTitleBold.current
     val subtitleBold = LocalReadingSubheadBold.current
-    val titleUpperCase = LocalReadingTitleUpperCase.current
-    val subtitleUpperCase = LocalReadingSubheadUpperCase.current
     val titleAlign = LocalReadingTitleAlign.current
     val subtitleAlign = LocalReadingSubheadAlign.current
+    val titleUpperCase = LocalReadingTitleUpperCase.current
+    val subheadUpperCase = LocalReadingSubheadUpperCase.current
 
     var titleAlignDialogVisible by remember { mutableStateOf(false) }
     var subtitleAlignDialogVisible by remember { mutableStateOf(false) }
@@ -61,10 +58,6 @@ fun ReadingTitlePage(
 
                 // Preview
                 item {
-                    Row(modifier = Modifier.horizontalScroll(rememberScrollState())
-                    ) {
-                    }
-
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -78,7 +71,7 @@ fun ReadingTitlePage(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-
+                        TitleAndTextPreview()
                     }
                     Spacer(modifier = Modifier.height(24.dp))
                 }
@@ -142,19 +135,22 @@ fun ReadingTitlePage(
                     SettingItem(
                         title = stringResource(R.string.upper_case),
                         onClick = {
-                            (!subtitleUpperCase).put(context, scope)
+                            (!subheadUpperCase).put(context, scope)
                             ReadingThemePreference.Custom.put(context, scope)
                         },
                     ) {
-                        RYSwitch(activated = subtitleUpperCase.value) {
-                            (!subtitleUpperCase).put(context, scope)
+                        RYSwitch(activated = subheadUpperCase.value) {
+                            (!subheadUpperCase).put(context, scope)
                             ReadingThemePreference.Custom.put(context, scope)
                         }
                     }
                     SettingItem(
                         title = stringResource(R.string.alignment),
                         desc = subtitleAlign.toDesc(context),
-                        onClick = { subtitleAlignDialogVisible = true },
+                        enable = false,
+                        onClick = {
+//                            subtitleAlignDialogVisible = true
+                        },
                     ) {}
                 }
 
