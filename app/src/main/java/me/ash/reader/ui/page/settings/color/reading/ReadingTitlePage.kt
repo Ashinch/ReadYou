@@ -156,10 +156,10 @@ fun ReadingTitlePage(
                         desc = subtitleAlign.toDesc(context),
                         onClick = { subtitleAlignDialogVisible = true },
                     ) {}
-                    Spacer(modifier = Modifier.height(24.dp))
                 }
 
                 item {
+                    Spacer(modifier = Modifier.height(24.dp))
                     Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }

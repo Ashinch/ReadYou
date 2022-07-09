@@ -113,10 +113,10 @@ fun ReadingImagePage(
                             ReadingThemePreference.Custom.put(context, scope)
                         }
                     }
-                    Spacer(modifier = Modifier.height(24.dp))
                 }
 
                 item {
+                    Spacer(modifier = Modifier.height(24.dp))
                     Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }

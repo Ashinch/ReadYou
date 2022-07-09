@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import me.ash.reader.R
+import me.ash.reader.data.model.preference.LocalReadingPageTonalElevation
 import me.ash.reader.ui.component.base.CanBeDisabledIconButton
 
 @Composable
@@ -34,6 +35,8 @@ fun BottomBar(
     onStarred: (isStarred: Boolean) -> Unit = {},
     onFullContent: (isFullContent: Boolean) -> Unit = {},
 ) {
+    val tonalElevation = LocalReadingPageTonalElevation.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -43,7 +46,10 @@ fun BottomBar(
         RYExtensibleVisibility(visible = isShow) {
             val view = LocalView.current
 
-            Surface(modifier = Modifier.navigationBarsPadding()) {
+            Surface(
+                modifier = Modifier.navigationBarsPadding(),
+                tonalElevation = tonalElevation.value.dp,
+            ) {
                 // TODO: Component styles await refactoring
                 Row(
                     modifier = Modifier

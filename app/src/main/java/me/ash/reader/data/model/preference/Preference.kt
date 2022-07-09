@@ -53,6 +53,7 @@ fun Preferences.toSettings(): Settings {
         // Reading page
         readingTheme = ReadingThemePreference.fromPreferences(this),
         readingDarkTheme = ReadingDarkThemePreference.fromPreferences(this),
+        readingPageTonalElevation = ReadingPageTonalElevationPreference.fromPreferences(this),
         readingAutoHideToolbar = ReadingAutoHideToolbarPreference.fromPreferences(this),
         readingTextFontSize = ReadingTextFontSizePreference.fromPreferences(this),
         readingLetterSpacing = ReadingLetterSpacingPreference.fromPreferences(this),

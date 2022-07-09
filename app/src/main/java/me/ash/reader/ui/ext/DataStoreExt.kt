@@ -271,6 +271,12 @@ sealed class DataStoreKeys<T> {
             get() = intPreferencesKey("readingDarkTheme")
     }
 
+    object ReadingPageTonalElevation : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("ReadingPageTonalElevation")
+    }
+
     object ReadingTextFontSize : DataStoreKeys<Int>() {
 
         override val key: Preferences.Key<Int>

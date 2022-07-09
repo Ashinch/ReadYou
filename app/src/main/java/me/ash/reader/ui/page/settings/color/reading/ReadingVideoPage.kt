@@ -90,14 +90,10 @@ fun ReadingVideoPage(
                         desc = "dp",
                         onClick = {},
                     ) {}
+                }
+
+                item {
                     Spacer(modifier = Modifier.height(24.dp))
-                }
-
-                item {
-                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
-                }
-
-                item {
                     Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }

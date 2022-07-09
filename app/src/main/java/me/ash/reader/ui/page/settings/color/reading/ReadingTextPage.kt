@@ -44,7 +44,7 @@ fun ReadingTextPage(
     var alignDialogVisible by remember { mutableStateOf(false) }
 
     var fontSizeValue: Int? by remember { mutableStateOf(fontSize) }
-    var letterSpacingValue: Double? by remember { mutableStateOf(letterSpacing) }
+    var letterSpacingValue: String? by remember { mutableStateOf(letterSpacing.toString()) }
     var horizontalPaddingValue: Int? by remember { mutableStateOf(horizontalPadding) }
 
     RYScaffold(
@@ -126,10 +126,10 @@ fun ReadingTextPage(
                         desc = align.toDesc(context),
                         onClick = { alignDialogVisible = true },
                     ) {}
-                    Spacer(modifier = Modifier.height(24.dp))
                 }
 
                 item {
+                    Spacer(modifier = Modifier.height(24.dp))
                     Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }
@@ -160,13 +160,13 @@ fun ReadingTextPage(
         value = (letterSpacingValue ?: "").toString(),
         placeholder = stringResource(R.string.value),
         onValueChange = {
-            letterSpacingValue = it.toDoubleOrNull()
+            letterSpacingValue = it
         },
         onDismissRequest = {
             letterSpacingDialogVisible = false
         },
         onConfirm = {
-            ReadingLetterSpacingPreference.put(context, scope, letterSpacingValue ?: 0.0)
+            ReadingLetterSpacingPreference.put(context, scope, letterSpacingValue?.toDoubleOrNull() ?: 0.0)
             ReadingThemePreference.Custom.put(context, scope)
             letterSpacingDialogVisible = false
         }

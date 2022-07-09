@@ -21,8 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import me.ash.reader.R
+import me.ash.reader.data.model.preference.LocalReadingPageTonalElevation
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.ext.share
+import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.common.RouteName
 
 @Composable
@@ -34,6 +36,7 @@ fun TopBar(
     onClose: () -> Unit = {},
 ) {
     val context = LocalContext.current
+    val tonalElevation = LocalReadingPageTonalElevation.current
 
     Box(
         modifier = Modifier
@@ -45,7 +48,9 @@ fun TopBar(
             SmallTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
                 colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
+                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+                        elevation = tonalElevation.value.dp
+                    ),
                 ),
                 title = {},
                 navigationIcon = {

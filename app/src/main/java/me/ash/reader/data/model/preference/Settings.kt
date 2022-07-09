@@ -52,6 +52,7 @@ data class Settings(
     // Reading page
     val readingTheme: ReadingThemePreference = ReadingThemePreference.default,
     val readingDarkTheme: ReadingDarkThemePreference = ReadingDarkThemePreference.default,
+    val readingPageTonalElevation: ReadingPageTonalElevationPreference = ReadingPageTonalElevationPreference.default,
     val readingAutoHideToolbar: ReadingAutoHideToolbarPreference = ReadingAutoHideToolbarPreference.default,
     val readingTextFontSize: Int = ReadingTextFontSizePreference.default,
     val readingLetterSpacing: Double = ReadingLetterSpacingPreference.default,
@@ -140,6 +141,7 @@ val LocalFlowArticleListTonalElevation =
 // Reading page
 val LocalReadingTheme = compositionLocalOf<ReadingThemePreference> { ReadingThemePreference.default }
 val LocalReadingDarkTheme = compositionLocalOf<ReadingDarkThemePreference> { ReadingDarkThemePreference.default }
+val LocalReadingPageTonalElevation = compositionLocalOf<ReadingPageTonalElevationPreference> { ReadingPageTonalElevationPreference.default }
 val LocalReadingAutoHideToolbar = compositionLocalOf<ReadingAutoHideToolbarPreference> { ReadingAutoHideToolbarPreference.default }
 val LocalReadingTextFontSize = compositionLocalOf { ReadingTextFontSizePreference.default }
 val LocalReadingLetterSpacing = compositionLocalOf { ReadingLetterSpacingPreference.default }
@@ -223,6 +225,7 @@ fun SettingsProvider(
         // Reading page
         LocalReadingTheme provides settings.readingTheme,
         LocalReadingDarkTheme provides settings.readingDarkTheme,
+        LocalReadingPageTonalElevation provides settings.readingPageTonalElevation,
         LocalReadingAutoHideToolbar provides settings.readingAutoHideToolbar,
         LocalReadingTextFontSize provides settings.readingTextFontSize,
         LocalReadingLetterSpacing provides settings.readingLetterSpacing,

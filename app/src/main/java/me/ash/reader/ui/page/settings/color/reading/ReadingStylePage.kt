@@ -41,9 +41,11 @@ fun ReadingStylePage(
     val readingTheme = LocalReadingTheme.current
     val darkTheme = LocalReadingDarkTheme.current
     val darkThemeNot = !darkTheme
+    val tonalElevation = LocalReadingPageTonalElevation.current
     val fonts = LocalReadingFonts.current
     val autoHideToolbar = LocalReadingAutoHideToolbar.current
 
+    var tonalElevationDialogVisible by remember { mutableStateOf(false) }
     var fontsDialogVisible by remember { mutableStateOf(false) }
 
     RYScaffold(
@@ -107,6 +109,11 @@ fun ReadingStylePage(
                         text = stringResource(R.string.general)
                     )
                     SettingItem(
+                        title = stringResource(R.string.reading_fonts),
+                        desc = fonts.toDesc(context),
+                        onClick = { fontsDialogVisible = true },
+                    ) {}
+                    SettingItem(
                         title = stringResource(R.string.dark_reading_theme),
                         desc = darkTheme.toDesc(context),
                         separatedActions = true,
@@ -123,18 +130,17 @@ fun ReadingStylePage(
                         }
                     }
                     SettingItem(
-                        title = stringResource(R.string.reading_fonts),
-                        desc = fonts.toDesc(context),
-                        onClick = { fontsDialogVisible = true },
-                    ) {}
-                    SettingItem(
                         title = stringResource(R.string.bionic_reading),
                         separatedActions = true,
+                        enable = false,
                         onClick = {
 //                            (!articleListDesc).put(context, scope)
                         },
                     ) {
-                        RYSwitch(activated = true) {
+                        RYSwitch(
+                            activated = false,
+                            enable = false,
+                        ) {
 //                            (!articleListDesc).put(context, scope)
                         }
                     }
@@ -150,7 +156,15 @@ fun ReadingStylePage(
                     }
                     SettingItem(
                         title = stringResource(R.string.rearrange_buttons),
+                        enable = false,
                         onClick = {},
+                    ) {}
+                    SettingItem(
+                        title = stringResource(R.string.tonal_elevation),
+                        desc = "${tonalElevation.value}dp",
+                        onClick = {
+                            tonalElevationDialogVisible = true
+                        },
                     ) {}
                     Spacer(modifier = Modifier.height(24.dp))
                 }
@@ -195,21 +209,37 @@ fun ReadingStylePage(
                         title = stringResource(R.string.videos),
                         desc = stringResource(R.string.videos_desc),
                         icon = Icons.Outlined.Movie,
+                        enable = false,
                         onClick = {
-                            navController.navigate(RouteName.READING_PAGE_VIDEO) {
-                                launchSingleTop = true
-                            }
+//                            navController.navigate(RouteName.READING_PAGE_VIDEO) {
+//                                launchSingleTop = true
+//                            }
                         },
                     ) {}
-                    Spacer(modifier = Modifier.height(24.dp))
                 }
 
                 item {
+                    Spacer(modifier = Modifier.height(24.dp))
                     Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }
         }
     )
+
+    RadioDialog(
+        visible = tonalElevationDialogVisible,
+        title = stringResource(R.string.tonal_elevation),
+        options = ReadingPageTonalElevationPreference.values.map {
+            RadioDialogOption(
+                text = it.toDesc(context),
+                selected = it == tonalElevation,
+            ) {
+                it.put(context, scope)
+            }
+        }
+    ) {
+        tonalElevationDialogVisible = false
+    }
 
     RadioDialog(
         visible = fontsDialogVisible,
