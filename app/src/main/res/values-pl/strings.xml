@@ -42,7 +42,7 @@
     <string name="import_from_opml">Import pliku OPML</string>
     <string name="preset">Preset</string>
     <string name="selected">Zaznaczone</string>
-    <string name="allow_notification">Zezwól na powiadomienia</string>
+    <string name="allow_notification">Powiadomienia</string>
     <string name="all_allow_notification_tips">Zezwól wszystkim kanałom w grupie \"%1$s\" na wysyłanie powiadomień.</string>
     <string name="all_allow_notification_toast">Zezwolono na wszystkie powiadomienia z grupy \"%1$s\"</string>
     <string name="all_deny_notification_toast">Cofnięto zezwolenie na powiadomienia z grupy \"%1$s\"</string>
@@ -256,7 +256,7 @@
     <string name="initial_page">Pierwsza strona</string>
     <string name="initial_filter">Domyślny filtr</string>
     <string name="preview_article_title">Powieść "Władca Tajemnic" zakończyła się</string>
-    <string name="preview_article_desc">Głupiec jest ósmym i zarazem ostatnim tomem serii Władca Tajemnic
+    <string name="preview_article_desc">"Głupiec" jest ósmym i zarazem ostatnim tomem serii Władca Tajemnic
         autorstwa Jana Kowalskiego.
     </string>
     <string name="preview_feed_name">Reddit</string>
