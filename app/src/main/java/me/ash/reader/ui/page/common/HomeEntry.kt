@@ -53,11 +53,6 @@ fun HomeEntry(
     }
 
     LaunchedEffect(Unit) {
-        navController.currentBackStackEntryFlow.collectLatest {
-            Log.i("RLog", "isReadingPage: ${navController.currentDestination?.route}")
-            delay(310L)
-            isReadingPage = navController.currentDestination?.route == "${RouteName.READING}/{articleId}"
-        }
         when (context.initialPage) {
             1 -> {
                 navController.navigate(RouteName.FLOW) {
@@ -77,6 +72,14 @@ fun HomeEntry(
                 }
             )
         )
+
+        // This is finally
+        navController.currentBackStackEntryFlow.collectLatest {
+            Log.i("RLog", "currentBackStackEntry: ${navController.currentDestination?.route}")
+            // Animation duration takes 310 ms
+            delay(310L)
+            isReadingPage = navController.currentDestination?.route == "${RouteName.READING}/{articleId}"
+        }
     }
 
     LaunchedEffect(openArticleId) {
