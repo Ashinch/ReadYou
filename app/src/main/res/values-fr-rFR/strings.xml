@@ -307,7 +307,7 @@
     <string name="use_app_theme">Use app theme</string>
     <string name="advanced">Advanced</string>
     <string name="dark_reading_theme">Dark reading theme</string>
-    <string name="title_desc">Bolded, upper case, alignment</string>
+    <string name="title_desc">Bold, upper case, alignment</string>
     <string name="text_desc">Font size, letter spacing, alignment</string>
     <string name="images_desc">Rounded corners, horizontal padding</string>
     <string name="videos_desc">Rounded corners, horizontal padding</string>

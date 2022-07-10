@@ -6,9 +6,13 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -16,6 +20,9 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import me.ash.reader.data.model.preference.LocalReadingImageHorizontalPadding
+import me.ash.reader.data.model.preference.LocalReadingImageRoundedCorners
+import me.ash.reader.data.model.preference.LocalReadingTextAlign
 import me.ash.reader.data.model.preference.ReadingThemePreference
 import me.ash.reader.ui.theme.Shape24
 import me.ash.reader.ui.theme.palette.onDark
@@ -28,6 +35,8 @@ fun ReadingThemePrev(
     onClick: () -> Unit = {},
 ) {
     val context = LocalContext.current
+    val imageRoundedCorners = LocalReadingImageRoundedCorners.current
+    val roundedCorners by remember { mutableStateOf(RoundedCornerShape((imageRoundedCorners / 2).dp)) }
 
     Column(
         modifier = Modifier
@@ -43,8 +52,10 @@ fun ReadingThemePrev(
             )
             .clickable(onClick = onClick),
         horizontalAlignment = when (theme) {
+            ReadingThemePreference.MaterialYou -> Alignment.Start
+            ReadingThemePreference.Reeder -> Alignment.Start
             ReadingThemePreference.Paper -> Alignment.CenterHorizontally
-            else -> Alignment.Start
+            ReadingThemePreference.Custom -> LocalReadingTextAlign.current.toAlignment()
         }
     ) {
         Spacer(modifier = Modifier.height(22.dp))
@@ -95,14 +106,18 @@ fun ReadingThemePrev(
         // Image
         Box(modifier = Modifier
             .padding(horizontal = when (theme) {
+                ReadingThemePreference.MaterialYou -> 12.dp
                 ReadingThemePreference.Reeder -> 0.dp
-                else -> 12.dp
+                ReadingThemePreference.Paper -> 12.dp
+                ReadingThemePreference.Custom -> (LocalReadingImageHorizontalPadding.current / 2).dp
             })
             .fillMaxWidth()
             .height(46.dp)
             .clip(when (theme) {
                 ReadingThemePreference.MaterialYou -> MaterialTheme.shapes.medium
-                else -> RectangleShape
+                ReadingThemePreference.Reeder -> RectangleShape
+                ReadingThemePreference.Paper -> RectangleShape
+                ReadingThemePreference.Custom -> roundedCorners
             })
             .background(MaterialTheme.colorScheme.primaryContainer onDark MaterialTheme.colorScheme.secondaryContainer)
         )

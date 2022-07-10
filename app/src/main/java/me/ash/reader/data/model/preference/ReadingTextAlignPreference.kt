@@ -1,6 +1,7 @@
 package me.ash.reader.data.model.preference
 
 import android.content.Context
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextAlign
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
@@ -39,6 +40,13 @@ sealed class ReadingTextAlignPreference(val value: Int) : Preference() {
             Right -> TextAlign.End
             Center -> TextAlign.Center
             Justify -> TextAlign.Justify
+        }
+    fun toAlignment(): Alignment.Horizontal =
+        when (this) {
+            Left -> Alignment.Start
+            Right -> Alignment.End
+            Center -> Alignment.CenterHorizontally
+            Justify -> Alignment.Start
         }
 
     companion object {
