@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.MaterialTheme
@@ -18,18 +19,24 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavHostController
 import me.ash.reader.R
+import me.ash.reader.data.model.preference.LocalReadingPageTonalElevation
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.ext.share
+import me.ash.reader.ui.ext.surfaceColorAtElevation
+import me.ash.reader.ui.page.common.RouteName
 
 @Composable
 fun TopBar(
+    navController: NavHostController,
     isShow: Boolean,
     title: String? = "",
     link: String? = "",
     onClose: () -> Unit = {},
 ) {
     val context = LocalContext.current
+    val tonalElevation = LocalReadingPageTonalElevation.current
 
     Box(
         modifier = Modifier
@@ -41,7 +48,9 @@ fun TopBar(
             SmallTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
                 colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
+                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+                        elevation = tonalElevation.value.dp
+                    ),
                 ),
                 title = {},
                 navigationIcon = {
@@ -54,6 +63,16 @@ fun TopBar(
                     }
                 },
                 actions = {
+                    FeedbackIconButton(
+                        modifier = Modifier.size(22.dp),
+                        imageVector = Icons.Outlined.Palette,
+                        contentDescription = stringResource(R.string.style),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    ) {
+                        navController.navigate(RouteName.READING_PAGE_STYLE) {
+                            launchSingleTop = true
+                        }
+                    }
                     FeedbackIconButton(
                         modifier = Modifier.size(20.dp),
                         imageVector = Icons.Outlined.Share,

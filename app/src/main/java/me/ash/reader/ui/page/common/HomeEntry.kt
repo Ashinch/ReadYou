@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.common
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
@@ -12,8 +13,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import me.ash.reader.data.model.general.Filter
 import me.ash.reader.data.model.preference.LocalDarkTheme
+import me.ash.reader.data.model.preference.LocalReadingDarkTheme
 import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage
@@ -24,6 +28,7 @@ import me.ash.reader.ui.page.settings.color.ColorAndStylePage
 import me.ash.reader.ui.page.settings.color.DarkThemePage
 import me.ash.reader.ui.page.settings.color.feeds.FeedsPageStylePage
 import me.ash.reader.ui.page.settings.color.flow.FlowPageStylePage
+import me.ash.reader.ui.page.settings.color.reading.*
 import me.ash.reader.ui.page.settings.interaction.InteractionPage
 import me.ash.reader.ui.page.settings.languages.LanguagesPage
 import me.ash.reader.ui.page.settings.tips.TipsAndSupportPage
@@ -36,6 +41,7 @@ fun HomeEntry(
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    var isReadingPage by rememberSaveable { mutableStateOf(false) }
     val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
     val navController = rememberAnimatedNavController()
 
@@ -47,6 +53,11 @@ fun HomeEntry(
     }
 
     LaunchedEffect(Unit) {
+        navController.currentBackStackEntryFlow.collectLatest {
+            Log.i("RLog", "isReadingPage: ${navController.currentDestination?.route}")
+            delay(310L)
+            isReadingPage = navController.currentDestination?.route == "${RouteName.READING}/{articleId}"
+        }
         when (context.initialPage) {
             1 -> {
                 navController.navigate(RouteName.FLOW) {
@@ -80,9 +91,16 @@ fun HomeEntry(
         }
     }
 
-    val useDarkTheme = LocalDarkTheme.current.isDarkTheme()
+    val useDarkTheme = if (isReadingPage) {
+        LocalReadingDarkTheme.current.isDarkTheme()
+    } else {
+        LocalDarkTheme.current.isDarkTheme()
+    }
 
-    AppTheme(useDarkTheme = useDarkTheme) {
+    AppTheme(
+        useDarkTheme = if (isReadingPage) LocalReadingDarkTheme.current.isDarkTheme()
+        else LocalDarkTheme.current.isDarkTheme()
+    ) {
 
         rememberSystemUiController().run {
             setStatusBarColor(Color.Transparent, !useDarkTheme)
@@ -131,6 +149,24 @@ fun HomeEntry(
             }
             animatedComposable(route = RouteName.FLOW_PAGE_STYLE) {
                 FlowPageStylePage(navController)
+            }
+            animatedComposable(route = RouteName.READING_PAGE_STYLE) {
+                ReadingStylePage(navController)
+            }
+            animatedComposable(route = RouteName.READING_DARK_THEME) {
+                ReadingDarkThemePage(navController)
+            }
+            animatedComposable(route = RouteName.READING_PAGE_TITLE) {
+                ReadingTitlePage(navController)
+            }
+            animatedComposable(route = RouteName.READING_PAGE_TEXT) {
+                ReadingTextPage(navController)
+            }
+            animatedComposable(route = RouteName.READING_PAGE_IMAGE) {
+                ReadingImagePage(navController)
+            }
+            animatedComposable(route = RouteName.READING_PAGE_VIDEO) {
+                ReadingVideoPage(navController)
             }
 
             // Interaction

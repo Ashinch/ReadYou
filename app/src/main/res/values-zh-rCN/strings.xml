@@ -224,7 +224,7 @@
     <string name="amoled_dark_theme">AMOLED 深色主题</string>
     <string name="other">其他</string>
     <string name="tonal_elevation">色调海拔</string>
-    <string name="fonts">字体</string>
+    <string name="reading_fonts">阅读字体</string>
     <string name="basic_fonts">基本字体</string>
     <string name="feeds_page">订阅源页面</string>
     <string name="flow_page">信息流页面</string>
@@ -245,10 +245,12 @@
     <string name="initial_page">起始页面</string>
     <string name="initial_filter">起始过滤条件</string>
     <string name="preview_article_title">呜呜呜，黎明之剑完结了</string>
-    <string name="preview_article_desc">是宴席，就有结束的时候，但这本书真的陪了我好久啊，好舍不得，而且主线结束了坑却没填完，不知道啥时候才有番外啊</string>
+    <string name="preview_article_desc">
+        是宴席，就有结束的时候，但这本书真的陪了我好久啊，好舍不得，而且主线结束了坑却没填完，不知道啥时候才有番外啊
+    </string>
     <string name="preview_feed_name">漩涡书院</string>
     <string name="value">值</string>
-    <string name="padding_on_both_ends">两端边距</string>
+    <string name="horizontal_padding">水平填充</string>
     <string name="article_date">文章发布时间</string>
     <string name="article_desc">文章描述</string>
     <string name="article_images">文章插图</string>
@@ -271,4 +273,33 @@
     <string name="tips_group_list_tonal_elevation">分组列表的色调海拔仅在亮色主题时可用。</string>
     <string name="share">分享</string>
     <string name="touch_to_play_video">轻触播放视频</string>
+    <string name="text">文本</string>
+    <string name="font_size">字体大小</string>
+    <string name="letter_spacing">字符间距</string>
+    <string name="line_spacing">行间距</string>
+    <string name="alignment">对齐</string>
+    <string name="general">通用</string>
+    <string name="auto_hide_toolbars">自动隐藏工具条</string>
+    <string name="rearrange_buttons">重新排列按钮</string>
+    <string name="bionic_reading">仿生阅读</string>
+    <string name="images">图片</string>
+    <string name="rounded_corners">圆角</string>
+    <string name="videos">视频</string>
+    <string name="align_left">左对齐</string>
+    <string name="align_right">右对齐</string>
+    <string name="center_text">居中对齐</string>
+    <string name="justify">两端对齐</string>
+    <string name="external_fonts">外部字体</string>
+    <string name="title">标题</string>
+    <string name="bold">加粗</string>
+    <string name="upper_case">大写字母</string>
+    <string name="subhead">子标题</string>
+    <string name="use_app_theme">跟随应用设置</string>
+    <string name="advanced">高级</string>
+    <string name="dark_reading_theme">深色阅读主题</string>
+    <string name="title_desc">加粗、大写字母、对齐</string>
+    <string name="text_desc">字体大小、字符间距、对齐</string>
+    <string name="images_desc">圆角、水平边距</string>
+    <string name="videos_desc">圆角、水平边距</string>
+    <string name="maximize">最大化</string>
 </resources>

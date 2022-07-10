@@ -69,6 +69,7 @@ sealed class DataStoreKeys<T> {
 
     abstract val key: Preferences.Key<T>
 
+    // Version
     object IsFirstLaunch : DataStoreKeys<Boolean>() {
 
         override val key: Preferences.Key<Boolean>
@@ -147,6 +148,7 @@ sealed class DataStoreKeys<T> {
             get() = booleanPreferencesKey("amoledDarkTheme")
     }
 
+    // Feeds page
     object FeedsFilterBarStyle : DataStoreKeys<Int>() {
 
         override val key: Preferences.Key<Int>
@@ -189,6 +191,7 @@ sealed class DataStoreKeys<T> {
             get() = intPreferencesKey("feedsGroupListTonalElevation")
     }
 
+    // Flow page
     object FlowFilterBarStyle : DataStoreKeys<Int>() {
 
         override val key: Preferences.Key<Int>
@@ -261,6 +264,122 @@ sealed class DataStoreKeys<T> {
             get() = intPreferencesKey("flowArticleListTonalElevation")
     }
 
+    // Reading page
+    object ReadingDarkTheme : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("readingDarkTheme")
+    }
+
+    object ReadingPageTonalElevation : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("ReadingPageTonalElevation")
+    }
+
+    object ReadingTextFontSize : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("readingTextFontSize")
+    }
+
+    object ReadingLetterSpacing : DataStoreKeys<Double>() {
+
+        override val key: Preferences.Key<Double>
+            get() = doublePreferencesKey("readingLetterSpacing")
+    }
+
+    object ReadingTextHorizontalPadding : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("readingTextHorizontalPadding")
+    }
+
+    object ReadingTextBold : DataStoreKeys<Boolean>() {
+
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("readingTextBold")
+    }
+
+    object ReadingTextAlign : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("readingTextAlign")
+    }
+
+    object ReadingTitleAlign : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("readingTitleAlign")
+    }
+
+    object ReadingSubheadAlign : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("readingSubheadAlign")
+    }
+
+    object ReadingTheme : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("readingTheme")
+    }
+
+    object ReadingFonts : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("readingFonts")
+    }
+
+    object ReadingAutoHideToolbar : DataStoreKeys<Boolean>() {
+
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("readingAutoHideToolbar")
+    }
+
+    object ReadingTitleBold : DataStoreKeys<Boolean>() {
+
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("readingTitleBold")
+    }
+
+    object ReadingSubheadBold : DataStoreKeys<Boolean>() {
+
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("ReadingSubheadBold")
+    }
+
+    object ReadingTitleUpperCase : DataStoreKeys<Boolean>() {
+
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("readingTitleUpperCase")
+    }
+
+    object ReadingSubheadUpperCase : DataStoreKeys<Boolean>() {
+
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("ReadingSubheadUpperCase")
+    }
+
+    object ReadingImageMaximize : DataStoreKeys<Boolean>() {
+
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("readingImageMaximize")
+    }
+
+    object ReadingImageHorizontalPadding : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("readingImageHorizontalPadding")
+    }
+
+    object ReadingImageRoundedCorners : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("readingImageRoundedCorners")
+    }
+
+    // Interaction
     object InitialPage : DataStoreKeys<Int>() {
 
         override val key: Preferences.Key<Int>
@@ -273,6 +392,7 @@ sealed class DataStoreKeys<T> {
             get() = intPreferencesKey("initialFilter")
     }
 
+    // Languages
     object Languages : DataStoreKeys<Int>() {
 
         override val key: Preferences.Key<Int>

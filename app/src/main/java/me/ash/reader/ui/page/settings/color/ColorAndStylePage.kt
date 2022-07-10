@@ -181,11 +181,15 @@ fun ColorAndStylePage(
                     ) {}
                     SettingItem(
                         title = stringResource(R.string.reading_page),
-                        enable = false,
-                        onClick = {},
+                        onClick = {
+                            navController.navigate(RouteName.READING_PAGE_STYLE) {
+                                launchSingleTop = true
+                            }
+                        },
                     ) {}
                 }
                 item {
+                    Spacer(modifier = Modifier.height(24.dp))
                     Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }

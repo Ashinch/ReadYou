@@ -66,6 +66,14 @@ Nachfolgend sind die bisher erzielten Fortschritte und die Ziele aufgeführt, an
 
 > Bei den oben genannten Funktionen handelt es sich nur um vorläufige Implementierungen, und es können noch unbekannte Probleme auftreten.
 
+## Herunterladen
+
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-de.png"
+     alt="Jetzt bei F-Droid"
+     height="80">](https://f-droid.org/packages/me.ash.reader/)
+
+oder hole die APK aus dem [GitHub Releasebereich](https://github.com/Ashinch/ReadYou/releases).
+
 ## Build
 
 > Wenn Sie eine Vorschau der Read You App wollen, können Sie die **Vorschau-Version** der APK-Datei in [Telegram] (https://t.me/ReadYouApp) herunterladen.
