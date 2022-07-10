@@ -1,28 +1,21 @@
 <resources>
-    <string name="read_you" translatable="false">Read You</string>
     <string name="all">Wszystkie</string>
     <plurals name="all_desc">
         <item quantity="one">%1$d pobrany artykuł</item>
-		<item quantity="two">%1$d pobrane artykuły</item>
-		<item quantity="three">%1$d pobrane artykuły</item>
-		<item quantity="four">%1$d pobrane artykuły</item>
-        <item quantity="other">%1$d pobranych artykułów</item>
+		<item quantity="few">%1$d pobrane artykuły</item>
+		<item quantity="many">%1$d pobranych artykułów</item>
     </plurals>
     <string name="unread">Nieprzeczytane</string>
     <plurals name="unread_desc">
         <item quantity="one">%1$d nieprzeczytany artykuł</item>
-		<item quantity="two">%1$d nieprzeczytane artykuły</item>
-		<item quantity="three">%1$d nieprzeczytane artykuły</item>
-		<item quantity="four">%1$d nieprzeczytane artykuły</item>
-        <item quantity="other">%1$d nieprzeczytanych artykułów</item>
+        <item quantity="few">%1$d nieprzeczytane artykuły</item>
+        <item quantity="many">%1$d nieprzeczytanych artykułów</item>
     </plurals>
     <string name="starred">Wyróżnione</string>
     <plurals name="starred_desc">
         <item quantity="one">%1$d wyróżniony artykuł</item>
-		<item quantity="two">%1$d wyróżnione artykuły</item>
-		<item quantity="three">%1$d wyróżnione artykuły</item>
-		<item quantity="four">%1$d wyróżnione artykuły</item>
-        <item quantity="other">%1$d wyróżnionych artykułów</item>
+        <item quantity="few">%1$d wyróżnione artykuły</item>
+        <item quantity="many">%1$d wyróżnionych artykułów</item>
     </plurals>
     <string name="feeds">Kanały</string>
     <string name="syncing">Synchronizacja…</string>
@@ -69,7 +62,6 @@
     <string name="all_move_to_group_toast">Przeniesiono wszystkie kanały do grupy \"%1$s\"</string>
     <string name="rename">Zmień nazwę</string>
     <string name="change_url">Zmień adres URL</string>
-    <string name="feed_url_placeholder" translatable="false">http://example.com/feed.rss</string>
     <string name="rename_toast">Zmieniono nazwę na \"%1$s\"</string>
     <string name="create_new_group">Utwórz nową grupę</string>
     <string name="name">Nazwa</string>
@@ -113,12 +105,6 @@
     <string name="languages_desc">Angielski, Chiński i więcej </string>
     <string name="help_translate">Pomóż w tłumaczeniu</string>
     <string name="use_device_languages">Zgodny z systemem</string>
-    <string name="english" translatable="false">English</string>
-    <string name="chinese_simplified" translatable="false">简体中文</string>
-    <string name="german" translatable="false">Deutsch</string>
-    <string name="french" translatable="false">français</string>
-    <string name="czech" translatable="false">Čeština</string>
-    <string name="italian" translatable="false">italiano</string>
     <string name="tips_and_support">Porady i wsparcie</string>
     <string name="tips_and_support_desc">Informacje o aplikacji i licencjach open source</string>
     <string name="welcome">Witamy</string>
@@ -249,15 +235,13 @@
     <string name="other">Inne</string>
     <string name="amoled_dark_theme">Czarny motyw AMOLED</string>
     <string name="tonal_elevation">Odcień</string>
-    <string name="fonts">Czcionki</string>
+    <string name="reading_fonts">Czytania czcionki</string>
     <string name="basic_fonts">Podstawowe czcionki</string>
     <string name="feeds_page">Strona kanałów</string>
     <string name="flow_page">Strona flow</string>
     <string name="reading_page">Strona czytania</string>
     <string name="sponsor">Sponsor</string>
     <string name="open_source_licenses">Licencje open source</string>
-    <string name="github_link" translatable="false">https://github.com/Ashinch/ReadYou</string>
-    <string name="telegram_link" translatable="false">https://t.me/ReadYouApp</string>
     <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
     <string name="change_log">Lista zmian</string>
     <string name="update">Aktualizuj</string>
@@ -277,7 +261,7 @@
     </string>
     <string name="preview_feed_name">Reddit</string>
     <string name="value">wartość</string>
-    <string name="padding_on_both_ends">Odstęp od krawędzi</string>
+    <string name="horizontal_padding">Odstęp od krawędzi</string>
     <string name="article_date">Data publikacji artykułu</string>
     <string name="article_desc">Opis artykuły</string>
     <string name="article_images">Obraz z artykułu</string>
@@ -300,4 +284,33 @@
     <string name="tips_group_list_tonal_elevation">Ten odcień jest dostępny tylko w jasnym motywie.</string>
     <string name="share">Udostępnij</string>
     <string name="touch_to_play_video">Dotknij aby odtworzyć klip</string>
+    <string name="text">Text</string>
+    <string name="font_size">Font size</string>
+    <string name="letter_spacing">Letter spacing</string>
+    <string name="line_spacing">Line spacing</string>
+    <string name="alignment">Alignment</string>
+    <string name="general">General</string>
+    <string name="auto_hide_toolbars">Auto hide toolbars</string>
+    <string name="rearrange_buttons">Rearrange buttons</string>
+    <string name="bionic_reading">Bionic Reading</string>
+    <string name="images">Images</string>
+    <string name="rounded_corners">Rounded corners</string>
+    <string name="videos">Videos</string>
+    <string name="align_left">Align left</string>
+    <string name="align_right">Align right</string>
+    <string name="center_text">Center text</string>
+    <string name="justify">Justify</string>
+    <string name="external_fonts">External fonts</string>
+    <string name="title">Title</string>
+    <string name="bold">Bold</string>
+    <string name="upper_case">Upper case</string>
+    <string name="subhead">Subhead</string>
+    <string name="use_app_theme">Use app theme</string>
+    <string name="advanced">Advanced</string>
+    <string name="dark_reading_theme">Dark reading theme</string>
+    <string name="title_desc">Bold, upper case, alignment</string>
+    <string name="text_desc">Font size, letter spacing, alignment</string>
+    <string name="images_desc">Rounded corners, horizontal padding</string>
+    <string name="videos_desc">Rounded corners, horizontal padding</string>
+    <string name="maximize">Maximize</string>
 </resources>

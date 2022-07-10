@@ -19,8 +19,9 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
     object French : LanguagesPreference(4)
     object Czech : LanguagesPreference(5)
     object Italian : LanguagesPreference(6)
-
     object Hindi : LanguagesPreference(7)
+    object Spanish : LanguagesPreference(8)
+    object Polish : LanguagesPreference(9)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
@@ -42,6 +43,8 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
             Czech -> context.getString(R.string.czech)
             Italian -> context.getString(R.string.italian)
             Hindi -> context.getString(R.string.hindi)
+            Spanish -> context.getString(R.string.spanish)
+            Polish -> context.getString(R.string.polish)
         }
 
     fun getLocale(): Locale =
@@ -54,6 +57,8 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
             Czech -> Locale("cs", "CZ")
             Italian -> Locale("it", "IT")
             Hindi -> Locale("hi", "IN")
+            Spanish -> Locale("es", "ES")
+            Polish -> Locale("pl", "PL")
         }
 
     fun setLocale(context: Context) {
@@ -78,7 +83,16 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
     companion object {
 
         val default = UseDeviceLanguages
-        val values = listOf(UseDeviceLanguages, English, ChineseSimplified, German, French, Czech, Italian, Hindi)
+        val values = listOf(UseDeviceLanguages,
+            English,
+            ChineseSimplified,
+            German,
+            French,
+            Czech,
+            Italian,
+            Hindi,
+            Spanish,
+            Polish)
 
         fun fromPreferences(preferences: Preferences): LanguagesPreference =
             when (preferences[DataStoreKeys.Languages.key]) {
@@ -90,6 +104,8 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
                 5 -> Czech
                 6 -> Italian
                 7 -> Hindi
+                8 -> Spanish
+                9 -> Polish
                 else -> default
             }
 
@@ -103,6 +119,8 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
                 5 -> Czech
                 6 -> Italian
                 7 -> Hindi
+                8 -> Spanish
+                9 -> Polish
                 else -> default
             }
     }

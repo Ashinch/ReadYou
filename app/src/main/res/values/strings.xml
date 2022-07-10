@@ -108,10 +108,12 @@
     <string name="english" translatable="false">English</string>
     <string name="chinese_simplified" translatable="false">简体中文</string>
     <string name="german" translatable="false">Deutsch</string>
-    <string name="french" translatable="false">français</string>
+    <string name="french" translatable="false">Français</string>
     <string name="czech" translatable="false">Čeština</string>
-    <string name="italian" translatable="false">italiano</string>
+    <string name="italian" translatable="false">Italiano</string>
     <string name="hindi" translatable="false">हिंदी</string>
+    <string name="spanish" translatable="false">Español</string>
+    <string name="polish" translatable="false">Polski</string>
     <string name="tips_and_support">Tips &amp; support</string>
     <string name="tips_and_support_desc">About, open source licenses</string>
     <string name="welcome">Welcome</string>
