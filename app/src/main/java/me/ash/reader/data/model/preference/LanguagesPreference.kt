@@ -22,6 +22,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
     object Hindi : LanguagesPreference(7)
     object Spanish : LanguagesPreference(8)
     object Polish : LanguagesPreference(9)
+    object Russian : LanguagesPreference(10)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
@@ -45,6 +46,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
             Hindi -> context.getString(R.string.hindi)
             Spanish -> context.getString(R.string.spanish)
             Polish -> context.getString(R.string.polish)
+            Russian -> context.getString(R.string.russian)
         }
 
     fun getLocale(): Locale =
@@ -59,6 +61,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
             Hindi -> Locale("hi", "IN")
             Spanish -> Locale("es", "ES")
             Polish -> Locale("pl", "PL")
+            Russian -> Locale("ru", "RU")
         }
 
     fun setLocale(context: Context) {
@@ -92,7 +95,9 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
             Italian,
             Hindi,
             Spanish,
-            Polish)
+            Polish,
+            Russian
+        )
 
         fun fromPreferences(preferences: Preferences): LanguagesPreference =
             when (preferences[DataStoreKeys.Languages.key]) {
@@ -106,6 +111,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
                 7 -> Hindi
                 8 -> Spanish
                 9 -> Polish
+                10 -> Russian
                 else -> default
             }
 
@@ -121,6 +127,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
                 7 -> Hindi
                 8 -> Spanish
                 9 -> Polish
+                10 -> Russian
                 else -> default
             }
     }

@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="all">Все</string>
+    <string name="unread">Непрочитанные</string>
+    <string name="starred">Избранные</string>
+    <string name="feeds">Ленты</string>
+    <string name="syncing">Синхронизация…</string>
+    <string name="loading">Загрузка…</string>
+    <string name="expand_less">Перемешать</string>
+    <string name="expand_more">Открыть</string>
+    <string name="cancel">Отмена</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="allow">Разрешить</string>
+    <string name="deny">Отказать</string>
+    <string name="defaults">По-умолчанию</string>
+    <string name="unknown">Неизвестно</string>
+    <string name="back">Назад</string>
+    <string name="go_to">Перейти к</string>
+    <string name="settings">Настройки</string>
+    <string name="refresh">Обновить</string>
+    <string name="search">Поиск</string>
+    <string name="searching">Поиск…</string>
+    <string name="subscribe">Подписаться</string>
+    <string name="already_subscribed">Уже в подписках</string>
+    <string name="clear">Очистить</string>
+    <string name="paste">Вставить</string>
+    <string name="feed_or_site_url">Лента или URL</string>
+    <string name="import_from_opml">Импорт через OMPL</string>
+    <string name="preset">Предустановка</string>
+    <string name="selected">Выбрано</string>
+    <string name="allow_notification">Разрешить уведомления</string>
+    <string name="parse_full_content">Получать полный контент</string>
+    <string name="clear_articles">Очистить статьи</string>
+    <string name="add_to_group">Добавить в группу</string>
+    <string name="move_to_group">Переместить в группу</string>
+    <string name="rename">Переименовать</string>
+    <string name="change_url">Изменить URL</string>
+    <string name="create_new_group">Создать новую группу</string>
+    <string name="name">Имя</string>
+    <string name="options">Опции</string>
+    <string name="delete">Удалить</string>
+    <string name="unsubscribe">Отписаться</string>
+    <string name="delete_group">Удалить группу</string>
+    <string name="today">Сегодня</string>
+    <string name="yesterday">Вчера</string>
+    <string name="mark_as_read">Отметить как прочитанное</string>
+    <string name="mark_all_as_read">Отметить всё как прочитанное</string>
+    <string name="mark_as_unread">Отметить как непрочитанное</string>
+    <string name="one_day">1д</string>
+    <string name="three_days">2д</string>
+    <string name="seven_days">3д</string>
+    <string name="close">Закрыть</string>
+    <string name="get_new_updates">Получить обновления</string>
+    <string name="in_coding">В разработке</string>
+    <string name="coming_soon">В скором времени</string>
+    <string name="accounts">Аккаунты</string>
+    <string name="help_translate">Помочь в переводе</string>
+    <string name="use_device_languages">Использовать язык устройства</string>
+    <string name="welcome">Добро пожаловать</string>
+    <string name="terms_of_service">Условия использования</string>
+    <string name="agree">Согласен</string>
+    <string name="only_android_8.1_plus">Только Android 8.1+</string>
+    <string name="basic_colors">Основные цвета</string>
+    <string name="change_log">Список изменений</string>
+    <string name="update">Обновить</string>
+    <string name="skip_this_version">Пропустить версию</string>
+    <string name="checking_updates">Поиск обновлений…</string>
+    <string name="is_latest_version">Это последняя версия</string>
+    <string name="help">Помощь</string>
+    <string name="preview_feed_name">Habr</string>
+    <string name="on">Вкл</string>
+    <string name="off">Выкл</string>
+    <string name="other">Прочее</string>
+    <string name="all_allow_notification_tips">Разрешить всем лентам в группе \"%1$s\" посылать уведомления</string>
+    <string name="all_deny_notification_toast">Все уведомления из группы \"%1$s\" заблокированы</string>
+    <string name="all_allow_notification_toast">Все уведомления из группы \"%1$s\" разрешены</string>
+    <string name="all_move_to_group_toast">Все ленты перемещены в группу \"%1$s\"</string>
+    <string name="rename_toast">Переименовано в \"%1$s\"</string>
+    <string name="open_with">Открыть %1$s</string>
+    <string name="delete_toast">Удалено \"%1$s\"</string>
+    <string name="date_at_time">%1$s в %2$s</string>
+    <string name="search_for_in">Поиск %1$s элементов в \"%2$s\"</string>
+    <string name="search_for">Поиск %1$s элементов</string>
+    <string name="get_new_updates_desc">Доступна версия %1$s</string>
+    <string name="accounts_desc">Локальный, FreshRSS</string>
+    <string name="color_and_style_desc">Тема, цветовая палитра, размер текста</string>
+    <string name="interaction">Взаимодействие</string>
+    <string name="interaction_desc">При запуске, тактильная обратная связь</string>
+    <string name="languages">Локализация</string>
+    <string name="languages_desc">Английский, Китайский, и пр.</string>
+    <string name="color_and_style">Цвет &amp; стиль</string>
+    <string name="subhead">Подзаголовок</string>
+    <string name="use_app_theme">Использовать тему устройства</string>
+    <string name="advanced">Расширенные</string>
+    <string name="title">Заголовок</string>
+    <string name="external_fonts">Дополнительные шрифты</string>
+    <string name="videos">Видео</string>
+    <string name="rounded_corners">Закругления краёв</string>
+    <string name="images">Изображения</string>
+    <string name="general">Общее</string>
+    <string name="share">Поделиться</string>
+    <string name="touch_to_play_video">Коснитесь для воспроизведения</string>
+    <string name="icons">Иконки</string>
+    <string name="horizontal_padding">Горизонтальный отступ</string>
+    <string name="on_start">На старте</string>
+    <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
+    <string name="open_source_licenses">Лицензии свободного ПО</string>
+    <string name="sponsor">Спонсор</string>
+    <string name="reading_page">Страница чтения</string>
+    <string name="reading_fonts">Шрифты чтения</string>
+    <string name="dark_theme">Темная тема</string>
+    <string name="use_device_theme">Использовать тему устройства</string>
+    <string name="appearance">Внешний вид</string>
+    <string name="style">Стиль</string>
+    <string name="primary_color_hint">Как #666666 или 666666</string>
+    <string name="primary_color">Заглавный цвет</string>
+    <string name="no_palettes">Цветовые схемы не найдены</string>
+    <string name="wallpaper_colors">Цвета на основе заставки</string>
+    <string name="tips_and_support">Советы &amp; поддержка</string>
+    <string name="tips_and_support_desc">О приложении, лицензии свободного ПО</string>
+    <string name="unsubscribe_tips">Отписаться от ленты \"%1$s\" и удалить все архивные статьи в ней</string>
+    <string name="delete_group_tips">Удалить группу \"%1$s\" а также все ленты в ней вместе с архивными статьями</string>
+    <string name="group_option_tips">Следующие опции будут применены ко всем лентам в группе</string>
+    <string name="all_move_to_group_tips">Переместить все ленты из группы \"%1$s\" в группу \"%2$s\"</string>
+    <string name="clear_articles_group_tips">Удалить все архивные статьи в группе %1$s</string>
+    <string name="clear_articles_feed_tips">Удалить все архивные статьи в ленте \"%1$s\"</string>
+    <string name="all_parse_full_content_tips">Получать полный контент для всех статей в группе \"%1$s\"</string>
+    <string name="tos_tips">Прочтите и примите условия использоваия и политику конфиденциальности приложения Read You</string>
+    <string name="amoled_dark_theme">Тёмная тема AMOLED</string>
+    <string name="browse_tos_tips">"Открыть &lt;i&gt;&lt;u&gt;Условия использования и Политику конфиденциальности&lt;/u&gt;&lt;/i&gt;     "</string>
+    <string name="basic_fonts">Базовые шрифты</string>
+    <string name="check_failure">Не удалость проверить версию</string>
+    <string name="download_failure">Не удалось скачать новую версию</string>
+    <string name="rate_limit">Превышен предел количества запросов</string>
+    <string name="initial_page">Открывать при запуске</string>
+    <string name="initial_filter">Показывать статьи</string>
+    <string name="value">значение</string>
+    <string name="article_date">Время публикации</string>
+    <string name="article_desc">Описание публикации</string>
+    <string name="article_images">Изображения в публикации</string>
+    <string name="feed_names">Имя ленты</string>
+    <string name="article_list">Список статей</string>
+    <string name="group_list">Список групп</string>
+    <string name="always_expand">Всегда раскрывать</string>
+    <string name="top">Наверх</string>
+    <string name="mark_as_read_button_position">Расположение кнопки \"Отметить как прочитанное\"</string>
+    <string name="text">Текст</string>
+    <string name="font_size">Размер шрифта</string>
+    <string name="alignment">Выравнивание</string>
+    <string name="auto_hide_toolbars">Автоматическое скрытие тулбара</string>
+    <string name="rearrange_buttons">Переназначение кнопок</string>
+    <string name="bold">Жирный шрифт</string>
+    <string name="tonal_elevation">Цветовой переход</string>
+    <string name="upper_case">Верхний регистр</string>
+    <string name="title_desc">Жирность шрифта, верхний регистр, выравнивание</string>
+    <string name="text_desc">Размер шрифта, межбуквенное расстояние, выравнивание</string>
+    <string name="images_desc">Закругления краёв, горизонтальный отступ</string>
+    <string name="videos_desc">Закругления краёв, горизонтальный отступ</string>
+    <string name="dark_reading_theme">Тёмная тема для чтения</string>
+    <string name="maximize">Увеличить до предела</string>
+    <string name="justify">Выровнять</string>
+    <string name="center_text">По центру</string>
+    <string name="align_right">Справа</string>
+    <string name="align_left">Слева</string>
+    <string name="letter_spacing">Межбуквенное расстояние</string>
+    <string name="line_spacing">Расстояние между строк</string>
+    <string name="icons_and_labels">Иконки и заголовки</string>
+    <string name="top_bar">Верхняя панель</string>
+    <string name="article_date_sticky_header">Плавающие заголовки для даты публикации (экспериментально)</string>
+    <string name="feed_favicons">Значки для лент</string>
+    <string name="bionic_reading">Органическое чтение</string>
+    <string name="all_parse_full_content_toast">Получать полный контент для всех статей в группе \"%1$s\"</string>
+    <string name="tips_top_bar_tonal_elevation">Этот тоновый переход появится в момент прокрутки</string>
+    <string name="tips_article_list_tonal_elevation">Этот тоновый переход появится при светлой теме</string>
+    <string name="tips_group_list_tonal_elevation">Этот тоновый переход появится при светлой теме</string>
+    <string name="icons_and_label_only_selected">Иконки и заголовки (только выбранные)</string>
+    <string name="mark_as_starred">Добавить в избранное</string>
+    <string name="mark_as_unstar">Удалить из избранного</string>
+    <string name="tos_content">
+        &lt;h5&gt;
+
+        Политика конфиденциальности
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        Ваша приватность очень важна для меня
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        не собирает никаких пользовательских данных, и вся конфиденциальная информация (пароли и
+        другая информация об учетной записи) надежно хранится в локальной базе данных
+        приложений на вашем устройстве.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        будет использовать следующие разрешения, чтобы предоставить Вам полезную функциональность.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        - Разрешение доступа к сети (для доступа к онлайн-контенту, который Вы добавите)
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - Получить разрешение на статус сети (для получения информации о том, доступны ли на данный
+        момент сетевой доступ для устройства)
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - Разрешение фоновой службы (для автоматической синхронизации избранного для вас на
+        регулярной основе)
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Сторонние библиотеки
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        Эта политика не распространяется на сторонние службы, которые Вы используете с
+        &lt;b&gt;Read You&lt;/b&gt;. Вы можете ознакомиться с политиками конфиденциальности
+        сторонних сервисов, которыми Вы пользуетесь, на их веб-сайтах.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Предупреждение
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        является только инструментом сбора контента. Ваше использование &lt;b&gt;Read You&lt;/b&gt;
+        регулируется законами и правилами Вашей страны и региона, и любую ответственность,
+        вытекающую из Ваших действий, будете нести Вы лично.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Лицензии библиотек с открытым исходным кодом
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        является проектом с открытым исходным кодом под лицензией GNU GPL 3.0 с открытым исходным кодом[1],
+        которая позволяет Вам использовать, ссылаться и изменять исходный код &lt;b&gt;Read You&lt;/b&gt;бесплатно,
+        но не позволяет распространять и продавать модифицированный и производный код как
+        коммерческое программное обеспечение с закрытым исходным кодом.
+        Подробности см. в полной лицензии GNU GPL 3.0 с открытым исходным кодом[2].
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Appendix
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        - [1] https://github.com/Ashinch/ReadYou
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - [2] https://www.gnu.org/licenses/gpl-3.0.html
+
+        &lt;/p&gt;
+    </string>
+    <string name="preview_article_title">Как писать, чтобы тебя читали</string>
+    <string name="preview_article_desc">Можно читать и не понимать, можно читать и понимать, а можно читать и понимать даже то, что не написано.
+    автор Exosphere</string>
+    <string name="fill_selected_icon">Заливка выбранной иконки</string>
+    <string name="feeds_page">Страница подписок</string>
+    <string name="flow_page">Страница статей</string>
+    <string name="all_deny_parse_full_content_toast">Не получать полный контент для всех статей в группе \"%1$s\"</string>
+    <string name="clear_articles_in_feed_toast">Все архивные статьи в ленте \"%1$s\" очищены</string>
+    <string name="clear_articles_in_group_toast">Все архивные статьи в группе \"%1$s\" очищены</string>
+    <string name="mark_as_read_one_day">Отметить как прочитанное больше, чем 1 день</string>
+    <string name="mark_as_read_three_days">Отметить как прочитанное больше, чем 3 дня</string>
+    <string name="mark_as_read_seven_days">Отметить как прочитанное больше, чем 7 дней</string>
+</resources>
