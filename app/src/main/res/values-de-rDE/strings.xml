@@ -65,8 +65,8 @@
     <string name="options">Optionen</string>
     <string name="delete">Löschen</string>
     <string name="delete_toast">„%1$s“ wurde gelöscht</string>
-    <string name="unsubscribe">Deabonieren</string>
-    <string name="unsubscribe_tips">„%1$s“ deabonieren und alle darin enthaltenen archivierten Artikel löschen.</string>
+    <string name="unsubscribe">Deabonnieren</string>
+    <string name="unsubscribe_tips">„%1$s“ deabonnieren und alle darin enthaltenen archivierten Artikel löschen.</string>
     <string name="delete_group">Gruppe löschen</string>
     <string name="delete_group_tips">Löscht die Gruppe „%1$s“ und alle darin enthaltenen Feeds und archivierten Artikel.</string>
     <string name="group_option_tips">Die folgenden Optionen werden auf alle Feeds in dieser Gruppe angewendet.</string>
