@@ -1,0 +1,316 @@
+<resources>
+    <string name="all">Guztia</string>
+    <plurals name="all_desc">
+        <item quantity="one">Artxibatutako elementu %1$d</item>
+        <item quantity="other">Artxibatutako %1$d elementu</item>
+    </plurals>
+    <string name="unread">Irakurri gabe</string>
+    <plurals name="unread_desc">
+        <item quantity="one">Irakurri gabeko elementu %1$d</item>
+        <item quantity="other">Irakurri gabeko %1$d elementu</item>
+    </plurals>
+    <string name="starred">Izartutakoak</string>
+    <plurals name="starred_desc">
+        <item quantity="one">Izartutako elementu %1$d</item>
+        <item quantity="other">Izartutako %1$d elementu</item>
+    </plurals>
+    <string name="feeds">Jarioak</string>
+    <string name="syncing">Sinkronizatzen…</string>
+    <string name="loading">Kargatzen…</string>
+    <string name="expand_less">Uzkurtu</string>
+    <string name="expand_more">Zabaldu</string>
+    <string name="confirm">Baieztatu</string>
+    <string name="cancel">Utzi</string>
+    <string name="allow">Baimendu</string>
+    <string name="deny">Ukatu</string>
+    <string name="defaults">Lehenetsia</string>
+    <string name="unknown">Ezezaguna</string>
+    <string name="back">Atzera</string>
+    <string name="go_to">Hona joan</string>
+    <string name="settings">Ezarpenak</string>
+    <string name="refresh">Freskatu</string>
+    <string name="search">Bilatu</string>
+    <string name="searching">Bilatzen…</string>
+    <string name="subscribe">Harpidetu</string>
+    <string name="already_subscribed">Dagoeneko harpidetuta</string>
+    <string name="clear">Garbitu</string>
+    <string name="paste">Itsatsi</string>
+    <string name="feed_or_site_url">Jarioa edo URLa</string>
+    <string name="import_from_opml">OPMLtik inportatu</string>
+    <string name="preset">Aurrezarpenak</string>
+    <string name="selected">Hautatuta</string>
+    <string name="allow_notification">Jakinarazpenak baimendu</string>
+    <string name="all_allow_notification_tips">Baimendu \"%1$s\" taldeko jario guztiei jakinarazpenak bidaltzen.</string>
+    <string name="all_allow_notification_toast">\"%1$s\" taldeko jakinarazpen guztiak baimenduta daude</string>
+    <string name="all_deny_notification_toast">\"%1$s\" taldeko jakinarazpenak ez daude baimenduta</string>
+    <string name="parse_full_content">Eduki osoa analizatu</string>
+    <string name="all_parse_full_content_tips">\"%1$s\" taldeko artikulu guztien eduki osoaren analisia.</string>
+    <string name="all_parse_full_content_toast">\"%1$s\" taldeko artikulu guztien eduki osoaren analisia</string>
+    <string name="all_deny_parse_full_content_toast">\"%1$s\" taldeko artikulu guztien eduki osoaren analisi 
+        gehiagorik ez
+    </string>
+    <string name="clear_articles">Artikuluak garbitu</string>
+    <string name="clear_articles_in_feed_toast">\"%1$s\" jarioaren artxibatutako artikulu guztiak garbitu dira</string>
+    <string name="clear_articles_in_group_toast">\"%1$s\" taldearen artxibatutako artikulu guztiak garbitu dira</string>
+    <string name="clear_articles_feed_tips">\"%1$s\" jarioaren artxibatutako artikulu guztiak garbitu.</string>
+    <string name="clear_articles_group_tips">\"%1$s\" taldearen artxibatutako artikulu guztiak garbitu.</string>
+    <string name="add_to_group">Taldera gehitu</string>
+    <string name="move_to_group">Taldera mugitu</string>
+    <string name="all_move_to_group_tips">\"%1$s\" taldeko jario guztiak \"%2$s\" taldera mugitu.</string>
+    <string name="all_move_to_group_toast">Jario guztiak \"%1$s\" taldera mugitu</string>
+    <string name="rename">Berrizendatu</string>
+    <string name="change_url">URLa aldatu</string>
+    <string name="rename_toast">\"%1$s\" izen berria jarri da</string>
+    <string name="create_new_group">Talde berria sortu</string>
+    <string name="name">Izena</string>
+    <string name="open_with">Ireki %1$s</string>
+    <string name="options">Aukerak</string>
+    <string name="delete">Ezabatu</string>
+    <string name="delete_toast">\"%1$s\" ezabatuta</string>
+    <string name="unsubscribe">Harpidetza kendu</string>
+    <string name="unsubscribe_tips">\"%1$s\"-etik harpidetza kendu eta bere artxibatutako artikulu guztiak ezabatu.</string>
+    <string name="delete_group">Taldea ezabatu</string>
+    <string name="delete_group_tips">\"%1$s\" taldea ezabatu, baita bere jario eta artxibatutako artikulu guztiak ere.</string>
+    <string name="group_option_tips">Hurrengo aukerak talde honetako jario guztiei aplikatuko zaizkie.</string>
+    <string name="today">Gaur</string>
+    <string name="yesterday">Atzo</string>
+    <string name="date_at_time">%1$s at %2$s</string>
+    <string name="search_for_in">Bilatu %1$s elementuak hemen \"%2$s\"</string>
+    <string name="search_for">Bilatu %1$s elementuak</string>
+    <string name="mark_as_read">Irakurrita bezala markatu</string>
+    <string name="mark_all_as_read">Markatu guztia irakurrita bezala</string>
+    <string name="mark_as_unread">Irakurri gabe bezala markatu</string>
+    <string name="mark_as_starred">Izar marka jarri</string>
+    <string name="mark_as_unstar">Izar marka kendu</string>
+    <string name="mark_as_read_one_day">Markatu irakurrita bezala egun 1 baino zaharragoak</string>
+    <string name="mark_as_read_three_days">Markatu irakurrita bezala 3 egun baino zaharragoak</string>
+    <string name="mark_as_read_seven_days">Markatu irakurrita bezala 7 egun baino zaharragoak</string>
+    <string name="one_day">Egun 1</string>
+    <string name="three_days">3e</string>
+    <string name="seven_days">7e</string>
+    <string name="close">Itxi</string>
+    <string name="get_new_updates">Eguneraketa berriak lortu</string>
+    <string name="get_new_updates_desc">%1$s bertsioa eskuragarri dago</string>
+    <string name="in_coding">Kodeatzen</string>
+    <string name="coming_soon">Laster</string>
+    <string name="accounts">Kontuak</string>
+    <string name="accounts_desc">Lokala, FreshRSS</string>
+    <string name="color_and_style">Kolorea eta estiloa</string>
+    <string name="color_and_style_desc">Itxura, kolore estiloa, letraren tamaina</string>
+    <string name="interaction">Interakzioa</string>
+    <string name="interaction_desc">Abioa, ukipen-atzeraelikadura</string>
+    <string name="languages">Hizkuntzak</string>
+    <string name="languages_desc">Ingelesa, Txinera, gehiago</string>
+    <string name="help_translate">Itzulpenarekin lagundu</string>
+    <string name="use_device_languages">Gailuaren hizkuntza erabili</string>
+    <string name="tips_and_support">Aholkuak eta babesa</string>
+    <string name="tips_and_support_desc">Honi buruz, kode irekiko lizentziak</string>
+    <string name="welcome">Ongi etorri</string>
+    <string name="tos_tips">Mesedez irakurri eta onartu Read You-ren zerbitzu-baldintzak eta pribatutasun politika jarraitu ahal izateko.</string>
+    <string name="browse_tos_tips">Nabigatu &lt;i&gt;&lt;u&gt;zerbitzu-baldintzetan eta pribatutasun politikan&lt;/u&gt;&lt;/i&gt;
+    </string>
+    <string name="terms_of_service">Zerbitzu-baldintzak</string>
+    <string name="tos_content">
+        &lt;h5&gt;
+
+        Pribatutasun politika
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        Zure pribatutasuna oso serio hartzen dut.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        aplikazioak ez du inolako erabiltzaile daturik biltzen, eta informazio sentikor guztia (pasahitzak eta beste kontu-informazioa) 
+        aplikazioaren datu-base lokal eta seguruan gordetzen dira zure gailuan.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        aplikazioak hurrengo baimenak erabiliko ditu zerbitzua hornitu ahal izateko.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        - Sarerako sarbide baimena (zehazten duzun sareko edukia eskuratu ahal izateko)
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - Sareraen egoera eskuratzeko baimena (jakin ahal izateko ea gailua sarerik eskuragarri duen)
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - Atzeko planoko zerbitzu baimena (aldiro zure gogokoenak automatikoki sinkronizatzeko)
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Hirugarrenen zerbitzuak
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        Politika honek ez du eraginik &lt;b&gt;Read You&lt;/b&gt; aplikazioarekin erabiltzen dituzun hirugarrenen zerbitzuetan.
+        Erabiltzen dituzun zerbitzuen pribatutasun politikak haien webguneetan aztertu ditzakezu.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Erantzukizun ezeztapenak
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        edukia biltzen duen tresna bat besterik ez da. Egiten duzun &lt;b&gt;Read You&lt;/b&gt; aplikazioaren erabilera 
+        zure herrialde eta eskualdearen lege eta arauen menpekoa da, eta zure ekintzetatik deribatutako edozein erantzukizun 
+        zure gain hartuko da pertsonalki.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Kode irekiko lizentzia
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+        &lt;b&gt;Read You&lt;/b&gt;
+
+        GNU GPL 3.0 kode irekiko lizentziapean dagoen kode irekiko proiektu bat da[1], baimena ematen dizuna modu librean 
+        &lt;b&gt;Read You&lt;/b&gt; proiektuaren kodea erabiltzeko, erreferentzia egiteko, eta iturburua aldatzeko, 
+        baina baimentzen ez duena aldatutako eta deribatutako kode hori kode itxiko software komertzial bezala banatzen edo saltzen.
+        Xehetasunetarako, mesedez irakurri GNU GPL 3.0 kode irekiko lizentzia[2] osoa.
+
+        &lt;/p&gt;
+        &lt;br/&gt;
+        &lt;br/&gt;
+        &lt;h5&gt;
+
+        Eranskinak
+
+        &lt;/h5&gt;
+        &lt;br/&gt;
+        &lt;p&gt;
+
+        - [1] https://github.com/Ashinch/ReadYou
+
+        &lt;/p&gt;
+        &lt;p&gt;
+
+        - [2] https://www.gnu.org/licenses/gpl-3.0.html
+
+        &lt;/p&gt;
+    </string>
+    <string name="agree">Ados</string>
+    <string name="wallpaper_colors">Horma-paperaren koloreak</string>
+    <string name="no_palettes">Paletarik ez</string>
+    <string name="only_android_8.1_plus">Android 8.1+ soilik</string>
+    <string name="basic_colors">Oinarrizko koloreak</string>
+    <string name="primary_color">Lehen kolorea</string>
+    <string name="primary_color_hint">#666666 edo 666666 bezala</string>
+    <string name="appearance">Itxura</string>
+    <string name="style">Estiloa</string>
+    <string name="dark_theme">Itxura iluna</string>
+    <string name="use_device_theme">Gailuaren itxura erabili</string>
+    <string name="on">Piztuta</string>
+    <string name="off">Itzalita</string>
+    <string name="other">Besteak</string>
+    <string name="amoled_dark_theme">AMOLED itxura iluna</string>
+    <string name="tonal_elevation">Tonuaren goratzea</string>
+    <string name="reading_fonts">Irakurtzeko letra-tipoak</string>
+    <string name="basic_fonts">Oinarrizko letra-tipoak</string>
+    <string name="feeds_page">Jarioen orria</string>
+    <string name="flow_page">Fluxu orria</string>
+    <string name="reading_page">Irakurketa orria</string>
+    <string name="sponsor">Babesa eman</string>
+    <string name="open_source_licenses">Kode irekiko lizentziak</string>
+    <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
+    <string name="change_log">Aldaketa egunkaria</string>
+    <string name="update">Eguneratu</string>
+    <string name="skip_this_version">Ez eguneratu bertsio honetara</string>
+    <string name="checking_updates">Eguneraketak bilatzen…</string>
+    <string name="is_latest_version">Hau da bertsiorik berriena</string>
+    <string name="check_failure">Ezin izan da eguneraketarik bilatu</string>
+    <string name="download_failure">Ezin izan da eguneraketarik deskargatu</string>
+    <string name="rate_limit">Eskaera tasa mugatuta dago</string>
+    <string name="help">Laguntza</string>
+    <string name="on_start">Abioan</string>
+    <string name="initial_page">Hasierako orria</string>
+    <string name="initial_filter">Hasierako iragazkia</string>
+    <string name="preview_article_title">"Lord of the Mysteries" eleberria amaitu da azkenean</string>
+    <string name="preview_article_desc">The Fool zortzigarren eta azken liburua da Lord of the Mysteries seriean,
+        Cuttlefish That Loves Diving-ek idatzia.
+    </string>
+    <string name="preview_feed_name">Reddit</string>
+    <string name="value">balioa</string>
+    <string name="horizontal_padding">Betetze horizontala</string>
+    <string name="article_date">Artikuluaren argitaratze data</string>
+    <string name="article_desc">Artikuluaren deskribapena</string>
+    <string name="article_images">Artikuluaren irudiak</string>
+    <string name="feed_names">Jarioen izenak</string>
+    <string name="feed_favicons">Jarioen favicon-ak</string>
+    <string name="article_date_sticky_header">Goiburu itsaskorra argitaratze datarako (esperimentala)</string>
+    <string name="article_list">Artikuluen zerrenda</string>
+    <string name="group_list">Taldeen zerrenda</string>
+    <string name="always_expand">Zabaldu beti</string>
+    <string name="top">Goian</string>
+    <string name="mark_as_read_button_position">\"Irakurrita bezala markatu\" botoiaren posizioa</string>
+    <string name="top_bar">Goiko barra</string>
+    <string name="fill_selected_icon">Hautatutako ikonoa bete</string>
+    <string name="filter_bar">Iragazki barra</string>
+    <string name="icons">Ikonoak</string>
+    <string name="icons_and_labels">Ikonoak eta etiketak</string>
+    <string name="icons_and_label_only_selected">Ikonoak eta etiketak (hautatutakoa soilik)</string>
+    <string name="tips_top_bar_tonal_elevation">Tonuaren goratze hau desplazamendu bertikalean dago eskuragarri soilik.</string>
+    <string name="tips_article_list_tonal_elevation">Tonuaren goratze hau itxura argian dago eskuragarri soilik.</string>
+    <string name="tips_group_list_tonal_elevation">Tonuaren goratze hau itxura argian dago eskuragarri soilik.</string>
+    <string name="share">Partekatu</string>
+    <string name="touch_to_play_video">Ukitu bideoa erreproduzitzeko</string>
+    <string name="text">Testua</string>
+    <string name="font_size">Letra-tamaina</string>
+    <string name="letter_spacing">Letren arteko tartea</string>
+    <string name="line_spacing">Lerroartea</string>
+    <string name="alignment">Lerrokatzea</string>
+    <string name="general">Orokorra</string>
+    <string name="auto_hide_toolbars">Tresna-barrak automatikoki ezkutatu</string>
+    <string name="rearrange_buttons">Botoiak berrantolatu</string>
+    <string name="bionic_reading">Irakurketa bionikoa</string>
+    <string name="images">Irudiak</string>
+    <string name="rounded_corners">Izkin biribilduak</string>
+    <string name="videos">Bideoak</string>
+    <string name="align_left">Esker-lerrokatzea</string>
+    <string name="align_right">Eskuin-lerrokatzea</string>
+    <string name="center_text">Testua zentratu</string>
+    <string name="justify">Justifikatu</string>
+    <string name="external_fonts">Kanpoko letra-motak</string>
+    <string name="title">Izenburua</string>
+    <string name="bold">Letra lodia</string>
+    <string name="upper_case">Maiuskulak</string>
+    <string name="subhead">Azpititulua</string>
+    <string name="use_app_theme">Gailuaren itxura erabili</string>
+    <string name="advanced">Aurreratua</string>
+    <string name="dark_reading_theme">Irakurtzeko itxura iluna</string>
+    <string name="title_desc">Letra-lodia, maiuskulak, lerrokatzea</string>
+    <string name="text_desc">Letra-tamaina, letra tartea, lerrokatzea</string>
+    <string name="images_desc">Izkin biribilduak, betetze horizontala</string>
+    <string name="videos_desc">Izkin biribilduak, betetze horizontala</string>
+    <string name="maximize">Maximizatu</string>
+</resources>
