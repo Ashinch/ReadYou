@@ -4,6 +4,8 @@ import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import me.ash.reader.R
 import me.ash.reader.data.dao.AccountDao
+import me.ash.reader.data.dao.ArticleDao
+import me.ash.reader.data.dao.FeedDao
 import me.ash.reader.data.dao.GroupDao
 import me.ash.reader.data.model.account.Account
 import me.ash.reader.data.model.account.AccountType
@@ -17,9 +19,11 @@ class AccountRepository @Inject constructor(
     private val context: Context,
     private val accountDao: AccountDao,
     private val groupDao: GroupDao,
+    private val feedDao: FeedDao,
+    private val articleDao: ArticleDao,
 ) {
 
-    suspend fun getCurrentAccount(): Account? = accountDao.queryById(context.currentAccountId)
+    suspend fun getCurrentAccount(): Account = accountDao.queryById(context.currentAccountId)!!
 
     suspend fun isNoAccount(): Boolean = accountDao.queryAll().isEmpty()
 
@@ -41,6 +45,21 @@ class AccountRepository @Inject constructor(
                     )
                 )
             }
+        }
+    }
+
+    suspend fun update(block: Account.() -> Unit) {
+        accountDao.queryById(context.currentAccountId)?.let {
+            accountDao.update(it.apply(block))
+        }
+    }
+
+    suspend fun delete(accountId: Int) {
+        accountDao.queryById(accountId)?.let {
+            articleDao.deleteByAccountId(accountId)
+            feedDao.deleteByAccountId(accountId)
+            groupDao.deleteByAccountId(accountId)
+            accountDao.delete(it)
         }
     }
 }

@@ -68,7 +68,7 @@ fun FlowPage(
 
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
-    homeViewModel.syncWorkLiveData.observe(owner) {
+    homeViewModel.syncWorkLiveData()?.observe(owner) {
         it?.let { isSyncing = it.progress.getIsSyncing() }
     }
 

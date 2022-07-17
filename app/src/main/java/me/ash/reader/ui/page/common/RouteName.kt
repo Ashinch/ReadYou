@@ -13,6 +13,11 @@ object RouteName {
     // Settings
     const val SETTINGS = "settings"
 
+    // Accounts
+    const val ACCOUNTS = "accounts"
+    const val ACCOUNT_DETAILS = "account_details"
+    const val ADD_ACCOUNTS = "add_accounts"
+
     // Color & Style
     const val COLOR_AND_STYLE = "color_and_style"
     const val DARK_THEME = "dark_theme"

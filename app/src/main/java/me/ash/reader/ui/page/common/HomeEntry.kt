@@ -24,6 +24,9 @@ import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.flow.FlowPage
 import me.ash.reader.ui.page.home.reading.ReadingPage
 import me.ash.reader.ui.page.settings.SettingsPage
+import me.ash.reader.ui.page.settings.accounts.AccountDetailsPage
+import me.ash.reader.ui.page.settings.accounts.AccountsPage
+import me.ash.reader.ui.page.settings.accounts.AddAccountsPage
 import me.ash.reader.ui.page.settings.color.ColorAndStylePage
 import me.ash.reader.ui.page.settings.color.DarkThemePage
 import me.ash.reader.ui.page.settings.color.feeds.FeedsPageStylePage
@@ -138,6 +141,19 @@ fun HomeEntry(
             // Settings
             animatedComposable(route = RouteName.SETTINGS) {
                 SettingsPage(navController)
+            }
+
+            // Accounts
+            animatedComposable(route = RouteName.ACCOUNTS) {
+                AccountsPage(navController)
+            }
+
+            animatedComposable(route = RouteName.ACCOUNT_DETAILS) {
+                AccountDetailsPage(navController)
+            }
+
+            animatedComposable(route = RouteName.ADD_ACCOUNTS) {
+                AddAccountsPage(navController)
             }
 
             // Color & Style

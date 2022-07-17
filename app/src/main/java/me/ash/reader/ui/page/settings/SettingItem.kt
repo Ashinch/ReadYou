@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +30,7 @@ fun SettingItem(
     title: String,
     desc: String? = null,
     icon: ImageVector? = null,
+    iconPainter: Painter? = null,
     separatedActions: Boolean = false,
     onClick: () -> Unit,
     action: (@Composable () -> Unit)? = null,
@@ -47,13 +49,24 @@ fun SettingItem(
                 .padding(24.dp, 16.dp, 16.dp, 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            icon?.let {
+            if (icon != null) {
                 Icon(
-                    imageVector = it,
-                    contentDescription = null,
                     modifier = Modifier.padding(end = 24.dp),
+                    imageVector = icon,
+                    contentDescription = title,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+            } else {
+                iconPainter?.let {
+                    Icon(
+                        modifier = Modifier
+                            .padding(end = 24.dp)
+                            .size(24.dp),
+                        painter = it,
+                        contentDescription = title,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
             Column(modifier = Modifier.weight(1f)) {
                 Text(

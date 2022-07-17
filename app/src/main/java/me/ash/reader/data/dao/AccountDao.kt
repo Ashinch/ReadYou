@@ -1,10 +1,19 @@
 package me.ash.reader.data.dao
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 import me.ash.reader.data.model.account.Account
 
 @Dao
 interface AccountDao {
+
+    @Query(
+        """
+        SELECT * FROM account
+        WHERE id = :id
+        """
+    )
+    fun queryAccount(id: Int): Flow<Account?>
 
     @Query(
         """

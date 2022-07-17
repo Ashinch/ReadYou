@@ -205,6 +205,18 @@ interface ArticleDao {
 
     @Query(
         """
+        DELETE FROM article
+        WHERE accountId = :accountId
+        AND date < :before
+        """
+    )
+    suspend fun deleteAllBefore(
+        accountId: Int,
+        before: Date,
+    )
+
+    @Query(
+        """
         UPDATE article SET isUnread = :isUnread 
         WHERE accountId = :accountId
         AND date < :before
@@ -284,6 +296,14 @@ interface ArticleDao {
         """
     )
     suspend fun deleteByGroupId(accountId: Int, groupId: String)
+
+    @Query(
+        """
+        DELETE FROM article
+        WHERE accountId = :accountId
+        """
+    )
+    suspend fun deleteByAccountId(accountId: Int)
 
     @Transaction
     @Query(
@@ -376,7 +396,7 @@ interface ArticleDao {
         """
         SELECT a.id, a.date, a.title, a.author, a.rawDescription, 
         a.shortDescription, a.fullContent, a.img, a.link, a.feedId, 
-        a.accountId, a.isUnread, a.isStarred, a.isReadLater 
+        a.accountId, a.isUnread, a.isStarred, a.isReadLater, a.updateAt 
         FROM article AS a
         LEFT JOIN feed AS b ON b.id = a.feedId
         LEFT JOIN `group` AS c ON c.id = b.groupId
@@ -396,7 +416,7 @@ interface ArticleDao {
         """
         SELECT a.id, a.date, a.title, a.author, a.rawDescription, 
         a.shortDescription, a.fullContent, a.img, a.link, a.feedId, 
-        a.accountId, a.isUnread, a.isStarred, a.isReadLater 
+        a.accountId, a.isUnread, a.isStarred, a.isReadLater, a.updateAt 
         FROM article AS a
         LEFT JOIN feed AS b ON b.id = a.feedId
         LEFT JOIN `group` AS c ON c.id = b.groupId
@@ -418,7 +438,7 @@ interface ArticleDao {
         """
         SELECT a.id, a.date, a.title, a.author, a.rawDescription, 
         a.shortDescription, a.fullContent, a.img, a.link, a.feedId, 
-        a.accountId, a.isUnread, a.isStarred, a.isReadLater 
+        a.accountId, a.isUnread, a.isStarred, a.isReadLater, a.updateAt 
         FROM article AS a
         LEFT JOIN feed AS b ON b.id = a.feedId
         LEFT JOIN `group` AS c ON c.id = b.groupId
@@ -485,7 +505,7 @@ interface ArticleDao {
         """
         SELECT a.id, a.date, a.title, a.author, a.rawDescription, 
         a.shortDescription, a.fullContent, a.img, a.link, a.feedId, 
-        a.accountId, a.isUnread, a.isStarred, a.isReadLater 
+        a.accountId, a.isUnread, a.isStarred, a.isReadLater, a.updateAt 
         FROM article AS a LEFT JOIN feed AS b 
         ON a.feedId = b.id
         WHERE a.feedId = :feedId 

@@ -9,37 +9,44 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 @HiltWorker
 class SyncWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
+    private val accountRepository: AccountRepository,
     private val rssRepository: RssRepository,
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result =
         withContext(Dispatchers.Default) {
             Log.i("RLog", "doWork: ")
-            rssRepository.get().sync(this@SyncWorker)
+            rssRepository.get().sync(this@SyncWorker).also {
+                rssRepository.get().keepArchivedArticles()
+            }
         }
 
     companion object {
 
-        const val WORK_NAME = "article.sync"
+        private const val IS_SYNCING = "isSyncing"
+        const val WORK_NAME = "ReadYou"
+        var uuid: UUID? = null
+        val OneTimeRequest: OneTimeWorkRequest.Builder =
+            OneTimeWorkRequestBuilder<SyncWorker>()
 
-        val uuid: UUID
-
-        val repeatingRequest = PeriodicWorkRequestBuilder<SyncWorker>(
-            15, TimeUnit.MINUTES
-        ).setConstraints(
-            Constraints.Builder()
-                .build()
+        fun getRepeatingRequest(
+            builder: PeriodicWorkRequest.Builder,
+            isSyncOnlyWhenCharging: Boolean,
+            isSyncOnlyOnWiFi: Boolean,
+        ): PeriodicWorkRequest = builder.setConstraints(Constraints.Builder()
+            .setRequiresCharging(isSyncOnlyWhenCharging)
+            .setRequiredNetworkType(if (isSyncOnlyOnWiFi) NetworkType.UNMETERED else NetworkType.CONNECTED)
+            .build()
         ).addTag(WORK_NAME).build().also {
             uuid = it.id
         }
 
-        fun setIsSyncing(boolean: Boolean) = workDataOf("isSyncing" to boolean)
-        fun Data.getIsSyncing(): Boolean = getBoolean("isSyncing", false)
+        fun setIsSyncing(boolean: Boolean) = workDataOf(IS_SYNCING to boolean)
+        fun Data.getIsSyncing(): Boolean = getBoolean(IS_SYNCING, false)
     }
 }

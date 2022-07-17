@@ -29,9 +29,9 @@ data class Feed(
     var groupId: String,
     @ColumnInfo(index = true)
     var accountId: Int,
-    @ColumnInfo(defaultValue = "false")
+    @ColumnInfo
     var isNotification: Boolean = false,
-    @ColumnInfo(defaultValue = "false")
+    @ColumnInfo
     var isFullContent: Boolean = false,
 ) {
 
