@@ -66,7 +66,7 @@
     <string name="delete">Hapus</string>
     <string name="delete_toast">\"%1$s\" Sudah Dihapus</string>
     <string name="unsubscribe">Berhenti Berlangganan</string>
-    <string name="unsubscribe_tips">Berhenti berlangganan dari \"%1$s\" dan menghapus semua artikel yang diarsip di dalamnya.</string>
+    <string name="unsubscribe_tips">Berhenti berlangganan dari \"%1$s\" dan hapus semua artikel yang diarsip di dalamnya.</string>
     <string name="delete_group">Hapus Grup</string>
     <string name="delete_group_tips">Hapus grup \"%1$s\" dan semua Feed dan artikel yang diarsip di dalamnya.</string>
     <string name="group_option_tips">Opsi berikut akan diterapkan ke semua Feed dalam grup ini.</string>
@@ -74,7 +74,7 @@
     <string name="yesterday">Kemarin</string>
     <string name="date_at_time">%1$s %2$s</string>
     <string name="search_for_in">Cari %1$s di \"%2$s\"</string>
-    <string name="search_for">Cari %1$s elementos</string>
+    <string name="search_for">Cari %1$s</string>
     <string name="mark_as_read">Tandai sudah dibaca</string>
     <string name="mark_all_as_read">Tandai sudah dibaca semua</string>
     <string name="mark_as_unread">Tandai belum dibaca</string>
