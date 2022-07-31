@@ -45,7 +45,7 @@ fun LazyListState.isScrollDown(): Boolean {
             if (isScrollInProgress) {
                 isScrollDown = when {
                     firstVisibleItemIndex > preItemIndex -> true
-                    firstVisibleItemScrollOffset < preItemIndex -> false
+                    firstVisibleItemIndex < preItemIndex -> false
                     else -> firstVisibleItemScrollOffset > preScrollStartOffset
                 }
             } else {
