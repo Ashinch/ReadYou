@@ -9,24 +9,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.paging.compose.collectAsLazyPagingItems
 import me.ash.reader.data.model.preference.LocalReadingAutoHideToolbar
 import me.ash.reader.data.model.preference.LocalReadingPageTonalElevation
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.isScrollDown
+import me.ash.reader.ui.page.home.HomeViewModel
 
 @Composable
 fun ReadingPage(
     navController: NavHostController,
+    homeViewModel: HomeViewModel,
     readingViewModel: ReadingViewModel = hiltViewModel(),
 ) {
     val tonalElevation = LocalReadingPageTonalElevation.current
     val readingUiState = readingViewModel.readingUiState.collectAsStateValue()
+    val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
     val isShowToolBar = if (LocalReadingAutoHideToolbar.current.value) {
         readingUiState.articleWithFeed != null && !readingUiState.listState.isScrollDown()
     } else {
         true
     }
+
+    val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
+    readingViewModel.recorderNextArticle(readingUiState, homeUiState, pagingItems)
 
     LaunchedEffect(Unit) {
         navController.currentBackStackEntryFlow.collect {
@@ -89,6 +96,9 @@ fun ReadingPage(
                         },
                         onStarred = {
                             readingViewModel.markStarred(it)
+                        },
+                        onNextArticle = {
+                            readingViewModel.nextArticle(navController, homeUiState.nextArticleId)
                         },
                         onFullContent = {
                             if (it) readingViewModel.renderFullContent()

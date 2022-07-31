@@ -33,6 +33,7 @@ fun BottomBar(
     isFullContent: Boolean,
     onUnread: (isUnread: Boolean) -> Unit = {},
     onStarred: (isStarred: Boolean) -> Unit = {},
+    onNextArticle: () -> Unit = {},
     onFullContent: (isFullContent: Boolean) -> Unit = {},
 ) {
     val tonalElevation = LocalReadingPageTonalElevation.current
@@ -95,13 +96,14 @@ fun BottomBar(
                         onStarred(!isStarred)
                     }
                     CanBeDisabledIconButton(
-                        disabled = true,
+                        disabled = false,
                         modifier = Modifier.size(40.dp),
                         imageVector = Icons.Rounded.ExpandMore,
                         contentDescription = "Next Article",
                         tint = MaterialTheme.colorScheme.outline,
                     ) {
                         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        onNextArticle()
                     }
                     CanBeDisabledIconButton(
                         modifier = Modifier.size(36.dp),

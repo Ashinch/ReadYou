@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import androidx.paging.ItemSnapshotList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,9 +13,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import me.ash.reader.data.model.article.ArticleFlowItem
 import me.ash.reader.data.model.article.ArticleWithFeed
 import me.ash.reader.data.repository.RssHelper
 import me.ash.reader.data.repository.RssRepository
+import me.ash.reader.ui.page.common.RouteName
+import me.ash.reader.ui.page.home.HomeUiState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -114,6 +119,13 @@ class ReadingViewModel @Inject constructor(
         }
     }
 
+    fun nextArticle(navController: NavController, nextArticleId: String) {
+        navController.popBackStack()
+        if (nextArticleId.isNotBlank()) {
+            navController.navigate("${RouteName.READING}/${nextArticleId}")
+        }
+    }
+
     private fun showLoading() {
         _readingUiState.update {
             it.copy(isLoading = true)
@@ -123,6 +135,30 @@ class ReadingViewModel @Inject constructor(
     private fun hideLoading() {
         _readingUiState.update {
             it.copy(isLoading = false)
+        }
+    }
+
+    fun recorderNextArticle(
+        readingUiState: ReadingUiState, homeUiState: HomeUiState, pagingItems:
+        ItemSnapshotList<ArticleFlowItem>
+    ) {
+        if (pagingItems.size > 0) {
+            val cur = readingUiState.articleWithFeed?.article
+            if (cur != null) {
+                var found = false
+                for (item in pagingItems) {
+                    if (item is ArticleFlowItem.Article) {
+                        val itemId = item.articleWithFeed.article.id
+                        if (itemId == cur.id) {
+                            found = true
+                            homeUiState.nextArticleId = ""
+                        } else if (found) {
+                            homeUiState.nextArticleId = itemId
+                            break
+                        }
+                    }
+                }
+            }
         }
     }
 }
