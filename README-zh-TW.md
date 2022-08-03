@@ -21,10 +21,11 @@
 
 <div align="center">
     <h1>Read You</h1>
-    <p>这是一个在 Android 上的  <a href="https://reederapp.com/">Reeder</a> 仿制品，为了让 Android 拥有一个与 Reeder 相似的 RSS 阅读器。</p>
+    <p>這是一個在 Android 上的  <a href="https://reederapp.com/">Reeder</a> 仿製品，為了讓 Android 擁有一個與 Reeder 相似的 RSS 閱讀器。</p>
     <p><a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README.md">English by DeepL</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-de.md">Deutsch</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-    简体中文</p>
+    <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-CN.md">简体中文</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+    繁體中文</p>
     <br/>
     <br/>
     <img src="./fastlane/metadata/android/zh/images/startup.png" width="19.2%" alt="startup" />
@@ -38,25 +39,25 @@
 
 ## 特性
 
-**Read You** 结合了 Reeder 的交互逻辑与 [Material Design 3 (You)](https://m3.material.io/) 的设计风格。
+**Read You** 結合了 Reeder 的交互邏輯與 [Material Design 3 (You)](https://m3.material.io/) 的設計風格。
 
-以下是目前取得的进展和近期将要努力的目标：
+以下是目前取得的進展和近期將要努力的目標：
 
 -   [x] 本地
 
-    -   [x] 订阅 RSS 链接
-    -   [x] 导入 OPML 文件
+    -   [x] 訂閱 RSS 連結
+    -   [x] 匯入 OPML 文件
     -   [x] 文章同步
     -   [x] 文章更新通知
-    -   [x] 全文解析
-    -   [x] 过滤未读、星标
-    -   [x] 订阅源分组
+    -   [x] 全文分析
+    -   [x] 過濾未讀、星標
+    -   [x] 訂閱源分組
     -   [x] 本地化
-    -   [x] 导出 OPML 文件
-    -   [x] 文章搜索
-    -   [ ] 偏好设置
-    -   [ ] 发布 APK
-    -   [ ] 小组件
+    -   [x] 匯出 OPML 文件
+    -   [x] 文章搜尋
+    -   [ ] 偏好設定
+    -   [ ] 發布 APK
+    -   [ ] 小工具
     -   [ ] ...
 
 -   [ ] Fever API 支持
@@ -64,27 +65,27 @@
 -   [ ] Inoreader API 支持
 -   [ ] ...
 
-> 以上特性仅是初步实现，可能存在某些未知 BUG，仍需进行测试和优化。
+> 以上特性僅是初步實現，可能存在某些未知 BUG，仍需進行測試和最佳化。
 
-## 构建
+## 構建
 
-> 如果你想要预览 Read You 应用，可以在 [Telegram 频道](https://t.me/ReadYouApp) 中获取 **预览版本** 的 APK 文件。
+> 如果你想要預覽 Read You 應用，可以在 [Telegram 頻道](https://t.me/ReadYouApp) 中獲取 **預覽版本** 的 APK 文件。
 
-**Read You** 基于 Android 原生的 [Jetpack Compose](https://developer.android.com/jetpack/compose) 架构实现。
+**Read You** 基於 Android 原生的 [Jetpack Compose](https://developer.android.com/jetpack/compose) 架構實現。
 
-1. 首先需要获取 **Read You** 的源代码：
+1. 首先需要獲取 **Read You** 的原始碼：
 
     ```shell
     git clone https://github.com/Ashinch/ReadYou.git
     ```
 
-2. 然后通过 [Android Studio (最新版本)](https://developer.android.com/studio) 打开。
+2. 然後通過 [Android Studio (最新版本)](https://developer.android.com/studio) 打開。
 
-3. 点击 `▶ 运行（Run）` 按钮后将会自动构建并运行。
+3. 點擊 `▶ 運行（Run）` 按鈕後將會自動構建並運行。
 
-    > 如遇卡顿现象，请选择 Release 版本构建。
+    > 如遇卡頓現象，請選擇 Release 版本構建。
 
-## 感谢开源
+## 感謝開源
 
 -   [MusicYou](https://github.com/Kyant0/MusicYou)
 -   [ParseRSS](https://github.com/muhrifqii/ParseRSS): [MIT](https://github.com/muhrifqii/ParseRSS/blob/master/LICENSE)
@@ -94,6 +95,6 @@
 -   [Rome](https://github.com/rometools/rome): [Apache License 2.0](https://github.com/rometools/rome/blob/master/LICENSE)
 -   [Feeder](https://gitlab.com/spacecowboy/Feeder): [GPL v3.0](https://gitlab.com/spacecowboy/Feeder/-/blob/master/LICENSE)
 
-## 许可证
+## 許可證
 
 [GNU GPL v3.0](https://github.com/Ashinch/ReadYou/blob/main/LICENSE)
