@@ -18,8 +18,6 @@ import me.ash.reader.data.source.RYDatabase
 import me.ash.reader.data.source.RYNetworkDataSource
 import me.ash.reader.ui.ext.*
 import okhttp3.OkHttpClient
-import org.conscrypt.Conscrypt
-import java.security.Security
 import javax.inject.Inject
 
 /**
@@ -34,7 +32,8 @@ class RYApp : Application(), Configuration.Provider {
      * Install Conscrypt to handle TLSv1.3 pre Android10.
      */
     init {
-        Security.insertProviderAt(Conscrypt.newProvider(), 1)
+        // Cancel TLSv1.3 support pre Android10
+        // Security.insertProviderAt(Conscrypt.newProvider(), 1)
     }
 
     @Inject
