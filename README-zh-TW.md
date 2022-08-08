@@ -79,8 +79,8 @@
 
 ## 翻译
 
-<a target="_blank" href="https://weblate.bubu1.eu/engage/readyou/">
-<img src="https://weblate.bubu1.eu/widgets/readyou/-/287x66-grey.png" alt="翻译状态" />
+<a target="_blank" href="https://hosted.weblate.org/engage/readyou/">
+<img src="https://hosted.weblate.org/widgets/readyou/-/287x66-white.png" alt="" />
 </a>
 
 ## 構建
