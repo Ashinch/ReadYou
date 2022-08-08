@@ -92,7 +92,7 @@
     <string name="accounts">帳戶</string>
     <string name="accounts_desc">本機、FreshRSS</string>
     <string name="color_and_style">顏色和樣式</string>
-    <string name="color_and_style_desc">主題、色調樣式、字體大小</string>
+    <string name="color_and_style_desc">主題、色調樣式、字型大小</string>
     <string name="interaction">互動</string>
     <string name="interaction_desc">啟動時、觸感回饋</string>
     <string name="languages">語言</string>
@@ -225,8 +225,8 @@
     <string name="amoled_dark_theme">AMOLED 深色主題</string>
     <string name="other">其他</string>
     <string name="tonal_elevation">色調海拔</string>
-    <string name="reading_fonts">閱讀字體</string>
-    <string name="basic_fonts">基本字體</string>
+    <string name="reading_fonts">閱讀字型</string>
+    <string name="basic_fonts">基本字型</string>
     <string name="feeds_page">訂閱源頁面</string>
     <string name="flow_page">訊息流頁面</string>
     <string name="reading_page">閱讀頁面</string>
@@ -275,7 +275,7 @@
     <string name="share">分享</string>
     <string name="touch_to_play_video">輕觸播放影片</string>
     <string name="text">文字</string>
-    <string name="font_size">字體大小</string>
+    <string name="font_size">字型大小</string>
     <string name="letter_spacing">字元間距</string>
     <string name="line_spacing">行間距</string>
     <string name="alignment">對齊</string>
@@ -290,7 +290,7 @@
     <string name="align_right">右對齊</string>
     <string name="center_text">居中對齊</string>
     <string name="justify">兩端對齊</string>
-    <string name="external_fonts">外部字體</string>
+    <string name="external_fonts">外部字型</string>
     <string name="title">標題</string>
     <string name="bold">加粗</string>
     <string name="upper_case">大寫字母</string>
@@ -299,7 +299,7 @@
     <string name="advanced">進階</string>
     <string name="dark_reading_theme">深色閱讀主題</string>
     <string name="title_desc">加粗、大寫字母、對齊</string>
-    <string name="text_desc">字體大小、字元間距、對齊</string>
+    <string name="text_desc">字型大小、字元間距、對齊</string>
     <string name="images_desc">圓角、水平邊距</string>
     <string name="videos_desc">圓角、水平邊距</string>
     <string name="maximize">最大化</string>
