@@ -132,7 +132,7 @@ fun HomeEntry(
                 )
             }
             animatedComposable(route = "${RouteName.READING}/{articleId}") {
-                ReadingPage(navController = navController)
+                ReadingPage(navController = navController, homeViewModel = homeViewModel)
             }
 
             // Settings
