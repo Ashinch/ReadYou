@@ -57,7 +57,7 @@ class HomeViewModel @Inject constructor(
             it.copy(
                 pagingData = Pager(
                     config = PagingConfig(
-                        pageSize = 100,
+                        pageSize = 50,
                         enablePlaceholders = false,
                     )
                 ) {
