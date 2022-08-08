@@ -46,7 +46,7 @@
     <string name="parse_full_content">Eduki osoa analizatu</string>
     <string name="all_parse_full_content_tips">\"%1$s\" taldeko artikulu guztien eduki osoaren analisia.</string>
     <string name="all_parse_full_content_toast">\"%1$s\" taldeko artikulu guztien eduki osoaren analisia</string>
-    <string name="all_deny_parse_full_content_toast">\"%1$s\" taldeko artikulu guztien eduki osoaren analisi 
+    <string name="all_deny_parse_full_content_toast">\"%1$s\" taldeko artikulu guztien eduki osoaren analisi
         gehiagorik ez
     </string>
     <string name="clear_articles">Artikuluak garbitu</string>
@@ -126,7 +126,7 @@
         &lt;p&gt;
         &lt;b&gt;Read You&lt;/b&gt;
 
-        aplikazioak ez du inolako erabiltzaile daturik biltzen, eta informazio sentikor guztia (pasahitzak eta beste kontu-informazioa) 
+        aplikazioak ez du inolako erabiltzaile daturik biltzen, eta informazio sentikor guztia (pasahitzak eta beste kontu-informazioa)
         aplikazioaren datu-base lokal eta seguruan gordetzen dira zure gailuan.
 
         &lt;/p&gt;
@@ -178,8 +178,8 @@
         &lt;p&gt;
         &lt;b&gt;Read You&lt;/b&gt;
 
-        edukia biltzen duen tresna bat besterik ez da. Egiten duzun &lt;b&gt;Read You&lt;/b&gt; aplikazioaren erabilera 
-        zure herrialde eta eskualdearen lege eta arauen menpekoa da, eta zure ekintzetatik deribatutako edozein erantzukizun 
+        edukia biltzen duen tresna bat besterik ez da. Egiten duzun &lt;b&gt;Read You&lt;/b&gt; aplikazioaren erabilera
+        zure herrialde eta eskualdearen lege eta arauen menpekoa da, eta zure ekintzetatik deribatutako edozein erantzukizun
         zure gain hartuko da pertsonalki.
 
         &lt;/p&gt;
@@ -194,8 +194,8 @@
         &lt;p&gt;
         &lt;b&gt;Read You&lt;/b&gt;
 
-        GNU GPL 3.0 kode irekiko lizentziapean dagoen kode irekiko proiektu bat da[1], baimena ematen dizuna modu librean 
-        &lt;b&gt;Read You&lt;/b&gt; proiektuaren kodea erabiltzeko, erreferentzia egiteko, eta iturburua aldatzeko, 
+        GNU GPL 3.0 kode irekiko lizentziapean dagoen kode irekiko proiektu bat da[1], baimena ematen dizuna modu librean
+        &lt;b&gt;Read You&lt;/b&gt; proiektuaren kodea erabiltzeko, erreferentzia egiteko, eta iturburua aldatzeko,
         baina baimentzen ez duena aldatutako eta deribatutako kode hori kode itxiko software komertzial bezala banatzen edo saltzen.
         Xehetasunetarako, mesedez irakurri GNU GPL 3.0 kode irekiko lizentzia[2] osoa.
 

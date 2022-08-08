@@ -2,8 +2,8 @@
     <string name="all">Wszystkie</string>
     <plurals name="all_desc">
         <item quantity="one">%1$d pobrany artykuł</item>
-		<item quantity="few">%1$d pobrane artykuły</item>
-		<item quantity="many">%1$d pobranych artykułów</item>
+        <item quantity="few">%1$d pobrane artykuły</item>
+        <item quantity="many">%1$d pobranych artykułów</item>
     </plurals>
     <string name="unread">Nieprzeczytane</string>
     <plurals name="unread_desc">
@@ -129,7 +129,7 @@
         &lt;b&gt;Read You&lt;/b&gt;
 
         nie gromadzi danych na temat użytkownika, a wszelkie poufne informacje (hasła i inne informacje dotyczące kont) są
-        bezpiecznie przechowywane w lokalnej bazie danych na twoim urządzeniu. 
+        bezpiecznie przechowywane w lokalnej bazie danych na twoim urządzeniu.
 
         &lt;/p&gt;
         &lt;br/&gt;
@@ -153,7 +153,7 @@
         &lt;p&gt;
 
         - Uruchom usługę na pierwszym planie (w celu regularnej automatycznej synchronizacji treści)
- 
+
 
         &lt;/p&gt;
         &lt;br/&gt;
@@ -167,7 +167,7 @@
         &lt;p&gt;
 
         Ta umowa nie tyczy się stron podmiotów trzecich z którymi użytkownik łączy się za pomocą &lt;b&gt;Read You&lt;/b&gt;.
-        Zasady ochrony prywatności tych serwisów można sprawdzić na ich poszczególnych stronach internetowych 
+        Zasady ochrony prywatności tych serwisów można sprawdzić na ich poszczególnych stronach internetowych
 
         &lt;/p&gt;
         &lt;br/&gt;

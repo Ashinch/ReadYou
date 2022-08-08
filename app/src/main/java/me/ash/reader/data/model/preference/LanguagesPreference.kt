@@ -69,7 +69,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
             Spanish -> Locale("es", "ES")
             Polish -> Locale("pl", "PL")
             Russian -> Locale("ru", "RU")
-            Basque -> Locale("eu", "EU")
+            Basque -> Locale("eu", "ES")
             Indonesian -> Locale("in", "ID")
             ChineseTraditional -> Locale("zh", "TW")
         }
