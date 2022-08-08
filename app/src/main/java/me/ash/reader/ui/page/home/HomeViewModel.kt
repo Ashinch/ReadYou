@@ -99,5 +99,4 @@ data class FilterState(
 data class HomeUiState(
     val pagingData: Flow<PagingData<ArticleFlowItem>> = emptyFlow(),
     val searchContent: String = "",
-    var nextArticleId: String = ""
 )

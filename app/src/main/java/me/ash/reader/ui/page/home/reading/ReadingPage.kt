@@ -1,6 +1,9 @@
 package me.ash.reader.ui.page.home.reading
 
 import android.util.Log
+import androidx.compose.animation.*
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -17,6 +20,7 @@ import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.isScrollDown
 import me.ash.reader.ui.page.home.HomeViewModel
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ReadingPage(
     navController: NavHostController,
@@ -33,7 +37,7 @@ fun ReadingPage(
     }
 
     val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
-    readingViewModel.recorderNextArticle(readingUiState, homeUiState, pagingItems)
+    readingViewModel.recorderNextArticle(pagingItems)
 
     LaunchedEffect(Unit) {
         navController.currentBackStackEntryFlow.collect {
@@ -72,17 +76,34 @@ fun ReadingPage(
 
                 // Content
                 if (readingUiState.articleWithFeed != null) {
-                    Content(
-                        content = readingUiState.content ?: "",
-                        feedName = readingUiState.articleWithFeed.feed.name,
-                        title = readingUiState.articleWithFeed.article.title,
-                        author = readingUiState.articleWithFeed.article.author,
-                        link = readingUiState.articleWithFeed.article.link,
-                        publishedDate = readingUiState.articleWithFeed.article.date,
-                        isLoading = readingUiState.isLoading,
-                        listState = readingUiState.listState,
-                        isShowToolBar = isShowToolBar,
-                    )
+                    AnimatedContent(
+                        targetState = readingUiState.content ?: "",
+                        transitionSpec = {
+                            slideInVertically(
+                                spring(
+                                    dampingRatio = Spring.DampingRatioNoBouncy,
+                                    stiffness = Spring.StiffnessLow,
+                                )
+                            ) { height -> height / 2 } with slideOutVertically { height -> -(height / 2) } + fadeOut(
+                                spring(
+                                    dampingRatio = Spring.DampingRatioNoBouncy,
+                                    stiffness = Spring.StiffnessLow,
+                                )
+                            )
+                        }
+                    ) { target ->
+                        Content(
+                            content = target,
+                            feedName = readingUiState.articleWithFeed.feed.name,
+                            title = readingUiState.articleWithFeed.article.title,
+                            author = readingUiState.articleWithFeed.article.author,
+                            link = readingUiState.articleWithFeed.article.link,
+                            publishedDate = readingUiState.articleWithFeed.article.date,
+                            isLoading = readingUiState.isLoading,
+                            listState = readingUiState.listState,
+                            isShowToolBar = isShowToolBar,
+                        )
+                    }
                 }
                 // Bottom Bar
                 if (readingUiState.articleWithFeed != null) {
@@ -98,7 +119,9 @@ fun ReadingPage(
                             readingViewModel.markStarred(it)
                         },
                         onNextArticle = {
-                            readingViewModel.nextArticle(navController, homeUiState.nextArticleId)
+                            if (readingUiState.nextArticleId.isNotEmpty()) {
+                                readingViewModel.initData(readingUiState.nextArticleId)
+                            }
                         },
                         onFullContent = {
                             if (it) readingViewModel.renderFullContent()
