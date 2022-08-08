@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="all">全部</string>
     <plurals name="all_desc">
@@ -97,8 +98,8 @@
     <string name="languages">語言</string>
     <string name="languages_desc">英語、中文、更多</string>
     <string name="use_device_languages">跟隨系統設定</string>
-    <string name="help_translate">幫助我們翻譯</string>
-    <string name="tips_and_support">提示和支持</string>
+    <string name="help_translate">協助翻譯</string>
+    <string name="tips_and_support">提示和支援</string>
     <string name="tips_and_support_desc">關於、開源</string>
     <string name="welcome">歡迎</string>
     <string name="tos_tips">在此之前，您需要同意 Read You 的服務條款與隱私政策後才能繼續。</string>
@@ -229,7 +230,7 @@
     <string name="feeds_page">訂閱源頁面</string>
     <string name="flow_page">訊息流頁面</string>
     <string name="reading_page">閱讀頁面</string>
-    <string name="sponsor">抖內</string>
+    <string name="sponsor">贊助</string>
     <string name="open_source_licenses">開放原始碼許可</string>
     <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
     <string name="change_log">更新日誌</string>
@@ -240,10 +241,10 @@
     <string name="check_failure">檢查失敗</string>
     <string name="download_failure">下載失敗</string>
     <string name="rate_limit">請求速率受限</string>
-    <string name="help">幫助</string>
+    <string name="help">說明</string>
     <string name="on_start">啟動時</string>
     <string name="initial_page">起始頁面</string>
-    <string name="initial_filter">起始過濾條件</string>
+    <string name="initial_filter">起始篩選條件</string>
     <string name="preview_article_title">嗚嗚嗚，黎明之劍完結了</string>
     <string name="preview_article_desc">
         是宴席，就有結束的時候，但這本書真的陪了我好久啊，好捨不得，而且主線結束了坑卻沒填完，不知道什麼時候才有番外啊
@@ -262,15 +263,15 @@
     <string name="always_expand">始終展開</string>
     <string name="top">頂部</string>
     <string name="mark_as_read_button_position">“標記為已讀”按鈕的位置</string>
-    <string name="top_bar">標題欄</string>
+    <string name="top_bar">標題列</string>
     <string name="fill_selected_icon">填充已選中的圖示</string>
-    <string name="filter_bar">過濾欄</string>
+    <string name="filter_bar">篩選列</string>
     <string name="icons">圖示</string>
     <string name="icons_and_labels">圖示和文字</string>
     <string name="icons_and_label_only_selected">圖示和文字（僅選中時）</string>
-    <string name="tips_top_bar_tonal_elevation">標題欄的色調海拔僅在滾動時可用。</string>
-    <string name="tips_article_list_tonal_elevation">文章列表的色調海拔僅在淺色主題時可用。</string>
-    <string name="tips_group_list_tonal_elevation">群組列表的色調海拔僅在淺色主題時可用。</string>
+    <string name="tips_top_bar_tonal_elevation">此色調海拔僅適用於捲動時。</string>
+    <string name="tips_article_list_tonal_elevation">此色調海拔僅適用於淺色主題。</string>
+    <string name="tips_group_list_tonal_elevation">此色調海拔僅適用於淺色主題。</string>
     <string name="share">分享</string>
     <string name="touch_to_play_video">輕觸播放影片</string>
     <string name="text">文字</string>
@@ -279,7 +280,7 @@
     <string name="line_spacing">行間距</string>
     <string name="alignment">對齊</string>
     <string name="general">一般</string>
-    <string name="auto_hide_toolbars">自動隱藏工具條</string>
+    <string name="auto_hide_toolbars">自動隱藏工具列</string>
     <string name="rearrange_buttons">重新排列按鈕</string>
     <string name="bionic_reading">仿生閱讀</string>
     <string name="images">圖片</string>
@@ -293,7 +294,7 @@
     <string name="title">標題</string>
     <string name="bold">加粗</string>
     <string name="upper_case">大寫字母</string>
-    <string name="subhead">子標題</string>
+    <string name="subhead">副標題</string>
     <string name="use_app_theme">跟隨應用程式設定</string>
     <string name="advanced">進階</string>
     <string name="dark_reading_theme">深色閱讀主題</string>
