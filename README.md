@@ -8,7 +8,9 @@
 
 <div align="center">
     <img alt="GitHub" src="https://img.shields.io/github/license/Ashinch/ReadYou?color=c3e7ff&style=flat-square">
-    <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Ashinch/ReadYou?color=c3e7ff&style=flat-square">
+    <a target="_blank" href="https://github.com/Ashinch/ReadYou/releases">
+        <img alt="Version" src="https://img.shields.io/github/v/release/Ashinch/ReadYou?color=c3e7ff&label=version&style=flat-square">
+    </a>
     <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Ashinch/ReadYou?color=c3e7ff&style=flat-square">
     <br>
     <a target="_blank" href="https://t.me/ReadYouApp">

@@ -8,7 +8,9 @@
 
 <div align="center">
     <img alt="GitHub" src="https://img.shields.io/github/license/Ashinch/ReadYou?color=c3e7ff&style=flat-square">
-    <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Ashinch/ReadYou?color=c3e7ff&style=flat-square">
+    <a target="_blank" href="https://github.com/Ashinch/ReadYou/releases">
+        <img alt="Version" src="https://img.shields.io/github/v/release/Ashinch/ReadYou?color=c3e7ff&label=version&style=flat-square">
+    </a>
     <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Ashinch/ReadYou?color=c3e7ff&style=flat-square">
     <br>
     <a target="_blank" href="https://t.me/ReadYouApp">
@@ -28,11 +30,11 @@
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-TW.md">繁體中文</a></p>
     <br/>
     <br/>
-    <img src="./fastlane/metadata/android/zh/images/startup.png" width="19.2%" alt="startup" />
-    <img src="./fastlane/metadata/android/zh/images/feeds.png" width="19.2%" alt="startup" />
-    <img src="./fastlane/metadata/android/zh/images/flow.png" width="19.2%" alt="startup" />
-    <img src="./fastlane/metadata/android/zh/images/read.png" width="19.2%" alt="startup" />
-    <img src="./fastlane/metadata/android/zh/images/settings.png" width="19.2%" alt="startup" />
+    <img src="./fastlane/metadata/android/zh-rCN/images/startup.png" width="19.2%" alt="startup" />
+    <img src="./fastlane/metadata/android/zh-rCN/images/feeds.png" width="19.2%" alt="startup" />
+    <img src="./fastlane/metadata/android/zh-rCN/images/flow.png" width="19.2%" alt="startup" />
+    <img src="./fastlane/metadata/android/zh-rCN/images/read.png" width="19.2%" alt="startup" />
+    <img src="./fastlane/metadata/android/zh-rCN/images/settings.png" width="19.2%" alt="startup" />
     <br/>
     <br/>
 </div>
@@ -66,6 +68,20 @@
 -   [ ] ...
 
 > 以上特性仅是初步实现，可能存在某些未知 BUG，仍需进行测试和优化。
+
+## 下载
+
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/me.ash.reader/)
+
+或者从 [GitHub release](https://github.com/Ashinch/ReadYou/releases) 获取 APK 文件。
+
+## 翻译
+
+<a target="_blank" href="https://weblate.bubu1.eu/engage/readyou/">
+<img src="https://weblate.bubu1.eu/widgets/readyou/-/287x66-grey.png" alt="翻译状态" />
+</a>
 
 ## 构建
 

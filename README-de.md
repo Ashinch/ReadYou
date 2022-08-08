@@ -8,7 +8,9 @@
 
 <div align="center">
     <img alt="GitHub" src="https://img.shields.io/github/license/Ashinch/ReadYou?color=c3e7ff&style=flat-square">
-    <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Ashinch/ReadYou?color=c3e7ff&style=flat-square">
+    <a target="_blank" href="https://github.com/Ashinch/ReadYou/releases">
+        <img alt="Version" src="https://img.shields.io/github/v/release/Ashinch/ReadYou?color=c3e7ff&label=version&style=flat-square">
+    </a>
     <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Ashinch/ReadYou?color=c3e7ff&style=flat-square">
     <br>
     <a target="_blank" href="https://t.me/ReadYouApp">
@@ -23,8 +25,7 @@
     <h1>Read You</h1>
     <p>Dies ist eine Kopie von <a href="https://reederapp.com/">Reeder</a>, um Android einen RSS-Reader ähnlich zu Reeder zu geben.</p>
     <p><a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README.md">English by DeepL</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-    Deutsch&nbsp;&nbsp;|&nbsp;&nbsp;
-    <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh.md">简体中文</a></p>
+    Deutsch&nbsp;&nbsp;|&nbsp;&nbsp;<a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-CN.md">简体中文</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-TW.md">繁體中文</a></p>
     <br/>
     <br/>
     <img src="./fastlane/metadata/android/de-DE/images/startup.png" width="19.2%" alt="startup" />
@@ -73,6 +74,12 @@ Nachfolgend sind die bisher erzielten Fortschritte und die Ziele aufgeführt, an
      height="80">](https://f-droid.org/packages/me.ash.reader/)
 
 oder hole die APK aus dem [GitHub Releasebereich](https://github.com/Ashinch/ReadYou/releases).
+
+## Übersetzen
+
+<a target="_blank" href="https://weblate.bubu1.eu/engage/readyou/">
+<img src="https://weblate.bubu1.eu/widgets/readyou/-/287x66-grey.png" alt="翻译状态" />
+</a>
 
 ## Build
 
