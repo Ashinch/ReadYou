@@ -75,6 +75,12 @@ The following are the progress made so far and the goals to be worked on in the 
 
 or get the APK from the [GitHub release section](https://github.com/Ashinch/ReadYou/releases).
 
+## Translate
+
+<a target="_blank" href="https://weblate.bubu1.eu/engage/readyou/">
+<img src="https://weblate.bubu1.eu/widgets/readyou/-/287x66-grey.png" alt="翻译状态" />
+</a>
+
 ## Build
 
 > If you want to preview the Read You app, you can get the **preview version** of the APK file in [Telegram](https://t.me/ReadYouApp).
