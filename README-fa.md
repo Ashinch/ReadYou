@@ -21,9 +21,9 @@
     </a>
 </div>
 
-<div align="center">
-    <h1>Read You</h1>
-    <p>This is a copy of  <a href="https://reederapp.com/">Reeder</a>, in order to give Android an RSS reader similar to Reeder.</p>
+<div dir="rtl" align="center">
+    <h1 dir="ltr">Read You</h1>
+    <p>این یک کپی از  <a href="https://reederapp.com/">Reeder</a>,به منظور ارائه یک RSS Reader مشابه Reeder به اندروید است.</p>
     <p>English by DeepL&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-de.md">Deutsch</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-CN.md">简体中文</a>&nbsp;&nbsp;|&nbsp;&nbsp;
@@ -40,69 +40,74 @@
     <br/>
 </div>
 
-## Features
+## ویژگی ها
 
-**Read You** combines the interaction logic of Reeder with the design style of [Material Design 3 (You)](https://m3.material.io/).
+برنامه **Read You** یک منطق تعاملی برای Reeder است که به توسط [Material Design 3 (You)](https://m3.material.io/) طراحی شده است.
 
-The following are the progress made so far and the goals to be worked on in the near future:
+پیشرفت های انجام شده تا کنون و اهدافی که به زودی روی آن ها کار خواهد شد به شرح زیر است:
 
--   [x] Local
-
-    -   [x] Subscribe to Feed Links
-    -   [x] Import from OPML
-    -   [x] Article Sync
-    -   [x] Article Update Notification
-    -   [x] Parse Full Content
-    -   [x] Filter Unread and Starred
-    -   [x] Feed Grouping
-    -   [x] Localization
-    -   [x] Export as OPML
-    -   [x] Search for Articles
-    -   [ ] Preference Settings
-    -   [ ] Release APK
-    -   [ ] Widget
+-   [x] لوکال
+    -   [x] مشترک شدن در فید ها
+    -   [x] وارد کردن از OPML
+    -   [x] همگام سازی مقاله
+    -   [x] ارسال نوتیفیکیشن در صورت بروزرسانی مقاله
+    -   [x] تجزیه کامل مطالب
+    -   [x] فیلتر بر اساس نخوانده ها و ستاره ها
+    -   [x] گروه‌بندی فید ها
+    -   [x] محلی‌سازی
+    -   [x] خروجی OPML
+    -   [x] جست وجو برای مقاله
+    -   [ ] تنظیمات ترجیحی
+    -   [ ] انتشار APK
+    -   [ ] ویجت ها
     -   [ ] ...
 
--   [ ] Fever API Support
--   [ ] Google Reader API Support
--   [ ] Inoreader API Support
+-   [ ] پشتیبانی از Fever API
+-   [ ] پشتیبانی از Google Reader API
+-   [ ] پشتیبانی از Inoreader API 
 -   [ ] ...
 
-> The above features are only preliminary implementations and there may be unknown issues.
+> ویژگی های فوق فقط پیاده سازی اولیه هستند و ممکن است مسائل ناشناخته ای وجود داشته باشد.
 
-## Download
+## دانلود
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-     alt="Get it on F-Droid"
+     alt="دانلود از F-Droid"
      height="80">](https://f-droid.org/packages/me.ash.reader/)
 
-or get the APK from the [GitHub release section](https://github.com/Ashinch/ReadYou/releases).
+یا از [خروجی گیت‌هاب اکشن](https://github.com/Ashinch/ReadYou/releases) دانلود کنید.
 
-## Translate
+## ترجمه
 
 <a target="_blank" href="https://hosted.weblate.org/engage/readyou/">
 <img src="https://hosted.weblate.org/widgets/readyou/-/287x66-white.png" alt="" />
 </a>
 
-## Build
+## بیلد
 
 > If you want to preview the Read You app, you can get the **preview version** of the APK file in [Telegram](https://t.me/ReadYouApp).
 
-**Read You** is implemented on Android's native [Jetpack Compose](https://developer.android.com/jetpack/compose) architecture.
+> اگر به نسخه پیش نمایش برنامه Read You نیاز دارید،  میتوانید فایل های APK **preview version**  را از [تلگرام](https://t.me/ReadYouApp) دریافت کنید/
 
-1. First you need to get the source code of **Read You**.
+<div dir=rtl>
+
+**Read You** در معماری اصلی [Jetpack Compose](https://developer.android.com/jetpack/compose) اندروید پیاده سازی شده است.
+
+1. برای شروع شما نیاز دارید سورس کد **Read You** را کلون کنید:
 
     ```shell
     git clone https://github.com/Ashinch/ReadYou.git
     ```
 
-2. Then open it via [Android Studio (latest version)](https://developer.android.com/studio).
+2. سپس آن را با [ااندروید استادیو (آخرین ورژن)](https://developer.android.com/studio) باز کنید.
 
-3. When you click the `▶ Run` button, it will be built and run automatically.
+3. سپس روی دکمه `▶ Run` کلیک کنید. برنامه به صورت خودکار بیلد و اجرا خواهد شد.
 
-    > In case of lag, please select Release version build.
+    > اگر با لگ همراه بود، لطفا `Release version build` را انتخاب کنید.
 
-## Credits
+</div>
+
+## الهام گرفته از:
 
 -   [MusicYou](https://github.com/Kyant0/MusicYou)
 -   [ParseRSS](https://github.com/muhrifqii/ParseRSS): [MIT](https://github.com/muhrifqii/ParseRSS/blob/master/LICENSE)
@@ -112,6 +117,6 @@ or get the APK from the [GitHub release section](https://github.com/Ashinch/Read
 -   [Rome](https://github.com/rometools/rome): [Apache License 2.0](https://github.com/rometools/rome/blob/master/LICENSE)
 -   [Feeder](https://gitlab.com/spacecowboy/Feeder): [GPL v3.0](https://gitlab.com/spacecowboy/Feeder/-/blob/master/LICENSE)
 
-## License
+## لاینسس
 
 [GNU GPL v3.0](https://github.com/Ashinch/ReadYou/blob/main/LICENSE)
