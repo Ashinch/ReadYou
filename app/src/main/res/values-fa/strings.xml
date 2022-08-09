@@ -1,2 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="all">همه</string>
+    <string name="unread">خوانده نشده</string>
+    <plurals name="unread_desc">
+        <item quantity="one">%1$d مورد خوانده نشده است</item>
+        <item quantity="other">%1$d مورد خوانده نشده است</item>
+    </plurals>
+    <string name="starred">ستاره دار</string>
+    <plurals name="starred_desc">
+        <item quantity="one">%1$d مورد ستاره دارد</item>
+        <item quantity="other">%1$d مورد ستاره دارند</item>
+    </plurals>
+    <plurals name="all_desc">
+        <item quantity="one">%1$d آرشیو شد</item>
+        <item quantity="other">%1$d آرشیو شدند</item>
+    </plurals>
+    <string name="loading">در حال بارگذاری…</string>
+    <string name="syncing">در حال همگام سازی…</string>
+    <string name="feeds">فید ها</string>
+</resources>
