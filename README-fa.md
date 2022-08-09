@@ -24,11 +24,11 @@
 <div dir="rtl" align="center">
     <h1 dir="ltr">Read You</h1>
     <p>این یک کپی از  <a href="https://reederapp.com/">Reeder</a>,به منظور ارائه یک RSS Reader مشابه Reeder به اندروید است.</p>
-    <p>English by DeepL&nbsp;&nbsp;|&nbsp;&nbsp;
+    <p>فارسی&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-de.md">Deutsch</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-CN.md">简体中文</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-TW.md">繁體中文</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-    <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-fa.md">فارسی</a></p>
+    <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README.md">English by DeepL</a></p>
     <br/>
     <br/>
     <img src="./fastlane/metadata/android/en-US/images/startup.png" width="19.2%" alt="startup" />
@@ -45,6 +45,8 @@
 برنامه **Read You** یک منطق تعاملی برای Reeder است که به توسط [Material Design 3 (You)](https://m3.material.io/) طراحی شده است.
 
 پیشرفت های انجام شده تا کنون و اهدافی که به زودی روی آن ها کار خواهد شد به شرح زیر است:
+
+<div dir="rtl">
 
 -   [x] لوکال
     -   [x] مشترک شدن در فید ها
@@ -64,8 +66,10 @@
 
 -   [ ] پشتیبانی از Fever API
 -   [ ] پشتیبانی از Google Reader API
--   [ ] پشتیبانی از Inoreader API 
+-   [ ] پشتیبانی از Inoreader API
 -   [ ] ...
+
+</div>
 
 > ویژگی های فوق فقط پیاده سازی اولیه هستند و ممکن است مسائل ناشناخته ای وجود داشته باشد.
 
@@ -85,27 +89,21 @@
 
 ## بیلد
 
-> If you want to preview the Read You app, you can get the **preview version** of the APK file in [Telegram](https://t.me/ReadYouApp).
+> اگر به نسخه پیش نمایش برنامه Read You نیاز دارید،  میتوانید فایل های APK **preview version**  را از [تلگرام](https://t.me/ReadYouApp) دریافت کنید.
 
-> اگر به نسخه پیش نمایش برنامه Read You نیاز دارید،  میتوانید فایل های APK **preview version**  را از [تلگرام](https://t.me/ReadYouApp) دریافت کنید/
+برنامه **Read You** در معماری اصلی [Jetpack Compose](https://developer.android.com/jetpack/compose) اندروید پیاده سازی شده است.
 
-<div dir=rtl>
+۱. برای شروع شما نیاز دارید سورس کد **Read You** را کلون کنید:
 
-**Read You** در معماری اصلی [Jetpack Compose](https://developer.android.com/jetpack/compose) اندروید پیاده سازی شده است.
-
-1. برای شروع شما نیاز دارید سورس کد **Read You** را کلون کنید:
-
-    ```shell
+```shell
     git clone https://github.com/Ashinch/ReadYou.git
-    ```
+```
 
-2. سپس آن را با [ااندروید استادیو (آخرین ورژن)](https://developer.android.com/studio) باز کنید.
+۲. سپس آن را با [ااندروید استادیو (آخرین ورژن)](https://developer.android.com/studio) باز کنید.
 
-3. سپس روی دکمه `▶ Run` کلیک کنید. برنامه به صورت خودکار بیلد و اجرا خواهد شد.
+۳. سپس روی دکمه `▶ Run` کلیک کنید. برنامه به صورت خودکار بیلد و اجرا خواهد شد.
 
     > اگر با لگ همراه بود، لطفا `Release version build` را انتخاب کنید.
-
-</div>
 
 ## الهام گرفته از:
 
