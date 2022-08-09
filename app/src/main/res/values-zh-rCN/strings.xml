@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="all">全部</string>
     <plurals name="all_desc">
@@ -43,10 +44,10 @@
     <string name="parse_full_content">全文解析</string>
     <string name="all_parse_full_content_tips">对 \"%1$s\" 分组中的所有文章进行全文解析。</string>
     <string name="all_parse_full_content_toast">全文解析 \"%1$s\" 分组中的文章</string>
-    <string name="all_deny_parse_full_content_toast">不再全文解析 \"%1$s\" 分组中的文章</string>
+    <string name="all_deny_parse_full_content_toast">"\"%1$s\"         分组     内所有文章均不再进行完整内容解析     "</string>
     <string name="clear_articles">清空文章</string>
-    <string name="clear_articles_in_feed_toast">已清空 \"%1$s\" 订阅源中所有已归档的文章。</string>
-    <string name="clear_articles_in_group_toast">已清空 \"%1$s\" 分组中所有已归档的文章。</string>
+    <string name="clear_articles_in_feed_toast">已清空 \"%1$s\" 订阅源中所有已归档文章</string>
+    <string name="clear_articles_in_group_toast">已清空 \"%1$s\" 分组中所有已归档的文章</string>
     <string name="clear_articles_feed_tips">清空 \"%1$s\" 订阅源中所有已归档的文章。</string>
     <string name="clear_articles_group_tips">清空 \"%1$s\" 分组中所有已归档的文章。</string>
     <string name="add_to_group">添加到组</string>
@@ -102,7 +103,7 @@
     <string name="tips_and_support_desc">关于、开源</string>
     <string name="welcome">欢迎</string>
     <string name="tos_tips">在此之前，您需要同意 Read You 的服务条款与隐私政策后才能继续。</string>
-    <string name="browse_tos_tips">查看《&lt;u&gt;服务条款与隐私政策&lt;/u&gt;》</string>
+    <string name="browse_tos_tips">查看《<i><u>服务条款与隐私政策</u></i>》</string>
     <string name="terms_of_service">服务条款</string>
     <string name="tos_content">
         &lt;h5&gt;
@@ -245,9 +246,7 @@
     <string name="initial_page">起始页面</string>
     <string name="initial_filter">起始过滤条件</string>
     <string name="preview_article_title">呜呜呜，黎明之剑完结了</string>
-    <string name="preview_article_desc">
-        是宴席，就有结束的时候，但这本书真的陪了我好久啊，好舍不得，而且主线结束了坑却没填完，不知道啥时候才有番外啊
-    </string>
+    <string name="preview_article_desc">是宴席，就有结束的时候，但这本书真的陪了我好久啊，好舍不得，而且主线结束了坑却没填完，不知道啥时候才有番外啊。</string>
     <string name="preview_feed_name">漩涡书院</string>
     <string name="value">值</string>
     <string name="horizontal_padding">水平填充</string>
