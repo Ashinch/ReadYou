@@ -27,6 +27,7 @@
     <p><a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README.md">English by DeepL</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-de.md">Deutsch</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-CN.md">简体中文</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+    <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-fa.md">فارسی</a></p>
     繁體中文</p>
     <br/>
     <br/>

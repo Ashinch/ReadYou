@@ -25,7 +25,9 @@
     <h1>Read You</h1>
     <p>Dies ist eine Kopie von <a href="https://reederapp.com/">Reeder</a>, um Android einen RSS-Reader ähnlich zu Reeder zu geben.</p>
     <p><a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README.md">English by DeepL</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-    Deutsch&nbsp;&nbsp;|&nbsp;&nbsp;<a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-CN.md">简体中文</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-TW.md">繁體中文</a></p>
+    <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-CN.md">简体中文</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+    <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-TW.md">繁體中文</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+    <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-fa.md">فارسی</a></p>
     <br/>
     <br/>
     <img src="./fastlane/metadata/android/de-DE/images/startup.png" width="19.2%" alt="startup" />
