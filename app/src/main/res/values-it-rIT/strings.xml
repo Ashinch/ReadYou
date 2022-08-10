@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="all">Tutti</string>
     <plurals name="all_desc">
@@ -37,7 +38,7 @@
     <string name="paste">Incolla</string>
     <string name="feed_or_site_url">Feed o URL</string>
     <string name="import_from_opml">Importa da OPML</string>
-    <string name="preset">Preset</string>
+    <string name="preset">Preimpostazione</string>
     <string name="selected">Selezionato</string>
     <string name="allow_notification">Concedi notifiche</string>
     <string name="all_allow_notification_tips">Permetti a tutti i feed nel gruppo \"%1$s\" di inviare notifiche.</string>
@@ -107,116 +108,7 @@
     <string name="tos_tips">Leggi e accetta i Termini di servizio e l\'Informativa sulla privacy di Read You per continuare.</string>
     <string name="browse_tos_tips">Sfoglia i&lt;i&gt;&lt;u&gt;Termini di servizio e l\'Informativa sulla privacy&lt;/u&gt;&lt;/i&gt;</string>
     <string name="terms_of_service">Termini di servizio</string>
-    <string name="tos_content">
-        &lt;h5&gt;
-
-        Privacy Policy
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        I take your privacy very seriously.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        does not collect any user data, and all sensitive information (passwords and other account information) is
-        securely stored in the local application database on your device.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        will use the following permissions to provide you with the service.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        - Access Network permission (for accessing online content as you specify)
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - Get network status permission (for getting whether the device currently has available network conditions)
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - Background service permission (to automatically sync your favorites for you on a regular
-        basis)
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Third Party Services
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        This policy does not apply to third-party services that you use with &lt;b&gt;Read You&lt;/b&gt;. You can review
-        the privacy policies of the third-party services you use on their websites
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Disclaimers
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        is a content collection tool only. Your use of &lt;b&gt;Read You&lt;/b&gt; is subject to the laws and
-        regulations of your country and region, and any liability arising from your actions will be borne by you
-        personally.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Open Source License
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        is an open source project under the GNU GPL 3.0 Open Source License[1], which allows you to use, reference, and
-        modify the source code of &lt;b&gt;Read You&lt;/b&gt; for free, but does not allow the
-        modified and derived code to be distributed and sold as closed-source commercial software. For details, please
-        see the full GNU GPL 3.0 Open Source License[2].
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Appendix
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        - [1] https://github.com/Ashinch/ReadYou
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - [2] https://www.gnu.org/licenses/gpl-3.0.html
-
-        &lt;/p&gt;
-    </string>
+    <string name="tos_content"><h5> Informativa sulla privacy </h5> <br/> <p> La privacy dell\'utente viene presa molto sul serio. </p> <br/> <p> <b>Read You</b> non raccoglie alcun dato dell\'utente e tutte le informazioni sensibili (password e altre informazioni sull\'account) vengono archiviate in modo sicuro nel database locale dell\'applicazione sul dispositivo. </p> <br/> <p> <b>Read You</b> utilizzerà le seguenti autorizzazioni per fornire il servizio. </p> <br/> <p> - Accesso alla rete (per l\'accesso ai contenuti online specificati dall\'utente) </p> <p> - Servizio in background (per sincronizzare automaticamente i preferiti su base regolare) </p> <br/> <br/> <h5> Servizi di terze parti </h5> <br/> <p> Questa politica non si applica ai servizi di terze parti utilizzati con <b>Read You</b>. È possibile consultare le informative sulla privacy dei servizi di terze parti utilizzati sui loro siti web </p> <br/> <br/> <h5> Disclaimer </h5> <br/> <p> <b>Read You</b> è solo uno strumento di raccolta di contenuti. L\'uso di <b>Read You</b> è soggetto alle leggi e ai regolamenti del proprio Paese e della propria regione e qualsiasi responsabilità derivante dalle proprie azioni sarà a carico dell\'utente stesso. </p> <br/> <br/> <h5> Licenza Open Source </h5> <br/> <p> <b>Read You</b> è un progetto open source secondo la licenza GNU GPL 3.0 Open Source License[1], che consente di utilizzare, fare riferimento e modificare gratuitamente il codice sorgente di <b>Read You</b> , ma non permette che il codice modificato e derivato venga distribuito e venduto come software commerciale closed-source. Per i dettagli, consultare la licenza GNU GPL 3.0 Open Source completa[2]. </p> <br/> <br/> <h5> Appendice </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">Accetto</string>
     <string name="wallpaper_colors">Colori dallo sfondo</string>
     <string name="no_palettes">Nessuna tavolozza</string>
@@ -281,32 +173,32 @@
     <string name="share">Condividi</string>
     <string name="touch_to_play_video">Tocca per riprodurre il video</string>
     <string name="text">Text</string>
-    <string name="font_size">Font size</string>
-    <string name="letter_spacing">Letter spacing</string>
-    <string name="line_spacing">Line spacing</string>
-    <string name="alignment">Alignment</string>
+    <string name="font_size">Dimensione dei caratteri</string>
+    <string name="letter_spacing">Spaziatura dei caratteri</string>
+    <string name="line_spacing">Spaziatura delle linee</string>
+    <string name="alignment">Allineamento</string>
     <string name="general">General</string>
-    <string name="auto_hide_toolbars">Auto hide toolbars</string>
-    <string name="rearrange_buttons">Rearrange buttons</string>
+    <string name="auto_hide_toolbars">Nascondi automaticamente le barre degli strumenti</string>
+    <string name="rearrange_buttons">Riordina i pulsanti</string>
     <string name="bionic_reading">Bionic Reading</string>
-    <string name="images">Images</string>
-    <string name="rounded_corners">Rounded corners</string>
-    <string name="videos">Videos</string>
-    <string name="align_left">Align left</string>
-    <string name="align_right">Align right</string>
-    <string name="center_text">Center text</string>
-    <string name="justify">Justify</string>
-    <string name="external_fonts">External fonts</string>
-    <string name="title">Title</string>
-    <string name="bold">Bold</string>
-    <string name="upper_case">Upper case</string>
-    <string name="subhead">Subhead</string>
-    <string name="use_app_theme">Use app theme</string>
-    <string name="advanced">Advanced</string>
-    <string name="dark_reading_theme">Dark reading theme</string>
-    <string name="title_desc">Bold, upper case, alignment</string>
-    <string name="text_desc">Font size, letter spacing, alignment</string>
-    <string name="images_desc">Rounded corners, horizontal padding</string>
-    <string name="videos_desc">Rounded corners, horizontal padding</string>
-    <string name="maximize">Maximize</string>
+    <string name="images">Immagini</string>
+    <string name="rounded_corners">Angoli arrotondati</string>
+    <string name="videos">Video</string>
+    <string name="align_left">Allinea a sinistra</string>
+    <string name="align_right">Allinea a destra</string>
+    <string name="center_text">Testo Centrato</string>
+    <string name="justify">Giustifica</string>
+    <string name="external_fonts">Font esterni</string>
+    <string name="title">Titolo</string>
+    <string name="bold">Grassetto</string>
+    <string name="upper_case">Maiuscolo</string>
+    <string name="subhead">Sottotitolo</string>
+    <string name="use_app_theme">Usa il tema dell\'applicazione</string>
+    <string name="advanced">Avanzato</string>
+    <string name="dark_reading_theme">Tema di lettura scuro</string>
+    <string name="title_desc">Grassetto, maiuscolo, allineamento</string>
+    <string name="text_desc">Dimensione dei caratteri, spaziatura delle lettere, allineamento</string>
+    <string name="images_desc">Angoli arrotondati, imbottitura orizzontale</string>
+    <string name="videos_desc">Angoli arrotondati, imbottitura orizzontale</string>
+    <string name="maximize">Massimizza</string>
 </resources>
