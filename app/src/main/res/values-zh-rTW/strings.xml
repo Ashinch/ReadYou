@@ -97,7 +97,7 @@
     <string name="interaction_desc">啟動時、觸覺回饋</string>
     <string name="languages">語言</string>
     <string name="languages_desc">英文、中文、更多</string>
-    <string name="use_device_languages">跟隨系統設定</string>
+    <string name="use_device_languages">使用裝置語言</string>
     <string name="help_translate">協助翻譯</string>
     <string name="tips_and_support">提示和支援</string>
     <string name="tips_and_support_desc">關於、開放原始碼授權</string>
@@ -105,110 +105,7 @@
     <string name="tos_tips">詳閱並同意 Read You 的服務條款與隱私權政策以繼續使用。</string>
     <string name="browse_tos_tips">詳閱《<u>服務條款與隱私權政策</u>》</string>
     <string name="terms_of_service">服務條款</string>
-    <string name="tos_content">
-        &lt;h5&gt;
-
-        隱私政策
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        我非常重視您的隱私。
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        不收集任何用戶數據，所有敏感訊息（密碼和其他帳戶訊息）都安全地儲存在您設備上的本機應用程式資料庫中。
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        將使用以下權限為您提供服務：
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        - 存取網路權限（用於存取您所指定的線上內容）
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - 取得網路狀態權限（用於取得目前設備是否擁有可供使用的網路條件）
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - 背景服務權限（用於定時自動地為您同步已收藏的內容）
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        第三方服務
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        本政策不適用於您與 &lt;b&gt;Read You&lt;/b&gt; 一起使用的第三方服務。您可以在所使用的第三方服務的網站上查閱相關的隱私政策。
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        免責聲明
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        &lt;b&gt;Read You&lt;/b&gt; 僅是一款內容收藏工具。您在使用 &lt;b&gt;Read You&lt;/b&gt;
-        的過程中，應遵守所在國家和地區的法律法規，因您的行為所產生的一切責任將由您個人承擔。
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        開源許可
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        是一個使用 GNU GPL 3.0 開源許可協議的開源項目[1]，允許您免費使用、引用、修改 &lt;b&gt;Read You&lt;/b&gt;
-        的原始碼，但不允許修改後和其衍生的代碼作為閉源的商業軟體進行發布和銷售。具體細節請查看完整的 GNU GPL 3.0 開源許可協議
-        [2]。
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        附錄
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        - [1] https://github.com/Ashinch/ReadYou
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - [2] https://www.gnu.org/licenses/gpl-3.0.html
-
-        &lt;/p&gt;
-    </string>
+    <string name="tos_content"><h5> 隱私權政策 </h5> <br/> <p> 我非常重視您的隱私。 </p> <br/> <p> <b>Read You</b> 不收集任何使用者資料，所有敏感資訊（密碼和其他帳戶資訊）都被安全地儲存在您裝置上的本機應用程式資料庫中。 </p> <br/> <p> <b>Read You</b> 將使用以下權限為您提供服務： </p> <br/> <p> - 存取網路權限（用於存取您所指定的線上內容） </p> <p> - 讀取網路狀態權限（用於取得目前裝置是否擁有可供使用的網路條件） </p> <p> - 背景服務權限（用於定時自動地為您同步已收藏的內容） </p> <br/> <br/> <h5> 第三方服務 </h5> <br/> <p> 本政策不適用於您與 <b>Read You</b> 一起使用的第三方服務。您可以在所使用的第三方服務的網站上查閱相關的隱私權政策。 </p> <br/> <br/> <h5> 免責聲明 </h5> <br/> <p> <b>Read You</b> 僅是一款內容收藏工具。您在使用 <b>Read You</b> 的過程中，應遵守所在國家和地區的法律規範，因您的行為所產生的一切責任將由您個人承擔。 </p> <br/> <br/> <h5> 開放原始碼授權 </h5> <br/> <p> <b>Read You</b> 是一個使用 GNU GPL 3.0 開放原始碼授權條款的開源專案[1]，允許您免費使用、引用、修改 <b>Read You</b> 的原始碼，但不允許將修改後及其衍生的程式碼作為專有商業軟體進行發布和銷售。具體細節請查看完整的 GNU GPL 3.0 開放原始碼授權條款 [2]。 </p> <br/> <br/> <h5> 附錄 </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">同意</string>
     <string name="wallpaper_colors">桌布顏色</string>
     <string name="no_palettes">暫無色板</string>
@@ -219,7 +116,7 @@
     <string name="appearance">外觀</string>
     <string name="style">樣式</string>
     <string name="dark_theme">深色主題</string>
-    <string name="use_device_theme">跟隨系統設定</string>
+    <string name="use_device_theme">使用裝置主題</string>
     <string name="on">開啟</string>
     <string name="off">關閉</string>
     <string name="amoled_dark_theme">AMOLED 深色主題</string>
@@ -228,7 +125,7 @@
     <string name="reading_fonts">閱讀字型</string>
     <string name="basic_fonts">基本字型</string>
     <string name="feeds_page">來源頁面</string>
-    <string name="flow_page">訊息流頁面</string>
+    <string name="flow_page">消息串頁面</string>
     <string name="reading_page">閱讀頁面</string>
     <string name="sponsor">贊助</string>
     <string name="open_source_licenses">開放原始碼授權</string>
@@ -251,7 +148,7 @@
     </string>
     <string name="preview_feed_name">漩渦書院</string>
     <string name="value">值</string>
-    <string name="horizontal_padding">水平填充</string>
+    <string name="horizontal_padding">水平邊距</string>
     <string name="article_date">文章發布時間</string>
     <string name="article_desc">文章描述</string>
     <string name="article_images">文章插圖</string>
@@ -295,7 +192,7 @@
     <string name="bold">粗體</string>
     <string name="upper_case">大寫字母</string>
     <string name="subhead">副標題</string>
-    <string name="use_app_theme">跟隨應用程式設定</string>
+    <string name="use_app_theme">使用應用程式主題</string>
     <string name="advanced">進階</string>
     <string name="dark_reading_theme">深色閱讀主題</string>
     <string name="title_desc">粗體、大寫字母、對齊</string>
