@@ -1,8 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="all">Alle</string>
     <plurals name="all_desc">
         <item quantity="one">%1$d archivierter Eintrag</item>
-        <item quantity="other">%d archivierte Einträge</item>
+        <item quantity="other">%1$d archivierte Einträge</item>
     </plurals>
     <string name="unread">Ungelesen</string>
     <plurals name="unread_desc">
