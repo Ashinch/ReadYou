@@ -1,0 +1,16 @@
+<i>Read You</i> là trình đọc RSS hiện đại và thanh lịch với thiết kế <a href='https://m3.material.io/' target='_blank' rel='nofollow'>Material You </a>
+
+<b>Tính năng:</b>
+
+* Quan tâm Feed URL
+* Nhập từ OPML
+* Đồng bộ bài viết
+* Thông báo bài viết mới
+* Phân tích toàn bộ nội dung
+* Bộ lọc Chưa Đọc và Yêu Thích
+* Phân loại Feed
+* Bản địa hóa
+* Xuất ra OPML
+* Tìm kiếm bài viết
+
+Và sẽ cập nhật thêm…

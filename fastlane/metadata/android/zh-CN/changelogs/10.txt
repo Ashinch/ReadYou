@@ -10,4 +10,4 @@
 
 5. 对于 Android 12+ 的设备，现在使用系统提供的颜色方案替换壁纸颜色中的第一个调色板。
 
-6. RSS 解析插件切换到 Rome（应该能解析大部分 feed，已知无法解析 Youtube、Reddit 等特殊格式）。
+6. RSS 解析插件切换到 Rome（应该能解析大部分 feed，已知无法解析 Youtube、Reddit 等特殊格式）

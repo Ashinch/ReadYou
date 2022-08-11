@@ -1,0 +1,16 @@
+<i>Read You</i> RSS irakurle moderno eta dotore bat <a href='https://m3.material.io/' target='_blank' rel='nofollow'>Material You </a> diseinuarekin
+
+<b>Ezaugarriak:</b>
+
+* Jario lotuetara harpidetu
+* OPML-tik inportatu
+* Artikuluen sinkronizazioa
+* Artikuluen eguneratze jakinarazpena
+* Eduki osoa analizatu
+* Irakurri gabekoak eta izartutakoak iragazi
+* Jarioak taldekatzea
+* Itzulpenak
+* OPML bezala esportatu
+* Artikuluak bilatu
+
+Gehiago izango dira…
