@@ -146,7 +146,7 @@ fun TipsAndSupportPage(
                         ) {
                             Image(
                                 modifier = Modifier.size(90.dp),
-                                painter = painterResource(R.drawable.ic_launcher_monochrome),
+                                painter = painterResource(R.drawable.ic_launcher_pure),
                                 contentDescription = stringResource(R.string.read_you),
                                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface alwaysLight true),
                             )
