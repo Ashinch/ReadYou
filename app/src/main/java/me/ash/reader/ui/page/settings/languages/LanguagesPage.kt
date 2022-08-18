@@ -67,7 +67,7 @@ fun LanguagesPage(
                         context.startActivity(
                             Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse("https://github.com/Ashinch/ReadYou/issues/56")
+                                Uri.parse(context.getString(R.string.translatable_url))
                             )
                         )
                     }
