@@ -302,4 +302,23 @@
     <string name="mark_as_read_one_day">Отметить как прочитанное больше, чем 1 день</string>
     <string name="mark_as_read_three_days">Отметить как прочитанное больше, чем 3 дня</string>
     <string name="mark_as_read_seven_days">Отметить как прочитанное больше, чем 7 дней</string>
+    <string name="filter_bar">Панель фильтров</string>
+    <plurals name="unread_desc">
+        <item quantity="one">%1$d Непрочитанная статья</item>
+        <item quantity="few">%1$d Непрочитанные статьи</item>
+        <item quantity="many">%1$d Непрочитанные статьи</item>
+        <item quantity="other">%1$d Непрочитанные статьи</item>
+    </plurals>
+    <plurals name="all_desc">
+        <item quantity="one">%1$d Архивная статья</item>
+        <item quantity="few">%1$d Архивные статьи</item>
+        <item quantity="many">%1$d Архивные статьи</item>
+        <item quantity="other">%1$d Архивные статьи</item>
+    </plurals>
+    <plurals name="starred_desc">
+        <item quantity="one">%1$d Избранная статья</item>
+        <item quantity="few">%1$d Избранные статьи</item>
+        <item quantity="many">%1$d Избранные статьи</item>
+        <item quantity="other">%1$d Избранные статьи</item>
+    </plurals>
 </resources>
