@@ -1,0 +1,16 @@
+<i>Read You</i> <a href='https://m3.material.io/' target='_blank' rel='nofollow'> Material You </a> Tasarımı ile modern ve şık bir RSS okuyucu
+
+<b>Özellikler:</b>
+
+* Besleme Bağlantılarına Abone Olma
+* OPML'den içe aktarma
+* Makale Senkronizasyonu
+* Makale Güncelleme Bildirimi
+* Tam İçeriği Ayrıştırma
+* Okunmamış ve Yıldızlıları Filtreleme
+* Besleme Gruplama
+* Yerelleştirme
+* OPML olarak dışa aktarma
+* Makale Arama
+
+Daha fazlası gelecek…

@@ -1,0 +1,21 @@
+## 0.8.3
+
+- Consentita modifica del nome del feed all'aggiunta di sottoscrizioni
+
+- Aggiunte impostazioni per lo stile della pagina di lettura
+
+- Aggiunta traduzione italiana, hindi, spagnola e polacca. Aggiornata la tedesca
+
+- Scritti i ToS e inclusi in F-Droid
+
+- Modifiche minori
+
+Le prossime priorità:
+
+- Alcune impostazioni dell'account
+
+- Supporto di più account (necessario prima di supportare API di terze parti)
+
+- Supporto di alcune API di terze parti
+
+Le altre funzionalità sono rimandate.
