@@ -23,7 +23,7 @@
 
 <div dir="rtl" align="center">
     <h1 dir="ltr">Read You</h1>
-    <p>این یک کپی از  <a href="https://reederapp.com/">Reeder</a>,به منظور ارائه یک RSS Reader مشابه Reeder به اندروید است.</p>
+    <p>این اپلیکیشن، یک کپی از <a href="https://reederapp.com/">Reeder</a> به منظور ارائه یک خبرخوان RSS مشابه Reeder برای اندروید است.</p>
     <p>فارسی&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-de.md">Deutsch</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-CN.md">简体中文</a>&nbsp;&nbsp;|&nbsp;&nbsp;
@@ -42,7 +42,7 @@
 
 ## ویژگی ها
 
-برنامه **Read You** یک منطق تعاملی برای Reeder است که به توسط [Material Design 3 (You)](https://m3.material.io/) طراحی شده است.
+اپلیکیشن **Read You** منطق Reeder را با [متریال دیزاین ۳ (You)](https://m3.material.io/) ترکیب نموده.
 
 پیشرفت های انجام شده تا کنون و اهدافی که به زودی روی آن ها کار خواهد شد به شرح زیر است:
 
@@ -54,14 +54,14 @@
     -   [x] همگام سازی مقاله
     -   [x] ارسال نوتیفیکیشن در صورت بروزرسانی مقاله
     -   [x] تجزیه کامل مطالب
-    -   [x] فیلتر بر اساس نخوانده ها و ستاره ها
-    -   [x] گروه‌بندی فید ها
+    -   [x] فیلتر بر اساس نخوانده‌ها و ستاره‌ها
+    -   [x] گروه‌بندی فید‌ها
     -   [x] محلی‌سازی
     -   [x] خروجی OPML
-    -   [x] جست وجو برای مقاله
+    -   [x] جستجو برای مقاله
     -   [ ] تنظیمات ترجیحی
     -   [ ] انتشار APK
-    -   [ ] ویجت ها
+    -   [ ] ویجت‌ها
     -   [ ] ...
 
 -   [ ] پشتیبانی از Fever API
@@ -71,12 +71,12 @@
 
 </div>
 
-> ویژگی های فوق فقط پیاده سازی اولیه هستند و ممکن است مسائل ناشناخته ای وجود داشته باشد.
+> امکانات فوق فقط پیاده‌سازی ابتدایی هستند و ممکن است ایرادات ناشناخته‌ای وجود داشته باشد.
 
-## دانلود
+## دریافت
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-     alt="دانلود از F-Droid"
+     alt="دریافت از F-Droid"
      height="80">](https://f-droid.org/packages/me.ash.reader/)
 
 یا از [خروجی گیت‌هاب اکشن](https://github.com/Ashinch/ReadYou/releases) دانلود کنید.
@@ -89,11 +89,11 @@
 
 ## بیلد
 
-> اگر به نسخه پیش نمایش برنامه Read You نیاز دارید،  میتوانید فایل های APK **preview version**  را از [تلگرام](https://t.me/ReadYouApp) دریافت کنید.
+> اگر به نسخه پیش‌نمایش برنامه Read You نیاز دارید،  می‌توانید فایل های APK **preview version**  را از [تلگرام](https://t.me/ReadYouApp) دریافت کنید.
 
-برنامه **Read You** در معماری اصلی [Jetpack Compose](https://developer.android.com/jetpack/compose) اندروید پیاده سازی شده است.
+اپلیکیشن **Read You** به صورت نیتیو پیاده سازی و با [Jetpack Compose](https://developer.android.com/jetpack/compose) طراحی شده است.
 
-۱. برای شروع شما نیاز دارید سورس کد **Read You** را کلون کنید:
+۱. ابتدا لازم است سورس کد **Read You** را کلون کنید:
 
 ```shell
     git clone https://github.com/Ashinch/ReadYou.git
@@ -115,6 +115,6 @@
 -   [Rome](https://github.com/rometools/rome): [Apache License 2.0](https://github.com/rometools/rome/blob/master/LICENSE)
 -   [Feeder](https://gitlab.com/spacecowboy/Feeder): [GPL v3.0](https://gitlab.com/spacecowboy/Feeder/-/blob/master/LICENSE)
 
-## لاینسس
+## لایسنس
 
 [GNU GPL v3.0](https://github.com/Ashinch/ReadYou/blob/main/LICENSE)
