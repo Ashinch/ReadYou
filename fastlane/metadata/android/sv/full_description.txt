@@ -1,0 +1,16 @@
+<i>Read You</i> En modern och elegant RSS-läsare med <a href='https://m3.material.io/' target='_blank' rel='nofollow'>innehåll som du </a> skapar
+
+<b>Grunddrag:</b>
+
+* Prenumerera på flödeslänkar
+* Importera från OPML
+* Artikelavstämning
+* Avisering om artikeluppdatering
+* Analysera fullständigt innehåll
+* Filtrera olästa och stjärnmarkerade
+* Gruppering av flöde
+* Språkanpassning
+* Exportera som OPML
+* Sök efter artiklar
+
+Och ytterligare framöver…
