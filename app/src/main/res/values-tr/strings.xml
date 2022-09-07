@@ -158,7 +158,7 @@
     <string name="delete_group">Grubu Sil</string>
     <string name="today">Bugün</string>
     <string name="yesterday">Dün</string>
-    <string name="date_at_time">%1$s %2$s zamanında</string>
+    <string name="date_at_time">%1$s %2$s</string>
     <string name="mark_as_starred">Yıldızlı Olarak İşaretle</string>
     <string name="close">Kapat</string>
     <string name="get_new_updates">Yeni güncellemeleri al</string>
@@ -198,4 +198,7 @@
     <string name="font_size">Yazı tipi boyutu</string>
     <string name="upper_case">Büyük harf</string>
     <string name="justify">Doğrula</string>
+    <string name="mark_as_read_one_day">1 Günden Uzun Süre Okundu Olarak İşaretle</string>
+    <string name="mark_as_read_three_days">3 Günden Uzun Süre Okundu Olarak İşaretle</string>
+    <string name="mark_as_read_seven_days">7 Günden Uzun Süre Okundu Olarak İşaretle</string>
 </resources>

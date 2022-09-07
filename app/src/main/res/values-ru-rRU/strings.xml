@@ -71,7 +71,7 @@
     <string name="on">Вкл</string>
     <string name="off">Выкл</string>
     <string name="other">Прочее</string>
-    <string name="all_allow_notification_tips">Разрешить всем лентам в группе \"%1$s\" посылать уведомления</string>
+    <string name="all_allow_notification_tips">Разрешить всем лентам в группе \"%1$s\" отправлять уведомления</string>
     <string name="all_deny_notification_toast">Все уведомления из группы \"%1$s\" заблокированы</string>
     <string name="all_allow_notification_toast">Все уведомления из группы \"%1$s\" разрешены</string>
     <string name="all_move_to_group_toast">Все ленты перемещены в группу \"%1$s\"</string>
@@ -120,12 +120,12 @@
     <string name="tips_and_support_desc">О приложении, лицензии свободного ПО</string>
     <string name="unsubscribe_tips">Отписаться от ленты \"%1$s\" и удалить все архивные статьи в ней</string>
     <string name="delete_group_tips">Удалить группу \"%1$s\" а также все ленты в ней вместе с архивными статьями</string>
-    <string name="group_option_tips">Следующие опции будут применены ко всем лентам в группе</string>
+    <string name="group_option_tips">Следующие настройки будут применены ко всем лентам в группе</string>
     <string name="all_move_to_group_tips">Переместить все ленты из группы \"%1$s\" в группу \"%2$s\"</string>
     <string name="clear_articles_group_tips">Удалить все архивные статьи в группе %1$s</string>
     <string name="clear_articles_feed_tips">Удалить все архивные статьи в ленте \"%1$s\"</string>
-    <string name="all_parse_full_content_tips">Получать полный контент для всех статей в группе \"%1$s\"</string>
-    <string name="tos_tips">Прочтите и примите условия использоваия и политику конфиденциальности приложения Read You</string>
+    <string name="all_parse_full_content_tips">Отображать полное содержание для всех статей в группе \"%1$s\"</string>
+    <string name="tos_tips">Прочтите и примите Условия Использования и Политику Конфиденциальности для продолжения</string>
     <string name="amoled_dark_theme">Тёмная тема AMOLED</string>
     <string name="browse_tos_tips">"Открыть &lt;i&gt;&lt;u&gt;Условия использования и Политику конфиденциальности&lt;/u&gt;&lt;/i&gt;     "</string>
     <string name="basic_fonts">Базовые шрифты</string>
