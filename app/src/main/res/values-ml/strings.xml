@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="defaults">സ്ഥിരസ്ഥിതി</string>
+    <string name="unread">വായിക്കാത്തത്</string>
+    <string name="starred">നക്ഷത്രം അടയാളപ്പെടുത്തിയത്</string>
+    <string name="feeds">ഫീഡ്സ്</string>
+    <string name="loading">ലോഡിങ്…</string>
+    <string name="expand_more">വലുതാക്കുക</string>
+    <string name="confirm">ഉറപ്പിച്ചു</string>
+    <string name="refresh">പുതുക്കുക</string>
+    <string name="expand_less">ചുരുക്കുക</string>
+    <string name="allow">അനുവദിച്ചു</string>
+    <string name="subscribe">വരിക്കാരാകുക</string>
+    <string name="paste">പതിപ്പിക്കുക</string>
+    <string name="cancel">ഒഴിവാക്കുക</string>
+    <string name="all">എല്ലാം</string>
+    <plurals name="unread_desc">
+        <item quantity="one">വായിക്കാത്തത് %1$d</item>
+        <item quantity="other">വായിക്കാത്തത് %1$d എണ്ണം</item>
+    </plurals>
+    <plurals name="starred_desc">
+        <item quantity="one">നക്ഷത്രം അടയാളപ്പെടുത്തിയത് %1$d</item>
+        <item quantity="other">നക്ഷത്രം അടയാളപ്പെടുത്തിയവ %1$d</item>
+    </plurals>
+    <string name="back">പിറകിലേക്ക്</string>
+    <string name="go_to">പോകുക</string>
+    <string name="settings">ക്രമികരണങ്ങൾ</string>
+    <string name="search">തിരയുക</string>
+    <string name="searching">തിരയുന്നു…</string>
+    <string name="already_subscribed">മുൻപേ തന്നെ വരിക്കരായി</string>
+    <string name="clear">മായിക്കുക</string>
+    <string name="selected">തിരഞ്ഞെടുത്തത്</string>
+</resources>
