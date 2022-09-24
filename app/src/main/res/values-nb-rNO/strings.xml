@@ -79,4 +79,23 @@
     <string name="skip_this_version">Hopp over denne versjonen</string>
     <string name="top_bar">Toppfelt</string>
     <string name="icons_and_labels">Ikoner og etiketter</string>
+    <string name="searching">Søker …</string>
+    <string name="already_subscribed">Allerede abonnert</string>
+    <string name="expand_less">Krymp</string>
+    <string name="expand_more">Utvid</string>
+    <string name="search">Søk</string>
+    <string name="all_allow_notification_tips">Tillat alle informasjonskanaler i «%1$s»-gruppen for å sende merknader.</string>
+    <string name="subscribe">Abonner</string>
+    <string name="clear">Tøm</string>
+    <string name="paste">Lim inn</string>
+    <string name="feed_or_site_url">Informasjonskanal eller nettadresse</string>
+    <string name="import_from_opml">Importer fra OPML</string>
+    <string name="preset">Forhåndsinnstilling</string>
+    <string name="selected">Valgt</string>
+    <string name="allow_notification">Tillat merknad</string>
+    <string name="all_deny_notification_toast">Alle merknader fra «%1$s»-gruppen nektes</string>
+    <string name="parse_full_content">Fortolk hele innholdet</string>
+    <string name="all_allow_notification_toast">Alle merknader fra «%1$s»-gruppen tillates.</string>
+    <string name="feeds">Informasjonskanaler</string>
+    <string name="loading">Laster inn …</string>
 </resources>
