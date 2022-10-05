@@ -207,7 +207,7 @@ interface ArticleDao {
         """
         DELETE FROM article
         WHERE accountId = :accountId
-        AND date < :before
+        AND updateAt < :before
         """
     )
     suspend fun deleteAllBefore(

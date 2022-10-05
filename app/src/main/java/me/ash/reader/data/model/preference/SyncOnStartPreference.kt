@@ -11,8 +11,8 @@ sealed class SyncOnStartPreference(
     object On : SyncOnStartPreference(true)
     object Off : SyncOnStartPreference(false)
 
-    fun put(viewModel: AccountViewModel) {
-        viewModel.update { syncOnStart = this@SyncOnStartPreference }
+    fun put(accountId: Int, viewModel: AccountViewModel) {
+        viewModel.update(accountId) { syncOnStart = this@SyncOnStartPreference }
     }
 
     fun toDesc(context: Context): String =

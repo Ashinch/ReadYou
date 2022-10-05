@@ -28,10 +28,7 @@ import me.ash.reader.data.model.preference.*
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.*
-import me.ash.reader.ui.ext.alphaLN
-import me.ash.reader.ui.ext.collectAsStateValue
-import me.ash.reader.ui.ext.findActivity
-import me.ash.reader.ui.ext.getCurrentVersion
+import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.HomeViewModel
@@ -73,8 +70,9 @@ fun FeedsPage(
 
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
-    homeViewModel.syncWorkLiveData()?.observe(owner) {
-        it?.let { isSyncing = it.progress.getIsSyncing() }
+    homeViewModel.syncWorkLiveData.observe(owner) {
+        context.showToast(it.size.toString())
+        it?.let { isSyncing = it.any { it.progress.getIsSyncing() } }
     }
 
     val infiniteTransition = rememberInfiniteTransition()

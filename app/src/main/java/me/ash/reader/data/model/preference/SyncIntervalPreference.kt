@@ -22,8 +22,8 @@ sealed class SyncIntervalPreference(
     object Every12Hours : SyncIntervalPreference(720L)
     object Every1Day : SyncIntervalPreference(1440L)
 
-    fun put(viewModel: AccountViewModel) {
-        viewModel.update { syncInterval = this@SyncIntervalPreference }
+    fun put(accountId: Int, viewModel: AccountViewModel) {
+        viewModel.update(accountId) { syncInterval = this@SyncIntervalPreference }
     }
 
     fun toDesc(context: Context): String =

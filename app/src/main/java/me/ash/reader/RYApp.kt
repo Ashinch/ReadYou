@@ -127,9 +127,7 @@ class RYApp : Application(), Configuration.Provider {
     }
 
     private suspend fun workerInit() {
-        if (accountRepository.getCurrentAccount().syncOnStart.value) {
-            rssRepository.get().doSync()
-        }
+        rssRepository.get().doSync(isOnStart = true)
     }
 
     private suspend fun checkUpdate() {

@@ -57,23 +57,30 @@ abstract class AbstractRssRepository constructor(
             }
     }
 
-    suspend fun doSync(isManually: Boolean = false, isOnStart: Boolean = false) {
+    suspend fun doSync(isOnStart: Boolean = false) {
         workManager.cancelAllWork()
         accountDao.queryById(context.currentAccountId)!!.let {
             if (it.syncInterval == SyncIntervalPreference.Manually) {
-                workManager.beginUniqueWork(
-                    SyncWorker.WORK_NAME,
-                    ExistingWorkPolicy.REPLACE,
-                    SyncWorker.OneTimeRequest.build()
-                ).enqueue()
+                if (!isOnStart || it.syncOnStart.value) {
+                    workManager.beginUniqueWork(
+                        SyncWorker.WORK_NAME,
+                        ExistingWorkPolicy.REPLACE,
+                        SyncWorker.OneTimeRequest.addTag(SyncWorker.WORK_NAME).build()
+                    ).enqueue()
+                } else {
+
+                }
             } else {
                 workManager.enqueueUniquePeriodicWork(
                     SyncWorker.WORK_NAME,
                     ExistingPeriodicWorkPolicy.REPLACE,
                     SyncWorker.getRepeatingRequest(
                         builder = it.syncInterval.toPeriodicWorkRequestBuilder(),
-                        isSyncOnlyWhenCharging = it.syncOnlyWhenCharging.value,
-                        isSyncOnlyOnWiFi = it.syncOnlyOnWiFi.value,
+                        isOnStart = isOnStart,
+                        syncOnStart = it.syncOnStart,
+                        syncInterval = it.syncInterval,
+                        syncOnlyWhenCharging = it.syncOnlyWhenCharging,
+                        syncOnlyOnWiFi = it.syncOnlyOnWiFi,
                     )
                 )
             }

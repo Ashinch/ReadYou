@@ -16,8 +16,8 @@ sealed class KeepArchivedPreference(
     object For2Weeks : KeepArchivedPreference(1209600000L)
     object For1Month : KeepArchivedPreference(2592000000L)
 
-    fun put(viewModel: AccountViewModel) {
-        viewModel.update { keepArchived = this@KeepArchivedPreference }
+    fun put(accountId: Int, viewModel: AccountViewModel) {
+        viewModel.update(accountId) { keepArchived = this@KeepArchivedPreference }
     }
 
     fun toDesc(context: Context): String =

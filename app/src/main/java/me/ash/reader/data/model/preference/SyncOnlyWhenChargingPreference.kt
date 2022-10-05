@@ -11,8 +11,8 @@ sealed class SyncOnlyWhenChargingPreference(
     object On : SyncOnlyWhenChargingPreference(true)
     object Off : SyncOnlyWhenChargingPreference(false)
 
-    fun put(viewModel: AccountViewModel) {
-        viewModel.update { syncOnlyWhenCharging = this@SyncOnlyWhenChargingPreference }
+    fun put(accountId: Int, viewModel: AccountViewModel) {
+        viewModel.update(accountId) { syncOnlyWhenCharging = this@SyncOnlyWhenChargingPreference }
     }
 
     fun toDesc(context: Context): String =

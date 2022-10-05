@@ -25,6 +25,7 @@ import me.ash.reader.R
 import me.ash.reader.data.model.preference.*
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
 
@@ -44,6 +45,8 @@ fun AccountDetailsPage(
     val keepArchived = LocalKeepArchived.current
     val syncBlockList = LocalSyncBlockList.current
 
+    var nameValue by remember { mutableStateOf(uiState.account?.name) }
+    var nameDialogVisible by remember { mutableStateOf(false) }
     var syncIntervalDialogVisible by remember { mutableStateOf(false) }
     var keepArchivedDialogVisible by remember { mutableStateOf(false) }
 
@@ -88,9 +91,7 @@ fun AccountDetailsPage(
                     SettingItem(
                         title = stringResource(R.string.name),
                         desc = uiState.account?.name ?: "",
-                        onClick = {
-
-                        },
+                        onClick = { nameDialogVisible = true },
                     ) {}
                     Spacer(modifier = Modifier.height(24.dp))
                 }
@@ -106,26 +107,26 @@ fun AccountDetailsPage(
                     ) {}
                     SettingItem(
                         title = stringResource(R.string.sync_once_on_start),
-                        onClick = { (!syncOnStart).put(viewModel) },
+                        onClick = { (!syncOnStart).put(context.currentAccountId, viewModel) },
                     ) {
                         RYSwitch(activated = syncOnStart.value) {
-                            (!syncOnStart).put(viewModel)
+                            (!syncOnStart).put(context.currentAccountId, viewModel)
                         }
                     }
                     SettingItem(
                         title = stringResource(R.string.only_on_wifi),
-                        onClick = { (!syncOnlyOnWiFi).put(viewModel) },
+                        onClick = { (!syncOnlyOnWiFi).put(context.currentAccountId, viewModel) },
                     ) {
                         RYSwitch(activated = syncOnlyOnWiFi.value) {
-                            (!syncOnlyOnWiFi).put(viewModel)
+                            (!syncOnlyOnWiFi).put(context.currentAccountId, viewModel)
                         }
                     }
                     SettingItem(
                         title = stringResource(R.string.only_when_charging),
-                        onClick = { (!syncOnlyWhenCharging).put(viewModel) },
+                        onClick = { (!syncOnlyWhenCharging).put(context.currentAccountId, viewModel) },
                     ) {
                         RYSwitch(activated = syncOnlyWhenCharging.value) {
-                            (!syncOnlyWhenCharging).put(viewModel)
+                            (!syncOnlyWhenCharging).put(context.currentAccountId, viewModel)
                         }
                     }
                     SettingItem(
@@ -178,7 +179,7 @@ fun AccountDetailsPage(
                 text = it.toDesc(context),
                 selected = it == syncInterval,
             ) {
-                it.put(viewModel)
+                it.put(context.currentAccountId, viewModel)
             }
         }
     ) {
@@ -193,7 +194,7 @@ fun AccountDetailsPage(
                 text = it.toDesc(context),
                 selected = it == keepArchived,
             ) {
-                it.put(viewModel)
+                it.put(context.currentAccountId, viewModel)
             }
         }
     ) {
@@ -243,6 +244,27 @@ fun AccountDetailsPage(
                 )
             }
         },
+    )
+
+    TextFieldDialog(
+        visible = nameDialogVisible,
+        title = stringResource(R.string.name),
+        value = nameValue ?: "",
+        placeholder = stringResource(R.string.value),
+        onValueChange = {
+            nameValue = it
+        },
+        onDismissRequest = {
+            nameDialogVisible = false
+        },
+        onConfirm = {
+            if (nameValue?.isNotBlank() == true) {
+                viewModel.update(context.currentAccountId) {
+                    name = nameValue ?: ""
+                }
+                nameDialogVisible = false
+            }
+        }
     )
 
     RYDialog(

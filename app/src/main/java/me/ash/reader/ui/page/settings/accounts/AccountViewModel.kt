@@ -42,9 +42,9 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun update(block: Account.() -> Unit) {
+    fun update(accountId: Int, block: Account.() -> Unit) {
         viewModelScope.launch(ioDispatcher) {
-            accountRepository.update(block)
+            accountRepository.update(accountId, block)
         }
     }
 

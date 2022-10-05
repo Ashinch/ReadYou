@@ -48,8 +48,8 @@ class AccountRepository @Inject constructor(
         }
     }
 
-    suspend fun update(block: Account.() -> Unit) {
-        accountDao.queryById(context.currentAccountId)?.let {
+    suspend fun update(accountId: Int, block: Account.() -> Unit) {
+        accountDao.queryById(accountId)?.let {
             accountDao.update(it.apply(block))
         }
     }
