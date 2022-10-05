@@ -26,6 +26,7 @@ import me.ash.reader.data.model.preference.*
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.currentAccountId
+import me.ash.reader.ui.ext.showToastLong
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
 
@@ -45,13 +46,19 @@ fun AccountDetailsPage(
     val keepArchived = LocalKeepArchived.current
     val syncBlockList = LocalSyncBlockList.current
 
-    var nameValue by remember { mutableStateOf(uiState.account?.name) }
+    val selectedAccount = uiState.selectedAccount.collectAsStateValue(initial = null)
+
+    var nameValue by remember { mutableStateOf(selectedAccount?.name) }
     var nameDialogVisible by remember { mutableStateOf(false) }
     var syncIntervalDialogVisible by remember { mutableStateOf(false) }
     var keepArchivedDialogVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        viewModel.fetchAccount()
+        navController.currentBackStackEntryFlow.collect {
+            it.arguments?.getString("accountId")?.let {
+                viewModel.initData(it.toInt())
+            }
+        }
     }
 
     val launcher = rememberLauncherForActivityResult(
@@ -80,7 +87,7 @@ fun AccountDetailsPage(
         content = {
             LazyColumn {
                 item {
-                    DisplayText(text = uiState.account?.type?.toDesc(context) ?: "", desc = "")
+                    DisplayText(text = selectedAccount?.type?.toDesc(context) ?: "", desc = "")
                     Spacer(modifier = Modifier.height(16.dp))
                 }
                 item {
@@ -90,7 +97,7 @@ fun AccountDetailsPage(
                     )
                     SettingItem(
                         title = stringResource(R.string.name),
-                        desc = uiState.account?.name ?: "",
+                        desc = selectedAccount?.name ?: "",
                         onClick = { nameDialogVisible = true },
                     ) {}
                     Spacer(modifier = Modifier.height(24.dp))
@@ -171,6 +178,27 @@ fun AccountDetailsPage(
         }
     )
 
+    TextFieldDialog(
+        visible = nameDialogVisible,
+        title = stringResource(R.string.name),
+        value = nameValue ?: "",
+        placeholder = stringResource(R.string.value),
+        onValueChange = {
+            nameValue = it
+        },
+        onDismissRequest = {
+            nameDialogVisible = false
+        },
+        onConfirm = {
+            if (nameValue?.isNotBlank() == true) {
+                viewModel.update(context.currentAccountId) {
+                    name = nameValue ?: ""
+                }
+                nameDialogVisible = false
+            }
+        }
+    )
+
     RadioDialog(
         visible = syncIntervalDialogVisible,
         title = stringResource(R.string.sync_interval),
@@ -216,14 +244,15 @@ fun AccountDetailsPage(
             Text(text = stringResource(R.string.clear_all_articles))
         },
         text = {
-            Text(text = stringResource(R.string.clear_all_articles_toast))
+            Text(text = stringResource(R.string.clear_all_articles_tips))
         },
         confirmButton = {
             TextButton(
                 onClick = {
-                    uiState.account?.id?.let {
+                    selectedAccount?.id?.let {
                         viewModel.clear(it) {
                             viewModel.hideClearDialog()
+                            context.showToastLong(context.getString(R.string.clear_all_articles_toast))
                         }
                     }
                 }
@@ -246,27 +275,6 @@ fun AccountDetailsPage(
         },
     )
 
-    TextFieldDialog(
-        visible = nameDialogVisible,
-        title = stringResource(R.string.name),
-        value = nameValue ?: "",
-        placeholder = stringResource(R.string.value),
-        onValueChange = {
-            nameValue = it
-        },
-        onDismissRequest = {
-            nameDialogVisible = false
-        },
-        onConfirm = {
-            if (nameValue?.isNotBlank() == true) {
-                viewModel.update(context.currentAccountId) {
-                    name = nameValue ?: ""
-                }
-                nameDialogVisible = false
-            }
-        }
-    )
-
     RYDialog(
         visible = uiState.deleteDialogVisible,
         onDismissRequest = {
@@ -282,12 +290,12 @@ fun AccountDetailsPage(
             Text(text = stringResource(R.string.delete_account))
         },
         text = {
-            Text(text = stringResource(R.string.delete_account_toast))
+            Text(text = stringResource(R.string.delete_account_tips))
         },
         confirmButton = {
             TextButton(
                 onClick = {
-                    uiState.account?.id?.let {
+                    selectedAccount?.id?.let {
                         viewModel.delete(it) {
                             viewModel.hideDeleteDialog()
                         }

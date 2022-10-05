@@ -5,10 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.ash.reader.data.model.account.Account
@@ -35,10 +32,11 @@ class AccountViewModel @Inject constructor(
 
     private val _accountUiState = MutableStateFlow(AccountUiState())
     val accountUiState: StateFlow<AccountUiState> = _accountUiState.asStateFlow()
+    val accounts = accountRepository.getAccounts()
 
-    fun fetchAccount() {
+    fun initData(accountId: Int) {
         viewModelScope.launch(ioDispatcher) {
-            _accountUiState.update { it.copy(account = accountRepository.getCurrentAccount()) }
+            _accountUiState.update { it.copy(selectedAccount = accountRepository.getAccountById(accountId)) }
         }
     }
 
@@ -75,30 +73,26 @@ class AccountViewModel @Inject constructor(
     }
 
     fun delete(accountId: Int, callback: () -> Unit = {}) {
-        _accountUiState.value.account?.let {
-            viewModelScope.launch(ioDispatcher) {
-                accountRepository.delete(accountId)
-                withContext(mainDispatcher) {
-                    callback()
-                }
+        viewModelScope.launch(ioDispatcher) {
+            accountRepository.delete(accountId)
+            withContext(mainDispatcher) {
+                callback()
             }
         }
     }
 
     fun clear(accountId: Int, callback: () -> Unit = {}) {
-        _accountUiState.value.account?.let {
-            viewModelScope.launch(ioDispatcher) {
-                rssRepository.get(accountId).deleteAccountArticles(accountId)
-                withContext(mainDispatcher) {
-                    callback()
-                }
+        viewModelScope.launch(ioDispatcher) {
+            rssRepository.get(accountId).deleteAccountArticles(accountId)
+            withContext(mainDispatcher) {
+                callback()
             }
         }
     }
 }
 
 data class AccountUiState(
-    val account: Account? = null,
+    val selectedAccount: Flow<Account?> = emptyFlow(),
     val deleteDialogVisible: Boolean = false,
     val clearDialogVisible: Boolean = false,
 )

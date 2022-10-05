@@ -337,6 +337,9 @@
     <string name="export_as_opml">导出为 OPML</string>
     <string name="clear_all_articles">清空所有文章</string>
     <string name="delete_account">删除账户</string>
-    <string name="clear_all_articles_toast">确定要清空该账户中所有的文章吗？</string>
-    <string name="delete_account_toast">确定要删除该账户吗？</string>
+    <string name="clear_all_articles_tips">确定要清空该账户中所有的文章吗？</string>
+    <string name="delete_account_tips">确定要删除该账户吗？</string>
+    <string name="must_have_an_account">必须保留一个账户</string>
+    <string name="clear_all_articles_toast">已清空该账户的所有文章</string>
+    <string name="delete_account_toast">该账户已被删除</string>
 </resources>

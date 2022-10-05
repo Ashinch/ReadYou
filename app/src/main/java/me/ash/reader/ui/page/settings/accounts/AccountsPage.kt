@@ -8,7 +8,6 @@ import androidx.compose.material.icons.outlined.PersonAdd
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -37,10 +36,7 @@ fun AccountsPage(
 ) {
     val context = LocalContext.current
     val uiState = viewModel.accountUiState.collectAsStateValue()
-
-    LaunchedEffect(Unit) {
-        viewModel.fetchAccount()
-    }
+    val accounts = viewModel.accounts.collectAsStateValue(initial = emptyList())
 
     RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
@@ -58,24 +54,26 @@ fun AccountsPage(
                 item {
                     DisplayText(text = stringResource(R.string.accounts), desc = "")
                     Spacer(modifier = Modifier.height(16.dp))
-                }
-                item {
                     Subtitle(
                         modifier = Modifier.padding(horizontal = 24.dp),
                         text = stringResource(R.string.list),
                     )
-                    SettingItem(
-                        title = uiState.account?.name ?: "",
-                        desc = uiState.account?.type?.toDesc(context) ?: "",
-                        icon = uiState.account?.type?.toIcon()?.takeIf { it is ImageVector }?.let { it as ImageVector },
-                        iconPainter = uiState.account?.type?.toIcon()?.takeIf { it is Painter }?.let { it as Painter },
-                        onClick = {
-                            navController.navigate(RouteName.ACCOUNT_DETAILS) {
-                                launchSingleTop = true
-                            }
-                        },
-                    ) {}
-                    Spacer(modifier = Modifier.height(24.dp))
+                }
+                accounts.forEach {
+                    item {
+                        SettingItem(
+                            title = it.name,
+                            desc = it.type.toDesc(context),
+                            icon = it.type.toIcon().takeIf { it is ImageVector }?.let { it as ImageVector },
+                            iconPainter = it.type.toIcon().takeIf { it is Painter }?.let { it as Painter },
+                            onClick = {
+                                navController.navigate("${RouteName.ACCOUNT_DETAILS}/${it.id}") {
+                                    launchSingleTop = true
+                                }
+                            },
+                        ) {}
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
                 }
                 item {
                     Subtitle(

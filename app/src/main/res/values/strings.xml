@@ -375,6 +375,9 @@
     <string name="export_as_opml">Export as OPML</string>
     <string name="clear_all_articles">Clear all articles</string>
     <string name="delete_account">Delete account</string>
-    <string name="clear_all_articles_toast">Are you sure you want to clear all articles from this account?</string>
-    <string name="delete_account_toast">Are you sure you want to delete this account?</string>
+    <string name="clear_all_articles_tips">Are you sure you want to clear all articles from this account?</string>
+    <string name="delete_account_tips">Are you sure you want to delete this account?</string>
+    <string name="must_have_an_account">Must have an account</string>
+    <string name="clear_all_articles_toast">All articles from this account have been cleared</string>
+    <string name="delete_account_toast">This account has been deleted</string>
 </resources>

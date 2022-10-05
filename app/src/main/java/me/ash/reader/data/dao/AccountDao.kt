@@ -25,6 +25,13 @@ interface AccountDao {
     @Query(
         """
         SELECT * FROM account
+        """
+    )
+    fun queryAllAsFlow(): Flow<List<Account>>
+
+    @Query(
+        """
+        SELECT * FROM account
         WHERE id = :id
         """
     )

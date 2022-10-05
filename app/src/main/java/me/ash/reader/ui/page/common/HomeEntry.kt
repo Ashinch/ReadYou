@@ -148,7 +148,7 @@ fun HomeEntry(
                 AccountsPage(navController)
             }
 
-            animatedComposable(route = RouteName.ACCOUNT_DETAILS) {
+            animatedComposable(route = "${RouteName.ACCOUNT_DETAILS}/{accountId}") {
                 AccountDetailsPage(navController)
             }
 
