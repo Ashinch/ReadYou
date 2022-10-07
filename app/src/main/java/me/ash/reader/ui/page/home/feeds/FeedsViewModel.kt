@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.feeds
 
-import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +12,6 @@ import me.ash.reader.data.model.account.Account
 import me.ash.reader.data.module.DefaultDispatcher
 import me.ash.reader.data.module.IODispatcher
 import me.ash.reader.data.repository.AccountRepository
-import me.ash.reader.data.repository.OpmlRepository
 import me.ash.reader.data.repository.RssRepository
 import me.ash.reader.data.repository.StringsRepository
 import me.ash.reader.ui.page.home.FilterState
@@ -23,7 +21,6 @@ import javax.inject.Inject
 class FeedsViewModel @Inject constructor(
     private val accountRepository: AccountRepository,
     private val rssRepository: RssRepository,
-    private val opmlRepository: OpmlRepository,
     private val stringsRepository: StringsRepository,
     @DefaultDispatcher
     private val defaultDispatcher: CoroutineDispatcher,
@@ -37,16 +34,6 @@ class FeedsViewModel @Inject constructor(
     fun fetchAccount() {
         viewModelScope.launch(ioDispatcher) {
             _feedsUiState.update { it.copy(account = accountRepository.getCurrentAccount()) }
-        }
-    }
-
-    fun exportAsOpml(callback: (String) -> Unit = {}) {
-        viewModelScope.launch(defaultDispatcher) {
-            try {
-                callback(opmlRepository.saveToString())
-            } catch (e: Exception) {
-                Log.e("FeedsViewModel", "exportAsOpml: ", e)
-            }
         }
     }
 

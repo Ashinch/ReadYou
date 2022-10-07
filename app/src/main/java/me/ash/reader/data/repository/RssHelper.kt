@@ -126,6 +126,7 @@ class RssHelper @Inject constructor(
             fullContent = content,
             img = findImg((content ?: desc) ?: ""),
             link = syndEntry.link ?: "",
+            updateAt = Date(),
         )
     }
 

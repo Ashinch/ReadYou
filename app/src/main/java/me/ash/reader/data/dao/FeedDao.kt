@@ -56,6 +56,14 @@ interface FeedDao {
 
     @Query(
         """
+        DELETE FROM feed
+        WHERE accountId = :accountId
+        """
+    )
+    suspend fun deleteByAccountId(accountId: Int)
+
+    @Query(
+        """
         SELECT * FROM feed
         WHERE id = :id
         """

@@ -1,8 +1,6 @@
 package me.ash.reader.ui.page.home.feeds
 
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -30,10 +28,7 @@ import me.ash.reader.data.model.preference.*
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.*
-import me.ash.reader.ui.ext.alphaLN
-import me.ash.reader.ui.ext.collectAsStateValue
-import me.ash.reader.ui.ext.findActivity
-import me.ash.reader.ui.ext.getCurrentVersion
+import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.HomeViewModel
@@ -76,7 +71,7 @@ fun FeedsPage(
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
     homeViewModel.syncWorkLiveData.observe(owner) {
-        it?.let { isSyncing = it.progress.getIsSyncing() }
+        it?.let { isSyncing = it.any { it.progress.getIsSyncing() } }
     }
 
     val infiniteTransition = rememberInfiniteTransition()
@@ -87,18 +82,6 @@ fun FeedsPage(
             animation = tween(1000, easing = LinearEasing)
         )
     )
-
-    val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.CreateDocument()
-    ) { result ->
-        feedsViewModel.exportAsOpml { string ->
-            result?.let { uri ->
-                context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                    outputStream.write(string.toByteArray())
-                }
-            }
-        }
-    }
 
     val feedBadgeAlpha by remember { derivedStateOf { (ln(groupListTonalElevation.value + 1.4f) + 2f) / 100f } }
     val groupAlpha by remember { derivedStateOf { groupListTonalElevation.value.dp.alphaLN(weight = 1.2f) } }
@@ -172,11 +155,11 @@ fun FeedsPage(
                         modifier = Modifier.pointerInput(Unit) {
                             detectTapGestures(
                                 onLongPress = {
-                                    launcher.launch("ReadYou.opml")
+
                                 }
                             )
                         },
-                        text = feedsUiState.account?.name ?: stringResource(R.string.read_you),
+                        text = feedsUiState.account?.name ?: "",
                         desc = if (isSyncing) stringResource(R.string.syncing) else "",
                     )
                 }

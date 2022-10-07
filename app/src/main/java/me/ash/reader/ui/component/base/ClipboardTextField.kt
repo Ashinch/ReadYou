@@ -23,6 +23,7 @@ fun ClipboardTextField(
     modifier: Modifier = Modifier,
     readOnly: Boolean = false,
     value: String = "",
+    singleLine: Boolean = true,
     onValueChange: (String) -> Unit = {},
     placeholder: String = "",
     errorText: String = "",
@@ -35,6 +36,7 @@ fun ClipboardTextField(
         RYTextField(
             readOnly = readOnly,
             value = value,
+            singleLine = singleLine,
             onValueChange = onValueChange,
             placeholder = placeholder,
             errorMessage = errorText,

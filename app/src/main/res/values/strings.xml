@@ -330,4 +330,55 @@
     <string name="images_desc">Rounded corners, horizontal padding</string>
     <string name="videos_desc">Rounded corners, horizontal padding</string>
     <string name="maximize">Maximize</string>
+    <string name="every_15_minutes">Every 15 minutes</string>
+    <string name="every_30_minutes">Every 30 minutes</string>
+    <string name="every_1_hour">Every hour</string>
+    <string name="every_2_hours">Every 2 hours</string>
+    <string name="every_3_hours">Every 3 hours</string>
+    <string name="every_6_hours">Every 6 hours</string>
+    <string name="every_12_hours">Every 12 hours</string>
+    <string name="every_1_day">Every day</string>
+    <string name="manually">Manually</string>
+    <string name="always">Always</string>
+    <string name="for_1_day">1 day</string>
+    <string name="for_2_days">2 days</string>
+    <string name="for_3_days">3 days</string>
+    <string name="for_1_week">1 week</string>
+    <string name="for_2_weeks">2 weeks</string>
+    <string name="for_1_month">1 month</string>
+    <string name="local">Local</string>
+    <string name="fever" translatable="false">Fever</string>
+    <string name="google_reader" translatable="false">Google Reader</string>
+    <string name="fresh_rss" translatable="false">FreshRSS</string>
+    <string name="feedlly" translatable="false">Feedlly</string>
+    <string name="inoreader" translatable="false">Inoreader</string>
+    <string name="local_desc">On this device</string>
+    <string name="services">Services</string>
+    <string name="feedlly_desc" translatable="false">feedlly.com</string>
+    <string name="inoreader_desc" translatable="false">inoreader.com</string>
+    <string name="self_hosted">Self-Hosted</string>
+    <string name="fresh_rss_desc" translatable="false">freshrss.org</string>
+    <string name="google_reader_desc" translatable="false">Google Reader API</string>
+    <string name="fever_desc">Deprecated. Not recommended.</string>
+    <string name="more">More</string>
+    <string name="add_accounts">Add accounts</string>
+    <string name="list">List</string>
+    <string name="add_accounts_desc">Local, Services, Self-Hosted</string>
+    <string name="display">Display</string>
+    <string name="synchronous">Syncing</string>
+    <string name="sync_interval">Sync</string>
+    <string name="sync_once_on_start">Sync once on start</string>
+    <string name="only_on_wifi">Only on Wi-Fi</string>
+    <string name="only_when_charging">Only when charging</string>
+    <string name="keep_archived_articles">Keep archived articles</string>
+    <string name="block_list">Block list</string>
+    <string name="export_as_opml">Export as OPML</string>
+    <string name="clear_all_articles">Clear all articles</string>
+    <string name="delete_account">Delete account</string>
+    <string name="clear_all_articles_tips">Are you sure you want to clear all articles from this account?</string>
+    <string name="delete_account_tips">Are you sure you want to delete this account?</string>
+    <string name="must_have_an_account">Must have an account</string>
+    <string name="clear_all_articles_toast">All articles from this account have been cleared</string>
+    <string name="delete_account_toast">This account has been deleted</string>
+    <string name="synchronous_tips">Restart is require for changes to take effect.</string>
 </resources>

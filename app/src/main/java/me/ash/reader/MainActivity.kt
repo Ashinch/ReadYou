@@ -10,6 +10,8 @@ import androidx.profileinstaller.ProfileInstallerInitializer
 import coil.ImageLoader
 import coil.compose.LocalImageLoader
 import dagger.hilt.android.AndroidEntryPoint
+import me.ash.reader.data.dao.AccountDao
+import me.ash.reader.data.model.preference.AccountSettingsProvider
 import me.ash.reader.data.model.preference.LanguagesPreference
 import me.ash.reader.data.model.preference.SettingsProvider
 import me.ash.reader.ui.ext.languages
@@ -24,6 +26,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var imageLoader: ImageLoader
+
+    @Inject
+    lateinit var accountDao: AccountDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +45,10 @@ class MainActivity : ComponentActivity() {
             CompositionLocalProvider(
                 LocalImageLoader provides imageLoader,
             ) {
-                SettingsProvider {
-                    HomeEntry()
+                AccountSettingsProvider(accountDao) {
+                    SettingsProvider {
+                        HomeEntry()
+                    }
                 }
             }
         }

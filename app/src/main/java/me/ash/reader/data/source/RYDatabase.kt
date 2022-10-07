@@ -8,18 +8,28 @@ import me.ash.reader.data.dao.AccountDao
 import me.ash.reader.data.dao.ArticleDao
 import me.ash.reader.data.dao.FeedDao
 import me.ash.reader.data.dao.GroupDao
-import me.ash.reader.data.model.account.Account
-import me.ash.reader.data.model.account.AccountTypeConverters
+import me.ash.reader.data.model.account.*
 import me.ash.reader.data.model.article.Article
 import me.ash.reader.data.model.feed.Feed
 import me.ash.reader.data.model.group.Group
+import me.ash.reader.data.model.preference.*
+import me.ash.reader.ui.ext.toInt
 import java.util.*
 
 @Database(
     entities = [Account::class, Feed::class, Article::class, Group::class],
-    version = 2
+    version = 3
 )
-@TypeConverters(RYDatabase.DateConverters::class, AccountTypeConverters::class)
+@TypeConverters(
+    RYDatabase.DateConverters::class,
+    AccountTypeConverters::class,
+    SyncIntervalConverters::class,
+    SyncOnStartConverters::class,
+    SyncOnlyOnWiFiConverters::class,
+    SyncOnlyWhenChargingConverters::class,
+    KeepArchivedConverters::class,
+    SyncBlockListConverters::class,
+)
 abstract class RYDatabase : RoomDatabase() {
 
     abstract fun accountDao(): AccountDao
@@ -60,6 +70,7 @@ abstract class RYDatabase : RoomDatabase() {
 
 val allMigrations = arrayOf(
     MIGRATION_1_2,
+    MIGRATION_2_3,
 )
 
 @Suppress("ClassName")
@@ -69,6 +80,48 @@ object MIGRATION_1_2 : Migration(1, 2) {
         database.execSQL(
             """
             ALTER TABLE article ADD COLUMN img TEXT DEFAULT NULL
+            """.trimIndent()
+        )
+    }
+}
+
+@Suppress("ClassName")
+object MIGRATION_2_3 : Migration(2, 3) {
+
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+            """
+            ALTER TABLE article ADD COLUMN updateAt INTEGER DEFAULT ${System.currentTimeMillis()}
+            """.trimIndent()
+        )
+        database.execSQL(
+            """
+            ALTER TABLE account ADD COLUMN syncInterval INTEGER NOT NULL DEFAULT ${SyncIntervalPreference.default.value}
+            """.trimIndent()
+        )
+        database.execSQL(
+            """
+            ALTER TABLE account ADD COLUMN syncOnStart INTEGER NOT NULL DEFAULT ${SyncOnStartPreference.default.value.toInt()}
+            """.trimIndent()
+        )
+        database.execSQL(
+            """
+            ALTER TABLE account ADD COLUMN syncOnlyOnWiFi INTEGER NOT NULL DEFAULT ${SyncOnlyOnWiFiPreference.default.value.toInt()}
+            """.trimIndent()
+        )
+        database.execSQL(
+            """
+            ALTER TABLE account ADD COLUMN syncOnlyWhenCharging INTEGER NOT NULL DEFAULT ${SyncOnlyWhenChargingPreference.default.value.toInt()}
+            """.trimIndent()
+        )
+        database.execSQL(
+            """
+            ALTER TABLE account ADD COLUMN keepArchived INTEGER NOT NULL DEFAULT ${KeepArchivedPreference.default.value}
+            """.trimIndent()
+        )
+        database.execSQL(
+            """
+            ALTER TABLE account ADD COLUMN syncBlockList TEXT NOT NULL DEFAULT ''
             """.trimIndent()
         )
     }

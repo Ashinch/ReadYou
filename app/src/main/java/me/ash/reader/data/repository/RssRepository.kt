@@ -14,7 +14,9 @@ class RssRepository @Inject constructor(
 //    private val googleReaderRssRepository: GoogleReaderRssRepository,
 ) {
 
-    fun get() = when (context.currentAccountType) {
+    fun get() = get(context.currentAccountType)
+
+    fun get(accountId: Int) = when (accountId) {
         AccountType.Local.id -> localRssRepository
 //        Account.Type.LOCAL -> feverRssRepository
 //        Account.Type.FEVER -> feverRssRepository

@@ -92,8 +92,11 @@ fun SettingsPage(
                         title = stringResource(R.string.accounts),
                         desc = stringResource(R.string.accounts_desc),
                         icon = Icons.Outlined.AccountCircle,
-                        enable = false,
-                    ) {}
+                    ) {
+                        navController.navigate(RouteName.ACCOUNTS) {
+                            launchSingleTop = true
+                        }
+                    }
                 }
                 item {
                     SelectableSettingGroupItem(

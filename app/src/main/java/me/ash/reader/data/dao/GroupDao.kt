@@ -44,6 +44,14 @@ interface GroupDao {
 
     @Query(
         """
+        DELETE FROM `group`
+        WHERE accountId = :accountId
+        """
+    )
+    suspend fun deleteByAccountId(accountId: Int)
+
+    @Query(
+        """
         SELECT * FROM `group`
         WHERE accountId = :accountId
         """

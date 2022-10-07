@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.work.CoroutineWorker
-import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,6 +19,8 @@ import me.ash.reader.data.model.article.ArticleWithFeed
 import me.ash.reader.data.model.feed.Feed
 import me.ash.reader.data.model.group.Group
 import me.ash.reader.data.model.group.GroupWithFeed
+import me.ash.reader.data.model.preference.KeepArchivedPreference
+import me.ash.reader.data.model.preference.SyncIntervalPreference
 import me.ash.reader.ui.ext.currentAccountId
 import java.util.*
 
@@ -50,12 +51,41 @@ abstract class AbstractRssRepository constructor(
         isUnread: Boolean,
     )
 
-    fun doSync() {
-        workManager.enqueueUniquePeriodicWork(
-            SyncWorker.WORK_NAME,
-            ExistingPeriodicWorkPolicy.REPLACE,
-            SyncWorker.repeatingRequest
-        )
+    suspend fun keepArchivedArticles() {
+        accountDao.queryById(context.currentAccountId)!!
+            .takeIf { it.keepArchived != KeepArchivedPreference.Always }
+            ?.let {
+                articleDao.deleteAllArchivedBeforeThan(it.id!!, Date(System.currentTimeMillis() - it.keepArchived.value))
+            }
+    }
+
+    suspend fun doSync(isOnStart: Boolean = false) {
+        workManager.cancelAllWork()
+        accountDao.queryById(context.currentAccountId)?.let {
+            if (isOnStart) {
+                if (it.syncOnStart.value) {
+                    SyncWorker.enqueueOneTimeWork(workManager)
+                }
+                if (it.syncInterval != SyncIntervalPreference.Manually) {
+                    SyncWorker.enqueuePeriodicWork(
+                        workManager = workManager,
+                        syncInterval = it.syncInterval,
+                        syncOnlyWhenCharging = it.syncOnlyWhenCharging,
+                        syncOnlyOnWiFi = it.syncOnlyOnWiFi,
+                    )
+                } else {
+
+                }
+            } else {
+                SyncWorker.enqueueOneTimeWork(workManager)
+                SyncWorker.enqueuePeriodicWork(
+                    workManager = workManager,
+                    syncInterval = it.syncInterval,
+                    syncOnlyWhenCharging = it.syncOnlyWhenCharging,
+                    syncOnlyOnWiFi = it.syncOnlyOnWiFi,
+                )
+            }
+        }
     }
 
     fun pullGroups(): Flow<MutableList<Group>> =
@@ -153,6 +183,10 @@ abstract class AbstractRssRepository constructor(
             group != null -> articleDao.deleteByGroupId(context.currentAccountId, group.id)
             feed != null -> articleDao.deleteByFeedId(context.currentAccountId, feed.id)
         }
+    }
+
+    suspend fun deleteAccountArticles(accountId: Int) {
+        articleDao.deleteByAccountId(accountId)
     }
 
     suspend fun groupParseFullContent(group: Group, isFullContent: Boolean) {

@@ -103,7 +103,7 @@ class RYApp : Application(), Configuration.Provider {
         applicationScope.launch {
             accountInit()
             workerInit()
-            if (notFdroid) checkUpdate()
+            checkUpdate()
         }
     }
 
@@ -126,11 +126,12 @@ class RYApp : Application(), Configuration.Provider {
         }
     }
 
-    private fun workerInit() {
-        rssRepository.get().doSync()
+    private suspend fun workerInit() {
+        rssRepository.get().doSync(isOnStart = true)
     }
 
     private suspend fun checkUpdate() {
+        if (isFdroid) return
         withContext(ioDispatcher) {
             applicationContext.getLatestApk().let {
                 if (it.exists()) it.del()

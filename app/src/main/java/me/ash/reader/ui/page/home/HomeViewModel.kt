@@ -1,20 +1,24 @@
 package me.ash.reader.ui.page.home
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import me.ash.reader.data.model.article.ArticleFlowItem
 import me.ash.reader.data.model.article.mapPagingFlowItem
 import me.ash.reader.data.model.feed.Feed
 import me.ash.reader.data.model.general.Filter
 import me.ash.reader.data.model.group.Group
 import me.ash.reader.data.module.ApplicationScope
+import me.ash.reader.data.module.IODispatcher
 import me.ash.reader.data.repository.RssRepository
 import me.ash.reader.data.repository.StringsRepository
 import me.ash.reader.data.repository.SyncWorker
@@ -27,6 +31,8 @@ class HomeViewModel @Inject constructor(
     @ApplicationScope
     private val applicationScope: CoroutineScope,
     private val workManager: WorkManager,
+    @IODispatcher
+    private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     private val _homeUiState = MutableStateFlow(HomeUiState())
@@ -35,10 +41,12 @@ class HomeViewModel @Inject constructor(
     private val _filterUiState = MutableStateFlow(FilterState())
     val filterUiState = _filterUiState.asStateFlow()
 
-    val syncWorkLiveData = workManager.getWorkInfoByIdLiveData(SyncWorker.uuid)
+    val syncWorkLiveData = workManager.getWorkInfosByTagLiveData(SyncWorker.WORK_NAME)
 
     fun sync() {
-        rssRepository.get().doSync()
+        viewModelScope.launch(ioDispatcher) {
+            rssRepository.get().doSync()
+        }
     }
 
     fun changeFilter(filterState: FilterState) {
