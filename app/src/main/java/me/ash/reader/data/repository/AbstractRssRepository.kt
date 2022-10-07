@@ -55,7 +55,7 @@ abstract class AbstractRssRepository constructor(
         accountDao.queryById(context.currentAccountId)!!
             .takeIf { it.keepArchived != KeepArchivedPreference.Always }
             ?.let {
-                articleDao.deleteAllBefore(it.id!!, Date(System.currentTimeMillis() - it.keepArchived.value))
+                articleDao.deleteAllArchivedBeforeThan(it.id!!, Date(System.currentTimeMillis() - it.keepArchived.value))
             }
     }
 

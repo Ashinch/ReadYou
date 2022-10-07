@@ -208,9 +208,11 @@ interface ArticleDao {
         DELETE FROM article
         WHERE accountId = :accountId
         AND updateAt < :before
+        AND isUnread = 0
+        AND isStarred = 0
         """
     )
-    suspend fun deleteAllBefore(
+    suspend fun deleteAllArchivedBeforeThan(
         accountId: Int,
         before: Date,
     )
