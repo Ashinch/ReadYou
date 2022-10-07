@@ -342,4 +342,5 @@
     <string name="must_have_an_account">必须保留一个账户</string>
     <string name="clear_all_articles_toast">已清空该账户的所有文章</string>
     <string name="delete_account_toast">该账户已被删除</string>
+    <string name="synchronous_tips">需要重新启动才能生效。</string>
 </resources>

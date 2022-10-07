@@ -71,7 +71,6 @@ fun FeedsPage(
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
     homeViewModel.syncWorkLiveData.observe(owner) {
-        context.showToast(it.size.toString())
         it?.let { isSyncing = it.any { it.progress.getIsSyncing() } }
     }
 
@@ -160,7 +159,7 @@ fun FeedsPage(
                                 }
                             )
                         },
-                        text = feedsUiState.account?.name ?: stringResource(R.string.read_you),
+                        text = feedsUiState.account?.name ?: "",
                         desc = if (isSyncing) stringResource(R.string.syncing) else "",
                     )
                 }

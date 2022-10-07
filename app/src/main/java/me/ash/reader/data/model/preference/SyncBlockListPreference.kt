@@ -1,10 +1,6 @@
 package me.ash.reader.data.model.preference
 
-import android.content.Context
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import me.ash.reader.data.dao.AccountDao
-import me.ash.reader.ui.ext.currentAccountId
+import me.ash.reader.ui.page.settings.accounts.AccountViewModel
 
 typealias SyncBlockList = List<String>
 
@@ -12,11 +8,16 @@ object SyncBlockListPreference {
 
     val default: SyncBlockList = emptyList()
 
-    fun put(accountDao: AccountDao, context: Context, scope: CoroutineScope) {
-        scope.launch {
-            accountDao.queryById(context.currentAccountId)?.let {
-                accountDao.update(it.apply { syncBlockList = this@SyncBlockListPreference.default })
-            }
-        }
+    fun put(accountId: Int, viewModel: AccountViewModel, syncBlockList: SyncBlockList) {
+        viewModel.update(accountId) { this.syncBlockList = syncBlockList }
     }
+
+    fun of(syncBlockList: String): SyncBlockList {
+        return syncBlockList.split("\n")
+    }
+
+    fun toString(syncBlockList: SyncBlockList): String = syncBlockList
+        .filter { it.isNotBlank() }
+        .map { it.trim() }
+        .joinToString { "$it\n" }
 }

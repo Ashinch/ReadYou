@@ -54,6 +54,7 @@ fun AddAccountsPage(
                         text = stringResource(R.string.local),
                     )
                     SettingItem(
+                        enable = false,
                         title = stringResource(R.string.local),
                         desc = stringResource(R.string.local_desc),
                         icon = Icons.Rounded.RssFeed,
@@ -71,12 +72,14 @@ fun AddAccountsPage(
                         text = stringResource(R.string.services),
                     )
                     SettingItem(
+                        enable = false,
                         title = stringResource(R.string.feedlly),
                         desc = stringResource(R.string.feedlly_desc),
                         iconPainter = painterResource(id = R.drawable.ic_feedly),
                         onClick = {},
                     ) {}
                     SettingItem(
+                        enable = false,
                         title = stringResource(R.string.inoreader),
                         desc = stringResource(R.string.inoreader_desc),
                         iconPainter = painterResource(id = R.drawable.ic_inoreader),
@@ -90,6 +93,7 @@ fun AddAccountsPage(
                         text = stringResource(R.string.self_hosted),
                     )
                     SettingItem(
+                        enable = false,
                         title = stringResource(R.string.fresh_rss),
                         desc = stringResource(R.string.fresh_rss_desc),
                         iconPainter = painterResource(id = R.drawable.ic_freshrss),
@@ -98,6 +102,7 @@ fun AddAccountsPage(
                         },
                     ) {}
                     SettingItem(
+                        enable = false,
                         title = stringResource(R.string.google_reader),
                         desc = stringResource(R.string.google_reader_desc),
                         icon = Icons.Rounded.RssFeed,
@@ -106,6 +111,7 @@ fun AddAccountsPage(
                         },
                     ) {}
                     SettingItem(
+                        enable = false,
                         title = stringResource(R.string.fever),
                         desc = stringResource(R.string.fever_desc),
                         iconPainter = painterResource(id = R.drawable.ic_fever),

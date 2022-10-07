@@ -380,4 +380,5 @@
     <string name="must_have_an_account">Must have an account</string>
     <string name="clear_all_articles_toast">All articles from this account have been cleared</string>
     <string name="delete_account_toast">This account has been deleted</string>
+    <string name="synchronous_tips">Restart is require for changes to take effect.</string>
 </resources>

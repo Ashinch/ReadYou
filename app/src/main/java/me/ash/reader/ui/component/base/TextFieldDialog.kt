@@ -21,6 +21,7 @@ fun TextFieldDialog(
     properties: DialogProperties = DialogProperties(),
     visible: Boolean = false,
     readOnly: Boolean = false,
+    singleLine: Boolean = true,
     title: String = "",
     icon: ImageVector? = null,
     value: String = "",
@@ -31,7 +32,7 @@ fun TextFieldDialog(
     onValueChange: (String) -> Unit = {},
     onDismissRequest: () -> Unit = {},
     onConfirm: (String) -> Unit = {},
-    imeAction: ImeAction = ImeAction.Done,
+    imeAction: ImeAction = if (singleLine) ImeAction.Done else ImeAction.Default,
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -55,6 +56,7 @@ fun TextFieldDialog(
                 modifier = modifier,
                 readOnly = readOnly,
                 value = value,
+                singleLine = singleLine,
                 onValueChange = onValueChange,
                 placeholder = placeholder,
                 errorText = errorText,

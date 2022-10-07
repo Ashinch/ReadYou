@@ -25,7 +25,7 @@ import me.ash.reader.R
 import me.ash.reader.data.model.preference.*
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.collectAsStateValue
-import me.ash.reader.ui.ext.currentAccountId
+import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.ext.showToastLong
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
@@ -50,6 +50,8 @@ fun AccountDetailsPage(
 
     var nameValue by remember { mutableStateOf(selectedAccount?.name) }
     var nameDialogVisible by remember { mutableStateOf(false) }
+    var blockListValue by remember { mutableStateOf(SyncBlockListPreference.toString(syncBlockList)) }
+    var blockListDialogVisible by remember { mutableStateOf(false) }
     var syncIntervalDialogVisible by remember { mutableStateOf(false) }
     var keepArchivedDialogVisible by remember { mutableStateOf(false) }
 
@@ -114,26 +116,44 @@ fun AccountDetailsPage(
                     ) {}
                     SettingItem(
                         title = stringResource(R.string.sync_once_on_start),
-                        onClick = { (!syncOnStart).put(context.currentAccountId, viewModel) },
+                        onClick = {
+                            selectedAccount?.id?.let {
+                                (!syncOnStart).put(it, viewModel)
+                            }
+                        },
                     ) {
                         RYSwitch(activated = syncOnStart.value) {
-                            (!syncOnStart).put(context.currentAccountId, viewModel)
+                            selectedAccount?.id?.let {
+                                (!syncOnStart).put(it, viewModel)
+                            }
                         }
                     }
                     SettingItem(
                         title = stringResource(R.string.only_on_wifi),
-                        onClick = { (!syncOnlyOnWiFi).put(context.currentAccountId, viewModel) },
+                        onClick = {
+                            selectedAccount?.id?.let {
+                                (!syncOnlyOnWiFi).put(it, viewModel)
+                            }
+                        },
                     ) {
                         RYSwitch(activated = syncOnlyOnWiFi.value) {
-                            (!syncOnlyOnWiFi).put(context.currentAccountId, viewModel)
+                            selectedAccount?.id?.let {
+                                (!syncOnlyOnWiFi).put(it, viewModel)
+                            }
                         }
                     }
                     SettingItem(
                         title = stringResource(R.string.only_when_charging),
-                        onClick = { (!syncOnlyWhenCharging).put(context.currentAccountId, viewModel) },
+                        onClick = {
+                            selectedAccount?.id?.let {
+                                (!syncOnlyWhenCharging).put(it, viewModel)
+                            }
+                        },
                     ) {
                         RYSwitch(activated = syncOnlyWhenCharging.value) {
-                            (!syncOnlyWhenCharging).put(context.currentAccountId, viewModel)
+                            selectedAccount?.id?.let {
+                                (!syncOnlyWhenCharging).put(it, viewModel)
+                            }
                         }
                     }
                     SettingItem(
@@ -141,12 +161,11 @@ fun AccountDetailsPage(
                         desc = keepArchived.toDesc(context),
                         onClick = { keepArchivedDialogVisible = true },
                     ) {}
-                    SettingItem(
-                        title = stringResource(R.string.block_list),
-                        onClick = {
-
-                        },
-                    ) {}
+                    // SettingItem(
+                    //     title = stringResource(R.string.block_list),
+                    //     onClick = { blockListDialogVisible = true },
+                    // ) {}
+                    Tips(text = stringResource(R.string.synchronous_tips))
                     Spacer(modifier = Modifier.height(24.dp))
                 }
                 item {
@@ -191,8 +210,10 @@ fun AccountDetailsPage(
         },
         onConfirm = {
             if (nameValue?.isNotBlank() == true) {
-                viewModel.update(context.currentAccountId) {
-                    name = nameValue ?: ""
+                selectedAccount?.id?.let {
+                    viewModel.update(it) {
+                        name = nameValue ?: ""
+                    }
                 }
                 nameDialogVisible = false
             }
@@ -207,7 +228,9 @@ fun AccountDetailsPage(
                 text = it.toDesc(context),
                 selected = it == syncInterval,
             ) {
-                it.put(context.currentAccountId, viewModel)
+                selectedAccount?.id?.let { accountId ->
+                    it.put(accountId, viewModel)
+                }
             }
         }
     ) {
@@ -222,12 +245,35 @@ fun AccountDetailsPage(
                 text = it.toDesc(context),
                 selected = it == keepArchived,
             ) {
-                it.put(context.currentAccountId, viewModel)
+                selectedAccount?.id?.let { accountId ->
+                    it.put(accountId, viewModel)
+                }
             }
         }
     ) {
         keepArchivedDialogVisible = false
     }
+
+    TextFieldDialog(
+        visible = blockListDialogVisible,
+        title = stringResource(R.string.block_list),
+        value = blockListValue,
+        singleLine = false,
+        placeholder = stringResource(R.string.value),
+        onValueChange = {
+            blockListValue = it
+        },
+        onDismissRequest = {
+            blockListDialogVisible = false
+        },
+        onConfirm = {
+            selectedAccount?.id?.let {
+                SyncBlockListPreference.put(it, viewModel, syncBlockList)
+                blockListDialogVisible = false
+                context.showToast(selectedAccount.syncBlockList.toString())
+            }
+        }
+    )
 
     RYDialog(
         visible = uiState.clearDialogVisible,

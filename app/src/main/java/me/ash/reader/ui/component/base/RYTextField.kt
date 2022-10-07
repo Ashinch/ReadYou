@@ -22,6 +22,7 @@ import me.ash.reader.R
 fun RYTextField(
     readOnly: Boolean,
     value: String,
+    singleLine: Boolean = true,
     onValueChange: (String) -> Unit,
     placeholder: String,
     errorMessage: String,
@@ -41,7 +42,7 @@ fun RYTextField(
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color.Transparent,
         ),
-        maxLines = 1,
+        maxLines = if (singleLine) 1 else Int.MAX_VALUE,
         enabled = !readOnly,
         value = value,
         onValueChange = {
@@ -55,7 +56,7 @@ fun RYTextField(
             )
         },
         isError = errorMessage.isNotEmpty(),
-        singleLine = true,
+        singleLine = singleLine,
         trailingIcon = {
             if (value.isNotEmpty()) {
                 IconButton(onClick = {

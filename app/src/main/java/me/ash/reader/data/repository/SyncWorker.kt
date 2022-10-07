@@ -9,7 +9,6 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import me.ash.reader.data.model.preference.SyncIntervalPreference
-import me.ash.reader.data.model.preference.SyncOnStartPreference
 import me.ash.reader.data.model.preference.SyncOnlyOnWiFiPreference
 import me.ash.reader.data.model.preference.SyncOnlyWhenChargingPreference
 import java.util.*
@@ -36,24 +35,35 @@ class SyncWorker @AssistedInject constructor(
         private const val IS_SYNCING = "isSyncing"
         const val WORK_NAME = "ReadYou"
         lateinit var uuid: UUID
-        val OneTimeRequest: OneTimeWorkRequest.Builder =
-            OneTimeWorkRequestBuilder<SyncWorker>()
 
-        fun getRepeatingRequest(
-            builder: PeriodicWorkRequest.Builder,
-            isOnStart: Boolean,
-            syncOnStart: SyncOnStartPreference,
+        fun enqueueOneTimeWork(
+            workManager: WorkManager,
+        ) {
+            workManager.enqueue(OneTimeWorkRequestBuilder<SyncWorker>()
+                .addTag(WORK_NAME)
+                .build()
+            )
+        }
+
+        fun enqueuePeriodicWork(
+            workManager: WorkManager,
             syncInterval: SyncIntervalPreference,
             syncOnlyWhenCharging: SyncOnlyWhenChargingPreference,
             syncOnlyOnWiFi: SyncOnlyOnWiFiPreference,
-        ): PeriodicWorkRequest = builder.setConstraints(Constraints.Builder()
-            .setRequiresCharging(syncOnlyWhenCharging.value)
-            .setRequiredNetworkType(if (syncOnlyOnWiFi.value) NetworkType.UNMETERED else NetworkType.CONNECTED)
-            .build()
-        ).addTag(WORK_NAME).run {
-            if (isOnStart && !syncOnStart.value) setInitialDelay(syncInterval.value, TimeUnit.MINUTES) else this
-        }.build().also {
-            uuid = it.id
+        ) {
+            workManager.enqueueUniquePeriodicWork(
+                WORK_NAME,
+                ExistingPeriodicWorkPolicy.REPLACE,
+                PeriodicWorkRequestBuilder<SyncWorker>(syncInterval.value, TimeUnit.MINUTES)
+                    .setConstraints(Constraints.Builder()
+                        .setRequiresCharging(syncOnlyWhenCharging.value)
+                        .setRequiredNetworkType(if (syncOnlyOnWiFi.value) NetworkType.UNMETERED else NetworkType.CONNECTED)
+                        .build()
+                    )
+                    .addTag(WORK_NAME)
+                    .setInitialDelay(syncInterval.value, TimeUnit.MINUTES)
+                    .build()
+            )
         }
 
         fun setIsSyncing(boolean: Boolean) = workDataOf(IS_SYNCING to boolean)

@@ -72,10 +72,10 @@ class LocalRssRepository @Inject constructor(
 
     override suspend fun sync(coroutineWorker: CoroutineWorker): ListenableWorker.Result =
         supervisorScope {
+            coroutineWorker.setProgress(setIsSyncing(true))
             val preTime = System.currentTimeMillis()
             val accountId = context.currentAccountId
             feedDao.queryAll(accountId)
-                .also { coroutineWorker.setProgress(setIsSyncing(true)) }
                 .chunked(16)
                 .forEach {
                     it.map { feed -> async { syncFeed(feed) } }

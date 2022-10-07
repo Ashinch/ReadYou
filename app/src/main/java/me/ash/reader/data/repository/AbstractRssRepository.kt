@@ -3,7 +3,9 @@ package me.ash.reader.data.repository
 import android.content.Context
 import android.util.Log
 import androidx.paging.PagingSource
-import androidx.work.*
+import androidx.work.CoroutineWorker
+import androidx.work.ListenableWorker
+import androidx.work.WorkManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -59,29 +61,28 @@ abstract class AbstractRssRepository constructor(
 
     suspend fun doSync(isOnStart: Boolean = false) {
         workManager.cancelAllWork()
-        accountDao.queryById(context.currentAccountId)!!.let {
-            if (it.syncInterval == SyncIntervalPreference.Manually) {
-                if (!isOnStart || it.syncOnStart.value) {
-                    workManager.beginUniqueWork(
-                        SyncWorker.WORK_NAME,
-                        ExistingWorkPolicy.REPLACE,
-                        SyncWorker.OneTimeRequest.addTag(SyncWorker.WORK_NAME).build()
-                    ).enqueue()
-                } else {
-
+        accountDao.queryById(context.currentAccountId)?.let {
+            if (isOnStart) {
+                if (it.syncOnStart.value) {
+                    SyncWorker.enqueueOneTimeWork(workManager)
                 }
-            } else {
-                workManager.enqueueUniquePeriodicWork(
-                    SyncWorker.WORK_NAME,
-                    ExistingPeriodicWorkPolicy.REPLACE,
-                    SyncWorker.getRepeatingRequest(
-                        builder = it.syncInterval.toPeriodicWorkRequestBuilder(),
-                        isOnStart = isOnStart,
-                        syncOnStart = it.syncOnStart,
+                if (it.syncInterval != SyncIntervalPreference.Manually) {
+                    SyncWorker.enqueuePeriodicWork(
+                        workManager = workManager,
                         syncInterval = it.syncInterval,
                         syncOnlyWhenCharging = it.syncOnlyWhenCharging,
                         syncOnlyOnWiFi = it.syncOnlyOnWiFi,
                     )
+                } else {
+
+                }
+            } else {
+                SyncWorker.enqueueOneTimeWork(workManager)
+                SyncWorker.enqueuePeriodicWork(
+                    workManager = workManager,
+                    syncInterval = it.syncInterval,
+                    syncOnlyWhenCharging = it.syncOnlyWhenCharging,
+                    syncOnlyOnWiFi = it.syncOnlyOnWiFi,
                 )
             }
         }

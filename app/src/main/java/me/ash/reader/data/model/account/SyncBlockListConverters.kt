@@ -11,13 +11,10 @@ import me.ash.reader.data.model.preference.SyncBlockListPreference
 class SyncBlockListConverters {
 
     @TypeConverter
-    fun toBlockList(syncBlockList: String): SyncBlockList {
-        if (!syncBlockList.contains(",")) return emptyList()
-        return syncBlockList.split(",")
-    }
+    fun toBlockList(syncBlockList: String): SyncBlockList =
+        SyncBlockListPreference.of(syncBlockList)
 
     @TypeConverter
-    fun fromBlockList(syncBlockList: SyncBlockList?): String {
-        return syncBlockList?.joinToString { "$it," } ?: ""
-    }
+    fun fromBlockList(syncBlockList: SyncBlockList?): String =
+        SyncBlockListPreference.toString(syncBlockList ?: emptyList())
 }
