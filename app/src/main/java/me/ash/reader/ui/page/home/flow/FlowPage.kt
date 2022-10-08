@@ -129,7 +129,12 @@ fun FlowPage(
                     },
                 ) {
                     scope.launch {
-                        flowUiState.listState.scrollToItem(0)
+                        // java.lang.NullPointerException: Attempt to invoke virtual method
+                        // 'boolean androidx.compose.ui.node.LayoutNode.getNeedsOnPositionedDispatch$ui_release()'
+                        // on a null object reference
+                        if (flowUiState.listState.firstVisibleItemIndex != 0) {
+                            flowUiState.listState.scrollToItem(0)
+                        }
                         markAsRead = !markAsRead
                         onSearch = false
                     }
@@ -145,7 +150,12 @@ fun FlowPage(
                 },
             ) {
                 scope.launch {
-                    flowUiState.listState.scrollToItem(0)
+                    // java.lang.NullPointerException: Attempt to invoke virtual method
+                    // 'boolean androidx.compose.ui.node.LayoutNode.getNeedsOnPositionedDispatch$ui_release()'
+                    // on a null object reference
+                    if (flowUiState.listState.firstVisibleItemIndex != 0) {
+                        flowUiState.listState.scrollToItem(0)
+                    }
                     onSearch = !onSearch
                 }
             }
@@ -249,7 +259,14 @@ fun FlowPage(
                 filterBarPadding = filterBarPadding.dp,
                 filterBarTonalElevation = filterBarTonalElevation.value.dp,
             ) {
-                flowViewModel.scrollToItem(0)
+                scope.launch {
+                    // java.lang.NullPointerException: Attempt to invoke virtual method
+                    // 'boolean androidx.compose.ui.node.LayoutNode.getNeedsOnPositionedDispatch$ui_release()'
+                    // on a null object reference
+                    if (flowUiState.listState.firstVisibleItemIndex != 0) {
+                        flowUiState.listState.scrollToItem(0)
+                    }
+                }
                 homeViewModel.changeFilter(filterUiState.copy(filter = it))
                 homeViewModel.fetchArticles()
             }
