@@ -30,12 +30,6 @@ class FlowViewModel @Inject constructor(
         }
     }
 
-    fun scrollToItem(index: Int) {
-        viewModelScope.launch {
-            _flowUiState.value.listState.scrollToItem(index)
-        }
-    }
-
     fun markAsRead(
         groupId: String?,
         feedId: String?,
