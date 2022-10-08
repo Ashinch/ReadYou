@@ -37,6 +37,12 @@ class ReadingViewModel @Inject constructor(
                 if (it.feed.isFullContent) internalRenderFullContent()
                 else renderDescriptionContent()
             }
+            // java.lang.NullPointerException: Attempt to invoke virtual method
+            // 'boolean androidx.compose.ui.node.LayoutNode.getNeedsOnPositionedDispatch$ui_release()'
+            // on a null object reference
+            if (_readingUiState.value.listState.firstVisibleItemIndex != 0) {
+                _readingUiState.value.listState.scrollToItem(0)
+            }
             hideLoading()
         }
     }
