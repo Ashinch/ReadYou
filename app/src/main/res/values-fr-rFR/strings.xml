@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="all">Tout</string>
     <plurals name="all_desc">
@@ -312,4 +313,46 @@
     <string name="images_desc">Rounded corners, horizontal padding</string>
     <string name="videos_desc">Rounded corners, horizontal padding</string>
     <string name="maximize">Maximize</string>
+    <string name="synchronous_tips">Un redémarrage est obligatoire pour que les changements s\'appliquent.</string>
+    <string name="delete_account">Supprimer le compte</string>
+    <string name="clear_all_articles_tips">Êtes-vous sûr de vouloir effacer tous les articles de ce compte \?</string>
+    <string name="every_15_minutes">Toutes les 15 minutes</string>
+    <string name="every_30_minutes">Toutes les 30 minutes</string>
+    <string name="every_1_hour">Toutes les heures</string>
+    <string name="every_2_hours">Toutes les 2 heures</string>
+    <string name="every_3_hours">Toutes les 3 heures</string>
+    <string name="every_6_hours">Toutes les 6 heures</string>
+    <string name="every_12_hours">Toutes les 12 heures</string>
+    <string name="every_1_day">Tous les jours</string>
+    <string name="manually">Manuellement</string>
+    <string name="always">Toujours</string>
+    <string name="for_1_day">1 jour</string>
+    <string name="for_2_days">2 jours</string>
+    <string name="for_3_days">3 jours</string>
+    <string name="for_1_week">1 semaine</string>
+    <string name="for_2_weeks">2 semaines</string>
+    <string name="for_1_month">1 mois</string>
+    <string name="local">Local</string>
+    <string name="local_desc">Sur cet appareil</string>
+    <string name="services">Services</string>
+    <string name="self_hosted">Auto-Hébergés</string>
+    <string name="more">Plus</string>
+    <string name="fever_desc">Obsolète. Non recommandé.</string>
+    <string name="add_accounts">Ajouter des comptes</string>
+    <string name="list">Liste</string>
+    <string name="synchronous">Synchronisation</string>
+    <string name="sync_interval">Synchroniser</string>
+    <string name="sync_once_on_start">Synchroniser une fois au démarrage</string>
+    <string name="only_on_wifi">Seulement sur le Wi-Fi</string>
+    <string name="only_when_charging">Seulement durant le chargement</string>
+    <string name="keep_archived_articles">Garder les articles archivés</string>
+    <string name="export_as_opml">Exporter en OPML</string>
+    <string name="clear_all_articles">Effacer tous les articles</string>
+    <string name="must_have_an_account">Vous devez avoir un compte</string>
+    <string name="clear_all_articles_toast">Tous les articles de ce compte ont été effacés</string>
+    <string name="delete_account_toast">Ce compte a été supprimé</string>
+    <string name="block_list">Bloquer la liste</string>
+    <string name="delete_account_tips">Êtes-vous sûr de vouloir supprimer ce compte \?</string>
+    <string name="add_accounts_desc">Local, Services, Auto-Hébergés</string>
+    <string name="display">Montrer</string>
 </resources>

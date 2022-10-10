@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="all">Semua</string>
     <plurals name="all_desc">
@@ -308,4 +309,46 @@
     <string name="images_desc">Sudut membulat, padding horizontal</string>
     <string name="videos_desc">Sudut membulat, padding horizontal</string>
     <string name="maximize">Perbesar</string>
+    <string name="block_list">Daftar blokir</string>
+    <string name="every_2_hours">Setiap 2 jam</string>
+    <string name="more">Lebih banyak</string>
+    <string name="list">Daftar</string>
+    <string name="add_accounts_desc">Lokal, Layanan, Di-host Sendiri</string>
+    <string name="display">Tampilkan</string>
+    <string name="synchronous_tips">Mulai ulang diperlukan agar perubahan diterapkan.</string>
+    <string name="every_1_hour">Setiap jam</string>
+    <string name="every_6_hours">Setiap 6 jam</string>
+    <string name="every_12_hours">Setiap 12 jam</string>
+    <string name="for_1_week">1 minggu</string>
+    <string name="every_3_hours">Setiap 3 jam</string>
+    <string name="every_1_day">Setiap hari</string>
+    <string name="synchronous">Sinkronisasi</string>
+    <string name="clear_all_articles_tips">Anda yakin ingin menghapus semua artikel di akun ini\?</string>
+    <string name="delete_account_toast">Akun ini telah dihapus</string>
+    <string name="delete_account_tips">Anda yakin ingin menghapus akun ini\?</string>
+    <string name="every_15_minutes">Setiap 15 menit</string>
+    <string name="every_30_minutes">Setiap 30 menit</string>
+    <string name="manually">Secara manual</string>
+    <string name="always">Selalu</string>
+    <string name="for_1_day">1 hari</string>
+    <string name="for_2_days">2 hari</string>
+    <string name="for_3_days">3 hari</string>
+    <string name="for_2_weeks">2 minggu</string>
+    <string name="for_1_month">1 bulan</string>
+    <string name="local">Lokal</string>
+    <string name="local_desc">Pada perangkat ini</string>
+    <string name="services">Layanan</string>
+    <string name="fever_desc">Tidak digunakan lagi. Tidak disarankan.</string>
+    <string name="add_accounts">Tambahkan akun</string>
+    <string name="sync_interval">Sinkronkan</string>
+    <string name="sync_once_on_start">Sinkronkan sekali saat mulai</string>
+    <string name="only_on_wifi">Hanya di Wi-Fi</string>
+    <string name="only_when_charging">Hanya saat mengisi daya</string>
+    <string name="keep_archived_articles">Simpan artikel yang diarsipkan</string>
+    <string name="export_as_opml">Ekspor sebagai OPML</string>
+    <string name="clear_all_articles">Hapus semua artikel</string>
+    <string name="delete_account">Hapus akun</string>
+    <string name="must_have_an_account">Harus memiliki akun</string>
+    <string name="clear_all_articles_toast">Semua artikel dari akun ini telah dihapus</string>
+    <string name="self_hosted">Di-host Sendiri</string>
 </resources>

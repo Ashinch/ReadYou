@@ -3,16 +3,19 @@
     <string name="all">Tutti</string>
     <plurals name="all_desc">
         <item quantity="one">%1$d elemento archiviato</item>
+        <item quantity="many">%1$d elementi archiviati</item>
         <item quantity="other">%1$d elementi archiviati</item>
     </plurals>
     <string name="unread">Non letti</string>
     <plurals name="unread_desc">
         <item quantity="one">%1$d elemento non letto</item>
+        <item quantity="many">%1$d elementi non letti</item>
         <item quantity="other">%1$d elementi non letti</item>
     </plurals>
     <string name="starred">Salvati</string>
     <plurals name="starred_desc">
         <item quantity="one">%1$d elemento salvato</item>
+        <item quantity="many">%1$d elementi salvati</item>
         <item quantity="other">%1$d elementi salvati</item>
     </plurals>
     <string name="feeds">Feed</string>
@@ -201,4 +204,42 @@
     <string name="images_desc">Angoli arrotondati, imbottitura orizzontale</string>
     <string name="videos_desc">Angoli arrotondati, imbottitura orizzontale</string>
     <string name="maximize">Massimizza</string>
+    <string name="every_30_minutes">Ogni 30 minuti</string>
+    <string name="every_1_hour">Ogni ora</string>
+    <string name="manually">Manuale</string>
+    <string name="always">Sempre</string>
+    <string name="for_2_weeks">2 settimane</string>
+    <string name="local">Locale</string>
+    <string name="synchronous">Sincronizzazione</string>
+    <string name="sync_interval">Sincronizzazione</string>
+    <string name="clear_all_articles">Cancella tutti gli articoli</string>
+    <string name="every_12_hours">Ogni 12 ore</string>
+    <string name="every_15_minutes">Ogni 15 minuti</string>
+    <string name="for_3_days">3 giorni</string>
+    <string name="for_1_week">1 settimana</string>
+    <string name="for_1_day">1 giorno</string>
+    <string name="clear_all_articles_toast">Tutti gli articoli di questo account sono stati cancellati</string>
+    <string name="delete_account_toast">Questo account è stato eliminato</string>
+    <string name="every_2_hours">Ogni 2 ore</string>
+    <string name="every_3_hours">Ogni 3 ore</string>
+    <string name="every_6_hours">Ogni 6 ore</string>
+    <string name="every_1_day">Ogni giorno</string>
+    <string name="for_2_days">2 giorni</string>
+    <string name="local_desc">Su questo dispositivo</string>
+    <string name="services">Servizi</string>
+    <string name="self_hosted">Self-hosted</string>
+    <string name="fever_desc">Deprecato. Non raccomandato.</string>
+    <string name="add_accounts">Aggiungi account</string>
+    <string name="sync_once_on_start">Sincronizza una volta all\'avvio</string>
+    <string name="only_on_wifi">Solo su Wi-Fi</string>
+    <string name="delete_account">Elimina account</string>
+    <string name="clear_all_articles_tips">Sei sicuro di voler cancellare tutti gli articoli da questo account\?</string>
+    <string name="must_have_an_account">Devi avere un account</string>
+    <string name="synchronous_tips">Il riavvio è necessario per rendere effettive le modifiche.</string>
+    <string name="for_1_month">1 mese</string>
+    <string name="add_accounts_desc">Locale, servizi, self-hosted</string>
+    <string name="delete_account_tips">Sei sicuro di voler eliminare questo account\?</string>
+    <string name="only_when_charging">Solo durante la carica</string>
+    <string name="keep_archived_articles">Conserva gli articoli archiviati</string>
+    <string name="export_as_opml">Esporta come OPML</string>
 </resources>
