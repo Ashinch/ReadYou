@@ -1,2 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="all_deny_parse_full_content_toast">"Sem mais conteúdos para exibir dos artigos no          grupo      \"%1$s\"     "</string>
+    <string name="clear_articles_in_feed_toast">Todos os artigos arquivados limpos no feed \"%1$s\"</string>
+    <string name="clear_articles_in_group_toast">Todos os artigos arquivados limpos no grupo \"%1$s\"</string>
+    <string name="clear_articles_feed_tips">Limpar todos os artigos arquivados no feed \"%1$s\".</string>
+    <string name="all_move_to_group_tips">Mover todos os feed no grupo \"%1$s\" para o grupo \"%2$s\".</string>
+    <string name="move_to_group">Move para grupo</string>
+    <string name="unread">Não lido</string>
+    <string name="loading">Carregando…</string>
+    <string name="refresh">Atualizar</string>
+    <string name="selected">Selecionado</string>
+    <string name="expand_less">Diminuir</string>
+    <string name="expand_more">Expandir</string>
+    <string name="deny">Negar</string>
+    <string name="all_allow_notification_tips">Permitir todas as notificações de feeds do grupo \"%1$s\".</string>
+    <string name="confirm">Confirmar</string>
+    <string name="unknown">Desconhecido</string>
+    <string name="back">Voltar</string>
+    <string name="go_to">Ir para</string>
+    <string name="search">Pesquisa</string>
+    <string name="preset">Predefinição</string>
+    <string name="allow_notification">Permitir notificação</string>
+    <string name="all_deny_notification_toast">Todas as notificações do grupo \"%1$s\" estão negadas</string>
+    <string name="all_allow_notification_toast">Todas as notificações do grupo \"%1$s\" estão permitidas</string>
+    <string name="parse_full_content">Mostrar todo o conteúdo</string>
+    <string name="clear_articles">Limpar artigos</string>
+    <string name="all">Todos</string>
+    <plurals name="starred_desc">
+        <item quantity="one">%1$d Item favoritado</item>
+        <item quantity="many">%1$d Itens favoritados</item>
+        <item quantity="other">%1$d Itens favoritados</item>
+    </plurals>
+    <string name="searching">Pesquisando…</string>
+    <string name="subscribe">Inscrever-se</string>
+    <string name="already_subscribed">Já inscrito</string>
+    <string name="clear">Limpar</string>
+    <string name="paste">Colar</string>
+    <string name="feed_or_site_url">Feed ou URL</string>
+    <string name="import_from_opml">Importar em OPML</string>
+    <string name="defaults">Predefinido</string>
+    <string name="settings">Configurações</string>
+    <string name="all_parse_full_content_tips">Mostrar todos os conteúdos dos artigos no grupo \"%1$s\".</string>
+    <string name="all_parse_full_content_toast">Mostrar todo o conteúdo dos artigos no grupo \"%1$s\"</string>
+    <string name="clear_articles_group_tips">Limpar todos os artigos arquivados no grupo \"%1$s\".</string>
+    <string name="add_to_group">Adicionar a um grupo</string>
+    <string name="all_move_to_group_toast">Todos os feed movidos para o grupo \"%1$s\"</string>
+    <plurals name="unread_desc">
+        <item quantity="one">%1$d Item não lido</item>
+        <item quantity="many">%1$d Itens não lidos</item>
+        <item quantity="other">%1$d Itens não lidos</item>
+    </plurals>
+    <string name="cancel">Cancelar</string>
+    <string name="allow">Permitir</string>
+    <plurals name="all_desc">
+        <item quantity="one">%1$d Item Arquivado</item>
+        <item quantity="many">%1$d Itens Arquivados</item>
+        <item quantity="other">%1$d Itens Arquivados</item>
+    </plurals>
+    <string name="starred">Favoritado</string>
+    <string name="feeds">Feeds</string>
+    <string name="syncing">Sincronizando…</string>
+</resources>
