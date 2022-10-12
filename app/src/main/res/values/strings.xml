@@ -277,7 +277,7 @@
     </string>
     <string name="preview_feed_name">Reddit</string>
     <string name="value">value</string>
-    <string name="horizontal_padding">Horizontal padding</string>
+    <string name="horizontal_padding">Side padding</string>
     <string name="article_date">Publication time</string>
     <string name="article_desc">Descriptions</string>
     <string name="article_images">Images</string>
@@ -326,8 +326,8 @@
     <string name="dark_reading_theme">Dark reading theme</string>
     <string name="title_desc">Bold, upper case, alignment</string>
     <string name="text_desc">Font size, letter spacing, alignment</string>
-    <string name="images_desc">Rounded corners, horizontal padding</string>
-    <string name="videos_desc">Rounded corners, horizontal padding</string>
+    <string name="images_desc">Rounded corners, side padding</string>
+    <string name="videos_desc">Rounded corners, side padding</string>
     <string name="maximize">Maximize</string>
     <string name="every_15_minutes">Every 15 minutes</string>
     <string name="every_30_minutes">Every 30 minutes</string>
@@ -370,7 +370,7 @@
     <string name="only_on_wifi">Only on Wi-Fi</string>
     <string name="only_when_charging">Only when charging</string>
     <string name="keep_archived_articles">Keep archived articles</string>
-    <string name="block_list">Block list</string>
+    <string name="block_list">Blacklist</string>
     <string name="export_as_opml">Export as OPML</string>
     <string name="clear_all_articles">Clear all articles</string>
     <string name="delete_account">Delete account</string>
