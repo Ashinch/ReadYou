@@ -59,6 +59,10 @@ abstract class AbstractRssRepository constructor(
             }
     }
 
+    fun cancelSync() {
+        workManager.cancelAllWork()
+    }
+
     suspend fun doSync(isOnStart: Boolean = false) {
         workManager.cancelAllWork()
         accountDao.queryById(context.currentAccountId)?.let {

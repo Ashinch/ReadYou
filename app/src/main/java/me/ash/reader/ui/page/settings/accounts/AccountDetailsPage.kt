@@ -6,7 +6,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DeleteForever
+import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material.icons.outlined.PersonOff
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Icon
@@ -66,7 +66,7 @@ fun AccountDetailsPage(
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument()
     ) { result ->
-        viewModel.exportAsOPML { string ->
+        viewModel.exportAsOPML(selectedAccount!!.id!!) { string ->
             result?.let { uri ->
                 context.contentResolver.openOutputStream(uri)?.use { outputStream ->
                     outputStream.write(string.toByteArray())
@@ -100,7 +100,10 @@ fun AccountDetailsPage(
                     SettingItem(
                         title = stringResource(R.string.name),
                         desc = selectedAccount?.name ?: "",
-                        onClick = { nameDialogVisible = true },
+                        onClick = {
+                            nameValue = selectedAccount?.name
+                            nameDialogVisible = true
+                        },
                     ) {}
                     Spacer(modifier = Modifier.height(24.dp))
                 }
@@ -282,7 +285,7 @@ fun AccountDetailsPage(
         },
         icon = {
             Icon(
-                imageVector = Icons.Outlined.DeleteForever,
+                imageVector = Icons.Outlined.DeleteSweep,
                 contentDescription = stringResource(R.string.clear_all_articles),
             )
         },
@@ -295,7 +298,7 @@ fun AccountDetailsPage(
         confirmButton = {
             TextButton(
                 onClick = {
-                    selectedAccount?.id?.let {
+                    selectedAccount?.let {
                         viewModel.clear(it) {
                             viewModel.hideClearDialog()
                             context.showToastLong(context.getString(R.string.clear_all_articles_toast))
@@ -343,7 +346,8 @@ fun AccountDetailsPage(
                 onClick = {
                     selectedAccount?.id?.let {
                         viewModel.delete(it) {
-                            viewModel.hideDeleteDialog()
+                            navController.popBackStack()
+                            context.showToastLong(context.getString(R.string.delete_account_toast))
                         }
                     }
                 }

@@ -46,10 +46,10 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun exportAsOPML(callback: (String) -> Unit = {}) {
+    fun exportAsOPML(accountId: Int, callback: (String) -> Unit = {}) {
         viewModelScope.launch(defaultDispatcher) {
             try {
-                callback(opmlRepository.saveToString())
+                callback(opmlRepository.saveToString(accountId))
             } catch (e: Exception) {
                 Log.e("FeedsViewModel", "exportAsOpml: ", e)
             }
@@ -81,9 +81,27 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun clear(accountId: Int, callback: () -> Unit = {}) {
+    fun clear(account: Account, callback: () -> Unit = {}) {
         viewModelScope.launch(ioDispatcher) {
-            rssRepository.get(accountId).deleteAccountArticles(accountId)
+            rssRepository.get(account.type.id).deleteAccountArticles(account.id!!)
+            withContext(mainDispatcher) {
+                callback()
+            }
+        }
+    }
+
+    fun addAccount(account: Account, callback: (Account) -> Unit = {}) {
+        viewModelScope.launch(ioDispatcher) {
+            val addAccount = accountRepository.addAccount(account)
+            withContext(mainDispatcher) {
+                callback(addAccount)
+            }
+        }
+    }
+
+    fun switchAccount(targetAccount: Account, callback: () -> Unit = {}) {
+        viewModelScope.launch(ioDispatcher) {
+            accountRepository.switch(targetAccount)
             withContext(mainDispatcher) {
                 callback()
             }

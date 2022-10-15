@@ -5,7 +5,6 @@ import android.os.Looper
 import android.util.Log
 import me.ash.reader.ui.ext.showToastLong
 import java.lang.Thread.UncaughtExceptionHandler
-import kotlin.system.exitProcess
 
 /**
  * The uncaught exception handler for the application.
@@ -20,12 +19,27 @@ class CrashHandler(private val context: Context) : UncaughtExceptionHandler {
      * Catch all uncaught exception and log it.
      */
     override fun uncaughtException(p0: Thread, p1: Throwable) {
-        Log.e("RLog", "uncaughtException: ${p1.message}")
+        val causeMessage = getCauseMessage(p1)
+        Log.e("RLog", "uncaughtException: $causeMessage")
         Looper.myLooper() ?: Looper.prepare()
-        context.showToastLong(p1.message)
+        context.showToastLong(causeMessage)
         Looper.loop()
         p1.printStackTrace()
-        android.os.Process.killProcess(android.os.Process.myPid());
-        exitProcess(1)
+        // android.os.Process.killProcess(android.os.Process.myPid());
+        // exitProcess(1)
+    }
+
+    private fun getCauseMessage(e: Throwable?): String? {
+        val cause = getCauseRecursively(e)
+        return if (cause != null) cause.message else e?.javaClass?.name
+    }
+
+    private fun getCauseRecursively(e: Throwable?): Throwable? {
+        var cause: Throwable?
+        cause = e
+        while (cause?.cause != null && cause !is RuntimeException) {
+            cause = cause.cause
+        }
+        return cause
     }
 }

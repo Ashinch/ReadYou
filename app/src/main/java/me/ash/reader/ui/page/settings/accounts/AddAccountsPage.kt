@@ -14,20 +14,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import me.ash.reader.R
+import me.ash.reader.data.model.account.Account
+import me.ash.reader.data.model.account.AccountType
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.component.base.Subtitle
+import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
+import me.ash.reader.ui.page.settings.accounts.addition.AddLocalAccountDialog
+import me.ash.reader.ui.page.settings.accounts.addition.AdditionViewModel
 import me.ash.reader.ui.theme.palette.onLight
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AddAccountsPage(
     navController: NavHostController = rememberAnimatedNavController(),
+    viewModel: AccountViewModel = hiltViewModel(),
+    additionViewModel: AdditionViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
 
@@ -54,14 +62,11 @@ fun AddAccountsPage(
                         text = stringResource(R.string.local),
                     )
                     SettingItem(
-                        enable = false,
                         title = stringResource(R.string.local),
                         desc = stringResource(R.string.local_desc),
                         icon = Icons.Rounded.RssFeed,
                         onClick = {
-                            // navController.navigate(RouteName.ACCOUNT_DETAILS) {
-                            //     launchSingleTop = true
-                            // }
+                            additionViewModel.showAddLocalAccountDialog()
                         },
                     ) {}
                     Spacer(modifier = Modifier.height(24.dp))
@@ -111,12 +116,19 @@ fun AddAccountsPage(
                         },
                     ) {}
                     SettingItem(
-                        enable = false,
                         title = stringResource(R.string.fever),
                         desc = stringResource(R.string.fever_desc),
                         iconPainter = painterResource(id = R.drawable.ic_fever),
                         onClick = {
-
+                            viewModel.addAccount(Account(
+                                type = AccountType.Fever,
+                                name = "name",
+                            )) {
+                                navController.popBackStack()
+                                navController.navigate("${RouteName.ACCOUNT_DETAILS}/${it.id}") {
+                                    launchSingleTop = true
+                                }
+                            }
                         },
                     ) {}
                     Spacer(modifier = Modifier.height(24.dp))
@@ -128,6 +140,8 @@ fun AddAccountsPage(
             }
         }
     )
+
+    AddLocalAccountDialog(navController)
 }
 
 @Preview

@@ -16,7 +16,9 @@ import me.ash.reader.data.repository.*
 import me.ash.reader.data.source.OpmlLocalDataSource
 import me.ash.reader.data.source.RYDatabase
 import me.ash.reader.data.source.RYNetworkDataSource
-import me.ash.reader.ui.ext.*
+import me.ash.reader.ui.ext.del
+import me.ash.reader.ui.ext.getLatestApk
+import me.ash.reader.ui.ext.isFdroid
 import okhttp3.OkHttpClient
 import javax.inject.Inject
 
@@ -119,9 +121,7 @@ class RYApp : Application(), Configuration.Provider {
     private suspend fun accountInit() {
         withContext(ioDispatcher) {
             if (accountRepository.isNoAccount()) {
-                val account = accountRepository.addDefaultAccount()
-                applicationContext.dataStore.put(DataStoreKeys.CurrentAccountId, account.id!!)
-                applicationContext.dataStore.put(DataStoreKeys.CurrentAccountType, account.type.id)
+                accountRepository.addDefaultAccount()
             }
         }
     }
