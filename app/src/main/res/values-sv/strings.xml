@@ -240,4 +240,7 @@
     <string name="fever_desc">Utrangerad. Rekommenderas inte.</string>
     <string name="block_list">Blockeringslista</string>
     <string name="clear_all_articles_tips">Vill du verkligen rensa alla artiklar från detta konto\?</string>
+    <string name="self_hosted">Själv-hostad</string>
+    <string name="add_accounts_desc">Lokal, Tjänster, Själv-hostad</string>
+    <string name="display">Skärm</string>
 </resources>
