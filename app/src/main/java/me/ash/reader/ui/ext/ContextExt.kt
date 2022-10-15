@@ -49,11 +49,9 @@ fun Context.installLatestApk() {
 private var toast: Toast? = null
 
 fun Context.showToast(message: String?, duration: Int = Toast.LENGTH_SHORT) {
-    Looper.myLooper() ?: Looper.prepare()
     toast?.cancel()
     toast = Toast.makeText(this, message, duration)
     toast?.show()
-    Looper.loop()
 }
 
 fun Context.showToastLong(message: String?) {
