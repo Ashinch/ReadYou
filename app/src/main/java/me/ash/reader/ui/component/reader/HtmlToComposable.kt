@@ -755,7 +755,7 @@ internal class ImageCandidates(
      * Might throw if hasImage returns false
      */
     fun getBestImageForMaxSize(maxSize: Size, pixelDensity: Float): String {
-        val setCandidate = srcSet.splitToSequence(",")
+        val setCandidate = srcSet.splitToSequence(", ")
             .map { it.trim() }
             .map { it.split(SpaceRegex).take(2).map { x -> x.trim() } }
             .fold(100f to "") { acc, candidate ->
@@ -787,10 +787,10 @@ internal class ImageCandidates(
             }
             .second
 
-        if (setCandidate.isNotBlank()) {
-            return StringUtil.resolve(baseUrl, setCandidate)
-        }
-        return StringUtil.resolve(baseUrl, absSrc)
+        return StringUtil.resolve(
+            baseUrl,
+            setCandidate.takeIf { it.isNotBlank() } ?: absSrc
+        )
     }
 }
 
