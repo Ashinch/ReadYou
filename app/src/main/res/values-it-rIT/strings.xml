@@ -19,7 +19,7 @@
         <item quantity="other">%1$d elementi salvati</item>
     </plurals>
     <string name="feeds">Feed</string>
-    <string name="syncing">Sincronizzando…</string>
+    <string name="syncing">Sincronizzazione…</string>
     <string name="loading">Caricamento…</string>
     <string name="expand_less">Riduci</string>
     <string name="expand_more">Espandi</string>
@@ -34,7 +34,7 @@
     <string name="settings">Impostazioni</string>
     <string name="refresh">Ricarica</string>
     <string name="search">Cerca</string>
-    <string name="searching">Cercando…</string>
+    <string name="searching">Ricerca…</string>
     <string name="subscribe">Iscriviti</string>
     <string name="already_subscribed">Già iscritto</string>
     <string name="clear">Pulisci</string>
@@ -242,4 +242,8 @@
     <string name="only_when_charging">Solo durante la carica</string>
     <string name="keep_archived_articles">Conserva gli articoli archiviati</string>
     <string name="export_as_opml">Esporta come OPML</string>
+    <string name="more">Di più</string>
+    <string name="list">Lista</string>
+    <string name="display">Schermo</string>
+    <string name="block_list">Blocca la lista</string>
 </resources>

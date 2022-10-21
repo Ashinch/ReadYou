@@ -237,4 +237,8 @@
     <string name="clear_all_articles_tips">Bu hesaptaki tüm makaleleri temizlemek istediğinizden emin misiniz\?</string>
     <string name="add_accounts">Hesap ekle</string>
     <string name="synchronous_tips">Değişikliklerin etkili olması için yeniden başlatma gereklidir.</string>
+    <string name="display">Ekran</string>
+    <string name="synchronous">Eşitleme</string>
+    <string name="sync_interval">Eşitle</string>
+    <string name="block_list">Engel listesi</string>
 </resources>
