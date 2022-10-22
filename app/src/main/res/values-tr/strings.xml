@@ -241,4 +241,6 @@
     <string name="synchronous">Eşitleme</string>
     <string name="sync_interval">Eşitle</string>
     <string name="block_list">Engel listesi</string>
+    <string name="self_hosted">Kendin Barındırma</string>
+    <string name="add_accounts_desc">Yerel, Hizmetler, Kendin Barındırma</string>
 </resources>
