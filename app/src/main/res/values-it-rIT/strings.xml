@@ -48,12 +48,12 @@
     <string name="all_allow_notification_toast">Tutte le notifiche dal gruppo \"%1$s\" sono concesse</string>
     <string name="all_deny_notification_toast">Tutte le notifiche dal gruppo \"%1$s\" sono negate</string>
     <string name="parse_full_content">Analizza il contenuto completo</string>
-    <string name="all_parse_full_content_tips">Analisi del contenuto completo di tutti gli articoli nel gruppo \"%1$s\".</string>
-    <string name="all_parse_full_content_toast">Analisi del contenuto completo di tutti gli articoli nel gruppo \"%1$s\"</string>
-    <string name="all_deny_parse_full_content_toast">Niente più analisi del contenuto completo di tutti gli articoli nel gruppo \"%1$s\"</string>
+    <string name="all_parse_full_content_tips">Analisi completa del contenuto di tutti gli articoli nel gruppo \"%1$s\".</string>
+    <string name="all_parse_full_content_toast">Analisi completa del contenuto di tutti gli articoli nel gruppo \"%1$s\"</string>
+    <string name="all_deny_parse_full_content_toast">"Niente più analisi del contenuto completo di tutti gli articoli nel gruppo \"%1$s\"     "</string>
     <string name="clear_articles">Pulisci articoli</string>
-    <string name="clear_articles_in_feed_toast">Pulito tutti gli articoli archiviati nel feed \"%1$s\"</string>
-    <string name="clear_articles_in_group_toast">Pulito tutti gli articoli archiviati nel gruppo \"%1$s\"</string>
+    <string name="clear_articles_in_feed_toast">Puliti tutti gli articoli archiviati nel feed \"%1$s\"</string>
+    <string name="clear_articles_in_group_toast">Puliti tutti gli articoli archiviati nel gruppo \"%1$s\"</string>
     <string name="clear_articles_feed_tips">Pulisci tutti gli articoli archiviati nel feed \"%1$s\".</string>
     <string name="clear_articles_group_tips">Pulisci tutti gli articoli archiviati nel gruppo \"%1$s\".</string>
     <string name="add_to_group">Aggiungi al gruppo</string>
