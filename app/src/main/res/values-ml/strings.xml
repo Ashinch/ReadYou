@@ -30,4 +30,13 @@
     <string name="already_subscribed">മുൻപേ തന്നെ വരിക്കരായി</string>
     <string name="clear">മായിക്കുക</string>
     <string name="selected">തിരഞ്ഞെടുത്തത്</string>
+    <string name="syncing">സമന്വയിപ്പിക്കുന്നു…</string>
+    <string name="feed_or_site_url">ഫീഡ് അല്ലെങ്കിൽ URL</string>
+    <string name="deny">നിഷേധിക്കുക</string>
+    <string name="unknown">അജ്ഞാതം</string>
+    <string name="import_from_opml">OPML-ൽ നിന്ന് ഇംപോർട്ട് ചെയ്യുക</string>
+    <plurals name="all_desc">
+        <item quantity="one">%1$d ആർക്കൈവ് ചെയ്ത ഇനങ്ങൾ</item>
+        <item quantity="other">%1$d ആർക്കൈവ് ചെയ്ത ഇനങ്ങൾ</item>
+    </plurals>
 </resources>
