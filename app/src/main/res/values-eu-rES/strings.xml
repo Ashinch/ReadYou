@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="all">Guztia</string>
     <plurals name="all_desc">
@@ -313,4 +314,39 @@
     <string name="images_desc">Izkin biribilduak, betetze horizontala</string>
     <string name="videos_desc">Izkin biribilduak, betetze horizontala</string>
     <string name="maximize">Maximizatu</string>
+    <string name="add_accounts">Kontuak gehitu</string>
+    <string name="for_2_days">2 egun</string>
+    <string name="services">Zerbitzuak</string>
+    <string name="more">Gehiago</string>
+    <string name="display">Erakutsi</string>
+    <string name="list">Zerrenda</string>
+    <string name="for_3_days">3 egun</string>
+    <string name="for_1_week">Aste 1</string>
+    <string name="for_1_month">Hilabete 1</string>
+    <string name="export_as_opml">OPML bezala esportatu</string>
+    <string name="sync_once_on_start">Sinkronizatu behin abiarazterakoan</string>
+    <string name="for_2_weeks">2 aste</string>
+    <string name="delete_account">Kontua ezabatu</string>
+    <string name="must_have_an_account">Kontu behar beharrezkoa da</string>
+    <string name="every_2_hours">2 orduro</string>
+    <string name="every_1_hour">Orduro</string>
+    <string name="every_12_hours">12 orduro</string>
+    <string name="keep_archived_articles">Mantendu artxibatutako artikuluak</string>
+    <string name="every_15_minutes">15 minuturo</string>
+    <string name="every_30_minutes">30 minuturo</string>
+    <string name="every_3_hours">3 orduro</string>
+    <string name="local_desc">Gailu honetan</string>
+    <string name="only_when_charging">Kargatu bitartean soilik</string>
+    <string name="clear_all_articles">Artikulu guztiak ezabatu</string>
+    <string name="every_6_hours">6 orduro</string>
+    <string name="add_accounts_desc">Lokala, Zerbitzuak, Norberak ostatatukoa</string>
+    <string name="only_on_wifi">Wifipean soilik</string>
+    <string name="self_hosted">Norberak ostatatutakoa</string>
+    <string name="synchronous">Sinkronizazioa</string>
+    <string name="sync_interval">Sinkronizatu</string>
+    <string name="every_1_day">Egunero</string>
+    <string name="for_1_day">Egun 1</string>
+    <string name="delete_account_toast">Kontu hau ezabatu egin da</string>
+    <string name="clear_all_articles_toast">Kontu honetako artikulu guztiak ezabatu dira</string>
+    <string name="block_list">Blokeatutakoen zerrenda</string>
 </resources>

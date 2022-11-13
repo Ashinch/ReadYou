@@ -2,21 +2,21 @@
 <resources>
     <string name="all">Tout</string>
     <plurals name="all_desc">
-        <item quantity="one">%1$d élément archivé</item>
-        <item quantity="other">%1$d éléments archivés</item>
-        <item quantity="many">%1$d éléments archivés</item>
+        <item quantity="one">%1$d élément archivé</item>
+        <item quantity="many">%1$d éléments archivés</item>
+        <item quantity="other">%1$d éléments archivés</item>
     </plurals>
     <string name="unread">Non lus</string>
     <plurals name="unread_desc">
-        <item quantity="one">%1$d élément non lu</item>
-        <item quantity="other">%1$d éléments non lus</item>
-        <item quantity="many">%1$d éléments non lus</item>
+        <item quantity="one">%1$d élément non lu</item>
+        <item quantity="many">%1$d éléments non lus</item>
+        <item quantity="other">%1$d éléments non lus</item>
     </plurals>
     <string name="starred">Favoris</string>
     <plurals name="starred_desc">
-        <item quantity="one">%1$d élément favori</item>
-        <item quantity="other">%1$d éléments favoris</item>
-        <item quantity="many">%1$d éléments favoris</item>
+        <item quantity="one">%1$d élément favori</item>
+        <item quantity="many">%1$d éléments favoris</item>
+        <item quantity="other">%1$d éléments favoris</item>
     </plurals>
     <string name="feeds">Flux</string>
     <string name="syncing">Synchronisation…</string>
@@ -35,7 +35,7 @@
     <string name="refresh">Actualiser</string>
     <string name="search">Rechercher</string>
     <string name="searching">Recherche…</string>
-    <string name="subscribe">S\'abonner</string>
+    <string name="subscribe">S’abonner</string>
     <string name="already_subscribed">Déjà abonné</string>
     <string name="clear">Vider</string>
     <string name="paste">Coller</string>
@@ -44,52 +44,52 @@
     <string name="preset">Préréglages</string>
     <string name="selected">Sélectionné</string>
     <string name="allow_notification">Autoriser les notifications</string>
-    <string name="all_allow_notification_tips">Vous êtes sur le point d\'autoriser tous les flux dans le groupe \"%1$s\" à vous envoyer des notifications.</string>
-    <string name="all_allow_notification_toast">Toutes les notifications du groupe \"%1$s\" sont autorisées</string>
-    <string name="all_deny_notification_toast">Toutes les notifications du groupe \"%1$s\" sont bloquées</string>
+    <string name="all_allow_notification_tips">Vous êtes sur le point d’autoriser tous les flux du groupe « %1$s » à envoyer des notifications.</string>
+    <string name="all_allow_notification_toast">Toutes les notifications du groupe « %1$s » sont autorisées</string>
+    <string name="all_deny_notification_toast">Toutes les notifications du groupe « %1$s » sont bloquées</string>
     <string name="parse_full_content">Analyser tout le contenu</string>
-    <string name="all_parse_full_content_tips">Vous êtes sur le point d\'autoriser l\'analyse de tout le contenu de tous les articles du groupe \"%1$s\".</string>
-    <string name="all_parse_full_content_toast">Le contenu de tous les articles du groupe \"%1$s\" est maintenant analysé</string>
-    <string name="all_deny_parse_full_content_toast">Le contenu de tous les articles du groupe \"%1$s\" n\'est plus analysé</string>
+    <string name="all_parse_full_content_tips">Vous êtes sur le point d’autoriser l’analyse de tout le contenu de tous les articles du groupe « %1$s ».</string>
+    <string name="all_parse_full_content_toast">Analyse de tout le contenu de tous les articles du groupe « %1$s »</string>
+    <string name="all_deny_parse_full_content_toast">"Ne plus analyser le contenu de tous les articles du groupe « %1$s »     "</string>
     <string name="clear_articles">Vider les articles</string>
-    <string name="clear_articles_in_feed_toast">Tous les articles archivés du flux \"%1$s\" ont été effacés</string>
-    <string name="clear_articles_in_group_toast">Tous les articles archivés du groupe \"%1$s\" ont été effacés</string>
-    <string name="clear_articles_feed_tips">Vous êtes sur le point d\'effacer tous les articles archivés du flux \"%1$s\".</string>
-    <string name="clear_articles_group_tips">Vous êtes sur le point d\'effacer tous les articles archivés du groupe \"%1$s\".</string>
+    <string name="clear_articles_in_feed_toast">Tous les articles archivés du flux « %1$s » ont été effacés</string>
+    <string name="clear_articles_in_group_toast">Tous les articles archivés du groupe « %1$s » ont été effacés</string>
+    <string name="clear_articles_feed_tips">Vous êtes sur le point d’effacer tous les articles archivés du flux « %1$s ».</string>
+    <string name="clear_articles_group_tips">Vous êtes sur le point d’effacer tous les articles archivés du groupe « %1$s ».</string>
     <string name="add_to_group">Ajouter au groupe</string>
     <string name="move_to_group">Déplacer vers le groupe</string>
-    <string name="all_move_to_group_tips">Voulez-vous vraiment déplacer tous les flux du groupe \"%1$s\" vers le groupe \"%2$s\" ?</string>
-    <string name="all_move_to_group_toast">Déplacé vers le groupe \"%1$s\"</string>
+    <string name="all_move_to_group_tips">Voulez-vous vraiment déplacer tous les flux du groupe « %1$s » vers le groupe « %2$s » \?</string>
+    <string name="all_move_to_group_toast">Déplacé vers le groupe « %1$s »</string>
     <string name="rename">Renommer</string>
-    <string name="change_url">Modifier l\'URL</string>
-    <string name="rename_toast">Renommé en \"%1$s\"</string>
+    <string name="change_url">Modifier l’URL</string>
+    <string name="rename_toast">Renommé en « %1$s »</string>
     <string name="create_new_group">Créer un nouveau groupe</string>
     <string name="name">Nom</string>
     <string name="open_with">Ouvrir %1$s</string>
     <string name="options">Options</string>
     <string name="delete">Supprimer</string>
-    <string name="delete_toast">\"%1$s\" a été supprimé</string>
+    <string name="delete_toast">« %1$s » a été supprimé</string>
     <string name="unsubscribe">Se désabonner</string>
-    <string name="unsubscribe_tips">Se désabonner de \"%1$s\" et supprimer tous les articles archivés de ce flux ?</string>
+    <string name="unsubscribe_tips">Se désabonner de « %1$s » et supprimer tous les articles archivés de ce flux \?</string>
     <string name="delete_group">Supprimer le groupe</string>
-    <string name="delete_group_tips">Supprimer le groupe \"%1$s\" et tous ses articles archivés ?</string>
+    <string name="delete_group_tips">Supprimer le groupe « %1$s » et tous ses articles archivés \?</string>
     <string name="group_option_tips">Les options suivantes seront appliqués à tous les flux du groupe.</string>
-    <string name="today">Aujourd\'hui</string>
+    <string name="today">Aujourd’hui</string>
     <string name="yesterday">Hier</string>
     <string name="date_at_time">%1$s à %2$s</string>
-    <string name="search_for_in">Rechercher dans %1$s du flux \"%2$s\"</string>
+    <string name="search_for_in">Rechercher dans %1$s de « %2$s »</string>
     <string name="search_for">Rechercher dans %1$s</string>
     <string name="mark_as_read">Marquer comme lu</string>
     <string name="mark_all_as_read">Tout marquer comme lu</string>
     <string name="mark_as_unread">Marquer comme non lu</string>
     <string name="mark_as_starred">Ajouter aux favoris</string>
     <string name="mark_as_unstar">Retirer des favoris</string>
-    <string name="mark_as_read_one_day">Marquer comme lu les articles jusqu\'à 1 jour</string>
-    <string name="mark_as_read_three_days">Marquer comme lu les articles jusqu\'à 3 jours</string>
-    <string name="mark_as_read_seven_days">Marquer comme lu les articles jusqu\'à 7 jours</string>
-    <string name="one_day">1j</string>
-    <string name="three_days">3j</string>
-    <string name="seven_days">7j</string>
+    <string name="mark_as_read_one_day">Marquer comme lu les articles datant de plus d’un jour</string>
+    <string name="mark_as_read_three_days">Marquer comme lu les articles datant de plus de 3 jours</string>
+    <string name="mark_as_read_seven_days">Marquer comme lu les articles datant de plus de 7 jours</string>
+    <string name="one_day">1 j</string>
+    <string name="three_days">3 j</string>
+    <string name="seven_days">7 j</string>
     <string name="close">Fermer</string>
     <string name="get_new_updates">Rechercher des mises à jour</string>
     <string name="get_new_updates_desc">La version %1$s est disponible</string>
@@ -102,127 +102,18 @@
     <string name="interaction">Comportement</string>
     <string name="interaction_desc">Au démarrage, retour haptique</string>
     <string name="languages">Langues</string>
-    <string name="languages_desc">Français, English, plus</string>
+    <string name="languages_desc">Français, anglais et plus</string>
     <string name="help_translate">Aidez-nous à traduire</string>
-    <string name="use_device_languages">Utiliser la langue du système</string>
+    <string name="use_device_languages">Utiliser la langue système</string>
     <string name="tips_and_support">Aide et assistance</string>
-    <string name="tips_and_support_desc">À propos, Open Source</string>
+    <string name="tips_and_support_desc">À propos, Licences Open Source</string>
     <string name="welcome">Bienvenue</string>
-    <string name="tos_tips">Avant de continuer, vous devez accepter les conditions d\'utilisation et la politique de confidentialité de Read You.</string>
-    <string name="browse_tos_tips">Lire les &lt;i&gt;&lt;u&gt;conditions d\'utilisation et la politique de confidentialité&lt;/u&gt;&lt;/i&gt;</string>
-    <string name="terms_of_service">Conditions</string>
-    <string name="tos_content">
-        &lt;h5&gt;
-
-        Privacy Policy
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        I take your privacy very seriously.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        does not collect any user data, and all sensitive information (passwords and other account information) is
-        securely stored in the local application database on your device.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        will use the following permissions to provide you with the service.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        - Access Network permission (for accessing online content as you specify)
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - Get network status permission (for getting whether the device currently has available network conditions)
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - Background service permission (to automatically sync your favorites for you on a regular
-        basis)
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Third Party Services
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        This policy does not apply to third-party services that you use with &lt;b&gt;Read You&lt;/b&gt;. You can review
-        the privacy policies of the third-party services you use on their websites
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Disclaimers
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        is a content collection tool only. Your use of &lt;b&gt;Read You&lt;/b&gt; is subject to the laws and
-        regulations of your country and region, and any liability arising from your actions will be borne by you
-        personally.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Open Source License
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        is an open source project under the GNU GPL 3.0 Open Source License[1], which allows you to use, reference, and
-        modify the source code of &lt;b&gt;Read You&lt;/b&gt; for free, but does not allow the
-        modified and derived code to be distributed and sold as closed-source commercial software. For details, please
-        see the full GNU GPL 3.0 Open Source License[2].
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Appendix
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        - [1] https://github.com/Ashinch/ReadYou
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - [2] https://www.gnu.org/licenses/gpl-3.0.html
-
-        &lt;/p&gt;
-    </string>
-    <string name="agree">J\'accepte</string>
-    <string name="wallpaper_colors">Couleurs du fond d\'écran</string>
+    <string name="tos_tips">Avant de continuer, vous devez accepter les conditions d’utilisation et la politique de confidentialité de Read You.</string>
+    <string name="browse_tos_tips">Lire les <i><u>conditions d’utilisation et la politique de confidentialité</u></i></string>
+    <string name="terms_of_service">Conditions d’utilisation</string>
+    <string name="tos_content"><h5>Politique de confidentialité</h5><br/><p>Je prends votre vie privée très au sérieux.</p><br/><p><b>Read You</b> ne collecte aucune donnée utilisateur, et toutes les informations sensibles (mots de passe et autres informations de compte) sont stockées en toute sécurité dans la base de données de l’application en local sur votre appareil.</p><br/><p><b>Read You</b> utilisera les permissions suivantes pour vous fournir le service.</p><br/><p>- Autorisation d’accès au réseau (pour accéder au contenu en ligne que vous spécifiez)</p><p> - Autorisation d’obtention de l’état du réseau (pour savoir si l’appareil dispose actuellement d’une connexion réseau)</p><p> - Autorisation d’exécution en arrière-plan (pour synchroniser automatiquement vos favoris pour vous de manière régulière)</p><br/><br/><h5>Services tiers</h5><br/><p>La politique de confidentialité ne s’applique pas aux services tiers que vous utilisez avec <b>Read You</b>. Vous pouvez consulter les politiques de confidentialité des services tiers que vous utilisez sur leurs sites Web.</p><br/><br/><h5>Avis de non-responsabilité</h5><br/><p><b>Read You</b> est un outil de collecte de contenu uniquement. Votre utilisation de <b>Read You</b> est soumise aux lois et réglementations de votre pays et région, et toute responsabilité découlant de vos actions sera supportée par vous personnellement.</p><br/><br/><h5>Licence Open Source</h5><br/><p><b>Read You</b> est un projet open source sous licence GNU GPL 3.0 [1], qui vous permet d’utiliser, de référencer et de modifier gratuitement le code source de <b>Read You</b>, mais n’autorise pas la distribution et la vente du code modifié et dérivé en tant que logiciel commercial à source fermée. Pour plus de détails, veuillez consulter la version intégrale de la licence GNU GPL 3.0 [2].</p><br/><br/><h5>Annexe</h5><br/><p> - [1] https://github.com/Ashinch/ReadYou</p><p> - [2] https://www.gnu.org/licenses/gpl-3.0.html</p></string>
+    <string name="agree">J’accepte</string>
+    <string name="wallpaper_colors">Couleurs du fond d’écran</string>
     <string name="no_palettes">Aucune palette</string>
     <string name="only_android_8.1_plus">Android 8.1+ uniquement</string>
     <string name="basic_colors">Couleurs de base</string>
@@ -257,7 +148,7 @@
     <string name="on_start">Au démarrage</string>
     <string name="initial_page">Page initiale</string>
     <string name="initial_filter">Filtre initial</string>
-    <string name="preview_article_title">Le roman "Le Seigneur des Mystères" a finalement pris fin.</string>
+    <string name="preview_article_title">Le roman Le Seigneur des Mystères a finalement pris fin</string>
     <string name="preview_article_desc">Le Fou est le huitième et dernier volume de la série Le Seigneur des Mystères écrite par Cuttlefish That Loves Diving.</string>
     <string name="preview_feed_name">Reddit</string>
     <string name="value">Valeur</string>
@@ -267,53 +158,53 @@
     <string name="article_images">Images des articles</string>
     <string name="feed_names">Noms des flux</string>
     <string name="feed_favicons">Favicons des flux</string>
-    <string name="article_date_sticky_header">En-tête fixe de l\'heure de publication des articles (Expérimental)</string>
-    <string name="article_list">Liste d\'articles</string>
+    <string name="article_date_sticky_header">En-tête fixe de l’heure de publication des articles (Expérimental)</string>
+    <string name="article_list">Liste d’articles</string>
     <string name="group_list">Liste des groupes</string>
     <string name="always_expand">Toujours développer</string>
     <string name="top">Haut</string>
     <string name="mark_as_read_button_position">Position du bouton \"Marquer comme lu\"</string>
     <string name="top_bar">Barre supérieure</string>
-    <string name="fill_selected_icon">Remplir l\'icône sélectionné</string>
+    <string name="fill_selected_icon">Remplir l’icône sélectionnée</string>
     <string name="filter_bar">Barre de filtre</string>
     <string name="icons">Icônes</string>
     <string name="icons_and_labels">Icônes et étiquettes</string>
     <string name="icons_and_label_only_selected">Icônes et étiquettes (sélectionné uniquement)</string>
-    <string name="tips_top_bar_tonal_elevation">L\'intensité de l\'en-tête est valable uniquement lors du défilement.</string>
-    <string name="tips_article_list_tonal_elevation">L\'intensité de la liste d\'articles est uniquement disponible pour le thème clair.</string>
-    <string name="tips_group_list_tonal_elevation">L\'intensité de la liste des groupes est uniquement disponible pour le thème clair.</string>
+    <string name="tips_top_bar_tonal_elevation">L’intensité de l’en-tête est valable uniquement lors du défilement.</string>
+    <string name="tips_article_list_tonal_elevation">L’intensité de la liste d’articles est uniquement disponible pour le thème clair.</string>
+    <string name="tips_group_list_tonal_elevation">L’intensité de la liste des groupes est uniquement disponible pour le thème clair.</string>
     <string name="share">Partager</string>
     <string name="touch_to_play_video">Appuyer pour lancer la lecture</string>
     <string name="text">Text</string>
-    <string name="font_size">Font size</string>
-    <string name="letter_spacing">Letter spacing</string>
-    <string name="line_spacing">Line spacing</string>
-    <string name="alignment">Alignment</string>
+    <string name="font_size">Taille de la police</string>
+    <string name="letter_spacing">Espacement des lettres</string>
+    <string name="line_spacing">Espacement des lignes</string>
+    <string name="alignment">Alignement</string>
     <string name="general">General</string>
-    <string name="auto_hide_toolbars">Auto hide toolbars</string>
-    <string name="rearrange_buttons">Rearrange buttons</string>
-    <string name="bionic_reading">Bionic Reading</string>
+    <string name="auto_hide_toolbars">Masquer automatiquement la barres d’outils</string>
+    <string name="rearrange_buttons">Réorganiser les boutons</string>
+    <string name="bionic_reading">Lecture bionique</string>
     <string name="images">Images</string>
-    <string name="rounded_corners">Rounded corners</string>
-    <string name="videos">Videos</string>
-    <string name="align_left">Align left</string>
-    <string name="align_right">Align right</string>
-    <string name="center_text">Center text</string>
-    <string name="justify">Justify</string>
-    <string name="external_fonts">External fonts</string>
-    <string name="title">Title</string>
-    <string name="bold">Bold</string>
-    <string name="upper_case">Upper case</string>
-    <string name="subhead">Subhead</string>
-    <string name="use_app_theme">Use app theme</string>
-    <string name="advanced">Advanced</string>
-    <string name="dark_reading_theme">Dark reading theme</string>
-    <string name="title_desc">Bold, upper case, alignment</string>
-    <string name="text_desc">Font size, letter spacing, alignment</string>
-    <string name="images_desc">Rounded corners, horizontal padding</string>
-    <string name="videos_desc">Rounded corners, horizontal padding</string>
-    <string name="maximize">Maximize</string>
-    <string name="synchronous_tips">Un redémarrage est obligatoire pour que les changements s\'appliquent.</string>
+    <string name="rounded_corners">Coins arrondis</string>
+    <string name="videos">Vidéos</string>
+    <string name="align_left">Aligner à gauche</string>
+    <string name="align_right">Aligner à droite</string>
+    <string name="center_text">Centrer le texte</string>
+    <string name="justify">Justifier</string>
+    <string name="external_fonts">Polices externes</string>
+    <string name="title">Titre</string>
+    <string name="bold">Gras</string>
+    <string name="upper_case">Majuscule</string>
+    <string name="subhead">Sous-titre</string>
+    <string name="use_app_theme">Utiliser le thème de l’application</string>
+    <string name="advanced">Avancé</string>
+    <string name="dark_reading_theme">Thème de lecture sombre</string>
+    <string name="title_desc">Gras, majuscule, alignement</string>
+    <string name="text_desc">Taille de police, espacement des lettres, alignement</string>
+    <string name="images_desc">Coins arrondis, rembourrage horizontal</string>
+    <string name="videos_desc">Coins arrondis, rembourrage horizontal</string>
+    <string name="maximize">Maximiser</string>
+    <string name="synchronous_tips">Un redémarrage est obligatoire pour que les changements s’appliquent.</string>
     <string name="delete_account">Supprimer le compte</string>
     <string name="clear_all_articles_tips">Êtes-vous sûr de vouloir effacer tous les articles de ce compte \?</string>
     <string name="every_15_minutes">Toutes les 15 minutes</string>
