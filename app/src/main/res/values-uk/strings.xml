@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unread">Непрочитані</string>
+    <string name="starred">Із зіркою</string>
+    <plurals name="starred_desc">
+        <item quantity="one">%1$d елемент із зіркою</item>
+        <item quantity="few">%1$d елементи з зіркою</item>
+        <item quantity="many">%1$d елементів з зіркою</item>
+        <item quantity="other">%1$d елементів з зіркою</item>
+    </plurals>
+    <string name="feeds">Канали</string>
+    <string name="syncing">Синхронізація…</string>
+    <string name="loading">Завантаження…</string>
+    <string name="expand_less">Згорнути</string>
+    <string name="expand_more">Розгорнути</string>
+    <string name="confirm">Підтвердити</string>
+    <string name="cancel">Скасувати</string>
+    <string name="deny">Заборонити</string>
+    <string name="defaults">Типово</string>
+    <string name="unknown">Невідомо</string>
+    <string name="back">Назад</string>
+    <string name="go_to">Перейти до</string>
+    <string name="settings">Установки</string>
+    <string name="refresh">Оновити</string>
+    <string name="searching">Шукаємо…</string>
+    <string name="subscribe">Підписатись</string>
+    <string name="already_subscribed">Вже підписані</string>
+    <string name="clear">Очистити</string>
+    <string name="paste">Вставити</string>
+    <string name="import_from_opml">Імпорт із OPML</string>
+    <string name="preset">Предустановка</string>
+    <string name="selected">Вибрано</string>
+    <string name="all_allow_notification_tips">Дозволити всім каналам у групі «%1$s» надсилати сповіщення.</string>
+    <string name="all_deny_notification_toast">Усі сповіщення від групи «%1$s» заборонені</string>
+    <string name="parse_full_content">Розібрати повний вміст</string>
+    <string name="all_parse_full_content_toast">Розбір повного вмісту всіх статей у групі «%1$s»</string>
+    <string name="all">Все</string>
+    <plurals name="all_desc">
+        <item quantity="one">%1$d архівований елемент</item>
+        <item quantity="few">%1$d архівовані елементи</item>
+        <item quantity="many">%1$d архівований елементів</item>
+        <item quantity="other">%1$d архівований елементів</item>
+    </plurals>
+    <plurals name="unread_desc">
+        <item quantity="one">%1$d непрочитаний елемент</item>
+        <item quantity="few">%1$d непрочитані елементи</item>
+        <item quantity="many">%1$d непрочитаних елементів</item>
+        <item quantity="other">%1$d непрочитаних елементів</item>
+    </plurals>
+    <string name="allow">Дозволити</string>
+    <string name="search">Пошук</string>
+    <string name="feed_or_site_url">Канал або URL</string>
+    <string name="allow_notification">Дозволити сповіщення</string>
+    <string name="all_allow_notification_toast">Усі сповіщення від групи «%1$s» дозволені</string>
+    <string name="all_parse_full_content_tips">Розбір повного вмісту всіх статей у групі «%1$s».</string>
+</resources>
