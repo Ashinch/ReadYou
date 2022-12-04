@@ -2,8 +2,8 @@
 <resources>
     <string name="all">Hepsi</string>
     <plurals name="unread_desc">
-        <item quantity="one">%1$d Okunmamış Öğe</item>
-        <item quantity="other">%1$d Okunmamış Öğe</item>
+        <item quantity="one">%1$d Okunmamış Öge</item>
+        <item quantity="other">%1$d Okunmamış Öge</item>
     </plurals>
     <string name="feeds">Beslemeler</string>
     <string name="syncing">Eşzamanlanıyor…</string>
@@ -13,12 +13,12 @@
     <string name="unread">Okunmamış</string>
     <string name="expand_less">Daralt</string>
     <plurals name="all_desc">
-        <item quantity="one">%1$d Arşivlenmiş Öğe</item>
-        <item quantity="other">%1$d Arşivlenmiş Öğe</item>
+        <item quantity="one">%1$d Arşivlenen Öge</item>
+        <item quantity="other">%1$d Arşivlenen Öge</item>
     </plurals>
     <plurals name="starred_desc">
-        <item quantity="one">%1$d Yıldızlanmış Öğe</item>
-        <item quantity="other">%1$d Yıldızlanmış Öğe</item>
+        <item quantity="one">%1$d Yıldızlanan Öge</item>
+        <item quantity="other">%1$d Yıldızlanan Öge</item>
     </plurals>
     <string name="starred">Yıldızlı</string>
     <string name="cancel">İptal et</string>
@@ -42,7 +42,7 @@
     <string name="parse_full_content">Tam İçeriği Ayrıştır</string>
     <string name="all_parse_full_content_tips">\"%1$s\" grubundaki tüm makalelerin tam içerik ayrıştırması.</string>
     <string name="all_parse_full_content_toast">\"%1$s\" grubundaki tüm makalelerin tam içerik ayrıştırması</string>
-    <string name="all_deny_parse_full_content_toast">"Artık \"%1$s\" grubundaki tüm makalelerin tam içerik ayrıştırması mevcut değil     "</string>
+    <string name="all_deny_parse_full_content_toast">Artık \"%1$s\" grubundaki tüm makalelerin tam içerik ayrıştırması yok</string>
     <string name="clear_articles">Makaleleri Temizle</string>
     <string name="clear_articles_in_feed_toast">\"%1$s\" beslemesindeki tüm arşivlenmiş makaleler temizlendi</string>
     <string name="clear_articles_in_group_toast">\"%1$s\" grubundaki tüm arşivlenmiş makaleler temizlendi</string>
@@ -50,7 +50,7 @@
     <string name="add_to_group">Gruba Ekle</string>
     <string name="move_to_group">Gruba Taşı</string>
     <string name="rename_toast">\"%1$s\" olarak yeniden adlandırıldı</string>
-    <string name="open_with">%1$s öğesini aç</string>
+    <string name="open_with">Aç: %1$s</string>
     <string name="options">Seçenekler</string>
     <string name="delete">Sil</string>
     <string name="delete_toast">\"%1$s\" silindi</string>

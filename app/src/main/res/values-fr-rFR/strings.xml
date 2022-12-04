@@ -50,7 +50,7 @@
     <string name="parse_full_content">Analyser tout le contenu</string>
     <string name="all_parse_full_content_tips">Vous êtes sur le point d’autoriser l’analyse de tout le contenu de tous les articles du groupe « %1$s ».</string>
     <string name="all_parse_full_content_toast">Analyse de tout le contenu de tous les articles du groupe « %1$s »</string>
-    <string name="all_deny_parse_full_content_toast">"Ne plus analyser le contenu de tous les articles du groupe « %1$s »     "</string>
+    <string name="all_deny_parse_full_content_toast">Ne plus analyser le contenu de tous les articles du groupe « %1$s »</string>
     <string name="clear_articles">Vider les articles</string>
     <string name="clear_articles_in_feed_toast">Tous les articles archivés du flux « %1$s » ont été effacés</string>
     <string name="clear_articles_in_group_toast">Tous les articles archivés du groupe « %1$s » ont été effacés</string>
