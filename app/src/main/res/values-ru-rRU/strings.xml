@@ -295,7 +295,7 @@
     <string name="fill_selected_icon">Заливка выбранной иконки</string>
     <string name="feeds_page">Страница подписок</string>
     <string name="flow_page">Страница статей</string>
-    <string name="all_deny_parse_full_content_toast">"Не получать полный контент для всех статей в группе \"%1$s\"     "</string>
+    <string name="all_deny_parse_full_content_toast">Не получать полный контент для всех статей в группе \"%1$s\"</string>
     <string name="clear_articles_in_feed_toast">Все архивные статьи в ленте \"%1$s\" очищены</string>
     <string name="clear_articles_in_group_toast">Все архивные статьи в группе \"%1$s\" очищены</string>
     <string name="mark_as_read_one_day">Отметить как прочитанное больше, чем 1 день</string>

@@ -44,7 +44,7 @@
     <string name="parse_full_content">全文解析</string>
     <string name="all_parse_full_content_tips">对 \"%1$s\" 分组中的所有文章进行全文解析。</string>
     <string name="all_parse_full_content_toast">全文解析 \"%1$s\" 分组中的文章</string>
-    <string name="all_deny_parse_full_content_toast">"\"%1$s\"         分组     内所有文章均不再进行完整内容解析     "</string>
+    <string name="all_deny_parse_full_content_toast">\"%1$s\" 分组内所有文章不再进行完整内容解析</string>
     <string name="clear_articles">清空文章</string>
     <string name="clear_articles_in_feed_toast">已清空 \"%1$s\" 订阅源中所有已归档文章</string>
     <string name="clear_articles_in_group_toast">已清空 \"%1$s\" 分组中所有已归档的文章</string>
