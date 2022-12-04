@@ -1,16 +1,16 @@
-<i>Read You</i> Sebuah pembaca RSS modern dan elegan dengan desain <a href='https://m3.material.io/' target='_blank' rel='nofollow'>Material You</a> 
- 
-<b>Fitur</b> 
- 
-* Berlangganan ke Tautan Umpan 
-* Impor dari OPML 
-* Penyinkronan Artikel 
-* Notifikasi Pembaruan Artikel 
-* Olah Konten Lengkap 
-* Saring yang Belum Dibaca dan Dibintangi 
-* Pengelompokan Umpan  
-* Lokalisasi 
-* Ekspor sebagai OPML 
-* Cari Artikel 
- 
+<i>Read You</i> Sebuah pembaca RSS modern dan elegan dengan desain <a href='https://m3.material.io/' target='_blank' rel='nofollow'>Material You</a>
+
+<b>Fitur</b>
+
+* Berlangganan ke Tautan Umpan
+* Impor dari OPML
+* Penyinkronan Artikel
+* Notifikasi Pembaruan Artikel
+* Olah Konten Lengkap
+* Saring yang Belum Dibaca dan Dibintangi
+* Pengelompokan Umpan
+* Lokalisasi
+* Ekspor sebagai OPML
+* Cari Artikel
+
 Lebih banyak yang akan datang…
