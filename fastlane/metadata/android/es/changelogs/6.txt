@@ -1,0 +1,33 @@
+## 0.7.4
+
+1. Página de "Tips & Soporte".
+
+2. Comprobación de actualizaciones.
+
+3. Selección de tema de color dinámica.
+
+4. Añadido gesto de sincronización en la página de información.
+
+5. Mostrar la carga durante el parseo de contenido.
+
+6. Actualización de dependencias.
+
+7 Soporte de RSS v1.0 (a testar).
+
+8. Barra de navegación arreglada.
+
+9. Arreglado: error en menú.
+
+10. Optimización de vídeos y estilos.
+
+### Notas
+
+1. Comprobar actualizaciones al iniciar.
+
+2. Usar la API de Gitee para chino simplificado y la API de GitHub API para el resto.
+
+3. Por favor, evitar comprobar actualizaciones muy frecuentemente.
+
+4. Refactorizada la página de lectura.
+
+5. La sincronización se hará en el hilo principal por limitaciones técnicas.

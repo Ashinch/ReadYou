@@ -6,13 +6,13 @@
 
 3. Scroll-Leiste für die Leseseite hinzugefügt (Dank an Matt Vaughn und Albert Chang. Nur als Referenz, da es keine Google API gibt, kann nur manuell implementiert werden).
 
-4. Funktion zum teilen von Artikeln hinzugefügt. 
+4. Funktion zum teilen von Artikeln hinzugefügt.
 
 5. Vorschaubilder für Artikel hinzugefügt (gilt nur für Artikel, die seit dieser Version neu synchronisiert wurden).
 
 6. Andere Detailänderungen.
 
-### Note
+### Anmerkung
 
 1. Diese Version ist ein wenig laggy, noch eine Menge Probleme entdeckt, die nächste Version wird optimiert und der code überarbeitet.
 
