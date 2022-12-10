@@ -16,7 +16,7 @@ class RssRepository @Inject constructor(
 
     fun get() = get(context.currentAccountType)
 
-    fun get(accountId: Int) = when (accountId) {
+    fun get(accountTypeId: Int) = when (accountTypeId) {
         AccountType.Local.id -> localRssRepository
 //        Account.Type.LOCAL -> feverRssRepository
 //        Account.Type.FEVER -> feverRssRepository

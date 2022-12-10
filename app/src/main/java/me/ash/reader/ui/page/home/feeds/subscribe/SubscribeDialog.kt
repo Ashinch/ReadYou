@@ -79,7 +79,9 @@ fun SubscribeDialog(
         title = {
             Text(
                 modifier = Modifier.roundClick {
-                    subscribeViewModel.showRenameDialog()
+                    if (!subscribeUiState.isSearchPage) {
+                        subscribeViewModel.showRenameDialog()
+                    }
                 },
                 text = if (subscribeUiState.isSearchPage) {
                     subscribeUiState.title

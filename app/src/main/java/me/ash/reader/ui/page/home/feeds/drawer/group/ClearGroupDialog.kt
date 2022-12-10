@@ -1,7 +1,7 @@
 package me.ash.reader.ui.page.home.feeds.drawer.group
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DeleteForever
+import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -32,7 +32,7 @@ fun ClearGroupDialog(
         },
         icon = {
             Icon(
-                imageVector = Icons.Outlined.DeleteForever,
+                imageVector = Icons.Outlined.DeleteSweep,
                 contentDescription = stringResource(R.string.clear_articles),
             )
         },

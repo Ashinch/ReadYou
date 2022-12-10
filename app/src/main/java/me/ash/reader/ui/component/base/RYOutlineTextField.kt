@@ -19,8 +19,8 @@ import kotlinx.coroutines.delay
 import me.ash.reader.R
 
 @Composable
-fun RYTextField(
-    readOnly: Boolean,
+fun RYOutlineTextField(
+    readOnly: Boolean = false,
     value: String,
     label: String = "",
     singleLine: Boolean = true,
@@ -38,7 +38,7 @@ fun RYTextField(
         focusRequester.requestFocus()
     }
 
-    TextField(
+    OutlinedTextField(
         modifier = Modifier.focusRequester(focusRequester),
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color.Transparent,

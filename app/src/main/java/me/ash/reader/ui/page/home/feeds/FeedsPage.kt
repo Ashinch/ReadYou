@@ -2,7 +2,7 @@ package me.ash.reader.ui.page.home.feeds
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -16,7 +16,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -32,10 +31,12 @@ import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.HomeViewModel
+import me.ash.reader.ui.page.home.feeds.accounts.AccountsTab
 import me.ash.reader.ui.page.home.feeds.drawer.feed.FeedOptionDrawer
 import me.ash.reader.ui.page.home.feeds.drawer.group.GroupOptionDrawer
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
+import me.ash.reader.ui.page.settings.accounts.AccountViewModel
 import kotlin.math.ln
 
 @OptIn(
@@ -44,10 +45,15 @@ import kotlin.math.ln
 @Composable
 fun FeedsPage(
     navController: NavHostController,
+    accountViewModel: AccountViewModel = hiltViewModel(),
     feedsViewModel: FeedsViewModel = hiltViewModel(),
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel,
 ) {
+    var accountTabVisible by remember { mutableStateOf(false) }
+
+
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val topBarTonalElevation = LocalFeedsTopBarTonalElevation.current
     val groupListTonalElevation = LocalFeedsGroupListTonalElevation.current
@@ -56,6 +62,8 @@ fun FeedsPage(
     val filterBarFilled = LocalFeedsFilterBarFilled.current
     val filterBarPadding = LocalFeedsFilterBarPadding.current
     val filterBarTonalElevation = LocalFeedsFilterBarTonalElevation.current
+
+    val accounts = accountViewModel.accounts.collectAsStateValue(initial = emptyList())
 
     val feedsUiState = feedsViewModel.feedsUiState.collectAsStateValue()
     val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
@@ -152,13 +160,20 @@ fun FeedsPage(
             LazyColumn {
                 item {
                     DisplayText(
-                        modifier = Modifier.pointerInput(Unit) {
-                            detectTapGestures(
-                                onLongPress = {
-
-                                }
-                            )
-                        },
+                        modifier = Modifier
+                            .clickable {
+                                accountTabVisible = true
+                            },
+                        // .pointerInput(Unit) {
+                        //     detectTapGestures(
+                        //         onPress = {
+                        //             accountTabRemember = true
+                        //         },
+                        //         onLongPress = {
+                        //             accountTabRemember = true
+                        //         }
+                        //     )
+                        // },
                         text = feedsUiState.account?.name ?: "",
                         desc = if (isSyncing) stringResource(R.string.syncing) else "",
                     )
@@ -268,6 +283,24 @@ fun FeedsPage(
     SubscribeDialog()
     GroupOptionDrawer()
     FeedOptionDrawer()
+
+    AccountsTab(
+        visible = accountTabVisible,
+        accounts = accounts,
+        onAccountSwitch = {
+            accountViewModel.switchAccount(it) {
+                accountTabVisible = false
+                navController.navigate(RouteName.SETTINGS)
+                navController.navigate(RouteName.FEEDS) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+        },
+        onDismissRequest = {
+            accountTabVisible = false
+        },
+    )
 }
 
 private fun filterChange(

@@ -19,10 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import me.ash.reader.R
-import me.ash.reader.ui.component.base.DisplayText
-import me.ash.reader.ui.component.base.FeedbackIconButton
-import me.ash.reader.ui.component.base.RYScaffold
-import me.ash.reader.ui.component.base.Subtitle
+import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
@@ -72,8 +69,11 @@ fun AccountsPage(
                                 }
                             },
                         ) {}
-                        Spacer(modifier = Modifier.height(24.dp))
                     }
+                }
+                item {
+                    Tips(text = stringResource(R.string.accounts_tips))
+                    Spacer(modifier = Modifier.height(24.dp))
                 }
                 item {
                     Subtitle(
@@ -90,7 +90,6 @@ fun AccountsPage(
                             }
                         },
                     ) {}
-                    Spacer(modifier = Modifier.height(24.dp))
                 }
                 item {
                     Spacer(modifier = Modifier.height(24.dp))

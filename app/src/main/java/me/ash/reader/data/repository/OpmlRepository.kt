@@ -38,7 +38,7 @@ class OpmlRepository @Inject constructor(
      */
     @Throws(Exception::class)
     suspend fun saveToDatabase(inputStream: InputStream) {
-        val defaultGroup = groupDao.queryById(getDefaultGroupId())!!
+        val defaultGroup = groupDao.queryById(getDefaultGroupId(context.currentAccountId))!!
         val groupWithFeedList =
             opmlLocalDataSource.parseFileInputStream(inputStream, defaultGroup)
         groupWithFeedList.forEach { groupWithFeed ->
@@ -60,18 +60,18 @@ class OpmlRepository @Inject constructor(
      * Exports OPML file.
      */
     @Throws(Exception::class)
-    suspend fun saveToString(): String {
-        val defaultGroup = groupDao.queryById(getDefaultGroupId())!!
+    suspend fun saveToString(accountId: Int): String {
+        val defaultGroup = groupDao.queryById(getDefaultGroupId(accountId))!!
         return OpmlWriter().write(
             Opml(
                 "2.0",
                 Head(
-                    accountDao.queryById(context.currentAccountId)?.name,
+                    accountDao.queryById(accountId)?.name,
                     Date().toString(), null, null, null,
                     null, null, null, null,
                     null, null, null, null,
                 ),
-                Body(groupDao.queryAllGroupWithFeed(context.currentAccountId).map {
+                Body(groupDao.queryAllGroupWithFeed(accountId).map {
                     Outline(
                         mapOf(
                             "text" to it.group.name,
@@ -97,5 +97,5 @@ class OpmlRepository @Inject constructor(
         )!!
     }
 
-    private fun getDefaultGroupId(): String = context.currentAccountId.getDefaultGroupId()
+    private fun getDefaultGroupId(accountId: Int): String = accountId.getDefaultGroupId()
 }
