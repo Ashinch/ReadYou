@@ -18,13 +18,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import me.ash.reader.R
-import me.ash.reader.data.model.account.Account
-import me.ash.reader.data.model.account.AccountType
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.component.base.Subtitle
-import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.page.settings.accounts.addition.AddLocalAccountDialog
 import me.ash.reader.ui.page.settings.accounts.addition.AdditionViewModel
@@ -121,15 +118,15 @@ fun AddAccountsPage(
                         desc = stringResource(R.string.fever_desc),
                         iconPainter = painterResource(id = R.drawable.ic_fever),
                         onClick = {
-                            viewModel.addAccount(Account(
-                                type = AccountType.Fever,
-                                name = "name",
-                            )) {
-                                navController.popBackStack()
-                                navController.navigate("${RouteName.ACCOUNT_DETAILS}/${it.id}") {
-                                    launchSingleTop = true
-                                }
-                            }
+                            // viewModel.addAccount(Account(
+                            //     type = AccountType.Fever,
+                            //     name = "name",
+                            // )) {
+                            //     navController.popBackStack()
+                            //     navController.navigate("${RouteName.ACCOUNT_DETAILS}/${it.id}") {
+                            //         launchSingleTop = true
+                            //     }
+                            // }
                         },
                     ) {}
                     Spacer(modifier = Modifier.height(24.dp))

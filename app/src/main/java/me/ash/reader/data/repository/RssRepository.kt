@@ -21,6 +21,6 @@ class RssRepository @Inject constructor(
 //        Account.Type.LOCAL -> feverRssRepository
 //        Account.Type.FEVER -> feverRssRepository
 //        Account.Type.GOOGLE_READER -> googleReaderRssRepository
-        else -> throw IllegalStateException("Unknown account type: ${context.currentAccountType}")
+        else -> localRssRepository
     }
 }
