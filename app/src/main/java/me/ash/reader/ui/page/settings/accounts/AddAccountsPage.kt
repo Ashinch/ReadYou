@@ -116,6 +116,7 @@ fun AddAccountsPage(
                         },
                     ) {}
                     SettingItem(
+                        enable = false,
                         title = stringResource(R.string.fever),
                         desc = stringResource(R.string.fever_desc),
                         iconPainter = painterResource(id = R.drawable.ic_fever),

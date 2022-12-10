@@ -21,8 +21,8 @@ android {
         applicationId "me.ash.reader"
         minSdk 26
         targetSdk 32
-        versionCode 15
-        versionName "0.9.1"
+        versionCode 16
+        versionName "0.9.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
