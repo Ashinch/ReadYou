@@ -44,7 +44,7 @@
     <string name="parse_full_content">全文解析</string>
     <string name="all_parse_full_content_tips">對「%1$s」群組中的所有文章進行全文解析。</string>
     <string name="all_parse_full_content_toast">全文解析「%1$s」群組中的所有文章</string>
-    <string name="all_deny_parse_full_content_toast">"不再全文解析「%1$s」群組中的所有文章     "</string>
+    <string name="all_deny_parse_full_content_toast">不再全文解析「%1$s」群組中的所有文章</string>
     <string name="clear_articles">清除文章</string>
     <string name="clear_articles_in_feed_toast">已全部清除來源「%1$s」的已封存文章</string>
     <string name="clear_articles_in_group_toast">已全部清除「%1$s」群組的已封存文章</string>
