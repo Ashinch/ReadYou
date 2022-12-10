@@ -47,9 +47,7 @@
     <string name="parse_full_content">Eduki osoa analizatu</string>
     <string name="all_parse_full_content_tips">\"%1$s\" taldeko artikulu guztien eduki osoaren analisia.</string>
     <string name="all_parse_full_content_toast">\"%1$s\" taldeko artikulu guztien eduki osoaren analisia</string>
-    <string name="all_deny_parse_full_content_toast">\"%1$s\" taldeko artikulu guztien eduki osoaren analisi
-        gehiagorik ez
-    </string>
+    <string name="all_deny_parse_full_content_toast">\"%1$s\" taldeko artikulu guztien eduki osoaren analisi gehiagorik ez</string>
     <string name="clear_articles">Artikuluak garbitu</string>
     <string name="clear_articles_in_feed_toast">\"%1$s\" jarioaren artxibatutako artikulu guztiak garbitu dira</string>
     <string name="clear_articles_in_group_toast">\"%1$s\" taldearen artxibatutako artikulu guztiak garbitu dira</string>
@@ -349,4 +347,11 @@
     <string name="delete_account_toast">Kontu hau ezabatu egin da</string>
     <string name="clear_all_articles_toast">Kontu honetako artikulu guztiak ezabatu dira</string>
     <string name="block_list">Blokeatutakoen zerrenda</string>
+    <string name="delete_account_tips">Kontu hau ezabatu nahi duzu\?</string>
+    <string name="clear_all_articles_tips">Kontu honetako artikulu guztiak ezabatu nahi dituzu\?</string>
+    <string name="always">Beti</string>
+    <string name="local">Lokala</string>
+    <string name="fever_desc">Zaharkituta. Ez da gomendatzen.</string>
+    <string name="synchronous_tips">Aplikazioa berrabiarazi behar da aldaketak efektua izateko.</string>
+    <string name="manually">Eskuz</string>
 </resources>

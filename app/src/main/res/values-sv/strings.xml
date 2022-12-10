@@ -36,7 +36,7 @@
     <string name="parse_full_content">Analysera fullständigt innehåll</string>
     <string name="all_parse_full_content_tips">Fullständig innehållsanalys av samtliga artiklar i gruppen \"%1$s\".</string>
     <string name="all_parse_full_content_toast">Fullständig innehållsanalys av samtliga artiklar i gruppen \"%1$s\"</string>
-    <string name="all_deny_parse_full_content_toast">"Ingen ytterligare fullständig innehållsanalys av samtliga artiklar i gruppen \"%1$s\"     "</string>
+    <string name="all_deny_parse_full_content_toast">Ingen ytterligare fullständig innehållsanalys av samtliga artiklar i gruppen \"%1$s\"</string>
     <string name="clear_articles">Rensa artiklar</string>
     <string name="clear_articles_in_feed_toast">Rensade alla arkiverade artiklar i flödet \"%1$s\"</string>
     <string name="clear_articles_feed_tips">Rensa alla arkiverade artiklar i flödet \"%1$s\".</string>
