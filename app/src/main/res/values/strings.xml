@@ -288,7 +288,7 @@
     <string name="group_list">Group List</string>
     <string name="always_expand">Always expand</string>
     <string name="top">Top</string>
-    <string name="mark_as_read_button_position">Postion of \"Mark as Read\" button</string>
+    <string name="mark_as_read_button_position">Position of \"Mark as Read\" button</string>
     <string name="top_bar">Top Bar</string>
     <string name="fill_selected_icon">Fill the selected icon</string>
     <string name="filter_bar">Filter Bar</string>
@@ -379,5 +379,5 @@
     <string name="must_have_an_account">Account needed</string>
     <string name="clear_all_articles_toast">Cleared all articles from this account</string>
     <string name="delete_account_toast">Account deleted</string>
-    <string name="synchronous_tips">Start the app again to use the new settings.</string>
+    <string name="synchronous_tips">Restart the app to use the new settings.</string>
 </resources>
