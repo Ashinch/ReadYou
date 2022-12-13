@@ -175,7 +175,7 @@
     <string name="tips_group_list_tonal_elevation">L’intensité de la liste des groupes est uniquement disponible pour le thème clair.</string>
     <string name="share">Partager</string>
     <string name="touch_to_play_video">Appuyer pour lancer la lecture</string>
-    <string name="text">Text</string>
+    <string name="text">Texte</string>
     <string name="font_size">Taille de la police</string>
     <string name="letter_spacing">Espacement des lettres</string>
     <string name="line_spacing">Espacement des lignes</string>
@@ -246,4 +246,7 @@
     <string name="delete_account_tips">Êtes-vous sûr de vouloir supprimer ce compte \?</string>
     <string name="add_accounts_desc">Local, Services, Auto-Hébergés</string>
     <string name="display">Montrer</string>
+    <string name="switch_account">Changer de compte</string>
+    <string name="add">Ajouter</string>
+    <string name="accounts_tips">Appuyez sur le nom du compte sur la page du flux pour changer de compte.</string>
 </resources>

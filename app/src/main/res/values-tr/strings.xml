@@ -243,4 +243,7 @@
     <string name="block_list">Engel listesi</string>
     <string name="self_hosted">Kendin Barındırma</string>
     <string name="add_accounts_desc">Yerel, Hizmetler, Kendin Barındırma</string>
+    <string name="add">Ekle</string>
+    <string name="accounts_tips">Değiştirmek için besleme sayfasındaki hesap adına tıklayın.</string>
+    <string name="switch_account">Hesap Değiştir</string>
 </resources>
