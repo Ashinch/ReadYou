@@ -249,4 +249,7 @@
     <string name="clear_all_articles_toast">Усі статті з цього облікового запису видалено</string>
     <string name="synchronous_tips">Щоб зміни набули чинності, потрібно перезапустити.</string>
     <string name="tips_group_list_tonal_elevation">Цей тоновий перехід доступний лише у світлій темі.</string>
+    <string name="switch_account">Змінити обліковий запис</string>
+    <string name="add">Додати</string>
+    <string name="accounts_tips">Натисніть ім’я облікового запису на сторінці каналу, щоб змінити їх.</string>
 </resources>

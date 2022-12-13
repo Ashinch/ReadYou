@@ -242,4 +242,7 @@
     <string name="clear_all_articles_tips">確定要清除此帳戶的所有文章嗎？</string>
     <string name="delete_account_tips">確定要刪除此帳戶嗎？</string>
     <string name="only_on_wifi">僅限 Wi-Fi</string>
+    <string name="switch_account">切換帳戶</string>
+    <string name="add">新增</string>
+    <string name="accounts_tips">按一下來源頁面上的帳戶名稱即可切換。</string>
 </resources>

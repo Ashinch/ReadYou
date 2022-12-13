@@ -350,4 +350,7 @@
     <string name="block_list">ब्लॉक सूची</string>
     <string name="clear_all_articles_tips">क्या आप वाकई इस खाते से सभी लेख हटाना चाहते हैं\?</string>
     <string name="delete_account_tips">क्या आप वाकई इस खाते को हटाना चाहते हैं\?</string>
+    <string name="switch_account">खाता बदलें</string>
+    <string name="accounts_tips">खाता बदलने हेतु फीड पृष्ट पर खाता का चयन करें।</string>
+    <string name="add">जोड़ें</string>
 </resources>

@@ -50,7 +50,7 @@
     <string name="parse_full_content">Analizza il contenuto completo</string>
     <string name="all_parse_full_content_tips">Analisi completa del contenuto di tutti gli articoli nel gruppo \"%1$s\".</string>
     <string name="all_parse_full_content_toast">Analisi completa del contenuto di tutti gli articoli nel gruppo \"%1$s\"</string>
-    <string name="all_deny_parse_full_content_toast">"Niente più analisi del contenuto completo di tutti gli articoli nel gruppo \"%1$s\"     "</string>
+    <string name="all_deny_parse_full_content_toast">Niente più analisi del contenuto completo di tutti gli articoli nel gruppo \"%1$s\"</string>
     <string name="clear_articles">Pulisci articoli</string>
     <string name="clear_articles_in_feed_toast">Puliti tutti gli articoli archiviati nel feed \"%1$s\"</string>
     <string name="clear_articles_in_group_toast">Puliti tutti gli articoli archiviati nel gruppo \"%1$s\"</string>
@@ -136,7 +136,7 @@
     <string name="sponsor">Sponsorizza</string>
     <string name="open_source_licenses">Licenze open source</string>
     <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
-    <string name="change_log">Changelog</string>
+    <string name="change_log">Cambiamenti e novità</string>
     <string name="update">Aggiorna</string>
     <string name="skip_this_version">Salta questa versione</string>
     <string name="checking_updates">Verifica degli aggiornamenti…</string>
@@ -183,7 +183,7 @@
     <string name="general">General</string>
     <string name="auto_hide_toolbars">Nascondi automaticamente le barre degli strumenti</string>
     <string name="rearrange_buttons">Riordina i pulsanti</string>
-    <string name="bionic_reading">Bionic Reading</string>
+    <string name="bionic_reading">Lettura bionica</string>
     <string name="images">Immagini</string>
     <string name="rounded_corners">Angoli arrotondati</string>
     <string name="videos">Video</string>
@@ -246,4 +246,7 @@
     <string name="list">Lista</string>
     <string name="display">Schermo</string>
     <string name="block_list">Blocca la lista</string>
+    <string name="switch_account">Cambia account</string>
+    <string name="accounts_tips">Premi sul nome dell\'account nella pagina dei feed per cambiare gli account.</string>
+    <string name="add">Aggiungi</string>
 </resources>

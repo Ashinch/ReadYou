@@ -351,4 +351,7 @@
     <string name="must_have_an_account">Harus memiliki akun</string>
     <string name="clear_all_articles_toast">Semua artikel dari akun ini telah dihapus</string>
     <string name="self_hosted">Di-host Sendiri</string>
+    <string name="switch_account">Ubah Akun</string>
+    <string name="add">Tambahkan</string>
+    <string name="accounts_tips">Klik nama akun di laman umpan untuk mengubahnya.</string>
 </resources>
