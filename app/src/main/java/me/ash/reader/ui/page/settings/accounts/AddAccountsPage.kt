@@ -75,8 +75,8 @@ fun AddAccountsPage(
                     )
                     SettingItem(
                         enable = false,
-                        title = stringResource(R.string.feedlly),
-                        desc = stringResource(R.string.feedlly_desc),
+                        title = stringResource(R.string.feedly),
+                        desc = stringResource(R.string.feedly_desc),
                         iconPainter = painterResource(id = R.drawable.ic_feedly),
                         onClick = {},
                     ) {}
