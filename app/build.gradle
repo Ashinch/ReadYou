@@ -39,7 +39,7 @@ android {
         }
     }
 
-    flavorDimensions "channel"
+    flavorDimensions.add("channel")
     productFlavors {
         fdroid {
             dimension "channel"
