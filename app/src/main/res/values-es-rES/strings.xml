@@ -358,4 +358,7 @@
     <string name="local_desc">En este dispositivo</string>
     <string name="only_on_wifi">Sólo por Wi-Fi</string>
     <string name="list">Lista</string>
+    <string name="switch_account">Cambiar cuenta</string>
+    <string name="add">Agregar</string>
+    <string name="accounts_tips">Haga clic en el nombre de la cuenta en la página de la fuente para cambiarlos.</string>
 </resources>

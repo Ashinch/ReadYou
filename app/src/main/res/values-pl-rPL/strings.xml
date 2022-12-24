@@ -50,7 +50,7 @@
     <string name="parse_full_content">Pobierz artykuły</string>
     <string name="all_parse_full_content_tips">Pobieranie pełnej treści artykułów z grupy \"%1$s\".</string>
     <string name="all_parse_full_content_toast">Zezwolono na pobieranie pełnej treści artykułów z grupy \"%1$s\"</string>
-    <string name="all_deny_parse_full_content_toast">"Cofnięto zezwolenie na pobieranie pełnej treści artykułów z grupy \"%1$s\"     "</string>
+    <string name="all_deny_parse_full_content_toast">Cofnięto zezwolenie na pobieranie pełnej treści artykułów z grupy \"%1$s\"</string>
     <string name="clear_articles">Usuń artykuły</string>
     <string name="clear_articles_in_feed_toast">Usunięto wszystkie pobrane artykuły z kanału \"%1$s\"</string>
     <string name="clear_articles_in_group_toast">Usunięto wszystkie artykuły z grupy \"%1$s\"</string>
@@ -355,4 +355,7 @@
     <string name="delete_account_tips">Czy na pewno chcesz usunąć to konto\?</string>
     <string name="synchronous_tips">Aby zmiany zaczęły obowiązywać, wymagane jest ponowne uruchomienie.</string>
     <string name="local_desc">Na tym urządzeniu</string>
+    <string name="switch_account">Zmień konto</string>
+    <string name="add">Dodaj</string>
+    <string name="accounts_tips">Kliknij nazwę konta na stronie kanału, aby je zmienić.</string>
 </resources>

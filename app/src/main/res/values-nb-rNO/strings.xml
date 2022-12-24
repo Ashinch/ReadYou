@@ -146,7 +146,7 @@
     <string name="rounded_corners">Avrundede hjørner</string>
     <string name="videos">Videoer</string>
     <string name="font_size">Skriftstørrelse</string>
-    <string name="all_deny_parse_full_content_toast">"Opphevet full innholdsfortokning a alle artikler i «%1$s»-gruppen     "</string>
+    <string name="all_deny_parse_full_content_toast">Opphevet full innholdsfortokning a alle artikler i «%1$s»-gruppen</string>
     <string name="clear_articles_in_feed_toast">Tømte alle arkiverte artikler i «%1$s»-informasjonskanalen</string>
     <string name="letter_spacing">Tegnavstand</string>
     <string name="line_spacing">Linjeavstand</string>

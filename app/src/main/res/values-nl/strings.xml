@@ -80,7 +80,7 @@
     <string name="clear">Wissen</string>
     <string name="paste">Plakken</string>
     <string name="import_from_opml">Importeren van OPML</string>
-    <string name="all_deny_parse_full_content_toast">"Geen volledige inhoud meer parseren van alle artikelen in de groep \"%1$s\"     "</string>
+    <string name="all_deny_parse_full_content_toast">Geen volledige inhoud meer parseren van alle artikelen in de groep \"%1$s\"</string>
     <string name="clear_articles_group_tips">Wis alle gearchiveerde artikelen in de groep \"%1$s\".</string>
     <string name="options">Opties</string>
     <string name="date_at_time">%1$s bij %2$s</string>

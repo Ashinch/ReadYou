@@ -65,12 +65,12 @@
     <plurals name="unread_desc">
         <item quantity="other">%1$d 個の未読アイテム</item>
     </plurals>
-    <string name="starred">スター</string>
+    <string name="starred">星付き</string>
     <plurals name="all_desc">
         <item quantity="other">%1$d 個のアーカイブされたアイテム</item>
     </plurals>
     <plurals name="starred_desc">
-        <item quantity="other">%1$d 個のスター付きアイテム</item>
+        <item quantity="other">%1$d 個の星付きアイテム</item>
     </plurals>
     <string name="expand_more">拡大する</string>
     <string name="cancel">キャンセル</string>
@@ -89,7 +89,7 @@
     <string name="clear">クリア</string>
     <string name="subscribe">購読</string>
     <string name="already_subscribed">すでに購読済です</string>
-    <string name="import_from_opml">OPMLからインポート</string>
+    <string name="import_from_opml">OPML からインポート</string>
     <string name="preset">プリセット</string>
     <string name="delete_group">グループを削除</string>
     <string name="selected">選択済み</string>
@@ -97,7 +97,7 @@
     <string name="all_deny_notification_toast">「%1$s」グループからの通知はすべて拒否されます</string>
     <string name="all_parse_full_content_tips">「%1$s」 グループ内のすべての記事の完全なコンテンツを取得します。</string>
     <string name="all_parse_full_content_toast">「%1$s」 グループ内のすべての記事の完全なコンテンツを取得します</string>
-    <string name="all_deny_parse_full_content_toast">"「%1$s」 グループ内の記事は完全な内容を取得しないように設定されました。     "</string>
+    <string name="all_deny_parse_full_content_toast">「%1$s」 グループ内の記事は完全な内容を取得しないように設定されました</string>
     <string name="create_new_group">新規グループの作成</string>
     <string name="today">今日</string>
     <string name="mark_all_as_read">すべて既読にする</string>
@@ -203,7 +203,7 @@
     <string name="for_2_weeks">2週間</string>
     <string name="for_1_month">1ヶ月</string>
     <string name="local">ローカル</string>
-    <string name="local_desc">このデバイス上</string>
+    <string name="local_desc">このデバイス</string>
     <string name="services">サービス</string>
     <string name="self_hosted">セルフホスト</string>
     <string name="fever_desc">廃止。推奨されません。</string>
@@ -214,10 +214,10 @@
     <string name="display">画面</string>
     <string name="synchronous">同期</string>
     <string name="sync_interval">同期</string>
-    <string name="sync_once_on_start">起動時に1度同期する</string>
-    <string name="only_on_wifi">Wi-F接続時のみ</string>
+    <string name="sync_once_on_start">起動時に１度同期する</string>
+    <string name="only_on_wifi">Wi-Fi接続時のみ</string>
     <string name="only_when_charging">充電時のみ</string>
-    <string name="keep_archived_articles">アーカイブされた記事を保持する</string>
+    <string name="keep_archived_articles">アーカイブされた記事を保持する期間</string>
     <string name="block_list">ブロックリスト</string>
     <string name="export_as_opml">OPML としてエクスポート</string>
     <string name="clear_all_articles">すべての記事を消去</string>
@@ -240,4 +240,7 @@
     <string name="images_desc">丸みを帯びた角、水平方向のパディング</string>
     <string name="every_6_hours">6時間ごと</string>
     <string name="every_30_minutes">30分ごと</string>
+    <string name="switch_account">アカウントを切り替える</string>
+    <string name="add">追加</string>
+    <string name="accounts_tips">フィードページのアカウント名をクリックして切り替えます。</string>
 </resources>
