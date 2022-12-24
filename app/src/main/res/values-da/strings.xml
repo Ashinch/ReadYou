@@ -58,7 +58,7 @@
     <string name="clear_articles_in_group_toast">Tømt alle arkiveret artikler i \"%1$s\" gruppen</string>
     <string name="clear_articles_feed_tips">Tøm alle arkiveret artikler in \"%1$s\" kanalen.</string>
     <string name="clear_articles_group_tips">Tøm alle arkiveret artikler i \"%1$s\" gruppen.</string>
-    <string name="all_deny_parse_full_content_toast">"Ikke mere fuld fortolkning af alle artikler i \"%1$s\" gruppen     "</string>
+    <string name="all_deny_parse_full_content_toast">Slut på fuld fortolkning af alle artikler i \"%1$s\"-gruppen</string>
     <string name="add_to_group">Tilføj til gruppe</string>
     <string name="move_to_group">Flyt til gruppe</string>
     <string name="all_move_to_group_tips">Flyt alle kanaler i \"%1$s\" gruppen til \"%2$s\" gruppen.</string>

@@ -154,7 +154,7 @@
     <string name="dark_theme">Temna tema</string>
     <string name="on">Vklop</string>
     <string name="off">Izklop</string>
-    <string name="all_deny_parse_full_content_toast">"Ni več pridobivanja celotne vsebine vseh novic v skupini \"%1$s\"     "</string>
+    <string name="all_deny_parse_full_content_toast">Ni več pridobivanja celotne vsebine vseh novic v skupini \"%1$s\"</string>
     <string name="clear_articles_in_group_toast">Odstranjeni vse novice iz arhiva v skupini \"%1$s\"</string>
     <string name="add_to_group">Dodaj v skupino</string>
     <string name="move_to_group">Premakni v skupino</string>

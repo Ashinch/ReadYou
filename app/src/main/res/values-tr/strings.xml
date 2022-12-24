@@ -6,7 +6,7 @@
         <item quantity="other">%1$d Okunmamış Öge</item>
     </plurals>
     <string name="feeds">Beslemeler</string>
-    <string name="syncing">Eşzamanlanıyor…</string>
+    <string name="syncing">Eşitleniyor…</string>
     <string name="loading">Yükleniyor…</string>
     <string name="expand_more">Genişlet</string>
     <string name="allow">İzin ver</string>
@@ -226,7 +226,7 @@
     <string name="for_1_month">1 ay</string>
     <string name="fever_desc">Kullanım dışı. Önerilmez.</string>
     <string name="more">Daha fazla</string>
-    <string name="sync_once_on_start">Başlangıçta bir kez senkronize et</string>
+    <string name="sync_once_on_start">Başlangıçta bir kez eşitle</string>
     <string name="only_on_wifi">Yalnızca Wi-Fi</string>
     <string name="only_when_charging">Yalnızca şarj olurken</string>
     <string name="clear_all_articles">Tüm makaleleri temizle</string>

@@ -49,7 +49,7 @@
     <string name="parse_full_content">Visualizar o conteúdo completo</string>
     <string name="clear_articles_in_feed_toast">Todos os artigos arquivados no feed \"%1$s\" foram limpos</string>
     <string name="all_parse_full_content_toast">Visualizar o conteúdo completo de todas as publicações no grupo \"%1$s\"</string>
-    <string name="all_deny_parse_full_content_toast">"Não mais visualizando o conteúdo completo de todas as publicações no grupo \"%1$s\"     "</string>
+    <string name="all_deny_parse_full_content_toast">Não mais visualizando o conteúdo completo de todas as publicações no grupo \"%1$s\"</string>
     <string name="clear_articles_feed_tips">Limpar todos os artigos arquivados no feed \"%1$s\".</string>
     <string name="add_to_group">Adicionar ao Grupo</string>
     <string name="move_to_group">Mover para o Grupo</string>
