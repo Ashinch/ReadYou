@@ -23,6 +23,7 @@ import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.page.settings.SettingItem
+import me.ash.reader.ui.page.settings.accounts.addition.AddFeverAccountDialog
 import me.ash.reader.ui.page.settings.accounts.addition.AddLocalAccountDialog
 import me.ash.reader.ui.page.settings.accounts.addition.AdditionViewModel
 import me.ash.reader.ui.theme.palette.onLight
@@ -113,20 +114,11 @@ fun AddAccountsPage(
                         },
                     ) {}
                     SettingItem(
-                        enable = false,
                         title = stringResource(R.string.fever),
                         desc = stringResource(R.string.fever_desc),
                         iconPainter = painterResource(id = R.drawable.ic_fever),
                         onClick = {
-                            // viewModel.addAccount(Account(
-                            //     type = AccountType.Fever,
-                            //     name = "name",
-                            // )) {
-                            //     navController.popBackStack()
-                            //     navController.navigate("${RouteName.ACCOUNT_DETAILS}/${it.id}") {
-                            //         launchSingleTop = true
-                            //     }
-                            // }
+                            additionViewModel.showAddFeverAccountDialog()
                         },
                     ) {}
                     Spacer(modifier = Modifier.height(24.dp))
@@ -140,6 +132,7 @@ fun AddAccountsPage(
     )
 
     AddLocalAccountDialog(navController)
+    AddFeverAccountDialog(navController)
 }
 
 @Preview

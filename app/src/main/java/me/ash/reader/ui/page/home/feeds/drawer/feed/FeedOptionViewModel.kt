@@ -24,7 +24,7 @@ import javax.inject.Inject
 @OptIn(ExperimentalMaterialApi::class)
 @HiltViewModel
 class FeedOptionViewModel @Inject constructor(
-    private val rssRepository: RssRepository,
+    val rssRepository: RssRepository,
     @MainDispatcher
     private val mainDispatcher: CoroutineDispatcher,
     @IODispatcher

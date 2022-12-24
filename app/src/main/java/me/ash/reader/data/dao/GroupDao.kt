@@ -58,8 +58,8 @@ interface GroupDao {
     )
     suspend fun queryAll(accountId: Int): List<Group>
 
-    @Insert
-    suspend fun insert(group: Group): Long
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(vararg group: Group)
 
     @Update
     suspend fun update(vararg group: Group)

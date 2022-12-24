@@ -3,6 +3,7 @@ package me.ash.reader.data.model.account
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import me.ash.reader.data.model.account.security.DESUtils
 import me.ash.reader.data.model.preference.*
 import java.util.*
 
@@ -32,4 +33,6 @@ data class Account(
     var keepArchived: KeepArchivedPreference = KeepArchivedPreference.default,
     @ColumnInfo(defaultValue = "")
     var syncBlockList: SyncBlockList = SyncBlockListPreference.default,
+    @ColumnInfo(defaultValue = DESUtils.empty)
+    var securityKey: String? = DESUtils.empty,
 )

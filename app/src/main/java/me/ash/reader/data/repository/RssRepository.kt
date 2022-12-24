@@ -10,7 +10,7 @@ class RssRepository @Inject constructor(
     @ApplicationContext
     private val context: Context,
     private val localRssRepository: LocalRssRepository,
-//    private val feverRssRepository: FeverRssRepository,
+    private val feverRssRepository: FeverRssRepository,
 //    private val googleReaderRssRepository: GoogleReaderRssRepository,
 ) {
 
@@ -18,9 +18,10 @@ class RssRepository @Inject constructor(
 
     fun get(accountTypeId: Int) = when (accountTypeId) {
         AccountType.Local.id -> localRssRepository
-//        Account.Type.LOCAL -> feverRssRepository
-//        Account.Type.FEVER -> feverRssRepository
-//        Account.Type.GOOGLE_READER -> googleReaderRssRepository
+        AccountType.Fever.id -> feverRssRepository
+        AccountType.GoogleReader.id -> localRssRepository
+        AccountType.Inoreader.id -> localRssRepository
+        AccountType.Feedly.id -> localRssRepository
         else -> localRssRepository
     }
 }

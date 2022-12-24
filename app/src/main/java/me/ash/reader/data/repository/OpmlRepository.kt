@@ -11,7 +11,7 @@ import me.ash.reader.data.dao.AccountDao
 import me.ash.reader.data.dao.FeedDao
 import me.ash.reader.data.dao.GroupDao
 import me.ash.reader.data.model.feed.Feed
-import me.ash.reader.data.source.OpmlLocalDataSource
+import me.ash.reader.data.source.OPMLDataSource
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.getDefaultGroupId
 import java.io.InputStream
@@ -28,7 +28,7 @@ class OpmlRepository @Inject constructor(
     private val feedDao: FeedDao,
     private val accountDao: AccountDao,
     private val rssRepository: RssRepository,
-    private val opmlLocalDataSource: OpmlLocalDataSource,
+    private val OPMLDataSource: OPMLDataSource,
 ) {
 
     /**
@@ -40,7 +40,7 @@ class OpmlRepository @Inject constructor(
     suspend fun saveToDatabase(inputStream: InputStream) {
         val defaultGroup = groupDao.queryById(getDefaultGroupId(context.currentAccountId))!!
         val groupWithFeedList =
-            opmlLocalDataSource.parseFileInputStream(inputStream, defaultGroup)
+            OPMLDataSource.parseFileInputStream(inputStream, defaultGroup)
         groupWithFeedList.forEach { groupWithFeed ->
             if (groupWithFeed.group != defaultGroup) {
                 groupDao.insert(groupWithFeed.group)

@@ -130,7 +130,7 @@ class RssHelper @Inject constructor(
         )
     }
 
-    private fun findImg(rawDescription: String): String? {
+    fun findImg(rawDescription: String): String? {
         // From: https://gitlab.com/spacecowboy/Feeder
         // Using negative lookahead to skip data: urls, being inline base64
         // And capturing original quote to use as ending quote

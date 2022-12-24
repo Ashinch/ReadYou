@@ -278,6 +278,19 @@ interface ArticleDao {
 
     @Query(
         """
+        UPDATE article SET isStarred = :isStarred 
+        WHERE id = :articleId
+        AND accountId = :accountId
+        """
+    )
+    suspend fun markAsStarredByArticleId(
+        accountId: Int,
+        articleId: String,
+        isStarred: Boolean,
+    )
+
+    @Query(
+        """
         DELETE FROM article
         WHERE accountId = :accountId
         AND feedId = :feedId
@@ -540,8 +553,14 @@ interface ArticleDao {
     )
     suspend fun queryById(id: String): ArticleWithFeed?
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(vararg article: Article)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertOnConflictIgnore(vararg article: Article)
+
     @Insert
-    suspend fun insertList(articles: List<Article>): List<Long>
+    suspend fun insertList(articles: List<Article>)
 
     @Update
     suspend fun update(vararg article: Article)

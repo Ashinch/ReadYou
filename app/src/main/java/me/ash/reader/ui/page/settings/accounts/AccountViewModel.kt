@@ -90,11 +90,22 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun addAccount(account: Account, callback: (Account) -> Unit = {}) {
+    fun addAccount(account: Account, callback: (Account?) -> Unit = {}) {
         viewModelScope.launch(ioDispatcher) {
             val addAccount = accountRepository.addAccount(account)
-            withContext(mainDispatcher) {
-                callback(addAccount)
+            try {
+                if (rssRepository.get(addAccount.type.id).validCredentials()) {
+                    withContext(mainDispatcher) {
+                        callback(addAccount)
+                    }
+                } else {
+                    throw Exception("Unauthorized")
+                }
+            } catch (e: Exception) {
+                accountRepository.delete(account.id!!)
+                withContext(mainDispatcher) {
+                    callback(null)
+                }
             }
         }
     }

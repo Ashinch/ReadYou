@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.work.WorkInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
@@ -69,7 +70,7 @@ fun FlowPage(
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
     homeViewModel.syncWorkLiveData.observe(owner) {
-        it?.let { isSyncing = it.any { it.progress.getIsSyncing() } }
+        it?.let { isSyncing = it.any { it.state == WorkInfo.State.RUNNING } }
     }
 
     LaunchedEffect(onSearch) {

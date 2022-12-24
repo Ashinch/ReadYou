@@ -22,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SubscribeViewModel @Inject constructor(
     private val opmlRepository: OpmlRepository,
-    private val rssRepository: RssRepository,
+    val rssRepository: RssRepository,
     private val rssHelper: RssHelper,
     private val stringsRepository: StringsRepository,
 ) : ViewModel() {

@@ -22,9 +22,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.work.WorkInfo
 import me.ash.reader.R
 import me.ash.reader.data.model.preference.*
-import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.*
@@ -79,7 +79,7 @@ fun FeedsPage(
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
     homeViewModel.syncWorkLiveData.observe(owner) {
-        it?.let { isSyncing = it.any { it.progress.getIsSyncing() } }
+        it?.let { isSyncing = it.any { it.state == WorkInfo.State.RUNNING } }
     }
 
     val infiniteTransition = rememberInfiniteTransition()
@@ -148,12 +148,14 @@ fun FeedsPage(
             ) {
                 if (!isSyncing) homeViewModel.sync()
             }
-            FeedbackIconButton(
-                imageVector = Icons.Rounded.Add,
-                contentDescription = stringResource(R.string.subscribe),
-                tint = MaterialTheme.colorScheme.onSurface,
-            ) {
-                subscribeViewModel.showDrawer()
+            if (subscribeViewModel.rssRepository.get().subscribe) {
+                FeedbackIconButton(
+                    imageVector = Icons.Rounded.Add,
+                    contentDescription = stringResource(R.string.subscribe),
+                    tint = MaterialTheme.colorScheme.onSurface,
+                ) {
+                    subscribeViewModel.showDrawer()
+                }
             }
         },
         content = {

@@ -86,6 +86,7 @@ fun FeedOptionDrawer(
                         ?: false,
                     selectedParseFullContentPreset = feedOptionUiState.feed?.isFullContent ?: false,
                     isMoveToGroup = true,
+                    showGroup = feedOptionViewModel.rssRepository.get().move,
                     showUnsubscribe = true,
                     selectedGroupId = feedOptionUiState.feed?.groupId ?: "",
                     allowNotificationPresetOnClick = {

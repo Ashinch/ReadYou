@@ -38,6 +38,7 @@ fun FeedOptionView(
     selectedAllowNotificationPreset: Boolean = false,
     selectedParseFullContentPreset: Boolean = false,
     isMoveToGroup: Boolean = false,
+    showGroup:Boolean = true,
     showUnsubscribe: Boolean = false,
     selectedGroupId: String = "",
     allowNotificationPresetOnClick: () -> Unit = {},
@@ -72,15 +73,18 @@ fun FeedOptionView(
             clearArticlesOnClick = clearArticlesOnClick,
             unsubscribeOnClick = unsubscribeOnClick,
         )
-        Spacer(modifier = Modifier.height(26.dp))
 
-        AddToGroup(
-            isMoveToGroup = isMoveToGroup,
-            groups = groups,
-            selectedGroupId = selectedGroupId,
-            onGroupClick = onGroupClick,
-            onAddNewGroup = onAddNewGroup,
-        )
+        if (showGroup) {
+            Spacer(modifier = Modifier.height(26.dp))
+
+            AddToGroup(
+                isMoveToGroup = isMoveToGroup,
+                groups = groups,
+                selectedGroupId = selectedGroupId,
+                onGroupClick = onGroupClick,
+                onAddNewGroup = onAddNewGroup,
+            )
+        }
         Spacer(modifier = Modifier.height(6.dp))
     }
 }

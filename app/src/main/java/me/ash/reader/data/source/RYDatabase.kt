@@ -9,6 +9,7 @@ import me.ash.reader.data.dao.ArticleDao
 import me.ash.reader.data.dao.FeedDao
 import me.ash.reader.data.dao.GroupDao
 import me.ash.reader.data.model.account.*
+import me.ash.reader.data.model.account.security.DESUtils
 import me.ash.reader.data.model.article.Article
 import me.ash.reader.data.model.feed.Feed
 import me.ash.reader.data.model.group.Group
@@ -18,7 +19,7 @@ import java.util.*
 
 @Database(
     entities = [Account::class, Feed::class, Article::class, Group::class],
-    version = 3
+    version = 4
 )
 @TypeConverters(
     RYDatabase.DateConverters::class,
@@ -71,6 +72,7 @@ abstract class RYDatabase : RoomDatabase() {
 val allMigrations = arrayOf(
     MIGRATION_1_2,
     MIGRATION_2_3,
+    MIGRATION_3_4,
 )
 
 @Suppress("ClassName")
@@ -122,6 +124,18 @@ object MIGRATION_2_3 : Migration(2, 3) {
         database.execSQL(
             """
             ALTER TABLE account ADD COLUMN syncBlockList TEXT NOT NULL DEFAULT ''
+            """.trimIndent()
+        )
+    }
+}
+
+@Suppress("ClassName")
+object MIGRATION_3_4 : Migration(3, 4) {
+
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+            """
+            ALTER TABLE account ADD COLUMN securityKey TEXT DEFAULT '${DESUtils.empty}'
             """.trimIndent()
         )
     }

@@ -26,6 +26,7 @@ fun ClipboardTextField(
     singleLine: Boolean = true,
     onValueChange: (String) -> Unit = {},
     placeholder: String = "",
+    isPassword: Boolean = false,
     errorText: String = "",
     imeAction: ImeAction = ImeAction.Done,
     focusManager: FocusManager? = null,
@@ -39,6 +40,7 @@ fun ClipboardTextField(
             singleLine = singleLine,
             onValueChange = onValueChange,
             placeholder = placeholder,
+            isPassword = isPassword,
             errorMessage = errorText,
             keyboardActions = KeyboardActions(
                 onDone = if (imeAction == ImeAction.Done)
