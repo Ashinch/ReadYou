@@ -28,6 +28,7 @@ import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.ext.showToastLong
 import me.ash.reader.ui.page.settings.SettingItem
+import me.ash.reader.ui.page.settings.accounts.connection.AccountConnection
 import me.ash.reader.ui.theme.palette.onLight
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -36,21 +37,17 @@ fun AccountDetailsPage(
     navController: NavHostController = rememberAnimatedNavController(),
     viewModel: AccountViewModel = hiltViewModel(),
 ) {
-    val scope = rememberCoroutineScope()
     val uiState = viewModel.accountUiState.collectAsStateValue()
     val context = LocalContext.current
-    val syncInterval = LocalSyncInterval.current
-    val syncOnStart = LocalSyncOnStart.current
-    val syncOnlyOnWiFi = LocalSyncOnlyOnWiFi.current
-    val syncOnlyWhenCharging = LocalSyncOnlyWhenCharging.current
-    val keepArchived = LocalKeepArchived.current
-    val syncBlockList = LocalSyncBlockList.current
 
     val selectedAccount = uiState.selectedAccount.collectAsStateValue(initial = null)
 
     var nameValue by remember { mutableStateOf(selectedAccount?.name) }
     var nameDialogVisible by remember { mutableStateOf(false) }
-    var blockListValue by remember { mutableStateOf(SyncBlockListPreference.toString(syncBlockList)) }
+    var blockListValue by remember {
+        mutableStateOf(SyncBlockListPreference.toString(selectedAccount?.syncBlockList
+            ?: SyncBlockListPreference.default))
+    }
     var blockListDialogVisible by remember { mutableStateOf(false) }
     var syncIntervalDialogVisible by remember { mutableStateOf(false) }
     var keepArchivedDialogVisible by remember { mutableStateOf(false) }
@@ -107,6 +104,11 @@ fun AccountDetailsPage(
                     ) {}
                     Spacer(modifier = Modifier.height(24.dp))
                 }
+                if (selectedAccount != null) {
+                    item {
+                        AccountConnection(account = selectedAccount)
+                    }
+                }
                 item {
                     Subtitle(
                         modifier = Modifier.padding(horizontal = 24.dp),
@@ -114,20 +116,20 @@ fun AccountDetailsPage(
                     )
                     SettingItem(
                         title = stringResource(R.string.sync_interval),
-                        desc = syncInterval.toDesc(context),
+                        desc = selectedAccount?.syncInterval?.toDesc(context),
                         onClick = { syncIntervalDialogVisible = true },
                     ) {}
                     SettingItem(
                         title = stringResource(R.string.sync_once_on_start),
                         onClick = {
                             selectedAccount?.id?.let {
-                                (!syncOnStart).put(it, viewModel)
+                                (!selectedAccount.syncOnStart).put(it, viewModel)
                             }
                         },
                     ) {
-                        RYSwitch(activated = syncOnStart.value) {
+                        RYSwitch(activated = selectedAccount?.syncOnStart?.value == true) {
                             selectedAccount?.id?.let {
-                                (!syncOnStart).put(it, viewModel)
+                                (!selectedAccount.syncOnStart).put(it, viewModel)
                             }
                         }
                     }
@@ -135,13 +137,13 @@ fun AccountDetailsPage(
                         title = stringResource(R.string.only_on_wifi),
                         onClick = {
                             selectedAccount?.id?.let {
-                                (!syncOnlyOnWiFi).put(it, viewModel)
+                                (!selectedAccount.syncOnlyOnWiFi).put(it, viewModel)
                             }
                         },
                     ) {
-                        RYSwitch(activated = syncOnlyOnWiFi.value) {
+                        RYSwitch(activated = selectedAccount?.syncOnlyOnWiFi?.value == true) {
                             selectedAccount?.id?.let {
-                                (!syncOnlyOnWiFi).put(it, viewModel)
+                                (!selectedAccount.syncOnlyOnWiFi).put(it, viewModel)
                             }
                         }
                     }
@@ -149,19 +151,19 @@ fun AccountDetailsPage(
                         title = stringResource(R.string.only_when_charging),
                         onClick = {
                             selectedAccount?.id?.let {
-                                (!syncOnlyWhenCharging).put(it, viewModel)
+                                (!selectedAccount.syncOnlyWhenCharging).put(it, viewModel)
                             }
                         },
                     ) {
-                        RYSwitch(activated = syncOnlyWhenCharging.value) {
+                        RYSwitch(activated = selectedAccount?.syncOnlyWhenCharging?.value == true) {
                             selectedAccount?.id?.let {
-                                (!syncOnlyWhenCharging).put(it, viewModel)
+                                (!selectedAccount.syncOnlyWhenCharging).put(it, viewModel)
                             }
                         }
                     }
                     SettingItem(
                         title = stringResource(R.string.keep_archived_articles),
-                        desc = keepArchived.toDesc(context),
+                        desc = selectedAccount?.keepArchived?.toDesc(context),
                         onClick = { keepArchivedDialogVisible = true },
                     ) {}
                     // SettingItem(
@@ -229,7 +231,7 @@ fun AccountDetailsPage(
         options = SyncIntervalPreference.values.map {
             RadioDialogOption(
                 text = it.toDesc(context),
-                selected = it == syncInterval,
+                selected = it == selectedAccount?.syncInterval,
             ) {
                 selectedAccount?.id?.let { accountId ->
                     it.put(accountId, viewModel)
@@ -246,7 +248,7 @@ fun AccountDetailsPage(
         options = KeepArchivedPreference.values.map {
             RadioDialogOption(
                 text = it.toDesc(context),
-                selected = it == keepArchived,
+                selected = it == selectedAccount?.keepArchived,
             ) {
                 selectedAccount?.id?.let { accountId ->
                     it.put(accountId, viewModel)
@@ -271,7 +273,7 @@ fun AccountDetailsPage(
         },
         onConfirm = {
             selectedAccount?.id?.let {
-                SyncBlockListPreference.put(it, viewModel, syncBlockList)
+                SyncBlockListPreference.put(it, viewModel, selectedAccount.syncBlockList)
                 blockListDialogVisible = false
                 context.showToast(selectedAccount.syncBlockList.toString())
             }

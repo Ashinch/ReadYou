@@ -25,7 +25,7 @@ import javax.inject.Inject
 class RYRepository @Inject constructor(
     @ApplicationContext
     private val context: Context,
-    private val RYNetworkDataSource: RYNetworkDataSource,
+    private val networkDataSource: RYNetworkDataSource,
     @IODispatcher
     private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher
@@ -34,7 +34,7 @@ class RYRepository @Inject constructor(
 
     suspend fun checkUpdate(showToast: Boolean = true): Boolean? = withContext(ioDispatcher) {
         try {
-            val response = RYNetworkDataSource.getReleaseLatest(context.getString(R.string.update_link))
+            val response = networkDataSource.getReleaseLatest(context.getString(R.string.update_link))
             when {
                 response.code() == 403 -> {
                     withContext(mainDispatcher) {
@@ -86,7 +86,7 @@ class RYRepository @Inject constructor(
         withContext(ioDispatcher) {
             Log.i("RLog", "downloadFile start: $url")
             try {
-                return@withContext RYNetworkDataSource.downloadFile(url)
+                return@withContext networkDataSource.downloadFile(url)
                     .downloadToFileWithProgress(context.getLatestApk())
             } catch (e: Exception) {
                 e.printStackTrace()

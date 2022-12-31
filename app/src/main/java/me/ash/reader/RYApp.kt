@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 import me.ash.reader.data.module.ApplicationScope
 import me.ash.reader.data.module.IODispatcher
 import me.ash.reader.data.repository.*
-import me.ash.reader.data.source.OpmlLocalDataSource
+import me.ash.reader.data.source.OPMLDataSource
 import me.ash.reader.data.source.RYDatabase
 import me.ash.reader.data.source.RYNetworkDataSource
 import me.ash.reader.ui.ext.del
@@ -51,7 +51,7 @@ class RYApp : Application(), Configuration.Provider {
     lateinit var ryNetworkDataSource: RYNetworkDataSource
 
     @Inject
-    lateinit var opmlLocalDataSource: OpmlLocalDataSource
+    lateinit var OPMLDataSource: OPMLDataSource
 
     @Inject
     lateinit var rssHelper: RssHelper

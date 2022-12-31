@@ -15,7 +15,7 @@ import java.io.InputStream
 import java.util.*
 import javax.inject.Inject
 
-class OpmlLocalDataSource @Inject constructor(
+class OPMLDataSource @Inject constructor(
     @ApplicationContext
     private val context: Context,
     @IODispatcher

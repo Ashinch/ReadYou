@@ -87,8 +87,8 @@ interface FeedDao {
     )
     suspend fun queryByLink(accountId: Int, url: String): List<Feed>
 
-    @Insert
-    suspend fun insert(feed: Feed): Long
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(vararg feed: Feed)
 
     @Insert
     suspend fun insertList(feeds: List<Feed>): List<Long>

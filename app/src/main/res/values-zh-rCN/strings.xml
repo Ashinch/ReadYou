@@ -23,6 +23,7 @@
     <string name="deny">拒绝</string>
     <string name="defaults">默认</string>
     <string name="unknown">未知</string>
+    <string name="empty">空</string>
     <string name="back">返回</string>
     <string name="go_to">转到</string>
     <string name="settings">设置</string>
@@ -346,4 +347,8 @@
     <string name="switch_account">切换账户</string>
     <string name="add">添加</string>
     <string name="accounts_tips">在订阅源页面中点击帐户名称来切换它们。</string>
+    <string name="server_url">服务器地址</string>
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+    <string name="connection">连接信息</string>
 </resources>

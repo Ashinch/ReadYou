@@ -26,7 +26,7 @@ class SyncWorker @AssistedInject constructor(
         withContext(Dispatchers.Default) {
             Log.i("RLog", "doWork: ")
             rssRepository.get().sync(this@SyncWorker).also {
-                rssRepository.get().keepArchivedArticles()
+                rssRepository.get().clearKeepArchivedArticles()
             }
         }
 

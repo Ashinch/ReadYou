@@ -116,8 +116,9 @@ class ReadingViewModel @Inject constructor(
                     )
                 )
             }
-            rssRepository.get().updateArticleInfo(
-                articleWithFeed.article.copy(isStarred = isStarred)
+            rssRepository.get().markAsStarred(
+                articleId = articleWithFeed.article.id,
+                isStarred = isStarred,
             )
         }
     }
