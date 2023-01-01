@@ -33,3 +33,6 @@
 
 # Rome
 -keep class com.rometools.** { *; }
+
+# Provider API
+-keep class me.ash.reader.data.provider.** { *; }
