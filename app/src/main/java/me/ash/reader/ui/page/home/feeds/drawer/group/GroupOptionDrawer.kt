@@ -41,12 +41,12 @@ import me.ash.reader.ui.ext.*
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GroupOptionDrawer(
-    groupOptionViewModel: GroupOptionViewModel = hiltViewModel(),
+    viewModel: GroupOptionViewModel = hiltViewModel(),
     content: @Composable () -> Unit = {},
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val groupOptionUiState = groupOptionViewModel.groupOptionUiState.collectAsStateValue()
+    val groupOptionUiState = viewModel.groupOptionUiState.collectAsStateValue()
     val group = groupOptionUiState.group
     val toastString = stringResource(R.string.rename_toast, groupOptionUiState.newName)
 
@@ -73,7 +73,9 @@ fun GroupOptionDrawer(
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         modifier = Modifier.roundClick {
-                            groupOptionViewModel.showRenameDialog()
+                            if (viewModel.rssRepository.get().update) {
+                                viewModel.showRenameDialog()
+                            }
                         },
                         text = group?.name ?: stringResource(R.string.unknown),
                         style = MaterialTheme.typography.headlineSmall,
@@ -102,17 +104,17 @@ fun GroupOptionDrawer(
                     Subtitle(text = stringResource(R.string.preset))
 
                     Spacer(modifier = Modifier.height(10.dp))
-                    Preset(groupOptionViewModel, group, context)
+                    Preset(viewModel, group, context)
 
-                    if (groupOptionUiState.groups.size != 1) {
+                    if (viewModel.rssRepository.get().move && groupOptionUiState.groups.size != 1) {
                         Spacer(modifier = Modifier.height(26.dp))
                         Subtitle(text = stringResource(R.string.move_to_group))
                         Spacer(modifier = Modifier.height(10.dp))
 
                         if (groupOptionUiState.groups.size > 6) {
-                            LazyRowGroups(groupOptionUiState, group, groupOptionViewModel)
+                            LazyRowGroups(groupOptionUiState, group, viewModel)
                         } else {
-                            FlowRowGroups(groupOptionUiState, group, groupOptionViewModel)
+                            FlowRowGroups(groupOptionUiState, group, viewModel)
                         }
                     }
 
@@ -133,14 +135,14 @@ fun GroupOptionDrawer(
         visible = groupOptionUiState.renameDialogVisible,
         value = groupOptionUiState.newName,
         onValueChange = {
-            groupOptionViewModel.inputNewName(it)
+            viewModel.inputNewName(it)
         },
         onDismissRequest = {
-            groupOptionViewModel.hideRenameDialog()
+            viewModel.hideRenameDialog()
         },
         onConfirm = {
-            groupOptionViewModel.rename()
-            groupOptionViewModel.hideDrawer(scope)
+            viewModel.rename()
+            viewModel.hideDrawer(scope)
             context.showToast(toastString)
         }
     )
@@ -148,7 +150,7 @@ fun GroupOptionDrawer(
 
 @Composable
 private fun Preset(
-    groupOptionViewModel: GroupOptionViewModel,
+    viewModel: GroupOptionViewModel,
     group: Group?,
     context: Context,
 ) {
@@ -172,7 +174,7 @@ private fun Preset(
                 )
             },
         ) {
-            groupOptionViewModel.showAllAllowNotificationDialog()
+            viewModel.showAllAllowNotificationDialog()
         }
         RYSelectionChip(
             modifier = Modifier.animateContentSize(),
@@ -188,22 +190,22 @@ private fun Preset(
                 )
             },
         ) {
-            groupOptionViewModel.showAllParseFullContentDialog()
+            viewModel.showAllParseFullContentDialog()
         }
         RYSelectionChip(
             modifier = Modifier.animateContentSize(),
             content = stringResource(R.string.clear_articles),
             selected = false,
         ) {
-            groupOptionViewModel.showClearDialog()
+            viewModel.showClearDialog()
         }
-        if (group?.id != context.currentAccountId.getDefaultGroupId()) {
+        if (viewModel.rssRepository.get().delete && group?.id != context.currentAccountId.getDefaultGroupId()) {
             RYSelectionChip(
                 modifier = Modifier.animateContentSize(),
                 content = stringResource(R.string.delete_group),
                 selected = false,
             ) {
-                groupOptionViewModel.showDeleteDialog()
+                viewModel.showDeleteDialog()
             }
         }
     }

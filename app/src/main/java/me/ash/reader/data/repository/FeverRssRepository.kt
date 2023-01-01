@@ -53,8 +53,10 @@ class FeverRssRepository @Inject constructor(
     feedDao, workManager, rssHelper, notificationHelper, ioDispatcher, defaultDispatcher
 ) {
 
-    override val subscribe = false
+    override val subscribe: Boolean = false
     override val move: Boolean = false
+    override val delete: Boolean = false
+    override val update: Boolean = false
 
     private suspend fun getFeverAPI() =
         FeverSecurityKey(accountDao.queryById(context.currentAccountId)!!.securityKey).run {

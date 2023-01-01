@@ -69,7 +69,9 @@ fun FeedOptionDrawer(
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         modifier = Modifier.roundClick {
-                            feedOptionViewModel.showRenameDialog()
+                            if (feedOptionViewModel.rssRepository.get().update) {
+                                feedOptionViewModel.showRenameDialog()
+                            }
                         },
                         text = feed?.name ?: stringResource(R.string.unknown),
                         style = MaterialTheme.typography.headlineSmall,
@@ -87,7 +89,8 @@ fun FeedOptionDrawer(
                     selectedParseFullContentPreset = feedOptionUiState.feed?.isFullContent ?: false,
                     isMoveToGroup = true,
                     showGroup = feedOptionViewModel.rssRepository.get().move,
-                    showUnsubscribe = true,
+                    showUnsubscribe = feedOptionViewModel.rssRepository.get().delete,
+                    notSubscribeMode = true,
                     selectedGroupId = feedOptionUiState.feed?.groupId ?: "",
                     allowNotificationPresetOnClick = {
                         feedOptionViewModel.changeAllowNotificationPreset()
@@ -111,8 +114,10 @@ fun FeedOptionDrawer(
                         context.openURL(feed?.url)
                     },
                     onFeedUrlLongClick = {
-                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                        feedOptionViewModel.showFeedUrlDialog()
+                        if (feedOptionViewModel.rssRepository.get().update) {
+                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                            feedOptionViewModel.showFeedUrlDialog()
+                        }
                     }
                 )
             }

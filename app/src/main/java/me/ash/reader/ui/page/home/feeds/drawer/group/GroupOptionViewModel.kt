@@ -23,7 +23,7 @@ import javax.inject.Inject
 @OptIn(ExperimentalMaterialApi::class)
 @HiltViewModel
 class GroupOptionViewModel @Inject constructor(
-    private val rssRepository: RssRepository,
+    val rssRepository: RssRepository,
     @MainDispatcher
     private val mainDispatcher: CoroutineDispatcher,
     @IODispatcher

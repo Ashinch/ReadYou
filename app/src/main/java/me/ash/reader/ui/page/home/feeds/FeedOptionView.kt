@@ -39,7 +39,8 @@ fun FeedOptionView(
     selectedParseFullContentPreset: Boolean = false,
     isMoveToGroup: Boolean = false,
     showGroup:Boolean = true,
-    showUnsubscribe: Boolean = false,
+    showUnsubscribe:Boolean = true,
+    notSubscribeMode: Boolean = false,
     selectedGroupId: String = "",
     allowNotificationPresetOnClick: () -> Unit = {},
     parseFullContentPresetOnClick: () -> Unit = {},
@@ -68,6 +69,7 @@ fun FeedOptionView(
             selectedAllowNotificationPreset = selectedAllowNotificationPreset,
             selectedParseFullContentPreset = selectedParseFullContentPreset,
             showUnsubscribe = showUnsubscribe,
+            notSubscribeMode = notSubscribeMode,
             allowNotificationPresetOnClick = allowNotificationPresetOnClick,
             parseFullContentPresetOnClick = parseFullContentPresetOnClick,
             clearArticlesOnClick = clearArticlesOnClick,
@@ -120,7 +122,8 @@ private fun EditableUrl(
 private fun Preset(
     selectedAllowNotificationPreset: Boolean = false,
     selectedParseFullContentPreset: Boolean = false,
-    showUnsubscribe: Boolean = false,
+    showUnsubscribe: Boolean = true,
+    notSubscribeMode: Boolean = false,
     allowNotificationPresetOnClick: () -> Unit = {},
     parseFullContentPresetOnClick: () -> Unit = {},
     clearArticlesOnClick: () -> Unit = {},
@@ -168,7 +171,7 @@ private fun Preset(
         ) {
             parseFullContentPresetOnClick()
         }
-        if (showUnsubscribe) {
+        if (notSubscribeMode) {
             RYSelectionChip(
                 modifier = Modifier.animateContentSize(),
                 content = stringResource(R.string.clear_articles),
@@ -176,12 +179,14 @@ private fun Preset(
             ) {
                 clearArticlesOnClick()
             }
-            RYSelectionChip(
-                modifier = Modifier.animateContentSize(),
-                content = stringResource(R.string.unsubscribe),
-                selected = false,
-            ) {
-                unsubscribeOnClick()
+            if (showUnsubscribe) {
+                RYSelectionChip(
+                    modifier = Modifier.animateContentSize(),
+                    content = stringResource(R.string.unsubscribe),
+                    selected = false,
+                ) {
+                    unsubscribeOnClick()
+                }
             }
         }
     }

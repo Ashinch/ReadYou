@@ -42,8 +42,10 @@ abstract class AbstractRssRepository constructor(
     private val dispatcherDefault: CoroutineDispatcher,
 ) {
 
-    open val subscribe = true
-    open val move = true
+    open val subscribe: Boolean = true
+    open val move: Boolean = true
+    open val delete: Boolean = true
+    open val update: Boolean = true
 
     open suspend fun validCredentials(): Boolean = true
 
