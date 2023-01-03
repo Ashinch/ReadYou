@@ -246,7 +246,12 @@
     <string name="delete_account_tips">Êtes-vous sûr de vouloir supprimer ce compte \?</string>
     <string name="add_accounts_desc">Local, Services, Auto-Hébergés</string>
     <string name="display">Montrer</string>
-    <string name="switch_account">Changer de compte</string>
+    <string name="switch_account">Basculer</string>
     <string name="add">Ajouter</string>
     <string name="accounts_tips">Appuyez sur le nom du compte sur la page du flux pour changer de compte.</string>
+    <string name="password">Mot de passe</string>
+    <string name="empty">Vide</string>
+    <string name="server_url">URL du serveur</string>
+    <string name="username">Nom d’utilisateur</string>
+    <string name="connection">Connexion</string>
 </resources>

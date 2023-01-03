@@ -39,7 +39,7 @@
     <string name="already_subscribed">Suscrito</string>
     <string name="clear">Limpio</string>
     <string name="paste">Pegar</string>
-    <string name="feed_or_site_url">Feed o URL</string>
+    <string name="feed_or_site_url">Fuente o URL</string>
     <string name="import_from_opml">Importar desde OPML</string>
     <string name="preset">Prestablecido</string>
     <string name="selected">Seleccionado</string>
@@ -358,7 +358,12 @@
     <string name="local_desc">En este dispositivo</string>
     <string name="only_on_wifi">Sólo por Wi-Fi</string>
     <string name="list">Lista</string>
-    <string name="switch_account">Cambiar cuenta</string>
+    <string name="switch_account">Cambiar</string>
     <string name="add">Agregar</string>
     <string name="accounts_tips">Haga clic en el nombre de la cuenta en la página de la fuente para cambiarlos.</string>
+    <string name="empty">Vacío</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="connection">Conexión</string>
+    <string name="server_url">URL del servidor</string>
+    <string name="password">Contraseña</string>
 </resources>

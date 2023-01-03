@@ -344,7 +344,7 @@
     <string name="clear_all_articles_toast">已清空该账户的所有文章</string>
     <string name="delete_account_toast">该账户已被删除</string>
     <string name="synchronous_tips">需要重新启动才能生效。</string>
-    <string name="switch_account">切换账户</string>
+    <string name="switch_account">切换</string>
     <string name="add">添加</string>
     <string name="accounts_tips">在订阅源页面中点击帐户名称来切换它们。</string>
     <string name="server_url">服务器地址</string>

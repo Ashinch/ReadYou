@@ -15,7 +15,7 @@
         <item quantity="one">%1$d Artikel Dibintangi</item>
         <item quantity="other">%1$d Artikel Dibintangi</item>
     </plurals>
-    <string name="feeds">Feeds</string>
+    <string name="feeds">Umpan</string>
     <string name="syncing">Menyinkronkan…</string>
     <string name="loading">Memuat…</string>
     <string name="expand_less">Lebih Sedikit</string>
@@ -29,19 +29,19 @@
     <string name="back">Kembali</string>
     <string name="go_to">Menuju ke</string>
     <string name="settings">Pengaturan</string>
-    <string name="refresh">Refresh</string>
+    <string name="refresh">Muat ulang</string>
     <string name="search">Cari</string>
     <string name="searching">Mencari…</string>
     <string name="subscribe">Berlangganan</string>
     <string name="already_subscribed">Sudah berlangganan</string>
     <string name="clear">Bersihkan</string>
     <string name="paste">Tempel</string>
-    <string name="feed_or_site_url">Feed atau URL</string>
+    <string name="feed_or_site_url">URL Umpan atau Situs</string>
     <string name="import_from_opml">Masukkan File OPML</string>
     <string name="preset">Prasetel</string>
     <string name="selected">Dipilih</string>
     <string name="allow_notification">Izinkan Notifikasi</string>
-    <string name="all_allow_notification_tips">Izinkan semua Feed di grup \"%1$s\" untuk mengirim notifikasi.</string>
+    <string name="all_allow_notification_tips">Izinkan semua umpan di grup \"%1$s\" untuk mengirim notifikasi.</string>
     <string name="all_allow_notification_toast">Mengizinkan semua notifikasi dari grup \"%1$s\"</string>
     <string name="all_deny_notification_toast">Menolak semua notifikasi dari grup \"%1$s\"</string>
     <string name="parse_full_content">Uraikan keseluruhan isi konten</string>
@@ -49,14 +49,14 @@
     <string name="all_parse_full_content_toast">Menguraikan keseluruhan isi konten dalam grup \"%1$s\"</string>
     <string name="all_deny_parse_full_content_toast">Mencegah penguraian isi konten secara lengkap pada semua artikel di grup \"%1$s\"</string>
     <string name="clear_articles">Bersihkan Artikel</string>
-    <string name="clear_articles_in_feed_toast">Membersihkan semua artikel yang diarsip pada Feed \"%1$s\".</string>
-    <string name="clear_articles_in_group_toast">Membersihkan semua artikel yang diarsip pada grup \"%1$s\".</string>
-    <string name="clear_articles_feed_tips">Bersihkan semua artikel yang diarsip pada Feed \"%1$s\".</string>
-    <string name="clear_articles_group_tips">Bersihkan semua artikel yang diarsip pada Feed \"%1$s\".</string>
+    <string name="clear_articles_in_feed_toast">Membersihkan semua artikel yang diarsip pada umpan \"%1$s\"</string>
+    <string name="clear_articles_in_group_toast">Membersihkan semua artikel yang diarsip pada grup \"%1$s\"</string>
+    <string name="clear_articles_feed_tips">Bersihkan semua artikel yang diarsip pada umpan \"%1$s\".</string>
+    <string name="clear_articles_group_tips">Bersihkan semua artikel yang diarsip pada umpan \"%1$s\".</string>
     <string name="add_to_group">Masukkan ke Grup</string>
     <string name="move_to_group">Pindahkan ke Grup</string>
-    <string name="all_move_to_group_tips">Pindahkan semua Feeds di grup \"%1$s\" ke grup \"%2$s\".</string>
-    <string name="all_move_to_group_toast">Memindahkan semua Feeds ke grup \"%1$s\"</string>
+    <string name="all_move_to_group_tips">Pindahkan semua umpan di grup \"%1$s\" ke grup \"%2$s\".</string>
+    <string name="all_move_to_group_toast">Memindahkan semua umpan ke grup \"%1$s\"</string>
     <string name="rename">Ganti Nama</string>
     <string name="change_url">Ganti URL</string>
     <string name="rename_toast">Nama diganti menjadi \"%1$s\"</string>
@@ -69,8 +69,8 @@
     <string name="unsubscribe">Berhenti Berlangganan</string>
     <string name="unsubscribe_tips">Berhenti berlangganan dari \"%1$s\" dan hapus semua artikel yang diarsip di dalamnya.</string>
     <string name="delete_group">Hapus Grup</string>
-    <string name="delete_group_tips">Hapus grup \"%1$s\" dan semua Feed dan artikel yang diarsip di dalamnya.</string>
-    <string name="group_option_tips">Opsi berikut akan diterapkan ke semua Feed dalam grup ini.</string>
+    <string name="delete_group_tips">Hapus grup \"%1$s\" dan semua umpan dan artikel yang diarsip di dalamnya.</string>
+    <string name="group_option_tips">Opsi berikut akan diterapkan ke semua umpaan dalam grup ini.</string>
     <string name="today">Hari ini</string>
     <string name="yesterday">Kemarin</string>
     <string name="date_at_time">%1$s %2$s</string>
@@ -95,128 +95,21 @@
     <string name="accounts">Akun</string>
     <string name="accounts_desc">Lokal, FreshRSS</string>
     <string name="color_and_style">Warna &amp; Gaya</string>
-    <string name="color_and_style_desc">Tema, gaya warna, ukuran Font</string>
+    <string name="color_and_style_desc">Tema, gaya warna, ukuran fon</string>
     <string name="interaction">Interaksi</string>
-    <string name="interaction_desc">Saat memulai, getaran Haptik</string>
+    <string name="interaction_desc">Saat memulai, getaran haptik</string>
     <string name="languages">Bahasa</string>
     <string name="languages_desc">Inggris, Mandarin, dll</string>
     <string name="help_translate">Bantu terjemahkan</string>
     <string name="use_device_languages">Gunakan bahasa perangkat</string>
     <string name="tips_and_support">Tips dan Bantuan</string>
-    <string name="tips_and_support_desc">Tentang, lisensi Open Source</string>
+    <string name="tips_and_support_desc">Tentang, lisensi sumber terbuka</string>
     <string name="welcome">Selamat Datang</string>
     <string name="tos_tips">Baca dan setujui Syarat Penggunaan Layanan dan Kebijakan Privasi dari Read You untuk melanjutkan.</string>
     <string name="browse_tos_tips">Pelajari lebih lanjut &lt;i&gt;&lt;u&gt;Syarat Penggunaan Layanan dan Kebijakan Privasi&lt;/u&gt;&lt;/i&gt;
     </string>
     <string name="terms_of_service">Syarat Menggunakan Layanan</string>
-    <string name="tos_content">
-        &lt;h5&gt;
-
-        Kebijakan Privasi
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        Kami menjaga privasimu dengan serius.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        tidak menyimpan data penggunanya sama sekali. Dan semua informasi sensitif (sandi ataupun informasi akun lainnya)
-        disimpan dengan aman di database lokal dari aplikasi yang ada di perangkatmu.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        akan menggunakan izin berikut untuk menyediakan layanan kepada Kamu.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        - Izin untuk mengakses jaringan (untuk mengakses konten online yang Kamu tentukan)
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - Izin untuk melihat status jaringan (untuk mengetahui apakah perangkat saat ini memiliki kesediaan jaringan)
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - Izin untuk tetap aktif di latar belakang (untuk otomatis menyinkronkan konten favoritmu secara teratur)
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Layanan Pihak Ketiga
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        Kebijakan ini tidak berlaku untuk layanan pihak ketiga yang Kamu gunakan dengan &lt;b&gt;Read You&lt;/b&gt;.
-        Kamu bisa meninjau kebijakan privasi dari layanan pihak ketiga yang Kamu gunakan di situs web mereka.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Perlu Diingat
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        adalah alat pengumpul konten saja. Penggunaan &lt;b&gt;Read You&lt;/b&gt; tunduk pada hukum dan peraturan negara dan wilayahmu,
-        dan setiap kewajiban yang muncul dari tindakanmu akan ditanggung Kamu secara pribadi.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Lisensi Open Source
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        adalah proyek Open Source di bawah Lisensi Open Source GNU GPL 3.0[1], Yang memungkinkan Kamu untuk menggunakan, mereferensikan, dan
-        memodifikasi Source Code &lt;b&gt;Read You&lt;/b&gt; dengan percuma, tetapi tidak mengizinkan
-        kode yang dimodifikasi dan diturunkan untuk didistribusikan dan dijual sebagai perangkat lunak Closed-Source yang dikomersilkan.
-        Untuk detailnya, silakan lihat Lisensi Open Source GNU GPL 3.0 secara lengkap[2].
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Lampiran
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        - [1] https://github.com/Ashinch/ReadYou
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - [2] https://www.gnu.org/licenses/gpl-3.0.html
-
-        &lt;/p&gt;
-    </string>
+    <string name="tos_content"><h5> Kebijakan Privasi </h5> <br/> <p> Kami menjaga privasi Anda dengan serius. </p> <br/> <p> <b>Read You</b> tidak menyimpan data penggunanya sama sekali. Semua informasi sensitif (sandi ataupun informasi akun lainnya) disimpan dengan aman di database lokal dari aplikasi yang ada di perangkat Anda. </p> <br/> <p> <b>Read You</b> akan menggunakan izin berikut untuk menyediakan layanan kepada Anda. </p> <br/> <p> - Izin untuk mengakses jaringan (untuk mengakses konten daring yang Anda tentukan) </p> <p> - Izin untuk melihat status jaringan (untuk mengetahui apakah perangkat saat ini memiliki kesediaan jaringan) </p> <p> - Izin untuk tetap aktif di latar belakang (untuk otomatis menyinkronkan konten favorit Anda secara teratur) </p> <br/> <br/> <h5> Layanan Pihak Ketiga </h5> <br/> <p> Kebijakan ini tidak berlaku untuk layanan pihak ketiga yang Anda gunakan dengan <b>Read You</b>. Anda dapat meninjau kebijakan privasi dari layanan pihak ketiga yang Anda gunakan di situs web mereka. </p> <br/> <br/> <h5> Perlu Diingat </h5> <br/> <p> <b>Read You</b> adalah alat pengumpul konten saja. Penggunaan <b>Read You</b> tunduk pada hukum dan peraturan negara dan wilayah Anda, dan setiap kewajiban yang muncul dari tindakan Anda akan ditanggung Anda secara pribadi. </p> <br/> <br/> <h5> Lisensi Sumber Terbuka </h5> <br/> <p> <b>Read You</b> adalah proyek Sumber Terbuka di bawah Lisensi Sumber Terbuka GNU GPL 3.0[1], yang memungkinkan Anda untuk menggunakan, mereferensikan, dan memodifikasi Kode Sumber <b>Read You</b> secara bebas, tetapi tidak mengizinkan kode yang dimodifikasi dan diturunkan untuk didistribusikan dan dijual sebagai perangkat lunak sumber tertutup. Untuk detailnya, silakan lihat Lisensi Sumber Terbuka GNU GPL 3.0 secara lengkap[2]. </p> <br/> <br/> <h5> Lampiran </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">Setuju</string>
     <string name="wallpaper_colors">Warna Wallpaper</string>
     <string name="no_palettes">Tidak ada palet</string>
@@ -233,13 +126,13 @@
     <string name="other">Lainnya</string>
     <string name="amoled_dark_theme">Tema AMOLED</string>
     <string name="tonal_elevation">Elevasi nada warna</string>
-    <string name="reading_fonts">Font bacaan</string>
-    <string name="basic_fonts">Font dasar</string>
-    <string name="feeds_page">Haalaman Feed</string>
+    <string name="reading_fonts">Fon bacaan</string>
+    <string name="basic_fonts">Fon dasar</string>
+    <string name="feeds_page">Halaman umpan</string>
     <string name="flow_page">Halaman alur</string>
     <string name="reading_page">Halaman membaca</string>
     <string name="sponsor">Sponsor</string>
-    <string name="open_source_licenses">Lisensi Open Source</string>
+    <string name="open_source_licenses">Lisensi sumber terbuka</string>
     <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
     <string name="change_log">Daftar Perubahan</string>
     <string name="update">Perbarui</string>
@@ -261,33 +154,33 @@
     <string name="article_date">Waktu publikasi artikel</string>
     <string name="article_desc">Deskripsi artikel</string>
     <string name="article_images">Gambar artikel</string>
-    <string name="feed_names">Nama Feed</string>
-    <string name="feed_favicons">Favicon Feed</string>
+    <string name="feed_names">Nama umpan</string>
+    <string name="feed_favicons">Favicon umpan</string>
     <string name="article_date_sticky_header">Header tetap untuk tanggal publikasi (fitur eksperimen)</string>
     <string name="article_list">Daftar Artikel</string>
     <string name="group_list">Daftar Grup</string>
     <string name="always_expand">Selalu lihat lebih banyak</string>
     <string name="top">Bagian Atas</string>
     <string name="mark_as_read_button_position">Posisi tombol \"Tandai Sudah Dibaca\"</string>
-    <string name="top_bar">Bar Atas</string>
+    <string name="top_bar">Bilah Atas</string>
     <string name="fill_selected_icon">Isi ikon yang dipilih</string>
-    <string name="filter_bar">Bar Filter</string>
+    <string name="filter_bar">Bilah Saringan</string>
     <string name="icons">Ikon</string>
     <string name="icons_and_labels">Ikon dan Label</string>
     <string name="icons_and_label_only_selected">Ikon dan Label (Hanya yang Dipilih)</string>
     <string name="tips_top_bar_tonal_elevation">Perubahan nada warna ini hanya tersedia saat menggulirkan layar.</string>
     <string name="tips_article_list_tonal_elevation">Perubahan nada warna ini hanya tersedia di tema terang.</string>
-    <string name="tips_group_list_tonal_elevation">Perubahan nada warna ini hanya tersedia di tems terang.</string>
+    <string name="tips_group_list_tonal_elevation">Perubahan nada warna ini hanya tersedia di tema terang.</string>
     <string name="share">Bagikan</string>
     <string name="touch_to_play_video">Klik untuk memutar video</string>
     <string name="text">Teks</string>
-    <string name="font_size">Ukuran Font</string>
+    <string name="font_size">Ukuran fon</string>
     <string name="letter_spacing">Jarak antar kata</string>
     <string name="line_spacing">Jarak antar baris</string>
     <string name="alignment">Kesejajaran</string>
     <string name="general">Umum</string>
-    <string name="auto_hide_toolbars">Otomatis sembunyikan Toolbars</string>
-    <string name="rearrange_buttons">Atur ulang tombol-tombol</string>
+    <string name="auto_hide_toolbars">Otomatis sembunyikan bilah alat</string>
+    <string name="rearrange_buttons">Atur ulang tombol</string>
     <string name="bionic_reading">Bionic Reading</string>
     <string name="images">Gambar</string>
     <string name="rounded_corners">Sudut membulat</string>
@@ -296,7 +189,7 @@
     <string name="align_right">Sejajar ke kanan</string>
     <string name="center_text">Teks di tengah</string>
     <string name="justify">Diperbenar</string>
-    <string name="external_fonts">Font eksternal</string>
+    <string name="external_fonts">Fon eksternal</string>
     <string name="title">Judul</string>
     <string name="bold">Ketebalan</string>
     <string name="upper_case">Huruf Kapital</string>
@@ -305,7 +198,7 @@
     <string name="advanced">Lebih lanjut</string>
     <string name="dark_reading_theme">Membaca dalam tema gelap</string>
     <string name="title_desc">Ketebalan, kapital, kesejajaran</string>
-    <string name="text_desc">Ukuran Font, jarak antar kata, kesejajaran</string>
+    <string name="text_desc">Ukuran fon, jarak antar kata, kesejajaran</string>
     <string name="images_desc">Sudut membulat, padding horizontal</string>
     <string name="videos_desc">Sudut membulat, padding horizontal</string>
     <string name="maximize">Perbesar</string>
@@ -313,7 +206,7 @@
     <string name="every_2_hours">Setiap 2 jam</string>
     <string name="more">Lebih banyak</string>
     <string name="list">Daftar</string>
-    <string name="add_accounts_desc">Lokal, Layanan, Di-host Sendiri</string>
+    <string name="add_accounts_desc">Lokal, Layanan, Peladen Sendiri</string>
     <string name="display">Tampilkan</string>
     <string name="synchronous_tips">Mulai ulang diperlukan agar perubahan diterapkan.</string>
     <string name="every_1_hour">Setiap jam</string>
@@ -342,7 +235,7 @@
     <string name="add_accounts">Tambahkan akun</string>
     <string name="sync_interval">Sinkronkan</string>
     <string name="sync_once_on_start">Sinkronkan sekali saat mulai</string>
-    <string name="only_on_wifi">Hanya di Wi-Fi</string>
+    <string name="only_on_wifi">Hanya pada Wi-Fi</string>
     <string name="only_when_charging">Hanya saat mengisi daya</string>
     <string name="keep_archived_articles">Simpan artikel yang diarsipkan</string>
     <string name="export_as_opml">Ekspor sebagai OPML</string>
@@ -350,8 +243,13 @@
     <string name="delete_account">Hapus akun</string>
     <string name="must_have_an_account">Harus memiliki akun</string>
     <string name="clear_all_articles_toast">Semua artikel dari akun ini telah dihapus</string>
-    <string name="self_hosted">Di-host Sendiri</string>
-    <string name="switch_account">Ubah Akun</string>
+    <string name="self_hosted">Peladen Sendiri</string>
+    <string name="switch_account">Ubah</string>
     <string name="add">Tambahkan</string>
     <string name="accounts_tips">Klik nama akun di laman umpan untuk mengubahnya.</string>
+    <string name="empty">Kosong</string>
+    <string name="password">Kata Sandi</string>
+    <string name="server_url">URL Server</string>
+    <string name="username">Nama Pengguna</string>
+    <string name="connection">Koneksl</string>
 </resources>

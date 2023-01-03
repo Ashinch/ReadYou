@@ -32,7 +32,7 @@
     <string name="already_subscribed">Zaten abonesin</string>
     <string name="clear">Temizle</string>
     <string name="paste">Yapıştır</string>
-    <string name="feed_or_site_url">Akış veya URL</string>
+    <string name="feed_or_site_url">Akış veya Site URL\'si</string>
     <string name="import_from_opml">OPML\'den içe aktar</string>
     <string name="preset">Ön ayar</string>
     <string name="allow_notification">Bildirime izin ver</string>
@@ -245,5 +245,10 @@
     <string name="add_accounts_desc">Yerel, Hizmetler, Kendin Barındırma</string>
     <string name="add">Ekle</string>
     <string name="accounts_tips">Değiştirmek için besleme sayfasındaki hesap adına tıklayın.</string>
-    <string name="switch_account">Hesap Değiştir</string>
+    <string name="switch_account">Değiştir</string>
+    <string name="username">Kullanıcı adı</string>
+    <string name="password">Parola</string>
+    <string name="connection">Bağlantı</string>
+    <string name="empty">Boş</string>
+    <string name="server_url">Sunucu URL\'si</string>
 </resources>
