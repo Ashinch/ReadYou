@@ -108,7 +108,7 @@
     <string name="tos_content"><h5> 隱私權政策 </h5> <br/> <p> 我非常重視您的隱私。 </p> <br/> <p> <b>Read You</b> 不收集任何使用者資料，所有敏感資訊（密碼和其他帳戶資訊）都被安全地儲存在您裝置上的本機應用程式資料庫中。 </p> <br/> <p> <b>Read You</b> 將使用以下權限為您提供服務： </p> <br/> <p> - 存取網路權限（用於存取您所指定的線上內容） </p> <p> - 讀取網路狀態權限（用於取得目前裝置是否擁有可供使用的網路條件） </p> <p> - 背景服務權限（用於定時自動地為您同步已收藏的內容） </p> <br/> <br/> <h5> 第三方服務 </h5> <br/> <p> 本政策不適用於您與 <b>Read You</b> 一起使用的第三方服務。您可以在所使用的第三方服務的網站上查閱相關的隱私權政策。 </p> <br/> <br/> <h5> 免責聲明 </h5> <br/> <p> <b>Read You</b> 僅是一款內容收藏工具。您在使用 <b>Read You</b> 的過程中，應遵守所在國家和地區的法律規範，因您的行為所產生的一切責任將由您個人承擔。 </p> <br/> <br/> <h5> 開放原始碼授權 </h5> <br/> <p> <b>Read You</b> 是一個使用 GNU GPL 3.0 開放原始碼授權條款的開源專案[1]，允許您免費使用、引用、修改 <b>Read You</b> 的原始碼，但不允許將修改後及其衍生的程式碼作為專有商業軟體進行發布和銷售。具體細節請查看完整的 GNU GPL 3.0 開放原始碼授權條款 [2]。 </p> <br/> <br/> <h5> 附錄 </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">同意</string>
     <string name="wallpaper_colors">桌布顏色</string>
-    <string name="no_palettes">暫無色板</string>
+    <string name="no_palettes">暫無調色板</string>
     <string name="only_android_8.1_plus">僅限 Android 8.1+</string>
     <string name="basic_colors">基本顏色</string>
     <string name="primary_color">強調色</string>
@@ -245,4 +245,9 @@
     <string name="switch_account">切換帳戶</string>
     <string name="add">新增</string>
     <string name="accounts_tips">按一下來源頁面上的帳戶名稱即可切換。</string>
+    <string name="empty">空白</string>
+    <string name="server_url">伺服器位址</string>
+    <string name="username">使用者名稱</string>
+    <string name="password">密碼</string>
+    <string name="connection">連線</string>
 </resources>
