@@ -1,33 +1,35 @@
 ## 0.7.4
 
-1. Página de "Tips & Soporte".
+1. Agregue la página "Consejos y soporte".
 
-2. Comprobación de actualizaciones.
+2. Agregue verificación y descarga de actualizaciones.
 
-3. Selección de tema de color dinámica.
+3. El tema de color dinámico se selecciona de forma predeterminada cuando se instala por primera vez (si está disponible).
 
-4. Añadido gesto de sincronización en la página de información.
+4. Se agregó sincronización desplegable en la página de flujo de información.
 
-5. Mostrar la carga durante el parseo de contenido.
+5. Agregue temporalmente avisos de carga al analizar el texto completo.
 
-6. Actualización de dependencias.
+6. Actualice algunas dependencias ascendentes (puede haber defectos desconocidos).
 
-7 Soporte de RSS v1.0 (a testar).
+7. Compatible con el protocolo RSS v1.0 (a probar).
 
-8. Barra de navegación arreglada.
+8. Fijar la inmersión de pequeñas barras blancas.
 
-9. Arreglado: error en menú.
+9. Se solucionó el problema de que el evento de devolución no se interceptaba cuando se abría el menú de opciones.
 
-10. Optimización de vídeos y estilos.
+10. Optimiza el estilo de algunos videos en la página de lectura.
 
-### Notas
+11. Optimice algunos estilos de excepción.
 
-1. Comprobar actualizaciones al iniciar.
+### ilustrar:
 
-2. Usar la API de Gitee para chino simplificado y la API de GitHub API para el resto.
+1. Buscará actualizaciones automáticamente cada vez que se inicie en frío (no se experimentará hasta que se lance la próxima versión).
 
-3. Por favor, evitar comprobar actualizaciones muy frecuentemente.
+2. Al buscar actualizaciones, el idioma chino simplificado usa la API de Gitee y otros idiomas usan la API de GitHub.
 
-4. Refactorizada la página de lectura.
+3. No verifique manualmente si hay actualizaciones con frecuencia (con un intervalo de enfriamiento de 2 segundos), porque la misma IP solo puede acceder a la API de GitHub 60 veces por hora, y el límite de frecuencia específico de la API de Gitee no está claro (actualmente 8 horas tienen no ha sido reiniciado).
 
-5. La sincronización se hará en el hilo principal por limitaciones técnicas.
+4. La reconstrucción de la página de lectura es posterior a la versión 0.8, el ícono y la portada relacionados son posteriores a la versión 0.9, y el soporte para FreshRSS (Fever API, Google Reader API) es posterior a la versión 1.0.
+
+5. Debido al ERROR del complemento de análisis ascendente, esta versión solo puede sincronizarse con un solo subproceso, lo que puede ser un poco lento. El autor mencionó que la próxima versión será reparada y el protocolo Atom también será compatible.
