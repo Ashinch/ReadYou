@@ -2,15 +2,15 @@
 
 <b>Özellikler:</b>
 
-* Besleme Bağlantılarına Abone Olma
+* Besleme bağlantılarına abone olma
 * OPML'den içe aktarma
-* Makale Senkronizasyonu
-* Makale Güncelleme Bildirimi
-* Tam İçeriği Ayrıştırma
-* Okunmamış ve Yıldızlıları Filtreleme
-* Besleme Gruplama
+* Makale eşitleme
+* Makale güncelleme bildirimi
+* Tam içeriği ayrıştırma
+* Okunmamış ve yıldızlıları filtreleme
+* Besleme gruplama
 * Yerelleştirme
 * OPML olarak dışa aktarma
-* Makale Arama
+* Makale arama
 
-Daha fazlası gelecek…
+Dahası da gelecek…
