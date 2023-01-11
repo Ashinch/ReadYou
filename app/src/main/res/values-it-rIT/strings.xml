@@ -39,7 +39,7 @@
     <string name="already_subscribed">Già iscritto</string>
     <string name="clear">Pulisci</string>
     <string name="paste">Incolla</string>
-    <string name="feed_or_site_url">Feed o URL</string>
+    <string name="feed_or_site_url">Feed o URL Sito</string>
     <string name="import_from_opml">Importa da OPML</string>
     <string name="preset">Preimpostazione</string>
     <string name="selected">Selezionato</string>
@@ -246,7 +246,12 @@
     <string name="list">Lista</string>
     <string name="display">Schermo</string>
     <string name="block_list">Blocca la lista</string>
-    <string name="switch_account">Cambia account</string>
+    <string name="switch_account">Cambia</string>
     <string name="accounts_tips">Premi sul nome dell\'account nella pagina dei feed per cambiare gli account.</string>
     <string name="add">Aggiungi</string>
+    <string name="empty">Vuoto</string>
+    <string name="server_url">URL Server</string>
+    <string name="password">Password</string>
+    <string name="username">Nome utente</string>
+    <string name="connection">Connessione</string>
 </resources>
