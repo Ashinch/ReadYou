@@ -1,5 +1,5 @@
 <div align="center">
-    <img width="200" height="200" style="display: block; border: 1px solid #f5f5f5; border-radius: 9999px;" src="./fastlane/metadata/android/en-US/images/icon.png">
+    <img width="200" height="200" style="display: block; border: 1px solid #f5f5f5; border-radius: 9999px;" src="https://raw.githubusercontent.com/Ashinch/ReadYou/main/fastlane/metadata/android/en-US/images/icon.png">
 </div>
 
 <br>
@@ -23,78 +23,93 @@
 
 <div align="center">
     <h1>Read You</h1>
-    <p>This is a copy of  <a href="https://reederapp.com/">Reeder</a>, in order to give Android an RSS reader similar to Reeder.</p>
-    <p>English by DeepL&nbsp;&nbsp;|&nbsp;&nbsp;
+    <p>An Android RSS reader presented in <a target="_blank" href="https://m3.material.io/">Material You</a> style.</p>
+    <p>English&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-de.md">Deutsch</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-CN.md">简体中文</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-TW.md">繁體中文</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-fa.md">فارسی</a></p>
     <br/>
     <br/>
-    <img src="./fastlane/metadata/android/en-US/images/startup.png" width="19.2%" alt="startup" />
-    <img src="./fastlane/metadata/android/en-US/images/feeds.png" width="19.2%" alt="startup" />
-    <img src="./fastlane/metadata/android/en-US/images/flow.png" width="19.2%" alt="startup" />
-    <img src="./fastlane/metadata/android/en-US/images/read.png" width="19.2%" alt="startup" />
-    <img src="./fastlane/metadata/android/en-US/images/settings.png" width="19.2%" alt="startup" />
+    <img src="https://raw.githubusercontent.com/Ashinch/ReadYou/main/fastlane/metadata/android/en-US/images/startup.png" width="19.2%" alt="startup" />
+    <img src="https://raw.githubusercontent.com/Ashinch/ReadYou/main/fastlane/metadata/android/en-US/images/feeds.png" width="19.2%" alt="feeds" />
+    <img src="https://raw.githubusercontent.com/Ashinch/ReadYou/main/fastlane/metadata/android/en-US/images/flow.png" width="19.2%" alt="flow" />
+    <img src="https://raw.githubusercontent.com/Ashinch/ReadYou/main/fastlane/metadata/android/en-US/images/read.png" width="19.2%" alt="read" />
+    <img src="https://raw.githubusercontent.com/Ashinch/ReadYou/main/fastlane/metadata/android/en-US/images/settings.png" width="19.2%" alt="settings" />
     <br/>
     <br/>
 </div>
 
 ## Features
 
-**Read You** combines the interaction logic of Reeder with the design style of [Material Design 3 (You)](https://m3.material.io/).
+**Read You** is an Android RSS reader presented in [Material You](https://m3.material.io/) style.
 
 The following are the progress made so far and the goals to be worked on in the near future:
 
--   [x] Local
+- [x] Subscribe to RSS links
+- [x] Import or export OPML files
+- [x] Notification of new articles
+- [x] Article readability optimization
+- [x] Full content parse for original articles
+- [x] Multi-account
+- [ ] Bionic reading
+- [ ] Read aloud
+- [ ] Android widget
+- [ ] ...
 
-    -   [x] Subscribe to Feed Links
-    -   [x] Import from OPML
-    -   [x] Article Sync
-    -   [x] Article Update Notification
-    -   [x] Parse Full Content
-    -   [x] Filter Unread and Starred
-    -   [x] Feed Grouping
-    -   [x] Localization
-    -   [x] Export as OPML
-    -   [x] Search for Articles
-    -   [ ] Preference Settings
-    -   [ ] Release APK
-    -   [ ] Widget
-    -   [ ] ...
+## Integration
 
--   [ ] Fever API Support
--   [ ] Google Reader API Support
--   [ ] Inoreader API Support
--   [ ] ...
+**Read You** integrates with some of third-party service APIs to support you in using your existing cloud accounts as data sources.
 
-> The above features are only preliminary implementations and there may be unknown issues.
+- [x] Fever
+- [ ] Google Reader
+- [ ] FreshRSS
+- [ ] Miniflux
+- [ ] Tiny Tiny RSS
+- [ ] Inoreader
+- [ ] Feedly
+- [ ] Feedbin
+- [ ] ...
 
 ## Download
 
+[<img src="https://s1.ax1x.com/2023/01/12/pSu1a36.png" alt="Get it on GitHub" height="80">](https://github.com/Ashinch/ReadYou/releases)
+[<img src="https://s1.ax1x.com/2023/01/12/pSnTZ0f.png"
+     alt="Get it on Telegram Channel"
+     height="80">](https://t.me/ReadYouApp)
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
      height="80">](https://f-droid.org/packages/me.ash.reader/)
 
-or get the APK from the [GitHub release section](https://github.com/Ashinch/ReadYou/releases).
+F-Droid releases can not upgrade to other releases and it is compiled, signed and distributed uniformly by [F-Droid](https://f-droid.org/docs/FAQ_-_General/).
 
-## Translate
+## Sponsor
 
-<a target="_blank" href="https://hosted.weblate.org/engage/readyou/">
-<img src="https://hosted.weblate.org/widgets/readyou/-/287x66-white.png" alt="" />
-</a>
+**Read You** is a free open source software that benefits from the open source community and every user can enjoy it's full functionality for free, so if you appreciate my current work, you can buy me a cup of coffee ☕️.
+
+[<img src="https://s1.ax1x.com/2023/01/12/pSnHqpQ.png"
+     alt="donate"
+     height="80">](https://afdian.net/a/ashinch)
+
+[Thanks for all the love and support ❤️](https://afdian.net/a/ashinch?tab=sponsor)
+
+## Localization
+
+Thank you to each of the **Read You** translators, and if you would like to contribute, please submit a translation via [Weblate](https://hosted.weblate.org/engage/readyou/).
+
+[<img src="https://hosted.weblate.org/widgets/readyou/-/horizontal-auto.svg" alt="" />](https://hosted.weblate.org/engage/readyou/)
 
 ## Build
 
-> If you want to preview the Read You app, you can get the **preview version** of the APK file in [Telegram](https://t.me/ReadYouApp).
+> Welcome to open a [pull request](https://github.com/Ashinch/ReadYou/pulls). [GitHub Actions](https://github.com/Ashinch/ReadYou/actions) automatically packages all flavors of apk files for each commit.
 
-**Read You** is implemented on Android's native [Jetpack Compose](https://developer.android.com/jetpack/compose) architecture.
+**Read You** is based on [Jetpack Compose](https://developer.android.com/jetpack/compose) toolkit for building Android's native UI.
 
 1. First you need to get the source code of **Read You**.
 
-    ```shell
-    git clone https://github.com/Ashinch/ReadYou.git
-    ```
+   ```shell
+   git clone https://github.com/Ashinch/ReadYou.git
+   ```
 
 2. Then open it via [Android Studio (latest version)](https://developer.android.com/studio).
 
@@ -104,14 +119,33 @@ or get the APK from the [GitHub release section](https://github.com/Ashinch/Read
 
 ## Credits
 
--   [MusicYou](https://github.com/Kyant0/MusicYou)
--   [ParseRSS](https://github.com/muhrifqii/ParseRSS): [MIT](https://github.com/muhrifqii/ParseRSS/blob/master/LICENSE)
--   [Readability4J](https://github.com/dankito/Readability4J): [Apache License 2.0](https://github.com/dankito/Readability4J/blob/master/LICENSE)
--   [opml-parser](https://github.com/mdewilde/opml-parser): [Apache License 2.0](https://github.com/mdewilde/opml-parser/blob/master/LICENSE)
--   [compose-html](https://github.com/ireward/compose-html): [Apache License 2.0](https://github.com/ireward/compose-html/blob/main/LICENSE.txt)
--   [Rome](https://github.com/rometools/rome): [Apache License 2.0](https://github.com/rometools/rome/blob/master/LICENSE)
--   [Feeder](https://gitlab.com/spacecowboy/Feeder): [GPL v3.0](https://gitlab.com/spacecowboy/Feeder/-/blob/master/LICENSE)
+### Open Source Projects
+
+- [MusicYou](https://github.com/Kyant0/MusicYou)
+- [ParseRSS](https://github.com/muhrifqii/ParseRSS)
+- [Readability4J](https://github.com/dankito/Readability4J)
+- [opml-parser](https://github.com/mdewilde/opml-parser)
+- [compose-html](https://github.com/ireward/compose-html)
+- [Rome](https://github.com/rometools/rome)
+- [Feeder](https://gitlab.com/spacecowboy/Feeder)
+- [Seal](https://github.com/JunkFood02/Seal)
+- [news-flash](https://gitlab.com/news-flash)
+- ...
+
+### Special Thanks
+
+[<img style="border: 1px solid #f5f5f5; border-radius: 9999px;width: 180px; height:180px;" src="https://avatars.githubusercontent.com/u/76829190?v=4" width="180" height ="180"/>](https://github.com/Kyant0)
+
+Thanks to **@Krant0** for the design inspiration and Monet engine implementation for **Read You**.
+
+[<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="200" alt="Copyright © 2000-2023 JetBrains s.r.o. JetBrains and the JetBrains logo are registered trademarks of JetBrains s.r.o."/>](https://www.jetbrains.com/)
+
+Thanks to **JetBrains** for allocating free open-source licences for IDEs for **Read You**.
+
+[<img src="https://hosted.weblate.org/widgets/readyou/-/287x66-white.png"  width="200"/>](https://hosted.weblate.org/engage/readyou/)
+
+Thanks to **Weblate** for providing free hosting of open source projects for **Read You**.
 
 ## License
 
-[GNU GPL v3.0](https://github.com/Ashinch/ReadYou/blob/main/LICENSE)
+GNU GPL v3.0 © [Read You](https://github.com/Ashinch/ReadYou/blob/main/LICENSE)

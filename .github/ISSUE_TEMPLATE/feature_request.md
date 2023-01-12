@@ -13,4 +13,3 @@ labels: enhancement
 
 **2. Describe the feature request**
 
-(Want you've done some research before now)

@@ -12,5 +12,3 @@ labels: bug
 -   APP: [0.7.2]
 
 **2. Describe the bug**
-
-(Want you've done some research before now)
