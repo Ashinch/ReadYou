@@ -132,7 +132,7 @@ F-Droid 版本与其他版本不兼容，您无法通过覆盖安装包来升级
 
 ### 特别鸣谢
 
-[<img style="border: 1px solid #f5f5f5; border-radius: 9999px;width: 180px; height:180px;" src="https://avatars.githubusercontent.com/u/76829190?v=4" width="180" height ="180"/>](https://github.com/Kyant0)
+[<img src="https://avatars.githubusercontent.com/u/76829190?v=4" width="180" height="180" style="display: block; border: 1px solid #f5f5f5; border-radius: 9999px;"/>](https://github.com/Kyant0)
 
 感谢 **@Krant0** 为 **Read You** 提供的设计灵感与 Monet 引擎实现。
 

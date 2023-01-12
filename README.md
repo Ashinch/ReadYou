@@ -134,7 +134,7 @@ Thank you to each of the **Read You** translators, and if you would like to cont
 
 ### Special Thanks
 
-[<img style="border: 1px solid #f5f5f5; border-radius: 9999px;width: 180px; height:180px;" src="https://avatars.githubusercontent.com/u/76829190?v=4" width="180" height ="180"/>](https://github.com/Kyant0)
+[<img src="https://avatars.githubusercontent.com/u/76829190?v=4" width="180" height="180" style="display: block; border: 1px solid #f5f5f5; border-radius: 9999px;"/>](https://github.com/Kyant0)
 
 Thanks to **@Krant0** for the design inspiration and Monet engine implementation for **Read You**.
 
