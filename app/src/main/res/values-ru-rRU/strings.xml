@@ -362,7 +362,12 @@
     <string name="keep_archived_articles">Хранить архивированные статьи</string>
     <string name="only_on_wifi">Только по Wi-Fi</string>
     <string name="synchronous_tips">Для вступления изменений в силу требуется перезагрузка.</string>
-    <string name="switch_account">Сменить аккаунт</string>
+    <string name="switch_account">Сменить</string>
     <string name="add">Добавить</string>
     <string name="accounts_tips">Щелкните имя учетной записи на странице веб-канала, чтобы переключить их.</string>
+    <string name="empty">Пустой</string>
+    <string name="server_url">URL-адрес сервера</string>
+    <string name="username">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="connection">Связь</string>
 </resources>
