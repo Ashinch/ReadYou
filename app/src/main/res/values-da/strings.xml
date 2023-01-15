@@ -42,7 +42,7 @@
     <string name="already_subscribed">Allerede abonneret</string>
     <string name="clear">Tøm</string>
     <string name="paste">Indsæt</string>
-    <string name="feed_or_site_url">Kanal eller URL</string>
+    <string name="feed_or_site_url">Kanal eller Hjemmeside URL</string>
     <string name="import_from_opml">Importer fra OPML</string>
     <string name="preset">Forudindstilling</string>
     <string name="selected">Valgt</string>
@@ -152,4 +152,16 @@
     <string name="value">værdi</string>
     <string name="horizontal_padding">Vandret polstring</string>
     <string name="article_date">Artiklens udgivelsestid</string>
+    <string name="article_list">Artikel liste</string>
+    <string name="feed_favicons">Feed ikoner</string>
+    <string name="article_date_sticky_header">Sticky header for udgivelsesdato (eksperimentel)</string>
+    <string name="mark_as_read_button_position">\"Marker som læst\" knappe position</string>
+    <string name="top_bar">Øverste bjælke</string>
+    <string name="flow_page">Flow side</string>
+    <string name="feed_names">Feed navne</string>
+    <string name="top">Top</string>
+    <string name="fill_selected_icon">Fyld det valgte ikon</string>
+    <string name="empty">Tøm</string>
+    <string name="group_list">Gruppe liste</string>
+    <string name="always_expand">Altid udvid</string>
 </resources>
