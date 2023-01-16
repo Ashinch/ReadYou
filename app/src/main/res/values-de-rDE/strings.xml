@@ -352,7 +352,7 @@
     <string name="delete_account_tips">Sind Sie sicher, dass Sie dieses Konto löschen möchten\?</string>
     <string name="synchronous_tips">Ein Neustart ist erforderlich, damit die Änderungen wirksam werden.</string>
     <string name="block_list">Blockierliste</string>
-    <string name="switch_account">Konto wechseln</string>
+    <string name="switch_account">Wechseln</string>
     <string name="add">Hinzufügen</string>
     <string name="accounts_tips">Klick auf den Kontonamen auf der Feed-Seite um zu wechseln.</string>
     <string name="username">Kontoname</string>
