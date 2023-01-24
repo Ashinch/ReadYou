@@ -139,6 +139,7 @@ fun WebView(
 @Stable
 fun argbToCssColor(argb: Int): String = String.format("#%06X", 0xFFFFFF and argb)
 
+// TODO: Google sans is deprecated
 @Stable
 fun getStyle(argb: Int): String = """
 <html><head><style>
