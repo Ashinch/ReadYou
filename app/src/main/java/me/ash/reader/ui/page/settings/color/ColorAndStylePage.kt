@@ -152,7 +152,7 @@ fun ColorAndStylePage(
                     }
                     SettingItem(
                         title = stringResource(R.string.basic_fonts),
-                        desc = "Google Sans",
+                        desc = stringResource(R.string.system_default),
                         enable = false,
                         onClick = {},
                     ) {}

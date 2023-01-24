@@ -351,4 +351,5 @@
     <string name="username">用户名</string>
     <string name="password">密码</string>
     <string name="connection">连接信息</string>
+    <string name="system_default">系统默认</string>
 </resources>

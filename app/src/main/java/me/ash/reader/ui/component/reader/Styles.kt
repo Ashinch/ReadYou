@@ -92,7 +92,7 @@ fun bodyStyle(): TextStyle =
 @ReadOnlyComposable
 fun h1Style(): TextStyle =
     TextStyle(
-        fontFamily = LocalReadingFonts.current.asFontFamily(isDisplay = true),
+        fontFamily = LocalReadingFonts.current.asFontFamily(),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
         fontSize = 28.sp,
         letterSpacing = 0.sp,
@@ -105,7 +105,7 @@ fun h1Style(): TextStyle =
 @ReadOnlyComposable
 fun h2Style(): TextStyle =
     TextStyle(
-        fontFamily = LocalReadingFonts.current.asFontFamily(isDisplay = true),
+        fontFamily = LocalReadingFonts.current.asFontFamily(),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
         fontSize = 28.sp,
         letterSpacing = 0.sp,
@@ -118,7 +118,7 @@ fun h2Style(): TextStyle =
 @ReadOnlyComposable
 fun h3Style(): TextStyle =
     TextStyle(
-        fontFamily = LocalReadingFonts.current.asFontFamily(isDisplay = true),
+        fontFamily = LocalReadingFonts.current.asFontFamily(),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
         fontSize = 19.sp,
         letterSpacing = 0.sp,
@@ -131,7 +131,7 @@ fun h3Style(): TextStyle =
 @ReadOnlyComposable
 fun h4Style(): TextStyle =
     TextStyle(
-        fontFamily = LocalReadingFonts.current.asFontFamily(isDisplay = true),
+        fontFamily = LocalReadingFonts.current.asFontFamily(),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
         fontSize = 17.sp,
         letterSpacing = 0.sp,
@@ -144,7 +144,7 @@ fun h4Style(): TextStyle =
 @ReadOnlyComposable
 fun h5Style(): TextStyle =
     TextStyle(
-        fontFamily = LocalReadingFonts.current.asFontFamily(isDisplay = true),
+        fontFamily = LocalReadingFonts.current.asFontFamily(),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
         fontSize = 17.sp,
         letterSpacing = 0.sp,
@@ -157,7 +157,7 @@ fun h5Style(): TextStyle =
 @ReadOnlyComposable
 fun h6Style(): TextStyle =
     TextStyle(
-        fontFamily = LocalReadingFonts.current.asFontFamily(isDisplay = true),
+        fontFamily = LocalReadingFonts.current.asFontFamily(),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
         fontSize = 17.sp,
         letterSpacing = 0.sp,
