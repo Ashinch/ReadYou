@@ -1,23 +1,23 @@
 ## 0.9.6
 
-1. API Fiebre de soporte (beta)
+1. Compatibilidad con la API de fiebre (beta)
 
-2. Traducciones mejoradas (gracias a todos)
+2. Traducciones mejoradas (gracias a los colaboradores)
 
-3. Solucione el problema de que la cuenta siempre está sincronizada al cambiar de cuenta
+3. Se corrigió el error de estar siempre sincronizado al cambiar de cuenta
 
-4. Se solucionó el problema de que no se podían modificar otras configuraciones de la cuenta
+4. Se corrigió un error que impedía cambiar la configuración de otra cuenta
 
-Fever es una API obsoleta que no es totalmente compatible con las capacidades de los lectores modernos.
-Pero como la primera API de servicio de terceros admitida por Read You, es una buena oportunidad para comenzar.
+Fever es una API en desuso, que no es compatible con los reproductores modernos.
+Sin embargo, representa una buena oportunidad para comenzar, ya que es la primera API de servicios de terceros compatible con Read You.
 
-Habrá una actualización complementaria en un futuro cercano para corregir errores y traducciones adicionales.
+Pronto estará disponible una actualización adicional para corregir errores y agregar nuevas traducciones.
 
 
-### Problemas conocidos
+### Errores conocidos
 
-1. La cuenta de Fever solo puede extraer todos los artículos del servidor cada vez que se sincroniza
+1. La cuenta Fever sincroniza todos los elementos del servidor cada vez que sincronizas
 
-2. La función de notificación de la cuenta Fever no es válida
+2. Las notificaciones no funcionan para las cuentas Fever
 
-3. El interruptor predeterminado de análisis de texto completo de la cuenta Fever se restablece después de cada sincronización
+3. Los ajustes preestablecidos de escaneo de contenido para las cuentas de Fever se restablecen en cada sincronización
