@@ -360,4 +360,5 @@
     <string name="server_url">Server URL</string>
     <string name="password">Passwort</string>
     <string name="connection">Verbindung</string>
+    <string name="system_default">Systemstandard</string>
 </resources>

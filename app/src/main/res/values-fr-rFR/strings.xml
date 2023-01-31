@@ -254,4 +254,5 @@
     <string name="server_url">URL du serveur</string>
     <string name="username">Nom d’utilisateur</string>
     <string name="connection">Connexion</string>
+    <string name="system_default">Défaut du système</string>
 </resources>

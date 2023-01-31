@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="starred_desc">
+        <item quantity="one">%1$d Csillagozott Elem</item>
+        <item quantity="other">%1$d Csillagozott Elem</item>
+    </plurals>
+    <string name="all">Mind</string>
+    <string name="clear">Töröl</string>
+    <plurals name="all_desc">
+        <item quantity="one">%1$d Archivált Elem</item>
+        <item quantity="other">%1$d Archivált Elem</item>
+    </plurals>
+    <string name="unread">Olvasatlan</string>
+    <plurals name="unread_desc">
+        <item quantity="one">%1$d Olvasatlan Elem</item>
+        <item quantity="other">%1$d Olvasatlan Elem</item>
+    </plurals>
+    <string name="starred">Csillagozott</string>
+    <string name="feeds">Hírfolyamok</string>
+    <string name="syncing">Szinkronizálás…</string>
+    <string name="loading">Betöltés…</string>
+    <string name="expand_less">Bezár</string>
+    <string name="expand_more">Kinyit</string>
+    <string name="cancel">Mégsem</string>
+    <string name="back">Vissza</string>
+    <string name="go_to">Ugrás</string>
+    <string name="settings">Beállítások</string>
+    <string name="searching">Keresés…</string>
+    <string name="subscribe">Feliratkozik</string>
+    <string name="already_subscribed">Már feliratkozott</string>
+    <string name="paste">Beilleszt</string>
+    <string name="feed_or_site_url">Hírfolyam vagy Weboldal URL</string>
+    <string name="import_from_opml">Betöltés OPML formátumból</string>
+    <string name="preset">Előre beállított</string>
+    <string name="selected">Kiválasztott</string>
+    <string name="allow_notification">Értesítések Engedélyezése</string>
+    <string name="all_allow_notification_tips">Értesítés küldésének engedélyezése a \"%1$s\" csoport összes hírfolyamának számára.</string>
+    <string name="all_allow_notification_toast">Minden értesítés engedélyezve a \"%1$s\" csoportnak</string>
+    <string name="all_deny_notification_toast">Minden értesítés letiltva a \"%1$s\" csoportnak</string>
+    <string name="parse_full_content">Teljes Tartalom Elemzése</string>
+    <string name="all_parse_full_content_tips">A \"%1$s\" csoport minden cikkének teljes elemzése.</string>
+    <string name="all_parse_full_content_toast">A \"%1$s\" csoport minden cikkének teljes elemzése</string>
+    <string name="all_deny_parse_full_content_toast">A \"%1$s\" csoport cikkeinek teljes elemzése megszűnt</string>
+    <string name="clear_articles">Cikkek Törlése</string>
+    <string name="clear_articles_in_feed_toast">A \"%1$s\" hírfolyam minden archivált cikke törlésre került</string>
+    <string name="clear_articles_in_group_toast">A \"%1$s\" csoport minden archivált cikke törlésre került</string>
+    <string name="confirm">Megerősít</string>
+    <string name="refresh">Frissít</string>
+    <string name="empty">Üres</string>
+    <string name="allow">Engedélyez</string>
+    <string name="defaults">Alapértelmezett</string>
+    <string name="search">Keres</string>
+    <string name="deny">Megtilt</string>
+    <string name="unknown">Ismeretlen</string>
+</resources>
