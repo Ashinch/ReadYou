@@ -254,4 +254,5 @@
     <string name="password">Password</string>
     <string name="username">Nome utente</string>
     <string name="connection">Connessione</string>
+    <string name="system_default">Predefinito dal sistema</string>
 </resources>
