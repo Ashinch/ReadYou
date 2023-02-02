@@ -148,6 +148,12 @@ sealed class DataStoreKeys<T> {
             get() = booleanPreferencesKey("amoledDarkTheme")
     }
 
+    object BasicFonts : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("basicFonts")
+    }
+
     // Feeds page
     object FeedsFilterBarStyle : DataStoreKeys<Int>() {
 

@@ -47,7 +47,7 @@ fun SubscribeDialog(
     val groupsState = subscribeUiState.groups.collectAsState(initial = emptyList())
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
         it?.let { uri ->
-            context.contentResolver.openInputStream(uri)?.let { inputStream ->
+            context.contentResolver.openInputStream(uri)?.use { inputStream ->
                 subscribeViewModel.importFromInputStream(inputStream)
             }
         }

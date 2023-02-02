@@ -25,6 +25,7 @@ data class Settings(
     val customPrimaryColor: String = CustomPrimaryColorPreference.default,
     val darkTheme: DarkThemePreference = DarkThemePreference.default,
     val amoledDarkTheme: AmoledDarkThemePreference = AmoledDarkThemePreference.default,
+    val basicFonts: BasicFontsPreference = BasicFontsPreference.default,
 
     // Feeds page
     val feedsFilterBarStyle: FeedsFilterBarStylePreference = FeedsFilterBarStylePreference.default,
@@ -95,6 +96,7 @@ val LocalDarkTheme =
     compositionLocalOf<DarkThemePreference> { DarkThemePreference.default }
 val LocalAmoledDarkTheme =
     compositionLocalOf<AmoledDarkThemePreference> { AmoledDarkThemePreference.default }
+val LocalBasicFonts = compositionLocalOf<BasicFontsPreference> { BasicFontsPreference.default }
 
 // Feeds page
 val LocalFeedsFilterBarStyle =
@@ -141,8 +143,10 @@ val LocalFlowArticleListTonalElevation =
 // Reading page
 val LocalReadingTheme = compositionLocalOf<ReadingThemePreference> { ReadingThemePreference.default }
 val LocalReadingDarkTheme = compositionLocalOf<ReadingDarkThemePreference> { ReadingDarkThemePreference.default }
-val LocalReadingPageTonalElevation = compositionLocalOf<ReadingPageTonalElevationPreference> { ReadingPageTonalElevationPreference.default }
-val LocalReadingAutoHideToolbar = compositionLocalOf<ReadingAutoHideToolbarPreference> { ReadingAutoHideToolbarPreference.default }
+val LocalReadingPageTonalElevation =
+    compositionLocalOf<ReadingPageTonalElevationPreference> { ReadingPageTonalElevationPreference.default }
+val LocalReadingAutoHideToolbar =
+    compositionLocalOf<ReadingAutoHideToolbarPreference> { ReadingAutoHideToolbarPreference.default }
 val LocalReadingTextFontSize = compositionLocalOf { ReadingTextFontSizePreference.default }
 val LocalReadingLetterSpacing = compositionLocalOf { ReadingLetterSpacingPreference.default }
 val LocalReadingTextHorizontalPadding = compositionLocalOf { ReadingTextHorizontalPaddingPreference.default }
@@ -161,7 +165,8 @@ val LocalReadingSubheadUpperCase =
     compositionLocalOf<ReadingSubheadUpperCasePreference> { ReadingSubheadUpperCasePreference.default }
 val LocalReadingImageHorizontalPadding = compositionLocalOf { ReadingImageHorizontalPaddingPreference.default }
 val LocalReadingImageRoundedCorners = compositionLocalOf { ReadingImageRoundedCornersPreference.default }
-val LocalReadingImageMaximize = compositionLocalOf<ReadingImageMaximizePreference> { ReadingImageMaximizePreference.default }
+val LocalReadingImageMaximize =
+    compositionLocalOf<ReadingImageMaximizePreference> { ReadingImageMaximizePreference.default }
 
 // Interaction
 val LocalInitialPage = compositionLocalOf<InitialPagePreference> { InitialPagePreference.default }
@@ -192,12 +197,14 @@ fun SettingsProvider(
         LocalNewVersionLog provides settings.newVersionLog,
         LocalNewVersionSize provides settings.newVersionSize,
         LocalNewVersionDownloadUrl provides settings.newVersionDownloadUrl,
+        LocalBasicFonts provides settings.basicFonts,
 
         // Theme
         LocalThemeIndex provides settings.themeIndex,
         LocalCustomPrimaryColor provides settings.customPrimaryColor,
         LocalDarkTheme provides settings.darkTheme,
         LocalAmoledDarkTheme provides settings.amoledDarkTheme,
+        LocalBasicFonts provides settings.basicFonts,
 
         // Feeds page
         LocalFeedsTopBarTonalElevation provides settings.feedsTopBarTonalElevation,

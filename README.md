@@ -57,6 +57,8 @@ The following are the progress made so far and the goals to be worked on in the 
 - [ ] Android widget
 - [ ] ...
 
+[What am I doing now?](https://github.com/users/Ashinch/projects/2)
+
 ## Integration
 
 **Read You** integrates with some of third-party service APIs to support you in using your existing cloud accounts as data sources.
