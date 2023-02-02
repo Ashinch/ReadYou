@@ -106,7 +106,7 @@ data class TonalPalettes(
     }
 
     @Composable
-    fun Preheating() {
+    fun Preparing() {
         tonalTokens.forEach { primary(it) }
         tonalTokens.forEach { secondary(it) }
         tonalTokens.forEach { tertiary(it) }

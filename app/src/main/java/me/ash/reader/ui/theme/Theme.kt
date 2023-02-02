@@ -3,6 +3,8 @@ package me.ash.reader.ui.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalContext
+import me.ash.reader.data.model.preference.LocalBasicFonts
 import me.ash.reader.data.model.preference.LocalThemeIndex
 import me.ash.reader.ui.theme.palette.LocalTonalPalettes
 import me.ash.reader.ui.theme.palette.TonalPalettes
@@ -20,26 +22,26 @@ fun AppTheme(
     val themeIndex = LocalThemeIndex.current
 
     val tonalPalettes = wallpaperPalettes[
-            if (themeIndex >= wallpaperPalettes.size) {
-                when {
-                    wallpaperPalettes.size == 5 -> 0
-                    wallpaperPalettes.size > 5 -> 5
-                    else -> 0
-                }
-            } else {
-                themeIndex
+        if (themeIndex >= wallpaperPalettes.size) {
+            when {
+                wallpaperPalettes.size == 5 -> 0
+                wallpaperPalettes.size > 5 -> 5
+                else -> 0
             }
+        } else {
+            themeIndex
+        }
     ]
 
     ProvideZcamViewingConditions {
         CompositionLocalProvider(
-            LocalTonalPalettes provides tonalPalettes.apply { Preheating() },
+            LocalTonalPalettes provides tonalPalettes.apply { Preparing() },
         ) {
             MaterialTheme(
                 colorScheme =
                 if (useDarkTheme) dynamicDarkColorScheme()
                 else dynamicLightColorScheme(),
-                typography = AppTypography,
+                typography = LocalBasicFonts.current.asTypography(LocalContext.current),
                 shapes = Shapes,
                 content = content,
             )

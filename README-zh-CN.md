@@ -55,6 +55,8 @@
 - [ ] Android 微件 / 小组件
 - [ ] ...
 
+[我目前在做什么？](https://github.com/users/Ashinch/projects/2)
+
 ## 集成
 
 **Read You** 也集成了一些第三方服务 API，支持您使用已有的云端账户来作为数据源。

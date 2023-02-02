@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.ExternalFonts
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
@@ -34,14 +35,14 @@ sealed class ReadingFontsPreference(val value: Int) : Preference() {
             External -> context.getString(R.string.external_fonts)
         }
 
-    fun asFontFamily(): FontFamily =
+    fun asFontFamily(context: Context): FontFamily =
         when (this) {
             System -> FontFamily.Default
             Serif -> FontFamily.Serif
             SansSerif -> FontFamily.SansSerif
             Monospace -> FontFamily.Monospace
             Cursive -> FontFamily.Cursive
-            External -> FontFamily.Default
+            External -> ExternalFonts.loadReadingTypography(context).displayLarge.fontFamily ?: FontFamily.Default
         }
 
     companion object {

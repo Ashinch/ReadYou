@@ -2,6 +2,8 @@ package me.ash.reader.ui.page.settings.color
 
 import android.content.Context
 import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,11 +27,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.data.model.preference.*
 import me.ash.reader.ui.component.base.*
+import me.ash.reader.ui.ext.ExternalFonts
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.svg.PALETTE
@@ -47,10 +51,19 @@ fun ColorAndStylePage(
     val darkThemeNot = !darkTheme
     val themeIndex = LocalThemeIndex.current
     val customPrimaryColor = LocalCustomPrimaryColor.current
+    val fonts = LocalBasicFonts.current
     val scope = rememberCoroutineScope()
 
     val wallpaperTonalPalettes = extractTonalPalettesFromUserWallpaper()
     var radioButtonSelected by remember { mutableStateOf(if (themeIndex > 4) 0 else 1) }
+    var fontsDialogVisible by remember { mutableStateOf(false) }
+
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            ExternalFonts(context, it, ExternalFonts.FontType.BasicFont).copyToInternalStorage()
+            BasicFontsPreference.External.put(context, scope)
+        }
+    }
 
     RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
@@ -152,9 +165,8 @@ fun ColorAndStylePage(
                     }
                     SettingItem(
                         title = stringResource(R.string.basic_fonts),
-                        desc = stringResource(R.string.system_default),
-                        enable = false,
-                        onClick = {},
+                        desc = fonts.toDesc(context),
+                        onClick = { fontsDialogVisible = true },
                     ) {}
                     Spacer(modifier = Modifier.height(24.dp))
                 }
@@ -195,6 +207,26 @@ fun ColorAndStylePage(
             }
         }
     )
+
+    RadioDialog(
+        visible = fontsDialogVisible,
+        title = stringResource(R.string.basic_fonts),
+        options = BasicFontsPreference.values.map {
+            RadioDialogOption(
+                text = it.toDesc(context),
+                style = TextStyle(fontFamily = it.asFontFamily(context)),
+                selected = it == fonts,
+            ) {
+                if (it.value == BasicFontsPreference.External.value) {
+                    launcher.launch("*/*")
+                } else {
+                    it.put(context, scope)
+                }
+            }
+        }
+    ) {
+        fontsDialogVisible = false
+    }
 }
 
 @Composable

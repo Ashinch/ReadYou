@@ -54,7 +54,7 @@ fun Metadata(
             text = dateString,
             color = MaterialTheme.colorScheme.outline,
             style = MaterialTheme.typography.labelMedium.copy(
-                fontFamily = LocalReadingFonts.current.asFontFamily(),
+                fontFamily = LocalReadingFonts.current.asFontFamily(context),
             ),
             textAlign = titleAlign.toTextAlign(),
         )
@@ -64,7 +64,7 @@ fun Metadata(
             text = if (titleUpperCase.value) titleUpperCaseString else title,
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.headlineLarge.copy(
-                fontFamily = LocalReadingFonts.current.asFontFamily(),
+                fontFamily = LocalReadingFonts.current.asFontFamily(context),
                 fontWeight = if (titleBold.value) FontWeight.SemiBold else FontWeight.Normal,
             ),
             textAlign = titleAlign.toTextAlign(),
@@ -79,7 +79,7 @@ fun Metadata(
                     text = it,
                     color = MaterialTheme.colorScheme.outline,
                     style = MaterialTheme.typography.labelMedium.copy(
-                        fontFamily = LocalReadingFonts.current.asFontFamily(),
+                        fontFamily = LocalReadingFonts.current.asFontFamily(context),
                     ),
                     textAlign = titleAlign.toTextAlign(),
                 )
@@ -92,7 +92,7 @@ fun Metadata(
             text = feedName,
             color = MaterialTheme.colorScheme.outline,
             style = MaterialTheme.typography.labelMedium.copy(
-                fontFamily = LocalReadingFonts.current.asFontFamily(),
+                fontFamily = LocalReadingFonts.current.asFontFamily(context),
             ),
             textAlign = titleAlign.toTextAlign(),
         )

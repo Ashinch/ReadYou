@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -79,7 +80,7 @@ fun bodyForeground(): Color = onSurfaceVariantColor()
 @ReadOnlyComposable
 fun bodyStyle(): TextStyle =
     TextStyle(
-        fontFamily = LocalReadingFonts.current.asFontFamily(),
+        fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontWeight = if (LocalReadingTextBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
         fontSize = LocalReadingTextFontSize.current.sp,
         letterSpacing = LocalReadingLetterSpacing.current.sp,
@@ -92,7 +93,7 @@ fun bodyStyle(): TextStyle =
 @ReadOnlyComposable
 fun h1Style(): TextStyle =
     TextStyle(
-        fontFamily = LocalReadingFonts.current.asFontFamily(),
+        fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
         fontSize = 28.sp,
         letterSpacing = 0.sp,
@@ -105,7 +106,7 @@ fun h1Style(): TextStyle =
 @ReadOnlyComposable
 fun h2Style(): TextStyle =
     TextStyle(
-        fontFamily = LocalReadingFonts.current.asFontFamily(),
+        fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
         fontSize = 28.sp,
         letterSpacing = 0.sp,
@@ -118,7 +119,7 @@ fun h2Style(): TextStyle =
 @ReadOnlyComposable
 fun h3Style(): TextStyle =
     TextStyle(
-        fontFamily = LocalReadingFonts.current.asFontFamily(),
+        fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
         fontSize = 19.sp,
         letterSpacing = 0.sp,
@@ -131,7 +132,7 @@ fun h3Style(): TextStyle =
 @ReadOnlyComposable
 fun h4Style(): TextStyle =
     TextStyle(
-        fontFamily = LocalReadingFonts.current.asFontFamily(),
+        fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
         fontSize = 17.sp,
         letterSpacing = 0.sp,
@@ -144,7 +145,7 @@ fun h4Style(): TextStyle =
 @ReadOnlyComposable
 fun h5Style(): TextStyle =
     TextStyle(
-        fontFamily = LocalReadingFonts.current.asFontFamily(),
+        fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
         fontSize = 17.sp,
         letterSpacing = 0.sp,
@@ -157,7 +158,7 @@ fun h5Style(): TextStyle =
 @ReadOnlyComposable
 fun h6Style(): TextStyle =
     TextStyle(
-        fontFamily = LocalReadingFonts.current.asFontFamily(),
+        fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
         fontSize = 17.sp,
         letterSpacing = 0.sp,
@@ -171,7 +172,7 @@ fun h6Style(): TextStyle =
 fun captionStyle(): TextStyle =
     MaterialTheme.typography.bodySmall.merge(
         TextStyle(
-            fontFamily = LocalReadingFonts.current.asFontFamily(),
+            fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
             color = bodyForeground().copy(alpha = 0.6f),
             textAlign = TextAlign.Center,
         )
@@ -182,7 +183,7 @@ fun captionStyle(): TextStyle =
 @ReadOnlyComposable
 fun linkTextStyle(): TextStyle =
     TextStyle(
-        fontFamily = LocalReadingFonts.current.asFontFamily(),
+        fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontSize = LocalReadingTextFontSize.current.sp,
         color = MaterialTheme.colorScheme.primary,
         textDecoration = TextDecoration.Underline,
