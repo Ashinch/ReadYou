@@ -1,21 +1,29 @@
 ## 0.8.3
 
-- Consentita modifica del nome del feed all'aggiunta di sottoscrizioni
+1. Consentita modifica del nome del feed all'aggiunta di sottoscrizioni
 
-- Aggiunte impostazioni per lo stile della pagina di lettura
+2. Aggiunte impostazioni per lo stile della pagina di lettura
 
-- Aggiunta traduzione italiana, hindi, spagnola e polacca. Aggiornata la tedesca
+3. Aggiunta la traduzione in italiano (grazie a Giovanni)
 
-- Scritti i ToS e inclusi in F-Droid
+4. Aggiunta la traduzione in hindi (grazie a augurer)
 
-- Modifiche minori
+5. Aggiunta la traduzione in spagnolo (grazie a Jayler95)
 
-Le prossime priorità:
+6. Aggiunta la traduzione in polacco (grazie a maciej-klupp)
 
-- Alcune impostazioni dell'account
+7. Aggiornata la traduzione in tedesco (grazie a Dave)
 
-- Supporto di più account (necessario prima di supportare API di terze parti)
+8. Sono stati scritti i termini di servizio e inclusi in F-Droid (grazie a linsui)
 
-- Supporto di alcune API di terze parti
+9. Modifiche minori
+
+Ora che Read You ha le funzionalità base di lettura locale, queste saranno le prossime tre priorità:
+
+1. Alcune impostazioni dell'account (come ad esempio l'intervallo di sincronizzazione)
+
+2. Supporto di più account (questo è necessario prima di supportare le API di terze parti)
+
+3. Supporto di alcune API di terze parti (come ad esempio Fever e Google Reader)
 
 Le altre funzionalità sono rimandate.
