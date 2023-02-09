@@ -366,5 +366,5 @@
     <string name="connection">Conexión</string>
     <string name="server_url">URL del servidor</string>
     <string name="password">Contraseña</string>
-    <string name="system_default">Configuración del sistema por defecto</string>
+    <string name="system_default">Sistema</string>
 </resources>

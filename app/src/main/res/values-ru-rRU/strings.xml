@@ -370,5 +370,5 @@
     <string name="username">Имя пользователя</string>
     <string name="password">Пароль</string>
     <string name="connection">Связь</string>
-    <string name="system_default">По умолчанию</string>
+    <string name="system_default">Следовать системным настройкам</string>
 </resources>

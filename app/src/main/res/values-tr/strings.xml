@@ -251,5 +251,5 @@
     <string name="connection">Bağlantı</string>
     <string name="empty">Boş</string>
     <string name="server_url">Sunucu URL\'si</string>
-    <string name="system_default">Sistem Öntanımlı Değeri</string>
+    <string name="system_default">Sistem</string>
 </resources>
