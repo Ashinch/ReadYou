@@ -2,14 +2,14 @@
 
 1. Aggiunta funzione di impostazione dell'account
 
-2. Aggiunta traduzione in molte lingue
+2. Aggiunta traduzione in molte lingue (grazie a ciascuno di voi, grazie a Weblate.com)
 
-3. Aggiunta funzione "Pulsante per l'articolo successivo" durante la lettura (animazione temporanea)
+3. Aggiunta funzione "Pulsante per l'articolo successivo" durante la lettura (animazione temporanea, grazie a frearb)
 
 4. Corretta icona monocromatica su Android 13
 
 5. Rimossa dipendenza TLSv1.3, ridotte dimensioni dell'app (impatto sconosciuto)
 
-6. Ridotto numero di articoli caricati contemporaneamente (100 -> 50)
+6. Ridotto il numero di articoli caricati contemporaneamente (100 -> 50)
 
-7. Aggiunta un'UI di tipo multi-account (la prossima versione supporta più account locali)
+7. Aggiunta un'interfaccia di tipo multi-account (la prossima versione supporta più account locali)
