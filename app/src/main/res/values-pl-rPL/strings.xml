@@ -363,5 +363,5 @@
     <string name="password">Hasło</string>
     <string name="connection">Połączenie</string>
     <string name="server_url">URL serwera</string>
-    <string name="system_default">Domyślne ustawienia systemu</string>
+    <string name="system_default">Ustawienia systemu</string>
 </resources>

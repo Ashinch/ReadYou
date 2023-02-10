@@ -105,8 +105,8 @@
     <string name="languages_desc">Inglese, Cinese, altre</string>
     <string name="help_translate">Aiuta a tradurre</string>
     <string name="use_device_languages">Usa la lingua del dispositivo</string>
-    <string name="tips_and_support">Trucchi e supporto</string>
-    <string name="tips_and_support_desc">Info, licenze open source</string>
+    <string name="tips_and_support">Note e supporto</string>
+    <string name="tips_and_support_desc">Informazioni, licenze open source</string>
     <string name="welcome">Benvenuto</string>
     <string name="tos_tips">Leggi e accetta i Termini di servizio e l\'Informativa sulla privacy di Read You per continuare.</string>
     <string name="browse_tos_tips">Sfoglia i&lt;i&gt;&lt;u&gt;Termini di servizio e l\'Informativa sulla privacy&lt;/u&gt;&lt;/i&gt;</string>
@@ -254,5 +254,5 @@
     <string name="password">Password</string>
     <string name="username">Nome utente</string>
     <string name="connection">Connessione</string>
-    <string name="system_default">Predefinito dal sistema</string>
+    <string name="system_default">Sistema</string>
 </resources>

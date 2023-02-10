@@ -257,5 +257,5 @@
     <string name="connection">Підключення</string>
     <string name="empty">Порожньо</string>
     <string name="username">Ім’я користувача</string>
-    <string name="system_default">Система за замовчуванням</string>
+    <string name="system_default">Слідувати системних налаштувань</string>
 </resources>

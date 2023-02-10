@@ -252,5 +252,5 @@
     <string name="server_url">URL Server</string>
     <string name="username">Nama Pengguna</string>
     <string name="connection">Koneksl</string>
-    <string name="system_default">Bawaan Sistem</string>
+    <string name="system_default">Sistem</string>
 </resources>
