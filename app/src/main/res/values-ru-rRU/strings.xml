@@ -12,7 +12,7 @@
     <string name="confirm">Подтвердить</string>
     <string name="allow">Разрешить</string>
     <string name="deny">Отказать</string>
-    <string name="defaults">По-умолчанию</string>
+    <string name="defaults">По умолчанию</string>
     <string name="unknown">Неизвестно</string>
     <string name="back">Назад</string>
     <string name="go_to">Перейти к</string>
@@ -108,7 +108,7 @@
     <string name="sponsor">Спонсор</string>
     <string name="reading_page">Страница чтения</string>
     <string name="reading_fonts">Шрифты чтения</string>
-    <string name="dark_theme">Темная тема</string>
+    <string name="dark_theme">Тёмная тема</string>
     <string name="use_device_theme">Использовать тему устройства</string>
     <string name="appearance">Внешний вид</string>
     <string name="style">Стиль</string>
