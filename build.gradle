@@ -36,14 +36,14 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.28-alpha'
+        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.40.1'
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.5.0-alpha01"
     }
 }
 
 plugins {
-    id 'com.android.application' version '7.1.1' apply false
-    id 'com.android.library' version '7.1.1' apply false
+    id 'com.android.application' version '7.4.1' apply false
+    id 'com.android.library' version '7.4.1' apply false
     id 'org.jetbrains.kotlin.android' version '1.6.21' apply false
 }
 
