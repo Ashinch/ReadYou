@@ -182,7 +182,7 @@
     <string name="align_right">Căn phải</string>
     <string name="center_text">Căn giữa</string>
     <string name="rounded_corners">Viền tròn góc</string>
-    <string name="bionic_reading">Bionic Reading</string>
+    <string name="bionic_reading">Đọc sinh học</string>
     <string name="justify">Căn đều</string>
     <string name="external_fonts">Phông chữ bên ngoài</string>
     <string name="always_expand">Luôn xổ xuống</string>
@@ -248,5 +248,5 @@
     <string name="password">Mật khẩu</string>
     <string name="connection">Kết nối</string>
     <string name="empty">Trống</string>
-    <string name="system_default">Mặc định hệ thống</string>
+    <string name="system_default">Hệ thống</string>
 </resources>
