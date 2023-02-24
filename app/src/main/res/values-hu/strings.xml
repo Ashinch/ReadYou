@@ -52,4 +52,12 @@
     <string name="search">Keres</string>
     <string name="deny">Megtilt</string>
     <string name="unknown">Ismeretlen</string>
+    <string name="rename">Átnevezés</string>
+    <string name="delete">Törlés</string>
+    <string name="today">Ma</string>
+    <string name="yesterday">Tegnap</string>
+    <string name="coming_soon">Hamarosan</string>
+    <string name="bold">Félkövér</string>
+    <string name="username">Felhasználónév</string>
+    <string name="password">Jelszó</string>
 </resources>
