@@ -78,14 +78,14 @@ fun SettingsPage(
                             ) {
                                 updateViewModel.showDialog()
                             }
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
-                        Banner(
-                            title = stringResource(R.string.in_coding),
-                            desc = stringResource(R.string.coming_soon),
-                            icon = Icons.Outlined.Lightbulb,
-                        )
+                        // Banner(
+                        //     title = stringResource(R.string.in_coding),
+                        //     desc = stringResource(R.string.coming_soon),
+                        //     icon = Icons.Outlined.Lightbulb,
+                        // )
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
                 item {
                     SelectableSettingGroupItem(
