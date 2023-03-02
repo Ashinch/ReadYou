@@ -26,7 +26,7 @@
     <string name="already_subscribed">Prenumererar redan</string>
     <string name="clear">Rensa</string>
     <string name="paste">Klistra in</string>
-    <string name="feed_or_site_url">Flöde eller URL</string>
+    <string name="feed_or_site_url">Flöde eller webbadress</string>
     <string name="import_from_opml">Importera från OPML</string>
     <string name="preset">Förinställning</string>
     <string name="selected">Vald</string>
@@ -243,4 +243,13 @@
     <string name="self_hosted">Själv-hostad</string>
     <string name="add_accounts_desc">Lokal, Tjänster, Själv-hostad</string>
     <string name="display">Skärm</string>
+    <string name="switch_account">Växla</string>
+    <string name="add">Lägg till</string>
+    <string name="accounts_tips">Klicka på kontonamnet på flödessidan för att byta dem.</string>
+    <string name="server_url">Server URL</string>
+    <string name="password">Lösenord</string>
+    <string name="connection">Förbindelse</string>
+    <string name="username">Användarnamn</string>
+    <string name="system_default">Systemet</string>
+    <string name="empty">Tömma</string>
 </resources>

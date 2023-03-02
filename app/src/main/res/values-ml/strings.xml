@@ -39,4 +39,7 @@
         <item quantity="one">%1$d ആർക്കൈവ് ചെയ്ത ഇനങ്ങൾ</item>
         <item quantity="other">%1$d ആർക്കൈവ് ചെയ്ത ഇനങ്ങൾ</item>
     </plurals>
+    <string name="allow_notification">അറിയിപ്പ് അനുവദിക്കുക</string>
+    <string name="add_to_group">കൂട്ടത്തിൽ ചേർക്കുക</string>
+    <string name="empty">ശൂന്യം</string>
 </resources>

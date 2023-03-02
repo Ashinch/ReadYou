@@ -12,7 +12,7 @@
     <string name="languages">Ngôn ngữ</string>
     <string name="videos_desc">Viền tròn góc, vùng chọn</string>
     <string name="maximize">Tràn viền</string>
-    <string name="all">Toàn bộ</string>
+    <string name="all">Tất cả</string>
     <plurals name="all_desc">
         <item quantity="other">%1$d bài viết lưu trữ</item>
     </plurals>
