@@ -38,7 +38,7 @@
     <string name="go_to">Ir para</string>
     <string name="subscribe">Inscrever-se</string>
     <string name="already_subscribed">Já inscrito</string>
-    <string name="feed_or_site_url">Feed ou URL</string>
+    <string name="feed_or_site_url">URL do site ou Feed</string>
     <string name="import_from_opml">Importar de arquivo OPML</string>
     <string name="preset">Predefinido</string>
     <string name="selected">Selecionado</string>
@@ -246,4 +246,13 @@
     <string name="fever_desc">Descontinuado. Não recomendado.</string>
     <string name="more">Mais</string>
     <string name="display">Exibição</string>
+    <string name="switch_account">Trocar</string>
+    <string name="add">Adicionar</string>
+    <string name="username">Nome de usuário</string>
+    <string name="accounts_tips">Clique no nome da conta na página de feed para trocá-los.</string>
+    <string name="server_url">URL do servidor</string>
+    <string name="empty">Vazio</string>
+    <string name="password">Senha</string>
+    <string name="connection">Conexão</string>
+    <string name="system_default">Sistema</string>
 </resources>

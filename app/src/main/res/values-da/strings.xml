@@ -50,7 +50,7 @@
     <string name="all_allow_notification_tips">Tillad alle kanaler i \"%1$s\" gruppen at sende notifikationer.</string>
     <string name="all_deny_notification_toast">Alle notifikationer fra \"%1$s\" gruppen er afvist</string>
     <string name="all_allow_notification_toast">Alle notifikationer fra \"%1$s\" gruppen er tilladt</string>
-    <string name="parse_full_content">Fortolk hele indholdet</string>
+    <string name="parse_full_content">Fortolk hele indholdet.</string>
     <string name="all_parse_full_content_tips">Fortolk hele indholdet af alle artikler i \"%1$s\" gruppen.</string>
     <string name="all_parse_full_content_toast">Fortolk hele indholdet af alle artikler i \"%1$s\" gruppen</string>
     <string name="clear_articles">Tøm artikler</string>
@@ -58,8 +58,8 @@
     <string name="clear_articles_in_group_toast">Tømt alle arkiveret artikler i \"%1$s\" gruppen</string>
     <string name="clear_articles_feed_tips">Tøm alle arkiveret artikler in \"%1$s\" kanalen.</string>
     <string name="clear_articles_group_tips">Tøm alle arkiveret artikler i \"%1$s\" gruppen.</string>
-    <string name="all_deny_parse_full_content_toast">Slut på fuld fortolkning af alle artikler i \"%1$s\"-gruppen</string>
-    <string name="add_to_group">Tilføj til gruppe</string>
+    <string name="all_deny_parse_full_content_toast">Ikke mere fuld indholdsanalyse af alle artikler i gruppen \"%1$s\"</string>
+    <string name="add_to_group">Tilføj til gruppen</string>
     <string name="move_to_group">Flyt til gruppe</string>
     <string name="all_move_to_group_tips">Flyt alle kanaler i \"%1$s\" gruppen til \"%2$s\" gruppen.</string>
     <string name="all_move_to_group_toast">Flyttet alle kanaler til \"%1$s\" gruppen</string>
@@ -161,7 +161,7 @@
     <string name="feed_names">Feed navne</string>
     <string name="top">Top</string>
     <string name="fill_selected_icon">Fyld det valgte ikon</string>
-    <string name="empty">Tøm</string>
+    <string name="empty">Tom</string>
     <string name="group_list">Gruppe liste</string>
-    <string name="always_expand">Altid udvid</string>
+    <string name="always_expand">Altid udvidet</string>
 </resources>
