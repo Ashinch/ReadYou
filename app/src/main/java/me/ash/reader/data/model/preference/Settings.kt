@@ -26,6 +26,7 @@ data class Settings(
     val darkTheme: DarkThemePreference = DarkThemePreference.default,
     val amoledDarkTheme: AmoledDarkThemePreference = AmoledDarkThemePreference.default,
     val basicFonts: BasicFontsPreference = BasicFontsPreference.default,
+    val reduceAnimation: ReduceAnimationPreference = ReduceAnimationPreference.default,
 
     // Feeds page
     val feedsFilterBarStyle: FeedsFilterBarStylePreference = FeedsFilterBarStylePreference.default,
@@ -97,6 +98,7 @@ val LocalDarkTheme =
 val LocalAmoledDarkTheme =
     compositionLocalOf<AmoledDarkThemePreference> { AmoledDarkThemePreference.default }
 val LocalBasicFonts = compositionLocalOf<BasicFontsPreference> { BasicFontsPreference.default }
+val LocalReduceAnimation = compositionLocalOf<ReduceAnimationPreference> { ReduceAnimationPreference.default }
 
 // Feeds page
 val LocalFeedsFilterBarStyle =
@@ -205,6 +207,7 @@ fun SettingsProvider(
         LocalDarkTheme provides settings.darkTheme,
         LocalAmoledDarkTheme provides settings.amoledDarkTheme,
         LocalBasicFonts provides settings.basicFonts,
+        LocalReduceAnimation provides settings.reduceAnimation,
 
         // Feeds page
         LocalFeedsTopBarTonalElevation provides settings.feedsTopBarTonalElevation,

@@ -52,6 +52,8 @@ fun ColorAndStylePage(
     val themeIndex = LocalThemeIndex.current
     val customPrimaryColor = LocalCustomPrimaryColor.current
     val fonts = LocalBasicFonts.current
+    val reduceAnimation = LocalReduceAnimation.current
+    val reduceAnimationNot = !reduceAnimation
     val scope = rememberCoroutineScope()
 
     val wallpaperTonalPalettes = extractTonalPalettesFromUserWallpaper()
@@ -168,6 +170,19 @@ fun ColorAndStylePage(
                         desc = fonts.toDesc(context),
                         onClick = { fontsDialogVisible = true },
                     ) {}
+                    SettingItem(
+                        title = stringResource(R.string.reduce_animation),
+                        desc = reduceAnimation.toDesc(context),
+                        onClick = {
+                            reduceAnimationNot.put(context, scope)
+                        },
+                    ) {
+                        RYSwitch(
+                            activated = reduceAnimation.value
+                        ) {
+                            reduceAnimationNot.put(context, scope)
+                        }
+                    }
                     Spacer(modifier = Modifier.height(24.dp))
                 }
                 item {

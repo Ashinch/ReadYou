@@ -391,4 +391,5 @@
     <string name="password">Password</string>
     <string name="connection">Connection</string>
     <string name="system_default">System</string>
+    <string name="reduce_animation">Reduce animation</string>
 </resources>

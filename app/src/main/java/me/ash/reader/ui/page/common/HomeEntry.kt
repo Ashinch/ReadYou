@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.collectLatest
 import me.ash.reader.data.model.general.Filter
 import me.ash.reader.data.model.preference.LocalDarkTheme
 import me.ash.reader.data.model.preference.LocalReadingDarkTheme
+import me.ash.reader.data.model.preference.LocalReduceAnimation
 import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage
@@ -103,6 +104,8 @@ fun HomeEntry(
         LocalDarkTheme.current.isDarkTheme()
     }
 
+    val reduceAnimation = LocalReduceAnimation.current.value
+
     AppTheme(
         useDarkTheme = if (isReadingPage) LocalReadingDarkTheme.current.isDarkTheme()
         else LocalDarkTheme.current.isDarkTheme()
@@ -120,86 +123,86 @@ fun HomeEntry(
             startDestination = if (context.isFirstLaunch) RouteName.STARTUP else RouteName.FEEDS,
         ) {
             // Startup
-            animatedComposable(route = RouteName.STARTUP) {
+            animatedComposable(route = RouteName.STARTUP, reduceAnimation = reduceAnimation) {
                 StartupPage(navController)
             }
 
             // Home
-            animatedComposable(route = RouteName.FEEDS) {
+            animatedComposable(route = RouteName.FEEDS, reduceAnimation = reduceAnimation) {
                 FeedsPage(navController = navController, homeViewModel = homeViewModel)
             }
-            animatedComposable(route = RouteName.FLOW) {
+            animatedComposable(route = RouteName.FLOW, reduceAnimation = reduceAnimation) {
                 FlowPage(
                     navController = navController,
                     homeViewModel = homeViewModel,
                 )
             }
-            animatedComposable(route = "${RouteName.READING}/{articleId}") {
+            animatedComposable(route = "${RouteName.READING}/{articleId}", reduceAnimation = reduceAnimation) {
                 ReadingPage(navController = navController, homeViewModel = homeViewModel)
             }
 
             // Settings
-            animatedComposable(route = RouteName.SETTINGS) {
+            animatedComposable(route = RouteName.SETTINGS, reduceAnimation = reduceAnimation) {
                 SettingsPage(navController)
             }
 
             // Accounts
-            animatedComposable(route = RouteName.ACCOUNTS) {
+            animatedComposable(route = RouteName.ACCOUNTS, reduceAnimation = reduceAnimation) {
                 AccountsPage(navController)
             }
 
-            animatedComposable(route = "${RouteName.ACCOUNT_DETAILS}/{accountId}") {
+            animatedComposable(route = "${RouteName.ACCOUNT_DETAILS}/{accountId}", reduceAnimation = reduceAnimation) {
                 AccountDetailsPage(navController)
             }
 
-            animatedComposable(route = RouteName.ADD_ACCOUNTS) {
+            animatedComposable(route = RouteName.ADD_ACCOUNTS, reduceAnimation = reduceAnimation) {
                 AddAccountsPage(navController)
             }
 
             // Color & Style
-            animatedComposable(route = RouteName.COLOR_AND_STYLE) {
+            animatedComposable(route = RouteName.COLOR_AND_STYLE, reduceAnimation = reduceAnimation) {
                 ColorAndStylePage(navController)
             }
-            animatedComposable(route = RouteName.DARK_THEME) {
+            animatedComposable(route = RouteName.DARK_THEME, reduceAnimation = reduceAnimation) {
                 DarkThemePage(navController)
             }
-            animatedComposable(route = RouteName.FEEDS_PAGE_STYLE) {
+            animatedComposable(route = RouteName.FEEDS_PAGE_STYLE, reduceAnimation = reduceAnimation) {
                 FeedsPageStylePage(navController)
             }
-            animatedComposable(route = RouteName.FLOW_PAGE_STYLE) {
+            animatedComposable(route = RouteName.FLOW_PAGE_STYLE, reduceAnimation = reduceAnimation) {
                 FlowPageStylePage(navController)
             }
-            animatedComposable(route = RouteName.READING_PAGE_STYLE) {
+            animatedComposable(route = RouteName.READING_PAGE_STYLE, reduceAnimation = reduceAnimation) {
                 ReadingStylePage(navController)
             }
-            animatedComposable(route = RouteName.READING_DARK_THEME) {
+            animatedComposable(route = RouteName.READING_DARK_THEME, reduceAnimation = reduceAnimation) {
                 ReadingDarkThemePage(navController)
             }
-            animatedComposable(route = RouteName.READING_PAGE_TITLE) {
+            animatedComposable(route = RouteName.READING_PAGE_TITLE, reduceAnimation = reduceAnimation) {
                 ReadingTitlePage(navController)
             }
-            animatedComposable(route = RouteName.READING_PAGE_TEXT) {
+            animatedComposable(route = RouteName.READING_PAGE_TEXT, reduceAnimation = reduceAnimation) {
                 ReadingTextPage(navController)
             }
-            animatedComposable(route = RouteName.READING_PAGE_IMAGE) {
+            animatedComposable(route = RouteName.READING_PAGE_IMAGE, reduceAnimation = reduceAnimation) {
                 ReadingImagePage(navController)
             }
-            animatedComposable(route = RouteName.READING_PAGE_VIDEO) {
+            animatedComposable(route = RouteName.READING_PAGE_VIDEO, reduceAnimation = reduceAnimation) {
                 ReadingVideoPage(navController)
             }
 
             // Interaction
-            animatedComposable(route = RouteName.INTERACTION) {
+            animatedComposable(route = RouteName.INTERACTION, reduceAnimation = reduceAnimation) {
                 InteractionPage(navController)
             }
 
             // Languages
-            animatedComposable(route = RouteName.LANGUAGES) {
+            animatedComposable(route = RouteName.LANGUAGES, reduceAnimation = reduceAnimation) {
                 LanguagesPage(navController = navController)
             }
 
             // Tips & Support
-            animatedComposable(route = RouteName.TIPS_AND_SUPPORT) {
+            animatedComposable(route = RouteName.TIPS_AND_SUPPORT, reduceAnimation = reduceAnimation) {
                 TipsAndSupportPage(navController)
             }
         }

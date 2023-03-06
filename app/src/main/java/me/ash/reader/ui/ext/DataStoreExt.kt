@@ -154,6 +154,12 @@ sealed class DataStoreKeys<T> {
             get() = intPreferencesKey("basicFonts")
     }
 
+    object ReduceAnimation : DataStoreKeys<Boolean>() {
+
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("reduceAnimation")
+    }
+
     // Feeds page
     object FeedsFilterBarStyle : DataStoreKeys<Int>() {
 

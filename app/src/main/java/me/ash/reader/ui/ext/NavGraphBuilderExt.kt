@@ -8,6 +8,7 @@
 
 package me.ash.reader.ui.ext
 
+import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
@@ -22,30 +23,43 @@ fun NavGraphBuilder.animatedComposable(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
     deepLinks: List<NavDeepLink> = emptyList(),
+    reduceAnimation: Boolean,
     content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit,
-) = composable(
-    route = route,
-    arguments = arguments,
-    deepLinks = deepLinks,
-    enterTransition = {
-        fadeIn(animationSpec = tween(220, delayMillis = 90)) +
-                scaleIn(
-                    initialScale = 0.92f,
-                    animationSpec = tween(220, delayMillis = 90)
-                )
-    },
-    exitTransition = {
-        fadeOut(animationSpec = tween(90))
-    },
-    popEnterTransition = {
-        fadeIn(animationSpec = tween(220, delayMillis = 90)) +
-                scaleIn(
-                    initialScale = 0.92f,
-                    animationSpec = tween(220, delayMillis = 90)
-                )
-    },
-    popExitTransition = {
-        fadeOut(animationSpec = tween(90))
-    },
-    content = content
-)
+) = if (reduceAnimation) {
+    Log.i("RLog", "ReduceAnimation: $reduceAnimation")
+
+    composable(
+        route = route,
+        arguments = arguments,
+        deepLinks = deepLinks,
+        content = content,
+    )
+} else {
+    Log.i("RLog", "ReduceAnimation: $reduceAnimation")
+    composable(
+        route = route,
+        arguments = arguments,
+        deepLinks = deepLinks,
+        enterTransition = {
+            fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+                    scaleIn(
+                        initialScale = 0.92f,
+                        animationSpec = tween(220, delayMillis = 90)
+                    )
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(90))
+        },
+        popEnterTransition = {
+            fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+                    scaleIn(
+                        initialScale = 0.92f,
+                        animationSpec = tween(220, delayMillis = 90)
+                    )
+        },
+        popExitTransition = {
+            fadeOut(animationSpec = tween(90))
+        },
+        content = content
+    )
+}
