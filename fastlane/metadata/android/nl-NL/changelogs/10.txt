@@ -10,4 +10,4 @@
 
 5. Voor Android 12+ toestellen, vervang nu het eerste palet van achtergrondkleuren door het door het systeem geleverde kleurenschema.
 
-6. RSS parsing plugin overgeschakeld naar Rome. (moet in staat zijn om de meeste feeds te parsen, bekend is dat het niet in staat is om speciale formaten zoals Youtube, Reddit, enz. te parsen).
+6. RSS parsing plugin overgeschakeld naar Rome. (moet in staat zijn om de meeste feeds te parsen, bekend is dat het niet in staat is om speciale formaten zoals Youtube, Reddit, enz. te parsen)

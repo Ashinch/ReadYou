@@ -1,23 +1,23 @@
 ## 0.9.6
 
-1. Support Fever API (beta)
+1. API Fever hỗ trợ (beta)
 
-2. Improve translation (thanks to all)
+2. Cải thiện bản dịch (cảm ơn tất cả)
 
-3. Fix the bug of being in sync all the time when switching accounts
+3. Fix lỗi luôn đồng bộ khi chuyển tài khoản
 
-4. Fix the bug that you can't modify other account settings
+4. Sửa lỗi không thể sửa đổi các cài đặt tài khoản khác
 
-Fever is an outdated API, which is not fully compatible with modern readers.
-But as the first third-party service API supported by Read You, it's a good opportunity to get started.
+Sốt là một API lỗi thời, không hoàn toàn tương thích với các trình đọc hiện đại.
+Nhưng với tư cách là API dịch vụ bên thứ ba đầu tiên được Read You hỗ trợ, đây là cơ hội tốt để bắt đầu.
 
-There will be a supplemental update in the near future for bug fixes and additional translations.
+Sẽ có một bản cập nhật bổ sung trong thời gian tới để sửa lỗi và bổ sung bản dịch.
 
 
-### Known bugs
+### Các lỗi đã biết
 
-1. Fever account can only pull the full amount of articles on the server during each sync
+1. Tài khoản Fever chỉ được kéo đủ lượng bài trên server trong mỗi lần đồng bộ
 
-2. Notification feature of Fever account is not working
+2. Tính năng thông báo Sốt tài khoản không hoạt động
 
-3. Full content parsing preset switch of Fever account is reset after each sync
+3. Công tắc đặt trước phân tích nội dung đầy đủ của tài khoản Fever được đặt lại sau mỗi lần đồng bộ hóa

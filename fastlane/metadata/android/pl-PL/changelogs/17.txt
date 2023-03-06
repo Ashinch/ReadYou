@@ -20,4 +20,4 @@ W najbliższej przyszłości pojawi się dodatkowa aktualizacja dla poprawek bł
 
 2. Funkcja powiadomień na koncie Fever nie działa.
 
-3. Ustawiony przełącznik pełnej analizy treści na koncie Fever jest resetowany po każdej synchronizacji.
+3. Ustawiony przełącznik pełnej analizy treści na koncie Fever jest resetowany po każdej synchronizacji
