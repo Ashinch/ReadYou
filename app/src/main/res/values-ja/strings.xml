@@ -79,9 +79,9 @@
     <string name="settings">設定</string>
     <string name="allow_notification">通知を許可</string>
     <string name="feeds">フィード</string>
-    <string name="go_to">移動…</string>
+    <string name="go_to">移動</string>
     <string name="paste">貼り付け</string>
-    <string name="feed_or_site_url">フィードまたはURL</string>
+    <string name="feed_or_site_url">フィードまたはサイトのURL</string>
     <string name="syncing">同期中…</string>
     <string name="refresh">更新</string>
     <string name="defaults">デフォルト</string>
@@ -120,7 +120,7 @@
     <string name="three_days">３日</string>
     <string name="in_coding">開発中</string>
     <string name="one_day">１日</string>
-    <string name="coming_soon">Coming soon</string>
+    <string name="coming_soon">近日公開</string>
     <string name="accounts_desc">ローカル、FreshRSS</string>
     <string name="color_and_style_desc">テーマ、カラースタイル、フォントサイズ</string>
     <string name="tips_and_support">ヒントとサポート</string>
@@ -128,7 +128,7 @@
     <string name="use_device_languages">デバイスの言語を使用する</string>
     <string name="tos_tips">Read You の利用規約とプライバシーポリシーをお読みになり、同意される場合は、[同意する]をタップしてください。</string>
     <string name="tips_and_support_desc">このアプリについて、オープンソースライセンス</string>
-    <string name="browse_tos_tips"><i><u>利用規約とプライバシー ポリシー</u></i>をご覧ください。</string>
+    <string name="browse_tos_tips"><i><u>利用規約とプライバシー ポリシー</u></i>をご覧ください</string>
     <string name="reading_fonts">フォント</string>
     <string name="flow_page">フローページ</string>
     <string name="reading_page">閲覧ページ</string>
@@ -240,7 +240,13 @@
     <string name="images_desc">丸みを帯びた角、水平方向のパディング</string>
     <string name="every_6_hours">6時間ごと</string>
     <string name="every_30_minutes">30分ごと</string>
-    <string name="switch_account">アカウントを切り替える</string>
+    <string name="switch_account">切り替える</string>
     <string name="add">追加</string>
     <string name="accounts_tips">フィードページのアカウント名をクリックして切り替えます。</string>
+    <string name="system_default">システム</string>
+    <string name="server_url">サーバーのURL</string>
+    <string name="password">パスワード</string>
+    <string name="empty">なし</string>
+    <string name="username">ユーザー名</string>
+    <string name="connection">接続</string>
 </resources>
