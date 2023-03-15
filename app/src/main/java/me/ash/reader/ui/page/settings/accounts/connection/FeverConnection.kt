@@ -71,6 +71,8 @@ fun LazyItemScope.FeverConnection(
         onConfirm = {
             if (securityKey.serverUrl?.isNotBlank() == true) {
                 securityKey.serverUrl = serverUrlValue
+                    ?.takeIf { !it.endsWith("/") }
+                    ?: serverUrlValue?.trimEnd('/')
                 save(account, viewModel, securityKey)
                 serverUrlDialogVisible = false
             }
