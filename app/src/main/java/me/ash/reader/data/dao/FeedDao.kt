@@ -98,4 +98,18 @@ interface FeedDao {
 
     @Delete
     suspend fun delete(vararg feed: Feed)
+
+    suspend fun insertOrUpdate(feeds: List<Feed>)  {
+        feeds.forEach {
+            val feed = queryById(it.id)
+            if (feed == null) {
+                insert(it)
+            } else {
+                // TODO: Consider migrating the fields to be nullable.
+                it.isNotification = feed.isNotification
+                it.isFullContent = feed.isFullContent
+                update(it)
+            }
+        }
+    }
 }
