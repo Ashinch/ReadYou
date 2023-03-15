@@ -21,6 +21,8 @@ data class Account(
     var type: AccountType,
     @ColumnInfo
     var updateAt: Date? = null,
+    @ColumnInfo
+    var lastArticleId: String? = null,
     @ColumnInfo(defaultValue = "30")
     var syncInterval: SyncIntervalPreference = SyncIntervalPreference.default,
     @ColumnInfo(defaultValue = "0")

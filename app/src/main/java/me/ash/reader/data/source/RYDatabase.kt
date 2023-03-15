@@ -19,7 +19,7 @@ import java.util.*
 
 @Database(
     entities = [Account::class, Feed::class, Article::class, Group::class],
-    version = 4
+    version = 5
 )
 @TypeConverters(
     RYDatabase.DateConverters::class,
@@ -73,6 +73,7 @@ val allMigrations = arrayOf(
     MIGRATION_1_2,
     MIGRATION_2_3,
     MIGRATION_3_4,
+    MIGRATION_4_5,
 )
 
 @Suppress("ClassName")
@@ -136,6 +137,18 @@ object MIGRATION_3_4 : Migration(3, 4) {
         database.execSQL(
             """
             ALTER TABLE account ADD COLUMN securityKey TEXT DEFAULT '${DESUtils.empty}'
+            """.trimIndent()
+        )
+    }
+}
+
+@Suppress("ClassName")
+object MIGRATION_4_5 : Migration(4, 5) {
+
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+            """
+            ALTER TABLE account ADD COLUMN lastArticleId TEXT DEFAULT NULL
             """.trimIndent()
         )
     }

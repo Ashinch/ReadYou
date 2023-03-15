@@ -181,24 +181,24 @@ abstract class AbstractRssRepository constructor(
                 if (it.syncOnStart.value) {
                     SyncWorker.enqueueOneTimeWork(workManager)
                 }
-                if (it.syncInterval != SyncIntervalPreference.Manually) {
+                if (it.syncInterval.value != SyncIntervalPreference.Manually.value) {
                     SyncWorker.enqueuePeriodicWork(
                         workManager = workManager,
                         syncInterval = it.syncInterval,
                         syncOnlyWhenCharging = it.syncOnlyWhenCharging,
                         syncOnlyOnWiFi = it.syncOnlyOnWiFi,
                     )
-                } else {
-
                 }
             } else {
                 SyncWorker.enqueueOneTimeWork(workManager)
-                SyncWorker.enqueuePeriodicWork(
-                    workManager = workManager,
-                    syncInterval = it.syncInterval,
-                    syncOnlyWhenCharging = it.syncOnlyWhenCharging,
-                    syncOnlyOnWiFi = it.syncOnlyOnWiFi,
-                )
+                if (it.syncInterval.value != SyncIntervalPreference.Manually.value) {
+                    SyncWorker.enqueuePeriodicWork(
+                        workManager = workManager,
+                        syncInterval = it.syncInterval,
+                        syncOnlyWhenCharging = it.syncOnlyWhenCharging,
+                        syncOnlyOnWiFi = it.syncOnlyOnWiFi,
+                    )
+                }
             }
         }
     }

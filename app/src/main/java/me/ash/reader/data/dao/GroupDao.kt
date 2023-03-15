@@ -66,4 +66,15 @@ interface GroupDao {
 
     @Delete
     suspend fun delete(vararg group: Group)
+
+    suspend fun insertOrUpdate(groups: List<Group>)  {
+        groups.forEach {
+            val group = queryById(it.id)
+            if (group == null) {
+                insert(it)
+            } else {
+                update(it)
+            }
+        }
+    }
 }

@@ -80,102 +80,115 @@ class FeverRssRepository @Inject constructor(
     }
 
     /**
-     * Sync handling for the Fever API.
+     * Fever API synchronous processing with object's ID to ensure idempotence
+     * and handle foreign key relationships such as read status, starred status, etc.
+     *
+     * When synchronizing articles, 50 articles will be pulled in each round.
+     * The ID of the 50th article in this round will be recorded and
+     * used as the starting mark for the next pull until the number of articles
+     * obtained is 0 or their quantity exceeds 250, at which point the pulling process stops.
      *
      * 1. Fetch the Fever groups
      * 2. Fetch the Fever feeds
      * 3. Fetch the Fever articles
      * 4. Fetch the Fever favicons
      */
-    override suspend fun sync(coroutineWorker: CoroutineWorker): ListenableWorker.Result =
-        supervisorScope {
-            coroutineWorker.setProgress(SyncWorker.setIsSyncing(true))
+    override suspend fun sync(coroutineWorker: CoroutineWorker): ListenableWorker.Result = supervisorScope {
+        coroutineWorker.setProgress(SyncWorker.setIsSyncing(true))
 
-            try {
-                val preTime = System.currentTimeMillis()
-                val accountId = context.currentAccountId
-                val feverAPI = getFeverAPI()
+        try {
+            val preTime = System.currentTimeMillis()
+            val accountId = context.currentAccountId
+            val account = accountDao.queryById(accountId)!!
+            val feverAPI = getFeverAPI()
 
-                // 1. Fetch the Fever groups
-                groupDao.insert(
-                    *feverAPI.getGroups().groups?.map {
-                        Group(
-                            id = accountId.spacerDollar(it.id!!),
-                            name = it.title ?: context.getString(R.string.empty),
-                            accountId = accountId,
-                        )
-                    }?.toTypedArray() ?: emptyArray()
-                )
+            // 1. Fetch the Fever groups
+            groupDao.insertOrUpdate(
+                feverAPI.getGroups().groups?.map {
+                    Group(
+                        id = accountId.spacerDollar(it.id!!),
+                        name = it.title ?: context.getString(R.string.empty),
+                        accountId = accountId,
+                    )
+                } ?: emptyList()
+            )
 
-                // 2. Fetch the Fever feeds
-                val feedsBody = feverAPI.getFeeds()
-                val feedsGroupsMap = mutableMapOf<String, String>()
-                feedsBody.feeds_groups?.forEach { feedsGroups ->
-                    feedsGroups.group_id?.toString()?.let { groupId ->
-                        feedsGroups.feed_ids?.split(",")?.forEach { feedId ->
-                            feedsGroupsMap[feedId] = groupId
-                        }
+            // 2. Fetch the Fever feeds
+            val feedsBody = feverAPI.getFeeds()
+            val feedsGroupsMap = mutableMapOf<String, String>()
+            feedsBody.feeds_groups?.forEach { feedsGroups ->
+                feedsGroups.group_id?.toString()?.let { groupId ->
+                    feedsGroups.feed_ids?.split(",")?.forEach { feedId ->
+                        feedsGroupsMap[feedId] = groupId
                     }
                 }
-                feedDao.insert(
-                    *feedsBody.feeds?.map {
-                        Feed(
+            }
+            feedDao.insertOrUpdate(
+                feedsBody.feeds?.map {
+                    Feed(
+                        id = accountId.spacerDollar(it.id!!),
+                        name = it.title ?: context.getString(R.string.empty),
+                        url = it.url!!,
+                        groupId = accountId.spacerDollar(feedsGroupsMap[it.id.toString()]!!),
+                        accountId = accountId,
+                    )
+                } ?: emptyList()
+            )
+
+            // 3. Fetch the Fever articles (up to unlimited counts)
+            var sinceId = account.lastArticleId?.dollarLast() ?: ""
+            var itemsBody = feverAPI.getItemsSince(sinceId)
+            while (itemsBody.items?.isNotEmpty() == true) {
+                articleDao.insert(
+                    *itemsBody.items?.map {
+                        Article(
                             id = accountId.spacerDollar(it.id!!),
-                            name = it.title ?: context.getString(R.string.empty),
-                            url = it.url!!,
-                            groupId = accountId.spacerDollar(feedsGroupsMap[it.id.toString()]!!),
+                            date = it.created_on_time?.run { Date(this * 1000) } ?: Date(),
+                            title = Html.fromHtml(it.title ?: context.getString(R.string.empty)).toString(),
+                            author = it.author,
+                            rawDescription = it.html ?: "",
+                            shortDescription = (Readability4JExtended("", it.html ?: "")
+                                .parse().textContent ?: "")
+                                .take(110)
+                                .trim(),
+                            fullContent = it.html,
+                            img = rssHelper.findImg(it.html ?: ""),
+                            link = it.url ?: "",
+                            feedId = accountId.spacerDollar(it.feed_id!!),
                             accountId = accountId,
-                        )
+                            isUnread = (it.is_read ?: 0) <= 0,
+                            isStarred = (it.is_saved ?: 0) > 0,
+                            updateAt = Date(),
+                        ).also {
+                            sinceId = it.id.dollarLast()
+                        }
                     }?.toTypedArray() ?: emptyArray()
                 )
-
-                // 3. Fetch the Fever articles (up to unlimited counts)
-                var sinceId = ""
-                var itemsBody = feverAPI.getItemsSince(sinceId)
-                while (itemsBody.items?.isEmpty() == false) {
-                    articleDao.insert(
-                        *itemsBody.items?.map {
-                            Article(
-                                id = accountId.spacerDollar(it.id!!),
-                                date = it.created_on_time?.run { Date(this * 1000) } ?: Date(),
-                                title = Html.fromHtml(it.title ?: context.getString(R.string.empty)).toString(),
-                                author = it.author,
-                                rawDescription = it.html ?: "",
-                                shortDescription = (Readability4JExtended("", it.html ?: "")
-                                    .parse().textContent ?: "")
-                                    .take(110)
-                                    .trim(),
-                                fullContent = it.html,
-                                img = rssHelper.findImg(it.html ?: ""),
-                                link = it.url ?: "",
-                                feedId = accountId.spacerDollar(it.feed_id!!),
-                                accountId = accountId,
-                                isUnread = (it.is_read ?: 0) <= 0,
-                                isStarred = (it.is_saved ?: 0) > 0,
-                                updateAt = Date(),
-                            ).also {
-                                sinceId = it.id.dollarLast()
-                            }
-                        }?.toTypedArray() ?: emptyArray()
-                    )
+                if (itemsBody.items?.size!! >= 50) {
                     itemsBody = feverAPI.getItemsSince(sinceId)
+                } else {
+                    break
                 }
-
-                // TODO: 4. Fetch the Fever favicons
-
-                Log.i("RLog", "onCompletion: ${System.currentTimeMillis() - preTime}")
-                accountDao.queryById(accountId)?.let { account ->
-                    accountDao.update(account.apply { updateAt = Date() })
-                }
-                ListenableWorker.Result.success(SyncWorker.setIsSyncing(false))
-            } catch (e: Exception) {
-                Log.e("RLog", "On sync exception: ${e.message}", e)
-                withContext(mainDispatcher) {
-                    context.showToast(e.message)
-                }
-                ListenableWorker.Result.failure(SyncWorker.setIsSyncing(false))
             }
+
+            // TODO: 4. Fetch the Fever favicons
+
+            Log.i("RLog", "onCompletion: ${System.currentTimeMillis() - preTime}")
+            accountDao.update(account.apply {
+                updateAt = Date()
+                if (sinceId.isNotEmpty()) {
+                    lastArticleId = accountId.spacerDollar(sinceId)
+                }
+            })
+            ListenableWorker.Result.success(SyncWorker.setIsSyncing(false))
+        } catch (e: Exception) {
+            Log.e("RLog", "On sync exception: ${e.message}", e)
+            withContext(mainDispatcher) {
+                context.showToast(e.message)
+            }
+            ListenableWorker.Result.failure(SyncWorker.setIsSyncing(false))
         }
+    }
 
     override suspend fun markAsRead(
         groupId: String?,
