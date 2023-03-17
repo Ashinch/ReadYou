@@ -43,21 +43,21 @@
     <string name="preset">Preset</string>
     <string name="selected">Selected</string>
     <string name="allow_notification">Allow Notification</string>
-    <string name="all_allow_notification_tips">Allow all feeds in the \"%1$s\" group to send notifications.</string>
+    <string name="all_allow_notification_tips">Allow all feeds in the \"%1$s\" group to send notifications</string>
     <string name="all_allow_notification_toast">All notifications from the \"%1$s\" group are allowed</string>
     <string name="all_deny_notification_toast">All notifications from the \"%1$s\" group are denied</string>
     <string name="parse_full_content">Parse Full Content</string>
-    <string name="all_parse_full_content_tips">Full content parsing of all articles in the \"%1$s\" group.</string>
+    <string name="all_parse_full_content_tips">Full content parsing of all articles in the \"%1$s\" group</string>
     <string name="all_parse_full_content_toast">Full content parsing of all articles in the \"%1$s\" group</string>
     <string name="all_deny_parse_full_content_toast">No more full content parsing of all articles in the \"%1$s\" group</string>
     <string name="clear_articles">Clear Articles</string>
     <string name="clear_articles_in_feed_toast">Cleaned all archived of articles in the \"%1$s\" feed</string>
     <string name="clear_articles_in_group_toast">Cleaned all archived of articles in the \"%1$s\" group</string>
-    <string name="clear_articles_feed_tips">Clear all archived of articles in \"%1$s\" feed.</string>
-    <string name="clear_articles_group_tips">Clear all archived of articles in \"%1$s\" group.</string>
+    <string name="clear_articles_feed_tips">Clear all archived of articles in \"%1$s\" feed</string>
+    <string name="clear_articles_group_tips">Clear all archived of articles in \"%1$s\" group</string>
     <string name="add_to_group">Add to Group</string>
     <string name="move_to_group">Move to Group</string>
-    <string name="all_move_to_group_tips">Move all feeds in the \"%1$s\" group to the \"%2$s\" group.</string>
+    <string name="all_move_to_group_tips">Move all feeds in the \"%1$s\" group to the \"%2$s\" group</string>
     <string name="all_move_to_group_toast">Moved all feeds to the \"%1$s\" group</string>
     <string name="rename">Rename</string>
     <string name="change_url">Change URL</string>
@@ -70,10 +70,10 @@
     <string name="delete">Delete</string>
     <string name="delete_toast">Deleted \"%1$s\"</string>
     <string name="unsubscribe">Unsubscribe</string>
-    <string name="unsubscribe_tips">Unsubscribe from \"%1$s\" and delete all archived articles in it.</string>
+    <string name="unsubscribe_tips">Unsubscribe from \"%1$s\" and delete all archived articles in it</string>
     <string name="delete_group">Delete Group</string>
-    <string name="delete_group_tips">Delete the \"%1$s\" group and all feeds and archived articles in it.</string>
-    <string name="group_option_tips">The following options will be applied to all feeds in this group.</string>
+    <string name="delete_group_tips">Delete the \"%1$s\" group and all of the feeds and archived articles it contains</string>
+    <string name="group_option_tips">The following options apply to all feeds in this group</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <string name="date_at_time">%1$s at %2$s</string>
@@ -83,16 +83,16 @@
     <string name="mark_all_as_read">Mark All as Read</string>
     <string name="mark_as_unread">Mark as Unread</string>
     <string name="mark_as_starred">Mark as Starred</string>
-    <string name="mark_as_unstar">Mark as Unstar</string>
-    <string name="mark_as_read_one_day">Mark as Read More Than 1 Day</string>
-    <string name="mark_as_read_three_days">Mark as Read More Than 3 Days</string>
-    <string name="mark_as_read_seven_days">Mark as Read More Than 7 Days</string>
+    <string name="mark_as_unstar">Mark as Unstarred</string>
+    <string name="mark_as_read_one_day">Mark as read older than 1 days</string>
+    <string name="mark_as_read_three_days">Mark as read older than 3 days</string>
+    <string name="mark_as_read_seven_days">Mark as read older than 7 days</string>
     <string name="one_day">1d</string>
     <string name="three_days">3d</string>
     <string name="seven_days">7d</string>
     <string name="close">Close</string>
     <string name="get_new_updates">Get new updates</string>
-    <string name="get_new_updates_desc">Version %1$s is available</string>
+    <string name="get_new_updates_desc">New version %1$s is available</string>
     <string name="in_coding">In coding</string>
     <string name="coming_soon">Coming soon</string>
     <string name="accounts">Accounts</string>
@@ -100,7 +100,7 @@
     <string name="color_and_style">Color &amp; style</string>
     <string name="color_and_style_desc">Theme, color style, font size</string>
     <string name="interaction">Interaction</string>
-    <string name="interaction_desc">On start, haptic feedback</string>
+    <string name="interaction_desc">Initial page, haptic feedback</string>
     <string name="languages">Languages</string>
     <string name="languages_desc">English, Chinese, more</string>
     <string name="help_translate">Help translate</string>
@@ -122,7 +122,7 @@
     <string name="tips_and_support">Tips &amp; support</string>
     <string name="tips_and_support_desc">About, open source licenses</string>
     <string name="welcome">Welcome</string>
-    <string name="tos_tips">Read and agree to Read You\'s Terms of Service and Privacy Policy to continue.</string>
+    <string name="tos_tips">Please read and agree to Read You\'s Terms of Service and Privacy Policy to continue.</string>
     <string name="browse_tos_tips">Browse the &lt;i&gt;&lt;u&gt;Terms of Service and Privacy Policy&lt;/u&gt;&lt;/i&gt;
     </string>
     <string name="terms_of_service">Terms of Service</string>
@@ -143,7 +143,7 @@
         &lt;b&gt;Read You&lt;/b&gt;
 
         does not collect any user data, and all sensitive information (passwords and other account information) is
-        securely stored in the local application database on your device.
+        stored securely in the local application database on your device.
 
         &lt;/p&gt;
         &lt;br/&gt;
@@ -156,12 +156,12 @@
         &lt;br/&gt;
         &lt;p&gt;
 
-        - Access Network permission (for accessing online content as you specify)
+        - Access Network permission (to access online content as you specify)
 
         &lt;/p&gt;
         &lt;p&gt;
 
-        - Get network status permission (for getting whether the device currently has available network conditions)
+        - Get network status permission (to determine if the device currently has available network conditions)
 
         &lt;/p&gt;
         &lt;p&gt;
@@ -212,7 +212,7 @@
         &lt;b&gt;Read You&lt;/b&gt;
 
         is an open source project under the GNU GPL 3.0 Open Source License[1], which allows you to use, reference, and
-        modify the source code of &lt;b&gt;Read You&lt;/b&gt; for free, but does not allow the
+        modify the source code of &lt;b&gt;Read You&lt;/b&gt; free of charge, but does not allow the
         modified and derived code to be distributed and sold as closed-source commercial software. For details, please
         see the full GNU GPL 3.0 Open Source License[2].
 
@@ -266,9 +266,9 @@
     <string name="update">Update</string>
     <string name="skip_this_version">Skip This Version</string>
     <string name="checking_updates">Checking for updates…</string>
-    <string name="is_latest_version">This is latest version</string>
-    <string name="check_failure">Could not check for updates</string>
-    <string name="download_failure">Could not download for updates</string>
+    <string name="is_latest_version">This is the latest version of the app</string>
+    <string name="check_failure">Failed to check for updates</string>
+    <string name="download_failure">Could not download updates</string>
     <string name="rate_limit">The request rate is limited</string>
     <string name="help">Help</string>
     <string name="on_start">On Start</string>
@@ -286,23 +286,23 @@
     <string name="article_images">Article images</string>
     <string name="feed_names">Feed names</string>
     <string name="feed_favicons">Feed favicons</string>
-    <string name="article_date_sticky_header">Sticky header for publication date (experimental)</string>
+    <string name="article_date_sticky_header">Sticky publication date header (experimental)</string>
     <string name="article_list">Article List</string>
     <string name="group_list">Group List</string>
     <string name="always_expand">Always expand</string>
     <string name="top">Top</string>
     <string name="mark_as_read_button_position">\"Mark as Read\" button position</string>
     <string name="top_bar">Top Bar</string>
-    <string name="fill_selected_icon">Fill the selected icon</string>
+    <string name="fill_selected_icon">Fill current filter icon</string>
     <string name="filter_bar">Filter Bar</string>
     <string name="icons">Icons</string>
     <string name="icons_and_labels">Icons and Labels</string>
-    <string name="icons_and_label_only_selected">Icons and Label (Only Selected)</string>
-    <string name="tips_top_bar_tonal_elevation">This tonal elevation is only available when scrolling.</string>
-    <string name="tips_article_list_tonal_elevation">This tonal elevation is only available in the light theme.</string>
-    <string name="tips_group_list_tonal_elevation">This tonal elevation is only available in the light theme.</string>
+    <string name="icons_and_label_only_selected">Icons and Label (only active)</string>
+    <string name="tips_top_bar_tonal_elevation">Tonal elevation for the top bar list is only available when scrolling</string>
+    <string name="tips_article_list_tonal_elevation">Tonal elevation for the article list is only available in the light theme</string>
+    <string name="tips_group_list_tonal_elevation">Tonal elevation for the group list is only available in the light theme</string>
     <string name="share">Share</string>
-    <string name="touch_to_play_video">Touch to play video</string>
+    <string name="touch_to_play_video">Tap to play a video</string>
     <string name="text">Text</string>
     <string name="font_size">Font size</string>
     <string name="letter_spacing">Letter spacing</string>
@@ -377,15 +377,15 @@
     <string name="export_as_opml">Export as OPML</string>
     <string name="clear_all_articles">Clear all articles</string>
     <string name="delete_account">Delete account</string>
-    <string name="clear_all_articles_tips">Are you sure you want to clear all articles from this account?</string>
+    <string name="clear_all_articles_tips">Are you sure you want to clear the articles list for this account?</string>
     <string name="delete_account_tips">Are you sure you want to delete this account?</string>
     <string name="must_have_an_account">Must have an account</string>
-    <string name="clear_all_articles_toast">All articles from this account have been cleared</string>
-    <string name="delete_account_toast">This account has been deleted</string>
-    <string name="synchronous_tips">Restart is required for changes to take effect.</string>
+    <string name="clear_all_articles_toast">Cleared the articles list</string>
+    <string name="delete_account_toast">Account deleted</string>
+    <string name="synchronous_tips">Restart required for changes to take effect</string>
     <string name="switch_account">Switch</string>
     <string name="add">Add</string>
-    <string name="accounts_tips">Click the account name on the feed page to switch them.</string>
+    <string name="accounts_tips">You can tap the account name on the feed page to toggle it</string>
     <string name="server_url">Server URL</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
