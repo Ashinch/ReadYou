@@ -246,4 +246,10 @@
     <string name="switch_account">Bytt konto</string>
     <string name="add">Legg til</string>
     <string name="accounts_tips">Klikk på kontonavnet på informasjonskanalsiden for å bytte dem.</string>
+    <string name="system_default">System</string>
+    <string name="empty">Tom</string>
+    <string name="server_url">Tjenernettadresse</string>
+    <string name="username">Brukernavn</string>
+    <string name="password">Passord</string>
+    <string name="connection">Tilkobling</string>
 </resources>
