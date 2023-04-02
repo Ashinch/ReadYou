@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -34,6 +35,7 @@ import me.ash.reader.ui.page.home.feeds.GroupItem
 import me.ash.reader.ui.theme.palette.onDark
 import kotlin.math.ln
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedsPagePreview(
     topBarTonalElevation: FeedsTopBarTonalElevationPreference,

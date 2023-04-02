@@ -43,6 +43,7 @@ import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.theme.palette.alwaysLight
 import me.ash.reader.ui.theme.palette.onLight
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TipsAndSupportPage(
     navController: NavHostController,

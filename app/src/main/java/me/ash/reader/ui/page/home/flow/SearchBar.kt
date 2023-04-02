@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import me.ash.reader.R
 import me.ash.reader.data.constant.ElevationTokens
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(
     value: String,
