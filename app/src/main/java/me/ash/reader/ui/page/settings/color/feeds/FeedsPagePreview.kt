@@ -102,13 +102,10 @@ fun FeedsPagePreview(
             alpha = groupAlpha,
             indicatorAlpha = groupIndicatorAlpha,
         )
-        FeedItem(
-            feed = generateFeedPreview(),
-            alpha = groupAlpha,
-            badgeAlpha = feedBadgeAlpha,
-            isEnded = { true },
-            isExpanded = { true },
-        )
+        FeedItemSwitcher(
+            groupAlpha = groupAlpha,
+            feedBadgeAlpha = feedBadgeAlpha,
+            isExpanded = groupListExpand.value)
         Spacer(modifier = Modifier.height(12.dp))
         FilterBar(
             filter = filter,
@@ -119,6 +116,28 @@ fun FeedsPagePreview(
         ) {
             filter = it
         }
+    }
+}
+
+@Stable
+@Composable
+fun FeedItemSwitcher(groupAlpha: Float,feedBadgeAlpha: Float ,isExpanded: Boolean) {
+    if (isExpanded) {
+        FeedItem(
+            feed = generateFeedPreview(),
+            alpha = groupAlpha,
+            badgeAlpha = feedBadgeAlpha,
+            isEnded = { true },
+            isExpanded = { true },
+        )
+    } else {
+        FeedItem(
+            feed = generateFeedPreview(),
+            alpha = groupAlpha,
+            badgeAlpha = feedBadgeAlpha,
+            isEnded = { true },
+            isExpanded = { false },
+        )
     }
 }
 
