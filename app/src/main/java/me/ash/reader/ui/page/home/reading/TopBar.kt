@@ -2,9 +2,9 @@ package me.ash.reader.ui.page.home.reading
 
 import RYExtensibleVisibility
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Share
@@ -49,7 +49,8 @@ fun TopBar(
         RYExtensibleVisibility(visible = isShow) {
             TopAppBar(
                 title = {},
-                modifier = Modifier.statusBarsPadding(),
+                modifier = Modifier,
+                windowInsets = WindowInsets(0.dp),
                 navigationIcon = {
                     FeedbackIconButton(
                         imageVector = Icons.Rounded.Close,

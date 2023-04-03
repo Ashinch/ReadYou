@@ -30,15 +30,7 @@ fun RYScaffold(
                     topBarTonalElevation,
                     color = containerColor
                 )
-            )
-            .statusBarsPadding(),
-//            .run {
-//                if (bottomBar != null || floatingActionButton != null) {
-//                    navigationBarsPadding()
-//                } else {
-//                    this
-//                }
-//            },
+            ),
         containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
             containerTonalElevation,
             color = containerColor
