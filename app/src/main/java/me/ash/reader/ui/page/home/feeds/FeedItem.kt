@@ -2,6 +2,7 @@ package me.ash.reader.ui.page.home.feeds
 
 import RYExtensibleVisibility
 import android.view.HapticFeedbackConstants
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Badge
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +29,7 @@ import me.ash.reader.ui.page.home.feeds.drawer.feed.FeedOptionViewModel
 import me.ash.reader.ui.theme.ShapeBottom32
 
 @OptIn(
-    androidx.compose.foundation.ExperimentalFoundationApi::class,
+    ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
 )
 @Composable
 fun FeedItem(

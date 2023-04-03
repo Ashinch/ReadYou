@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import kotlinx.coroutines.delay
 import me.ash.reader.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RYOutlineTextField(
     readOnly: Boolean = false,

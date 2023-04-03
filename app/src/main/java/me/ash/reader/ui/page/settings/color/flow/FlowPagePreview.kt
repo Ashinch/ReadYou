@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -32,6 +33,7 @@ import me.ash.reader.ui.page.home.flow.ArticleItem
 import me.ash.reader.ui.theme.palette.onDark
 import java.util.*
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlowPagePreview(
     topBarTonalElevation: FlowTopBarTonalElevationPreference,
