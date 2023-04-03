@@ -11,11 +11,12 @@ import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -25,7 +26,6 @@ import me.ash.reader.R
 import me.ash.reader.data.model.preference.LocalReadingPageTonalElevation
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.ext.share
-import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.common.RouteName
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,14 +47,9 @@ fun TopBar(
         contentAlignment = Alignment.TopCenter
     ) {
         RYExtensibleVisibility(visible = isShow) {
-            SmallTopAppBar(
-                modifier = Modifier.statusBarsPadding(),
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                        elevation = tonalElevation.value.dp
-                    ),
-                ),
+            TopAppBar(
                 title = {},
+                modifier = Modifier.statusBarsPadding(),
                 navigationIcon = {
                     FeedbackIconButton(
                         imageVector = Icons.Rounded.Close,
@@ -86,7 +81,9 @@ fun TopBar(
                             ?.let { it + "\n" } + link
                         )
                     }
-                }
+                }, colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = Color.Transparent,
+                )
             )
         }
     }

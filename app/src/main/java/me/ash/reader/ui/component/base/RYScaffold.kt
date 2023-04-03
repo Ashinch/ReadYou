@@ -45,15 +45,13 @@ fun RYScaffold(
         ) onDark MaterialTheme.colorScheme.surface,
         topBar = {
             if (navigationIcon != null || actions != null) {
-                SmallTopAppBar(
+                TopAppBar(
                     title = {},
-                    colors = TopAppBarDefaults.smallTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                            topBarTonalElevation, color = containerColor
-                        ),
-                    ),
                     navigationIcon = { navigationIcon?.invoke() },
                     actions = { actions?.invoke(this) },
+                    colors = TopAppBarDefaults.smallTopAppBarColors(
+                        containerColor = Color.Transparent,
+                    )
                 )
             }
         },
