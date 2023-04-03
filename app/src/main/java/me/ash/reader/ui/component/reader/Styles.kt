@@ -21,6 +21,7 @@
 package me.ash.reader.ui.component.reader
 
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
@@ -35,7 +36,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import me.ash.reader.data.model.preference.*
+import me.ash.reader.data.model.preference.LocalReadingFonts
+import me.ash.reader.data.model.preference.LocalReadingImageHorizontalPadding
+import me.ash.reader.data.model.preference.LocalReadingImageRoundedCorners
+import me.ash.reader.data.model.preference.LocalReadingLetterSpacing
+import me.ash.reader.data.model.preference.LocalReadingSubheadAlign
+import me.ash.reader.data.model.preference.LocalReadingSubheadBold
+import me.ash.reader.data.model.preference.LocalReadingTextAlign
+import me.ash.reader.data.model.preference.LocalReadingTextBold
+import me.ash.reader.data.model.preference.LocalReadingTextFontSize
+import me.ash.reader.data.model.preference.LocalReadingTextHorizontalPadding
 import me.ash.reader.ui.ext.alphaLN
 
 const val MAX_CONTENT_WIDTH = 840.0
@@ -78,7 +88,7 @@ fun bodyForeground(): Color = onSurfaceVariantColor()
 @Stable
 @Composable
 @ReadOnlyComposable
-fun bodyStyle(): TextStyle =
+fun bodyStyle(): TextStyle = LocalTextStyle.current.merge(
     TextStyle(
         fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontWeight = if (LocalReadingTextBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
@@ -87,11 +97,12 @@ fun bodyStyle(): TextStyle =
         color = bodyForeground(),
         textAlign = LocalReadingTextAlign.current.toTextAlign(),
     )
+)
 
 @Stable
 @Composable
 @ReadOnlyComposable
-fun h1Style(): TextStyle =
+fun h1Style(): TextStyle = LocalTextStyle.current.merge(
     TextStyle(
         fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
@@ -100,11 +111,12 @@ fun h1Style(): TextStyle =
         color = onSurfaceColor(),
         textAlign = LocalReadingSubheadAlign.current.toTextAlign(),
     )
+)
 
 @Stable
 @Composable
 @ReadOnlyComposable
-fun h2Style(): TextStyle =
+fun h2Style(): TextStyle = LocalTextStyle.current.merge(
     TextStyle(
         fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
@@ -113,11 +125,12 @@ fun h2Style(): TextStyle =
         color = onSurfaceColor(),
         textAlign = LocalReadingSubheadAlign.current.toTextAlign(),
     )
+)
 
 @Stable
 @Composable
 @ReadOnlyComposable
-fun h3Style(): TextStyle =
+fun h3Style(): TextStyle = LocalTextStyle.current.merge(
     TextStyle(
         fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
@@ -126,11 +139,12 @@ fun h3Style(): TextStyle =
         color = onSurfaceColor(),
         textAlign = LocalReadingSubheadAlign.current.toTextAlign(),
     )
+)
 
 @Stable
 @Composable
 @ReadOnlyComposable
-fun h4Style(): TextStyle =
+fun h4Style(): TextStyle = LocalTextStyle.current.merge(
     TextStyle(
         fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
@@ -139,11 +153,12 @@ fun h4Style(): TextStyle =
         color = onSurfaceColor(),
         textAlign = LocalReadingSubheadAlign.current.toTextAlign(),
     )
+)
 
 @Stable
 @Composable
 @ReadOnlyComposable
-fun h5Style(): TextStyle =
+fun h5Style(): TextStyle = LocalTextStyle.current.merge(
     TextStyle(
         fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
@@ -152,11 +167,12 @@ fun h5Style(): TextStyle =
         color = onSurfaceColor(),
         textAlign = LocalReadingSubheadAlign.current.toTextAlign(),
     )
+)
 
 @Stable
 @Composable
 @ReadOnlyComposable
-fun h6Style(): TextStyle =
+fun h6Style(): TextStyle = LocalTextStyle.current.merge(
     TextStyle(
         fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontWeight = if (LocalReadingSubheadBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
@@ -165,11 +181,12 @@ fun h6Style(): TextStyle =
         color = onSurfaceColor(),
         textAlign = LocalReadingSubheadAlign.current.toTextAlign(),
     )
+)
 
 @Stable
 @Composable
 @ReadOnlyComposable
-fun captionStyle(): TextStyle =
+fun captionStyle(): TextStyle = LocalTextStyle.current.merge(
     MaterialTheme.typography.bodySmall.merge(
         TextStyle(
             fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
@@ -177,17 +194,19 @@ fun captionStyle(): TextStyle =
             textAlign = TextAlign.Center,
         )
     )
+)
 
 @Stable
 @Composable
 @ReadOnlyComposable
-fun linkTextStyle(): TextStyle =
+fun linkTextStyle(): TextStyle = LocalTextStyle.current.merge(
     TextStyle(
         fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontSize = LocalReadingTextFontSize.current.sp,
         color = MaterialTheme.colorScheme.primary,
         textDecoration = TextDecoration.Underline,
     )
+)
 
 @Stable
 @Composable

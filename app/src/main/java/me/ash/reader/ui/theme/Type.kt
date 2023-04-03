@@ -3,6 +3,7 @@ package me.ash.reader.ui.theme
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.sp
 
 val SystemTypography = Typography(
@@ -96,4 +97,24 @@ val SystemTypography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp,
     ),
+)
+
+internal fun TextStyle.applyTextDirection() = this.copy(textDirection = TextDirection.Content)
+
+internal fun Typography.applyTextDirection() = this.copy(
+    displayLarge = displayLarge.applyTextDirection(),
+    displayMedium = displayMedium.applyTextDirection(),
+    displaySmall = displaySmall.applyTextDirection(),
+    headlineLarge = headlineLarge.applyTextDirection(),
+    headlineMedium = headlineMedium.applyTextDirection(),
+    headlineSmall = headlineSmall.applyTextDirection(),
+    titleLarge = titleLarge.applyTextDirection(),
+    titleMedium = titleMedium.applyTextDirection(),
+    titleSmall = titleSmall.applyTextDirection(),
+    bodyLarge = bodyLarge.applyTextDirection(),
+    bodyMedium = bodyMedium.applyTextDirection(),
+    bodySmall = bodySmall.applyTextDirection(),
+    labelLarge = labelLarge.applyTextDirection(),
+    labelMedium = labelMedium.applyTextDirection(),
+    labelSmall = labelSmall.applyTextDirection(),
 )

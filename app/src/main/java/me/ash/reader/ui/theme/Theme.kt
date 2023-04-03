@@ -1,5 +1,6 @@
 package me.ash.reader.ui.theme
 
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -36,12 +37,14 @@ fun AppTheme(
     ProvideZcamViewingConditions {
         CompositionLocalProvider(
             LocalTonalPalettes provides tonalPalettes.apply { Preparing() },
+            LocalTextStyle provides LocalTextStyle.current.applyTextDirection()
         ) {
             MaterialTheme(
                 colorScheme =
                 if (useDarkTheme) dynamicDarkColorScheme()
                 else dynamicLightColorScheme(),
-                typography = LocalBasicFonts.current.asTypography(LocalContext.current),
+                typography = LocalBasicFonts.current.asTypography(LocalContext.current)
+                    .applyTextDirection(),
                 shapes = Shapes,
                 content = content,
             )
