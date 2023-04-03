@@ -35,7 +35,7 @@
     <string name="already_subscribed">قبلاً مشترک شده است</string>
     <string name="clear">پاک کردن</string>
     <string name="paste">چسباندن</string>
-    <string name="feed_or_site_url">فید یا URL</string>
+    <string name="feed_or_site_url">فید یا آدرس اینترنتی سایت</string>
     <string name="import_from_opml">دریافت از OPML</string>
     <string name="preset">از پیش تعیین شده</string>
     <string name="selected">انتخاب شد</string>
@@ -49,7 +49,7 @@
     <string name="all_move_to_group_tips">همه فیدهای گروه %1$s را به گروه %2$s منتقل کنید.</string>
     <string name="all_move_to_group_toast">همه فید ها را به گروه %1$s منتقل کنید</string>
     <string name="rename">تغییر نام</string>
-    <string name="change_url">تغییر URL</string>
+    <string name="change_url">تغییر آدرس اینترنتی</string>
     <string name="rename_toast">تغییر نام به %1$s</string>
     <string name="create_new_group">ایجاد گروه جدید</string>
     <string name="name">نام</string>
@@ -201,7 +201,7 @@
     <string name="advanced">پیشرفته</string>
     <string name="images_desc">گوشه های گرد، لایه افقی</string>
     <string name="dark_reading_theme">تم خواندن تیره</string>
-    <string name="switch_account">تغییر حساب</string>
+    <string name="switch_account">تعویض</string>
     <string name="add">افزودن</string>
     <string name="accounts_tips">برای تغییر حساب در صفحه‌ی خبرنامه روی نام حساب ضربه بزنید.</string>
     <string name="every_30_minutes">هر 30 دقیقه</string>
@@ -246,4 +246,10 @@
     <string name="clear_all_articles_tips">آیا مطمئن هستید که می‌خواهید تمام مقالات را از این حساب پاک کنید؟</string>
     <string name="delete_account_tips">آیا مطمئن هستید که می‌خواهید این حساب را حذف کنید؟</string>
     <string name="synchronous_tips">شروع دوباره برای اجرای تغییرات لازم است.</string>
+    <string name="connection">در حال اتصال</string>
+    <string name="username">نام کاربری</string>
+    <string name="password">رمزعبور</string>
+    <string name="server_url">آدرس اینترنتی سرور</string>
+    <string name="empty">خالی</string>
+    <string name="system_default">سیستم</string>
 </resources>
