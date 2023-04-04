@@ -12,10 +12,11 @@ import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -55,13 +56,8 @@ fun FlowPagePreview(
                 shape = RoundedCornerShape(24.dp)
             )
     ) {
-        SmallTopAppBar(
+        TopAppBar(
             title = {},
-            colors = TopAppBarDefaults.smallTopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                    topBarTonalElevation.value.dp
-                ),
-            ),
             navigationIcon = {
                 FeedbackIconButton(
                     imageVector = Icons.Rounded.ArrowBack,
@@ -80,7 +76,9 @@ fun FlowPagePreview(
                     contentDescription = stringResource(R.string.search),
                     tint = MaterialTheme.colorScheme.onSurface,
                 ) {}
-            }
+            }, colors = TopAppBarDefaults.smallTopAppBarColors(
+                containerColor = Color.Transparent,
+            )
         )
         Spacer(modifier = Modifier.height(12.dp))
         ArticleItem(

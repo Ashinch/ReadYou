@@ -37,14 +37,6 @@ fun Content(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
-                .run {
-                    if (isShowToolBar) {
-                        navigationBarsPadding()
-                    } else {
-                        this
-                    }
-                }
                 .drawVerticalScrollbar(listState),
             state = listState,
         ) {
