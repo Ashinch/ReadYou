@@ -52,7 +52,7 @@ fun AddLocalAccountDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         onDismissRequest = {
             focusManager.clearFocus()
-            // subscribeViewModel.hideDrawer()
+            viewModel.hideAddLocalAccountDialog()
         },
         icon = {
             Icon(

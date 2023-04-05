@@ -56,7 +56,7 @@ fun AddFeverAccountDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         onDismissRequest = {
             focusManager.clearFocus()
-            // subscribeViewModel.hideDrawer()
+            viewModel.hideAddFeverAccountDialog()
         },
         icon = {
             Icon(
