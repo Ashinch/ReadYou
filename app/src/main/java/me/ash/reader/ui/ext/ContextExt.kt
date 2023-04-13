@@ -69,6 +69,7 @@ fun Context.share(content: String) {
 }
 
 fun Context.openURL(url: String?) {
-    url?.takeIf { it.trim().isNotEmpty() }
-        ?.let { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it))) }
+    url?.trim().let {
+        if (!it.isNullOrEmpty()) startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
+    }
 }
