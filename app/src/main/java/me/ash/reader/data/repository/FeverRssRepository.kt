@@ -138,6 +138,7 @@ class FeverRssRepository @Inject constructor(
             // 3. Fetch the Fever articles (up to unlimited counts)
             var sinceId = account.lastArticleId?.dollarLast() ?: ""
             var itemsBody = feverAPI.getItemsSince(sinceId)
+            var itemsFetched = 0
             while (itemsBody.items?.isNotEmpty() == true) {
                 articleDao.insert(
                     *itemsBody.items?.map {
@@ -164,8 +165,9 @@ class FeverRssRepository @Inject constructor(
                         }
                     }?.toTypedArray() ?: emptyArray()
                 )
-                if (itemsBody.items?.size!! >= 50) {
+                if (itemsBody.items?.size!! >= 50 && itemsFetched <= 250) {
                     itemsBody = feverAPI.getItemsSince(sinceId)
+                    itemsFetched += 50
                 } else {
                     break
                 }
