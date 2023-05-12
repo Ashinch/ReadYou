@@ -39,21 +39,21 @@
     <string name="preset">预设</string>
     <string name="selected">已选择</string>
     <string name="allow_notification">允许通知</string>
-    <string name="all_allow_notification_tips">允许 \"%1$s\" 分组中的所有订阅源发出通知。</string>
+    <string name="all_allow_notification_tips">允许 \"%1$s\" 分组中的所有订阅源发出通知</string>
     <string name="all_allow_notification_toast">已全部允许 \"%1$s\" 分组中的通知</string>
     <string name="all_deny_notification_toast">已全部拒绝 \"%1$s\" 分组中的通知</string>
     <string name="parse_full_content">全文解析</string>
-    <string name="all_parse_full_content_tips">对 \"%1$s\" 分组中的所有文章进行全文解析。</string>
+    <string name="all_parse_full_content_tips">对 \"%1$s\" 分组中的所有文章进行全文解析</string>
     <string name="all_parse_full_content_toast">全文解析 \"%1$s\" 分组中的文章</string>
     <string name="all_deny_parse_full_content_toast">\"%1$s\" 分组内所有文章不再进行完整内容解析</string>
     <string name="clear_articles">清空文章</string>
     <string name="clear_articles_in_feed_toast">已清空 \"%1$s\" 订阅源中所有已归档文章</string>
     <string name="clear_articles_in_group_toast">已清空 \"%1$s\" 分组中所有已归档的文章</string>
-    <string name="clear_articles_feed_tips">清空 \"%1$s\" 订阅源中所有已归档的文章。</string>
-    <string name="clear_articles_group_tips">清空 \"%1$s\" 分组中所有已归档的文章。</string>
+    <string name="clear_articles_feed_tips">清空 \"%1$s\" 订阅源中所有已归档的文章</string>
+    <string name="clear_articles_group_tips">清空 \"%1$s\" 分组中所有已归档的文章</string>
     <string name="add_to_group">添加到组</string>
     <string name="move_to_group">移动到组</string>
-    <string name="all_move_to_group_tips">将 \"%1$s\" 分组中的所有订阅源移动至 \"%2$s\" 分组。</string>
+    <string name="all_move_to_group_tips">将 \"%1$s\" 分组中的所有订阅源移动至 \"%2$s\" 分组</string>
     <string name="all_move_to_group_toast">已全部移动至 \"%1$s\" 分组</string>
     <string name="rename">重命名</string>
     <string name="change_url">更改链接</string>
@@ -65,10 +65,10 @@
     <string name="delete">删除</string>
     <string name="delete_toast">\"%1$s\" 已被删除</string>
     <string name="unsubscribe">取消订阅</string>
-    <string name="unsubscribe_tips">不再订阅 \"%1$s\"，同时删除其中所有已归档的文章。</string>
+    <string name="unsubscribe_tips">不再订阅 \"%1$s\"，同时删除其中所有已归档的文章</string>
     <string name="delete_group">删除分组</string>
-    <string name="delete_group_tips">删除 \"%1$s\" 分组，同时删除其中所有订阅源和已归档的文章。</string>
-    <string name="group_option_tips">以下选项将应用到该分组中的所有订阅源。</string>
+    <string name="delete_group_tips">删除 \"%1$s\" 分组，同时删除其中所有订阅源和已归档的文章</string>
+    <string name="group_option_tips">以下选项应用到该分组中的所有订阅源</string>
     <string name="today">今天</string>
     <string name="yesterday">昨天</string>
     <string name="date_at_time">%1$s %2$s</string>
@@ -79,15 +79,15 @@
     <string name="mark_as_unread">标记为未读</string>
     <string name="mark_as_starred">标记为已加星标</string>
     <string name="mark_as_unstar">标记为未加星标</string>
-    <string name="mark_as_read_one_day">超过 1 天标记为已读</string>
-    <string name="mark_as_read_three_days">超过 3 天标记为已读</string>
-    <string name="mark_as_read_seven_days">超过 7 天标记为已读</string>
+    <string name="mark_as_read_one_day">将逾 1 天前的文章标为已读</string>
+    <string name="mark_as_read_three_days">将逾 3 天前文章标为已读</string>
+    <string name="mark_as_read_seven_days">将逾 7 天前文章标为已读</string>
     <string name="one_day">1天</string>
     <string name="three_days">3天</string>
     <string name="seven_days">7天</string>
     <string name="close">关闭</string>
     <string name="get_new_updates">获取新的更新</string>
-    <string name="get_new_updates_desc">版本 %1$s 现已发布</string>
+    <string name="get_new_updates_desc">有新版本 %1$s 可用</string>
     <string name="in_coding">施工中</string>
     <string name="coming_soon">正在路上</string>
     <string name="accounts">账户</string>
@@ -95,7 +95,7 @@
     <string name="color_and_style">颜色和样式</string>
     <string name="color_and_style_desc">主题、色调样式、字体大小</string>
     <string name="interaction">交互</string>
-    <string name="interaction_desc">启动时、触感反馈</string>
+    <string name="interaction_desc">初始页面，触感反馈</string>
     <string name="languages">语言</string>
     <string name="languages_desc">英语、简体中文、更多</string>
     <string name="use_device_languages">跟随系统设置</string>
@@ -103,113 +103,10 @@
     <string name="tips_and_support">提示和支持</string>
     <string name="tips_and_support_desc">关于、开源</string>
     <string name="welcome">欢迎</string>
-    <string name="tos_tips">在此之前，您需要同意 Read You 的服务条款与隐私政策后才能继续。</string>
+    <string name="tos_tips">在此之前，请阅读并同意 Read You 的服务条款与隐私政策。</string>
     <string name="browse_tos_tips">查看《<i><u>服务条款与隐私政策</u></i>》</string>
     <string name="terms_of_service">服务条款</string>
-    <string name="tos_content">
-        &lt;h5&gt;
-
-        隐私政策
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        我非常重视您的隐私。
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        不收集任何用户数据，所有敏感信息（密码和其他账户信息）都安全地存储在您设备上的本地应用数据库中。
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        将使用以下权限为您提供服务：
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        - 访问网络权限（用于访问您所指定的在线内容）
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - 获取网络状态权限（用于获取当前设备是否拥有可用的网络条件）
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - 后台服务权限（用于定时自动地为您同步已收藏的内容）
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        第三方服务
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        本政策不适用于您与 &lt;b&gt;Read You&lt;/b&gt; 一起使用的第三方服务。您可以在所使用的第三方服务的网站上查阅相关的隐私政策。
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        免责声明
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        &lt;b&gt;Read You&lt;/b&gt; 仅是一款内容收藏工具。您在使用 &lt;b&gt;Read You&lt;/b&gt;
-        的过程中，应遵守所在国家和地区的法律法规，因您的行为所产生的一切责任将由您个人承担。
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        开源许可
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        是一个使用 GNU GPL 3.0 开源许可协议的开源项目[1]，允许您免费使用、引用、修改 &lt;b&gt;Read You&lt;/b&gt;
-        的源代码，但不允许修改后和其衍生的代码作为闭源的商业软件进行发布和销售。具体细节请查看完整的 GNU GPL 3.0 开源许可协议
-        [2]。
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        附录
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        - [1] https://github.com/Ashinch/ReadYou
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - [2] https://www.gnu.org/licenses/gpl-3.0.html
-
-        &lt;/p&gt;
-    </string>
+    <string name="tos_content"><h5> 隐私政策 </h5> <br/> <p> 我非常重视您的隐私。 </p> <br/> <p> <b>Read You</b> 不收集任何用户数据，所有敏感信息（密码和其他账户信息）都安全地存储在您设备上的本地应用数据库中。 </p> <br/> <p> <b>Read You</b> 将使用以下权限为您提供服务： </p> <br/> <p> - 访问网络权限（用于访问您所指定的在线内容） </p> <p> - 获取网络状态权限（用于确定当前设备是否拥有可用的网络条件） </p> <p> - 后台服务权限（用于定时自动地为您同步已收藏的内容） </p> <br/> <br/> <h5> 第三方服务 </h5> <br/> <p> 本政策不适用于您与 <b>Read You</b> 一起使用的第三方服务。您可以在所使用的第三方服务的网站上查阅相关的隐私政策。 </p> <br/> <br/> <h5> 免责声明 </h5> <br/> <p> <b>Read You</b> 仅是一款内容收藏工具。您在使用 <b>Read You</b> 的过程中，应遵守所在国家和地区的法律法规，因您的行为所产生的一切责任将由您个人承担。 </p> <br/> <br/> <h5> 开源许可 </h5> <br/> <p> <b>Read You</b> 是一个使用 GNU GPL 3.0 开源许可协议的开源项目[1]，允许您免费使用、引用、修改 <b>Read You</b> 的源代码，但不允许修改后和其衍生的代码作为闭源的商业软件进行发布和销售。具体细节请查看完整的 GNU GPL 3.0 开源许可协议 [2]。 </p> <br/> <br/> <h5> 附录 </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">同意并继续</string>
     <string name="wallpaper_colors">壁纸颜色</string>
     <string name="no_palettes">暂无色板</string>
@@ -239,8 +136,8 @@
     <string name="skip_this_version">跳过这个版本</string>
     <string name="checking_updates">正在检查更新…</string>
     <string name="is_latest_version">已是最新版本</string>
-    <string name="check_failure">检查失败</string>
-    <string name="download_failure">下载失败</string>
+    <string name="check_failure">检查更新失败</string>
+    <string name="download_failure">无法下载更新</string>
     <string name="rate_limit">请求速率受限</string>
     <string name="help">帮助</string>
     <string name="on_start">启动时</string>
@@ -256,21 +153,21 @@
     <string name="article_images">文章插图</string>
     <string name="feed_names">订阅源名称</string>
     <string name="feed_favicons">订阅源图标</string>
-    <string name="article_date_sticky_header">文章发布日期粘性标签（实验性）</string>
+    <string name="article_date_sticky_header">粘性发布日期标头（实验性）</string>
     <string name="article_list">文章列表</string>
     <string name="group_list">分组列表</string>
     <string name="always_expand">始终展开</string>
     <string name="top">顶部</string>
     <string name="mark_as_read_button_position">“标记为已读”按钮的位置</string>
     <string name="top_bar">标题栏</string>
-    <string name="fill_selected_icon">填充已选中的图标</string>
+    <string name="fill_selected_icon">填充当前筛选器图标</string>
     <string name="filter_bar">过滤栏</string>
     <string name="icons">图标</string>
     <string name="icons_and_labels">图标和文字</string>
-    <string name="icons_and_label_only_selected">图标和文字（仅选中时）</string>
-    <string name="tips_top_bar_tonal_elevation">标题栏的色调海拔仅在滚动时可用。</string>
-    <string name="tips_article_list_tonal_elevation">文章列表的色调海拔仅在亮色主题时可用。</string>
-    <string name="tips_group_list_tonal_elevation">分组列表的色调海拔仅在亮色主题时可用。</string>
+    <string name="icons_and_label_only_selected">图标和标签（仅活跃）</string>
+    <string name="tips_top_bar_tonal_elevation">标题栏列表的色调海拔仅在滚动时可用</string>
+    <string name="tips_article_list_tonal_elevation">文章列表的色调海拔仅在亮色主题时可用</string>
+    <string name="tips_group_list_tonal_elevation">分组列表的色调海拔仅在亮色主题时可用</string>
     <string name="share">分享</string>
     <string name="touch_to_play_video">轻触播放视频</string>
     <string name="text">文本</string>
@@ -338,15 +235,15 @@
     <string name="export_as_opml">导出为 OPML</string>
     <string name="clear_all_articles">清空所有文章</string>
     <string name="delete_account">删除账户</string>
-    <string name="clear_all_articles_tips">确定要清空该账户中所有的文章吗？</string>
+    <string name="clear_all_articles_tips">确定要清空该账户的文章列表吗？</string>
     <string name="delete_account_tips">确定要删除该账户吗？</string>
     <string name="must_have_an_account">必须保留一个账户</string>
-    <string name="clear_all_articles_toast">已清空该账户的所有文章</string>
-    <string name="delete_account_toast">该账户已被删除</string>
-    <string name="synchronous_tips">需要重新启动才能生效。</string>
+    <string name="clear_all_articles_toast">已清空文章列表</string>
+    <string name="delete_account_toast">已删除帐户</string>
+    <string name="synchronous_tips">需要重新启动才能使更改生效</string>
     <string name="switch_account">切换</string>
     <string name="add">添加</string>
-    <string name="accounts_tips">在订阅源页面中点击帐户名称来切换它们。</string>
+    <string name="accounts_tips">在订阅源页面中轻按帐户名称来切换它</string>
     <string name="server_url">服务器地址</string>
     <string name="username">用户名</string>
     <string name="password">密码</string>
