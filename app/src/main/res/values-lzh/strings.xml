@@ -1,2 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="all">诸</string>
+    <plurals name="all_desc">
+        <item quantity="one">%1$d 项已纳入</item>
+        <item quantity="other">%1$d 项已纳入</item>
+    </plurals>
+    <string name="unread">未览</string>
+    <plurals name="unread_desc">
+        <item quantity="one">%1$d 项未览</item>
+        <item quantity="other">%1$d 项未览</item>
+    </plurals>
+    <string name="starred">已藏</string>
+    <plurals name="starred_desc">
+        <item quantity="one">%1$d 项已藏</item>
+        <item quantity="other">%1$d 项已藏</item>
+    </plurals>
+    <string name="feeds">分类</string>
+    <string name="syncing">同步中……</string>
+    <string name="loading">加载中……</string>
+    <string name="expand_less">收束</string>
+    <string name="expand_more">展开</string>
+    <string name="confirm">核实</string>
+    <string name="cancel">废止</string>
+    <string name="allow">准允</string>
+    <string name="deny">驳回</string>
+    <string name="defaults">遂从</string>
+    <string name="unknown">不明</string>
+    <string name="empty">空</string>
+    <string name="back">折返</string>
+    <string name="go_to">移至</string>
+    <string name="settings">配置</string>
+    <string name="refresh">更替</string>
+    <string name="search">缉查</string>
+    <string name="searching">缉查中……</string>
+    <string name="subscribe">定阅</string>
+    <string name="already_subscribed">已有定阅</string>
+    <string name="clear">肃清</string>
+    <string name="paste">粘附</string>
+    <string name="feed_or_site_url">订户或站点链接</string>
+    <string name="import_from_opml">录入OPML文件</string>
+    <string name="preset">预置</string>
+    <string name="selected">已选取</string>
+    <string name="allow_notification">告知往来</string>
+    <string name="languages_desc">英语、简体中文、更多</string>
+    <string name="list">罗列</string>
+    <string name="more">更多</string>
+    <string name="add">增添</string>
+    <string name="switch_account">调换</string>
+    <string name="username">名号</string>
+    <string name="password">密钥</string>
+    <string name="server_url">服务器定址</string>
+</resources>

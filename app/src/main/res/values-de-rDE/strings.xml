@@ -41,21 +41,21 @@
     <string name="preset">Voreinstellung</string>
     <string name="selected">Ausgewählte</string>
     <string name="allow_notification">Benachrichtigung zulassen</string>
-    <string name="all_allow_notification_tips">Alle Feeds in der Gruppe „%1$s“ dürfen Benachrichtigungen senden.</string>
+    <string name="all_allow_notification_tips">Alle Feeds in der Gruppe „%1$s“ dürfen Benachrichtigungen senden</string>
     <string name="all_allow_notification_toast">Alle Benachrichtigungen in der Gruppe „%1$s“ sind erlaubt</string>
     <string name="all_deny_notification_toast">Alle Benachrichtigungen in der Gruppe „%1$s“ werden abgelehnt</string>
     <string name="parse_full_content">Gesamtinhalt abrufen</string>
-    <string name="all_parse_full_content_tips">Gesamten Inhalt von allen Artikeln in der Gruppe „%1$s“ abrufen.</string>
+    <string name="all_parse_full_content_tips">Gesamten Inhalt von allen Artikeln in der Gruppe „%1$s“ abrufen</string>
     <string name="all_parse_full_content_toast">Gesamten Inhalt von allen Artikeln in der Gruppe „%1$s“ abrufen</string>
     <string name="all_deny_parse_full_content_toast">Keinen gesamten Inhalt von allen Artikeln in der Gruppe „%1$s“ abrufen</string>
     <string name="clear_articles">Artikel löschen</string>
     <string name="clear_articles_in_feed_toast">Alle archivierten Artikel im Feed „%1$s“ wurden bereinigt</string>
     <string name="clear_articles_in_group_toast">Alle archivierten Artikel in der Gruppe „%1$s“ wurden bereinigt</string>
-    <string name="clear_articles_feed_tips">Alle archivierten Artikel im Feed „%1$s“ löschen.</string>
-    <string name="clear_articles_group_tips">Alle archivierten Artikel in der Gruppe „%1$s“ löschen.</string>
+    <string name="clear_articles_feed_tips">Alle archivierten Artikel im Feed „%1$s“ löschen</string>
+    <string name="clear_articles_group_tips">Alle archivierten Artikel in der Gruppe „%1$s“ löschen</string>
     <string name="add_to_group">Zu Gruppe hinzufügen</string>
     <string name="move_to_group">Zur Gruppe verschieben</string>
-    <string name="all_move_to_group_tips">Verschieben Sie alle Feeds in der Gruppe „%1$s“ in die Gruppe „%2$s“.</string>
+    <string name="all_move_to_group_tips">Verschieben Sie alle Feeds in der Gruppe „%1$s“ in die Gruppe „%2$s“</string>
     <string name="all_move_to_group_toast">Alle zur Gruppe „%1$s“ verschoben</string>
     <string name="rename">Umbenennen</string>
     <string name="change_url">URL ändern</string>
@@ -67,10 +67,10 @@
     <string name="delete">Löschen</string>
     <string name="delete_toast">„%1$s“ wurde gelöscht</string>
     <string name="unsubscribe">Deabonnieren</string>
-    <string name="unsubscribe_tips">„%1$s“ deabonnieren und alle darin enthaltenen archivierten Artikel löschen.</string>
+    <string name="unsubscribe_tips">„%1$s“ deabonnieren und alle darin enthaltenen archivierten Artikel löschen</string>
     <string name="delete_group">Gruppe löschen</string>
-    <string name="delete_group_tips">Löscht die Gruppe „%1$s“ und alle darin enthaltenen Feeds und archivierten Artikel.</string>
-    <string name="group_option_tips">Die folgenden Optionen werden auf alle Feeds in dieser Gruppe angewendet.</string>
+    <string name="delete_group_tips">Lösche die Gruppe „%1$s“ und alle darin enthaltenen Feeds und archivierten Artikel</string>
+    <string name="group_option_tips">Die folgenden Optionen werden auf alle Feeds in dieser Gruppe angewendet</string>
     <string name="today">Heute</string>
     <string name="yesterday">Gestern</string>
     <string name="date_at_time">%1$s um %2$s</string>
@@ -80,16 +80,16 @@
     <string name="mark_all_as_read">Alle als gelesen</string>
     <string name="mark_as_unread">Als ungelesen markieren</string>
     <string name="mark_as_starred">Als markiert markieren</string>
-    <string name="mark_as_unstar">Als unmarkiert markieren</string>
-    <string name="mark_as_read_one_day">Als mehr als 1 Tag gelesen markieren</string>
-    <string name="mark_as_read_three_days">Als mehr als 3 Tage gelesen markieren</string>
-    <string name="mark_as_read_seven_days">Als mehr als 7 Tage gelesen markieren</string>
+    <string name="mark_as_unstar">Markierung entfernen</string>
+    <string name="mark_as_read_one_day">Als gelesen markieren wenn älter als 1 Tag</string>
+    <string name="mark_as_read_three_days">Als gelesen markieren älter als 3 Tage</string>
+    <string name="mark_as_read_seven_days">Als gelesen markieren älter als 7 Tage</string>
     <string name="one_day">1 T</string>
     <string name="three_days">3 T</string>
     <string name="seven_days">7 T</string>
     <string name="close">Schließen</string>
     <string name="get_new_updates">Neue Updates erhalten</string>
-    <string name="get_new_updates_desc">Version %1$s wurde veröffentlicht</string>
+    <string name="get_new_updates_desc">Neue version %1$s ist verfügbar</string>
     <string name="in_coding">In Entwicklung</string>
     <string name="coming_soon">Demnächst verfügbar</string>
     <string name="accounts">Konten</string>
@@ -97,7 +97,7 @@
     <string name="color_and_style">Farbe &amp; Stil</string>
     <string name="color_and_style_desc">Design, Farbstil, Schriftgröße</string>
     <string name="interaction">Interaktion</string>
-    <string name="interaction_desc">Beim Start, haptisches Feedback</string>
+    <string name="interaction_desc">Startseite, haptisches Feedback</string>
     <string name="languages">Sprachen</string>
     <string name="languages_desc">Deutsch, Englisch, andere</string>
     <string name="help_translate">Hilf uns beim Übersetzen</string>
@@ -105,119 +105,10 @@
     <string name="tips_and_support">Tipps &amp; Support</string>
     <string name="tips_and_support_desc">Über, Open Source</string>
     <string name="welcome">Willkommen</string>
-    <string name="tos_tips">Bevor Sie fortfahren können, müssen Sie den Nutzungsbedingungen und der Datenschutzrichtlinie von Read You zustimmen.</string>
+    <string name="tos_tips">Bitte die Nutzungsbedingungen und die Datenschutzrichtlinie von Read You lesen und zustimmen, um fortzufahren.</string>
     <string name="browse_tos_tips">Siehe die <i><u>Nutzungsbedingungen und Datenschutzrichtlinie</u></i></string>
     <string name="terms_of_service">Nutzungsbedingungen</string>
-    <string name="tos_content">
-        &lt;h5&gt;
-
-        Datenschutzrichtlinie
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        Ich nehme Ihre Privatsphäre sehr ernst.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        sammelt keine Benutzerdaten, und alle sensiblen Informationen (Passwörter und andere Kontoinformationen) werden
-        sicher in der lokalen Anwendungsdatenbank auf Ihrem Gerät gespeichert.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        wird die folgenden Berechtigungen nutzen, um Ihnen den Dienst zur Verfügung zu stellen.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        - Netzwerkzugriffsberechtigung (für den Zugriff auf die von Ihnen angegebenen Online-Inhalte)
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - Berechtigung zum Abrufen des Netzwerkstatus (um festzustellen, ob das Gerät derzeit über ein verfügbares
-        Netzwerk verfügt)
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - Berechtigung für den Hintergrunddienst (um Ihre Favoriten automatisch und regelmäßig zu synchronisieren)
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Dienstleistungen von Dritten
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        Diese Richtlinie gilt nicht für Dienste Dritter, die Sie mit &lt;b&gt;Read You&lt;/b&gt; nutzen. Sie können die
-        Datenschutzrichtlinien der von Ihnen genutzten Dienste Dritter auf den jeweiligen Websites einsehen.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Haftungsausschlüsse
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        ist ein reines Tool zur Sammlung von Inhalten. Ihre Nutzung von &lt;b&gt;Read You&lt;/b&gt; unterliegt den
-        Gesetzen und Vorschriften Ihres Landes und Ihrer Region, und jede Haftung, die sich aus Ihren Handlungen ergibt,
-        wird von Ihnen persönlich getragen.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Open Source Lizenz
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        ist ein Open Source Projekt unter der GNU GPL 3.0 Open Source Lizenz[1], die es Ihnen erlaubt, den Quellcode
-        von Read You kostenlos zu verwenden, zu referenzieren und zu modifizieren, aber nicht erlaubt, den
-        modifizierten und abgeleiteten Code als kommerzielle Closed-Source-Software zu vertreiben und zu verkaufen.
-        Details finden Sie in der vollständigen GNU GPL 3.0 Open Source Lizenz[2].
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Anhang
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        - [1] https://github.com/Ashinch/ReadYou
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - [2] https://www.gnu.org/licenses/gpl-3.0.html
-
-        &lt;/p&gt;
-    </string>
+    <string name="tos_content"><h5> Datenschutzrichtlinie </h5> <br/> <p> Ich nehme Ihre Privatsphäre sehr ernst. </p> <br/> <p> <b>Read You</b> sammelt keine Benutzerdaten, und alle sensiblen Informationen (Passwörter und andere Kontoinformationen) werden sicher in der lokalen Anwendungsdatenbank auf Ihrem Gerät gespeichert. </p> <br/> <p> <b>Read You</b> wird die folgenden Berechtigungen nutzen, um Ihnen den Dienst zur Verfügung zu stellen. </p> <br/> <p> - Netzwerkzugriffsberechtigung (für den Zugriff auf die von Ihnen angegebenen Online-Inhalte) </p> <p> - Berechtigung zum Abrufen des Netzwerkstatus (um festzustellen, ob das Gerät derzeit über ein verfügbares Netzwerk verfügt) </p> <p> - Berechtigung für den Hintergrunddienst (um Ihre Favoriten automatisch und regelmäßig zu synchronisieren) </p> <br/> <br/> <h5> Dienstleistungen von Dritten </h5> <br/> <p> Diese Richtlinie gilt nicht für Dienste Dritter, die Sie mit <b>Read You</b> nutzen. Sie können die Datenschutzrichtlinien der von Ihnen genutzten Dienste Dritter auf den jeweiligen Websites einsehen. </p> <br/> <br/> <h5> Haftungsausschlüsse </h5> <br/> <p> <b>Read You</b> ist ein reines Tool zur Sammlung von Inhalten. Ihre Nutzung von <b>Read You</b> unterliegt den Gesetzen und Vorschriften Ihres Landes und Ihrer Region, und jede Haftung, die sich aus Ihren Handlungen ergibt, wird von Ihnen persönlich getragen. </p> <br/> <br/> <h5> Open Source Lizenz </h5> <br/> <p> <b>Read You</b> ist ein Open Source Projekt unter der GNU GPL 3.0 Open Source Lizenz[1], die es Ihnen erlaubt, den Quellcode von Read You kostenlos zu verwenden, zu referenzieren und zu modifizieren, aber nicht erlaubt, den modifizierten und abgeleiteten Code als kommerzielle Closed-Source-Software zu vertreiben und zu verkaufen. Details finden Sie in der vollständigen GNU GPL 3.0 Open Source Lizenz[2]. </p> <br/> <br/> <h5> Anhang </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">Zustimmen</string>
     <string name="wallpaper_colors">Hintergrundfarben</string>
     <string name="no_palettes">Keine Paletten</string>
@@ -246,9 +137,9 @@
     <string name="update">Aktualisieren</string>
     <string name="skip_this_version">Version überspringen</string>
     <string name="checking_updates">Suche nach Aktualisierungen…</string>
-    <string name="is_latest_version">Dies ist die neueste Version</string>
-    <string name="check_failure">Suche fehlgeschlagen</string>
-    <string name="download_failure">Fehler beim Herunterladen</string>
+    <string name="is_latest_version">Dies ist die neueste Version der App</string>
+    <string name="check_failure">Suche nach Updates fehlgeschlagen</string>
+    <string name="download_failure">Fehler beim Herunterladen des Updates</string>
     <string name="rate_limit">Die Anfragerate ist limitiert</string>
     <string name="help">Hilfe</string>
     <string name="on_start">Beim Start</string>
@@ -264,23 +155,23 @@
     <string name="article_images">Artikel Bilder</string>
     <string name="feed_names">Feed Namen</string>
     <string name="feed_favicons">Feed Favicons</string>
-    <string name="article_date_sticky_header">Artikeldatum klebrige Kopfzeile (Experimentell)</string>
+    <string name="article_date_sticky_header">Artikeldatum oben fixieren (experimentell)</string>
     <string name="article_list">Artikelliste</string>
     <string name="group_list">Gruppenliste</string>
     <string name="always_expand">Immer erweitern</string>
     <string name="top">Oben</string>
     <string name="mark_as_read_button_position">„Als gelesen markieren“ Position</string>
     <string name="top_bar">Obere Leiste</string>
-    <string name="fill_selected_icon">Ausgewähltes Symbol füllen</string>
+    <string name="fill_selected_icon">Ausgewähltes Filter-Symbol füllen</string>
     <string name="filter_bar">Filterleiste</string>
     <string name="icons">Symbole</string>
     <string name="icons_and_labels">Symbole &amp; Beschriftungen</string>
-    <string name="icons_and_label_only_selected">Symbole &amp; Beschriftungen (Nur ausgewähltes)</string>
-    <string name="tips_top_bar_tonal_elevation">Das farbliche Hervorheben der oberen Leiste ist nur beim Scrollen verfügbar.</string>
-    <string name="tips_article_list_tonal_elevation">Das farbliche Hervorheben der Artikelliste ist nur für das helle Design verfügbar.</string>
-    <string name="tips_group_list_tonal_elevation">Das farbliche Hervorheben der Gruppenliste ist nur für das helle Design verfügbar.</string>
+    <string name="icons_and_label_only_selected">Symbole &amp; Beschriftungen (nur aktive)</string>
+    <string name="tips_top_bar_tonal_elevation">Das farbliche Hervorheben der oberen Leiste ist nur beim Scrollen verfügbar</string>
+    <string name="tips_article_list_tonal_elevation">Das farbliche Hervorheben der Artikelliste ist nur für das helle Design verfügbar</string>
+    <string name="tips_group_list_tonal_elevation">Das farbliche Hervorheben der Gruppenliste ist nur für das helle Design verfügbar</string>
     <string name="share">Teilen</string>
-    <string name="touch_to_play_video">Berühren, um Video abzuspielen</string>
+    <string name="touch_to_play_video">Tippen, um Video abzuspielen</string>
     <string name="text">Text</string>
     <string name="font_size">Schriftgröße</string>
     <string name="letter_spacing">Zeichenabstand</string>
@@ -346,15 +237,15 @@
     <string name="clear_all_articles">Alle Artikel löschen</string>
     <string name="delete_account">Konto löschen</string>
     <string name="must_have_an_account">Sie müssen ein Konto haben</string>
-    <string name="clear_all_articles_toast">Alle Artikel von diesem Konto wurden gelöscht</string>
-    <string name="delete_account_toast">Dieses Konto wurde gelöscht</string>
-    <string name="clear_all_articles_tips">Sind Sie sicher, dass Sie alle Artikel aus diesem Konto löschen wollen\?</string>
+    <string name="clear_all_articles_toast">Die Artikel-Liste dieses Kontos wurde gelöscht</string>
+    <string name="delete_account_toast">Konto gelöscht</string>
+    <string name="clear_all_articles_tips">Sind Sie sicher, dass Sie die Artikel-Liste für dieses Konto löschen wollen\?</string>
     <string name="delete_account_tips">Sind Sie sicher, dass Sie dieses Konto löschen möchten\?</string>
-    <string name="synchronous_tips">Ein Neustart ist erforderlich, damit die Änderungen wirksam werden.</string>
+    <string name="synchronous_tips">Neustart erforderlich, damit die Änderungen wirksam werden</string>
     <string name="block_list">Blockierliste</string>
     <string name="switch_account">Wechseln</string>
     <string name="add">Hinzufügen</string>
-    <string name="accounts_tips">Klick auf den Kontonamen auf der Feed-Seite um zu wechseln.</string>
+    <string name="accounts_tips">Auf den Kontonamen auf der Feed-Seite klicken, um zu wechseln</string>
     <string name="username">Kontoname</string>
     <string name="empty">Leer</string>
     <string name="server_url">Server URL</string>

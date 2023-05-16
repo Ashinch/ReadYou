@@ -99,7 +99,7 @@
     <string name="seven_days">7d</string>
     <string name="close">Fechar</string>
     <string name="get_new_updates">Obter novas atualizações</string>
-    <string name="get_new_updates_desc">Versão %1$s disponível</string>
+    <string name="get_new_updates_desc">Nova versão %1$s disponível</string>
     <string name="in_coding">Em desenvolvimento</string>
     <string name="coming_soon">Em breve</string>
     <string name="accounts">Contas</string>
@@ -141,7 +141,7 @@
     <string name="change_log">Registo de alterações</string>
     <string name="update">Atualizar</string>
     <string name="checking_updates">A verificar atualizações…</string>
-    <string name="is_latest_version">Esta é a versão mais recente</string>
+    <string name="is_latest_version">Esta é a versão mais recente da aplicação</string>
     <string name="download_failure">Não foi possível descarregar atualizações</string>
     <string name="rate_limit">O pedido foi limitado</string>
     <string name="help">Ajuda</string>
@@ -199,7 +199,7 @@
     <string name="top_bar">Barra do topo</string>
     <string name="fill_selected_icon">Preencher o ícone do item selecionado</string>
     <string name="filter_bar">Barra de Filtros</string>
-    <string name="icons_and_label_only_selected">Ícones e rótulos (Apenas selecionados)</string>
+    <string name="icons_and_label_only_selected">Ícones e rótulos (apenas ativos)</string>
     <string name="tips_top_bar_tonal_elevation">Esta elevação tonal está disponível apenas enquanto estiver rolando a página.</string>
     <string name="text">Texto</string>
     <string name="font_size">Tamanho da fonte</string>
@@ -247,7 +247,7 @@
     <string name="keep_archived_articles">Manter artigos arquivados</string>
     <string name="block_list">Lista de bloqueados</string>
     <string name="clear_all_articles">Apagar todos os artigos</string>
-    <string name="delete_account_toast">Essa conta foi deletada</string>
+    <string name="delete_account_toast">Conta deletada</string>
     <string name="synchronous_tips">Para ver as mudanças é necessário reiniciar o app.</string>
     <string name="server_url">URL do servidor</string>
     <string name="username">Nome do utilizador</string>
