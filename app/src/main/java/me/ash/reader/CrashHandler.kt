@@ -31,7 +31,7 @@ class CrashHandler(private val context: Context) : UncaughtExceptionHandler {
 
     private fun getCauseMessage(e: Throwable?): String? {
         val cause = getCauseRecursively(e)
-        return if (cause != null) cause.message else e?.javaClass?.name
+        return if (cause != null) cause.message.toString() else e?.javaClass?.name
     }
 
     private fun getCauseRecursively(e: Throwable?): Throwable? {

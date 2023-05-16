@@ -136,7 +136,7 @@ Vielen Dank an alle **Read You** Übersetzer, und wenn Sie einen Beitrag leisten
 
 [<img src="https://avatars.githubusercontent.com/u/76829190?v=4" width="180" height="180" style="display: block; border: 1px solid #f5f5f5; border-radius: 9999px;"/>](https://github.com/Kyant0)
 
-Vielen Dank an **@Krant0** für die Design-Inspiration und die Implementierung der Monet-Engine für **Read You**.
+Vielen Dank an **@Kyant0** für die Design-Inspiration und die Implementierung der Monet-Engine für **Read You**.
 
 [<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="200" alt="Copyright © 2000-2023 JetBrains s.r.o. JetBrains and the JetBrains logo are registered trademarks of JetBrains s.r.o."/>](https://www.jetbrains.com/)
 

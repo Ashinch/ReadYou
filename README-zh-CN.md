@@ -136,7 +136,7 @@ F-Droid 版本与其他版本不兼容，您无法通过覆盖安装包来升级
 
 [<img src="https://avatars.githubusercontent.com/u/76829190?v=4" width="180" height="180" style="display: block; border: 1px solid #f5f5f5; border-radius: 9999px;"/>](https://github.com/Kyant0)
 
-感谢 **@Krant0** 为 **Read You** 提供的设计灵感与 Monet 引擎实现。
+感谢 **@Kyant0** 为 **Read You** 提供的设计灵感与 Monet 引擎实现。
 
 [<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="200" alt="Copyright © 2000-2023 JetBrains s.r.o. JetBrains and the JetBrains logo are registered trademarks of JetBrains s.r.o."/>](https://www.jetbrains.com/)
 
