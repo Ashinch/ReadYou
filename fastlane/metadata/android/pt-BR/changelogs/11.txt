@@ -1,6 +1,6 @@
 ## 0.8.0
 
-1. Incluir tradução para Alemão (agradecimentos a Dave).
+1. Incluir tradução para Alemão (graças a(o) Dave).
 
 2. Reestruturar a pagina de leitura (graças ao código aberto do Feeder).
 
