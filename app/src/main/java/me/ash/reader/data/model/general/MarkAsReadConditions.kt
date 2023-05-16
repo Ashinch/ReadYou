@@ -19,7 +19,7 @@ enum class MarkAsReadConditions {
     ;
 
     fun toDate(): Date? = when (this) {
-        All -> null
+        All -> Date()
         else -> Calendar.getInstance().apply {
             time = Date()
             add(Calendar.DAY_OF_MONTH, when (this@MarkAsReadConditions) {

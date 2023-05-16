@@ -199,12 +199,13 @@ class FeverRssRepository @Inject constructor(
     ) {
         super.markAsRead(groupId, feedId, articleId, before, isUnread)
         val feverAPI = getFeverAPI()
+        var beforeUnixTimestamp = (before?.time ?: Date(Long.MAX_VALUE).time) / 1000
         when {
             groupId != null -> {
                 feverAPI.markGroup(
                     status = if (isUnread) FeverDTO.StatusEnum.Unread else FeverDTO.StatusEnum.Read,
                     id = groupId.dollarLast().toLong(),
-                    before = before?.time ?: Date(Long.MAX_VALUE).time
+                    before = beforeUnixTimestamp
                 )
             }
 
@@ -212,7 +213,7 @@ class FeverRssRepository @Inject constructor(
                 feverAPI.markFeed(
                     status = if (isUnread) FeverDTO.StatusEnum.Unread else FeverDTO.StatusEnum.Read,
                     id = feedId.dollarLast().toLong(),
-                    before = before?.time ?: Date(Long.MAX_VALUE).time
+                    before = beforeUnixTimestamp
                 )
             }
 
@@ -228,7 +229,7 @@ class FeverRssRepository @Inject constructor(
                     feverAPI.markFeed(
                         status = if (isUnread) FeverDTO.StatusEnum.Unread else FeverDTO.StatusEnum.Read,
                         id = it.id.dollarLast().toLong(),
-                        before = before?.time ?: Date(Long.MAX_VALUE).time
+                        before = beforeUnixTimestamp
                     )
                 }
             }
