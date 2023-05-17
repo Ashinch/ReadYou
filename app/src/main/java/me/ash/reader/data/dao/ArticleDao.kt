@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import me.ash.reader.data.model.article.Article
+import me.ash.reader.data.model.article.ArticleMeta
 import me.ash.reader.data.model.article.ArticleWithFeed
 import me.ash.reader.data.model.feed.ImportantNum
 import java.util.*
@@ -552,6 +553,18 @@ interface ArticleDao {
         """
     )
     suspend fun queryById(id: String): ArticleWithFeed?
+
+    @Transaction
+    @Query(
+            """
+        SELECT id, isUnread, isStarred FROM article
+        WHERE accountId = :accountId
+        ORDER BY date DESC
+        """
+    )
+    fun queryArticleMetadataAll(
+            accountId: Int
+    ): List<ArticleMeta>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg article: Article)

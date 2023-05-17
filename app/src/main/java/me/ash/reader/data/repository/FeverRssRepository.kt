@@ -17,6 +17,7 @@ import me.ash.reader.data.dao.FeedDao
 import me.ash.reader.data.dao.GroupDao
 import me.ash.reader.data.model.account.security.FeverSecurityKey
 import me.ash.reader.data.model.article.Article
+import me.ash.reader.data.model.article.ArticleMeta
 import me.ash.reader.data.model.feed.Feed
 import me.ash.reader.data.model.group.Group
 import me.ash.reader.data.module.DefaultDispatcher
@@ -91,7 +92,8 @@ class FeverRssRepository @Inject constructor(
      * 1. Fetch the Fever groups
      * 2. Fetch the Fever feeds
      * 3. Fetch the Fever articles
-     * 4. Fetch the Fever favicons
+     * 4. Synchronize read/unread and starred/un-starred items
+     * 5. TODO: Fetch the Fever favicons
      */
     override suspend fun sync(coroutineWorker: CoroutineWorker): ListenableWorker.Result = supervisorScope {
         coroutineWorker.setProgress(SyncWorker.setIsSyncing(true))
@@ -171,7 +173,23 @@ class FeverRssRepository @Inject constructor(
                 }
             }
 
-            // TODO: 4. Fetch the Fever favicons
+            // 4. Synchronize read/unread and starred/un-starred
+            val unreadArticleIds = feverAPI.getUnreadItems().unread_item_ids?.split(",")
+            val starredArticleIds = feverAPI.getSavedItems().saved_item_ids?.split(",")
+            val articleMeta = articleDao.queryArticleMetadataAll(accountId)
+            for (meta: ArticleMeta in articleMeta) {
+                val articleId = meta.id.dollarLast()
+                val shouldBeUnread = unreadArticleIds?.contains(articleId)
+                val shouldBeStarred = starredArticleIds?.contains(articleId)
+                if (meta.isUnread != shouldBeUnread) {
+                    articleDao.markAsReadByArticleId(accountId, meta.id, shouldBeUnread?:true)
+                }
+                if (meta.isStarred != shouldBeStarred){
+                    articleDao.markAsStarredByArticleId(accountId, meta.id, shouldBeStarred?:false)
+                }
+            }
+
+            // TODO: 5. Fetch the Fever favicons
 
             Log.i("RLog", "onCompletion: ${System.currentTimeMillis() - preTime}")
             accountDao.update(account.apply {
