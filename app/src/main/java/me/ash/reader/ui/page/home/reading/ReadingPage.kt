@@ -7,7 +7,6 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -42,8 +41,10 @@ fun ReadingPage(
 
     LaunchedEffect(Unit) {
         navController.currentBackStackEntryFlow.collect {
-            it.arguments?.getString("articleId")?.let {
-                readingViewModel.initData(it)
+            it.arguments?.getString("articleId")?.let { articleId ->
+                if (readingUiState.articleWithFeed?.article?.id != articleId) {
+                    readingViewModel.initData(articleId)
+                }
             }
         }
     }
