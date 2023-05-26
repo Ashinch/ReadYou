@@ -14,6 +14,7 @@ import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
@@ -71,6 +72,7 @@ fun FeedsPage(
         feedsUiState.importantSum.collectAsStateValue(initial = stringResource(R.string.loading))
     val groupWithFeedList =
         feedsUiState.groupWithFeedList.collectAsStateValue(initial = emptyList())
+    val groupsVisible: SnapshotStateMap<String, Boolean> = feedsUiState.groupsVisible
 
     val newVersion = LocalNewVersionNumber.current
     val skipVersion = LocalSkipVersionNumber.current
@@ -99,14 +101,6 @@ fun FeedsPage(
                 weight = 1.4f
             )
         }
-    }
-
-    val groupsVisible = remember(groupWithFeedList) {
-        mutableStateMapOf(
-            *(groupWithFeedList.filterIsInstance<GroupFeedsView.Group>().map {
-                it.group.id to groupListExpand.value
-            }.toTypedArray())
-        )
     }
 
     LaunchedEffect(Unit) {
@@ -217,14 +211,21 @@ fun FeedsPage(
                                 Spacer(modifier = Modifier.height(16.dp))
                             }
                             GroupItem(
-                                isExpanded = { groupsVisible[groupWithFeed.group.id] ?: false },
+                                isExpanded = {
+                                    groupsVisible.getOrPut(
+                                        groupWithFeed.group.id,
+                                        groupListExpand::value
+                                    )
+                                },
                                 group = groupWithFeed.group,
                                 alpha = groupAlpha,
                                 indicatorAlpha = groupIndicatorAlpha,
                                 isEnded = { index == groupWithFeedList.lastIndex },
                                 onExpanded = {
-                                    groupsVisible[groupWithFeed.group.id] =
-                                        !(groupsVisible[groupWithFeed.group.id] ?: false)
+                                    groupsVisible[groupWithFeed.group.id] = groupsVisible.getOrPut(
+                                        groupWithFeed.group.id,
+                                        groupListExpand::value
+                                    ).not()
                                 }
                             ) {
                                 filterChange(
@@ -244,7 +245,12 @@ fun FeedsPage(
                                 alpha = groupAlpha,
                                 badgeAlpha = feedBadgeAlpha,
                                 isEnded = { index == groupWithFeedList.lastIndex || groupWithFeedList[index + 1] is GroupFeedsView.Group },
-                                isExpanded = { groupsVisible[groupWithFeed.feed.groupId] ?: false },
+                                isExpanded = {
+                                    groupsVisible.getOrPut(
+                                        groupWithFeed.feed.groupId,
+                                        groupListExpand::value
+                                    )
+                                },
                             ) {
                                 filterChange(
                                     navController = navController,

@@ -1,6 +1,8 @@
 package me.ash.reader.ui.page.home.feeds
 
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -102,7 +104,7 @@ data class FeedsUiState(
     val importantSum: Flow<String> = emptyFlow(),
     val groupWithFeedList: Flow<List<GroupFeedsView>> = emptyFlow(),
     val listState: LazyListState = LazyListState(),
-    val groupsVisible: Boolean = true,
+    val groupsVisible: SnapshotStateMap<String, Boolean> = mutableStateMapOf(),
 )
 
 sealed class GroupFeedsView {
