@@ -13,9 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import me.ash.reader.data.model.preference.LocalOpenLink
+import me.ash.reader.data.model.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.data.model.preference.LocalReadingSubheadUpperCase
 import me.ash.reader.ui.component.reader.Reader
 import me.ash.reader.ui.ext.drawVerticalScrollbar
+import me.ash.reader.ui.ext.openURL
 import java.util.*
 
 @Composable
@@ -32,6 +35,8 @@ fun Content(
 ) {
     val context = LocalContext.current
     val subheadUpperCase = LocalReadingSubheadUpperCase.current
+    val openLink = LocalOpenLink.current
+    val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
 
     SelectionContainer {
         LazyColumn(
@@ -84,7 +89,10 @@ fun Content(
                     context = context,
                     subheadUpperCase = subheadUpperCase.value,
                     link = link ?: "",
-                    content = content
+                    content = content,
+                    onLinkClick = {
+                        context.openURL(it, openLink, openLinkSpecificBrowser)
+                    }
                 )
             }
             item {

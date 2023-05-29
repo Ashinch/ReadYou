@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import me.ash.reader.R
+import me.ash.reader.data.model.preference.OpenLinkPreference
 import me.ash.reader.ui.component.base.CurlyCornerShape
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold
@@ -194,12 +195,7 @@ fun TipsAndSupportPage(
                         ) {
                             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             view.playSoundEffect(SoundEffectConstants.CLICK)
-                            context.startActivity(
-                                Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse(context.getString(R.string.github_link))
-                                )
-                            )
+                            context.openURL(context.getString(R.string.github_link), OpenLinkPreference.AutoPreferCustomTabs)
                         })
                         Spacer(modifier = Modifier.width(16.dp))
 
@@ -209,12 +205,7 @@ fun TipsAndSupportPage(
                         ) {
                             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             view.playSoundEffect(SoundEffectConstants.CLICK)
-                            context.startActivity(
-                                Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse(context.getString(R.string.telegram_link))
-                                )
-                            )
+                            context.openURL(context.getString(R.string.telegram_link), OpenLinkPreference.AutoPreferCustomTabs)
                         })
                         Spacer(modifier = Modifier.width(16.dp))
 

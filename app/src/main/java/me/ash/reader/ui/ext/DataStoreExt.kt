@@ -398,6 +398,18 @@ sealed class DataStoreKeys<T> {
             get() = intPreferencesKey("initialFilter")
     }
 
+    object OpenLink : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("openLink")
+    }
+
+    object OpenLinkAppSpecificBrowser : DataStoreKeys<String>() {
+
+        override val key: Preferences.Key<String>
+                get() = stringPreferencesKey("openLppSpecificBrowser")
+    }
+
     // Languages
     object Languages : DataStoreKeys<Int>() {
 
