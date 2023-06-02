@@ -46,9 +46,8 @@ fun Preferences.toSettings(): Settings {
         flowArticleListImage = FlowArticleListImagePreference.fromPreferences(this),
         flowArticleListDesc = FlowArticleListDescPreference.fromPreferences(this),
         flowArticleListTime = FlowArticleListTimePreference.fromPreferences(this),
-        flowArticleListDateStickyHeader = FlowArticleListDateStickyHeaderPreference.fromPreferences(
-            this
-        ),
+        flowArticleListDateStickyHeader = FlowArticleListDateStickyHeaderPreference.fromPreferences(this),
+        flowArticleListStarredAlpha = FlowArticleListStarredAlphaPreference.fromPreferences(this),
         flowArticleListTonalElevation = FlowArticleListTonalElevationPreference.fromPreferences(this),
 
         // Reading page

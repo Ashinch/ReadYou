@@ -38,6 +38,7 @@ fun FlowPageStylePage(
     val articleListDesc = LocalFlowArticleListDesc.current
     val articleListTime = LocalFlowArticleListTime.current
     val articleListStickyDate = LocalFlowArticleListDateStickyHeader.current
+    val articleListStarredAlpha = LocalFlowArticleListStarredAlpha.current
     val articleListTonalElevation = LocalFlowArticleListTonalElevation.current
 
     val scope = rememberCoroutineScope()
@@ -181,6 +182,16 @@ fun FlowPageStylePage(
                     ) {
                         RYSwitch(activated = articleListStickyDate.value) {
                             (!articleListStickyDate).put(context, scope)
+                        }
+                    }
+                    SettingItem(
+                        title = stringResource(R.string.article_list_starred_alpha),
+                        onClick = {
+                            (!articleListStarredAlpha).put(context, scope)
+                        },
+                    ) {
+                        RYSwitch(activated = articleListStarredAlpha.value) {
+                            (!articleListStarredAlpha).put(context, scope)
                         }
                     }
                     SettingItem(

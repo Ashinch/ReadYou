@@ -264,6 +264,12 @@ sealed class DataStoreKeys<T> {
             get() = booleanPreferencesKey("flowArticleListDateStickyHeader")
     }
 
+    object FlowArticleListStarredAlpha : DataStoreKeys<Boolean>() {
+
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("flowArticleListStarredAlpha")
+    }
+
     object FlowArticleListTonalElevation : DataStoreKeys<Int>() {
 
         override val key: Preferences.Key<Int>

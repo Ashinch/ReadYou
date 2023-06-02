@@ -48,6 +48,7 @@ data class Settings(
     val flowArticleListDesc: FlowArticleListDescPreference = FlowArticleListDescPreference.default,
     val flowArticleListTime: FlowArticleListTimePreference = FlowArticleListTimePreference.default,
     val flowArticleListDateStickyHeader: FlowArticleListDateStickyHeaderPreference = FlowArticleListDateStickyHeaderPreference.default,
+    val flowArticleListStarredAlpha: FlowArticleListStarredAlphaPreference = FlowArticleListStarredAlphaPreference.default,
     val flowArticleListTonalElevation: FlowArticleListTonalElevationPreference = FlowArticleListTonalElevationPreference.default,
 
     // Reading page
@@ -137,6 +138,8 @@ val LocalFlowArticleListTime =
     compositionLocalOf<FlowArticleListTimePreference> { FlowArticleListTimePreference.default }
 val LocalFlowArticleListDateStickyHeader =
     compositionLocalOf<FlowArticleListDateStickyHeaderPreference> { FlowArticleListDateStickyHeaderPreference.default }
+val LocalFlowArticleListStarredAlpha =
+    compositionLocalOf<FlowArticleListStarredAlphaPreference> { FlowArticleListStarredAlphaPreference.default }
 val LocalFlowArticleListTonalElevation =
     compositionLocalOf<FlowArticleListTonalElevationPreference> { FlowArticleListTonalElevationPreference.default }
 
@@ -223,6 +226,7 @@ fun SettingsProvider(
         LocalFlowArticleListDesc provides settings.flowArticleListDesc,
         LocalFlowArticleListTime provides settings.flowArticleListTime,
         LocalFlowArticleListDateStickyHeader provides settings.flowArticleListDateStickyHeader,
+        LocalFlowArticleListStarredAlpha provides settings.flowArticleListStarredAlpha,
         LocalFlowArticleListTonalElevation provides settings.flowArticleListTonalElevation,
         LocalFlowFilterBarStyle provides settings.flowFilterBarStyle,
         LocalFlowFilterBarFilled provides settings.flowFilterBarFilled,

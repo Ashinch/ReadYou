@@ -287,6 +287,7 @@
     <string name="feed_names">Feed names</string>
     <string name="feed_favicons">Feed favicons</string>
     <string name="article_date_sticky_header">Sticky publication date header (experimental)</string>
+    <string name="article_list_starred_alpha">Show starred as unread</string>
     <string name="article_list">Article List</string>
     <string name="group_list">Group List</string>
     <string name="always_expand">Always expand</string>
