@@ -143,16 +143,19 @@ class FeverRssRepository @Inject constructor(
             while (itemsBody.items?.isNotEmpty() == true) {
                 articleDao.insert(
                     *itemsBody.items?.map {
+                        val readability4JShortDescription = try {
+                            Readability4JExtended("", it.html ?: "").parse().textContent ?: ""
+                        } catch (e: java.lang.IllegalStateException) {
+                            ""
+                        }
+
                         Article(
                             id = accountId.spacerDollar(it.id!!),
                             date = it.created_on_time?.run { Date(this * 1000) } ?: Date(),
                             title = Html.fromHtml(it.title ?: context.getString(R.string.empty)).toString(),
                             author = it.author,
                             rawDescription = it.html ?: "",
-                            shortDescription = (Readability4JExtended("", it.html ?: "")
-                                .parse().textContent ?: "")
-                                .take(110)
-                                .trim(),
+                            shortDescription = readability4JShortDescription.take(110).trim(),
                             fullContent = it.html,
                             img = rssHelper.findImg(it.html ?: ""),
                             link = it.url ?: "",
