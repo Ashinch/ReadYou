@@ -1,4 +1,4 @@
-برنامج <i>Read You</i> هو قارئ آر‌إس‌إس حديث وأنيق يستخدم <a href='https://m3.material.io/' target='_blank' rel='nofollow'>تصميم مَتِيريَل يُو</a>
+برنامج <i>Read You</i> هو قارئ RSS حديث وأنيق يستخدم <a href='https://m3.material.io/' target='_blank' rel='nofollow'>تصميم مَاتِيريَال يُو</a>
 
 <b>المزايا:</b>
 
