@@ -83,7 +83,7 @@ fun TopBar(
                         )
                     }
                 }, colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = Color.Transparent,
+                    containerColor = MaterialTheme.colorScheme.surface,
                 )
             )
         }

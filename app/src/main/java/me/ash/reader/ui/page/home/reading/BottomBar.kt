@@ -48,12 +48,12 @@ fun BottomBar(
             val view = LocalView.current
 
             Surface(
-                modifier = Modifier.navigationBarsPadding(),
                 tonalElevation = tonalElevation.value.dp,
             ) {
                 // TODO: Component styles await refactoring
                 Row(
                     modifier = Modifier
+                        .navigationBarsPadding()
                         .fillMaxWidth()
                         .height(60.dp),
                     horizontalArrangement = Arrangement.SpaceAround,
