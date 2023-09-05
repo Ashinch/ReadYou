@@ -98,7 +98,7 @@
     <string name="article_date">Makale yayın zamanı</string>
     <string name="article_desc">Makale açıklamaları</string>
     <string name="article_images">Makale resimleri</string>
-    <string name="feed_favicons">Besleme site ikonları</string>
+    <string name="feed_favicons">Besleme site simgeleri</string>
     <string name="article_date_sticky_header">Sabit yayın tarihi başlığı (deneysel)</string>
     <string name="article_list">Makale Listesi</string>
     <string name="group_list">Grup Listesi</string>

@@ -348,7 +348,7 @@
     <string name="delete_account">Usuń konto</string>
     <string name="must_have_an_account">Konto jest wymagane</string>
     <string name="clear_all_articles_toast">Wszystkie artykuły z tego konta zostały usunięte</string>
-    <string name="delete_account_toast">To konto zostało usunięte</string>
+    <string name="delete_account_toast">Konto zostało usunięte</string>
     <string name="clear_all_articles">Usuń wszystkie artykuły</string>
     <string name="block_list">Lista zablokowanych</string>
     <string name="clear_all_articles_tips">Czy na pewno chcesz usunąć wszystkie artykuły z tego konta\?</string>
