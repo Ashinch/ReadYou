@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
@@ -11,23 +12,24 @@ import me.ash.reader.data.model.article.ArticleFlowItem
 import me.ash.reader.data.model.article.ArticleWithFeed
 
 @Suppress("FunctionName")
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 fun LazyListScope.ArticleList(
     pagingItems: LazyPagingItems<ArticleFlowItem>,
     isShowFeedIcon: Boolean,
     isShowStickyHeader: Boolean,
     articleListTonalElevation: Int,
     onClick: (ArticleWithFeed) -> Unit = {},
+    onSwipeOut: (ArticleWithFeed) -> Unit = {}
 ) {
     for (index in 0 until pagingItems.itemCount) {
         when (val item = pagingItems.peek(index)) {
             is ArticleFlowItem.Article -> {
                 item(key = item.articleWithFeed.article.id) {
-                    ArticleItem(
+                    swipeToDismiss(
                         articleWithFeed = (pagingItems[index] as ArticleFlowItem.Article).articleWithFeed,
-                    ) {
-                        onClick(it)
-                    }
+                        onClick = { onClick(it) },
+                        onSwipeOut = { onSwipeOut(it) }
+                    )
                 }
             }
 
