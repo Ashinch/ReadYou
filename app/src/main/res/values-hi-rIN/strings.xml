@@ -41,24 +41,24 @@
     <string name="preset">मूल</string>
     <string name="selected">चयनित</string>
     <string name="allow_notification">सूचना की अनुमति दें</string>
-    <string name="all_allow_notification_tips">\"%1$s\" समूह के सभी स्त्रोतों को सूचनाएँ भेजने की अनुमति दें.</string>
-    <string name="all_allow_notification_toast">\"%1$s\" समूह की सभी सूचनाएं स्वीकृत है</string>
-    <string name="all_deny_notification_toast">\"%1$s\" समूह की सभी सूचनाएं अस्वीकृत है</string>
+    <string name="all_allow_notification_tips">\"%1$s\" ग्रुप के सभी फ़ीड को सूचनाएँ भेजने की अनुमति दें</string>
+    <string name="all_allow_notification_toast">\"%1$s\" ग्रुप की सभी सूचनाएं स्वीकृत है</string>
+    <string name="all_deny_notification_toast">\"%1$s\" ग्रुप की सभी सूचनाएं अस्वीकृत है</string>
     <string name="parse_full_content">सम्पूर्ण लेख दिखाएँ</string>
-    <string name="all_parse_full_content_tips">\"%1$s\" समूह के सभी लेखों की पूर्ण सामग्री की पदव्याख्या की जा रही है.</string>
-    <string name="all_parse_full_content_toast">\"%1$s\" समूह के सभी लेखों की पूर्ण सामग्री की पदव्याख्या की जा रही है</string>
-    <string name="all_deny_parse_full_content_toast">\"%1$s\" समूह के सभी लेखों की पूर्ण सामग्री पदव्याख्या नहीं हो सकी</string>
+    <string name="all_parse_full_content_tips">\"%1$s\" ग्रुप के सभी लेखों की पूर्ण सामग्री की पदव्याख्या की जा रही है</string>
+    <string name="all_parse_full_content_toast">\"%1$s\" ग्रुप के सभी लेखों की पूर्ण सामग्री की पदव्याख्या की जा रही है</string>
+    <string name="all_deny_parse_full_content_toast">\"%1$s\" ग्रुप के सभी लेखों की पूर्ण सामग्री पदव्याख्या नहीं हो सकी</string>
     <string name="clear_articles">पाठ हटाएँ </string>
     <string name="clear_articles_in_feed_toast">\"%1$s\" स्त्रोत के सभी संग्रहित पाठो को हटाएँ</string>
-    <string name="clear_articles_in_group_toast">\"%1$s\" समूह में सभी संग्रहीत लेखों को साफ किया</string>
-    <string name="clear_articles_feed_tips">\"%1$s\" फ़ीड में सभी संग्रहीत लेखों को साफ़ करें.</string>
-    <string name="clear_articles_group_tips">\"%1$s\" ग्रुप के सभी संग्रहित पाठो को हटाएँ.</string>
-    <string name="add_to_group">ग्रुप में जोड़ें </string>
-    <string name="move_to_group">ग्रुप में स्तानान्तरित करें </string>
-    <string name="all_move_to_group_tips">\"%1$s\" ग्रुप के सभी पाठो को   \"%2$s\" में स्थानांतरित करें .</string>
+    <string name="clear_articles_in_group_toast">\"%1$s\" ग्रुप में सभी संग्रहीत लेखों को साफ किया</string>
+    <string name="clear_articles_feed_tips">\"%1$s\" फ़ीड में सभी संग्रहीत लेखों को साफ़ करें</string>
+    <string name="clear_articles_group_tips">\"%1$s\" ग्रुप के सभी संग्रहित पाठो को हटाएँ</string>
+    <string name="add_to_group">ग्रुप में जोड़ें</string>
+    <string name="move_to_group">ग्रुप में स्तानान्तरित करें</string>
+    <string name="all_move_to_group_tips">\"%1$s\" ग्रुप के सभी पाठों को \"%2$s\" में स्थानांतरित करें</string>
     <string name="all_move_to_group_toast">\"%1$s\" ग्रुप में स्थानांतरण पूरा हुआ </string>
     <string name="rename">नाम बदलें </string>
-    <string name="change_url">यु आर एल बदलें </string>
+    <string name="change_url">URL बदलें</string>
     <string name="rename_toast">नया नाम  \"%1$s\"</string>
     <string name="create_new_group">नया ग्रुप बनाएँ </string>
     <string name="name">नाम </string>
@@ -67,10 +67,10 @@
     <string name="delete">मिटाएं  </string>
     <string name="delete_toast">मिट गया \"%1$s\"</string>
     <string name="unsubscribe">सदस्यता छोडें</string>
-    <string name="unsubscribe_tips">\"%1$s\" से सदस्यता छोडें और सभी संग्रहित पाठों को मिटाएं।</string>
+    <string name="unsubscribe_tips">\"%1$s\" से सदस्यता छोडें और इसमें सभी संग्रहित पाठों को मिटाएं</string>
     <string name="delete_group">ग्रुप को मिटाएँ </string>
-    <string name="delete_group_tips">\"%1$s\" ग्रुप के सभी फ़ीड्स अथवा संग्रहित पाठों को मिटाएँ।</string>
-    <string name="group_option_tips">निम्नलिखित विकल्प ग्रुप के सभी फ़ीडस् पर लागू होंगे।</string>
+    <string name="delete_group_tips">\"%1$s\" ग्रुप के सभी फ़ीड्स अथवा इसके संग्रहित पाठों को मिटाएँ</string>
+    <string name="group_option_tips">निम्नलिखित विकल्प ग्रुप के सभी फ़ीडस् पर लागू होंगे</string>
     <string name="today">आज </string>
     <string name="yesterday">कल </string>
     <string name="date_at_time">तिथि %1$s समय  %2$s</string>
@@ -80,7 +80,7 @@
     <string name="mark_all_as_read">सभी को पढ़ा हुआ चिन्हित करें</string>
     <string name="mark_as_unread">अपठित के रूप में चिह्नित करें</string>
     <string name="mark_as_starred">तारांकित के रूप में चिह्नित करें</string>
-    <string name="mark_as_unstar">अतारांकित के रूप में चिह्नित करें</string>
+    <string name="mark_as_unstar">अन-स्टारड के रूप में चिह्नित करें</string>
     <string name="mark_as_read_one_day">1 दिन से अधिक पढ़ें के रूप में चिह्नित करें</string>
     <string name="mark_as_read_three_days">3 दिन से अधिक पढ़ें के रूप में चिह्नित करें</string>
     <string name="mark_as_read_seven_days">7 दिन से अधिक पढ़ें के रूप में चिह्नित करें</string>
@@ -88,134 +88,28 @@
     <string name="three_days">3 दिन </string>
     <string name="seven_days">7 दिन </string>
     <string name="close">बंद करें </string>
-    <string name="get_new_updates">नया अपडेट प्राप्त करें</string>
-    <string name="get_new_updates_desc"> %1$s वर्ज़न उपलब्ध है </string>
+    <string name="get_new_updates">नवीनतम संस्करण प्राप्त करें</string>
+    <string name="get_new_updates_desc">%1$s संस्करण उपलब्ध है</string>
     <string name="in_coding">कोडिंग चल रही है</string>
     <string name="coming_soon">जल्द आ रहा है</string>
     <string name="accounts">खाते</string>
-    <string name="accounts_desc">लोकल, नया आर एस एस </string>
+    <string name="accounts_desc">लोकल, नया RSS</string>
     <string name="color_and_style">रंग  अथवा  शैली </string>
     <string name="color_and_style_desc">थीम , रंग शैली , लिपि आकार </string>
     <string name="interaction">प्रभाव</string>
-    <string name="interaction_desc">शुरू होने पे , हैप्टिक फीडबैक </string>
+    <string name="interaction_desc">आरंभिक पृष्ठ, हैप्टिक फ़ीडबैक</string>
     <string name="languages">भाषाएँ </string>
-    <string name="languages_desc">अंग्रेजी , चाइनीज, और</string>
-    <string name="help_translate">अनुवाद में मदद करें</string>
+    <string name="languages_desc">अंग्रेजी , चीनी भाषा, और भी</string>
+    <string name="help_translate">अनुवाद में सहायता करें</string>
     <string name="use_device_languages">डिवाइस भाषा का उपयोग करें</string>
     <string name="tips_and_support">सुझाव और सहायता</string>
     <string name="tips_and_support_desc">परिचय, ओपन सोर्स लाइसेंस</string>
     <string name="welcome">स्वागत है </string>
-    <string name="tos_tips">आगे बढ़ने के लिए Read Youकी सेवा शर्तें और गोपनीयता नीति को पढ़े और स्वीकार करें।</string>
+    <string name="tos_tips">आगे बढ़ने के लिए Read You की सेवा शर्तें और गोपनीयता नीति को पढ़े और स्वीकार करें।</string>
     <string name="browse_tos_tips">यहाँ &lt;i&gt;&lt;u&gt;सेवा शर्तें और गोपनीयता नीति पढ़े &lt;/u&gt;&lt;/i&gt;
     </string>
     <string name="terms_of_service">सेवा की शर्तें</string>
-    <string name="tos_content">
-        &lt;h5&gt;
-
-	गोपनीयता नीति
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-       	 मैं आपकी गोपनीयता को बहुत गंभीरता से लेता हूं
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-      	 कोई उपयोगकर्ता डेटा एकत्र नहीं करता है, और सभी संवेदनशील जानकारी (पासवर्ड और अन्य खाता जानकारी)
-                      आपके डिवाइस पर स्थानीय एप्लिकेशन डेटाबेस में सुरक्षित रूप से संग्रहीत है|
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-                     आपको सेवा प्रदान करने के लिए निम्नलिखित अनुमतियों का उपयोग किया जाएगा।
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-	- एक्सेस नेटवर्क अनुमति (आपके द्वारा निर्देशित ऑनलाइन सामग्री तक पहुँचने के लिए)
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-	- नेटवर्क स्थिति की अनुमति (यह जानने करने के लिए कि क्या डिवाइस में वर्तमान में नेटवर्क की स्थिति उपलब्ध है)
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-	-पृष्ठभूमिक सेवा अनुमति (नियमित रूप से अपने पसंदीदार पाठों को स्वचालित रूप से नियमित सिंक करने के लिए आधार)
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-       	 तृतीय पक्ष सेवाएं
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-	यह नीति आपके द्वारा  &lt;b&gt;Read You&lt;/b&gt;के साथ उपयोग की जाने वाली तृतीय-पक्ष सेवाओं पर लागू नहीं होती है. आप उन वेबसाइटों की गोपनीयता नीतियों की समीक्षा
-	करने हेतु स्वतंत्र है|
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-	अस्वीकरण
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-	 केवल एक सामग्री संग्रह उपकरण है।. आपके द्वारा  &lt;b&gt;Read You&lt;/b&gt; का उपयोग आपके देश/राष्ट्र और क्षेत्र के नियम ऐवं कानून के अंतर्गत है 
-	और आपके कार्यों से उत्पन्न होने वाले किसी भी दायित्व का वहन आपके द्वारा ही किया जाएगा |
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-	ओपन सोर्स लाइसेंस
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        GNU GPL 3.0 Open Source License[1] के अंतर्गत एक ओपन सौरसे प्रोजेक्ट है, जो आपको &lt;b&gt;Read You&lt;/b&gt; के सोर्स कोड को उपयोग, 
-	प्रासंगिक सन्दर्भ और मुफ्त में संशोधित करेने के अनुमति देता है, परन्तु संशोधित और व्युत्पन्न कोड को क्लोज्ड-सोर्स वाणिज्यिक सॉफ्टवेयर के रूप में वितरित और बेचा जाने की अनुमति नहीं देता ।
-	पूर्ण जानकारी हेतु GNU GPL 3.0 Open Source License[2]. देखें।
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-	शेषसंग्रह
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        - [1] https://github.com/Ashinch/ReadYou
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - [2] https://www.gnu.org/licenses/gpl-3.0.html
-
-        &lt;/p&gt;
-    </string>
+    <string name="tos_content"><h5> गोपनीयता नीति </h5> <br/> <p> मैं आपकी गोपनीयता को बहुत गंभीरता से लेता हूं </p> <br/> <p> <b>Read You</b> कोई उपयोगकर्ता डेटा एकत्र नहीं करता है, और सभी संवेदनशील जानकारी (पासवर्ड और अन्य खाता जानकारी) आपके डिवाइस पर स्थानीय एप्लिकेशन डेटाबेस में सुरक्षित रूप से संग्रहीत है| </p> <br/> <p> <b>Read You</b> आपको सेवा प्रदान करने के लिए निम्नलिखित अनुमतियों का उपयोग किया जाएगा। </p> <br/> <p> - एक्सेस नेटवर्क अनुमति (आपके द्वारा निर्देशित ऑनलाइन सामग्री तक पहुँचने के लिए) </p> <p> - नेटवर्क स्थिति की अनुमति (यह जानने करने के लिए कि क्या डिवाइस में वर्तमान में नेटवर्क की स्थिति उपलब्ध है) </p> <p> -पृष्ठभूमिक सेवा अनुमति (नियमित रूप से अपने पसंदीदार पाठों को स्वचालित रूप से नियमित सिंक करने के लिए आधार) </p> <br/> <br/> <h5> तृतीय पक्ष सेवाएं </h5> <br/> <p> यह नीति आपके द्वारा <b>Read You</b>के साथ उपयोग की जाने वाली तृतीय-पक्ष सेवाओं पर लागू नहीं होती है. आप उन वेबसाइटों की गोपनीयता नीतियों की समीक्षा करने हेतु स्वतंत्र है| </p> <br/> <br/> <h5> अस्वीकरण </h5> <br/> <p> <b>Read You</b> केवल एक सामग्री संग्रह उपकरण है।. आपके द्वारा <b>Read You</b> का उपयोग आपके देश/राष्ट्र और क्षेत्र के नियम ऐवं कानून के अंतर्गत है और आपके कार्यों से उत्पन्न होने वाले किसी भी दायित्व का वहन आपके द्वारा ही किया जाएगा | </p> <br/> <br/> <h5> ओपन सोर्स लाइसेंस </h5> <br/> <p> <b>Read You</b> GNU GPL 3.0 Open Source License[1] के अंतर्गत एक ओपन सौरसे प्रोजेक्ट है, जो आपको <b>Read You</b> के सोर्स कोड को उपयोग, प्रासंगिक सन्दर्भ और मुफ्त में संशोधित करेने के अनुमति देता है, परन्तु संशोधित और व्युत्पन्न कोड को क्लोज्ड-सोर्स वाणिज्यिक सॉफ्टवेयर के रूप में वितरित और बेचा जाने की अनुमति नहीं देता । पूर्ण जानकारी हेतु GNU GPL 3.0 Open Source License[2]. देखें। </p> <br/> <br/> <h5> शेषसंग्रह </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">स्वीकृत करें  </string>
     <string name="wallpaper_colors">वॉलपेपर रंग</string>
     <string name="no_palettes">कोई पैलेट नहीं</string>
@@ -227,7 +121,7 @@
     <string name="style">शैली</string>
     <string name="dark_theme">डार्क थीम </string>
     <string name="use_device_theme"> डिवाइस थीम का उपयोग करें </string>
-    <string name="on">ओन</string>
+    <string name="on">ऑन</string>
     <string name="off">ऑफ</string>
     <string name="other">अन्य </string>
     <string name="amoled_dark_theme">अमोलेड डार्क थीम</string>
@@ -244,9 +138,9 @@
     <string name="update">अपडेट</string>
     <string name="skip_this_version">इस वर्जन को छोडें </string>
     <string name="checking_updates">अपडेट की जाँच की जा रही है…</string>
-    <string name="is_latest_version">यह लेटेस्ट अपडेट है </string>
-    <string name="check_failure">अपडेट की जाँच नहीं कर पाए </string>
-    <string name="download_failure">अपडेट डाउनलोड नहीं कर पाए </string>
+    <string name="is_latest_version">यह ऐप का नवीनतम संस्करण है</string>
+    <string name="check_failure">अपडेट की जाँच में असफल</string>
+    <string name="download_failure">अपडेट डाउनलोड नहीं कर पाए</string>
     <string name="rate_limit">अनुरोध दर सीमित है</string>
     <string name="help">सहायता </string>
     <string name="on_start">चालू होने पर</string>
@@ -262,23 +156,23 @@
     <string name="article_images">पाठ चित्र कलाएँ</string>
     <string name="feed_names">फीड के नाम </string>
     <string name="feed_favicons">फीड फविकों </string>
-    <string name="article_date_sticky_header">प्रकाशन तिथि के लिए स्टिकी हेडर (प्रयोगात्मक)</string>
+    <string name="article_date_sticky_header">प्रकाशन तिथि स्टिकी हेडर (प्रयोगात्मक)</string>
     <string name="article_list">पाठों की सूचि </string>
-    <string name="group_list">ग्रुप की सूचि </string>
+    <string name="group_list">ग्रुप सूचि</string>
     <string name="always_expand">हमेशा विस्तृत रखें </string>
     <string name="top">टॉप </string>
     <string name="mark_as_read_button_position">\"पढ़ने के रूप में चिह्नित करें\" बटन स्थिति</string>
     <string name="top_bar">टॉप बार </string>
-    <string name="fill_selected_icon">चयनित आइकन भरें</string>
+    <string name="fill_selected_icon">वर्तमान फ़िल्टर आइकन भरें</string>
     <string name="filter_bar">फ़िल्टर बार</string>
     <string name="icons">चिह्न</string>
     <string name="icons_and_labels">चिह्न ऐवं लेबल</string>
-    <string name="icons_and_label_only_selected">चिह्न ऐवं लेबल (केवल चयनित)</string>
-    <string name="tips_top_bar_tonal_elevation">यह टोनल ऊंचाई केवल स्क्रॉल करते समय उपलब्ध है।</string>
-    <string name="tips_article_list_tonal_elevation">यह टोनल ऊंचाई केवल प्रकाश विषय में उपलब्ध है।</string>
-    <string name="tips_group_list_tonal_elevation">यह टोनल एलिवेशन केवल लाइट थीम में उपलब्ध है।</string>
+    <string name="icons_and_label_only_selected">चिह्न और लेबल (केवल सक्रिय)</string>
+    <string name="tips_top_bar_tonal_elevation">शीर्ष बार सूची के लिए टोनल ऊंचाई केवल स्क्रॉल करते समय उपलब्ध है</string>
+    <string name="tips_article_list_tonal_elevation">लेख सूची के लिए टोनल ऊंचाई केवल हलके थीम में उपलब्ध है</string>
+    <string name="tips_group_list_tonal_elevation">ग्रुप सूची के लिए टोनल एलिवेशन केवल हलके थीम में उपलब्ध है</string>
     <string name="share">साँझा करें </string>
-    <string name="touch_to_play_video">विडियो चलने हेतु टच करें </string>
+    <string name="touch_to_play_video">विडियो चलने हेतु टैप करें</string>
     <string name="text">पाठा </string>
     <string name="font_size">फोंट साइज</string>
     <string name="letter_spacing">लैटर स्पेसिंग</string>
@@ -313,7 +207,7 @@
     <string name="for_1_month">1 महीना</string>
     <string name="self_hosted">स्व-होस्ट किया गया</string>
     <string name="every_12_hours">हर 12 घंटे</string>
-    <string name="synchronous_tips">परिवर्तनों को प्रभावी करने के लिए एप पुनरारंभ करना आवश्यक है।</string>
+    <string name="synchronous_tips">परिवर्तनों को प्रभावी करने के लिए एप पुनरारंभ करने की जरूरत है</string>
     <string name="every_15_minutes">हर 15 मिनट</string>
     <string name="every_30_minutes">हर 30 मिनट</string>
     <string name="every_1_hour">हर घंटे</string>
@@ -345,12 +239,18 @@
     <string name="clear_all_articles">सभी लेख साफ़ करें</string>
     <string name="delete_account">खाता हटाएँ</string>
     <string name="must_have_an_account">खाता होना चाहिए</string>
-    <string name="clear_all_articles_toast">इस खाते से सभी लेख साफ़ कर दिए गए हैं</string>
-    <string name="delete_account_toast">यह खाता हटा दिया गया है</string>
+    <string name="clear_all_articles_toast">लेखों की सूची साफ़ कर दी गई</string>
+    <string name="delete_account_toast">खाता हटा दिया गया</string>
     <string name="block_list">ब्लॉक सूची</string>
-    <string name="clear_all_articles_tips">क्या आप वाकई इस खाते से सभी लेख हटाना चाहते हैं\?</string>
+    <string name="clear_all_articles_tips">क्या आप वाकई इस खाते के लिए लेख सूची साफ़ करना चाहते हैं\?</string>
     <string name="delete_account_tips">क्या आप वाकई इस खाते को हटाना चाहते हैं\?</string>
     <string name="switch_account">खाता बदलें</string>
-    <string name="accounts_tips">खाता बदलने हेतु फीड पृष्ट पर खाता का चयन करें।</string>
+    <string name="accounts_tips">खाता बदलने हेतु फ़ीड पृष्ट पर खाते के नाम पर टैप करें</string>
     <string name="add">जोड़ें</string>
+    <string name="empty">खाली</string>
+    <string name="server_url">सर्वर URL</string>
+    <string name="password">पासवर्ड</string>
+    <string name="connection">कनेक्शन</string>
+    <string name="username">यूजर का नाम</string>
+    <string name="system_default">सिस्टम</string>
 </resources>
