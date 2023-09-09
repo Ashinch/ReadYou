@@ -24,6 +24,7 @@ import androidx.work.WorkInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.data.model.general.MarkAsReadConditions
 import me.ash.reader.data.model.preference.*
 import me.ash.reader.data.repository.SyncWorker.Companion.getIsSyncing
 import me.ash.reader.ui.component.FilterBar
@@ -239,11 +240,19 @@ fun FlowPage(
                         isShowFeedIcon = articleListFeedIcon.value,
                         isShowStickyHeader = articleListDateStickyHeader.value,
                         articleListTonalElevation = articleListTonalElevation.value,
-                    ) {
-                        onSearch = false
-                        navController.navigate("${RouteName.READING}/${it.article.id}") {
-                            launchSingleTop = true
+                        onClick =  {
+                            onSearch = false
+                            navController.navigate("${RouteName.READING}/${it.article.id}") {
+                                launchSingleTop = true
+                            }
                         }
+                    ) {
+                        flowViewModel.markAsRead(
+                            groupId = filterUiState.group?.id,
+                            feedId = filterUiState.feed?.id,
+                            articleId = it.article.id,
+                            MarkAsReadConditions.All
+                            )
                     }
                     item {
                         Spacer(modifier = Modifier.height(128.dp))
