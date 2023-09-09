@@ -36,6 +36,7 @@ import me.ash.reader.data.source.Download
 import me.ash.reader.ui.component.base.RYDialog
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.installLatestApk
+import me.ash.reader.ui.ext.openURL
 
 @Composable
 fun UpdateDialog(
@@ -106,12 +107,7 @@ fun UpdateDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    context.startActivity(
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("${context.getString(R.string.github_link)}/releases/latest"),
-                        )
-                    )
+                    context.openURL("${context.getString(R.string.github_link)}/releases/latest", OpenLinkPreference.AutoPreferCustomTabs)
                     // Disable automatic updates in F-Droid
 //                    if (downloadState !is Download.Progress) {
 //                        updateViewModel.dispatch(

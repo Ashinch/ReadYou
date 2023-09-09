@@ -12,6 +12,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import me.ash.reader.data.model.preference.LocalOpenLink
+import me.ash.reader.data.model.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.data.model.preference.LocalReadingFonts
 import me.ash.reader.data.model.preference.LocalReadingTitleAlign
 import me.ash.reader.data.model.preference.LocalReadingTitleBold
@@ -33,6 +35,8 @@ fun Metadata(
     val titleBold = LocalReadingTitleBold.current
     val titleUpperCase = LocalReadingTitleUpperCase.current
     val titleAlign = LocalReadingTitleAlign.current
+    val openLink = LocalOpenLink.current
+    val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
     val dateString = remember(publishedDate) {
         publishedDate.formatAsString(context, atHourMinute = true)
     }
@@ -43,7 +47,7 @@ fun Metadata(
         modifier = Modifier
             .fillMaxWidth()
             .roundClick {
-                context.openURL(link)
+                context.openURL(link, openLink, openLinkSpecificBrowser)
             }
             .padding(12.dp)
     ) {

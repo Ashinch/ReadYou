@@ -25,14 +25,20 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.runtime.Composable
 import me.ash.reader.R
-
+import me.ash.reader.data.model.preference.LocalOpenLink
+import me.ash.reader.data.model.preference.LocalOpenLinkSpecificBrowser
+import me.ash.reader.data.model.preference.OpenLinkPreference
+import me.ash.reader.data.model.preference.OpenLinkSpecificBrowserPreference
+import me.ash.reader.ui.ext.openURL
 @Suppress("FunctionName")
 fun LazyListScope.Reader(
     context: Context,
     subheadUpperCase: Boolean = false,
     link: String,
     content: String,
+    onLinkClick: (String) -> Unit
 ) {
     Log.i("RLog", "Reader: ")
     htmlFormattedText(
@@ -40,13 +46,6 @@ fun LazyListScope.Reader(
         subheadUpperCase = subheadUpperCase,
         baseUrl = link,
         imagePlaceholder = R.drawable.ic_launcher_foreground,
-        onLinkClick = {
-            context.startActivity(
-                Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse(it)
-                )
-            )
-        }
+        onLinkClick = onLinkClick
     )
 }

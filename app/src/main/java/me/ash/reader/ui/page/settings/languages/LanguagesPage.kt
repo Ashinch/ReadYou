@@ -22,10 +22,12 @@ import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.data.model.preference.LanguagesPreference
 import me.ash.reader.data.model.preference.LocalLanguages
+import me.ash.reader.data.model.preference.OpenLinkPreference
 import me.ash.reader.ui.component.base.Banner
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold
+import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
 
@@ -64,12 +66,7 @@ fun LanguagesPage(
                             )
                         },
                     ) {
-                        context.startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse(context.getString(R.string.translatable_url))
-                            )
-                        )
+                        context.openURL(context.getString(R.string.translatable_url), OpenLinkPreference.AutoPreferCustomTabs)
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                 }

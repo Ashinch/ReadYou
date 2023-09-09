@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.data.model.preference.LocalOpenLink
+import me.ash.reader.data.model.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.ui.component.ChangeUrlDialog
 import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.RenameDialog
@@ -39,6 +41,8 @@ fun FeedOptionDrawer(
 ) {
     val context = LocalContext.current
     val view = LocalView.current
+    val openLink = LocalOpenLink.current
+    val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
     val scope = rememberCoroutineScope()
     val feedOptionUiState = feedOptionViewModel.feedOptionUiState.collectAsStateValue()
     val feed = feedOptionUiState.feed
@@ -111,7 +115,7 @@ fun FeedOptionDrawer(
                         feedOptionViewModel.showNewGroupDialog()
                     },
                     onFeedUrlClick = {
-                        context.openURL(feed?.url)
+                        context.openURL(feed?.url, openLink, openLinkSpecificBrowser)
                     },
                     onFeedUrlLongClick = {
                         if (feedOptionViewModel.rssRepository.get().update) {

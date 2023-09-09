@@ -74,6 +74,8 @@ data class Settings(
     // Interaction
     val initialPage: InitialPagePreference = InitialPagePreference.default,
     val initialFilter: InitialFilterPreference = InitialFilterPreference.default,
+    val openLink: OpenLinkPreference = OpenLinkPreference.default,
+    val openLinkSpecificBrowser: OpenLinkSpecificBrowserPreference = OpenLinkSpecificBrowserPreference.default,
 
     // Languages
     val languages: LanguagesPreference = LanguagesPreference.default,
@@ -172,6 +174,10 @@ val LocalReadingImageMaximize =
 val LocalInitialPage = compositionLocalOf<InitialPagePreference> { InitialPagePreference.default }
 val LocalInitialFilter =
     compositionLocalOf<InitialFilterPreference> { InitialFilterPreference.default }
+val LocalOpenLink =
+    compositionLocalOf<OpenLinkPreference> { OpenLinkPreference.default }
+val LocalOpenLinkSpecificBrowser =
+    compositionLocalOf { OpenLinkSpecificBrowserPreference.default }
 
 // Languages
 val LocalLanguages =
@@ -253,6 +259,8 @@ fun SettingsProvider(
         // Interaction
         LocalInitialPage provides settings.initialPage,
         LocalInitialFilter provides settings.initialFilter,
+        LocalOpenLink provides settings.openLink,
+        LocalOpenLinkSpecificBrowser provides settings.openLinkSpecificBrowser,
 
         // Languages
         LocalLanguages provides settings.languages,

@@ -1,5 +1,11 @@
 package me.ash.reader.ui.page.settings.interaction
 
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import android.os.Build
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -13,12 +19,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.data.model.preference.InitialFilterPreference
+import me.ash.reader.data.model.preference.OpenLinkPreference
 import me.ash.reader.data.model.preference.InitialPagePreference
 import me.ash.reader.data.model.preference.LocalInitialFilter
+import me.ash.reader.data.model.preference.LocalOpenLink
+import me.ash.reader.data.model.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.data.model.preference.LocalInitialPage
 import me.ash.reader.ui.component.base.*
+import me.ash.reader.ui.ext.getBrowserAppList
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
+
 
 @Composable
 fun InteractionPage(
@@ -27,9 +38,16 @@ fun InteractionPage(
     val context = LocalContext.current
     val initialPage = LocalInitialPage.current
     val initialFilter = LocalInitialFilter.current
+    val openLink = LocalOpenLink.current
+    val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
     val scope = rememberCoroutineScope()
+    val isOpenLinkSpecificBrowserItemEnabled = remember(openLink) {
+        openLink == OpenLinkPreference.SpecificBrowser
+    }
     var initialPageDialogVisible by remember { mutableStateOf(false) }
     var initialFilterDialogVisible by remember { mutableStateOf(false) }
+    var openLinkDialogVisible by remember { mutableStateOf(false) }
+    var openLinkSpecificBrowserDialogVisible by remember { mutableStateOf(false) }
 
     RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
@@ -65,6 +83,24 @@ fun InteractionPage(
                         desc = initialFilter.toDesc(context),
                         onClick = {
                             initialFilterDialogVisible = true
+                        },
+                    ) {}
+                    SettingItem(
+                        title = stringResource(R.string.initial_open_app),
+                        desc = openLink.toDesc(context),
+                        onClick = {
+                            openLinkDialogVisible = true
+                        },
+                    ) {}
+                    SettingItem(
+                        title = stringResource(R.string.open_link_specific_browser),
+                        desc = openLinkSpecificBrowser.toDesc(context),
+                        enable = isOpenLinkSpecificBrowserItemEnabled,
+                        onClick = {
+
+                            if (isOpenLinkSpecificBrowserItemEnabled) {
+                                openLinkSpecificBrowserDialogVisible = true
+                            }
                         },
                     ) {}
                 }
@@ -105,4 +141,40 @@ fun InteractionPage(
     ) {
         initialFilterDialogVisible = false
     }
+
+    RadioDialog(
+        visible = openLinkDialogVisible,
+        title = stringResource(R.string.initial_open_app),
+        options = OpenLinkPreference.values.map {
+            RadioDialogOption(
+                text = it.toDesc(context),
+                selected = it == openLink,
+            ) {
+                it.put(context, scope)
+            }
+        },
+    ) {
+        openLinkDialogVisible = false
+    }
+
+    val browserList = remember(context) {
+        context.getBrowserAppList()
+    }
+
+    RadioDialog(
+        visible = openLinkSpecificBrowserDialogVisible ,
+        title = stringResource(R.string.open_link_specific_browser),
+        options = browserList.map {
+            RadioDialogOption(
+                text = it.loadLabel(context.packageManager).toString(),
+                selected = it.activityInfo.packageName == openLinkSpecificBrowser.packageName,
+            ) {
+                openLinkSpecificBrowser.copy(packageName = it.activityInfo.packageName).put(context, scope)
+            }
+        },
+        onDismissRequest = {
+            openLinkSpecificBrowserDialogVisible = false
+        }
+    )
+
 }

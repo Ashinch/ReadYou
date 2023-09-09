@@ -11,6 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
+import me.ash.reader.data.model.preference.LocalOpenLink
+import me.ash.reader.data.model.preference.LocalOpenLinkSpecificBrowser
+import me.ash.reader.ui.ext.openURL
 
 const val INJECTION_TOKEN = "/android_asset_font/"
 
@@ -21,6 +24,8 @@ fun WebView(
     onReceivedError: (error: WebResourceError?) -> Unit = {},
 ) {
     val context = LocalContext.current
+    val openLink = LocalOpenLink.current
+    val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
     val color = MaterialTheme.colorScheme.onSurfaceVariant.toArgb()
     val backgroundColor = MaterialTheme.colorScheme.surface.toArgb()
     val webViewClient by remember {
@@ -67,12 +72,7 @@ fun WebView(
             ): Boolean {
                 if (null == request?.url) return false
                 val url = request.url.toString()
-                if (url.isNotEmpty()) context.startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse(url)
-                    )
-                )
+                if (url.isNotEmpty()) context.openURL(url, openLink, openLinkSpecificBrowser)
                 return true
             }
 

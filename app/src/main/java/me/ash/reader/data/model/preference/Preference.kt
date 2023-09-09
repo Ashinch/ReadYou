@@ -75,6 +75,8 @@ fun Preferences.toSettings(): Settings {
         // Interaction
         initialPage = InitialPagePreference.fromPreferences(this),
         initialFilter = InitialFilterPreference.fromPreferences(this),
+        openLink = OpenLinkPreference.fromPreferences(this),
+        openLinkSpecificBrowser = OpenLinkSpecificBrowserPreference.fromPreferences(this),
 
         // Languages
         languages = LanguagesPreference.fromPreferences(this),
