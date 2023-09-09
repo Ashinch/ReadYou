@@ -1,0 +1,16 @@
+A <i>Read You</i> egy modern és elegáns RSS-olvasó <a href='https://m3.material.io/' target='_blank' rel='nofollow'>Material You </a> dizájnnal.
+
+<b>Funkciók:</b>
+
+* Feliratkozás a hírforrás-hivatkozásokra
+* Importálás OPML-ből
+* Cikkszinkronizálás
+* Cikkfrissítési értesítés
+* Teljes tartalom feldolgozása
+* Olvasatlanok és csillagozottak szűrése
+* Hírforrás-csoportosítás
+* Honosítás
+* Exportálás OPML-ként
+* Cikkek keresése
+
+Továbbiak következnek…
