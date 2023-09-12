@@ -253,4 +253,16 @@
     <string name="username">Nama Pengguna</string>
     <string name="connection">Koneksl</string>
     <string name="system_default">Sistem</string>
+    <string name="custom_tabs">Paksakan Custom Tabs</string>
+    <string name="open_link_ask_dialog_title">Buka dengan…</string>
+    <string name="open_link_specific_browser">Peramban</string>
+    <string name="auto_default_browser">Otomatis (Lebih Suka Peramban Bawaan)</string>
+    <string name="always_ask">Selalu Tanyakan</string>
+    <string name="specific_browser_name">Peramban: %1$s</string>
+    <string name="specific_browser">Paksakan peramban tertentu</string>
+    <string name="initial_open_app">Aplikasi ketika tautan diketuk</string>
+    <string name="auto_customtabs">Otomatis (Lebih Suka Custom Tabs)</string>
+    <string name="default_browser">Paksakan peramban bawaan</string>
+    <string name="open_link_something_wrong">Pengaturan Buka Tautan diabaikan karena ada yang salah.</string>
+    <string name="open_link_specific_browser_not_selected">Tidak ada</string>
 </resources>

@@ -251,4 +251,16 @@
     <string name="password">密碼</string>
     <string name="connection">連線</string>
     <string name="system_default">系統</string>
+    <string name="custom_tabs">內建瀏覽器</string>
+    <string name="open_link_ask_dialog_title">開啟方式</string>
+    <string name="open_link_specific_browser">指定瀏覽器</string>
+    <string name="auto_default_browser">自動 (預設瀏覽器優先)</string>
+    <string name="always_ask">一律詢問</string>
+    <string name="specific_browser_name">指定瀏覽器：%1$s</string>
+    <string name="specific_browser">指定瀏覽器</string>
+    <string name="initial_open_app">連結開啟方式</string>
+    <string name="auto_customtabs">自動 (內建瀏覽器優先)</string>
+    <string name="default_browser">預設瀏覽器</string>
+    <string name="open_link_something_wrong">由於發生未知的錯誤，已取消詢問連結開啟方式。</string>
+    <string name="open_link_specific_browser_not_selected">無</string>
 </resources>
