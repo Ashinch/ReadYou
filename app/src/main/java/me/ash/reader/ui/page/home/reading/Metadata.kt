@@ -12,12 +12,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import me.ash.reader.data.model.preference.LocalOpenLink
-import me.ash.reader.data.model.preference.LocalOpenLinkSpecificBrowser
-import me.ash.reader.data.model.preference.LocalReadingFonts
-import me.ash.reader.data.model.preference.LocalReadingTitleAlign
-import me.ash.reader.data.model.preference.LocalReadingTitleBold
-import me.ash.reader.data.model.preference.LocalReadingTitleUpperCase
+import me.ash.reader.infrastructure.preference.*
 import me.ash.reader.ui.ext.formatAsString
 import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.ext.roundClick

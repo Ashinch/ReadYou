@@ -1,6 +1,5 @@
 package me.ash.reader.ui.component.base
 
-import RYExtensibleVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height

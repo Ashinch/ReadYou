@@ -20,10 +20,10 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import me.ash.reader.data.model.preference.LocalReadingImageHorizontalPadding
-import me.ash.reader.data.model.preference.LocalReadingImageRoundedCorners
-import me.ash.reader.data.model.preference.LocalReadingTextAlign
-import me.ash.reader.data.model.preference.ReadingThemePreference
+import me.ash.reader.infrastructure.preference.LocalReadingImageHorizontalPadding
+import me.ash.reader.infrastructure.preference.LocalReadingImageRoundedCorners
+import me.ash.reader.infrastructure.preference.LocalReadingTextAlign
+import me.ash.reader.infrastructure.preference.ReadingThemePreference
 import me.ash.reader.ui.theme.Shape24
 import me.ash.reader.ui.theme.palette.onDark
 import me.ash.reader.ui.theme.palette.onLight

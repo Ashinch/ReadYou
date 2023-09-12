@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
-import me.ash.reader.data.model.preference.LocalReadingAutoHideToolbar
-import me.ash.reader.data.model.preference.LocalReadingPageTonalElevation
+import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
+import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.isScrollDown

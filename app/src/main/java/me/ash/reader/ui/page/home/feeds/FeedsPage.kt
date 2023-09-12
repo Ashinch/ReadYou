@@ -25,10 +25,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.work.WorkInfo
 import me.ash.reader.R
-import me.ash.reader.data.model.preference.*
+import me.ash.reader.infrastructure.preference.*
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.*
-import me.ash.reader.ui.ext.*
+import me.ash.reader.ui.ext.alphaLN
+import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.findActivity
+import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.HomeViewModel
@@ -38,6 +41,7 @@ import me.ash.reader.ui.page.home.feeds.drawer.group.GroupOptionDrawer
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.page.settings.accounts.AccountViewModel
+import kotlin.collections.set
 import kotlin.math.ln
 
 @OptIn(

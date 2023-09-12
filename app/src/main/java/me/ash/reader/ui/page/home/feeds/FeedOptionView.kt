@@ -25,7 +25,7 @@ import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import me.ash.reader.R
-import me.ash.reader.data.model.group.Group
+import me.ash.reader.domain.model.group.Group
 import me.ash.reader.ui.component.base.RYSelectionChip
 import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.theme.palette.alwaysLight
@@ -38,8 +38,8 @@ fun FeedOptionView(
     selectedAllowNotificationPreset: Boolean = false,
     selectedParseFullContentPreset: Boolean = false,
     isMoveToGroup: Boolean = false,
-    showGroup:Boolean = true,
-    showUnsubscribe:Boolean = true,
+    showGroup: Boolean = true,
+    showUnsubscribe: Boolean = true,
     notSubscribeMode: Boolean = false,
     selectedGroupId: String = "",
     allowNotificationPresetOnClick: () -> Unit = {},

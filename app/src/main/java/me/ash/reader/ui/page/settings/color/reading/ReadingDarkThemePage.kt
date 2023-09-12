@@ -15,8 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.data.model.preference.LocalReadingDarkTheme
-import me.ash.reader.data.model.preference.ReadingDarkThemePreference
+import me.ash.reader.infrastructure.preference.LocalReadingDarkTheme
+import me.ash.reader.infrastructure.preference.ReadingDarkThemePreference
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold

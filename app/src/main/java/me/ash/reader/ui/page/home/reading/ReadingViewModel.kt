@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import me.ash.reader.data.model.article.ArticleFlowItem
-import me.ash.reader.data.model.article.ArticleWithFeed
-import me.ash.reader.data.repository.RssHelper
-import me.ash.reader.data.repository.RssRepository
+import me.ash.reader.domain.model.article.ArticleFlowItem
+import me.ash.reader.domain.model.article.ArticleWithFeed
+import me.ash.reader.domain.service.RssHelper
+import me.ash.reader.domain.service.RssRepository
 import javax.inject.Inject
 
 @HiltViewModel

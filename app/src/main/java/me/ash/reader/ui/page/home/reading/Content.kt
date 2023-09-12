@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.reading
 
-import RYExtensibleVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -13,9 +12,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import me.ash.reader.data.model.preference.LocalOpenLink
-import me.ash.reader.data.model.preference.LocalOpenLinkSpecificBrowser
-import me.ash.reader.data.model.preference.LocalReadingSubheadUpperCase
+import me.ash.reader.infrastructure.preference.LocalOpenLink
+import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
+import me.ash.reader.infrastructure.preference.LocalReadingSubheadUpperCase
+import me.ash.reader.ui.component.base.RYExtensibleVisibility
 import me.ash.reader.ui.component.reader.Reader
 import me.ash.reader.ui.ext.drawVerticalScrollbar
 import me.ash.reader.ui.ext.openURL

@@ -1,7 +1,5 @@
 package me.ash.reader.ui.page.settings.languages
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -20,9 +18,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.data.model.preference.LanguagesPreference
-import me.ash.reader.data.model.preference.LocalLanguages
-import me.ash.reader.data.model.preference.OpenLinkPreference
+import me.ash.reader.infrastructure.preference.LanguagesPreference
+import me.ash.reader.infrastructure.preference.LocalLanguages
+import me.ash.reader.infrastructure.preference.OpenLinkPreference
 import me.ash.reader.ui.component.base.Banner
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
