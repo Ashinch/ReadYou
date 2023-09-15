@@ -18,6 +18,7 @@ import me.ash.reader.data.model.preference.LocalReadingPageTonalElevation
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.isScrollDown
+import me.ash.reader.ui.ext.swipeableUpDown
 import me.ash.reader.ui.page.home.HomeViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -59,79 +60,89 @@ fun ReadingPage(
     }
 
     RYScaffold(
-        topBarTonalElevation = tonalElevation.value.dp,
-        containerTonalElevation = tonalElevation.value.dp,
-        content = {
-            Log.i("RLog", "TopBar: recomposition")
+            topBarTonalElevation = tonalElevation.value.dp,
+            containerTonalElevation = tonalElevation.value.dp,
+            content = {
+                Log.i("RLog", "TopBar: recomposition")
 
-            Box(modifier = Modifier.fillMaxSize()) {
-                // Top Bar
-                TopBar(
-                    navController = navController,
-                    isShow = isShowToolBar,
-                    title = readingUiState.articleWithFeed?.article?.title,
-                    link = readingUiState.articleWithFeed?.article?.link,
-                    onClose = {
-                        navController.popBackStack()
-                    },
-                )
+                Box(modifier = Modifier.fillMaxSize().swipeableUpDown({
+                    Log.d("Swipe", "Up")
+                    if (readingUiState.nextArticleId.isNotEmpty()) {
+                        readingViewModel.initData(readingUiState.nextArticleId)
+                    }
+                 }, {
+                    Log.d("Swipe", "Down")
+                    if (readingUiState.previousArticleId.isNotEmpty()) {
+                        readingViewModel.initData(readingUiState.previousArticleId)
+                    }
+                })) {
+                    // Top Bar
+                    TopBar(
+                            navController = navController,
+                            isShow = isShowToolBar,
+                            title = readingUiState.articleWithFeed?.article?.title,
+                            link = readingUiState.articleWithFeed?.article?.link,
+                            onClose = {
+                                navController.popBackStack()
+                            },
+                    )
 
-                // Content
-                if (readingUiState.articleWithFeed != null) {
-                    AnimatedContent(
-                        targetState = readingUiState.content ?: "",
-                        transitionSpec = {
-                            slideInVertically(
-                                spring(
-                                    dampingRatio = Spring.DampingRatioNoBouncy,
-                                    stiffness = Spring.StiffnessLow,
-                                )
-                            ) { height -> height / 2 } with slideOutVertically { height -> -(height / 2) } + fadeOut(
-                                spring(
-                                    dampingRatio = Spring.DampingRatioNoBouncy,
-                                    stiffness = Spring.StiffnessLow,
-                                )
+                    // Content
+                    if (readingUiState.articleWithFeed != null) {
+                        AnimatedContent(
+                                targetState = readingUiState.content ?: "",
+                                transitionSpec = {
+                                    slideInVertically(
+                                            spring(
+                                                    dampingRatio = Spring.DampingRatioNoBouncy,
+                                                    stiffness = Spring.StiffnessLow,
+                                            )
+                                    ) { height -> height / 2 } with slideOutVertically { height -> -(height / 2) } + fadeOut(
+                                            spring(
+                                                    dampingRatio = Spring.DampingRatioNoBouncy,
+                                                    stiffness = Spring.StiffnessLow,
+                                            )
+                                    )
+                                }
+                        ) { target ->
+                            Content(
+                                    content = target,
+                                    feedName = readingUiState.articleWithFeed.feed.name,
+                                    title = readingUiState.articleWithFeed.article.title,
+                                    author = readingUiState.articleWithFeed.article.author,
+                                    link = readingUiState.articleWithFeed.article.link,
+                                    publishedDate = readingUiState.articleWithFeed.article.date,
+                                    isLoading = readingUiState.isLoading,
+                                    listState = readingUiState.listState,
+                                    isShowToolBar = isShowToolBar,
                             )
                         }
-                    ) { target ->
-                        Content(
-                            content = target,
-                            feedName = readingUiState.articleWithFeed.feed.name,
-                            title = readingUiState.articleWithFeed.article.title,
-                            author = readingUiState.articleWithFeed.article.author,
-                            link = readingUiState.articleWithFeed.article.link,
-                            publishedDate = readingUiState.articleWithFeed.article.date,
-                            isLoading = readingUiState.isLoading,
-                            listState = readingUiState.listState,
-                            isShowToolBar = isShowToolBar,
+                    }
+                    // Bottom Bar
+                    if (readingUiState.articleWithFeed != null) {
+                        BottomBar(
+                                isShow = isShowToolBar,
+                                isUnread = readingUiState.articleWithFeed.article.isUnread,
+                                isStarred = readingUiState.articleWithFeed.article.isStarred,
+                                isFullContent = readingUiState.isFullContent,
+                                onUnread = {
+                                    readingViewModel.markUnread(it)
+                                },
+                                onStarred = {
+                                    readingViewModel.markStarred(it)
+                                },
+                                onNextArticle = {
+                                    if (readingUiState.nextArticleId.isNotEmpty()) {
+                                        readingViewModel.initData(readingUiState.nextArticleId)
+                                    }
+                                },
+                                onFullContent = {
+                                    if (it) readingViewModel.renderFullContent()
+                                    else readingViewModel.renderDescriptionContent()
+                                },
                         )
                     }
                 }
-                // Bottom Bar
-                if (readingUiState.articleWithFeed != null) {
-                    BottomBar(
-                        isShow = isShowToolBar,
-                        isUnread = readingUiState.articleWithFeed.article.isUnread,
-                        isStarred = readingUiState.articleWithFeed.article.isStarred,
-                        isFullContent = readingUiState.isFullContent,
-                        onUnread = {
-                            readingViewModel.markUnread(it)
-                        },
-                        onStarred = {
-                            readingViewModel.markStarred(it)
-                        },
-                        onNextArticle = {
-                            if (readingUiState.nextArticleId.isNotEmpty()) {
-                                readingViewModel.initData(readingUiState.nextArticleId)
-                            }
-                        },
-                        onFullContent = {
-                            if (it) readingViewModel.renderFullContent()
-                            else readingViewModel.renderDescriptionContent()
-                        },
-                    )
-                }
             }
-        }
     )
 }
