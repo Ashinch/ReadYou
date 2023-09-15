@@ -26,7 +26,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -39,6 +38,8 @@ import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.base.RYAsyncImage
 import me.ash.reader.ui.component.base.SIZE_1000
 import me.ash.reader.ui.theme.Shape20
+import me.ash.reader.data.model.preference.LocalDarkTheme
+import me.ash.reader.data.model.preference.LocalAmoledDarkTheme
 
 @Composable
 fun ArticleItem(
@@ -183,28 +184,25 @@ fun swipeToDismiss(
     if (isArticleVisible) {
         SwipeToDismiss(
                 state = dismissState,
-                /***  create dismiss alert Background */
+                /***  create dismiss alert background box */
                 background = {
-                    val color = Color.Gray
-
                     if (dismissState.dismissDirection == DismissDirection.StartToEnd) {
                         Box(
                                 modifier = Modifier
                                         .fillMaxSize()
-                                        .background(color)
-                                        .padding(8.dp)
+                                        .padding(12.dp)
                         ) {
                             Column(modifier = Modifier.align(Alignment.CenterStart)) {
                                 Icon(
                                         imageVector = Icons.Default.Check,
                                         contentDescription = null,
-                                        tint = Color.White,
+                                        tint = MaterialTheme.colorScheme.inverseSurface,
                                         modifier = Modifier.align(Alignment.CenterHorizontally)
                                 )
                                 Text(
-                                        text = "Mark Read", fontWeight = FontWeight.Bold,
+                                        text = "Mark Read",
                                         textAlign = TextAlign.Center,
-                                        color = Color.White
+                                        color = MaterialTheme.colorScheme.inverseSurface
                                 )
                             }
 
@@ -213,7 +211,19 @@ fun swipeToDismiss(
                 },
                 /**** Dismiss Content */
                 dismissContent = {
-                    ArticleItem(articleWithFeed, onClick)
+                    val isDarkTheme = LocalDarkTheme.current.isDarkTheme()
+                    val isAmoledDarkTheme = LocalAmoledDarkTheme.current.value
+
+                    val articleItemBackgroundColor = if (isDarkTheme && isAmoledDarkTheme) {Color.Black}
+                        else {MaterialTheme.colorScheme.background}
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(articleItemBackgroundColor)
+                    ) {
+                        ArticleItem(articleWithFeed, onClick)
+                    }
                 },
                 /*** Set Direction to dismiss */
                 directions = setOf(DismissDirection.StartToEnd),
