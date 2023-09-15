@@ -1,2 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="add_to_group">ಗುಂಪಿಗೆ ಸೇರಿಸಿ</string>
+    <string name="subscribe">ಚಂದಾದಾರರಾಗಿ</string>
+    <string name="feeds">ಫೀಡ್ಗಳು</string>
+    <string name="date_at_time">%2$s ನಲ್ಲಿ %1$s</string>
+    <string name="feed_or_site_url">ಫೀಡ್ ಅಥವಾ ಸೈಟ್ URL</string>
+    <string name="unread">ಓದಿಲ್ಲ</string>
+    <string name="all_parse_full_content_toast">\"%1$s\" ಗುಂಪಿನಲ್ಲಿರುವ ಎಲ್ಲಾ ಲೇಖನಗಳ ಪೂರ್ಣ ವಿಷಯ ಪಾರ್ಸಿಂಗ್</string>
+    <string name="change_url">URL ಅನ್ನು ಬದಲಾಯಿಸಿ</string>
+    <string name="all_move_to_group_tips">\"%1$s\" ಗುಂಪಿನಲ್ಲಿರುವ ಎಲ್ಲಾ ಫೀಡ್‌ಗಳನ್ನು \"%2$s\" ಗುಂಪಿಗೆ ಸರಿಸಿ</string>
+    <string name="clear">ಅಳಿಸು</string>
+    <string name="all">ಎಲ್ಲಾ</string>
+    <string name="unknown">ಅಜ್ಞಾತ</string>
+    <string name="rename">ಮರುಹೆಸರಿಸಿ</string>
+    <string name="name">ಹೆಸರು</string>
+    <string name="all_deny_notification_toast">\"%1$s\" ಗುಂಪಿನ ಎಲ್ಲಾ ಅಧಿಸೂಚನೆಗಳನ್ನು ನಿರಾಕರಿಸಲಾಗಿದೆ</string>
+    <string name="back">ಹಿಂದೆ</string>
+    <string name="allow_notification">ಅಧಿಸೂಚನೆಯನ್ನು ಅನುಮತಿಸಿ</string>
+    <string name="delete">ಅಳಿಸಿ</string>
+    <string name="selected">ಆಯ್ಕೆ ಮಾಡಲಾಗಿದೆ</string>
+    <plurals name="unread_desc">
+        <item quantity="one">%1$d ಓದದಿರುವ ಐಟಂ</item>
+        <item quantity="other">%1$d ಓದದಿರುವ ಐಟಂಗಳು</item>
+    </plurals>
+    <string name="all_move_to_group_toast">ಎಲ್ಲಾ ಫೀಡ್‌ಗಳನ್ನು \"%1$s\" ಗುಂಪಿಗೆ ಸರಿಸಲಾಗಿದೆ</string>
+    <string name="all_deny_parse_full_content_toast">\"%1$s\" ಗುಂಪಿನಲ್ಲಿರುವ ಎಲ್ಲಾ ಲೇಖನಗಳ ಪೂರ್ಣ ವಿಷಯವನ್ನು ಪಾರ್ಸಿಂಗ್ ಮಾಡಲಾಗುವುದಿಲ್ಲ</string>
+    <string name="delete_group_tips">\"%1$s\" ಗುಂಪು ಮತ್ತು ಅದು ಒಳಗೊಂಡಿರುವ ಎಲ್ಲಾ ಫೀಡ್‌ಗಳು ಮತ್ತು ಆರ್ಕೈವ್ ಮಾಡಿದ ಲೇಖನಗಳನ್ನು ಅಳಿಸಿ</string>
+    <string name="unsubscribe_tips">\"%1$s\" ನಿಂದ ಅನ್‌ಸಬ್‌ಸ್ಕ್ರೈಬ್ ಮಾಡಿ ಮತ್ತು ಅದರಲ್ಲಿರುವ ಎಲ್ಲಾ ಆರ್ಕೈವ್ ಮಾಡಿದ ಲೇಖನಗಳನ್ನು ಅಳಿಸಿ</string>
+    <string name="starred">ನಕ್ಷತ್ರ ಹಾಕಲಾಗಿದೆ</string>
+    <string name="paste">ಅಂಟಿಸಿ</string>
+    <string name="open_with">%1$s ತೆರೆಯಿರಿ</string>
+    <string name="options">ಆಯ್ಕೆಗಳು</string>
+    <string name="deny">ನಿರಾಕರಿಸಿ</string>
+    <string name="move_to_group">ಇದನ್ನು ಗುಂಪಿಗೆ ಸರಿಸಿ</string>
+    <string name="preset">ಮೊದಲೇ ಹೊಂದಿಸಲಾಗಿದೆ</string>
+    <plurals name="starred_desc">
+        <item quantity="one">%1$d ನಕ್ಷತ್ರ ಹಾಕಿದ ಐಟಂ</item>
+        <item quantity="other">%1$d ನಕ್ಷತ್ರ ಹಾಕಿದ ಐಟಂಗಳು</item>
+    </plurals>
+    <string name="parse_full_content">ಪೂರ್ಣ ವಿಷಯವನ್ನು ಪಾರ್ಸ್ ಮಾಡಿ</string>
+    <string name="cancel">ರದ್ದುಮಾಡಿ</string>
+    <string name="yesterday">ನಿನ್ನೆ</string>
+    <string name="refresh">ರಿಫ್ರೆಶ್</string>
+    <string name="create_new_group">ಹೊಸ ಗುಂಪನ್ನು ರಚಿಸಿ</string>
+    <string name="confirm">ದೃಢೀಕರಿಸಿ</string>
+    <string name="syncing">ಸಿಂಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ…</string>
+    <string name="all_allow_notification_tips">ಅಧಿಸೂಚನೆಗಳನ್ನು ಕಳುಹಿಸಲು \"%1$s\" ಗುಂಪಿನಲ್ಲಿರುವ ಎಲ್ಲಾ ಫೀಡ್‌ಗಳನ್ನು ಅನುಮತಿಸಿ</string>
+    <string name="expand_less">ಕುಗ್ಗಿಸು</string>
+    <string name="all_parse_full_content_tips">\"%1$s\" ಗುಂಪಿನಲ್ಲಿರುವ ಎಲ್ಲಾ ಲೇಖನಗಳಿಗೆ ಪೂರ್ಣ ವಿಷಯ ಪಾರ್ಸಿಂಗ್ ಆನ್ ಆಗಿದೆ</string>
+    <string name="search">ಹುಡುಕಿ</string>
+    <string name="delete_group">ಗುಂಪನ್ನು ಅಳಿಸಿ</string>
+    <string name="delete_toast">\"%1$s\" ಅಳಿಸಲಾಗಿದೆ</string>
+    <string name="rename_toast">\"%1$s\" ಎಂದು ಮರುಹೆಸರಿಸಲಾಗಿದೆ</string>
+    <string name="already_subscribed">ಈಗಾಗಲೇ ಚಂದಾದಾರರಾಗಿದ್ದಾರೆ</string>
+    <string name="empty">ಖಾಲಿ</string>
+    <string name="expand_more">ವಿಸ್ತರಿಸು</string>
+    <string name="allow">ಅನುಮತಿಸಿ</string>
+    <string name="settings">ಸೆಟ್ಟಿಂಗ್‌ಗಳು</string>
+    <string name="clear_articles_in_feed_toast">\"%1$s\" ಫೀಡ್‌ನಲ್ಲಿನ ಎಲ್ಲಾ ಆರ್ಕೈವ್ ಲೇಖನಗಳನ್ನು ತೆರವುಗೊಳಿಸಿ</string>
+    <string name="loading">ಲೋಡ್ ಆಗುತ್ತಿದೆ…</string>
+    <plurals name="all_desc">
+        <item quantity="one">%1$d ಆರ್ಕೈವ್ ಮಾಡಿದ ಐಟಂ</item>
+        <item quantity="other">%1$d ಆರ್ಕೈವ್ ಮಾಡಿದ ಐಟಂಗಳು</item>
+    </plurals>
+    <string name="all_allow_notification_toast">\"%1$s\" ಗುಂಪಿನಿಂದ ಎಲ್ಲಾ ಅಧಿಸೂಚನೆಗಳನ್ನು ಅನುಮತಿಸಲಾಗಿದೆ</string>
+    <string name="searching">ಹುಡುಕಲಾಗುತ್ತಿದೆ…</string>
+    <string name="clear_articles_feed_tips">\"%1$s\" ಫೀಡ್‌ನಲ್ಲಿ ಆರ್ಕೈವ್ ಮಾಡಲಾದ ಎಲ್ಲಾ ಲೇಖನಗಳನ್ನು ತೆರವುಗೊಳಿಸಿ</string>
+    <string name="import_from_opml">OPML ನಿಂದ ಆಮದು ಮಾಡಿಕೊಳ್ಳಿ</string>
+    <string name="group_option_tips">ಈ ಗುಂಪಿನಲ್ಲಿರುವ ಎಲ್ಲಾ ಫೀಡ್‌ಗಳಿಗೆ ಈ ಕೆಳಗಿನ ಆಯ್ಕೆಗಳು ಅನ್ವಯಿಸುತ್ತವೆ</string>
+    <string name="defaults">ಪೂರ್ವನಿಯೋಜಿತ</string>
+    <string name="go_to">ಗೆ ಹೋಗಿ</string>
+    <string name="clear_articles_group_tips">\"%1$s\" ಗುಂಪಿನಲ್ಲಿರುವ ಎಲ್ಲಾ ಆರ್ಕೈವ್ ಮಾಡಿದ ಲೇಖನಗಳನ್ನು ತೆರವುಗೊಳಿಸಿ</string>
+    <string name="unsubscribe">ಅನ್‌ಸಬ್‌ಸ್ಕ್ರೈಬ್ ಮಾಡಿ</string>
+    <string name="today">ಇಂದು</string>
+    <string name="clear_articles_in_group_toast">\"%1$s\" ಗುಂಪಿನಲ್ಲಿರುವ ಎಲ್ಲಾ ಆರ್ಕೈವ್ ಮಾಡಿದ ಲೇಖನಗಳನ್ನು ತೆರವುಗೊಳಿಸಲಾಗಿದೆ</string>
+    <string name="clear_articles">ಲೇಖನಗಳನ್ನು ತೆರವುಗೊಳಿಸಿ</string>
+</resources>

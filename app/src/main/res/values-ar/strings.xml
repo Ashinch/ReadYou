@@ -264,4 +264,16 @@
     <string name="mark_as_read_three_days">علِّمه مقروءًا منذ أكثر من ٣ أيَّام</string>
     <string name="tos_content">&lt;h5&gt; سياسة الخصوصية &lt;/h5&gt; &lt;br/&gt; &lt;p&gt; أنا آخذ خصوصيتك على محمل الجد. &lt;/p&gt; &lt;br/&gt; &lt;p&gt; &lt;b&gt; لا يجمع Read You&lt;/b&gt; أي بيانات مستخدم ، ويتم تخزين جميع المعلومات الحساسة (كلمات المرور ومعلومات الحساب الأخرى) بشكل آمن في قاعدة بيانات التطبيقات المحلية على جهازك. &lt;/p&gt; &lt;br/&gt; &lt;p&gt; &lt;b&gt; ستستخدم Read You&lt;/b&gt; الأذونات التالية لتزويدك بالخدمة. &lt;/p&gt; &lt;br/&gt; &lt;p&gt; - إذن الوصول إلى الشبكة (للوصول إلى المحتوى عبر الإنترنت كما تحدده) &lt;/p&gt; &lt;p&gt; - الحصول على إذن حالة الشبكة (لتحديد ما إذا كان الجهاز يحتوي حاليا على ظروف الشبكة المتاحة) &lt;/p&gt; &lt;p&gt; - إذن خدمة الخلفية (لمزامنة المفضلة تلقائيا لك على أساس منتظم) &lt;/p&gt; &lt;br/&gt; &lt;br/&gt; &lt;h5&gt; خدمات الجهات الخارجية &lt;/h5&gt; &lt;br/&gt; &lt;p&gt; لا تنطبق هذه السياسة على خدمات الجهات الخارجية التي تستخدمها مع &lt;b&gt;اقرأ لك&lt;/b&gt;. يمكنك مراجعة سياسات الخصوصية الخاصة بخدمات الجهات الخارجية التي تستخدمها على مواقع الويب الخاصة بها &lt;/p&gt; &lt;br/&gt; &lt;br/&gt; &lt;h5&gt; إخلاء المسؤولية &lt;/h5&gt; &lt;br/&gt; &lt;p&gt; &lt;b&gt;Read You&lt;/b&gt; هي أداة جمع محتوى فقط. يخضع استخدامك ل &lt;b&gt;Read You&lt;/b&gt; لقوانين ولوائح بلدك ومنطقتك، وأي مسؤولية تنشأ عن أفعالك ستتحملها أنت شخصيا. &lt;/p&gt; &lt;br/&gt; &lt;br/&gt; &lt;h5&gt; ترخيص مفتوح المصدر &lt;/h5&gt; &lt;br/&gt; &lt;p&gt; &lt;b&gt;Read You&lt;/b&gt; هو مشروع مفتوح المصدر بموجب رخصة GNU GPL 3.0 مفتوحة المصدر[1]، والذي يسمح لك باستخدام الكود المصدري ل &lt;b&gt; والرجوع إليه وتعديله مجانا، ولكنه لا يسمح بتوزيع الكود المعدل والمشتق وبيعه كبرنامج تجاري مغلق المصدر. لمزيد من التفاصيل، يرجى الاطلاع على رخصة جنو GPL 3.0 مفتوحة المصدر الكاملة[2]. &lt;/p&gt; &lt;br/&gt; &lt;br/&gt; &lt;h5&gt; الملحق &lt;/h5&gt; &lt;br/&gt; &lt;p&gt; - [1] https://github.com/Ashinch/ReadYou &lt;/p&gt; &lt;p&gt; - [2] https://www.gnu.org/licenses/gpl-3.0.html &lt;/p&gt;</string>
     <string name="system_default">النظام</string>
+    <string name="custom_tabs">فرض علامات التبويب المخصصة</string>
+    <string name="open_link_ask_dialog_title">فتح بواسطة…</string>
+    <string name="open_link_specific_browser">المتصفح</string>
+    <string name="auto_default_browser">تلقائي (يفضل المتصفح الافتراضي)</string>
+    <string name="always_ask">اسأل دائما</string>
+    <string name="specific_browser_name">المتصفح: %1$s</string>
+    <string name="specific_browser">فرض متصفح معين</string>
+    <string name="initial_open_app">التطبيق عند النقر على الرابط</string>
+    <string name="auto_customtabs">تلقائي (يفضل علامات التبويب المخصصة)</string>
+    <string name="default_browser">فرض المتصفح الافتراضي</string>
+    <string name="open_link_something_wrong">تم تجاهل إعداد فتح الروابط بسبب حدوث خطأ ما.</string>
+    <string name="open_link_specific_browser_not_selected">بدون</string>
 </resources>

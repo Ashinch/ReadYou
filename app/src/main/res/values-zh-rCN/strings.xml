@@ -249,4 +249,16 @@
     <string name="password">密码</string>
     <string name="connection">连接信息</string>
     <string name="system_default">系统默认</string>
+    <string name="custom_tabs">强制使用自定义标签页</string>
+    <string name="open_link_ask_dialog_title">打开方式…</string>
+    <string name="open_link_specific_browser">浏览器</string>
+    <string name="auto_default_browser">自动（偏好默认浏览器）</string>
+    <string name="always_ask">始终询问</string>
+    <string name="specific_browser_name">浏览器：%1$s</string>
+    <string name="specific_browser">强制使用特定浏览器</string>
+    <string name="initial_open_app">单击链接打开应用</string>
+    <string name="auto_customtabs">自动（偏好自定义标签页）</string>
+    <string name="default_browser">强制使用默认浏览器</string>
+    <string name="open_link_something_wrong">打开链接设置被忽略，因为出错了。</string>
+    <string name="open_link_specific_browser_not_selected">未选择</string>
 </resources>
