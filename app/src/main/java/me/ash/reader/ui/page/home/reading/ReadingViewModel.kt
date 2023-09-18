@@ -140,13 +140,14 @@ class ReadingViewModel @Inject constructor(
             val cur = _readingUiState.value.articleWithFeed?.article
             if (cur != null) {
                 var found = false
+                var prev = ""
                 for (item in pagingItems) {
                     if (item is ArticleFlowItem.Article) {
                         val itemId = item.articleWithFeed.article.id
                         if (itemId == cur.id) {
                             found = true
                             _readingUiState.update {
-                                it.copy(nextArticleId = "")
+                                it.copy(previousArticleId = prev, nextArticleId = "")
                             }
                         } else if (found) {
                             _readingUiState.update {
@@ -154,6 +155,7 @@ class ReadingViewModel @Inject constructor(
                             }
                             break
                         }
+                        prev = itemId
                     }
                 }
             }
@@ -168,4 +170,5 @@ data class ReadingUiState(
     val isLoading: Boolean = true,
     val listState: LazyListState = LazyListState(),
     val nextArticleId: String = "",
+    val previousArticleId: String = "",
 )
