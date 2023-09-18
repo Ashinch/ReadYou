@@ -18,9 +18,9 @@
     <application
         android:name=".RYApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="${appIcon}"
         android:label="@string/read_you"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="${appIconRound}"
         android:supportsRtl="true"
         android:theme="@style/Theme.Reader"
         android:usesCleartextTraffic="true">

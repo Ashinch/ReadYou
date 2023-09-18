@@ -58,10 +58,23 @@ android {
     }
     buildTypes {
         release {
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher",
+                    appIconRound: "@mipmap/ic_launcher_round"
+            ]
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
+        }
+        debug {
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher_debug",
+                    appIconRound: "@mipmap/ic_launcher_round_debug"
+            ]
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+            debuggable true
         }
     }
     applicationVariants.all { variant ->
