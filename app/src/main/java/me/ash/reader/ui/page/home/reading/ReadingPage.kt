@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,7 +39,7 @@ fun ReadingPage(
     } else {
         true
     }
-
+    var slideDirection = remember { mutableStateOf(1) }
     val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
     readingViewModel.recorderNextArticle(pagingItems)
 
@@ -67,11 +70,13 @@ fun ReadingPage(
 
                 Box(modifier = Modifier.fillMaxSize().swipeableUpDown({
                     Log.d("Swipe", "Up")
+                    slideDirection.value = 1
                     if (readingUiState.nextArticleId.isNotEmpty()) {
                         readingViewModel.initData(readingUiState.nextArticleId)
                     }
                  }, {
                     Log.d("Swipe", "Down")
+                    slideDirection.value = -1
                     if (readingUiState.previousArticleId.isNotEmpty()) {
                         readingViewModel.initData(readingUiState.previousArticleId)
                     }
@@ -97,7 +102,7 @@ fun ReadingPage(
                                                     dampingRatio = Spring.DampingRatioNoBouncy,
                                                     stiffness = Spring.StiffnessLow,
                                             )
-                                    ) { height -> height / 2 } with slideOutVertically { height -> -(height / 2) } + fadeOut(
+                                    ) { height -> slideDirection.value * (height / 2) } with slideOutVertically { height -> slideDirection.value * -(height / 2)} + fadeOut(
                                             spring(
                                                     dampingRatio = Spring.DampingRatioNoBouncy,
                                                     stiffness = Spring.StiffnessLow,
@@ -135,6 +140,7 @@ fun ReadingPage(
                                     if (readingUiState.nextArticleId.isNotEmpty()) {
                                         readingViewModel.initData(readingUiState.nextArticleId)
                                     }
+                                    slideDirection.value = 1
                                 },
                                 onFullContent = {
                                     if (it) readingViewModel.renderFullContent()
