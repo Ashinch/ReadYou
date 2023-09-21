@@ -1,4 +1,4 @@
-package me.ash.reader.infrastructure.source
+package me.ash.reader.infrastructure.db
 
 import android.content.Context
 import androidx.room.*
@@ -22,7 +22,7 @@ import java.util.*
     version = 5
 )
 @TypeConverters(
-    RYDatabase.DateConverters::class,
+    AndroidDatabase.DateConverters::class,
     AccountTypeConverters::class,
     SyncIntervalConverters::class,
     SyncOnStartConverters::class,
@@ -31,7 +31,7 @@ import java.util.*
     KeepArchivedConverters::class,
     SyncBlockListConverters::class,
 )
-abstract class RYDatabase : RoomDatabase() {
+abstract class AndroidDatabase : RoomDatabase() {
 
     abstract fun accountDao(): AccountDao
     abstract fun feedDao(): FeedDao
@@ -40,13 +40,13 @@ abstract class RYDatabase : RoomDatabase() {
 
     companion object {
 
-        private var instance: RYDatabase? = null
+        private var instance: AndroidDatabase? = null
 
-        fun getInstance(context: Context): RYDatabase {
+        fun getInstance(context: Context): AndroidDatabase {
             return instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
-                    RYDatabase::class.java,
+                    AndroidDatabase::class.java,
                     "Reader"
                 ).addMigrations(*allMigrations).build().also {
                     instance = it

@@ -20,11 +20,13 @@ import me.ash.reader.domain.repository.AccountDao
 import me.ash.reader.domain.repository.ArticleDao
 import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.domain.repository.GroupDao
+import me.ash.reader.infrastructure.android.NotificationHelper
 import me.ash.reader.infrastructure.di.DefaultDispatcher
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
-import me.ash.reader.infrastructure.provider.fever.FeverAPI
-import me.ash.reader.infrastructure.provider.fever.FeverDTO
+import me.ash.reader.infrastructure.rss.RssHelper
+import me.ash.reader.infrastructure.rss.provider.fever.FeverAPI
+import me.ash.reader.infrastructure.rss.provider.fever.FeverDTO
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.dollarLast
 import me.ash.reader.ui.ext.showToast
@@ -33,7 +35,7 @@ import net.dankito.readability4j.extended.Readability4JExtended
 import java.util.*
 import javax.inject.Inject
 
-class FeverRssRepository @Inject constructor(
+class FeverRssService @Inject constructor(
     @ApplicationContext
     private val context: Context,
     private val articleDao: ArticleDao,

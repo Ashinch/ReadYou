@@ -10,9 +10,11 @@ import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.domain.repository.GroupDao
 import me.ash.reader.infrastructure.di.DefaultDispatcher
 import me.ash.reader.infrastructure.di.IODispatcher
+import me.ash.reader.infrastructure.rss.RssHelper
+import me.ash.reader.infrastructure.android.NotificationHelper
 import javax.inject.Inject
 
-class LocalRssRepository @Inject constructor(
+class LocalRssService @Inject constructor(
     @ApplicationContext
     private val context: Context,
     private val articleDao: ArticleDao,

@@ -1,4 +1,4 @@
-package me.ash.reader.domain.service
+package me.ash.reader.infrastructure.rss
 
 import android.content.Context
 import android.text.Html

@@ -146,7 +146,7 @@ fun FeedsPage(
             ) {
                 if (!isSyncing) homeViewModel.sync()
             }
-            if (subscribeViewModel.rssRepository.get().subscribe) {
+            if (subscribeViewModel.rssService.get().subscribe) {
                 FeedbackIconButton(
                     imageVector = Icons.Rounded.Add,
                     contentDescription = stringResource(R.string.subscribe),

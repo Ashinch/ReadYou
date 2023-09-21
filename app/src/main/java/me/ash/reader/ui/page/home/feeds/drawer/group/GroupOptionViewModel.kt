@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.ash.reader.domain.model.group.Group
-import me.ash.reader.domain.service.RssRepository
+import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
 import javax.inject.Inject
@@ -23,7 +23,7 @@ import javax.inject.Inject
 @OptIn(ExperimentalMaterialApi::class)
 @HiltViewModel
 class GroupOptionViewModel @Inject constructor(
-    val rssRepository: RssRepository,
+    val rssService: RssService,
     @MainDispatcher
     private val mainDispatcher: CoroutineDispatcher,
     @IODispatcher
@@ -35,7 +35,7 @@ class GroupOptionViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(ioDispatcher) {
-            rssRepository.get().pullGroups().collect { groups ->
+            rssService.get().pullGroups().collect { groups ->
                 _groupOptionUiState.update { it.copy(groups = groups) }
             }
         }
@@ -43,7 +43,7 @@ class GroupOptionViewModel @Inject constructor(
 
     fun showDrawer(scope: CoroutineScope, groupId: String) {
         scope.launch {
-            _groupOptionUiState.update { it.copy(group = rssRepository.get().findGroupById(groupId)) }
+            _groupOptionUiState.update { it.copy(group = rssService.get().findGroupById(groupId)) }
             _groupOptionUiState.value.drawerState.show()
         }
     }
@@ -55,7 +55,7 @@ class GroupOptionViewModel @Inject constructor(
     fun allAllowNotification(isNotification: Boolean, callback: () -> Unit = {}) {
         _groupOptionUiState.value.group?.let {
             viewModelScope.launch(ioDispatcher) {
-                rssRepository.get().groupAllowNotification(it, isNotification)
+                rssService.get().groupAllowNotification(it, isNotification)
                 withContext(mainDispatcher) {
                     callback()
                 }
@@ -74,7 +74,7 @@ class GroupOptionViewModel @Inject constructor(
     fun allParseFullContent(isFullContent: Boolean, callback: () -> Unit = {}) {
         _groupOptionUiState.value.group?.let {
             viewModelScope.launch(ioDispatcher) {
-                rssRepository.get().groupParseFullContent(it, isFullContent)
+                rssService.get().groupParseFullContent(it, isFullContent)
                 withContext(mainDispatcher) {
                     callback()
                 }
@@ -93,7 +93,7 @@ class GroupOptionViewModel @Inject constructor(
     fun delete(callback: () -> Unit = {}) {
         _groupOptionUiState.value.group?.let {
             viewModelScope.launch(ioDispatcher) {
-                rssRepository.get().deleteGroup(it)
+                rssService.get().deleteGroup(it)
                 withContext(mainDispatcher) {
                     callback()
                 }
@@ -120,7 +120,7 @@ class GroupOptionViewModel @Inject constructor(
     fun clear(callback: () -> Unit = {}) {
         _groupOptionUiState.value.group?.let {
             viewModelScope.launch(ioDispatcher) {
-                rssRepository.get().deleteArticles(group = it)
+                rssService.get().deleteArticles(group = it)
                 withContext(mainDispatcher) {
                     callback()
                 }
@@ -132,7 +132,7 @@ class GroupOptionViewModel @Inject constructor(
         _groupOptionUiState.value.group?.let { group ->
             _groupOptionUiState.value.targetGroup?.let { targetGroup ->
                 viewModelScope.launch(ioDispatcher) {
-                    rssRepository.get().groupMoveToTargetGroup(group, targetGroup)
+                    rssService.get().groupMoveToTargetGroup(group, targetGroup)
                     withContext(mainDispatcher) {
                         callback()
                     }
@@ -162,7 +162,7 @@ class GroupOptionViewModel @Inject constructor(
     fun rename() {
         _groupOptionUiState.value.group?.let {
             viewModelScope.launch {
-                rssRepository.get().updateGroup(it.copy(name = _groupOptionUiState.value.newName))
+                rssService.get().updateGroup(it.copy(name = _groupOptionUiState.value.newName))
                 _groupOptionUiState.update { it.copy(renameDialogVisible = false) }
             }
         }

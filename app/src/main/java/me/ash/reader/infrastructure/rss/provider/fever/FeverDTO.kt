@@ -1,4 +1,4 @@
-package me.ash.reader.infrastructure.provider.fever
+package me.ash.reader.infrastructure.rss.provider.fever
 
 object FeverDTO {
 

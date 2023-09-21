@@ -18,15 +18,15 @@ import java.util.concurrent.TimeUnit
 class SyncWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
-    private val accountRepository: AccountRepository,
-    private val rssRepository: RssRepository,
+    private val accountService: AccountService,
+    private val rssService: RssService,
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result =
         withContext(Dispatchers.Default) {
             Log.i("RLog", "doWork: ")
-            rssRepository.get().sync(this@SyncWorker).also {
-                rssRepository.get().clearKeepArchivedArticles()
+            rssService.get().sync(this@SyncWorker).also {
+                rssService.get().clearKeepArchivedArticles()
             }
         }
 
