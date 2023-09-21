@@ -73,7 +73,7 @@ fun GroupOptionDrawer(
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         modifier = Modifier.roundClick {
-                            if (viewModel.rssRepository.get().update) {
+                            if (viewModel.rssService.get().update) {
                                 viewModel.showRenameDialog()
                             }
                         },
@@ -106,7 +106,7 @@ fun GroupOptionDrawer(
                     Spacer(modifier = Modifier.height(10.dp))
                     Preset(viewModel, group, context)
 
-                    if (viewModel.rssRepository.get().move && groupOptionUiState.groups.size != 1) {
+                    if (viewModel.rssService.get().move && groupOptionUiState.groups.size != 1) {
                         Spacer(modifier = Modifier.height(26.dp))
                         Subtitle(text = stringResource(R.string.move_to_group))
                         Spacer(modifier = Modifier.height(10.dp))
@@ -199,7 +199,7 @@ private fun Preset(
         ) {
             viewModel.showClearDialog()
         }
-        if (viewModel.rssRepository.get().delete && group?.id != context.currentAccountId.getDefaultGroupId()) {
+        if (viewModel.rssService.get().delete && group?.id != context.currentAccountId.getDefaultGroupId()) {
             RYSelectionChip(
                 modifier = Modifier.animateContentSize(),
                 content = stringResource(R.string.delete_group),

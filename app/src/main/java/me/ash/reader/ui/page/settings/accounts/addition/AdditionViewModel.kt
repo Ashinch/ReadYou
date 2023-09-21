@@ -6,18 +6,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import me.ash.reader.domain.service.OpmlRepository
-import me.ash.reader.domain.service.RssHelper
-import me.ash.reader.domain.service.RssRepository
-import me.ash.reader.domain.service.StringsRepository
+import me.ash.reader.domain.service.OpmlService
+import me.ash.reader.infrastructure.rss.RssHelper
+import me.ash.reader.domain.service.RssService
+import me.ash.reader.infrastructure.android.AndroidStringsHelper
 import javax.inject.Inject
 
 @HiltViewModel
 class AdditionViewModel @Inject constructor(
-    private val opmlRepository: OpmlRepository,
-    private val rssRepository: RssRepository,
+    private val opmlService: OpmlService,
+    private val rssService: RssService,
     private val rssHelper: RssHelper,
-    private val stringsRepository: StringsRepository,
+    private val androidStringsHelper: AndroidStringsHelper,
 ) : ViewModel() {
 
     private val _additionUiState = MutableStateFlow(AdditionUiState())

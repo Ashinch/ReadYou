@@ -5,14 +5,14 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import me.ash.reader.domain.service.RYRepository
-import me.ash.reader.infrastructure.source.Download
+import me.ash.reader.domain.service.AppService
+import me.ash.reader.infrastructure.net.Download
 import me.ash.reader.ui.ext.notFdroid
 import javax.inject.Inject
 
 @HiltViewModel
 class UpdateViewModel @Inject constructor(
-    private val ryRepository: RYRepository,
+    private val appService: AppService,
 ) : ViewModel() {
 
     private val _updateUiState = MutableStateFlow(UpdateUiState())
@@ -25,7 +25,7 @@ class UpdateViewModel @Inject constructor(
         if (notFdroid) {
             viewModelScope.launch {
                 preProcessor()
-                ryRepository.checkUpdate().let {
+                appService.checkUpdate().let {
                     it?.let {
                         if (it) {
                             showDialog()
@@ -64,7 +64,7 @@ class UpdateViewModel @Inject constructor(
             }
             _updateUiState.update {
                 it.copy(
-                    downloadFlow = ryRepository.downloadFile(url)
+                    downloadFlow = appService.downloadFile(url)
                 )
             }
         }

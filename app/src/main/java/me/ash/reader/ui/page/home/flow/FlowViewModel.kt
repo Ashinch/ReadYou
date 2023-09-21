@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import me.ash.reader.domain.model.general.MarkAsReadConditions
-import me.ash.reader.domain.service.RssRepository
+import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.di.IODispatcher
 import javax.inject.Inject
 
 @HiltViewModel
 class FlowViewModel @Inject constructor(
-    private val rssRepository: RssRepository,
+    private val rssService: RssService,
     @IODispatcher
     private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
@@ -26,7 +26,7 @@ class FlowViewModel @Inject constructor(
 
     fun sync() {
         viewModelScope.launch(ioDispatcher) {
-            rssRepository.get().doSync()
+            rssService.get().doSync()
         }
     }
 
@@ -37,7 +37,7 @@ class FlowViewModel @Inject constructor(
         conditions: MarkAsReadConditions,
     ) {
         viewModelScope.launch {
-            rssRepository.get().markAsRead(
+            rssService.get().markAsRead(
                 groupId = groupId,
                 feedId = feedId,
                 articleId = articleId,

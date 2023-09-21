@@ -1,4 +1,4 @@
-package me.ash.reader.infrastructure.provider
+package me.ash.reader.infrastructure.rss.provider
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -6,7 +6,7 @@ import me.ash.reader.infrastructure.di.UserAgentInterceptor
 import me.ash.reader.infrastructure.di.cachingHttpClient
 import okhttp3.OkHttpClient
 
-abstract class BaseAPI {
+abstract class ProviderAPI {
 
     protected val client: OkHttpClient = cachingHttpClient()
         .newBuilder()

@@ -11,21 +11,21 @@ import me.ash.reader.R
 import me.ash.reader.domain.model.general.toVersion
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
+import me.ash.reader.infrastructure.net.Download
+import me.ash.reader.infrastructure.net.NetworkDataSource
+import me.ash.reader.infrastructure.net.downloadToFileWithProgress
 import me.ash.reader.infrastructure.preference.*
 import me.ash.reader.infrastructure.preference.NewVersionSizePreference.formatSize
-import me.ash.reader.infrastructure.source.Download
-import me.ash.reader.infrastructure.source.RYNetworkDataSource
-import me.ash.reader.infrastructure.source.downloadToFileWithProgress
 import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.ext.getLatestApk
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.ext.skipVersionNumber
 import javax.inject.Inject
 
-class RYRepository @Inject constructor(
+class AppService @Inject constructor(
     @ApplicationContext
     private val context: Context,
-    private val networkDataSource: RYNetworkDataSource,
+    private val networkDataSource: NetworkDataSource,
     @IODispatcher
     private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher

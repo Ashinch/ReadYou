@@ -1,4 +1,4 @@
-package me.ash.reader.infrastructure.source
+package me.ash.reader.infrastructure.net
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +14,7 @@ import retrofit2.http.Streaming
 import retrofit2.http.Url
 import java.io.File
 
-interface RYNetworkDataSource {
+interface NetworkDataSource {
 
     @GET
     suspend fun getReleaseLatest(@Url url: String): Response<LatestRelease>
@@ -25,14 +25,14 @@ interface RYNetworkDataSource {
 
     companion object {
 
-        private var instance: RYNetworkDataSource? = null
+        private var instance: NetworkDataSource? = null
 
-        fun getInstance(): RYNetworkDataSource {
+        fun getInstance(): NetworkDataSource {
             return instance ?: synchronized(this) {
                 instance ?: Retrofit.Builder()
                     .baseUrl("https://api.github.com/")
                     .addConverterFactory(GsonConverterFactory.create())
-                    .build().create(RYNetworkDataSource::class.java).also {
+                    .build().create(NetworkDataSource::class.java).also {
                         instance = it
                     }
             }
