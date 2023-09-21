@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 import com.caverock.androidsvg.SVG
-import me.ash.reader.data.model.preference.LocalDarkTheme
+import me.ash.reader.infrastructure.preference.LocalDarkTheme
 import me.ash.reader.ui.svg.parseDynamicColor
 import me.ash.reader.ui.theme.palette.LocalTonalPalettes
 

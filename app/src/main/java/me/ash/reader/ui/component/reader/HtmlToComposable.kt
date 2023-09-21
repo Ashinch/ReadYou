@@ -52,7 +52,7 @@ import coil.size.Precision
 import coil.size.Size
 import coil.size.pxOrElse
 import me.ash.reader.R
-import me.ash.reader.data.model.preference.LocalReadingImageMaximize
+import me.ash.reader.infrastructure.preference.LocalReadingImageMaximize
 import me.ash.reader.ui.component.base.RYAsyncImage
 import org.jsoup.Jsoup
 import org.jsoup.helper.StringUtil

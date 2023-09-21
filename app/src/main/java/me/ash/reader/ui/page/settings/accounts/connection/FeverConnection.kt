@@ -5,8 +5,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.R
-import me.ash.reader.data.model.account.Account
-import me.ash.reader.data.model.account.security.FeverSecurityKey
+import me.ash.reader.domain.model.account.Account
+import me.ash.reader.domain.model.account.security.FeverSecurityKey
 import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.ext.mask
 import me.ash.reader.ui.page.settings.SettingItem

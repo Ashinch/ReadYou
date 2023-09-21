@@ -5,8 +5,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
-import me.ash.reader.data.model.preference.LocalBasicFonts
-import me.ash.reader.data.model.preference.LocalThemeIndex
+import me.ash.reader.infrastructure.preference.LocalBasicFonts
+import me.ash.reader.infrastructure.preference.LocalThemeIndex
 import me.ash.reader.ui.theme.palette.LocalTonalPalettes
 import me.ash.reader.ui.theme.palette.TonalPalettes
 import me.ash.reader.ui.theme.palette.core.ProvideZcamViewingConditions

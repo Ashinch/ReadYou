@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import me.ash.reader.data.model.general.Filter
-import me.ash.reader.data.model.preference.FlowFilterBarStylePreference
-import me.ash.reader.data.model.preference.LocalThemeIndex
+import me.ash.reader.domain.model.general.Filter
+import me.ash.reader.infrastructure.preference.FlowFilterBarStylePreference
+import me.ash.reader.infrastructure.preference.LocalThemeIndex
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.theme.palette.onDark
 

@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import me.ash.reader.R
-import me.ash.reader.data.model.account.Account
-import me.ash.reader.data.model.account.AccountType
+import me.ash.reader.domain.model.account.Account
+import me.ash.reader.domain.model.account.AccountType
 import me.ash.reader.ui.component.base.Subtitle
 
 @Composable

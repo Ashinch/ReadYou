@@ -15,9 +15,9 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import me.ash.reader.data.model.general.Filter
-import me.ash.reader.data.model.preference.LocalDarkTheme
-import me.ash.reader.data.model.preference.LocalReadingDarkTheme
+import me.ash.reader.domain.model.general.Filter
+import me.ash.reader.infrastructure.preference.LocalDarkTheme
+import me.ash.reader.infrastructure.preference.LocalReadingDarkTheme
 import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage

@@ -12,8 +12,11 @@ import androidx.compose.material.icons.rounded.RssFeed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -25,9 +28,9 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.data.model.account.Account
-import me.ash.reader.data.model.account.AccountType
-import me.ash.reader.data.model.account.security.FeverSecurityKey
+import me.ash.reader.domain.model.account.Account
+import me.ash.reader.domain.model.account.AccountType
+import me.ash.reader.domain.model.account.security.FeverSecurityKey
 import me.ash.reader.ui.component.base.RYDialog
 import me.ash.reader.ui.component.base.RYOutlineTextField
 import me.ash.reader.ui.ext.collectAsStateValue

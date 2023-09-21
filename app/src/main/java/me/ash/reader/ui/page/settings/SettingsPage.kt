@@ -20,8 +20,8 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.data.model.preference.LocalNewVersionNumber
-import me.ash.reader.data.model.preference.LocalSkipVersionNumber
+import me.ash.reader.infrastructure.preference.LocalNewVersionNumber
+import me.ash.reader.infrastructure.preference.LocalSkipVersionNumber
 import me.ash.reader.ui.component.base.Banner
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton

@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import me.ash.reader.R
-import me.ash.reader.data.model.preference.*
+import me.ash.reader.infrastructure.preference.*
 import me.ash.reader.ui.component.reader.bodyStyle
 import me.ash.reader.ui.component.reader.h3Style
 import me.ash.reader.ui.component.reader.textHorizontalPadding

@@ -1,7 +1,5 @@
 package me.ash.reader.ui.page.settings.tips
 
-import android.content.Intent
-import android.net.Uri
 import android.view.HapticFeedbackConstants
 import android.view.SoundEffectConstants
 import androidx.compose.animation.animateContentSize
@@ -36,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.data.model.preference.OpenLinkPreference
+import me.ash.reader.infrastructure.preference.OpenLinkPreference
 import me.ash.reader.ui.component.base.CurlyCornerShape
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold

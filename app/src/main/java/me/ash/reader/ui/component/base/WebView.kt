@@ -1,7 +1,5 @@
 package me.ash.reader.ui.component.base
 
-import android.content.Intent
-import android.net.Uri
 import android.net.http.SslError
 import android.util.Log
 import android.webkit.*
@@ -11,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import me.ash.reader.data.model.preference.LocalOpenLink
-import me.ash.reader.data.model.preference.LocalOpenLinkSpecificBrowser
+import me.ash.reader.infrastructure.preference.LocalOpenLink
+import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.ui.ext.openURL
 
 const val INJECTION_TOKEN = "/android_asset_font/"
