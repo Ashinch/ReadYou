@@ -71,7 +71,7 @@ fun FeedItem(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(modifier = Modifier.weight(1f)) {
-                    FeedIcon(feed.name)
+                    FeedIcon(feed.name, feed.icon)
                     Text(
                         modifier = Modifier.padding(start = 12.dp, end = 6.dp),
                         text = feed.name,
