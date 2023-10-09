@@ -130,6 +130,7 @@ Thank you to each of the **Read You** translators, and if you would like to cont
 - [Feeder](https://gitlab.com/spacecowboy/Feeder)
 - [Seal](https://github.com/JunkFood02/Seal)
 - [news-flash](https://gitlab.com/news-flash)
+- [besticon](https://github.com/mat/besticon)
 - ...
 
 ### Special Thanks

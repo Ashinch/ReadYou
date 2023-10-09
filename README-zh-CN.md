@@ -130,6 +130,7 @@ F-Droid 版本与其他版本不兼容，您无法通过覆盖安装包来升级
 - [Feeder](https://gitlab.com/spacecowboy/Feeder)
 - [Seal](https://github.com/JunkFood02/Seal)
 - [news-flash](https://gitlab.com/news-flash)
+- [besticon](https://github.com/mat/besticon)
 - ...
 
 ### 特别鸣谢
