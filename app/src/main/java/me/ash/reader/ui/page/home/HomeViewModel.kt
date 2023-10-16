@@ -41,6 +41,9 @@ class HomeViewModel @Inject constructor(
     private val _filterUiState = MutableStateFlow(FilterState())
     val filterUiState = _filterUiState.asStateFlow()
 
+    private val _readingProgressState = MutableStateFlow(ReadingProgressState())
+    val readingProgressState = _readingProgressState.asStateFlow()
+
     val syncWorkLiveData = workManager.getWorkInfosByTagLiveData(SyncWorker.WORK_NAME)
 
     fun sync() {
@@ -57,7 +60,55 @@ class HomeViewModel @Inject constructor(
                 filter = filterState.filter,
             )
         }
+        resetReadingProgress()
         fetchArticles()
+    }
+
+    fun resetReadingProgress() {
+        _readingProgressState.update {
+            it.copy(
+                readingCurrentItemNumber = -1,
+                readingId = "",
+                readingCurrentNumber = -1,
+                readingList = emptyList(),
+                readingNext = "",
+                readingPrev = "",
+            )
+        }
+    }
+
+    fun changeReadingProgressListAndItemNum(list: List<String>, itemNum: Int) {
+        _readingProgressState.update {
+            it.copy(
+                readingList = list,
+                readingCurrentItemNumber = itemNum
+            )
+        }
+    }
+
+    fun recordReadingState(currentNumber: Int,
+                           previous: String,
+                           current: String,
+                           next: String) {
+        _readingProgressState.update {
+            it.copy(
+                readingCurrentNumber = currentNumber,
+                readingPrev = previous,
+                readingNext = next,
+                readingId = current
+            )
+        }
+    }
+
+    fun changeReadingCurrentId(id: String) {
+        _readingProgressState.update {
+            it.copy(
+                readingId = id,
+                readingCurrentItemNumber = -1,
+                readingPrev = "",
+                readingNext = ""
+            )
+        }
     }
 
     fun fetchArticles() {
@@ -107,4 +158,15 @@ data class FilterState(
 data class HomeUiState(
     val pagingData: Flow<PagingData<ArticleFlowItem>> = emptyFlow(),
     val searchContent: String = "",
+)
+
+data class ReadingProgressState(
+    // for flow page scroll usage
+    val readingCurrentItemNumber: Int = -1,
+
+    val readingId: String = "",
+    val readingCurrentNumber: Int = -1,
+    val readingList: List<String> = emptyList(),
+    val readingNext: String = "",
+    val readingPrev: String = "",
 )

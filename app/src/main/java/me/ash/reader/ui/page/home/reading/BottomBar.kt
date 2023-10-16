@@ -6,13 +6,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FiberManualRecord
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.FiberManualRecord
-import androidx.compose.material.icons.outlined.Headphones
 import androidx.compose.material.icons.rounded.Article
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.StarOutline
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,8 +33,8 @@ fun BottomBar(
     isFullContent: Boolean,
     onUnread: (isUnread: Boolean) -> Unit = {},
     onStarred: (isStarred: Boolean) -> Unit = {},
-    onNextArticle: () -> Unit = {},
     onFullContent: (isFullContent: Boolean) -> Unit = {},
+    progress: String,
 ) {
     val tonalElevation = LocalReadingPageTonalElevation.current
 
@@ -59,6 +59,9 @@ fun BottomBar(
                     horizontalArrangement = Arrangement.SpaceAround,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    Text(
+                        text = progress
+                    )
                     CanBeDisabledIconButton(
                         modifier = Modifier.size(40.dp),
                         disabled = false,
@@ -94,25 +97,6 @@ fun BottomBar(
                     ) {
                         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                         onStarred(!isStarred)
-                    }
-                    CanBeDisabledIconButton(
-                        disabled = false,
-                        modifier = Modifier.size(40.dp),
-                        imageVector = Icons.Rounded.ExpandMore,
-                        contentDescription = "Next Article",
-                        tint = MaterialTheme.colorScheme.outline,
-                    ) {
-                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                        onNextArticle()
-                    }
-                    CanBeDisabledIconButton(
-                        modifier = Modifier.size(36.dp),
-                        disabled = true,
-                        imageVector = Icons.Outlined.Headphones,
-                        contentDescription = "Add Tag",
-                        tint = MaterialTheme.colorScheme.outline,
-                    ) {
-                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                     }
                     CanBeDisabledIconButton(
                         disabled = false,

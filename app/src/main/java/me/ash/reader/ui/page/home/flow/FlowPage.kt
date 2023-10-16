@@ -23,7 +23,6 @@ import androidx.work.WorkInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.domain.model.general.MarkAsReadConditions
 import me.ash.reader.infrastructure.preference.*
@@ -57,6 +56,7 @@ fun FlowPage(
     val flowUiState = flowViewModel.flowUiState.collectAsStateValue()
     val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
     val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems()
+    val readingProcessState = homeViewModel.readingProgressState.collectAsStateValue()
     val listState =
         if (pagingItems.itemCount > 0) flowUiState.listState else rememberLazyListState()
 
@@ -93,6 +93,17 @@ fun FlowPage(
         }
     }
 
+    LaunchedEffect(pagingItems.itemCount) {
+        val id = readingProcessState.readingCurrentItemNumber
+        if (id >= 0) {
+            scope.launch {
+                flowUiState.listState.scrollToItem(id)
+                homeViewModel.changeReadingCurrentId("")
+
+            }
+        }
+    }
+
     BackHandler(onSearch) {
         onSearch = false
     }
@@ -109,7 +120,7 @@ fun FlowPage(
                 onSearch = false
                 if (navController.previousBackStackEntry == null) {
                     navController.navigate(RouteName.FEEDS) {
-                        launchSingleTop = true
+                        launchSingleTop = false
                     }
                 } else {
                     navController.popBackStack()
@@ -234,6 +245,7 @@ fun FlowPage(
                     }
                     ArticleList(
                         pagingItems = pagingItems,
+                        currentReadingId = homeViewModel.readingProgressState.value.readingId,
                         isFilterUnread = filterUiState.filter == Filter.Unread,
                         isShowFeedIcon = articleListFeedIcon.value,
                         isShowStickyHeader = articleListDateStickyHeader.value,
@@ -243,14 +255,20 @@ fun FlowPage(
                             navController.navigate("${RouteName.READING}/${it.article.id}") {
                                 launchSingleTop = true
                             }
-                        }
-                    ) {
-                        flowViewModel.markAsRead(
-                            groupId = null,
-                            feedId = null,
-                            articleId = it.article.id,
-                            MarkAsReadConditions.All
+                        },
+                        onSwipeOut = {
+                            flowViewModel.markAsRead(
+                                groupId = null,
+                                feedId = null,
+                                articleId = it.article.id,
+                                MarkAsReadConditions.All
                             )
+                    }) {
+                            list, curItemNum ->
+                        if (navController.currentDestination?.route == RouteName.FLOW) {
+                            homeViewModel.changeReadingProgressListAndItemNum(list, curItemNum)
+                        }
+
                     }
                     item {
                         Spacer(modifier = Modifier.height(128.dp))
