@@ -146,8 +146,12 @@ abstract class AbstractRssRepository(
     private suspend fun syncFeed(feed: Feed): FeedWithArticle {
         val latest = articleDao.queryLatestByFeedId(context.currentAccountId, feed.id)
         val articles = rssHelper.queryRssXml(feed, latest?.link)
-        if (feed.icon == null) {
-            rssHelper.queryRssIcon(feedDao, feed)
+        try {
+            if (feed.icon == null) {
+                rssHelper.queryRssIcon(feedDao, feed)
+            }
+        } catch (ex: Exception) {
+            Log.e("RLog", "Unable to get feed icon ${feed.url}")
         }
         return FeedWithArticle(
             feed = feed.apply { isNotification = feed.isNotification && articles.isNotEmpty() },
