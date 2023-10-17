@@ -1,11 +1,13 @@
 package me.ash.reader.ui.page.home.feeds
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Settings
@@ -81,6 +83,7 @@ fun FeedsPage(
     val newVersion = LocalNewVersionNumber.current
     val skipVersion = LocalSkipVersionNumber.current
     val currentVersion = remember { context.getCurrentVersion() }
+    val listState = if (groupWithFeedList.isNotEmpty()) feedsUiState.listState else rememberLazyListState()
 
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
@@ -157,7 +160,9 @@ fun FeedsPage(
             }
         },
         content = {
-            LazyColumn {
+            LazyColumn (
+                state = listState
+            ) {
                 item {
                     DisplayText(
                         modifier = Modifier
