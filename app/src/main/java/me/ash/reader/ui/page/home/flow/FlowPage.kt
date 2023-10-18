@@ -23,6 +23,8 @@ import androidx.work.WorkInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.domain.model.article.ArticleFlowItem
+import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.domain.model.general.MarkAsReadConditions
 import me.ash.reader.infrastructure.preference.*
 import me.ash.reader.ui.component.FilterBar
@@ -232,6 +234,7 @@ fun FlowPage(
                     }
                     ArticleList(
                         pagingItems = pagingItems,
+                        isFilterUnread = filterUiState.filter == Filter.Unread,
                         isShowFeedIcon = articleListFeedIcon.value,
                         isShowStickyHeader = articleListDateStickyHeader.value,
                         articleListTonalElevation = articleListTonalElevation.value,

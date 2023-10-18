@@ -163,17 +163,18 @@ fun ArticleItem(
 @ExperimentalMaterialApi
 @Composable
 fun swipeToDismiss(
-        articleWithFeed: ArticleWithFeed,
-        onClick: (ArticleWithFeed) -> Unit = {},
-        onSwipeOut: (ArticleWithFeed) -> Unit = {},
+    articleWithFeed: ArticleWithFeed,
+    isFilterUnread: Boolean,
+    onClick: (ArticleWithFeed) -> Unit = {},
+    onSwipeOut: (ArticleWithFeed) -> Unit = {},
 ) {
     var isArticleVisible by remember { mutableStateOf(true) }
     val dismissState = rememberDismissState(initialValue = DismissValue.Default, confirmStateChange = {
         if (it == DismissValue.DismissedToEnd) {
-            isArticleVisible = false
+            isArticleVisible = !isFilterUnread
             onSwipeOut(articleWithFeed)
         }
-       true
+        isFilterUnread
     })
     if (isArticleVisible) {
         SwipeToDismiss(

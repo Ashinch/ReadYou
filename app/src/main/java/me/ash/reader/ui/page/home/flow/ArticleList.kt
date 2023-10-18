@@ -15,6 +15,7 @@ import me.ash.reader.domain.model.article.ArticleWithFeed
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 fun LazyListScope.ArticleList(
     pagingItems: LazyPagingItems<ArticleFlowItem>,
+    isFilterUnread: Boolean,
     isShowFeedIcon: Boolean,
     isShowStickyHeader: Boolean,
     articleListTonalElevation: Int,
@@ -27,6 +28,7 @@ fun LazyListScope.ArticleList(
                 item(key = item.articleWithFeed.article.id) {
                     swipeToDismiss(
                         articleWithFeed = (pagingItems[index] as ArticleFlowItem.Article).articleWithFeed,
+                        isFilterUnread = isFilterUnread,
                         onClick = { onClick(it) },
                         onSwipeOut = { onSwipeOut(it) }
                     )
