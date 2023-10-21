@@ -246,8 +246,8 @@ fun FlowPage(
                         }
                     ) {
                         flowViewModel.markAsRead(
-                            groupId = filterUiState.group?.id,
-                            feedId = filterUiState.feed?.id,
+                            groupId = null,
+                            feedId = null,
                             articleId = it.article.id,
                             MarkAsReadConditions.All
                             )
