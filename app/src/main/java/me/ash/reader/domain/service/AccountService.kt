@@ -2,11 +2,26 @@ package me.ash.reader.domain.service
 
 import android.content.Context
 import android.os.Looper
+import android.util.Log
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingSource
+import androidx.paging.RemoteMediator
+import androidx.paging.map
+import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectIndexed
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.account.AccountType
+import me.ash.reader.domain.model.article.Article
+import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.group.Group
 import me.ash.reader.domain.repository.AccountDao
 import me.ash.reader.domain.repository.ArticleDao
@@ -95,5 +110,12 @@ class AccountService @Inject constructor(
         //     context.startActivity(it)
         //     android.os.Process.killProcess(android.os.Process.myPid())
         // }
+    }
+
+
+    fun exportAllStarred(accountId: Int): List<ArticleWithFeed> {
+        val starred = articleDao.queryArticleWithFeedWhenIsStarredToList(accountId, true)
+
+        return starred
     }
 }

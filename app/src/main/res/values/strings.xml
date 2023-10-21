@@ -375,6 +375,7 @@
     <string name="keep_archived_articles">Keep archived articles</string>
     <string name="block_list">Block list</string>
     <string name="export_as_opml">Export as OPML</string>
+    <string name="export_starred">Export Starred Items</string>
     <string name="clear_all_articles">Clear all articles</string>
     <string name="delete_account">Delete account</string>
     <string name="clear_all_articles_tips">Are you sure you want to clear the articles list for this account?</string>

@@ -3,6 +3,7 @@ package me.ash.reader.ui.page.settings.accounts
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
@@ -52,6 +53,19 @@ class AccountViewModel @Inject constructor(
                 callback(opmlService.saveToString(accountId))
             } catch (e: Exception) {
                 Log.e("FeedsViewModel", "exportAsOpml: ", e)
+            }
+        }
+    }
+
+    fun exportStarred(accountId: Int, callback: (String) -> Unit = {}) {
+        viewModelScope.launch(ioDispatcher) {
+            try {
+                val articles = accountService.exportAllStarred(accountId)
+                val gson = Gson()
+                val json = gson.toJsonTree(articles).toString()
+                callback(json)
+            } catch (e: Exception) {
+                Log.e("FeedsViewModel", "exportStarred: ", e)
             }
         }
     }

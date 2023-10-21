@@ -395,6 +395,20 @@ interface ArticleDao {
     @Transaction
     @Query(
         """
+        SELECT * FROM article
+        WHERE isStarred = :isStarred 
+        AND accountId = :accountId
+        ORDER BY date DESC
+        """
+    )
+    fun queryArticleWithFeedWhenIsStarredToList(
+        accountId: Int,
+        isStarred: Boolean,
+    ): List<ArticleWithFeed>
+
+    @Transaction
+    @Query(
+        """
         SELECT * FROM article 
         WHERE isUnread = :isUnread 
         AND accountId = :accountId

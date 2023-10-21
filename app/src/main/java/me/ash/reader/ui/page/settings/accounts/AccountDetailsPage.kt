@@ -75,6 +75,18 @@ fun AccountDetailsPage(
         }
     }
 
+    val exportStarredLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument()
+    ) { result ->
+        viewModel.exportStarred(selectedAccount!!.id!!) { string ->
+            result?.let { uri ->
+                context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                    outputStream.write(string.toByteArray())
+                }
+            }
+        }
+    }
+
     RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
@@ -185,6 +197,12 @@ fun AccountDetailsPage(
                         title = stringResource(R.string.export_as_opml),
                         onClick = {
                             launcher.launch("ReadYou.opml")
+                        },
+                    ) {}
+                    SettingItem(
+                        title = stringResource(R.string.export_starred),
+                        onClick = {
+                            exportStarredLauncher.launch("ReadYouStarred.json")
                         },
                     ) {}
                     SettingItem(
