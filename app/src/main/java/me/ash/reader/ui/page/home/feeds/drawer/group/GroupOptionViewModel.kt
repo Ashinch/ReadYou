@@ -67,6 +67,19 @@ class GroupOptionViewModel @Inject constructor(
         _groupOptionUiState.update { it.copy(allAllowNotificationDialogVisible = true) }
     }
 
+    fun setPriority(priority: Int) {
+        _groupOptionUiState.value.group.let {g ->
+            g?.copy(priority=priority).let { group ->
+                _groupOptionUiState.update { it.copy(group = group) }
+                if (group != null) {
+                    viewModelScope.launch(ioDispatcher) {
+                        rssService.get().updateGroup(group)
+                    }
+                }
+            }
+        }
+    }
+
     fun hideAllAllowNotificationDialog() {
         _groupOptionUiState.update { it.copy(allAllowNotificationDialogVisible = false) }
     }

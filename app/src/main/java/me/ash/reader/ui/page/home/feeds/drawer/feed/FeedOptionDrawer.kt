@@ -96,6 +96,7 @@ fun FeedOptionDrawer(
                     showUnsubscribe = feedOptionViewModel.rssService.get().delete,
                     notSubscribeMode = true,
                     selectedGroupId = feedOptionUiState.feed?.groupId ?: "",
+                    priority = feedOptionUiState.feed?.priority ?: 0,
                     allowNotificationPresetOnClick = {
                         feedOptionViewModel.changeAllowNotificationPreset()
                     },
@@ -122,6 +123,9 @@ fun FeedOptionDrawer(
                             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             feedOptionViewModel.showFeedUrlDialog()
                         }
+                    },
+                    onSetPriority = {
+                        feedOptionViewModel.setPriority(it)
                     }
                 )
             }

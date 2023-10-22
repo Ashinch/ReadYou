@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.feeds
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.clickable

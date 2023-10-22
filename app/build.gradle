@@ -58,6 +58,8 @@ android {
     }
     buildTypes {
         release {
+            applicationIdSuffix ".test"
+            versionNameSuffix "-test"
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"

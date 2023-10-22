@@ -103,6 +103,15 @@ class FeedOptionViewModel @Inject constructor(
         }
     }
 
+    fun setPriority(priority: Int) {
+        _feedOptionUiState.value.feed?.let {f ->
+            viewModelScope.launch(ioDispatcher) {
+                rssService.get().updateFeed(f.copy(priority=priority))
+                fetchFeed(f.id)
+            }
+        }
+    }
+
     fun changeParseFullContentPreset() {
         viewModelScope.launch(ioDispatcher) {
             _feedOptionUiState.value.feed?.let {

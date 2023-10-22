@@ -29,7 +29,8 @@ import me.ash.reader.infrastructure.preference.SyncIntervalPreference
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.spacerDollar
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 abstract class AbstractRssRepository(
     private val context: Context,

@@ -41,6 +41,10 @@
     <string name="feed_or_site_url">Feed or Site URL</string>
     <string name="import_from_opml">Import from OPML</string>
     <string name="preset">Preset</string>
+    <string name="priority">Priority</string>
+    <string name="priority_low">Low</string>
+    <string name="priority_mid">Middle</string>
+    <string name="priority_high">High</string>
     <string name="selected">Selected</string>
     <string name="allow_notification">Allow Notification</string>
     <string name="all_allow_notification_tips">Allow all feeds in the \"%1$s\" group to send notifications</string>

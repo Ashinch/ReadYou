@@ -1,6 +1,10 @@
 package me.ash.reader.domain.model.feed
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import me.ash.reader.domain.model.group.Group
 
 /**
@@ -33,6 +37,8 @@ data class Feed(
     var isNotification: Boolean = false,
     @ColumnInfo
     var isFullContent: Boolean = false,
+    @ColumnInfo
+    var priority: Int = 0,
 ) {
 
     @Ignore
@@ -53,6 +59,7 @@ data class Feed(
         if (isNotification != other.isNotification) return false
         if (isFullContent != other.isFullContent) return false
         if (important != other.important) return false
+        if (priority != other.priority) return false
 
         return true
     }
@@ -67,6 +74,7 @@ data class Feed(
         result = 31 * result + isNotification.hashCode()
         result = 31 * result + isFullContent.hashCode()
         result = 31 * result + (important ?: 0)
+        result = 31 * result + priority
         return result
     }
 }

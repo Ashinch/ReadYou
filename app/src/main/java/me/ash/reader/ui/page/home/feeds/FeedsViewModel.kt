@@ -7,7 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
@@ -84,11 +92,15 @@ class FeedsViewModel @Inject constructor(
                     }
                     groupWithFeedList
                 }.mapLatest { groupWithFeedList ->
-                    groupWithFeedList.map {
+                    groupWithFeedList
+                        .sortedBy { -it.group.priority }
+                        .map { it ->
                         mutableListOf<GroupFeedsView>(GroupFeedsView.Group(it.group)).apply {
                             addAll(
                                 it.feeds.map {
                                     GroupFeedsView.Feed(it)
+                                }.sortedBy { feed ->
+                                    -feed.feed.priority
                                 }
                             )
                         }

@@ -16,8 +16,9 @@ data class Group(
     var name: String,
     @ColumnInfo(index = true)
     var accountId: Int,
+    @ColumnInfo(defaultValue = "0")
+    var priority: Int = 0
 ) {
-
     @Ignore
     var important: Int? = 0
 }

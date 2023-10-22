@@ -27,6 +27,7 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 import me.ash.reader.R
 import me.ash.reader.domain.model.group.Group
 import me.ash.reader.ui.component.base.RYSelectionChip
+import me.ash.reader.ui.component.base.RYSortPriority
 import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.theme.palette.alwaysLight
 
@@ -42,6 +43,7 @@ fun FeedOptionView(
     showUnsubscribe: Boolean = true,
     notSubscribeMode: Boolean = false,
     selectedGroupId: String = "",
+    priority: Int = 0,
     allowNotificationPresetOnClick: () -> Unit = {},
     parseFullContentPresetOnClick: () -> Unit = {},
     clearArticlesOnClick: () -> Unit = {},
@@ -50,6 +52,7 @@ fun FeedOptionView(
     onAddNewGroup: () -> Unit = {},
     onFeedUrlClick: () -> Unit = {},
     onFeedUrlLongClick: () -> Unit = {},
+    onSetPriority: (Int) -> Unit = {}
 ) {
     LaunchedEffect(Unit) {
         if (groups.isNotEmpty() && selectedGroupId.isEmpty()) onGroupClick(groups.first().id)
@@ -75,6 +78,13 @@ fun FeedOptionView(
             clearArticlesOnClick = clearArticlesOnClick,
             unsubscribeOnClick = unsubscribeOnClick,
         )
+
+
+        Spacer(modifier = Modifier.height(26.dp))
+        Subtitle(text = stringResource(R.string.priority))
+
+        Spacer(modifier = Modifier.height(10.dp))
+        RYSortPriority(priority, onSetPriority)
 
         if (showGroup) {
             Spacer(modifier = Modifier.height(26.dp))

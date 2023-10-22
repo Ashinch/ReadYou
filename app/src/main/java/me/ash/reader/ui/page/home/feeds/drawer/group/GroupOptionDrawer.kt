@@ -35,6 +35,7 @@ import me.ash.reader.domain.model.group.Group
 import me.ash.reader.ui.component.RenameDialog
 import me.ash.reader.ui.component.base.BottomDrawer
 import me.ash.reader.ui.component.base.RYSelectionChip
+import me.ash.reader.ui.component.base.RYSortPriority
 import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.ext.*
 
@@ -105,6 +106,17 @@ fun GroupOptionDrawer(
 
                     Spacer(modifier = Modifier.height(10.dp))
                     Preset(viewModel, group, context)
+
+                    Spacer(modifier = Modifier.height(26.dp))
+                    Subtitle(text = stringResource(R.string.priority))
+
+                    Spacer(modifier = Modifier.height(10.dp))
+                    RYSortPriority(
+                        priority = groupOptionUiState.group?.priority ?: 0,
+                        setPriority = {
+                            viewModel.setPriority(it)
+                            viewModel.hideDrawer(scope)
+                        })
 
                     if (viewModel.rssService.get().move && groupOptionUiState.groups.size != 1) {
                         Spacer(modifier = Modifier.height(26.dp))
