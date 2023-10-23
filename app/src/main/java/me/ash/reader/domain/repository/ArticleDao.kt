@@ -208,7 +208,7 @@ interface ArticleDao {
         """
         DELETE FROM article
         WHERE accountId = :accountId
-        AND updateAt < :before
+        AND date < :before
         AND isUnread = 0
         AND isStarred = 0
         """
