@@ -27,7 +27,7 @@
     <string name="password">Лозинка</string>
     <string name="icons_and_label_only_selected">Иконице и ознака (само активно)</string>
     <string name="every_3_hours">Сваких 3 сата</string>
-    <string name="feed_or_site_url">Фид или URL сајта</string>
+    <string name="feed_or_site_url">Фид или URL адреса сајта</string>
     <string name="welcome">Добро дошли</string>
     <string name="preview_article_desc">„Будала“ је осми и последњи том серијала „Господар мистерија“ коју је написала Сипа, која воли роњење.</string>
     <string name="terms_of_service">Услови коришћења</string>
@@ -47,7 +47,7 @@
     <string name="preview_article_title">Роману „Господар мистерија“ коначно је дошао крај</string>
     <string name="article_images">Слике чланка</string>
     <string name="feeds_page">Страница за фидове</string>
-    <string name="change_url">Промени URL</string>
+    <string name="change_url">Промени URL адресу</string>
     <string name="all_move_to_group_tips">Преместите све фидове из групе „%1$s“ у групу „%2$s“</string>
     <string name="flow_page">Страница за ток</string>
     <string name="every_1_hour">Сваки сат</string>
@@ -132,7 +132,7 @@
     <string name="other">Остало</string>
     <string name="rearrange_buttons">Преуреди дугмад</string>
     <string name="manually">Ручно</string>
-    <string name="server_url">URL сервера</string>
+    <string name="server_url">URL адреса сервера</string>
     <string name="in_coding">У процесу програмирања</string>
     <string name="all_move_to_group_toast">Премештени су сви фидови у групу „%1$s“</string>
     <string name="connection">Веза</string>
@@ -249,7 +249,7 @@
     <string name="go_to">Иди на</string>
     <string name="tos_content"><h5>Политика приватности</h5><br/><p> Вашу приватност схватам веома озбиљно.</p><br/><p> <b>Read You</b> не прикупља никакве корисничке податке, а све осетљиве информације (лозинке и друге информације о налогу) се безбедно чувају у бази података локалних апликација на Вашем уређају.</p><br/><p> <b>Read You</b> ће користити следеће дозволе да би Вам пружио услугу.</p><br/><p> - Дозвола за приступ мрежи (за приступ онлајн садржају, како Ви наведете)</p><p> - Преузеће дозволу за статус мреже (да би утврдио да ли уређај тренутно има доступне мрежне услове)</p><p> - Дозвола за услугу у позадини (да аутоматски синхронизује Ваше фаворите за Вас на редовној основи)</p><br/><br/><h5> Услуге трећих страна</h5><br/><p> Ова политика се не примењује на услуге трећих страна које користите са <b>Read You</b> . Можете прегледати политике приватности услуга трећих страна које користите на њиховим веб-сајтовима </p><br/><br/><h5> Одрицање од одговорности</h5><br/><p> <b>Read You</b> је само алатка за прикупљање садржаја. Ваше коришћење <b>Read You-а</b> подлеже законима и прописима Ваше земље и региона, а сваку одговорност која проистиче из Ваших радњи сносићете Ви лично.</p><br/><br/><h5> Лиценца отвореног кода</h5><br/><p> <b>Read You</b> је пројекат отвореног кода под GNU GPL 3.0 лиценцом отвореног кода[1], која Вам омогућава да бесплатно користите, референцирате и модификујете изворни код <b>Read You-а</b> , али не дозвољава да се модификовани и изведени код дистрибуира и продаје као комерцијални софтвер затвореног кода. За детаље, погледајте пуну GNU GPL 3.0 лиценцу отвореног кода[2].</p><br/><br/><h5> Додатак</h5><br/><p> - [1] https://github.com/Ashinch/ReadYou</p><p> - [2] https://www.gnu.org/licenses/gpl-3.0.html</p></string>
     <string name="clear_articles_group_tips">Очистите све архивиране чланке у групи „%1$s“</string>
-    <string name="open_link_something_wrong">Подешавање отварања линка је занемарено, јер је нешто пошло по злу.</string>
+    <string name="open_link_something_wrong">Подешавање „Отвори линк“ је занемарено, јер је дошло до грешке.</string>
     <string name="open_link_specific_browser_not_selected">Ниједно</string>
     <string name="upper_case">Велика слова</string>
     <string name="mark_as_read">Означи као прочитано</string>

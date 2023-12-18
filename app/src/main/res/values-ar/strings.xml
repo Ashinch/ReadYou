@@ -274,6 +274,6 @@
     <string name="initial_open_app">التطبيق عند النقر على الرابط</string>
     <string name="auto_customtabs">تلقائي (يفضل علامات التبويب المخصصة)</string>
     <string name="default_browser">فرض المتصفح الافتراضي</string>
-    <string name="open_link_something_wrong">تم تجاهل إعداد فتح الروابط بسبب حدوث خطأ ما.</string>
+    <string name="open_link_something_wrong">تم تجاهل إعداد \"فتح الرابط\" بسبب حدوث خطأ ما.</string>
     <string name="open_link_specific_browser_not_selected">بدون</string>
 </resources>

@@ -255,4 +255,16 @@
     <string name="username">Nom d’utilisateur</string>
     <string name="connection">Connexion</string>
     <string name="system_default">Système</string>
+    <string name="custom_tabs">Forcer les CustomTabs</string>
+    <string name="open_link_ask_dialog_title">Ouvrir avec…</string>
+    <string name="open_link_specific_browser">Navigateur</string>
+    <string name="auto_default_browser">Automatique (Préférer le Navigateur par Défaut)</string>
+    <string name="always_ask">Toujours Demander</string>
+    <string name="specific_browser_name">Navigateur : %1$s</string>
+    <string name="specific_browser">Forcer un navigateur spécifique</string>
+    <string name="initial_open_app">Application lorsque le lien est cliqué</string>
+    <string name="auto_customtabs">Automatique (Préférer CustomTabs)</string>
+    <string name="default_browser">Forcer le navigateur par défaut</string>
+    <string name="open_link_something_wrong">Paramètre Ouvrir le Lien a été ignoré car quelque chose s\'est mal passé.</string>
+    <string name="open_link_specific_browser_not_selected">Aucun</string>
 </resources>

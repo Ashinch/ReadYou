@@ -6,7 +6,7 @@
         <item quantity="one">פריט אחד סומן בכוכב</item>
         <item quantity="two">שני פריטים סומנו בכוכב</item>
         <item quantity="many">%1$d פריטים סומנו בכוכב</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="feeds">היזנים</string>
     <string name="syncing">מתבצע סנכרון…</string>
@@ -120,13 +120,13 @@
         <item quantity="one">פריט אחד הועבר לארכיון</item>
         <item quantity="two">שני פריטים הועברו לארכיון</item>
         <item quantity="many">%1$d פריטים הועברו לארכיון</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <plurals name="unread_desc">
         <item quantity="one">פריט אחד לא נקרא</item>
         <item quantity="two">שני פריטים לא נקראו</item>
         <item quantity="many">%1$d פריטים לא נקראו</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="unknown">לא ידוע</string>
     <string name="date_at_time">%1$s ב־%2$s</string>
@@ -201,4 +201,10 @@
     <string name="add">הוספה</string>
     <string name="connection">חיבור</string>
     <string name="system_default">מערכת</string>
+    <string name="open_link_ask_dialog_title">פתיחה עם…</string>
+    <string name="all_deny_notification_toast">כל ההתראות מהקבוצה „%1$s” נדחות</string>
+    <string name="all_allow_notification_tips">לאפשר לכל ההזנות בקבוצה „%1$s” לשלוח התראות</string>
+    <string name="all_parse_full_content_tips">ניתוח תוכן מלא של כל המאמרים בקבוצה „%1$s”</string>
+    <string name="all_allow_notification_toast">כל ההתראות מהקבוצה „%1$s” מורשות</string>
+    <string name="open_link_something_wrong">ההגדרה „פתיחת קישור” לא תקפה כי משהו השתבש.</string>
 </resources>

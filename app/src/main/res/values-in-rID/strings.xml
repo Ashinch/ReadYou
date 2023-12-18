@@ -263,6 +263,6 @@
     <string name="initial_open_app">Aplikasi ketika tautan diketuk</string>
     <string name="auto_customtabs">Otomatis (Lebih Suka Custom Tabs)</string>
     <string name="default_browser">Paksakan peramban bawaan</string>
-    <string name="open_link_something_wrong">Pengaturan Buka Tautan diabaikan karena ada yang salah.</string>
+    <string name="open_link_something_wrong">Pengaturan \"Buka Tautan\" diabaikan karena ada yang salah.</string>
     <string name="open_link_specific_browser_not_selected">Tidak ada</string>
 </resources>

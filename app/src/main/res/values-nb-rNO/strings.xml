@@ -252,4 +252,16 @@
     <string name="username">Brukernavn</string>
     <string name="password">Passord</string>
     <string name="connection">Tilkobling</string>
+    <string name="custom_tabs">Påtving egendefinerte faner</string>
+    <string name="open_link_ask_dialog_title">Åpne med …</string>
+    <string name="open_link_specific_browser">Filbehandler</string>
+    <string name="auto_default_browser">Auto (foretrekk forvalgt filbehandler)</string>
+    <string name="always_ask">Alltid spør</string>
+    <string name="specific_browser_name">Filbehandler: %1$s</string>
+    <string name="specific_browser">Påtving spesifikk filbehandler</string>
+    <string name="initial_open_app">Program når lenke klikkes</string>
+    <string name="auto_customtabs">Auto (foretrekk egendefinerte faner)</string>
+    <string name="default_browser">Påtving forvalgt filbehandler</string>
+    <string name="open_link_something_wrong">Innstilling for åpning av lenke ble ignorert fordi noe gikk galt.</string>
+    <string name="open_link_specific_browser_not_selected">Ingen</string>
 </resources>
