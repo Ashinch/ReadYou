@@ -255,4 +255,5 @@
     <string name="password">Senha</string>
     <string name="connection">Conexão</string>
     <string name="system_default">Sistema</string>
+    <string name="open_link_ask_dialog_title">Abrir com…</string>
 </resources>

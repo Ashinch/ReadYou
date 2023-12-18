@@ -249,4 +249,16 @@
     <string name="connection">Kết nối</string>
     <string name="empty">Trống</string>
     <string name="system_default">Hệ thống</string>
+    <string name="custom_tabs">Ép CustomTabs</string>
+    <string name="open_link_ask_dialog_title">Mở bằng…</string>
+    <string name="open_link_specific_browser">Trình duyệt</string>
+    <string name="auto_default_browser">Tự động (nên dùng Trình duyệt mặc định)</string>
+    <string name="always_ask">Luôn hỏi</string>
+    <string name="specific_browser_name">Trình duyệt: %1$s</string>
+    <string name="specific_browser">Ép trình duyệt cụ thể</string>
+    <string name="initial_open_app">App khi nhấn vào link</string>
+    <string name="auto_customtabs">Tự động (nên dùng CustomTabs)</string>
+    <string name="default_browser">Ép trình duyệt mặc định</string>
+    <string name="open_link_something_wrong">Cài đặt \"Mở liên kết\" đã bị bỏ qua vì có điều gì không ổn.</string>
+    <string name="open_link_specific_browser_not_selected">Không</string>
 </resources>

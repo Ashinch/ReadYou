@@ -31,10 +31,10 @@
     <string name="go_to">移至</string>
     <string name="settings">配置</string>
     <string name="refresh">更替</string>
-    <string name="search">缉查</string>
-    <string name="searching">缉查中……</string>
+    <string name="search">查找</string>
+    <string name="searching">查找中……</string>
     <string name="subscribe">定阅</string>
-    <string name="already_subscribed">已有定阅</string>
+    <string name="already_subscribed">已有订阅</string>
     <string name="clear">肃清</string>
     <string name="paste">粘附</string>
     <string name="feed_or_site_url">订户或站点链接</string>
@@ -50,4 +50,5 @@
     <string name="username">名号</string>
     <string name="password">密钥</string>
     <string name="server_url">服务器定址</string>
+    <string name="parse_full_content">解析完整内容</string>
 </resources>

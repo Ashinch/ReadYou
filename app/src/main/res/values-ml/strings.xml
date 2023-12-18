@@ -42,4 +42,19 @@
     <string name="allow_notification">അറിയിപ്പ് അനുവദിക്കുക</string>
     <string name="add_to_group">കൂട്ടത്തിൽ ചേർക്കുക</string>
     <string name="empty">ശൂന്യം</string>
+    <string name="all_parse_full_content_toast">\"%1$s\" ഗ്രൂപ്പിലെ എല്ലാ ലേഖനങ്ങളുടെയും പൂർണ്ണമായ ഉള്ളടക്കം പാഴ്‌സിംഗ്</string>
+    <string name="all_move_to_group_tips">\"%1$s\" ഗ്രൂപ്പിലെ എല്ലാ ഫീഡുകളും \"%2$s\" ഗ്രൂപ്പിലേക്ക് സ്ഥാനാര്‍ഥിക്കുക</string>
+    <string name="all_deny_notification_toast">\"%1$s\" ഗ്രൂപ്പിൽ നിന്നുള്ള എല്ലാ അറിയിപ്പുകളും നിരസിച്ചു</string>
+    <string name="all_deny_parse_full_content_toast">\"%1$s\" ഗ്രൂപ്പിലെ എല്ലാ ലേഖനങ്ങളുടെയും പൂർണ്ണമായ ഉള്ളടക്കം പാഴ്‌സിംഗ് ചെയ്യേണ്ടതില്ല</string>
+    <string name="move_to_group">ഗ്രൂപ്പിലേക്ക് നീങ്ങുക</string>
+    <string name="preset">പ്രീസെറ്റ്</string>
+    <string name="parse_full_content">മുഴുവൻ ഉള്ളടക്കവും പാഴ്‌സ് ചെയ്യുക</string>
+    <string name="all_allow_notification_tips">അറിയിപ്പുകൾ അയയ്ക്കാൻ \"%1$s\" ഗ്രൂപ്പിലെ എല്ലാ ഫീഡുകളെയും അനുവദിക്കുക</string>
+    <string name="all_parse_full_content_tips">\"%1$s\" ഗ്രൂപ്പിലെ എല്ലാ ലേഖനങ്ങളുടെയും പൂർണ്ണമായ ഉള്ളടക്കം പാഴ്‌സിംഗ്</string>
+    <string name="clear_articles_in_feed_toast">\"%1$s\" ഫീഡിലെ ആർക്കൈവുചെയ്‌ത എല്ലാ ലേഖനങ്ങളും വൃത്തിയാക്കി</string>
+    <string name="all_allow_notification_toast">\"%1$s\" ഗ്രൂപ്പിൽ നിന്നുള്ള എല്ലാ അറിയിപ്പുകളും അനുവദനീയമാണ്</string>
+    <string name="clear_articles_feed_tips">\"%1$s\" ഫീഡിൽ ആർക്കൈവുചെയ്‌ത എല്ലാ ലേഖനങ്ങളും മായ്‌ക്കുക</string>
+    <string name="clear_articles_group_tips">\"%1$s\" ഗ്രൂപ്പിലെ ലേഖനങ്ങളുടെ എല്ലാ ആർക്കൈവും മായ്‌ക്കുക</string>
+    <string name="clear_articles_in_group_toast">\"%1$s\" ഫീഡിലെ ലേഖനങ്ങളുടെ എല്ലാ ആർക്കൈവും വൃത്തിയാക്കി</string>
+    <string name="clear_articles">വ്യക്തമായ ലേഖനങ്ങൾ</string>
 </resources>

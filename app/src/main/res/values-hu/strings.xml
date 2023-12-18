@@ -252,4 +252,16 @@
     <string name="accounts_tips">Rákoppinthat a fiók nevére a hírforrás oldalon a ki- és bekapcsolásához</string>
     <string name="server_url">Kiszolgáló URL</string>
     <string name="connection">Kapcsolat</string>
+    <string name="custom_tabs">Egyéni lapok kényszerítése</string>
+    <string name="open_link_ask_dialog_title">Megnyitás ezzel…</string>
+    <string name="open_link_specific_browser">Böngésző</string>
+    <string name="auto_default_browser">Automatikus (alapértelmezett böngésző előnyben részesítése)</string>
+    <string name="always_ask">Rákérdezés mindig</string>
+    <string name="specific_browser_name">Böngésző: %1$s</string>
+    <string name="specific_browser">Adott böngésző kényszerítése</string>
+    <string name="initial_open_app">Alkalmazás a hivatkozásra kattintáskor</string>
+    <string name="auto_customtabs">Automatikus (egyéni lapok előnyben részesítése)</string>
+    <string name="default_browser">Alapértelmezett böngésző kényszerítése</string>
+    <string name="open_link_something_wrong">A hivatkozás megnyitása beállítása figyelmen kívül hagyva, mert valamilyen hiba történt.</string>
+    <string name="open_link_specific_browser_not_selected">Nincs</string>
 </resources>

@@ -4,11 +4,11 @@
     <string name="confirm">確認</string>
     <string name="searching">検索中…</string>
     <string name="unread">未読</string>
-    <string name="expand_less">縮小する</string>
+    <string name="expand_less">表示を減らす</string>
     <string name="allow">許可</string>
     <string name="deny">拒否</string>
     <string name="all_allow_notification_toast">「%1$s」グループからのすべての通知が許可されます</string>
-    <string name="parse_full_content">フルコンテンツを取得する</string>
+    <string name="parse_full_content">フルコンテンツを取得</string>
     <string name="clear_articles">記事をクリア</string>
     <string name="clear_articles_feed_tips">「%1$s」フィードにアーカイブされている記事をすべて消去します。</string>
     <string name="add_to_group">グループへ追加</string>
@@ -25,7 +25,7 @@
     <string name="mark_as_starred">星を付ける</string>
     <string name="mark_as_read_one_day">1 日以上前の記事を既読としてマーク</string>
     <string name="mark_as_read_three_days">３日以上前の記事を既読としてマーク</string>
-    <string name="seven_days">７日</string>
+    <string name="seven_days">7日</string>
     <string name="close">閉じる</string>
     <string name="get_new_updates">新しいアップデートを取得する</string>
     <string name="get_new_updates_desc">バージョン %1$s が利用可能です</string>
@@ -41,17 +41,17 @@
     <string name="wallpaper_colors">壁紙の色</string>
     <string name="no_palettes">パレットなし</string>
     <string name="only_android_8.1_plus">Android 8.1 以降のみ</string>
-    <string name="basic_colors">基本色</string>
+    <string name="basic_colors">基本の色</string>
     <string name="primary_color">第一色</string>
     <string name="style">スタイル</string>
     <string name="dark_theme">ダークテーマ</string>
     <string name="on">オン</string>
     <string name="off">オフ</string>
     <string name="other">その他</string>
-    <string name="amoled_dark_theme">真っ黒ダークテーマ</string>
+    <string name="amoled_dark_theme">AMOLED ダークテーマ</string>
     <string name="tonal_elevation">色調の高さ</string>
     <string name="basic_fonts">基本フォント</string>
-    <string name="open_source_licenses">オープンソース ライセンス</string>
+    <string name="open_source_licenses">オープンソースライセンス</string>
     <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
     <string name="change_log">変更履歴</string>
     <string name="update">アップデート</string>
@@ -72,7 +72,7 @@
     <plurals name="starred_desc">
         <item quantity="other">%1$d 個の星付きアイテム</item>
     </plurals>
-    <string name="expand_more">拡大する</string>
+    <string name="expand_more">表示を増やす</string>
     <string name="cancel">キャンセル</string>
     <string name="unknown">不明</string>
     <string name="back">戻る</string>
@@ -81,7 +81,7 @@
     <string name="feeds">フィード</string>
     <string name="go_to">移動</string>
     <string name="paste">貼り付け</string>
-    <string name="feed_or_site_url">フィードまたはサイトのURL</string>
+    <string name="feed_or_site_url">フィードまたはサイトの URL</string>
     <string name="syncing">同期中…</string>
     <string name="refresh">更新</string>
     <string name="defaults">デフォルト</string>
@@ -104,7 +104,7 @@
     <string name="clear_articles_in_feed_toast">「%1$s」フィード内のアーカイブされた記事をすべて削除しました</string>
     <string name="clear_articles_group_tips">「%1$s」グループ内のアーカイブされた記事をすべて消去します。</string>
     <string name="rename">名前を変更</string>
-    <string name="change_url">URLを変更</string>
+    <string name="change_url">URL を変更</string>
     <string name="clear_articles_in_group_toast">「%1$s」 グループ内のアーカイブされた記事をすべて削除しました</string>
     <string name="open_with">%1$s を開く</string>
     <string name="options">オプション</string>
@@ -117,9 +117,9 @@
     <string name="mark_as_read_seven_days">７ 日以上前の記事を既読としてマーク</string>
     <string name="yesterday">昨日</string>
     <string name="mark_as_unstar">星を外す</string>
-    <string name="three_days">３日</string>
+    <string name="three_days">3日</string>
     <string name="in_coding">開発中</string>
-    <string name="one_day">１日</string>
+    <string name="one_day">1日</string>
     <string name="coming_soon">近日公開</string>
     <string name="accounts_desc">ローカル、FreshRSS</string>
     <string name="color_and_style_desc">テーマ、カラースタイル、フォントサイズ</string>
@@ -147,7 +147,7 @@
     <string name="on_start">アプリ起動時</string>
     <string name="initial_filter">初期フィルター</string>
     <string name="preview_article_title">小説「ロード・オブ・ザ・ミステリーズ」、ついに完結へ</string>
-    <string name="preview_article_desc">The Foolは、Cuttlefish That Loves Divingが執筆したLord of the Mysteriesシリーズの第8巻であり、最終巻です。</string>
+    <string name="preview_article_desc">The Fool は、Cuttlefish That Loves Diving が執筆した Lord of the Mysteries シリーズの第8巻であり、最終巻です。</string>
     <string name="horizontal_padding">水平パディング</string>
     <string name="article_desc">記事の説明</string>
     <string name="article_images">記事の画像</string>
@@ -249,4 +249,5 @@
     <string name="empty">なし</string>
     <string name="username">ユーザー名</string>
     <string name="connection">接続</string>
+    <string name="custom_tabs">カスタムタブの使用を強制する</string>
 </resources>
