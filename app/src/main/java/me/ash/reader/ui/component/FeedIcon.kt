@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import me.ash.reader.ui.component.base.Base64Image
 import me.ash.reader.ui.component.base.RYAsyncImage
 
 @Composable
@@ -26,7 +27,7 @@ fun FeedIcon(
     if (iconUrl == null) {
         Box(
             modifier = Modifier
-                .size(20.dp)
+                .size(size)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.primary),
             contentAlignment = Alignment.Center,
@@ -38,6 +39,14 @@ fun FeedIcon(
                 fontSize = 10.sp,
             )
         }
+    }
+    // e.g. image/gif;base64,R0lGODlh...
+    else if ("^image/.*;base64,.*".toRegex().matches(iconUrl)) {
+        Base64Image(
+            modifier = Modifier
+                .size(size)
+                .clip(CircleShape),
+            base64Uri = iconUrl)
     } else {
         RYAsyncImage(
             modifier = Modifier
