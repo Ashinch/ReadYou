@@ -16,6 +16,8 @@ import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.infrastructure.preference.FlowFilterBarStylePreference
 import me.ash.reader.infrastructure.preference.LocalThemeIndex
 import me.ash.reader.ui.ext.surfaceColorAtElevation
+import me.ash.reader.ui.page.home.feeds.WindowInfo
+import me.ash.reader.ui.page.home.feeds.rememberWindowInfo
 import me.ash.reader.ui.theme.palette.onDark
 
 @Composable
@@ -30,59 +32,125 @@ fun FilterBar(
     val view = LocalView.current
     val themeIndex = LocalThemeIndex.current
 
-    NavigationBar(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(filterBarTonalElevation))
-            .navigationBarsPadding(),
-        tonalElevation = filterBarTonalElevation,
-    ) {
-        Spacer(modifier = Modifier.width(filterBarPadding))
-        Filter.values.forEach { item ->
-            NavigationBarItem(
-//                        modifier = Modifier.height(60.dp),
-                alwaysShowLabel = when (filterBarStyle) {
-                    FlowFilterBarStylePreference.Icon.value -> false
-                    FlowFilterBarStylePreference.IconLabel.value -> true
-                    FlowFilterBarStylePreference.IconLabelOnlySelected.value -> false
-                    else -> false
-                },
-                icon = {
-                    Icon(
-                        imageVector = if (filter == item && filterBarFilled) {
-                            item.iconFilled
-                        } else {
-                            item.iconOutline
-                        },
-                        contentDescription = item.toName()
+    val windowInfo = rememberWindowInfo()
+
+
+    if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compat) {
+        NavigationBar(
+            modifier = Modifier
+                .background(
+                    MaterialTheme.colorScheme.surfaceColorAtElevation(
+                        filterBarTonalElevation
                     )
-                },
-                label = if (filterBarStyle == FlowFilterBarStylePreference.Icon.value) {
-                    null
-                } else {
-                    {
-                        Text(
-                            text = item.toName(),
-//                            style = MaterialTheme.typography.labelLarge,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
+                )
+                .navigationBarsPadding(),
+            tonalElevation = filterBarTonalElevation,
+        ) {
+            Spacer(modifier = Modifier.width(filterBarPadding))
+            Filter.values.forEach { item ->
+                NavigationBarItem(
+//                        modifier = Modifier.height(60.dp),
+                    alwaysShowLabel = when (filterBarStyle) {
+                        FlowFilterBarStylePreference.Icon.value -> false
+                        FlowFilterBarStylePreference.IconLabel.value -> true
+                        FlowFilterBarStylePreference.IconLabelOnlySelected.value -> false
+                        else -> false
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = if (filter == item && filterBarFilled) {
+                                item.iconFilled
+                            } else {
+                                item.iconOutline
+                            },
+                            contentDescription = item.toName()
                         )
-                    }
-                },
-                selected = filter == item,
-                onClick = {
-//                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                    view.playSoundEffect(SoundEffectConstants.CLICK)
-                    filterOnClick(item)
-                },
-                colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = if (themeIndex == 5 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        MaterialTheme.colorScheme.secondaryContainer
+                    },
+                    label = if (filterBarStyle == FlowFilterBarStylePreference.Icon.value) {
+                        null
                     } else {
-                        MaterialTheme.colorScheme.primaryContainer
-                    } onDark MaterialTheme.colorScheme.secondaryContainer,
-                ),
-            )
+                        {
+                            Text(
+                                text = item.toName(),
+//                            style = MaterialTheme.typography.labelLarge,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                    },
+                    selected = filter == item,
+                    onClick = {
+//                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                        filterOnClick(item)
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        indicatorColor = if (themeIndex == 5 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            MaterialTheme.colorScheme.secondaryContainer
+                        } else {
+                            MaterialTheme.colorScheme.primaryContainer
+                        } onDark MaterialTheme.colorScheme.secondaryContainer,
+                    ),
+                )
+            }
+            Spacer(modifier = Modifier.width(filterBarPadding))
         }
-        Spacer(modifier = Modifier.width(filterBarPadding))
+    } else {
+        NavigationRail(
+            modifier = Modifier
+                .background(
+                    MaterialTheme.colorScheme.surfaceColorAtElevation(
+                        filterBarTonalElevation
+                    )
+                )
+
+        ) {
+            Filter.values.forEach { item ->
+                NavigationRailItem(
+//                        modifier = Modifier.height(60.dp),
+                    alwaysShowLabel = when (filterBarStyle) {
+                        FlowFilterBarStylePreference.Icon.value -> false
+                        FlowFilterBarStylePreference.IconLabel.value -> true
+                        FlowFilterBarStylePreference.IconLabelOnlySelected.value -> false
+                        else -> false
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = if (filter == item && filterBarFilled) {
+                                item.iconFilled
+                            } else {
+                                item.iconOutline
+                            },
+                            contentDescription = item.toName()
+                        )
+                    },
+                    label = if (filterBarStyle == FlowFilterBarStylePreference.Icon.value) {
+                        null
+                    } else {
+                        {
+                            Text(
+                                text = item.toName(),
+//                            style = MaterialTheme.typography.labelLarge,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                    },
+                    selected = filter == item,
+                    onClick = {
+//                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                        filterOnClick(item)
+                    },
+                    colors = NavigationRailItemDefaults.colors(
+                        indicatorColor = if (themeIndex == 5 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            MaterialTheme.colorScheme.secondaryContainer
+                        } else {
+                            MaterialTheme.colorScheme.primaryContainer
+                        } onDark MaterialTheme.colorScheme.secondaryContainer,
+                    ),
+                )
+            }
+        }
     }
 }

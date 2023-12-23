@@ -30,6 +30,8 @@ import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
+import me.ash.reader.ui.page.home.feeds.WindowInfo
+import me.ash.reader.ui.page.home.feeds.rememberWindowInfo
 
 @OptIn(
     com.google.accompanist.pager.ExperimentalPagerApi::class,
@@ -68,6 +70,9 @@ fun FlowPage(
     homeViewModel.syncWorkLiveData.observe(owner) {
         it?.let { isSyncing = it.any { it.state == WorkInfo.State.RUNNING } }
     }
+
+    val windowInfo = rememberWindowInfo()
+
 
     LaunchedEffect(onSearch) {
         snapshotFlow { onSearch }.collect {
@@ -166,7 +171,12 @@ fun FlowPage(
                 }
             ) {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            start = if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compat) 0.dp else 66.dp ,
+                            end =   if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compat) 0.dp else 38.dp)
+                    ,
                     state = listState,
                 ) {
                     item {
@@ -247,7 +257,7 @@ fun FlowPage(
                             feedId = filterUiState.feed?.id,
                             articleId = it.article.id,
                             MarkAsReadConditions.All
-                            )
+                        )
                     }
                     item {
                         Spacer(modifier = Modifier.height(128.dp))

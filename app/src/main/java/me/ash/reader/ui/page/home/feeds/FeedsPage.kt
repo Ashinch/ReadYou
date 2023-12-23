@@ -107,6 +107,8 @@ fun FeedsPage(
         }
     }
 
+    val windowInfo = rememberWindowInfo()
+
     LaunchedEffect(Unit) {
         feedsViewModel.fetchAccount()
     }
@@ -157,7 +159,12 @@ fun FeedsPage(
             }
         },
         content = {
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(
+                        start = if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compat) 0.dp else 66.dp ,
+                        end =   if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compat) 0.dp else 36.dp)
+            ) {
                 item {
                     DisplayText(
                         modifier = Modifier
@@ -226,10 +233,11 @@ fun FeedsPage(
                                 indicatorAlpha = groupIndicatorAlpha,
                                 isEnded = { index == groupWithFeedList.lastIndex },
                                 onExpanded = {
-                                    groupsVisible[groupWithFeed.group.id] = groupsVisible.getOrPut(
-                                        groupWithFeed.group.id,
-                                        groupListExpand::value
-                                    ).not()
+                                    groupsVisible[groupWithFeed.group.id] =
+                                        groupsVisible.getOrPut(
+                                            groupWithFeed.group.id,
+                                            groupListExpand::value
+                                        ).not()
                                 }
                             ) {
                                 filterChange(
@@ -274,6 +282,7 @@ fun FeedsPage(
                 }
             }
         },
+
         bottomBar = {
             FilterBar(
                 filter = filterUiState.filter,
@@ -289,8 +298,8 @@ fun FeedsPage(
                     isNavigate = false,
                 )
             }
-        }
-    )
+
+        })
 
     SubscribeDialog()
     GroupOptionDrawer()
