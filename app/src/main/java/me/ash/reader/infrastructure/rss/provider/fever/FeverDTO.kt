@@ -105,7 +105,6 @@ object FeverDTO {
     )
 
     data class Favicon(
-//        val mime_type: String?,
         val id: Int,
         val data: String?,
     )
