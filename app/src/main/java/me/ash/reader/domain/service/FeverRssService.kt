@@ -128,7 +128,7 @@ class FeverRssService @Inject constructor(
             }
 
             // Fetch the Fever favicons
-            val faviconsByFeedId = feverAPI.getFavicons().favicons?.associateBy { it.id } ?: emptyMap()
+            val faviconsById = feverAPI.getFavicons().favicons?.associateBy { it.id } ?: emptyMap()
             feedDao.insertOrUpdate(
                 feedsBody.feeds?.map {
                     Feed(
@@ -137,7 +137,7 @@ class FeverRssService @Inject constructor(
                         url = it.url!!,
                         groupId = accountId.spacerDollar(feedsGroupsMap[it.id.toString()]!!),
                         accountId = accountId,
-                        icon = faviconsByFeedId[it.id]?.data
+                        icon = faviconsById[it.favicon_id]?.data
                     )
                 } ?: emptyList()
             )
@@ -186,8 +186,8 @@ class FeverRssService @Inject constructor(
                 val articleId = meta.id.dollarLast()
                 val shouldBeUnread = unreadArticleIds?.contains(articleId)
                 val shouldBeStarred = starredArticleIds?.contains(articleId)
-                if (shouldBeUnread != null && meta.isUnread != shouldBeUnread) {
-                    articleDao.markAsReadByArticleId(accountId, meta.id, shouldBeUnread)
+                if (meta.isUnread != shouldBeUnread) {
+                    articleDao.markAsReadByArticleId(accountId, meta.id, shouldBeUnread ?: true)
                 }
                 if (meta.isStarred != shouldBeStarred) {
                     articleDao.markAsStarredByArticleId(accountId, meta.id, shouldBeStarred ?: false)
