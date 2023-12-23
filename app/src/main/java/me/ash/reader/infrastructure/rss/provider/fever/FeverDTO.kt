@@ -101,12 +101,12 @@ object FeverDTO {
         val api_version: Int?,
         val auth: Int?,
         val last_refreshed_on_time: Long?,
-        val favicons: Map<String, Favicon>,
+        val favicons: List<Favicon>?,
     )
 
     data class Favicon(
-        val mime_type: String,
-        val data: String,
+        val id: Int,
+        val data: String?,
     )
 
     /**
