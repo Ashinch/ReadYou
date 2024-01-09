@@ -9,7 +9,7 @@ jobs:
             - uses: actions/setup-java@v3.10.0
               with:
                   distribution: temurin
-                  java-version: 11
+                  java-version: 17
 
             - uses: gradle/gradle-build-action@v2.4.2
             - run: gradle assembleRelease
