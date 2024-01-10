@@ -1,4 +1,4 @@
-package me.ash.reader.infrastructure.android
+package me.ash.reader
 
 import android.content.Context
 import android.os.Looper

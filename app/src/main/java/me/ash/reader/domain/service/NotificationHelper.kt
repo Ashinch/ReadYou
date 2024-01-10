@@ -1,4 +1,4 @@
-package me.ash.reader.infrastructure.android
+package me.ash.reader.domain.service
 
 import android.app.*
 import android.content.Context
@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
+import me.ash.reader.MainActivity
 import me.ash.reader.R
 import me.ash.reader.domain.model.feed.FeedWithArticle
 import me.ash.reader.ui.page.common.ExtraName

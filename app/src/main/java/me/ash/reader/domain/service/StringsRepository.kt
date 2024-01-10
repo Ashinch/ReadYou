@@ -1,4 +1,4 @@
-package me.ash.reader.infrastructure.android
+package me.ash.reader.domain.service
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -6,7 +6,7 @@ import me.ash.reader.ui.ext.formatAsString
 import java.util.*
 import javax.inject.Inject
 
-class AndroidStringsHelper @Inject constructor(
+class StringsRepository @Inject constructor(
     @ApplicationContext
     private val context: Context,
 ) {

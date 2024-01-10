@@ -1,4 +1,4 @@
-package me.ash.reader.infrastructure.android
+package me.ash.reader
 
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
@@ -11,12 +11,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.ash.reader.domain.service.*
-import me.ash.reader.infrastructure.db.AndroidDatabase
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
-import me.ash.reader.infrastructure.net.NetworkDataSource
-import me.ash.reader.infrastructure.rss.OPMLDataSource
-import me.ash.reader.infrastructure.rss.RssHelper
+import me.ash.reader.infrastructure.source.OPMLDataSource
+import me.ash.reader.infrastructure.source.RYDatabase
+import me.ash.reader.infrastructure.source.RYNetworkDataSource
 import me.ash.reader.ui.ext.del
 import me.ash.reader.ui.ext.getLatestApk
 import me.ash.reader.ui.ext.isFdroid
@@ -27,7 +26,7 @@ import javax.inject.Inject
  * The Application class, where the Dagger components is generated.
  */
 @HiltAndroidApp
-class AndroidApp : Application(), Configuration.Provider {
+class RYApp : Application(), Configuration.Provider {
 
     /**
      * From: [Feeder](https://gitlab.com/spacecowboy/Feeder).
@@ -40,7 +39,7 @@ class AndroidApp : Application(), Configuration.Provider {
     }
 
     @Inject
-    lateinit var androidDatabase: AndroidDatabase
+    lateinit var ryDatabase: RYDatabase
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
@@ -49,7 +48,7 @@ class AndroidApp : Application(), Configuration.Provider {
     lateinit var workManager: WorkManager
 
     @Inject
-    lateinit var networkDataSource: NetworkDataSource
+    lateinit var ryNetworkDataSource: RYNetworkDataSource
 
     @Inject
     lateinit var OPMLDataSource: OPMLDataSource
@@ -61,22 +60,22 @@ class AndroidApp : Application(), Configuration.Provider {
     lateinit var notificationHelper: NotificationHelper
 
     @Inject
-    lateinit var appService: AppService
+    lateinit var ryRepository: RYRepository
 
     @Inject
-    lateinit var androidStringsHelper: AndroidStringsHelper
+    lateinit var stringsRepository: StringsRepository
 
     @Inject
-    lateinit var accountService: AccountService
+    lateinit var accountRepository: AccountRepository
 
     @Inject
-    lateinit var localRssService: LocalRssService
+    lateinit var localRssRepository: LocalRssRepository
 
     @Inject
-    lateinit var opmlService: OpmlService
+    lateinit var opmlRepository: OpmlRepository
 
     @Inject
-    lateinit var rssService: RssService
+    lateinit var rssRepository: RssRepository
 
     @Inject
     @ApplicationScope
@@ -121,14 +120,14 @@ class AndroidApp : Application(), Configuration.Provider {
 
     private suspend fun accountInit() {
         withContext(ioDispatcher) {
-            if (accountService.isNoAccount()) {
-                accountService.addDefaultAccount()
+            if (accountRepository.isNoAccount()) {
+                accountRepository.addDefaultAccount()
             }
         }
     }
 
     private suspend fun workerInit() {
-        rssService.get().doSync(isOnStart = true)
+        rssRepository.get().doSync(isOnStart = true)
     }
 
     private suspend fun checkUpdate() {
@@ -138,6 +137,6 @@ class AndroidApp : Application(), Configuration.Provider {
                 if (it.exists()) it.del()
             }
         }
-        appService.checkUpdate(showToast = false)
+        ryRepository.checkUpdate(showToast = false)
     }
 }

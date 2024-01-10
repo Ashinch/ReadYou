@@ -3,7 +3,7 @@ package me.ash.reader.domain.model.article
 import androidx.paging.PagingData
 import androidx.paging.insertSeparators
 import androidx.paging.map
-import me.ash.reader.infrastructure.android.AndroidStringsHelper
+import me.ash.reader.domain.service.StringsRepository
 
 /**
  * Provide paginated and inserted separator data types for article list view.
@@ -30,19 +30,19 @@ sealed class ArticleFlowItem {
 /**
  * Mapping [ArticleWithFeed] list to [ArticleFlowItem] list.
  */
-fun PagingData<ArticleWithFeed>.mapPagingFlowItem(androidStringsHelper: AndroidStringsHelper): PagingData<ArticleFlowItem> =
+fun PagingData<ArticleWithFeed>.mapPagingFlowItem(stringsRepository: StringsRepository): PagingData<ArticleFlowItem> =
     map {
         ArticleFlowItem.Article(it.apply {
-            article.dateString = androidStringsHelper.formatAsString(
+            article.dateString = stringsRepository.formatAsString(
                 date = article.date,
                 onlyHourMinute = true
             )
         })
     }.insertSeparators { before, after ->
         val beforeDate =
-            androidStringsHelper.formatAsString(before?.articleWithFeed?.article?.date)
+            stringsRepository.formatAsString(before?.articleWithFeed?.article?.date)
         val afterDate =
-            androidStringsHelper.formatAsString(after?.articleWithFeed?.article?.date)
+            stringsRepository.formatAsString(after?.articleWithFeed?.article?.date)
         if (beforeDate != afterDate) {
             afterDate?.let { ArticleFlowItem.Date(it, beforeDate != null) }
         } else {

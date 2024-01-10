@@ -14,13 +14,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.ArticleWithFeed
-import me.ash.reader.infrastructure.rss.RssHelper
-import me.ash.reader.domain.service.RssService
+import me.ash.reader.domain.service.RssHelper
+import me.ash.reader.domain.service.RssRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class ReadingViewModel @Inject constructor(
-    private val rssService: RssService,
+    private val rssRepository: RssRepository,
     private val rssHelper: RssHelper,
 ) : ViewModel() {
 
@@ -31,7 +31,7 @@ class ReadingViewModel @Inject constructor(
         showLoading()
         viewModelScope.launch {
             _readingUiState.update {
-                it.copy(articleWithFeed = rssService.get().findArticleById(articleId))
+                it.copy(articleWithFeed = rssRepository.get().findArticleById(articleId))
             }
             _readingUiState.value.articleWithFeed?.let {
                 if (it.feed.isFullContent) internalRenderFullContent()
@@ -94,7 +94,7 @@ class ReadingViewModel @Inject constructor(
                     )
                 )
             }
-            rssService.get().markAsRead(
+            rssRepository.get().markAsRead(
                 groupId = null,
                 feedId = null,
                 articleId = _readingUiState.value.articleWithFeed!!.article.id,
@@ -116,7 +116,7 @@ class ReadingViewModel @Inject constructor(
                     )
                 )
             }
-            rssService.get().markAsStarred(
+            rssRepository.get().markAsStarred(
                 articleId = articleWithFeed.article.id,
                 isStarred = isStarred,
             )

@@ -1,4 +1,4 @@
-package me.ash.reader.infrastructure.rss.provider.greader
+package me.ash.reader.infrastructure.source
 
 object GoogleReaderApiDto {
     // subscription/list?output=json

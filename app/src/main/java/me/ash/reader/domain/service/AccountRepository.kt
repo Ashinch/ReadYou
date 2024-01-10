@@ -15,14 +15,14 @@ import me.ash.reader.domain.repository.GroupDao
 import me.ash.reader.ui.ext.*
 import javax.inject.Inject
 
-class AccountService @Inject constructor(
+class AccountRepository @Inject constructor(
     @ApplicationContext
     private val context: Context,
     private val accountDao: AccountDao,
     private val groupDao: GroupDao,
     private val feedDao: FeedDao,
     private val articleDao: ArticleDao,
-    private val rssService: RssService,
+    private val rssRepository: RssRepository,
 ) {
 
     fun getAccounts(): Flow<List<Account>> = accountDao.queryAllAsFlow()
@@ -85,7 +85,7 @@ class AccountService @Inject constructor(
     }
 
     suspend fun switch(account: Account) {
-        rssService.get().cancelSync()
+        rssRepository.get().cancelSync()
         context.dataStore.put(DataStoreKeys.CurrentAccountId, account.id!!)
         context.dataStore.put(DataStoreKeys.CurrentAccountType, account.type.id)
 

@@ -1,4 +1,4 @@
-package me.ash.reader.infrastructure.rss
+package me.ash.reader.infrastructure.source
 
 import android.content.Context
 import be.ceau.opml.OpmlParser

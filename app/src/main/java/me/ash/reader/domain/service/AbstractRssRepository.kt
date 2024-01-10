@@ -25,8 +25,6 @@ import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.domain.repository.GroupDao
 import me.ash.reader.infrastructure.preference.KeepArchivedPreference
 import me.ash.reader.infrastructure.preference.SyncIntervalPreference
-import me.ash.reader.infrastructure.rss.RssHelper
-import me.ash.reader.infrastructure.android.NotificationHelper
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.spacerDollar
 import java.util.*

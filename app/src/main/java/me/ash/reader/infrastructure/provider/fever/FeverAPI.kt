@@ -1,6 +1,6 @@
-package me.ash.reader.infrastructure.rss.provider.fever
+package me.ash.reader.infrastructure.provider.fever
 
-import me.ash.reader.infrastructure.rss.provider.ProviderAPI
+import me.ash.reader.infrastructure.provider.BaseAPI
 import me.ash.reader.ui.ext.encodeBase64
 import me.ash.reader.ui.ext.md5
 import okhttp3.FormBody
@@ -13,7 +13,7 @@ class FeverAPI private constructor(
     private val apiKey: String,
     private val httpUsername: String? = null,
     private val httpPassword: String? = null,
-) : ProviderAPI() {
+) : BaseAPI() {
 
     private suspend inline fun <reified T> postRequest(query: String?): T {
         val response = client.newCall(

@@ -16,7 +16,7 @@
     </queries>
 
     <application
-        android:name=".infrastructure.android.AndroidApp"
+        android:name=".RYApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/read_you"
@@ -25,7 +25,7 @@
         android:theme="@style/Theme.Reader"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".infrastructure.android.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Reader">
             <intent-filter>

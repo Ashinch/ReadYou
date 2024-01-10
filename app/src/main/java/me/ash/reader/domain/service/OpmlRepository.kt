@@ -11,7 +11,7 @@ import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.repository.AccountDao
 import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.domain.repository.GroupDao
-import me.ash.reader.infrastructure.rss.OPMLDataSource
+import me.ash.reader.infrastructure.source.OPMLDataSource
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.getDefaultGroupId
 import java.io.InputStream
@@ -21,13 +21,13 @@ import javax.inject.Inject
 /**
  * Supports import and export from OPML files.
  */
-class OpmlService @Inject constructor(
+class OpmlRepository @Inject constructor(
     @ApplicationContext
     private val context: Context,
     private val groupDao: GroupDao,
     private val feedDao: FeedDao,
     private val accountDao: AccountDao,
-    private val rssService: RssService,
+    private val rssRepository: RssRepository,
     private val OPMLDataSource: OPMLDataSource,
 ) {
 
@@ -48,7 +48,7 @@ class OpmlService @Inject constructor(
             val repeatList = mutableListOf<Feed>()
             groupWithFeed.feeds.forEach {
                 it.groupId = groupWithFeed.group.id
-                if (rssService.get().isFeedExist(it.url)) {
+                if (rssRepository.get().isFeedExist(it.url)) {
                     repeatList.add(it)
                 }
             }

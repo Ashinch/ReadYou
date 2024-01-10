@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.group.Group
-import me.ash.reader.domain.service.RssService
+import me.ash.reader.domain.service.RssRepository
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
 import javax.inject.Inject
@@ -24,7 +24,7 @@ import javax.inject.Inject
 @OptIn(ExperimentalMaterialApi::class)
 @HiltViewModel
 class FeedOptionViewModel @Inject constructor(
-    val rssService: RssService,
+    val rssRepository: RssRepository,
     @MainDispatcher
     private val mainDispatcher: CoroutineDispatcher,
     @IODispatcher
@@ -36,14 +36,14 @@ class FeedOptionViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(ioDispatcher) {
-            rssService.get().pullGroups().collect { groups ->
+            rssRepository.get().pullGroups().collect { groups ->
                 _feedOptionUiState.update { it.copy(groups = groups) }
             }
         }
     }
 
     private suspend fun fetchFeed(feedId: String) {
-        val feed = rssService.get().findFeedById(feedId)
+        val feed = rssRepository.get().findFeedById(feedId)
         _feedOptionUiState.update {
             it.copy(
                 feed = feed,
@@ -88,7 +88,7 @@ class FeedOptionViewModel @Inject constructor(
     fun addNewGroup() {
         if (_feedOptionUiState.value.newGroupContent.isNotBlank()) {
             viewModelScope.launch {
-                selectedGroup(rssService.get().addGroup(_feedOptionUiState.value.newGroupContent))
+                selectedGroup(rssRepository.get().addGroup(_feedOptionUiState.value.newGroupContent))
                 hideNewGroupDialog()
             }
         }
@@ -97,7 +97,7 @@ class FeedOptionViewModel @Inject constructor(
     fun selectedGroup(groupId: String) {
         viewModelScope.launch(ioDispatcher) {
             _feedOptionUiState.value.feed?.let {
-                rssService.get().updateFeed(it.copy(groupId = groupId))
+                rssRepository.get().updateFeed(it.copy(groupId = groupId))
                 fetchFeed(it.id)
             }
         }
@@ -106,7 +106,7 @@ class FeedOptionViewModel @Inject constructor(
     fun changeParseFullContentPreset() {
         viewModelScope.launch(ioDispatcher) {
             _feedOptionUiState.value.feed?.let {
-                rssService.get().updateFeed(it.copy(isFullContent = !it.isFullContent))
+                rssRepository.get().updateFeed(it.copy(isFullContent = !it.isFullContent))
                 fetchFeed(it.id)
             }
         }
@@ -115,7 +115,7 @@ class FeedOptionViewModel @Inject constructor(
     fun changeAllowNotificationPreset() {
         viewModelScope.launch(ioDispatcher) {
             _feedOptionUiState.value.feed?.let {
-                rssService.get().updateFeed(it.copy(isNotification = !it.isNotification))
+                rssRepository.get().updateFeed(it.copy(isNotification = !it.isNotification))
                 fetchFeed(it.id)
             }
         }
@@ -124,7 +124,7 @@ class FeedOptionViewModel @Inject constructor(
     fun delete(callback: () -> Unit = {}) {
         _feedOptionUiState.value.feed?.let {
             viewModelScope.launch(ioDispatcher) {
-                rssService.get().deleteFeed(it)
+                rssRepository.get().deleteFeed(it)
                 withContext(mainDispatcher) {
                     callback()
                 }
@@ -151,7 +151,7 @@ class FeedOptionViewModel @Inject constructor(
     fun clearFeed(callback: () -> Unit = {}) {
         _feedOptionUiState.value.feed?.let {
             viewModelScope.launch(ioDispatcher) {
-                rssService.get().deleteArticles(feed = it)
+                rssRepository.get().deleteArticles(feed = it)
                 withContext(mainDispatcher) {
                     callback()
                 }
@@ -162,7 +162,7 @@ class FeedOptionViewModel @Inject constructor(
     fun renameFeed() {
         _feedOptionUiState.value.feed?.let {
             viewModelScope.launch {
-                rssService.get().updateFeed(it.copy(name = _feedOptionUiState.value.newName))
+                rssRepository.get().updateFeed(it.copy(name = _feedOptionUiState.value.newName))
                 _feedOptionUiState.update { it.copy(renameDialogVisible = false) }
             }
         }
@@ -215,7 +215,7 @@ class FeedOptionViewModel @Inject constructor(
     fun changeFeedUrl() {
         _feedOptionUiState.value.feed?.let {
             viewModelScope.launch {
-                rssService.get().updateFeed(it.copy(url = _feedOptionUiState.value.newUrl))
+                rssRepository.get().updateFeed(it.copy(url = _feedOptionUiState.value.newUrl))
                 _feedOptionUiState.update { it.copy(changeUrlDialogVisible = false) }
             }
         }

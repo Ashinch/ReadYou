@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.ash.reader.domain.model.account.Account
-import me.ash.reader.domain.service.AccountService
-import me.ash.reader.domain.service.OpmlService
-import me.ash.reader.domain.service.RssService
+import me.ash.reader.domain.service.AccountRepository
+import me.ash.reader.domain.service.OpmlRepository
+import me.ash.reader.domain.service.RssRepository
 import me.ash.reader.infrastructure.di.DefaultDispatcher
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
@@ -19,9 +19,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
-    private val accountService: AccountService,
-    private val rssService: RssService,
-    private val opmlService: OpmlService,
+    private val accountRepository: AccountRepository,
+    private val rssRepository: RssRepository,
+    private val opmlRepository: OpmlRepository,
     @IODispatcher
     private val ioDispatcher: CoroutineDispatcher,
     @DefaultDispatcher
@@ -32,24 +32,24 @@ class AccountViewModel @Inject constructor(
 
     private val _accountUiState = MutableStateFlow(AccountUiState())
     val accountUiState: StateFlow<AccountUiState> = _accountUiState.asStateFlow()
-    val accounts = accountService.getAccounts()
+    val accounts = accountRepository.getAccounts()
 
     fun initData(accountId: Int) {
         viewModelScope.launch(ioDispatcher) {
-            _accountUiState.update { it.copy(selectedAccount = accountService.getAccountById(accountId)) }
+            _accountUiState.update { it.copy(selectedAccount = accountRepository.getAccountById(accountId)) }
         }
     }
 
     fun update(accountId: Int, block: Account.() -> Unit) {
         viewModelScope.launch(ioDispatcher) {
-            accountService.update(accountId, block)
+            accountRepository.update(accountId, block)
         }
     }
 
     fun exportAsOPML(accountId: Int, callback: (String) -> Unit = {}) {
         viewModelScope.launch(defaultDispatcher) {
             try {
-                callback(opmlService.saveToString(accountId))
+                callback(opmlRepository.saveToString(accountId))
             } catch (e: Exception) {
                 Log.e("FeedsViewModel", "exportAsOpml: ", e)
             }
@@ -74,7 +74,7 @@ class AccountViewModel @Inject constructor(
 
     fun delete(accountId: Int, callback: () -> Unit = {}) {
         viewModelScope.launch(ioDispatcher) {
-            accountService.delete(accountId)
+            accountRepository.delete(accountId)
             withContext(mainDispatcher) {
                 callback()
             }
@@ -83,7 +83,7 @@ class AccountViewModel @Inject constructor(
 
     fun clear(account: Account, callback: () -> Unit = {}) {
         viewModelScope.launch(ioDispatcher) {
-            rssService.get(account.type.id).deleteAccountArticles(account.id!!)
+            rssRepository.get(account.type.id).deleteAccountArticles(account.id!!)
             withContext(mainDispatcher) {
                 callback()
             }
@@ -92,9 +92,9 @@ class AccountViewModel @Inject constructor(
 
     fun addAccount(account: Account, callback: (Account?) -> Unit = {}) {
         viewModelScope.launch(ioDispatcher) {
-            val addAccount = accountService.addAccount(account)
+            val addAccount = accountRepository.addAccount(account)
             try {
-                if (rssService.get(addAccount.type.id).validCredentials()) {
+                if (rssRepository.get(addAccount.type.id).validCredentials()) {
                     withContext(mainDispatcher) {
                         callback(addAccount)
                     }
@@ -102,7 +102,7 @@ class AccountViewModel @Inject constructor(
                     throw Exception("Unauthorized")
                 }
             } catch (e: Exception) {
-                accountService.delete(account.id!!)
+                accountRepository.delete(account.id!!)
                 withContext(mainDispatcher) {
                     callback(null)
                 }
@@ -112,7 +112,7 @@ class AccountViewModel @Inject constructor(
 
     fun switchAccount(targetAccount: Account, callback: () -> Unit = {}) {
         viewModelScope.launch(ioDispatcher) {
-            accountService.switch(targetAccount)
+            accountRepository.switch(targetAccount)
             withContext(mainDispatcher) {
                 callback()
             }

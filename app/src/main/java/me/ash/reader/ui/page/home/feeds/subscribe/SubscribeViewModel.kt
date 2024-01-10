@@ -11,20 +11,20 @@ import me.ash.reader.R
 import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.group.Group
-import me.ash.reader.infrastructure.android.AndroidStringsHelper
-import me.ash.reader.domain.service.OpmlService
-import me.ash.reader.domain.service.RssService
-import me.ash.reader.infrastructure.rss.RssHelper
+import me.ash.reader.domain.service.OpmlRepository
+import me.ash.reader.domain.service.RssHelper
+import me.ash.reader.domain.service.RssRepository
+import me.ash.reader.domain.service.StringsRepository
 import me.ash.reader.ui.ext.formatUrl
 import java.io.InputStream
 import javax.inject.Inject
 
 @HiltViewModel
 class SubscribeViewModel @Inject constructor(
-    private val opmlService: OpmlService,
-    val rssService: RssService,
+    private val opmlRepository: OpmlRepository,
+    val rssRepository: RssRepository,
     private val rssHelper: RssHelper,
-    private val androidStringsHelper: AndroidStringsHelper,
+    private val stringsRepository: StringsRepository,
 ) : ViewModel() {
 
     private val _subscribeUiState = MutableStateFlow(SubscribeUiState())
@@ -34,8 +34,8 @@ class SubscribeViewModel @Inject constructor(
     fun init() {
         _subscribeUiState.update {
             it.copy(
-                title = androidStringsHelper.getString(R.string.subscribe),
-                groups = rssService.get().pullGroups(),
+                title = stringsRepository.getString(R.string.subscribe),
+                groups = rssRepository.get().pullGroups(),
             )
         }
     }
@@ -44,15 +44,15 @@ class SubscribeViewModel @Inject constructor(
         searchJob?.cancel()
         searchJob = null
         _subscribeUiState.update {
-            SubscribeUiState().copy(title = androidStringsHelper.getString(R.string.subscribe))
+            SubscribeUiState().copy(title = stringsRepository.getString(R.string.subscribe))
         }
     }
 
     fun importFromInputStream(inputStream: InputStream) {
         viewModelScope.launch {
             try {
-                opmlService.saveToDatabase(inputStream)
-                rssService.get().doSync()
+                opmlRepository.saveToDatabase(inputStream)
+                rssRepository.get().doSync()
             } catch (e: Exception) {
                 Log.e("FeedsViewModel", "importFromInputStream: ", e)
             }
@@ -66,7 +66,7 @@ class SubscribeViewModel @Inject constructor(
     fun addNewGroup() {
         if (_subscribeUiState.value.newGroupContent.isNotBlank()) {
             viewModelScope.launch {
-                selectedGroup(rssService.get().addGroup(_subscribeUiState.value.newGroupContent))
+                selectedGroup(rssRepository.get().addGroup(_subscribeUiState.value.newGroupContent))
                 hideNewGroupDialog()
                 _subscribeUiState.update { it.copy(newGroupContent = "") }
             }
@@ -105,15 +105,15 @@ class SubscribeViewModel @Inject constructor(
                 }
                 _subscribeUiState.update {
                     it.copy(
-                        title = androidStringsHelper.getString(R.string.searching),
+                        title = stringsRepository.getString(R.string.searching),
                         lockLinkInput = true,
                     )
                 }
-                if (rssService.get().isFeedExist(_subscribeUiState.value.linkContent)) {
+                if (rssRepository.get().isFeedExist(_subscribeUiState.value.linkContent)) {
                     _subscribeUiState.update {
                         it.copy(
-                            title = androidStringsHelper.getString(R.string.subscribe),
-                            errorMessage = androidStringsHelper.getString(R.string.already_subscribed),
+                            title = stringsRepository.getString(R.string.subscribe),
+                            errorMessage = stringsRepository.getString(R.string.already_subscribed),
                             lockLinkInput = false,
                         )
                     }
@@ -131,8 +131,8 @@ class SubscribeViewModel @Inject constructor(
                 e.printStackTrace()
                 _subscribeUiState.update {
                     it.copy(
-                        title = androidStringsHelper.getString(R.string.subscribe),
-                        errorMessage = e.message ?: androidStringsHelper.getString(R.string.unknown),
+                        title = stringsRepository.getString(R.string.subscribe),
+                        errorMessage = e.message ?: stringsRepository.getString(R.string.unknown),
                         lockLinkInput = false,
                     )
                 }
@@ -146,7 +146,7 @@ class SubscribeViewModel @Inject constructor(
         val feed = _subscribeUiState.value.feed ?: return
         val articles = _subscribeUiState.value.articles
         viewModelScope.launch {
-            rssService.get().subscribe(
+            rssRepository.get().subscribe(
                 feed.copy(
                     groupId = _subscribeUiState.value.selectedGroupId,
                     isNotification = _subscribeUiState.value.allowNotificationPreset,

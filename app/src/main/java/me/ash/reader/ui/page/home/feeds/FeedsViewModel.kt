@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
-import me.ash.reader.domain.service.AccountService
-import me.ash.reader.domain.service.RssService
-import me.ash.reader.infrastructure.android.AndroidStringsHelper
+import me.ash.reader.domain.service.AccountRepository
+import me.ash.reader.domain.service.RssRepository
+import me.ash.reader.domain.service.StringsRepository
 import me.ash.reader.infrastructure.di.DefaultDispatcher
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.ui.page.home.FilterState
@@ -21,9 +21,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeedsViewModel @Inject constructor(
-    private val accountService: AccountService,
-    private val rssService: RssService,
-    private val androidStringsHelper: AndroidStringsHelper,
+    private val accountRepository: AccountRepository,
+    private val rssRepository: RssRepository,
+    private val stringsRepository: StringsRepository,
     @DefaultDispatcher
     private val defaultDispatcher: CoroutineDispatcher,
     @IODispatcher
@@ -35,7 +35,7 @@ class FeedsViewModel @Inject constructor(
 
     fun fetchAccount() {
         viewModelScope.launch(ioDispatcher) {
-            _feedsUiState.update { it.copy(account = accountService.getCurrentAccount()) }
+            _feedsUiState.update { it.copy(account = accountRepository.getCurrentAccount()) }
         }
     }
 
@@ -44,10 +44,10 @@ class FeedsViewModel @Inject constructor(
         val isUnread = filterState.filter.isUnread()
         _feedsUiState.update {
             it.copy(
-                importantSum = rssService.get().pullImportant(isStarred, isUnread)
+                importantSum = rssRepository.get().pullImportant(isStarred, isUnread)
                     .mapLatest {
                         (it["sum"] ?: 0).run {
-                            androidStringsHelper.getQuantityString(
+                            stringsRepository.getQuantityString(
                                 when {
                                     isStarred -> R.plurals.starred_desc
                                     isUnread -> R.plurals.unread_desc
@@ -59,8 +59,8 @@ class FeedsViewModel @Inject constructor(
                         }
                     }.flowOn(defaultDispatcher),
                 groupWithFeedList = combine(
-                    rssService.get().pullImportant(isStarred, isUnread),
-                    rssService.get().pullFeeds()
+                    rssRepository.get().pullImportant(isStarred, isUnread),
+                    rssRepository.get().pullFeeds()
                 ) { importantMap, groupWithFeedList ->
                     val groupIterator = groupWithFeedList.iterator()
                     while (groupIterator.hasNext()) {

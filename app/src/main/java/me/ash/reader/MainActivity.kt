@@ -1,4 +1,4 @@
-package me.ash.reader.infrastructure.android
+package me.ash.reader
 
 import android.os.Build
 import android.os.Bundle

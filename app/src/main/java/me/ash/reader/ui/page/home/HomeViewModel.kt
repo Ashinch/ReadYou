@@ -17,8 +17,8 @@ import me.ash.reader.domain.model.article.mapPagingFlowItem
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.domain.model.group.Group
-import me.ash.reader.domain.service.RssService
-import me.ash.reader.infrastructure.android.AndroidStringsHelper
+import me.ash.reader.domain.service.RssRepository
+import me.ash.reader.domain.service.StringsRepository
 import me.ash.reader.domain.service.SyncWorker
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
@@ -26,8 +26,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val rssService: RssService,
-    private val androidStringsHelper: AndroidStringsHelper,
+    private val rssRepository: RssRepository,
+    private val stringsRepository: StringsRepository,
     @ApplicationScope
     private val applicationScope: CoroutineScope,
     private val workManager: WorkManager,
@@ -45,7 +45,7 @@ class HomeViewModel @Inject constructor(
 
     fun sync() {
         viewModelScope.launch(ioDispatcher) {
-            rssService.get().doSync()
+            rssRepository.get().doSync()
         }
     }
 
@@ -70,7 +70,7 @@ class HomeViewModel @Inject constructor(
                     )
                 ) {
                     if (_homeUiState.value.searchContent.isNotBlank()) {
-                        rssService.get().searchArticles(
+                        rssRepository.get().searchArticles(
                             content = _homeUiState.value.searchContent.trim(),
                             groupId = _filterUiState.value.group?.id,
                             feedId = _filterUiState.value.feed?.id,
@@ -78,7 +78,7 @@ class HomeViewModel @Inject constructor(
                             isUnread = _filterUiState.value.filter.isUnread(),
                         )
                     } else {
-                        rssService.get().pullArticles(
+                        rssRepository.get().pullArticles(
                             groupId = _filterUiState.value.group?.id,
                             feedId = _filterUiState.value.feed?.id,
                             isStarred = _filterUiState.value.filter.isStarred(),
@@ -86,7 +86,7 @@ class HomeViewModel @Inject constructor(
                         )
                     }
                 }.flow.map {
-                    it.mapPagingFlowItem(androidStringsHelper)
+                    it.mapPagingFlowItem(stringsRepository)
                 }.cachedIn(applicationScope)
             )
         }
