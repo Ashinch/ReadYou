@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import me.ash.reader.R
-import me.ash.reader.domain.model.constant.ElevationTokens
+import me.ash.reader.data.constant.ElevationTokens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

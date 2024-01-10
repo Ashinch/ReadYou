@@ -1,5 +1,11 @@
 package me.ash.reader.ui.page.settings.interaction
 
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import android.os.Build
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -12,7 +18,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.infrastructure.preference.*
+import me.ash.reader.data.model.preference.InitialFilterPreference
+import me.ash.reader.data.model.preference.OpenLinkPreference
+import me.ash.reader.data.model.preference.InitialPagePreference
+import me.ash.reader.data.model.preference.LocalInitialFilter
+import me.ash.reader.data.model.preference.LocalOpenLink
+import me.ash.reader.data.model.preference.LocalOpenLinkSpecificBrowser
+import me.ash.reader.data.model.preference.LocalInitialPage
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.getBrowserAppList
 import me.ash.reader.ui.page.settings.SettingItem

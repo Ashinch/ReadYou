@@ -8,8 +8,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import me.ash.reader.domain.model.article.ArticleFlowItem
-import me.ash.reader.domain.model.article.ArticleWithFeed
+import me.ash.reader.data.model.article.ArticleFlowItem
+import me.ash.reader.data.model.article.ArticleWithFeed
 
 @Suppress("FunctionName")
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)

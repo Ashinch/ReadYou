@@ -1,5 +1,3 @@
-package me.ash.reader.ui.component.base
-
 import androidx.compose.animation.*
 import androidx.compose.runtime.Composable
 

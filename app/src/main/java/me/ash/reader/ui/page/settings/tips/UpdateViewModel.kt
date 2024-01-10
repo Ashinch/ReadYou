@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import me.ash.reader.domain.service.RYRepository
-import me.ash.reader.infrastructure.source.Download
+import me.ash.reader.data.repository.RYRepository
+import me.ash.reader.data.source.Download
 import me.ash.reader.ui.ext.notFdroid
 import javax.inject.Inject
 

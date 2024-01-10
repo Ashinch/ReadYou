@@ -10,12 +10,12 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.domain.model.account.Account
-import me.ash.reader.domain.service.AccountRepository
-import me.ash.reader.domain.service.RssRepository
-import me.ash.reader.domain.service.StringsRepository
-import me.ash.reader.infrastructure.di.DefaultDispatcher
-import me.ash.reader.infrastructure.di.IODispatcher
+import me.ash.reader.data.model.account.Account
+import me.ash.reader.data.module.DefaultDispatcher
+import me.ash.reader.data.module.IODispatcher
+import me.ash.reader.data.repository.AccountRepository
+import me.ash.reader.data.repository.RssRepository
+import me.ash.reader.data.repository.StringsRepository
 import me.ash.reader.ui.page.home.FilterState
 import javax.inject.Inject
 
@@ -108,6 +108,6 @@ data class FeedsUiState(
 )
 
 sealed class GroupFeedsView {
-    class Group(val group: me.ash.reader.domain.model.group.Group) : GroupFeedsView()
-    class Feed(val feed: me.ash.reader.domain.model.feed.Feed) : GroupFeedsView()
+    class Group(val group: me.ash.reader.data.model.group.Group) : GroupFeedsView()
+    class Feed(val feed: me.ash.reader.data.model.feed.Feed) : GroupFeedsView()
 }

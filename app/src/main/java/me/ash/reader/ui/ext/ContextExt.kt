@@ -12,13 +12,17 @@ import android.util.Log
 import android.widget.Toast
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION
+import androidx.browser.customtabs.CustomTabsService.START_REDELIVER_INTENT
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.PackageManagerCompat
 import androidx.core.net.toUri
+import androidx.work.impl.utils.PackageManagerHelper
 import me.ash.reader.R
-import me.ash.reader.domain.model.general.Version
-import me.ash.reader.domain.model.general.toVersion
-import me.ash.reader.infrastructure.preference.OpenLinkPreference
-import me.ash.reader.infrastructure.preference.OpenLinkSpecificBrowserPreference
+import me.ash.reader.data.model.general.Version
+import me.ash.reader.data.model.general.toVersion
+import me.ash.reader.data.model.preference.OpenLinkPreference
+import me.ash.reader.data.model.preference.OpenLinkSpecificBrowserPreference
 import java.io.File
 
 

@@ -22,10 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import me.ash.reader.R
-import me.ash.reader.infrastructure.preference.KeepArchivedPreference
-import me.ash.reader.infrastructure.preference.SyncBlockListPreference
-import me.ash.reader.infrastructure.preference.SyncIntervalPreference
-import me.ash.reader.infrastructure.preference.not
+import me.ash.reader.data.model.preference.*
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast

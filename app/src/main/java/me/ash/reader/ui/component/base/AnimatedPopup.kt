@@ -1,5 +1,6 @@
 package me.ash.reader.ui.component.base
 
+import RYExtensibleVisibility
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable

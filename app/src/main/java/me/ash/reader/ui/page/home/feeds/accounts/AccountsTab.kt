@@ -25,7 +25,7 @@ import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import me.ash.reader.R
-import me.ash.reader.domain.model.account.Account
+import me.ash.reader.data.model.account.Account
 import me.ash.reader.ui.component.base.RYDialog
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.theme.palette.alwaysLight

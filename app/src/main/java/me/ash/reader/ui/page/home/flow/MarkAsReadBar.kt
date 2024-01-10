@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import me.ash.reader.R
-import me.ash.reader.domain.model.general.MarkAsReadConditions
+import me.ash.reader.data.model.general.MarkAsReadConditions
 import me.ash.reader.ui.component.base.AnimatedPopup
 import me.ash.reader.ui.theme.palette.alwaysLight
 

@@ -31,7 +31,7 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.domain.model.group.Group
+import me.ash.reader.data.model.group.Group
 import me.ash.reader.ui.component.RenameDialog
 import me.ash.reader.ui.component.base.BottomDrawer
 import me.ash.reader.ui.component.base.RYSelectionChip

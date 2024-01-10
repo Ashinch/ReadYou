@@ -15,10 +15,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.infrastructure.preference.DarkThemePreference
-import me.ash.reader.infrastructure.preference.LocalAmoledDarkTheme
-import me.ash.reader.infrastructure.preference.LocalDarkTheme
-import me.ash.reader.infrastructure.preference.not
+import me.ash.reader.data.model.preference.DarkThemePreference
+import me.ash.reader.data.model.preference.LocalAmoledDarkTheme
+import me.ash.reader.data.model.preference.LocalDarkTheme
+import me.ash.reader.data.model.preference.not
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight

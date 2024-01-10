@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.reading
 
+import RYExtensibleVisibility
 import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -21,9 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import me.ash.reader.R
-import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
+import me.ash.reader.data.model.preference.LocalReadingPageTonalElevation
 import me.ash.reader.ui.component.base.CanBeDisabledIconButton
-import me.ash.reader.ui.component.base.RYExtensibleVisibility
 
 @Composable
 fun BottomBar(

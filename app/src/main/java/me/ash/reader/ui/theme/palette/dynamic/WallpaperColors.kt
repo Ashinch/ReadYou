@@ -15,7 +15,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import me.ash.reader.infrastructure.preference.LocalCustomPrimaryColor
+import me.ash.reader.data.model.preference.LocalCustomPrimaryColor
 import me.ash.reader.ui.theme.palette.TonalPalettes
 import me.ash.reader.ui.theme.palette.TonalPalettes.Companion.getSystemTonalPalettes
 import me.ash.reader.ui.theme.palette.TonalPalettes.Companion.toTonalPalettes

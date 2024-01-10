@@ -12,16 +12,16 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import me.ash.reader.domain.model.article.ArticleFlowItem
-import me.ash.reader.domain.model.article.mapPagingFlowItem
-import me.ash.reader.domain.model.feed.Feed
-import me.ash.reader.domain.model.general.Filter
-import me.ash.reader.domain.model.group.Group
-import me.ash.reader.domain.service.RssRepository
-import me.ash.reader.domain.service.StringsRepository
-import me.ash.reader.domain.service.SyncWorker
-import me.ash.reader.infrastructure.di.ApplicationScope
-import me.ash.reader.infrastructure.di.IODispatcher
+import me.ash.reader.data.model.article.ArticleFlowItem
+import me.ash.reader.data.model.article.mapPagingFlowItem
+import me.ash.reader.data.model.feed.Feed
+import me.ash.reader.data.model.general.Filter
+import me.ash.reader.data.model.group.Group
+import me.ash.reader.data.module.ApplicationScope
+import me.ash.reader.data.module.IODispatcher
+import me.ash.reader.data.repository.RssRepository
+import me.ash.reader.data.repository.StringsRepository
+import me.ash.reader.data.repository.SyncWorker
 import javax.inject.Inject
 
 @HiltViewModel

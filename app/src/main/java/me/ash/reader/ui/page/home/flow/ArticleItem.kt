@@ -14,7 +14,11 @@ import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -28,12 +32,14 @@ import androidx.compose.ui.unit.dp
 import coil.size.Precision
 import coil.size.Scale
 import me.ash.reader.R
-import me.ash.reader.domain.model.article.ArticleWithFeed
-import me.ash.reader.infrastructure.preference.*
+import me.ash.reader.data.model.article.ArticleWithFeed
+import me.ash.reader.data.model.preference.*
 import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.base.RYAsyncImage
 import me.ash.reader.ui.component.base.SIZE_1000
 import me.ash.reader.ui.theme.Shape20
+import me.ash.reader.data.model.preference.LocalDarkTheme
+import me.ash.reader.data.model.preference.LocalAmoledDarkTheme
 
 @Composable
 fun ArticleItem(

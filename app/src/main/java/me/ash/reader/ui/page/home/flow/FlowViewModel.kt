@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import me.ash.reader.domain.model.general.MarkAsReadConditions
-import me.ash.reader.domain.service.RssRepository
-import me.ash.reader.infrastructure.di.IODispatcher
+import me.ash.reader.data.model.general.MarkAsReadConditions
+import me.ash.reader.data.module.IODispatcher
+import me.ash.reader.data.repository.RssRepository
 import javax.inject.Inject
 
 @HiltViewModel

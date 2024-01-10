@@ -8,13 +8,13 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.ash.reader.domain.model.account.Account
-import me.ash.reader.domain.service.AccountRepository
-import me.ash.reader.domain.service.OpmlRepository
-import me.ash.reader.domain.service.RssRepository
-import me.ash.reader.infrastructure.di.DefaultDispatcher
-import me.ash.reader.infrastructure.di.IODispatcher
-import me.ash.reader.infrastructure.di.MainDispatcher
+import me.ash.reader.data.model.account.Account
+import me.ash.reader.data.module.DefaultDispatcher
+import me.ash.reader.data.module.IODispatcher
+import me.ash.reader.data.module.MainDispatcher
+import me.ash.reader.data.repository.AccountRepository
+import me.ash.reader.data.repository.OpmlRepository
+import me.ash.reader.data.repository.RssRepository
 import javax.inject.Inject
 
 @HiltViewModel
