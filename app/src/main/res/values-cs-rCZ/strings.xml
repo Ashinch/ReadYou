@@ -47,21 +47,21 @@
     <string name="preset">Přednastavení</string>
     <string name="selected">Vybráno</string>
     <string name="allow_notification">Povolit oznámení</string>
-    <string name="all_allow_notification_tips">Umožnit všem zdrojům ve skupině \"%1$s\" vám posílat oznámení.</string>
+    <string name="all_allow_notification_tips">Povolit zasílání oznámení všem kanálům ve skupině \"%1$s\"</string>
     <string name="all_allow_notification_toast">Ve skupině \"%1$s\" jsou povolena všechna oznámení</string>
     <string name="all_deny_notification_toast">Ve skupině \"%1$s\" jsou zakázána všechna oznámení</string>
     <string name="parse_full_content">Načíst celý obsah</string>
-    <string name="all_parse_full_content_tips">Načítání celého obsahu všech článků ve skupině \"%1$s\".</string>
+    <string name="all_parse_full_content_tips">Načítání celého obsahu všech článků ve skupině \"%1$s\"</string>
     <string name="all_parse_full_content_toast">Načítání celého obsahu všech článků ve skupině \"%1$s\"</string>
     <string name="all_deny_parse_full_content_toast">Již nebude načítán celý obsah článků ve skupině \"%1$s\"</string>
     <string name="clear_articles">Vymazat články</string>
     <string name="clear_articles_in_feed_toast">Ze zdroje \"%1$s\" byly vymazány všechny archivované články</string>
     <string name="clear_articles_in_group_toast">Ze skupiny \"%1$s\" byly vymazány všechny archivované články</string>
-    <string name="clear_articles_feed_tips">Vymazat všechny archivované články ze zdroje \"%1$s\".</string>
-    <string name="clear_articles_group_tips">Vymazat všechny archivované články ze skupiny \"%1$s\".</string>
+    <string name="clear_articles_feed_tips">Vymazat všechny archivované články ze zdroje \"%1$s\"</string>
+    <string name="clear_articles_group_tips">Vymazat všechny archivované články ze skupiny \"%1$s\"</string>
     <string name="add_to_group">Přidat do skupiny</string>
     <string name="move_to_group">Přesunout do skupiny</string>
-    <string name="all_move_to_group_tips">Přesunout všechny zdroje ve skupině \"%1$s\" do skupiny \"%2$s\".</string>
+    <string name="all_move_to_group_tips">Přesunout všechny zdroje ve skupině \"%1$s\" do skupiny \"%2$s\"</string>
     <string name="all_move_to_group_toast">Vše přesunuto do skupiny \"%1$s\"</string>
     <string name="rename">Přejmenovat</string>
     <string name="change_url">Změnit URL</string>
@@ -73,10 +73,10 @@
     <string name="delete">Odstranit</string>
     <string name="delete_toast">\"%1$s\" bylo smazáno</string>
     <string name="unsubscribe">Zrušit odběr</string>
-    <string name="unsubscribe_tips">Zrušit odběr zdroje \"%1$s\" a odstranit z něj všechny články.</string>
+    <string name="unsubscribe_tips">Zrušit odběr zdroje \"%1$s\" a odstranit z něj všechny články</string>
     <string name="delete_group">Odstranit skupinu</string>
-    <string name="delete_group_tips">Odstranit skupinu \"%1$s\" a odstranit z ní všechny zdroje a archivované články.</string>
-    <string name="group_option_tips">Následující možnosti budou použity na všechny zdroje v této skupině.</string>
+    <string name="delete_group_tips">Odstranit skupinu \"%1$s\" a odstranit z ní všechny zdroje a archivované články</string>
+    <string name="group_option_tips">Následující možnosti budou použity na všechny zdroje v této skupině</string>
     <string name="today">Dnes</string>
     <string name="yesterday">Včera</string>
     <string name="date_at_time">%1$s v %2$s</string>
@@ -86,7 +86,7 @@
     <string name="mark_all_as_read">Označit vše jako přečtené</string>
     <string name="mark_as_unread">Označit jako nepřečtené</string>
     <string name="mark_as_starred">Označit jako oblíbené</string>
-    <string name="mark_as_unstar">Zrušit označení jako oblíbené</string>
+    <string name="mark_as_unstar">Odebrat z oblíbených</string>
     <string name="mark_as_read_one_day">Označit jako přečtené vše starší než 1 den</string>
     <string name="mark_as_read_three_days">Označit jako přečtené vše starší než 3 dny</string>
     <string name="mark_as_read_seven_days">Označit jako přečtené vše starší než 7 dní</string>
@@ -95,7 +95,7 @@
     <string name="seven_days">7d</string>
     <string name="close">Zavřít</string>
     <string name="get_new_updates">Získat aktualizace</string>
-    <string name="get_new_updates_desc">Byla vydána verze %1$s</string>
+    <string name="get_new_updates_desc">Nová verze %1$s je k dispozici</string>
     <string name="in_coding">Ve vývoji</string>
     <string name="coming_soon">Již brzy</string>
     <string name="accounts">Účty</string>
@@ -103,7 +103,7 @@
     <string name="color_and_style">Barva a styl</string>
     <string name="color_and_style_desc">Téma, barevný styl, velikost písma</string>
     <string name="interaction">Interakce</string>
-    <string name="interaction_desc">Při startu, haptická odezva</string>
+    <string name="interaction_desc">Úvodní stránka, haptická odezva</string>
     <string name="languages">Jazyky</string>
     <string name="languages_desc">Angličtina, Čeština, více</string>
     <string name="help_translate">Pomozte nám s překladem</string>
@@ -111,119 +111,10 @@
     <string name="tips_and_support">Tipy a podpora</string>
     <string name="tips_and_support_desc">O aplikaci, open source</string>
     <string name="welcome">Vítejte</string>
-    <string name="tos_tips">Než budete moci pokračovat, musíte souhlasit s podmínkami služby a zásadami ochrany osobních údajů aplikace Read You.</string>
+    <string name="tos_tips">Chcete-li pokračovat, přečtěte si prosím podmínky služby Read You a zásady ochrany osobních údajů a vyjádřete s nimi souhlas.</string>
     <string name="browse_tos_tips">Podívejte se na &lt;i&gt;&lt;u&gt;podmínky služby a zásady ochrany osobních údajů&lt;/u&gt;&lt;/i&gt;</string>
     <string name="terms_of_service">Podmínky služby</string>
-    <string name="tos_content">
-        &lt;h5&gt;
-
-        Privacy Policy
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        I take your privacy very seriously.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        does not collect any user data, and all sensitive information (passwords and other account information) is
-        securely stored in the local application database on your device.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        will use the following permissions to provide you with the service.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        - Access Network permission (for accessing online content as you specify)
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - Get network status permission (for getting whether the device currently has available network conditions)
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - Background service permission (to automatically sync your favorites for you on a regular
-        basis)
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Third Party Services
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        This policy does not apply to third-party services that you use with &lt;b&gt;Read You&lt;/b&gt;. You can review
-        the privacy policies of the third-party services you use on their websites
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Disclaimers
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        is a content collection tool only. Your use of &lt;b&gt;Read You&lt;/b&gt; is subject to the laws and
-        regulations of your country and region, and any liability arising from your actions will be borne by you
-        personally.
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Open Source License
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-        &lt;b&gt;Read You&lt;/b&gt;
-
-        is an open source project under the GNU GPL 3.0 Open Source License[1], which allows you to use, reference, and
-        modify the source code of &lt;b&gt;Read You&lt;/b&gt; for free, but does not allow the
-        modified and derived code to be distributed and sold as closed-source commercial software. For details, please
-        see the full GNU GPL 3.0 Open Source License[2].
-
-        &lt;/p&gt;
-        &lt;br/&gt;
-        &lt;br/&gt;
-        &lt;h5&gt;
-
-        Appendix
-
-        &lt;/h5&gt;
-        &lt;br/&gt;
-        &lt;p&gt;
-
-        - [1] https://github.com/Ashinch/ReadYou
-
-        &lt;/p&gt;
-        &lt;p&gt;
-
-        - [2] https://www.gnu.org/licenses/gpl-3.0.html
-
-        &lt;/p&gt;
-    </string>
+    <string name="tos_content">&lt;h5&gt; Zásady ochrany osobních údajů &lt;/h5&gt; &lt;br/&gt; &lt;p&gt; Vaše soukromí beru velmi vážně. &lt;/p&gt; &lt;br/&gt; &lt;p&gt; &lt;b&gt;Read You&lt;/b&gt; neshromažďuje žádná uživatelská data a všechny citlivé informace (hesla a další informace o účtu) jsou bezpečně uloženy v místní databázi aplikací ve vašem zařízení. &lt;/p&gt; &lt;br/&gt; &lt;p&gt; &lt;b&gt;Read You&lt;/b&gt; použije k poskytování služby následující oprávnění. &lt;/p&gt; &lt;br/&gt; &lt;p&gt; - Oprávnění k přístupu k síti (pro přístup k online obsahu, jak určíte) &lt;/p&gt; &lt;p&gt; - Získat oprávnění ke stavu sítě (k určení, zda má zařízení aktuálně dostupné síťové podmínky) &lt;/ p&gt; &lt;p&gt; – Povolení služby na pozadí (aby se vaše oblíbené položky pravidelně automaticky synchronizovaly) &lt;/p&gt; &lt;br/&gt; &lt;br/&gt; &lt;h5&gt; Služby třetích stran &lt;/h5&gt; &lt;br/&gt; &lt;p &gt; Tyto zásady se nevztahují na služby třetích stran, které používáte s &lt;b&gt;Read You&lt;/b&gt;. Zásady ochrany osobních údajů služeb třetích stran, které používáte, si můžete prohlédnout na jejich webových stránkách &lt;/p&gt; &lt;br/&gt; &lt;br/&gt; &lt;h5&gt; Vyloučení odpovědnosti &lt;/h5&gt; &lt;br/&gt; &lt;p&gt; &lt;b&gt;Read You&lt; /b&gt; je pouze nástroj pro shromažďování obsahu. Vaše používání &lt;b&gt;Read You&lt;/b&gt; podléhá zákonům a předpisům vaší země a regionu a veškerou odpovědnost vyplývající z vašeho jednání ponesete vy osobně. &lt;/p&gt; &lt;br/&gt; &lt;br/&gt; &lt;h5&gt; Licence Open Source &lt;/h5&gt; &lt;br/&gt; &lt;p&gt; &lt;b&gt;Read You&lt;/b&gt; je projekt s otevřeným zdrojovým kódem pod GNU GPL 3.0 Open Source Licence[1], která vám umožňuje bezplatně používat, odkazovat a upravovat zdrojový kód &lt;b&gt;Read You&lt;/b&gt;, ale neumožňuje distribuovat a prodávat upravený a odvozený kód jako uzavřený zdroj komerční software. Podrobnosti naleznete v plné verzi GNU GPL 3.0 Open Source License[2]. &lt;/p&gt; &lt;br/&gt; &lt;br/&gt; &lt;h5&gt; Dodatek &lt;/h5&gt; &lt;br/&gt; &lt;p&gt; - [1] https://github.com/Ashinch/ReadYou &lt;/p&gt; &lt;p&gt; - [2] https://www.gnu.org/licenses/gpl-3.0.html &lt;/p&gt;</string>
     <string name="agree">Souhlasím</string>
     <string name="wallpaper_colors">Barvy pozadí</string>
     <string name="no_palettes">Žádné palety</string>
@@ -252,9 +143,9 @@
     <string name="update">Aktualizovat</string>
     <string name="skip_this_version">Přeskočit tuto verzi</string>
     <string name="checking_updates">Zkontrolovat aktualizace…</string>
-    <string name="is_latest_version">Toto je nejnovější verze</string>
-    <string name="check_failure">Chyba kontroly</string>
-    <string name="download_failure">Chyba stahování</string>
+    <string name="is_latest_version">Toto je nejnovější verze aplikace</string>
+    <string name="check_failure">Nezdařilo se zkontrolovat aktualizace</string>
+    <string name="download_failure">Nepodařilo se stáhnout aktualizace</string>
     <string name="rate_limit">Rychlost požadavků je limitována</string>
     <string name="help">Nápověda</string>
     <string name="on_start">Při spuštění</string>
@@ -316,4 +207,52 @@
     <string name="images_desc">Rounded corners, horizontal padding</string>
     <string name="videos_desc">Rounded corners, horizontal padding</string>
     <string name="maximize">Maximize</string>
+    <string name="empty">Prázdný</string>
+    <string name="for_2_days">2 dny</string>
+    <string name="every_15_minutes">Každých 15 minut</string>
+    <string name="every_12_hours">Každých 12 hodin</string>
+    <string name="manually">Ručně</string>
+    <string name="for_3_days">3 dny</string>
+    <string name="for_1_week">1 týden</string>
+    <string name="for_2_weeks">2 týdny</string>
+    <string name="synchronous">Synchronizace</string>
+    <string name="keep_archived_articles">Uchovávat archivované články</string>
+    <string name="delete_account">Smazat účet</string>
+    <string name="clear_all_articles_tips">Opravdu chcete vymazat seznam článků pro tento účet?</string>
+    <string name="must_have_an_account">Je nutné mít účet</string>
+    <string name="add">Přidat</string>
+    <string name="connection">Připojení</string>
+    <string name="synchronous_tips">Aby se změny projevily, je nutný restart</string>
+    <string name="open_link_specific_browser">Prohlížeč</string>
+    <string name="only_on_wifi">Pouze na Wi-Fi</string>
+    <string name="add_accounts">Přidat účty</string>
+    <string name="export_as_opml">Exportovat jako OPML</string>
+    <string name="every_3_hours">Každé 3 hodiny</string>
+    <string name="every_1_hour">Každou hodinu</string>
+    <string name="always_ask">Vždy se zeptat</string>
+    <string name="more">Více</string>
+    <string name="for_1_month">1 měsíc</string>
+    <string name="every_30_minutes">Každých 30 minut</string>
+    <string name="every_6_hours">Každých 6 hodin</string>
+    <string name="every_1_day">Každý den</string>
+    <string name="always">Vždy</string>
+    <string name="for_1_day">1 den</string>
+    <string name="local">Lokální</string>
+    <string name="local_desc">Na tomto zařízení</string>
+    <string name="services">Služby</string>
+    <string name="self_hosted">Vlastní</string>
+    <string name="fever_desc">Zastaralé. Nedoporučuje se.</string>
+    <string name="add_accounts_desc">Místní, Služby, Vlastní</string>
+    <string name="sync_interval">Synchronizovat</string>
+    <string name="sync_once_on_start">Synchronizovat jednou při spuštění</string>
+    <string name="only_when_charging">Pouze při nabíjení</string>
+    <string name="clear_all_articles">Vymazat všechny články</string>
+    <string name="clear_all_articles_toast">Seznam článků vymazán</string>
+    <string name="delete_account_toast">Účet byl smazán</string>
+    <string name="username">Uživatelské jméno</string>
+    <string name="password">Heslo</string>
+    <string name="delete_account_tips">Opravdu chcete tento účet smazat?</string>
+    <string name="open_link_something_wrong">Nastavení \"Otevřít odkaz\" bylo ignorováno, protože se něco pokazilo.</string>
+    <string name="open_link_ask_dialog_title">Otevřít pomocí…</string>
+    <string name="every_2_hours">Každé dvě hodiny</string>
 </resources>
