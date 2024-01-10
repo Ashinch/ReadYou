@@ -3,14 +3,11 @@ package me.ash.reader.ui.page.home.flow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.DismissDirection
-import androidx.compose.material.DismissValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material.rememberDismissState
+import androidx.compose.material3.DismissDirection
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,6 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import co.softov.morestuff.android.ui.compose.NoFlingSwipeToDismiss
+import co.softov.morestuff.android.ui.compose.rememberNoFlingDismissState
 import coil.size.Precision
 import coil.size.Scale
 import me.ash.reader.R
@@ -160,67 +159,72 @@ fun ArticleItem(
         }
     }
 }
-@ExperimentalMaterialApi
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun swipeToDismiss(
-        articleWithFeed: ArticleWithFeed,
-        onClick: (ArticleWithFeed) -> Unit = {},
-        onSwipeOut: (ArticleWithFeed) -> Unit = {},
+fun SwipeToDismiss(
+    articleWithFeed: ArticleWithFeed,
+    onClick: (ArticleWithFeed) -> Unit = {},
+    onSwipeOut: (ArticleWithFeed) -> Unit = {},
 ) {
     var isArticleVisible by remember { mutableStateOf(true) }
-    val dismissState = rememberDismissState(initialValue = DismissValue.Default, confirmStateChange = {
-        if (it == DismissValue.DismissedToEnd) {
-            isArticleVisible = false
-            onSwipeOut(articleWithFeed)
+
+    val noFlingDismissState = rememberNoFlingDismissState(
+        positionalThreshold = { 110.dp.toPx() },
+        confirmValueChange = { dismissValue ->
+            if (dismissValue == androidx.compose.material3.DismissValue.DismissedToEnd) {
+                isArticleVisible = false
+                onSwipeOut(articleWithFeed)
+            }
+            true
         }
-       true
-    })
-    if (isArticleVisible) {
-        SwipeToDismiss(
-                state = dismissState,
-                /***  create dismiss alert background box */
-                background = {
-                    if (dismissState.dismissDirection == DismissDirection.StartToEnd) {
-                        Box(
-                                modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(12.dp)
-                        ) {
-                            Column(modifier = Modifier.align(Alignment.CenterStart)) {
-                                Icon(
-                                        imageVector = Icons.Default.Check,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.inverseSurface,
-                                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                                )
-                                Text(
-                                        text = "Mark Read",
-                                        textAlign = TextAlign.Center,
-                                        color = MaterialTheme.colorScheme.inverseSurface
-                                )
-                            }
+    )
 
-                        }
-                    }
-                },
-                /**** Dismiss Content */
-                dismissContent = {
-                    val isDarkTheme = LocalDarkTheme.current.isDarkTheme()
-                    val isAmoledDarkTheme = LocalAmoledDarkTheme.current.value
+    if (!isArticleVisible) return
 
-                    val articleItemBackgroundColor = if (isDarkTheme && isAmoledDarkTheme) {Color.Black}
-                        else {MaterialTheme.colorScheme.background}
-
+    NoFlingSwipeToDismiss(
+        state = noFlingDismissState,
+        background = {
+            when (noFlingDismissState.dismissDirection) {
+                DismissDirection.StartToEnd -> {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(articleItemBackgroundColor)
+                            .padding(12.dp)
                     ) {
-                        ArticleItem(articleWithFeed, onClick)
+                        Column {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.inverseSurface,
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
+                            Text(
+                                text = "Mark Read",
+                                textAlign = TextAlign.Center,
+                                color = MaterialTheme.colorScheme.inverseSurface
+                            )
+                        }
                     }
-                },
-                /*** Set Direction to dismiss */
-                directions = setOf(DismissDirection.StartToEnd),
-        )
-    }
+                }
+                else -> Unit
+            }
+        },
+        dismissContent = {
+            val isDarkTheme = LocalDarkTheme.current.isDarkTheme()
+            val isAmoledDarkTheme = LocalAmoledDarkTheme.current.value
+
+            val articleItemBackgroundColor = if (isDarkTheme && isAmoledDarkTheme) Color.Black
+            else MaterialTheme.colorScheme.background
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(articleItemBackgroundColor)
+            ) {
+                ArticleItem(articleWithFeed, onClick)
+            }
+        },
+        directions = setOf(DismissDirection.StartToEnd),
+    )
 }
