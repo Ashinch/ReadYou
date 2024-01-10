@@ -92,9 +92,10 @@ class FeverRssService @Inject constructor(
      * obtained is 0 or their quantity exceeds 250, at which point the pulling process stops.
      *
      * 1. Fetch the Fever groups
-     * 2. Fetch the Fever feeds (including favicons)
+     * 2. Fetch the Fever feeds
      * 3. Fetch the Fever articles
      * 4. Synchronize read/unread and starred/un-starred items
+     * 5. TODO: Fetch the Fever favicons
      */
     override suspend fun sync(coroutineWorker: CoroutineWorker): ListenableWorker.Result = supervisorScope {
         coroutineWorker.setProgress(SyncWorker.setIsSyncing(true))
@@ -126,9 +127,6 @@ class FeverRssService @Inject constructor(
                     }
                 }
             }
-
-            // Fetch the Fever favicons
-            val faviconsById = feverAPI.getFavicons().favicons?.associateBy { it.id } ?: emptyMap()
             feedDao.insertOrUpdate(
                 feedsBody.feeds?.map {
                     Feed(
@@ -137,7 +135,6 @@ class FeverRssService @Inject constructor(
                         url = it.url!!,
                         groupId = accountId.spacerDollar(feedsGroupsMap[it.id.toString()]!!),
                         accountId = accountId,
-                        icon = faviconsById[it.favicon_id]?.data
                     )
                 } ?: emptyList()
             )
@@ -194,6 +191,7 @@ class FeverRssService @Inject constructor(
                 }
             }
 
+            // TODO: 5. Fetch the Fever favicons
 
             Log.i("RLog", "onCompletion: ${System.currentTimeMillis() - preTime}")
             accountDao.update(account.apply {
