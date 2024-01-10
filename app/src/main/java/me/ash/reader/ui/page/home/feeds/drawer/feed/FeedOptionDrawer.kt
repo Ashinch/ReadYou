@@ -63,7 +63,7 @@ fun FeedOptionDrawer(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    FeedIcon(feedName = feed?.name ?: "", iconUrl = feed?.icon, size = 24.dp)
+                    FeedIcon(feedName = feed?.name ?: "", size = 24.dp)
 //                    Icon(
 //                        modifier = Modifier.roundClick { },
 //                        imageVector = Icons.Rounded.RssFeed,

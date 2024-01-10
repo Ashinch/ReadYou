@@ -112,7 +112,7 @@ fun ArticleItem(
         ) {
             // Feed icon
             if (articleListFeedIcon.value) {
-                FeedIcon(articleWithFeed.feed.name, iconUrl = articleWithFeed.feed.icon)
+                FeedIcon(articleWithFeed.feed.name)
                 Spacer(modifier = Modifier.width(10.dp))
             }
 

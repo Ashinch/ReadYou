@@ -3,7 +3,6 @@ package me.ash.reader.infrastructure.rss
 import android.content.Context
 import android.text.Html
 import android.util.Log
-import com.google.gson.Gson
 import com.rometools.rome.feed.synd.SyndEntry
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
@@ -144,14 +143,34 @@ class RssHelper @Inject constructor(
     suspend fun queryRssIcon(
         feedDao: FeedDao,
         feed: Feed,
+        articleLink: String,
     ) {
         withContext(ioDispatcher) {
-            val request = response(okHttpClient, "https://besticon-demo.herokuapp.com/allicons.json?url=${feed.url}")
+            val domainRegex = Regex("(http|https)://(www.)?(\\w+(\\.)?)+")
+            val request = response(okHttpClient, articleLink)
             val content = request.body.string()
-            val favicon = Gson().fromJson(content, Favicon::class.java)
-            favicon?.icons?.first { it.width != null && it.width >= 20 }?.url?.let {
-                saveRssIcon(feedDao, feed, it)
-            }?: return@withContext
+            val regex = Regex("""<link(.+?)rel="shortcut icon"(.+?)href="(.+?)"""")
+            var iconLink = regex
+                .find(content)
+                ?.groups?.get(3)
+                ?.value
+            Log.i("rlog", "queryRssIcon: $iconLink")
+            if (iconLink != null) {
+                if (iconLink.startsWith("//")) {
+                    iconLink = "http:$iconLink"
+                }
+                if (iconLink.startsWith("/")) {
+                    iconLink = "${domainRegex.find(articleLink)?.value}$iconLink"
+                }
+                saveRssIcon(feedDao, feed, iconLink)
+            } else {
+                domainRegex.find(articleLink)?.value?.let {
+                    Log.i("RLog", "favicon: ${it}")
+                    if (response(okHttpClient, "$it/favicon.ico").isSuccessful) {
+                        saveRssIcon(feedDao, feed, it)
+                    }
+                }
+            }
         }
     }
 

@@ -23,10 +23,10 @@ import me.ash.reader.domain.repository.AccountDao
 import me.ash.reader.domain.repository.ArticleDao
 import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.domain.repository.GroupDao
-import me.ash.reader.infrastructure.android.NotificationHelper
 import me.ash.reader.infrastructure.preference.KeepArchivedPreference
 import me.ash.reader.infrastructure.preference.SyncIntervalPreference
 import me.ash.reader.infrastructure.rss.RssHelper
+import me.ash.reader.infrastructure.android.NotificationHelper
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.spacerDollar
 import java.util.*
@@ -146,9 +146,17 @@ abstract class AbstractRssRepository(
     private suspend fun syncFeed(feed: Feed): FeedWithArticle {
         val latest = articleDao.queryLatestByFeedId(context.currentAccountId, feed.id)
         val articles = rssHelper.queryRssXml(feed, latest?.link)
-        if (feed.icon == null) {
-            rssHelper.queryRssIcon(feedDao, feed)
-        }
+//        try {
+//            if (feed.icon == null && !articles.isNullOrEmpty()) {
+//                rssHelper.queryRssIcon(feedDao, feed, articles.first().link)
+//            }
+//        } catch (e: Exception) {
+//            Log.e("RLog", "queryRssIcon[${feed.name}]: ${e.message}")
+//            return FeedWithArticle(
+//                feed = feed.apply { isNotification = false },
+//                articles = listOf()
+//            )
+//        }
         return FeedWithArticle(
             feed = feed.apply { isNotification = feed.isNotification && articles.isNotEmpty() },
             articles = articles
