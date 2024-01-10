@@ -147,7 +147,11 @@ abstract class AbstractRssRepository(
         val latest = articleDao.queryLatestByFeedId(context.currentAccountId, feed.id)
         val articles = rssHelper.queryRssXml(feed, latest?.link)
         if (feed.icon == null) {
-            rssHelper.queryRssIcon(feedDao, feed)
+            try {
+                rssHelper.queryRssIcon(feedDao, feed)
+            } catch (e: Exception) {
+                Log.i("RLog", "queryRssIcon is failed: ${e.message}")
+            }
         }
         return FeedWithArticle(
             feed = feed.apply { isNotification = feed.isNotification && articles.isNotEmpty() },
