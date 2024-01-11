@@ -22,7 +22,7 @@ fun Base64Image(
 
     if (isSvg) {
         Image(
-            painter = base64ToPainter(String(base64ToBytes(base64Uri))),
+            painter = base64ToPainter(base64Uri),
             modifier = modifier,
             contentDescription = null
         )
@@ -46,7 +46,7 @@ private fun base64ToBytes(base64String: String): ByteArray {
 @Composable
 private fun base64ToPainter(base64Str: String): Painter {
     return remember(base64Str) {
-        val svg = SVG.getFromString(base64Str)
+        val svg = SVG.getFromString(String(base64ToBytes(base64Str)))
         object : Painter() {
             override val intrinsicSize: Size
                 get() {
