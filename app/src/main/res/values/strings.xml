@@ -356,7 +356,7 @@
     <string name="inoreader" translatable="false">Inoreader</string>
     <string name="local_desc">On this device</string>
     <string name="services">Services</string>
-    <string name="feedly_desc" translatable="false">feedll.com</string>
+    <string name="feedly_desc" translatable="false">feedly.com</string>
     <string name="inoreader_desc" translatable="false">inoreader.com</string>
     <string name="self_hosted">Self-Hosted</string>
     <string name="fresh_rss_desc" translatable="false">freshrss.org</string>
