@@ -16,6 +16,7 @@ import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.domain.service.RssService
+import me.ash.reader.ui.page.home.HomeViewModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +28,14 @@ class ReadingViewModel @Inject constructor(
     private val _readingUiState = MutableStateFlow(ReadingUiState())
     val readingUiState: StateFlow<ReadingUiState> = _readingUiState.asStateFlow()
 
+    fun trySwitchArticle(articleId: String) {
+        if (articleId.isNotEmpty()) {
+            viewModelScope.launch {
+                initData(articleId)
+            }
+        }
+    }
+    
     fun initData(articleId: String) {
         showLoading()
         viewModelScope.launch {
@@ -140,6 +149,7 @@ class ReadingViewModel @Inject constructor(
             val cur = _readingUiState.value.articleWithFeed?.article
             if (cur != null) {
                 var found = false
+                var index = 0
                 for (item in pagingItems) {
                     if (item is ArticleFlowItem.Article) {
                         val itemId = item.articleWithFeed.article.id
@@ -155,7 +165,38 @@ class ReadingViewModel @Inject constructor(
                             break
                         }
                     }
+                    index++
                 }
+            }
+        }
+    }
+
+    fun recordCurrentReadingState(homeViewModel: HomeViewModel) {
+        val curId = readingUiState.value.articleWithFeed?.article?.id
+        val list = homeViewModel.readingProgressState.value.readingList
+        if (curId != null && list.isNotEmpty()) {
+            var previous = ""
+            var next = ""
+            var targetIndex = -1
+            var matched = false
+
+            var last = ""
+            for (id in list) {
+                if (id == curId) {
+                    previous = last
+                    matched = true
+                } else if (last == curId) {
+                    next = id
+                    break
+                }
+
+                targetIndex++
+                last = id
+                }
+            if (matched) {
+                homeViewModel.recordReadingState(targetIndex, previous, curId, next)
+            } else {
+                homeViewModel.recordReadingState(-2, "", curId, "")
             }
         }
     }
