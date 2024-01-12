@@ -119,7 +119,7 @@ abstract class AbstractRssRepository(
                 )
             }
 
-            feedId != null -> {
+            feedId != null && articleId == null -> {
                 articleDao.markAllAsReadByFeedId(
                     accountId = accountId,
                     feedId = feedId,
