@@ -16,7 +16,7 @@
 
 6. Various internal refactorings and improvements (@Ashinch)
 
-7. Translations updates: Hungarian, Turkish, Serbian, German, Indonesian, Persian (thanks to everyone who helped out!)
+7. Translations updates: Hungarian, Turkish, Serbian, German, Indonesian, Persian, and many others (thanks to everyone who helped out!)
 
 ### Notes
 
