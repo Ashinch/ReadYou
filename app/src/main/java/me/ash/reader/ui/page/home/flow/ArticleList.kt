@@ -15,17 +15,28 @@ import me.ash.reader.domain.model.article.ArticleWithFeed
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 fun LazyListScope.ArticleList(
     pagingItems: LazyPagingItems<ArticleFlowItem>,
+    currentReadingId: String,
     isFilterUnread: Boolean,
     isShowFeedIcon: Boolean,
     isShowStickyHeader: Boolean,
     articleListTonalElevation: Int,
     onClick: (ArticleWithFeed) -> Unit = {},
-    onSwipeOut: (ArticleWithFeed) -> Unit = {}
+    onSwipeOut: (ArticleWithFeed) -> Unit = {},
+    onFinished: (List<String>, Int) -> Unit = { strings: List<String>, i: Int -> }
 ) {
+    var count =0
+    var matched = -1
+    val idList = mutableListOf<String>()
     for (index in 0 until pagingItems.itemCount) {
         when (val item = pagingItems.peek(index)) {
             is ArticleFlowItem.Article -> {
-                item(key = item.articleWithFeed.article.id) {
+                val id = item.articleWithFeed.article.id
+                idList.add(id)
+                if (matched < 0 && id == currentReadingId) {
+                    matched = count
+                }
+                count++
+                item(key = id) {
                     swipeToDismiss(
                         articleWithFeed = item.articleWithFeed,
                         isFilterUnread = isFilterUnread,
@@ -36,7 +47,11 @@ fun LazyListScope.ArticleList(
             }
 
             is ArticleFlowItem.Date -> {
-                if (item.showSpacer) item { Spacer(modifier = Modifier.height(40.dp)) }
+                if (item.showSpacer) {
+                    count++
+                    item { Spacer(modifier = Modifier.height(40.dp)) }
+                }
+                count++
                 if (isShowStickyHeader) {
                     stickyHeader(key = item.date) {
                         StickyHeader(item.date, isShowFeedIcon, articleListTonalElevation)
@@ -52,3 +67,4 @@ fun LazyListScope.ArticleList(
         }
     }
 }
+onFinished(idList, matched)
