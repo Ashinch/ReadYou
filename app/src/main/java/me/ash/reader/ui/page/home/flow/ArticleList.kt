@@ -25,8 +25,8 @@ fun LazyListScope.ArticleList(
         when (val item = pagingItems.peek(index)) {
             is ArticleFlowItem.Article -> {
                 item(key = item.articleWithFeed.article.id) {
-                    swipeToDismiss(
-                        articleWithFeed = (pagingItems[index] as ArticleFlowItem.Article).articleWithFeed,
+                    SwipeableArticleItem(
+                        articleWithFeed = item.articleWithFeed,
                         onClick = { onClick(it) },
                         onSwipeOut = { onSwipeOut(it) }
                     )

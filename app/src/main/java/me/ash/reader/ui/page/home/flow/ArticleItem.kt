@@ -162,7 +162,7 @@ fun ArticleItem(
 }
 @ExperimentalMaterialApi
 @Composable
-fun swipeToDismiss(
+fun SwipeableArticleItem(
         articleWithFeed: ArticleWithFeed,
         onClick: (ArticleWithFeed) -> Unit = {},
         onSwipeOut: (ArticleWithFeed) -> Unit = {},
