@@ -114,9 +114,11 @@ fun FeedsPage(
         feedsViewModel.fetchAccount()
     }
 
-    LaunchedEffect(filterUiState) {
-        snapshotFlow { filterUiState }.collect {
-            feedsViewModel.pullFeeds(it)
+    LaunchedEffect(filterUiState, isSyncing) {
+        if (!isSyncing) {
+            snapshotFlow { filterUiState }.collect {
+                feedsViewModel.pullFeeds(it)
+            }
         }
     }
 
