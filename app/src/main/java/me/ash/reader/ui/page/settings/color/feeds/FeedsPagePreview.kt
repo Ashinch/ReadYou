@@ -94,7 +94,7 @@ fun FeedsPagePreview(
         )
         Spacer(modifier = Modifier.height(12.dp))
         GroupItem(
-            isEnded = { false },
+            roundedBottomCorner = { false },
             isExpanded = { groupListExpand.value },
             group = generateGroupPreview(),
             alpha = groupAlpha,
