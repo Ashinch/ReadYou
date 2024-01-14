@@ -1,19 +1,9 @@
 package me.ash.reader.ui.page.home.feeds
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -24,15 +14,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -44,21 +26,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.work.WorkInfo
 import me.ash.reader.R
-import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarFilled
-import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarPadding
-import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarStyle
-import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarTonalElevation
-import me.ash.reader.infrastructure.preference.LocalFeedsGroupListExpand
-import me.ash.reader.infrastructure.preference.LocalFeedsGroupListTonalElevation
-import me.ash.reader.infrastructure.preference.LocalFeedsTopBarTonalElevation
-import me.ash.reader.infrastructure.preference.LocalNewVersionNumber
-import me.ash.reader.infrastructure.preference.LocalSkipVersionNumber
+import me.ash.reader.infrastructure.preference.*
 import me.ash.reader.ui.component.FilterBar
-import me.ash.reader.ui.component.base.Banner
-import me.ash.reader.ui.component.base.DisplayText
-import me.ash.reader.ui.component.base.FeedbackIconButton
-import me.ash.reader.ui.component.base.RYScaffold
-import me.ash.reader.ui.component.base.Subtitle
+import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.alphaLN
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.findActivity
@@ -112,8 +82,7 @@ fun FeedsPage(
     val newVersion = LocalNewVersionNumber.current
     val skipVersion = LocalSkipVersionNumber.current
     val currentVersion = remember { context.getCurrentVersion() }
-    val listState =
-        if (groupWithFeedList.isNotEmpty()) feedsUiState.listState else rememberLazyListState()
+    val listState = if (groupWithFeedList.isNotEmpty()) feedsUiState.listState else rememberLazyListState()
 
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
@@ -190,7 +159,7 @@ fun FeedsPage(
             }
         },
         content = {
-            LazyColumn(
+            LazyColumn (
                 state = listState
             ) {
                 item {
