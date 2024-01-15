@@ -117,7 +117,7 @@ class RssHelper @Inject constructor(
             accountId = accountId,
             feedId = feed.id,
             date = syndEntry.publishedDate ?: syndEntry.updatedDate ?: Date(),
-            title = Html.fromHtml(syndEntry.title.toString()).toString(),
+            title = Html.fromHtml(syndEntry.title ?: feed.name).toString(),
             author = syndEntry.author,
             rawDescription = (content ?: desc) ?: "",
             shortDescription = (Readability4JExtended("", desc ?: content ?: "")
