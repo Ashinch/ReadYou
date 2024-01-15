@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.feeds
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.clickable
@@ -229,7 +228,7 @@ fun FeedsPage(
                                 group = groupWithFeed.group,
                                 alpha = groupAlpha,
                                 indicatorAlpha = groupIndicatorAlpha,
-                                isEnded = { index == groupWithFeedList.lastIndex },
+                                roundedBottomCorner = { index == groupWithFeedList.lastIndex || groupWithFeed.group.important == 0 },
                                 onExpanded = {
                                     groupsVisible[groupWithFeed.group.id] = groupsVisible.getOrPut(
                                         groupWithFeed.group.id,

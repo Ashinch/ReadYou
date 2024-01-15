@@ -18,6 +18,9 @@ data class Group(
     var accountId: Int,
 ) {
 
+    /**
+     * see [me.ash.reader.domain.model.feed.ImportantNum.important]
+     */
     @Ignore
     var important: Int? = 0
 }

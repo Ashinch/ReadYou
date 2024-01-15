@@ -35,7 +35,7 @@ fun GroupItem(
     group: Group,
     alpha: Float = 1f,
     indicatorAlpha: Float = 1f,
-    isEnded: () -> Boolean,
+    roundedBottomCorner: () -> Boolean,
     isExpanded: () -> Boolean,
     groupOptionViewModel: GroupOptionViewModel = hiltViewModel(),
     onExpanded: () -> Unit = {},
@@ -49,7 +49,7 @@ fun GroupItem(
             .animateContentSize()
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .clip(if (isExpanded() && !isEnded()) ShapeTop32 else Shape32)
+            .clip(if (isExpanded() && !roundedBottomCorner()) ShapeTop32 else Shape32)
             .background(MaterialTheme.colorScheme.secondary.copy(alpha = alpha))
             .combinedClickable(
                 onClick = {
