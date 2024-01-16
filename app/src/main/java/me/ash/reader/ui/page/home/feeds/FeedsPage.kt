@@ -228,7 +228,7 @@ fun FeedsPage(
                                 group = groupWithFeed.group,
                                 alpha = groupAlpha,
                                 indicatorAlpha = groupIndicatorAlpha,
-                                roundedBottomCorner = { index == groupWithFeedList.lastIndex || groupWithFeed.group.important == 0 },
+                                roundedBottomCorner = { index == groupWithFeedList.lastIndex || groupWithFeed.group.feeds == 0 },
                                 onExpanded = {
                                     groupsVisible[groupWithFeed.group.id] = groupsVisible.getOrPut(
                                         groupWithFeed.group.id,
