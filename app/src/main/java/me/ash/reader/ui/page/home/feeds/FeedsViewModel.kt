@@ -76,7 +76,7 @@ class FeedsViewModel @Inject constructor(
                         while (feedIterator.hasNext()) {
                             val feed = feedIterator.next()
                             val feedImportant = importantMap[feed.id] ?: 0
-                            groupWithFeed.group.feeds = groupWithFeed.group.feeds.plus(1)
+                            groupWithFeed.group.feeds++
                             if ((isStarred || isUnread) && feedImportant == 0) {
                                 feedIterator.remove()
                                 continue
