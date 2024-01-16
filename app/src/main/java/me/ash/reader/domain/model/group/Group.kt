@@ -23,4 +23,10 @@ data class Group(
      */
     @Ignore
     var important: Int? = 0
+
+    /**
+     * number of feeds within a group
+     * */
+    @Ignore
+    var feeds: Int = 0
 }
