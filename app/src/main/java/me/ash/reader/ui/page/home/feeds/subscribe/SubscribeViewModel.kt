@@ -65,7 +65,8 @@ class SubscribeViewModel @Inject constructor(
     fun addNewGroup() {
         if (_subscribeUiState.value.newGroupContent.isNotBlank()) {
             viewModelScope.launch {
-                selectedGroup(rssService.get().addGroup(_subscribeUiState.value.newGroupContent))
+                // TODO: How to add a single group without no feeds via Google Reader API?
+                selectedGroup(rssService.get().addGroup(null, _subscribeUiState.value.newGroupContent))
                 hideNewGroupDialog()
                 _subscribeUiState.update { it.copy(newGroupContent = "") }
             }

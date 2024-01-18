@@ -162,7 +162,7 @@ class GroupOptionViewModel @Inject constructor(
     fun rename() {
         _groupOptionUiState.value.group?.let {
             viewModelScope.launch {
-                rssService.get().updateGroup(it.copy(name = _groupOptionUiState.value.newName))
+                rssService.get().renameGroup(it.copy(name = _groupOptionUiState.value.newName))
                 _groupOptionUiState.update { it.copy(renameDialogVisible = false) }
             }
         }

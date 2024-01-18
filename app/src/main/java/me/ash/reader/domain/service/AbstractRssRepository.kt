@@ -44,10 +44,10 @@ abstract class AbstractRssRepository(
     private val dispatcherDefault: CoroutineDispatcher,
 ) {
 
-    open val subscribe: Boolean = true
-    open val move: Boolean = true
-    open val delete: Boolean = true
-    open val update: Boolean = true
+    open val addSubscription: Boolean = true
+    open val moveSubscription: Boolean = true
+    open val deleteSubscription: Boolean = true
+    open val updateSubscription: Boolean = true
 
     open suspend fun validCredentials(): Boolean = true
 
@@ -73,13 +73,16 @@ abstract class AbstractRssRepository(
         })
     }
 
-    open suspend fun addGroup(name: String): String {
+    open suspend fun addGroup(
+        destFeed: Feed?,
+        newGroupName: String
+    ): String {
         context.currentAccountId.let { accountId ->
             return accountId.spacerDollar(UUID.randomUUID().toString()).also {
                 groupDao.insert(
                     Group(
                         id = it,
-                        name = name,
+                        name = newGroupName,
                         accountId = accountId
                     )
                 )
@@ -290,21 +293,33 @@ abstract class AbstractRssRepository(
 
     suspend fun isFeedExist(url: String): Boolean = feedDao.queryByLink(context.currentAccountId, url).isNotEmpty()
 
-    suspend fun updateGroup(group: Group) {
+    open suspend fun renameGroup(group: Group) {
         groupDao.update(group)
     }
 
-    suspend fun updateFeed(feed: Feed) {
+    open suspend fun renameFeed(feed: Feed) {
+       updateFeed(feed)
+    }
+
+    open suspend fun moveFeed(originGroupId: String, feed: Feed) {
+       updateFeed(feed)
+    }
+
+    open suspend fun changeFeedUrl(feed: Feed) {
+       updateFeed(feed)
+    }
+
+    internal suspend fun updateFeed(feed: Feed) {
         feedDao.update(feed)
     }
 
-    suspend fun deleteGroup(group: Group) {
+    open suspend fun deleteGroup(group: Group) {
         deleteArticles(group = group)
         feedDao.deleteByGroupId(context.currentAccountId, group.id)
         groupDao.delete(group)
     }
 
-    suspend fun deleteFeed(feed: Feed) {
+    open suspend fun deleteFeed(feed: Feed) {
         deleteArticles(feed = feed)
         feedDao.delete(feed)
     }

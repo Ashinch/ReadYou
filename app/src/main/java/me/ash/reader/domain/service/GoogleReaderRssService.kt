@@ -27,9 +27,9 @@ import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI
-import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofCategoryPathToId
-import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofFeedPathToId
-import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofItemPathToId
+import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofCategoryStreamIdToId
+import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofFeedStreamIdToId
+import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofItemStreamIdToId
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.dollarLast
 import me.ash.reader.ui.ext.showToast
@@ -59,10 +59,10 @@ class GoogleReaderRssService @Inject constructor(
     feedDao, workManager, rssHelper, notificationHelper, ioDispatcher, defaultDispatcher
 ) {
 
-    // override val subscribe: Boolean = true
-    // override val move: Boolean = true
-    // override val delete: Boolean = true
-    // override val update: Boolean = true
+    override val addSubscription: Boolean = true
+    override val moveSubscription: Boolean = true
+    override val deleteSubscription: Boolean = true
+    override val updateSubscription: Boolean = true
 
     private suspend fun getGoogleReaderAPI() =
         GoogleReaderSecurityKey(accountDao.queryById(context.currentAccountId)!!.securityKey).run {
@@ -87,9 +87,12 @@ class GoogleReaderRssService @Inject constructor(
     ) {
         val accountId = context.currentAccountId
         val quickAdd = getGoogleReaderAPI().subscriptionQuickAdd(feedLink)
-        val feedId = quickAdd.streamId?.ofFeedPathToId()!!
-        getGoogleReaderAPI().subscriptionEdit(feedId, groupId.dollarLast())
-        // TODO: Support rename while adding a subscription
+        val feedId = quickAdd.streamId?.ofFeedStreamIdToId()!!
+        getGoogleReaderAPI().subscriptionEdit(
+            destFeedId = feedId,
+            destCategoryId = groupId.dollarLast(),
+            destFeedName = searchedFeed.title!!
+        )
         feedDao.insert(Feed(
             id = accountId.spacerDollar(feedId),
             name = searchedFeed.title!!,
@@ -102,8 +105,70 @@ class GoogleReaderRssService @Inject constructor(
         SyncWorker.enqueueOneTimeWork(workManager)
     }
 
-    override suspend fun addGroup(name: String): String {
+    override suspend fun addGroup(
+        destFeed: Feed?,
+        newGroupName: String,
+    ): String {
+        val accountId = context.currentAccountId
+        getGoogleReaderAPI().subscriptionEdit(
+            destFeedId = destFeed?.id?.dollarLast(),
+            destCategoryId = newGroupName
+        )
+        val id = accountId.spacerDollar(newGroupName)
+        groupDao.insert(
+            Group(
+                id = id,
+                name = newGroupName,
+                accountId = accountId
+            )
+        )
+        return id
+    }
+
+    override suspend fun renameGroup(group: Group) {
+        getGoogleReaderAPI().renameTag(
+            categoryId = group.id.dollarLast(),
+            renameToName = group.name
+        )
+        // TODO: Whether to switch the old ID to the new ID?
+        super.renameGroup(group)
+    }
+
+    override suspend fun moveFeed(originGroupId: String, feed: Feed) {
+        getGoogleReaderAPI().subscriptionEdit(
+            destFeedId = feed.id.dollarLast(),
+            destCategoryId = feed.groupId.dollarLast(),
+            originCategoryId = originGroupId.dollarLast(),
+        )
+        super.moveFeed(originGroupId, feed)
+    }
+
+    override suspend fun changeFeedUrl(feed: Feed) {
         throw Exception("Unsupported")
+    }
+
+    override suspend fun renameFeed(feed: Feed) {
+        getGoogleReaderAPI().subscriptionEdit(
+            destFeedId = feed.id.dollarLast(),
+            destFeedName = feed.name
+        )
+        // TODO: Whether to switch the old ID to the new ID?
+        super.renameFeed(feed)
+    }
+
+    override suspend fun deleteGroup(group: Group) {
+        feedDao.queryByGroupId(context.currentAccountId, group.id)
+            .forEach { deleteFeed(it) }
+        getGoogleReaderAPI().disableTag(group.id.dollarLast())
+        super.deleteGroup(group)
+    }
+
+    override suspend fun deleteFeed(feed: Feed) {
+        getGoogleReaderAPI().subscriptionEdit(
+            action = "unsubscribe",
+            destFeedId = feed.id.dollarLast()
+        )
+        super.deleteFeed(feed)
     }
 
     /**
@@ -141,7 +206,7 @@ class GoogleReaderRssService @Inject constructor(
             googleReaderAPI.getSubscriptionList()
                 .subscriptions.groupBy { it.categories?.first() }
                 .forEach { (category, feeds) ->
-                    val groupId = accountId.spacerDollar(category?.id?.ofCategoryPathToId()!!)
+                    val groupId = accountId.spacerDollar(category?.id?.ofCategoryStreamIdToId()!!)
 
                     // Handle folders
                     groupDao.insert(
@@ -156,7 +221,7 @@ class GoogleReaderRssService @Inject constructor(
                     // Handle feeds
                     feedDao.insert(
                         *feeds.map {
-                            val feedId = accountId.spacerDollar(it.id?.ofFeedPathToId()!!)
+                            val feedId = accountId.spacerDollar(it.id?.ofFeedStreamIdToId()!!)
                             Feed(
                                 id = feedId,
                                 name = it.title ?: context.getString(R.string.empty),
@@ -197,7 +262,7 @@ class GoogleReaderRssService @Inject constructor(
             readIds?.map { it.id!! }?.chunked(100)?.forEach { chunkedIds ->
                 articleDao.insert(
                     *googleReaderAPI.getItemsContents(chunkedIds).items?.map {
-                        val articleId = it.id!!.ofItemPathToId()
+                        val articleId = it.id!!.ofItemStreamIdToId()
                         Article(
                             id = accountId.spacerDollar(articleId),
                             date = it.published?.run { Date(this * 1000) } ?: Date(),
@@ -213,7 +278,7 @@ class GoogleReaderRssService @Inject constructor(
                             link = it.canonical?.first()?.href
                                 ?: it.alternate?.first()?.href
                                 ?: it.origin?.htmlUrl ?: "",
-                            feedId = accountId.spacerDollar(it.origin?.streamId?.ofFeedPathToId() ?: feedIds.first()),
+                            feedId = accountId.spacerDollar(it.origin?.streamId?.ofFeedStreamIdToId() ?: feedIds.first()),
                             accountId = accountId,
                             isUnread = unreadIds?.contains(articleId) ?: true,
                             isStarred = starredIds?.contains(articleId) ?: false,

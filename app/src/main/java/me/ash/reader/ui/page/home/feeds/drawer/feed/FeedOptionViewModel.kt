@@ -88,7 +88,9 @@ class FeedOptionViewModel @Inject constructor(
     fun addNewGroup() {
         if (_feedOptionUiState.value.newGroupContent.isNotBlank()) {
             viewModelScope.launch {
-                selectedGroup(rssService.get().addGroup(_feedOptionUiState.value.newGroupContent))
+                selectedGroup(rssService.get().addGroup(
+                    destFeed = _feedOptionUiState.value.feed,
+                    newGroupName = _feedOptionUiState.value.newGroupContent))
                 hideNewGroupDialog()
             }
         }
@@ -97,7 +99,10 @@ class FeedOptionViewModel @Inject constructor(
     fun selectedGroup(groupId: String) {
         viewModelScope.launch(ioDispatcher) {
             _feedOptionUiState.value.feed?.let {
-                rssService.get().updateFeed(it.copy(groupId = groupId))
+                rssService.get().moveFeed(
+                    originGroupId = it.groupId,
+                    feed = it.copy(groupId = groupId)
+                )
                 fetchFeed(it.id)
             }
         }
@@ -162,7 +167,7 @@ class FeedOptionViewModel @Inject constructor(
     fun renameFeed() {
         _feedOptionUiState.value.feed?.let {
             viewModelScope.launch {
-                rssService.get().updateFeed(it.copy(name = _feedOptionUiState.value.newName))
+                rssService.get().renameFeed(it.copy(name = _feedOptionUiState.value.newName))
                 _feedOptionUiState.update { it.copy(renameDialogVisible = false) }
             }
         }
@@ -215,7 +220,7 @@ class FeedOptionViewModel @Inject constructor(
     fun changeFeedUrl() {
         _feedOptionUiState.value.feed?.let {
             viewModelScope.launch {
-                rssService.get().updateFeed(it.copy(url = _feedOptionUiState.value.newUrl))
+                rssService.get().changeFeedUrl(it.copy(url = _feedOptionUiState.value.newUrl))
                 _feedOptionUiState.update { it.copy(changeUrlDialogVisible = false) }
             }
         }

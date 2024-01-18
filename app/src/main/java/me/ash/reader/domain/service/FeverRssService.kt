@@ -57,10 +57,10 @@ class FeverRssService @Inject constructor(
     feedDao, workManager, rssHelper, notificationHelper, ioDispatcher, defaultDispatcher
 ) {
 
-    override val subscribe: Boolean = false
-    override val move: Boolean = false
-    override val delete: Boolean = false
-    override val update: Boolean = false
+    override val addSubscription: Boolean = false
+    override val moveSubscription: Boolean = false
+    override val deleteSubscription: Boolean = false
+    override val updateSubscription: Boolean = false
 
     private suspend fun getFeverAPI() =
         FeverSecurityKey(accountDao.queryById(context.currentAccountId)!!.securityKey).run {
@@ -86,7 +86,31 @@ class FeverRssService @Inject constructor(
         throw Exception("Unsupported")
     }
 
-    override suspend fun addGroup(name: String): String {
+    override suspend fun addGroup(destFeed: Feed?, newGroupName: String): String {
+        throw Exception("Unsupported")
+    }
+
+    override suspend fun renameGroup(group: Group) {
+        throw Exception("Unsupported")
+    }
+
+    override suspend fun renameFeed(feed: Feed) {
+        throw Exception("Unsupported")
+    }
+
+    override suspend fun deleteGroup(group: Group) {
+        throw Exception("Unsupported")
+    }
+
+    override suspend fun deleteFeed(feed: Feed) {
+        throw Exception("Unsupported")
+    }
+
+    override suspend fun moveFeed(originGroupId: String, feed: Feed) {
+        throw Exception("Unsupported")
+    }
+
+    override suspend fun changeFeedUrl(feed: Feed) {
         throw Exception("Unsupported")
     }
 

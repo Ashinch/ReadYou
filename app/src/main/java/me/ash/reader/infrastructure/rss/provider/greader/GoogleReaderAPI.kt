@@ -24,11 +24,11 @@ class GoogleReaderAPI private constructor(
     private val authData = AuthData(null, null)
 
     suspend fun validCredentials(): Boolean {
-        reAuthentication()
+        reauthenticate()
         return authData.clientLoginToken?.isNotEmpty() ?: false
     }
 
-    private suspend fun reAuthentication() {
+    private suspend fun reauthenticate() {
         // Get client login token
         val clResponse = client.newCall(
             Request.Builder()
@@ -109,7 +109,7 @@ class GoogleReaderAPI private constructor(
         params: List<Pair<String, String>>? = null,
     ): T {
         if (authData.clientLoginToken.isNullOrEmpty()) {
-            reAuthentication()
+            reauthenticate()
         }
 
         val response = client.newCall(
@@ -143,7 +143,7 @@ class GoogleReaderAPI private constructor(
         form: List<Pair<String, String>>? = null,
     ): T {
         if (authData.clientLoginToken.isNullOrEmpty()) {
-            reAuthentication()
+            reauthenticate()
         }
         val response = client.newCall(
             Request.Builder()
@@ -219,15 +219,41 @@ class GoogleReaderAPI private constructor(
             form = listOf(Pair("quickadd", feedUrl))
         )
 
-    suspend fun subscriptionEdit(feedId: String, categoryId: String): String =
+    enum class subscriptionOperationType
+
+    suspend fun editTag(categoryName: String): String =
         retryablePostRequest<String>(
-            query = "reader/api/0/subscription/edit",
+            query = "reader/api/0/edit-tag",
+            form = listOf(Pair("a", categoryName.ofCategoryIdToStreamId()))
+        )
+
+    suspend fun disableTag(categoryId: String): String =
+        retryablePostRequest<String>(
+            query = "reader/api/0/disable-tag",
+            form = listOf(Pair("s", categoryId.ofCategoryIdToStreamId()))
+        )
+
+    suspend fun renameTag(categoryId: String, renameToName: String): String =
+        retryablePostRequest<String>(
+            query = "reader/api/0/rename-tag",
             form = listOf(
-                Pair("ac", "edit"),
-                Pair("s", feedId.ofFeedIdToPath()),
-                Pair("a", categoryId.ofCategoryIdToPath()),
+                Pair("s", categoryId.ofCategoryIdToStreamId()),
+                Pair("dest", renameToName.ofCategoryIdToStreamId()),
             )
         )
+
+    suspend fun subscriptionEdit(
+        action: String = "edit", destFeedId: String? = null, destCategoryId: String? = null,
+        originCategoryId: String? = null, destFeedName: String? = null,
+    ): String = retryablePostRequest<String>(
+        query = "reader/api/0/subscription/edit",
+        form = mutableListOf(Pair("ac", action)).apply {
+            if (destFeedId != null) add(Pair("s", destFeedId.ofFeedIdToStreamId()))
+            if (destCategoryId != null) add(Pair("a", destCategoryId.ofCategoryIdToStreamId()))
+            if (originCategoryId != null) add(Pair("r", originCategoryId.ofCategoryIdToStreamId()))
+            if (destFeedName?.isNotBlank() == true) add(Pair("t", destFeedName))
+        }
+    )
 
     companion object {
 
@@ -241,35 +267,35 @@ class GoogleReaderAPI private constructor(
             return toLong(16).toString()
         }
 
-        fun String.ofItemPathToHexId(): String {
+        fun String.ofItemStreamIdToHexId(): String {
             return replace("tag:google.com,2005:reader/item/", "")
         }
 
-        fun String.ofItemPathToId(): String {
-            return ofItemPathToHexId().ofItemHexIdToId()
+        fun String.ofItemStreamIdToId(): String {
+            return ofItemStreamIdToHexId().ofItemHexIdToId()
         }
 
-        fun String.ofItemHexIdToPath(): String {
+        fun String.ofItemHexIdToStreamId(): String {
             return "tag:google.com,2005:reader/item/$this"
         }
 
-        fun String.ofItemIdToPath(): String {
+        fun String.ofItemIdToStreamId(): String {
             return "tag:google.com,2005:reader/item/${ofItemIdToHexId()}"
         }
 
-        fun String.ofFeedIdToPath(): String {
+        fun String.ofFeedIdToStreamId(): String {
             return "feed/$this"
         }
 
-        fun String.ofFeedPathToId(): String {
+        fun String.ofFeedStreamIdToId(): String {
             return replace("feed/", "")
         }
 
-        fun String.ofCategoryIdToPath(): String {
+        fun String.ofCategoryIdToStreamId(): String {
             return "user/-/label/$this"
         }
 
-        fun String.ofCategoryPathToId(): String {
+        fun String.ofCategoryStreamIdToId(): String {
             return replace("user/-/label/", "")
         }
 
