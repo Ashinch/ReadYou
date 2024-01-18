@@ -120,86 +120,86 @@ fun HomeEntry(
             startDestination = if (context.isFirstLaunch) RouteName.STARTUP else RouteName.FEEDS,
         ) {
             // Startup
-            animatedComposable(route = RouteName.STARTUP) {
+            forwardAndBackwardComposable(route = RouteName.STARTUP) {
                 StartupPage(navController)
             }
 
             // Home
-            animatedComposable(route = RouteName.FEEDS) {
+            forwardAndBackwardComposable(route = RouteName.FEEDS) {
                 FeedsPage(navController = navController, homeViewModel = homeViewModel)
             }
-            animatedComposable(route = RouteName.FLOW) {
+            forwardAndBackwardComposable(route = RouteName.FLOW) {
                 FlowPage(
                     navController = navController,
                     homeViewModel = homeViewModel,
                 )
             }
-            animatedComposable(route = "${RouteName.READING}/{articleId}") {
+            forwardAndBackwardComposable(route = "${RouteName.READING}/{articleId}") {
                 ReadingPage(navController = navController, homeViewModel = homeViewModel)
             }
 
             // Settings
-            animatedComposable(route = RouteName.SETTINGS) {
+            forwardAndBackwardComposable(route = RouteName.SETTINGS) {
                 SettingsPage(navController)
             }
 
             // Accounts
-            animatedComposable(route = RouteName.ACCOUNTS) {
+            forwardAndBackwardComposable(route = RouteName.ACCOUNTS) {
                 AccountsPage(navController)
             }
 
-            animatedComposable(route = "${RouteName.ACCOUNT_DETAILS}/{accountId}") {
+            forwardAndBackwardComposable(route = "${RouteName.ACCOUNT_DETAILS}/{accountId}") {
                 AccountDetailsPage(navController)
             }
 
-            animatedComposable(route = RouteName.ADD_ACCOUNTS) {
+            forwardAndBackwardComposable(route = RouteName.ADD_ACCOUNTS) {
                 AddAccountsPage(navController)
             }
 
             // Color & Style
-            animatedComposable(route = RouteName.COLOR_AND_STYLE) {
+            forwardAndBackwardComposable(route = RouteName.COLOR_AND_STYLE) {
                 ColorAndStylePage(navController)
             }
-            animatedComposable(route = RouteName.DARK_THEME) {
+            forwardAndBackwardComposable(route = RouteName.DARK_THEME) {
                 DarkThemePage(navController)
             }
-            animatedComposable(route = RouteName.FEEDS_PAGE_STYLE) {
+            forwardAndBackwardComposable(route = RouteName.FEEDS_PAGE_STYLE) {
                 FeedsPageStylePage(navController)
             }
-            animatedComposable(route = RouteName.FLOW_PAGE_STYLE) {
+            forwardAndBackwardComposable(route = RouteName.FLOW_PAGE_STYLE) {
                 FlowPageStylePage(navController)
             }
-            animatedComposable(route = RouteName.READING_PAGE_STYLE) {
+            forwardAndBackwardComposable(route = RouteName.READING_PAGE_STYLE) {
                 ReadingStylePage(navController)
             }
-            animatedComposable(route = RouteName.READING_DARK_THEME) {
+            forwardAndBackwardComposable(route = RouteName.READING_DARK_THEME) {
                 ReadingDarkThemePage(navController)
             }
-            animatedComposable(route = RouteName.READING_PAGE_TITLE) {
+            forwardAndBackwardComposable(route = RouteName.READING_PAGE_TITLE) {
                 ReadingTitlePage(navController)
             }
-            animatedComposable(route = RouteName.READING_PAGE_TEXT) {
+            forwardAndBackwardComposable(route = RouteName.READING_PAGE_TEXT) {
                 ReadingTextPage(navController)
             }
-            animatedComposable(route = RouteName.READING_PAGE_IMAGE) {
+            forwardAndBackwardComposable(route = RouteName.READING_PAGE_IMAGE) {
                 ReadingImagePage(navController)
             }
-            animatedComposable(route = RouteName.READING_PAGE_VIDEO) {
+            forwardAndBackwardComposable(route = RouteName.READING_PAGE_VIDEO) {
                 ReadingVideoPage(navController)
             }
 
             // Interaction
-            animatedComposable(route = RouteName.INTERACTION) {
+            forwardAndBackwardComposable(route = RouteName.INTERACTION) {
                 InteractionPage(navController)
             }
 
             // Languages
-            animatedComposable(route = RouteName.LANGUAGES) {
+            forwardAndBackwardComposable(route = RouteName.LANGUAGES) {
                 LanguagesPage(navController = navController)
             }
 
             // Tips & Support
-            animatedComposable(route = RouteName.TIPS_AND_SUPPORT) {
+            forwardAndBackwardComposable(route = RouteName.TIPS_AND_SUPPORT) {
                 TipsAndSupportPage(navController)
             }
         }
