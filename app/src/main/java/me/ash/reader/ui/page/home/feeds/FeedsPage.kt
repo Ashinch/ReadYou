@@ -58,7 +58,6 @@ fun FeedsPage(
 ) {
     var accountTabVisible by remember { mutableStateOf(false) }
 
-
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val topBarTonalElevation = LocalFeedsTopBarTonalElevation.current
@@ -164,20 +163,9 @@ fun FeedsPage(
             ) {
                 item {
                     DisplayText(
-                        modifier = Modifier
-                            .clickable {
-                                accountTabVisible = true
-                            },
-                        // .pointerInput(Unit) {
-                        //     detectTapGestures(
-                        //         onPress = {
-                        //             accountTabRemember = true
-                        //         },
-                        //         onLongPress = {
-                        //             accountTabRemember = true
-                        //         }
-                        //     )
-                        // },
+                        modifier = Modifier.clickable {
+                            accountTabVisible = true
+                        },
                         text = feedsUiState.account?.name ?: "",
                         desc = if (isSyncing) stringResource(R.string.syncing) else "",
                     )
