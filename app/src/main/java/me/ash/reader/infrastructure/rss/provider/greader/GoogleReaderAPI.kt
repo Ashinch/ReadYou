@@ -16,7 +16,16 @@ class GoogleReaderAPI private constructor(
     private val httpPassword: String? = null,
 ) : ProviderAPI() {
 
-    data class AuthData(
+    enum class Stream(val tag: String) {
+        ALL_ITEMS("user/-/state/com.google/reading-list"),
+        READ("user/-/state/com.google/read"),
+        STARRED("user/-/state/com.google/starred"),
+        LIKE("user/-/state/com.google/like"),
+        BROADCAST("user/-/state/com.google/broadcast"),
+        ;
+    }
+
+    private data class AuthData(
         var clientLoginToken: String?,
         var actionToken: String?,
     )
@@ -182,7 +191,7 @@ class GoogleReaderAPI private constructor(
         retryableGetRequest<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
             params = listOf(
-                Pair("s", Label.READ),
+                Pair("s", Stream.READ.tag),
                 Pair("ot", since.toString()),
                 Pair("n", MAXIMUM_ITEMS_LIMIT),
             ))
@@ -191,8 +200,8 @@ class GoogleReaderAPI private constructor(
         retryableGetRequest<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
             params = listOf(
-                Pair("s", Label.ALL_ITEMS),
-                Pair("xt", Label.READ),
+                Pair("s", Stream.ALL_ITEMS.tag),
+                Pair("xt", Stream.READ.tag),
                 Pair("n", MAXIMUM_ITEMS_LIMIT),
             ))
 
@@ -200,7 +209,7 @@ class GoogleReaderAPI private constructor(
         retryableGetRequest<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
             params = listOf(
-                Pair("s", Label.STARRED),
+                Pair("s", Stream.STARRED.tag),
                 Pair("n", MAXIMUM_ITEMS_LIMIT),
             ))
 
@@ -218,17 +227,6 @@ class GoogleReaderAPI private constructor(
             params = listOf(Pair("quickadd", feedUrl)),
             form = listOf(Pair("quickadd", feedUrl))
         )
-
-    enum class subscriptionOperationType
-
-    object Label {
-
-        const val ALL_ITEMS = "user/-/state/com.google/reading-list"
-        const val READ = "user/-/state/com.google/read"
-        const val STARRED = "user/-/state/com.google/starred"
-        const val LIKE = "user/-/state/com.google/like"
-        const val BROADCAST = "user/-/state/com.google/broadcast"
-    }
 
     suspend fun editTag(itemIds: List<String>, mark: String? = null, unmark: String? = null): String =
         retryablePostRequest<String>(

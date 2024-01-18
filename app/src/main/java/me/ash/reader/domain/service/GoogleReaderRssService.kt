@@ -199,10 +199,10 @@ class GoogleReaderRssService @Inject constructor(
      * 6. Remove items that are no longer in unread/starred/tagged ids lists from your local database.
      * 7. Fetch contents of items missing in database.
      * 8. Mark/unmark items read/starred/tagged in you app comparing local state and ids you've got from the Google Reader API.
-     *
      * Use edit-tag to sync read/starred/tagged status from your app to Google Reader API.
      *
      * @link https://github.com/bazqux/bazqux-api?tab=readme-ov-file
+     * @link https://github.com/theoldreader/api
      */
     override suspend fun sync(coroutineWorker: CoroutineWorker): ListenableWorker.Result = supervisorScope {
         coroutineWorker.setProgress(SyncWorker.setIsSyncing(true))
@@ -291,7 +291,8 @@ class GoogleReaderRssService @Inject constructor(
                             link = it.canonical?.first()?.href
                                 ?: it.alternate?.first()?.href
                                 ?: it.origin?.htmlUrl ?: "",
-                            feedId = accountId.spacerDollar(it.origin?.streamId?.ofFeedStreamIdToId() ?: feedIds.first()),
+                            feedId = accountId.spacerDollar(it.origin?.streamId?.ofFeedStreamIdToId()
+                                ?: feedIds.first()),
                             accountId = accountId,
                             isUnread = unreadIds?.contains(articleId) ?: true,
                             isStarred = starredIds?.contains(articleId) ?: false,
@@ -301,14 +302,8 @@ class GoogleReaderRssService @Inject constructor(
                 )
             }
 
-
-            // 7. Remove items that are no longer in unread/starred/tagged ids lists from your local database
-
-            // 8. Fetch contents of items missing in database.
-
-            // 9. Mark/unmark items read/starred/tagged in you app comparing local state and ids you've got from the
-            // GoogleReader
-
+            // 7. Mark/unmark items read/starred/tagged in you app comparing
+            // local state and ids you've got from the GoogleReader
             val articlesMeta = articleDao.queryArticleMetadataAll(accountId)
             for (meta: ArticleMeta in articlesMeta) {
                 val articleId = meta.id.dollarLast()
@@ -368,14 +363,14 @@ class GoogleReaderRssService @Inject constructor(
             articleId != null -> {
                 googleReaderAPI.editTag(
                     itemIds = listOf(articleId.dollarLast()),
-                    mark = if (!isUnread) GoogleReaderAPI.Label.READ else null,
-                    unmark = if (isUnread) GoogleReaderAPI.Label.READ else null,
+                    mark = if (!isUnread) GoogleReaderAPI.Stream.READ.tag else null,
+                    unmark = if (isUnread) GoogleReaderAPI.Stream.READ.tag else null,
                 )
             }
 
             else -> {
                 googleReaderAPI.markAllAsRead(
-                    streamId = GoogleReaderAPI.Label.ALL_ITEMS,
+                    streamId = GoogleReaderAPI.Stream.ALL_ITEMS.tag,
                     sinceTimestamp = sinceTime
                 )
             }
@@ -386,8 +381,8 @@ class GoogleReaderRssService @Inject constructor(
         super.markAsStarred(articleId, isStarred)
         getGoogleReaderAPI().editTag(
             itemIds = listOf(articleId.dollarLast()),
-            mark = if (isStarred) GoogleReaderAPI.Label.STARRED else null,
-            unmark = if (!isStarred) GoogleReaderAPI.Label.STARRED else null,
+            mark = if (isStarred) GoogleReaderAPI.Stream.STARRED.tag else null,
+            unmark = if (!isStarred) GoogleReaderAPI.Stream.STARRED.tag else null,
         )
     }
 }
