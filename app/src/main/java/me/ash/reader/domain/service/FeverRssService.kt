@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
+import com.rometools.rome.feed.synd.SyndFeed
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.supervisorScope
@@ -74,7 +75,14 @@ class FeverRssService @Inject constructor(
 
     override suspend fun validCredentials(): Boolean = getFeverAPI().validCredentials() > 0
 
-    override suspend fun subscribe(feed: Feed, articles: List<Article>) {
+    override suspend fun clearAuthorization() {
+        FeverAPI.clearInstance()
+    }
+
+    override suspend fun subscribe(
+        feedLink: String, searchedFeed: SyndFeed, groupId: String,
+        isNotification: Boolean, isFullContent: Boolean,
+    ) {
         throw Exception("Unsupported")
     }
 

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CreateNewFolder
 import androidx.compose.material.icons.rounded.RssFeed
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -25,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.R
+import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.RenameDialog
 import me.ash.reader.ui.component.base.ClipboardTextField
 import me.ash.reader.ui.component.base.RYDialog
@@ -71,9 +71,10 @@ fun SubscribeDialog(
             subscribeViewModel.hideDrawer()
         },
         icon = {
-            Icon(
-                imageVector = Icons.Rounded.RssFeed,
-                contentDescription = stringResource(R.string.subscribe),
+            FeedIcon(
+                feedName = subscribeUiState.searchedFeed?.title ?: stringResource(R.string.subscribe),
+                iconUrl = subscribeUiState.searchedFeed?.icon?.url,
+                placeholderIcon = Icons.Rounded.RssFeed,
             )
         },
         title = {
@@ -83,10 +84,10 @@ fun SubscribeDialog(
                         subscribeViewModel.showRenameDialog()
                     }
                 },
-                text = if (subscribeUiState.isSearchPage) {
-                    subscribeUiState.title
-                } else {
-                    subscribeUiState.feed?.name ?: stringResource(R.string.unknown)
+                text = when {
+                    subscribeUiState.isSearchPage -> subscribeUiState.title
+                    subscribeUiState.searchedFeed?.title != null -> subscribeUiState.searchedFeed.title
+                    else -> stringResource(R.string.unknown)
                 },
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

@@ -6,6 +6,7 @@ import androidx.paging.PagingSource
 import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
+import com.rometools.rome.feed.synd.SyndFeed
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -13,7 +14,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.supervisorScope
-import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.feed.FeedWithArticle
@@ -51,7 +51,22 @@ abstract class AbstractRssRepository(
 
     open suspend fun validCredentials(): Boolean = true
 
-    open suspend fun subscribe(feed: Feed, articles: List<Article>) {
+    open suspend fun clearAuthorization() {}
+
+    open suspend fun subscribe(
+        feedLink: String, searchedFeed: SyndFeed, groupId: String,
+        isNotification: Boolean, isFullContent: Boolean
+    ) {
+        val accountId = context.currentAccountId
+        val feed = Feed(
+            id = accountId.spacerDollar(UUID.randomUUID().toString()),
+            name = searchedFeed.title!!,
+            url = feedLink,
+            groupId = groupId,
+            accountId = accountId,
+            icon = searchedFeed.icon?.link
+        )
+        val articles = searchedFeed.entries.map { rssHelper.buildArticleFromSyndEntry(feed, accountId, it) }
         feedDao.insert(feed)
         articleDao.insertList(articles.map {
             it.copy(feedId = feed.id)
@@ -148,7 +163,10 @@ abstract class AbstractRssRepository(
         val articles = rssHelper.queryRssXml(feed, latest?.link)
         if (feed.icon == null) {
             try {
-                rssHelper.queryRssIcon(feedDao, feed)
+                val iconLink = rssHelper.queryRssIconLink(feed.url)
+                if (iconLink != null) {
+                    rssHelper.saveRssIcon(feedDao, feed, iconLink)
+                }
             } catch (e: Exception) {
                 Log.i("RLog", "queryRssIcon is failed: ${e.message}")
             }

@@ -24,6 +24,7 @@ import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.page.settings.accounts.addition.AddFeverAccountDialog
+import me.ash.reader.ui.page.settings.accounts.addition.AddGoogleReaderAccountDialog
 import me.ash.reader.ui.page.settings.accounts.addition.AddLocalAccountDialog
 import me.ash.reader.ui.page.settings.accounts.addition.AdditionViewModel
 import me.ash.reader.ui.theme.palette.onLight
@@ -105,12 +106,11 @@ fun AddAccountsPage(
                         },
                     ) {}
                     SettingItem(
-                        enable = false,
                         title = stringResource(R.string.google_reader),
                         desc = stringResource(R.string.google_reader_desc),
                         icon = Icons.Rounded.RssFeed,
                         onClick = {
-
+                            additionViewModel.showAddGoogleReaderAccountDialog()
                         },
                     ) {}
                     SettingItem(
@@ -133,6 +133,7 @@ fun AddAccountsPage(
 
     AddLocalAccountDialog(navController)
     AddFeverAccountDialog(navController)
+    AddGoogleReaderAccountDialog(navController)
 }
 
 @Preview

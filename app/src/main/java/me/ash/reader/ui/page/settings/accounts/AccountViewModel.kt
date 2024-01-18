@@ -43,6 +43,7 @@ class AccountViewModel @Inject constructor(
     fun update(accountId: Int, block: Account.() -> Unit) {
         viewModelScope.launch(ioDispatcher) {
             accountService.update(accountId, block)
+            rssService.get(accountId).clearAuthorization()
         }
     }
 
@@ -90,13 +91,13 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun addAccount(account: Account, callback: (Account?) -> Unit = {}) {
+    fun addAccount(account: Account, callback: (account: Account?, exception: Exception?) -> Unit) {
         viewModelScope.launch(ioDispatcher) {
             val addAccount = accountService.addAccount(account)
             try {
                 if (rssService.get(addAccount.type.id).validCredentials()) {
                     withContext(mainDispatcher) {
-                        callback(addAccount)
+                        callback(addAccount, null)
                     }
                 } else {
                     throw Exception("Unauthorized")
@@ -104,7 +105,7 @@ class AccountViewModel @Inject constructor(
             } catch (e: Exception) {
                 accountService.delete(account.id!!)
                 withContext(mainDispatcher) {
-                    callback(null)
+                    callback(null, e)
                 }
             }
         }

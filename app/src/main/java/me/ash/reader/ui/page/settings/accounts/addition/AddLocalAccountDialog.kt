@@ -89,13 +89,13 @@ fun AddLocalAccountDialog(
                     accountViewModel.addAccount(Account(
                         type = AccountType.Local,
                         name = name,
-                    )) {
-                        if (it == null) {
-                            context.showToast("Not valid credentials")
+                    )) { account, exception ->
+                        if (account == null) {
+                            context.showToast(exception?.message ?: "Not valid credentials")
                         } else {
                             viewModel.hideAddLocalAccountDialog()
                             navController.popBackStack()
-                            navController.navigate("${RouteName.ACCOUNT_DETAILS}/${it.id}") {
+                            navController.navigate("${RouteName.ACCOUNT_DETAILS}/${account.id}") {
                                 launchSingleTop = true
                             }
                         }

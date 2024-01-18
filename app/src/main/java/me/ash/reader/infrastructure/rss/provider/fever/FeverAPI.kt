@@ -113,5 +113,9 @@ class FeverAPI private constructor(
                 FeverAPI(serverUrl, this, httpUsername, httpPassword)
             }
         }
+
+        fun clearInstance() {
+            instances.clear()
+        }
     }
 }
