@@ -83,7 +83,7 @@ fun InteractionPage(
                     SettingItem(
                         title = stringResource(R.string.open_link_specific_browser),
                         desc = openLinkSpecificBrowser.toDesc(context),
-                        enable = isOpenLinkSpecificBrowserItemEnabled,
+                        enabled = isOpenLinkSpecificBrowserItemEnabled,
                         onClick = {
 
                             if (isOpenLinkSpecificBrowserItemEnabled) {

@@ -103,7 +103,7 @@ fun FlowPageStylePage(
                     SettingItem(
                         title = stringResource(R.string.mark_as_read_button_position),
                         desc = stringResource(R.string.top),
-                        enable = false,
+                        enabled = false,
                         onClick = {},
                     ) {}
                     SettingItem(

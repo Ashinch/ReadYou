@@ -142,7 +142,7 @@ fun ReadingStylePage(
                     SettingItem(
                         title = stringResource(R.string.bionic_reading),
                         separatedActions = true,
-                        enable = false,
+                        enabled = false,
                         onClick = {
 //                            (!articleListDesc).put(context, scope)
                         },
@@ -166,7 +166,7 @@ fun ReadingStylePage(
                     }
                     SettingItem(
                         title = stringResource(R.string.rearrange_buttons),
-                        enable = false,
+                        enabled = false,
                         onClick = {},
                     ) {}
                     SettingItem(
@@ -219,7 +219,7 @@ fun ReadingStylePage(
                         title = stringResource(R.string.videos),
                         desc = stringResource(R.string.videos_desc),
                         icon = Icons.Outlined.Movie,
-                        enable = false,
+                        enabled = false,
                         onClick = {
 //                            navController.navigate(RouteName.READING_PAGE_VIDEO) {
 //                                launchSingleTop = true
