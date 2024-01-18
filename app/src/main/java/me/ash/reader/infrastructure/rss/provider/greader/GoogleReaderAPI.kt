@@ -182,7 +182,7 @@ class GoogleReaderAPI private constructor(
         retryableGetRequest<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
             params = listOf(
-                Pair("s", "user/-/state/com.google/read"),
+                Pair("s", Label.READ),
                 Pair("ot", since.toString()),
                 Pair("n", MAXIMUM_ITEMS_LIMIT),
             ))
@@ -191,8 +191,8 @@ class GoogleReaderAPI private constructor(
         retryableGetRequest<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
             params = listOf(
-                Pair("s", "user/-/state/com.google/reading-list"),
-                Pair("xt", "user/-/state/com.google/read"),
+                Pair("s", Label.ALL_ITEMS),
+                Pair("xt", Label.READ),
                 Pair("n", MAXIMUM_ITEMS_LIMIT),
             ))
 
@@ -200,7 +200,7 @@ class GoogleReaderAPI private constructor(
         retryableGetRequest<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
             params = listOf(
-                Pair("s", "user/-/state/com.google/starred"),
+                Pair("s", Label.STARRED),
                 Pair("n", MAXIMUM_ITEMS_LIMIT),
             ))
 
@@ -221,10 +221,23 @@ class GoogleReaderAPI private constructor(
 
     enum class subscriptionOperationType
 
-    suspend fun editTag(categoryName: String): String =
+    object Label {
+
+        const val ALL_ITEMS = "user/-/state/com.google/reading-list"
+        const val READ = "user/-/state/com.google/read"
+        const val STARRED = "user/-/state/com.google/starred"
+        const val LIKE = "user/-/state/com.google/like"
+        const val BROADCAST = "user/-/state/com.google/broadcast"
+    }
+
+    suspend fun editTag(itemIds: List<String>, mark: String? = null, unmark: String? = null): String =
         retryablePostRequest<String>(
             query = "reader/api/0/edit-tag",
-            form = listOf(Pair("a", categoryName.ofCategoryIdToStreamId()))
+            form = mutableListOf<Pair<String, String>>().apply {
+                itemIds.forEach { add(Pair("i", it.ofItemIdToStreamId())) }
+                mark?.let { add(Pair("a", mark)) }
+                unmark?.let { add(Pair("r", unmark)) }
+            }
         )
 
     suspend fun disableTag(categoryId: String): String =
@@ -248,12 +261,22 @@ class GoogleReaderAPI private constructor(
     ): String = retryablePostRequest<String>(
         query = "reader/api/0/subscription/edit",
         form = mutableListOf(Pair("ac", action)).apply {
-            if (destFeedId != null) add(Pair("s", destFeedId.ofFeedIdToStreamId()))
-            if (destCategoryId != null) add(Pair("a", destCategoryId.ofCategoryIdToStreamId()))
-            if (originCategoryId != null) add(Pair("r", originCategoryId.ofCategoryIdToStreamId()))
-            if (destFeedName?.isNotBlank() == true) add(Pair("t", destFeedName))
+            destFeedId?.let { add(Pair("s", it.ofFeedIdToStreamId())) }
+            destCategoryId?.let { add(Pair("a", it.ofCategoryIdToStreamId())) }
+            originCategoryId?.let { add(Pair("r", it.ofCategoryIdToStreamId())) }
+            destFeedName?.takeIf { it.isNotBlank() }?.let { add(Pair("t", destFeedName)) }
         }
     )
+
+    suspend fun markAllAsRead(streamId: String, sinceTimestamp: Long? = null): String =
+        retryablePostRequest<String>(
+            query = "reader/api/0/mark-all-as-read",
+            form = mutableListOf(
+                Pair("s", streamId),
+            ).apply {
+                sinceTimestamp?.let { add(Pair("ts", it.toString())) }
+            }
+        )
 
     companion object {
 

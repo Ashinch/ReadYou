@@ -28,7 +28,9 @@ import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI
+import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofCategoryIdToStreamId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofCategoryStreamIdToId
+import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofFeedIdToStreamId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofFeedStreamIdToId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofItemStreamIdToId
 import me.ash.reader.ui.ext.currentAccountId
@@ -346,49 +348,46 @@ class GoogleReaderRssService @Inject constructor(
     ) {
         super.markAsRead(groupId, feedId, articleId, before, isUnread)
         val googleReaderAPI = getGoogleReaderAPI()
-        val beforeUnixTimestamp = (before?.time ?: Date(Long.MAX_VALUE).time) / 1000
+        val sinceTime = before?.time
         when {
             groupId != null -> {
-                // googleReaderAPI.markGroup(
-                //     status = if (isUnread) FeverDTO.StatusEnum.Unread else FeverDTO.StatusEnum.Read,
-                //     id = groupId.dollarLast().toLong(),
-                //     before = beforeUnixTimestamp
-                // )
+                googleReaderAPI.markAllAsRead(
+                    streamId = groupId.dollarLast().ofCategoryIdToStreamId(),
+                    sinceTimestamp = sinceTime
+                )
             }
 
             feedId != null -> {
-                // googleReaderAPI.markFeed(
-                //     status = if (isUnread) FeverDTO.StatusEnum.Unread else FeverDTO.StatusEnum.Read,
-                //     id = feedId.dollarLast().toLong(),
-                //     before = beforeUnixTimestamp
-                // )
+                // TODO: Nothing happened???
+                googleReaderAPI.markAllAsRead(
+                    streamId = feedId.dollarLast().ofFeedIdToStreamId(),
+                    sinceTimestamp = sinceTime
+                )
             }
 
             articleId != null -> {
-                // googleReaderAPI.markItem(
-                //     status = if (isUnread) FeverDTO.StatusEnum.Unread else FeverDTO.StatusEnum.Read,
-                //     id = articleId.dollarLast(),
-                // )
+                googleReaderAPI.editTag(
+                    itemIds = listOf(articleId.dollarLast()),
+                    mark = if (!isUnread) GoogleReaderAPI.Label.READ else null,
+                    unmark = if (isUnread) GoogleReaderAPI.Label.READ else null,
+                )
             }
 
             else -> {
-                feedDao.queryAll(context.currentAccountId).forEach {
-                    // googleReaderAPI.markFeed(
-                    //     status = if (isUnread) FeverDTO.StatusEnum.Unread else FeverDTO.StatusEnum.Read,
-                    //     id = it.id.dollarLast().toLong(),
-                    //     before = beforeUnixTimestamp
-                    // )
-                }
+                googleReaderAPI.markAllAsRead(
+                    streamId = GoogleReaderAPI.Label.ALL_ITEMS,
+                    sinceTimestamp = sinceTime
+                )
             }
         }
     }
 
     override suspend fun markAsStarred(articleId: String, isStarred: Boolean) {
         super.markAsStarred(articleId, isStarred)
-        val googleReaderAPI = getGoogleReaderAPI()
-        // googleReaderAPI.markItem(
-        //     status = if (isStarred) FeverDTO.StatusEnum.Saved else FeverDTO.StatusEnum.Unsaved,
-        //     id = articleId.dollarLast()
-        // )
+        getGoogleReaderAPI().editTag(
+            itemIds = listOf(articleId.dollarLast()),
+            mark = if (isStarred) GoogleReaderAPI.Label.STARRED else null,
+            unmark = if (!isStarred) GoogleReaderAPI.Label.STARRED else null,
+        )
     }
 }
