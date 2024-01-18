@@ -20,6 +20,7 @@ class RssService @Inject constructor(
         AccountType.Local.id -> localRssService
         AccountType.Fever.id -> feverRssService
         AccountType.GoogleReader.id -> googleReaderRssService
+        AccountType.FreshRSS.id -> googleReaderRssService
         AccountType.Inoreader.id -> localRssService
         AccountType.Feedly.id -> localRssService
         else -> localRssService

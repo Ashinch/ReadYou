@@ -1,9 +1,6 @@
 package me.ash.reader.ui.page.settings.accounts.addition
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -63,6 +60,7 @@ fun AddGoogleReaderAccountDialog(
         },
         icon = {
             Icon(
+                modifier = Modifier.size(24.dp),
                 imageVector = Icons.Rounded.RssFeed,
                 contentDescription = stringResource(R.string.google_reader),
             )
@@ -111,6 +109,9 @@ fun AddGoogleReaderAccountDialog(
                 enabled = googleReaderServerUrl.isNotBlank() && googleReaderUsername.isNotEmpty() && googleReaderPassword.isNotEmpty(),
                 onClick = {
                     focusManager.clearFocus()
+                    if (!googleReaderServerUrl.endsWith("/")) {
+                        googleReaderServerUrl += "/"
+                    }
                     accountViewModel.addAccount(Account(
                         type = AccountType.GoogleReader,
                         name = context.getString(R.string.google_reader),

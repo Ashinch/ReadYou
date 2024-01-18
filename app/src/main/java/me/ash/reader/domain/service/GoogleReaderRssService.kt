@@ -83,6 +83,7 @@ class GoogleReaderRssService @Inject constructor(
                     accountDao.update(account.copy(name = it))
                 }
             } catch (ignore: Exception) {
+                Log.e("RLog", "get user info is failed: ", ignore)
             }
         }
     }

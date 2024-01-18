@@ -23,10 +23,7 @@ import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.page.settings.SettingItem
-import me.ash.reader.ui.page.settings.accounts.addition.AddFeverAccountDialog
-import me.ash.reader.ui.page.settings.accounts.addition.AddGoogleReaderAccountDialog
-import me.ash.reader.ui.page.settings.accounts.addition.AddLocalAccountDialog
-import me.ash.reader.ui.page.settings.accounts.addition.AdditionViewModel
+import me.ash.reader.ui.page.settings.accounts.addition.*
 import me.ash.reader.ui.theme.palette.onLight
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -101,7 +98,7 @@ fun AddAccountsPage(
                         desc = stringResource(R.string.fresh_rss_desc),
                         iconPainter = painterResource(id = R.drawable.ic_freshrss),
                         onClick = {
-                            additionViewModel.showAddGoogleReaderAccountDialog()
+                            additionViewModel.showAddFreshRSSAccountDialog()
                         },
                     ) {}
                     SettingItem(
@@ -133,6 +130,7 @@ fun AddAccountsPage(
     AddLocalAccountDialog(navController)
     AddFeverAccountDialog(navController)
     AddGoogleReaderAccountDialog(navController)
+    AddFreshRSSAccountDialog(navController)
 }
 
 @Preview

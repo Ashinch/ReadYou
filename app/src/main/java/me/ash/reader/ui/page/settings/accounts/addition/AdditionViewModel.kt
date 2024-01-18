@@ -70,10 +70,27 @@ class AdditionViewModel @Inject constructor(
             )
         }
     }
+
+    fun showAddFreshRSSAccountDialog() {
+        _additionUiState.update {
+            it.copy(
+                addFreshRSSAccountDialogVisible = true,
+            )
+        }
+    }
+
+    fun hideAddFreshRSSAccountDialog() {
+        _additionUiState.update {
+            it.copy(
+                addFreshRSSAccountDialogVisible = false,
+            )
+        }
+    }
 }
 
 data class AdditionUiState(
     val addLocalAccountDialogVisible: Boolean = false,
     val addFeverAccountDialogVisible: Boolean = false,
     val addGoogleReaderAccountDialogVisible: Boolean = false,
+    val addFreshRSSAccountDialogVisible: Boolean = false,
 )
