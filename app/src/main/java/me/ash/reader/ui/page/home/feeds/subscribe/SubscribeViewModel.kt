@@ -3,17 +3,16 @@ package me.ash.reader.ui.page.home.feeds.subscribe
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rometools.rome.feed.synd.SyndFeed
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.domain.model.article.Article
-import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.group.Group
-import me.ash.reader.infrastructure.android.AndroidStringsHelper
 import me.ash.reader.domain.service.OpmlService
 import me.ash.reader.domain.service.RssService
+import me.ash.reader.infrastructure.android.AndroidStringsHelper
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.ui.ext.formatUrl
 import java.io.InputStream
@@ -66,7 +65,8 @@ class SubscribeViewModel @Inject constructor(
     fun addNewGroup() {
         if (_subscribeUiState.value.newGroupContent.isNotBlank()) {
             viewModelScope.launch {
-                selectedGroup(rssService.get().addGroup(_subscribeUiState.value.newGroupContent))
+                // TODO: How to add a single group without no feeds via Google Reader API?
+                selectedGroup(rssService.get().addGroup(null, _subscribeUiState.value.newGroupContent))
                 hideNewGroupDialog()
                 _subscribeUiState.update { it.copy(newGroupContent = "") }
             }
@@ -94,7 +94,7 @@ class SubscribeViewModel @Inject constructor(
                         errorMessage = "",
                     )
                 }
-                _subscribeUiState.value.linkContent.formatUrl().let { str ->
+                _subscribeUiState.value.linkContent.trim().formatUrl().let { str ->
                     if (str != _subscribeUiState.value.linkContent) {
                         _subscribeUiState.update {
                             it.copy(
@@ -119,11 +119,9 @@ class SubscribeViewModel @Inject constructor(
                     }
                     return@launch
                 }
-                val feedWithArticle = rssHelper.searchFeed(_subscribeUiState.value.linkContent)
                 _subscribeUiState.update {
                     it.copy(
-                        feed = feedWithArticle.feed,
-                        articles = feedWithArticle.articles,
+                        searchedFeed = rssHelper.searchFeed(_subscribeUiState.value.linkContent),
                     )
                 }
                 switchPage(false)
@@ -143,15 +141,13 @@ class SubscribeViewModel @Inject constructor(
     }
 
     fun subscribe() {
-        val feed = _subscribeUiState.value.feed ?: return
-        val articles = _subscribeUiState.value.articles
         viewModelScope.launch {
             rssService.get().subscribe(
-                feed.copy(
-                    groupId = _subscribeUiState.value.selectedGroupId,
-                    isNotification = _subscribeUiState.value.allowNotificationPreset,
-                    isFullContent = _subscribeUiState.value.parseFullContentPreset,
-                ), articles
+                searchedFeed = _subscribeUiState.value.searchedFeed ?: return@launch,
+                feedLink = _subscribeUiState.value.linkContent,
+                groupId = _subscribeUiState.value.selectedGroupId,
+                isNotification = _subscribeUiState.value.allowNotificationPreset,
+                isFullContent = _subscribeUiState.value.parseFullContentPreset,
             )
             hideDrawer()
         }
@@ -194,7 +190,7 @@ class SubscribeViewModel @Inject constructor(
         _subscribeUiState.update {
             it.copy(
                 renameDialogVisible = true,
-                newName = _subscribeUiState.value.feed?.name ?: "",
+                newName = _subscribeUiState.value.searchedFeed?.title ?: "",
             )
         }
     }
@@ -213,13 +209,7 @@ class SubscribeViewModel @Inject constructor(
     }
 
     fun renameFeed() {
-        _subscribeUiState.value.feed?.let {
-            _subscribeUiState.update {
-                it.copy(
-                    feed = it.feed?.copy(name = _subscribeUiState.value.newName),
-                )
-            }
-        }
+        _subscribeUiState.value.searchedFeed?.title = _subscribeUiState.value.newName
     }
 }
 
@@ -229,8 +219,7 @@ data class SubscribeUiState(
     val errorMessage: String = "",
     val linkContent: String = "",
     val lockLinkInput: Boolean = false,
-    val feed: Feed? = null,
-    val articles: List<Article> = emptyList(),
+    val searchedFeed: SyndFeed? = null,
     val allowNotificationPreset: Boolean = false,
     val parseFullContentPreset: Boolean = false,
     val selectedGroupId: String = "",

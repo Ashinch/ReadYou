@@ -11,7 +11,7 @@ class RssService @Inject constructor(
     private val context: Context,
     private val localRssService: LocalRssService,
     private val feverRssService: FeverRssService,
-//    private val googleReaderRssRepository: GoogleReaderRssRepository,
+    private val googleReaderRssService: GoogleReaderRssService,
 ) {
 
     fun get() = get(context.currentAccountType)
@@ -19,7 +19,8 @@ class RssService @Inject constructor(
     fun get(accountTypeId: Int) = when (accountTypeId) {
         AccountType.Local.id -> localRssService
         AccountType.Fever.id -> feverRssService
-        AccountType.GoogleReader.id -> localRssService
+        AccountType.GoogleReader.id -> googleReaderRssService
+        AccountType.FreshRSS.id -> googleReaderRssService
         AccountType.Inoreader.id -> localRssService
         AccountType.Feedly.id -> localRssService
         else -> localRssService

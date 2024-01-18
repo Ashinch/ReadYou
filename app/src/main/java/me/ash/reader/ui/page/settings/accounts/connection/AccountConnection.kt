@@ -25,8 +25,8 @@ fun LazyItemScope.AccountConnection(
     }
     when (account.type.id) {
         AccountType.Fever.id -> FeverConnection(account)
-        AccountType.GoogleReader.id -> {}
-        AccountType.FreshRSS.id -> {}
+        AccountType.GoogleReader.id -> GoogleReaderConnection(account)
+        AccountType.FreshRSS.id -> FreshRSSConnection(account)
         AccountType.Feedly.id -> {}
         AccountType.Inoreader.id -> {}
     }

@@ -73,7 +73,7 @@ fun FeedOptionDrawer(
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         modifier = Modifier.roundClick {
-                            if (feedOptionViewModel.rssService.get().update) {
+                            if (feedOptionViewModel.rssService.get().updateSubscription) {
                                 feedOptionViewModel.showRenameDialog()
                             }
                         },
@@ -92,8 +92,8 @@ fun FeedOptionDrawer(
                         ?: false,
                     selectedParseFullContentPreset = feedOptionUiState.feed?.isFullContent ?: false,
                     isMoveToGroup = true,
-                    showGroup = feedOptionViewModel.rssService.get().move,
-                    showUnsubscribe = feedOptionViewModel.rssService.get().delete,
+                    showGroup = feedOptionViewModel.rssService.get().moveSubscription,
+                    showUnsubscribe = feedOptionViewModel.rssService.get().deleteSubscription,
                     notSubscribeMode = true,
                     selectedGroupId = feedOptionUiState.feed?.groupId ?: "",
                     allowNotificationPresetOnClick = {
@@ -118,7 +118,7 @@ fun FeedOptionDrawer(
                         context.openURL(feed?.url, openLink, openLinkSpecificBrowser)
                     },
                     onFeedUrlLongClick = {
-                        if (feedOptionViewModel.rssService.get().update) {
+                        if (feedOptionViewModel.rssService.get().updateSubscription) {
                             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             feedOptionViewModel.showFeedUrlDialog()
                         }

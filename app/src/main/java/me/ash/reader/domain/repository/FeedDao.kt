@@ -47,6 +47,15 @@ interface FeedDao {
 
     @Query(
         """
+        SELECT * FROM feed
+        WHERE groupId = :groupId
+        AND accountId = :accountId
+        """
+    )
+    suspend fun queryByGroupId(accountId: Int, groupId: String): List<Feed>
+
+    @Query(
+        """
         DELETE FROM feed
         WHERE groupId = :groupId
         AND accountId = :accountId

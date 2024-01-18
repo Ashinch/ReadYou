@@ -6,11 +6,13 @@ import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
+import com.rometools.rome.feed.synd.SyndFeed
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
 import me.ash.reader.R
+import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.account.security.FeverSecurityKey
 import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.article.ArticleMeta
@@ -56,10 +58,10 @@ class FeverRssService @Inject constructor(
     feedDao, workManager, rssHelper, notificationHelper, ioDispatcher, defaultDispatcher
 ) {
 
-    override val subscribe: Boolean = false
-    override val move: Boolean = false
-    override val delete: Boolean = false
-    override val update: Boolean = false
+    override val addSubscription: Boolean = false
+    override val moveSubscription: Boolean = false
+    override val deleteSubscription: Boolean = false
+    override val updateSubscription: Boolean = false
 
     private suspend fun getFeverAPI() =
         FeverSecurityKey(accountDao.queryById(context.currentAccountId)!!.securityKey).run {
@@ -72,13 +74,45 @@ class FeverRssService @Inject constructor(
             )
         }
 
-    override suspend fun validCredentials(): Boolean = getFeverAPI().validCredentials() > 0
+    override suspend fun validCredentials(account: Account): Boolean =
+        getFeverAPI().validCredentials() > 0
 
-    override suspend fun subscribe(feed: Feed, articles: List<Article>) {
+    override suspend fun clearAuthorization() {
+        FeverAPI.clearInstance()
+    }
+
+    override suspend fun subscribe(
+        feedLink: String, searchedFeed: SyndFeed, groupId: String,
+        isNotification: Boolean, isFullContent: Boolean,
+    ) {
         throw Exception("Unsupported")
     }
 
-    override suspend fun addGroup(name: String): String {
+    override suspend fun addGroup(destFeed: Feed?, newGroupName: String): String {
+        throw Exception("Unsupported")
+    }
+
+    override suspend fun renameGroup(group: Group) {
+        throw Exception("Unsupported")
+    }
+
+    override suspend fun renameFeed(feed: Feed) {
+        throw Exception("Unsupported")
+    }
+
+    override suspend fun deleteGroup(group: Group) {
+        throw Exception("Unsupported")
+    }
+
+    override suspend fun deleteFeed(feed: Feed) {
+        throw Exception("Unsupported")
+    }
+
+    override suspend fun moveFeed(originGroupId: String, feed: Feed) {
+        throw Exception("Unsupported")
+    }
+
+    override suspend fun changeFeedUrl(feed: Feed) {
         throw Exception("Unsupported")
     }
 

@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import me.ash.reader.domain.service.OpmlService
-import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.android.AndroidStringsHelper
+import me.ash.reader.infrastructure.rss.RssHelper
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,9 +54,43 @@ class AdditionViewModel @Inject constructor(
             )
         }
     }
+
+    fun showAddGoogleReaderAccountDialog() {
+        _additionUiState.update {
+            it.copy(
+                addGoogleReaderAccountDialogVisible = true,
+            )
+        }
+    }
+
+    fun hideAddGoogleReaderAccountDialog() {
+        _additionUiState.update {
+            it.copy(
+                addGoogleReaderAccountDialogVisible = false,
+            )
+        }
+    }
+
+    fun showAddFreshRSSAccountDialog() {
+        _additionUiState.update {
+            it.copy(
+                addFreshRSSAccountDialogVisible = true,
+            )
+        }
+    }
+
+    fun hideAddFreshRSSAccountDialog() {
+        _additionUiState.update {
+            it.copy(
+                addFreshRSSAccountDialogVisible = false,
+            )
+        }
+    }
 }
 
 data class AdditionUiState(
     val addLocalAccountDialogVisible: Boolean = false,
     val addFeverAccountDialogVisible: Boolean = false,
+    val addGoogleReaderAccountDialogVisible: Boolean = false,
+    val addFreshRSSAccountDialogVisible: Boolean = false,
 )
