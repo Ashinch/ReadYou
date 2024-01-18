@@ -95,7 +95,7 @@ class AccountViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             val addAccount = accountService.addAccount(account)
             try {
-                if (rssService.get(addAccount.type.id).validCredentials()) {
+                if (rssService.get(addAccount.type.id).validCredentials(account)) {
                     withContext(mainDispatcher) {
                         callback(addAccount, null)
                     }

@@ -97,12 +97,11 @@ fun AddAccountsPage(
                         text = stringResource(R.string.self_hosted),
                     )
                     SettingItem(
-                        enable = false,
                         title = stringResource(R.string.fresh_rss),
                         desc = stringResource(R.string.fresh_rss_desc),
                         iconPainter = painterResource(id = R.drawable.ic_freshrss),
                         onClick = {
-
+                            additionViewModel.showAddGoogleReaderAccountDialog()
                         },
                     ) {}
                     SettingItem(

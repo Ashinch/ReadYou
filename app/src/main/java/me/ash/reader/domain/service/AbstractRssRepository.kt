@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.supervisorScope
+import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.feed.FeedWithArticle
@@ -49,7 +50,7 @@ abstract class AbstractRssRepository(
     open val deleteSubscription: Boolean = true
     open val updateSubscription: Boolean = true
 
-    open suspend fun validCredentials(): Boolean = true
+    open suspend fun validCredentials(account: Account): Boolean = true
 
     open suspend fun clearAuthorization() {}
 

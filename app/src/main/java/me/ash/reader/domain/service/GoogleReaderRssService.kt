@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
 import me.ash.reader.R
+import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.account.security.GoogleReaderSecurityKey
 import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.article.ArticleMeta
@@ -75,7 +76,16 @@ class GoogleReaderRssService @Inject constructor(
             )
         }
 
-    override suspend fun validCredentials(): Boolean = getGoogleReaderAPI().validCredentials()
+    override suspend fun validCredentials(account: Account): Boolean {
+        return getGoogleReaderAPI().validCredentials().also { success ->
+            if (success) try {
+                getGoogleReaderAPI().getUserInfo().userName?.let {
+                    accountDao.update(account.copy(name = it))
+                }
+            } catch (ignore: Exception) {
+            }
+        }
+    }
 
     override suspend fun clearAuthorization() {
         GoogleReaderAPI.clearInstance()

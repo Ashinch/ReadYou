@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
 import me.ash.reader.R
+import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.account.security.FeverSecurityKey
 import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.article.ArticleMeta
@@ -73,7 +74,8 @@ class FeverRssService @Inject constructor(
             )
         }
 
-    override suspend fun validCredentials(): Boolean = getFeverAPI().validCredentials() > 0
+    override suspend fun validCredentials(account: Account): Boolean =
+        getFeverAPI().validCredentials() > 0
 
     override suspend fun clearAuthorization() {
         FeverAPI.clearInstance()
