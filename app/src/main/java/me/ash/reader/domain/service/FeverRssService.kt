@@ -91,8 +91,8 @@ class FeverRssService @Inject constructor(
      * used as the starting mark for the next pull until the number of articles
      * obtained is 0 or their quantity exceeds 250, at which point the pulling process stops.
      *
-     * 1. Fetch the Fever groups
-     * 2. Fetch the Fever feeds (including favicons)
+     * 1. Fetch the Fever groups (may need to remove orphaned groups)
+     * 2. Fetch the Fever feeds (including favicons, may need to remove orphaned feeds)
      * 3. Fetch the Fever articles
      * 4. Synchronize read/unread and starred/un-starred items
      */
@@ -106,15 +106,20 @@ class FeverRssService @Inject constructor(
             val feverAPI = getFeverAPI()
 
             // 1. Fetch the Fever groups
-            groupDao.insertOrUpdate(
-                feverAPI.getGroups().groups?.map {
-                    Group(
-                        id = accountId.spacerDollar(it.id!!),
-                        name = it.title ?: context.getString(R.string.empty),
-                        accountId = accountId,
-                    )
-                } ?: emptyList()
-            )
+            val groups = feverAPI.getGroups().groups?.map {
+                Group(
+                    id = accountId.spacerDollar(it.id!!),
+                    name = it.title ?: context.getString(R.string.empty),
+                    accountId = accountId,
+                )
+            } ?: emptyList()
+            groupDao.insertOrUpdate(groups)
+            val groupIds = groups.map { it.id }
+            groupDao.queryAll(accountId).forEach {
+                if (!groupIds.contains(it.id)) {
+                    super.deleteGroup(it)
+                }
+            }
 
             // 2. Fetch the Fever feeds
             val feedsBody = feverAPI.getFeeds()
@@ -124,6 +129,11 @@ class FeverRssService @Inject constructor(
                     feedsGroups.feed_ids?.split(",")?.forEach { feedId ->
                         feedsGroupsMap[feedId] = groupId
                     }
+                }
+            }
+            feedDao.queryAll(accountId).forEach {
+                if (!feedsGroupsMap.contains(it.id.dollarLast())) {
+                    super.deleteFeed(it)
                 }
             }
 
