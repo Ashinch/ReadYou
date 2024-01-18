@@ -73,14 +73,14 @@ fun AddAccountsPage(
                         text = stringResource(R.string.services),
                     )
                     SettingItem(
-                        enable = false,
+                        enabled = false,
                         title = stringResource(R.string.feedly),
                         desc = stringResource(R.string.feedly_desc),
                         iconPainter = painterResource(id = R.drawable.ic_feedly),
                         onClick = {},
                     ) {}
                     SettingItem(
-                        enable = false,
+                        enabled = false,
                         title = stringResource(R.string.inoreader),
                         desc = stringResource(R.string.inoreader_desc),
                         iconPainter = painterResource(id = R.drawable.ic_inoreader),

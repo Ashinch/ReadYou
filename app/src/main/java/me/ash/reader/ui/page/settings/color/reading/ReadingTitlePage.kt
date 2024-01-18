@@ -147,7 +147,7 @@ fun ReadingTitlePage(
                     SettingItem(
                         title = stringResource(R.string.alignment),
                         desc = subtitleAlign.toDesc(context),
-                        enable = false,
+                        enabled = false,
                         onClick = {
 //                            subtitleAlignDialogVisible = true
                         },

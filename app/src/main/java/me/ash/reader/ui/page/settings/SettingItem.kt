@@ -26,7 +26,7 @@ import me.ash.reader.ui.theme.palette.onDark
 @Composable
 fun SettingItem(
     modifier: Modifier = Modifier,
-    enable: Boolean = true,
+    enabled: Boolean = true,
     title: String,
     desc: String? = null,
     icon: ImageVector? = null,
@@ -39,8 +39,8 @@ fun SettingItem(
 
     Surface(
         modifier = modifier
-            .clickable { onClick() }
-            .alpha(if (enable) 1f else 0.5f),
+            .clickable(enabled = enabled) { onClick() }
+            .alpha(if (enabled) 1f else 0.5f),
         color = Color.Unspecified
     ) {
         Row(
