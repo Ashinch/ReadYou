@@ -267,7 +267,7 @@ class GoogleReaderRssService @Inject constructor(
             val readIds = googleReaderAPI.getReadItemIds(
                 Calendar.getInstance().apply {
                     time = Date()
-                    add(Calendar.DAY_OF_MONTH, -1)
+                    add(Calendar.MONTH, -1)
                 }.time.time / 1000
             ).itemRefs
 
