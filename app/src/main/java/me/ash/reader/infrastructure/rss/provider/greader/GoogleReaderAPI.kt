@@ -62,11 +62,15 @@ class GoogleReaderAPI private constructor(
             }
         }
 
-        authData.clientLoginToken = clBody
-            .split("\n")
-            .find { it.startsWith("Auth=") }
-            ?.substring(5)
-            ?: throw Exception("body format error for CL Token:\n$clBody")
+        authData.clientLoginToken = try {
+            toDTO<GoogleReaderDTO.MinifluxAuthData>(clBody).Auth
+        } catch (ignore: Exception) {
+            clBody
+                .split("\n")
+                .find { it.startsWith("Auth=") }
+                ?.substring(5)
+                ?: throw Exception("body format error for CL Token:\n$clBody")
+        }
 
         // Get action token
         val actResponse = client.newCall(

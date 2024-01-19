@@ -9,6 +9,20 @@ object GoogleReaderDTO {
     )
 
     /**
+     * @sample
+     *{
+     *     "SID": "demo/718*********************************7fa",
+     *     "LSID": "demo/718*********************************7fa",
+     *     "Auth": "demo/718*********************************7fa"
+     * }
+     */
+    data class MinifluxAuthData(
+        val SID: String?,
+        val LSID: String?,
+        val Auth: String?,
+    )
+
+    /**
      * @link reader/api/0/user-info?output=json
      * @sample
      * {
