@@ -54,7 +54,7 @@
     <string name="clear_articles">Usuń artykuły</string>
     <string name="clear_articles_in_feed_toast">Usunięto wszystkie pobrane artykuły z kanału \"%1$s\"</string>
     <string name="clear_articles_in_group_toast">Usunięto wszystkie artykuły z grupy \"%1$s\"</string>
-    <string name="clear_articles_feed_tips">Usuń wszystkie pobrane artykułu z kanału \"%1$s\".</string>
+    <string name="clear_articles_feed_tips">Usuń wszystkie pobrane artykułu z kanału \"%1$s\"</string>
     <string name="clear_articles_group_tips">Usuń wszystkie pobrane artykułu z grupy \"%1$s\".</string>
     <string name="add_to_group">Dodaj do grupy</string>
     <string name="move_to_group">Przenieś do grupy</string>

@@ -93,7 +93,7 @@
     <string name="no_palettes">Geen paletten</string>
     <string name="primary_color_hint">Zoals #666666 of 666666</string>
     <string name="feeds_page">Feeds-pagina</string>
-    <string name="clear_articles_feed_tips">Wis alle gearchiveerde artikelen in \"%1$s\" feed.</string>
+    <string name="clear_articles_feed_tips">Wis alle gearchiveerde artikelen in \"%1$s\" feed</string>
     <string name="all_move_to_group_toast">Alle feeds verplaatst naar de groep \"%1$s\"</string>
     <string name="name">Naam</string>
     <string name="all_move_to_group_tips">Verplaats alle feeds in de groep \"%1$s\" naar de groep \"%2$s\".</string>

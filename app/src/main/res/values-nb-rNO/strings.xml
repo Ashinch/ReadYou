@@ -136,7 +136,7 @@
     <string name="initial_page">Startside</string>
     <string name="feed_names">Informasjonkanalsnavn</string>
     <string name="alignment">Justering</string>
-    <string name="clear_articles_feed_tips">Tøm alle arkiverte artikler i «%1$s»-informasjonskanalen.</string>
+    <string name="clear_articles_feed_tips">Tøm alle arkiverte artikler i «%1$s»-informasjonskanalen</string>
     <string name="delete_group">Slett gruppe</string>
     <string name="all_move_to_group_tips">Flytt alle informasjonskanaler i «%1$s»-gruppen til «%2$s»-gruppen.</string>
     <string name="clear_articles_group_tips">Tøm alle arkiverte artikler i «%1$s»-gruppen.</string>
