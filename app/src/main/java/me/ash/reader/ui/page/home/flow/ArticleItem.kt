@@ -42,6 +42,7 @@ fun ArticleItem(
     val articleListImage = LocalFlowArticleListImage.current
     val articleListDesc = LocalFlowArticleListDesc.current
     val articleListDate = LocalFlowArticleListTime.current
+    val articleListAlwaysHighlightStarred = LocalFlowArticleListAlwaysHighlightStarred.current
 
     Column(
         modifier = Modifier
@@ -49,7 +50,8 @@ fun ArticleItem(
             .clip(Shape20)
             .clickable { onClick(articleWithFeed) }
             .padding(horizontal = 12.dp, vertical = 12.dp)
-            .alpha(if (articleWithFeed.article.isStarred || articleWithFeed.article.isUnread) 1f else 0.5f),
+            .alpha(if (articleWithFeed.article.isUnread ||
+                (articleWithFeed.article.isStarred && articleListAlwaysHighlightStarred.value)) 1f else 0.5f),
     ) {
         // Top
         Row(

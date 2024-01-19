@@ -270,6 +270,12 @@ sealed class DataStoreKeys<T> {
             get() = intPreferencesKey("flowArticleListTonalElevation")
     }
 
+    object FlowArticleListAlwaysHighlightStarred : DataStoreKeys<Boolean>() {
+
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("flowArticleListAlwaysHighlightStarred")
+    }
+
     // Reading page
     object ReadingDarkTheme : DataStoreKeys<Int>() {
 

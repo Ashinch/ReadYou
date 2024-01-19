@@ -39,6 +39,7 @@ fun FlowPageStylePage(
     val articleListTime = LocalFlowArticleListTime.current
     val articleListStickyDate = LocalFlowArticleListDateStickyHeader.current
     val articleListTonalElevation = LocalFlowArticleListTonalElevation.current
+    val articleListAlwaysHighlightStarred = LocalFlowArticleListAlwaysHighlightStarred.current
 
     val scope = rememberCoroutineScope()
 
@@ -192,6 +193,16 @@ fun FlowPageStylePage(
                     ) {}
                     Tips(text = stringResource(R.string.tips_article_list_tonal_elevation))
                     Spacer(modifier = Modifier.height(24.dp))
+                    SettingItem(
+                        title = stringResource(R.string.article_list_always_highlight_starred),
+                        onClick = {
+                            (!articleListAlwaysHighlightStarred).put(context, scope)
+                        },
+                    ) {
+                        RYSwitch(activated = articleListAlwaysHighlightStarred.value) {
+                            (!articleListAlwaysHighlightStarred).put(context, scope)
+                        }
+                    }
                 }
 
                 // Filter Bar

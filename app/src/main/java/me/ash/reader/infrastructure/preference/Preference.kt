@@ -49,6 +49,7 @@ fun Preferences.toSettings(): Settings {
         flowArticleListDateStickyHeader = FlowArticleListDateStickyHeaderPreference.fromPreferences(
             this
         ),
+        flowArticleListAlwaysHighlightStarred = FlowArticleListAlwaysHighlightStarredPreference.fromPreferences(this),
         flowArticleListTonalElevation = FlowArticleListTonalElevationPreference.fromPreferences(this),
 
         // Reading page
