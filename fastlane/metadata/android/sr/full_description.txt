@@ -1,5 +1,4 @@
-<i>Read You</i> Модеран и елегантан RSS читач са
-<a href='https://m3.material.io/' target='_blank' rel='nofollow'> Material You</a> дизајном
+<i>Read You</i> Модеран и елегантан RSS читач са <a href='https://m3.material.io/' target='_blank' rel='nofollow'> Material You</a> дизајном
 
 <b>Карактеристике:</b>
 
