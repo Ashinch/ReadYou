@@ -62,6 +62,9 @@ import org.jsoup.nodes.TextNode
 import java.io.InputStream
 import kotlin.math.abs
 import kotlin.math.roundToInt
+import net.engawapg.lib.zoomable.rememberZoomState
+import net.engawapg.lib.zoomable.toggleScale
+import net.engawapg.lib.zoomable.zoomable
 
 fun LazyListScope.htmlFormattedText(
     inputStream: InputStream,
@@ -497,13 +500,21 @@ private fun TextComposer.appendTextChildren(
 //                                            }
                                             ) {
                                                 val imageSize = maxImageSize()
+                                                val zoomState = rememberZoomState()
+                                                val targetScale = 1.75f
                                                 RYAsyncImage(
                                                     modifier = Modifier
                                                         .align(Alignment.Center)
                                                         .fillMaxWidth()
                                                         .padding(horizontal = imageHorizontalPadding().dp)
                                                         .clip(imageShape())
-                                                        .clickable { },
+                                                        .clickable { }
+                                                        .zoomable(
+                                                            zoomState = zoomState,
+                                                            onDoubleTap = {
+                                                                    position -> zoomState.toggleScale(targetScale, position)
+                                                            }
+                                                        ),
                                                     data = imageCandidates.getBestImageForMaxSize(
                                                         pixelDensity = pixelDensity(),
                                                         maxSize = imageSize,
