@@ -33,6 +33,7 @@ import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Compani
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofFeedIdToStreamId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofFeedStreamIdToId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofItemStreamIdToId
+import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderDTO
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.dollarLast
 import me.ash.reader.ui.ext.showToast
@@ -258,13 +259,17 @@ class GoogleReaderRssService @Inject constructor(
                 .forEach { super.deleteFeed(it) }
 
             // 3. Fetch ids of unread items
-            val unreadIds = googleReaderAPI.getUnreadItemIds().itemRefs?.map { it.id }
+            val unreadItems = googleReaderAPI.getUnreadItemIds().itemRefs
+            val unreadIds = unreadItems ?.map { it.id }
+            fetchItemsContents(unreadItems, googleReaderAPI, accountId, feedIds, unreadIds, listOf())
 
             // 4. Fetch ids of starred items
-            val starredIds = googleReaderAPI.getStarredItemIds().itemRefs?.map { it.id }
+            val starredItems = googleReaderAPI.getStarredItemIds().itemRefs
+            val starredIds = starredItems?.map { it.id }
+            fetchItemsContents(starredItems, googleReaderAPI, accountId, feedIds, unreadIds, starredIds)
 
             // 5. Fetch ids of read items since last month
-            val readIds = googleReaderAPI.getReadItemIds(
+            val readItems = googleReaderAPI.getReadItemIds(
                 Calendar.getInstance().apply {
                     time = Date()
                     add(Calendar.MONTH, -1)
@@ -272,35 +277,7 @@ class GoogleReaderRssService @Inject constructor(
             ).itemRefs
 
             // 6. Fetch items contents for ids
-            readIds?.map { it.id!! }?.chunked(100)?.forEach { chunkedIds ->
-                articleDao.insert(
-                    *googleReaderAPI.getItemsContents(chunkedIds).items?.map {
-                        val articleId = it.id!!.ofItemStreamIdToId()
-                        Article(
-                            id = accountId.spacerDollar(articleId),
-                            date = it.published?.run { Date(this * 1000) } ?: Date(),
-                            title = Html.fromHtml(it.title ?: context.getString(R.string.empty)).toString(),
-                            author = it.author,
-                            rawDescription = it.summary?.content ?: "",
-                            shortDescription = (Readability4JExtended("", it.summary?.content ?: "")
-                                .parse().textContent ?: "")
-                                .take(110)
-                                .trim(),
-                            fullContent = it.summary?.content ?: "",
-                            img = rssHelper.findImg(it.summary?.content ?: ""),
-                            link = it.canonical?.first()?.href
-                                ?: it.alternate?.first()?.href
-                                ?: it.origin?.htmlUrl ?: "",
-                            feedId = accountId.spacerDollar(it.origin?.streamId?.ofFeedStreamIdToId()
-                                ?: feedIds.first()),
-                            accountId = accountId,
-                            isUnread = unreadIds?.contains(articleId) ?: true,
-                            isStarred = starredIds?.contains(articleId) ?: false,
-                            updateAt = it.crawlTimeMsec?.run { Date(this.toLong()) } ?: Date(),
-                        )
-                    }?.toTypedArray() ?: emptyArray()
-                )
-            }
+            fetchItemsContents(readItems, googleReaderAPI, accountId, feedIds, unreadIds, starredIds)
 
             // 7. Mark/unmark items read/starred/tagged in you app comparing
             // local state and ids you've got from the GoogleReader
@@ -320,7 +297,7 @@ class GoogleReaderRssService @Inject constructor(
             Log.i("RLog", "onCompletion: ${System.currentTimeMillis() - preTime}")
             accountDao.update(account.apply {
                 updateAt = Date()
-                readIds?.takeIf { it.isNotEmpty() }?.first()?.id?.let {
+                readItems?.takeIf { it.isNotEmpty() }?.first()?.id?.let {
                     lastArticleId = accountId.spacerDollar(it)
                 }
             })
@@ -331,6 +308,45 @@ class GoogleReaderRssService @Inject constructor(
                 context.showToast(e.message)
             }
             ListenableWorker.Result.failure(SyncWorker.setIsSyncing(false))
+        }
+    }
+
+    private suspend fun fetchItemsContents(
+        readIds: List<GoogleReaderDTO.Item>?,
+        googleReaderAPI: GoogleReaderAPI,
+        accountId: Int,
+        feedIds: MutableSet<String>,
+        unreadIds: List<String?>?,
+        starredIds: List<String?>?,
+    ) {
+        readIds?.map { it.id!! }?.chunked(100)?.forEach { chunkedIds ->
+            articleDao.insert(
+                *googleReaderAPI.getItemsContents(chunkedIds).items?.map {
+                    val articleId = it.id!!.ofItemStreamIdToId()
+                    Article(
+                        id = accountId.spacerDollar(articleId),
+                        date = it.published?.run { Date(this * 1000) } ?: Date(),
+                        title = Html.fromHtml(it.title ?: context.getString(R.string.empty)).toString(),
+                        author = it.author,
+                        rawDescription = it.summary?.content ?: "",
+                        shortDescription = (Readability4JExtended("", it.summary?.content ?: "")
+                            .parse().textContent ?: "")
+                            .take(110)
+                            .trim(),
+                        fullContent = it.summary?.content ?: "",
+                        img = rssHelper.findImg(it.summary?.content ?: ""),
+                        link = it.canonical?.first()?.href
+                            ?: it.alternate?.first()?.href
+                            ?: it.origin?.htmlUrl ?: "",
+                        feedId = accountId.spacerDollar(it.origin?.streamId?.ofFeedStreamIdToId()
+                            ?: feedIds.first()),
+                        accountId = accountId,
+                        isUnread = unreadIds?.contains(articleId) ?: true,
+                        isStarred = starredIds?.contains(articleId) ?: false,
+                        updateAt = it.crawlTimeMsec?.run { Date(this.toLong()) } ?: Date(),
+                    )
+                }?.toTypedArray() ?: emptyArray()
+            )
         }
     }
 
