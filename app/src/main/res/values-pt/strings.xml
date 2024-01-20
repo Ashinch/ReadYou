@@ -3,7 +3,7 @@
     <string name="all_deny_parse_full_content_toast">Sem mais conteúdos para exibir dos artigos no grupo \"%1$s\"</string>
     <string name="clear_articles_in_feed_toast">Limpos todos os artigos arquivados da fonte \"%1$s\"</string>
     <string name="clear_articles_in_group_toast">Limpos todos os artigos arquivados do grupo \"%1$s\"</string>
-    <string name="clear_articles_feed_tips">Limpar todos os artigos arquivados no feed \"%1$s\".</string>
+    <string name="clear_articles_feed_tips">Limpar todos os artigos arquivados no feed \"%1$s\"</string>
     <string name="all_move_to_group_tips">Mover todos as fontes do grupo \"%1$s\" para o grupo \"%2$s\".</string>
     <string name="move_to_group">Mover para um grupo</string>
     <string name="unread">Não lidos</string>

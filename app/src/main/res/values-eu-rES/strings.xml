@@ -51,7 +51,7 @@
     <string name="clear_articles">Artikuluak garbitu</string>
     <string name="clear_articles_in_feed_toast">\"%1$s\" jarioaren artxibatutako artikulu guztiak garbitu dira</string>
     <string name="clear_articles_in_group_toast">\"%1$s\" taldearen artxibatutako artikulu guztiak garbitu dira</string>
-    <string name="clear_articles_feed_tips">\"%1$s\" jarioaren artxibatutako artikulu guztiak garbitu.</string>
+    <string name="clear_articles_feed_tips">\"%1$s\" jarioaren artxibatutako artikulu guztiak garbitu</string>
     <string name="clear_articles_group_tips">\"%1$s\" taldearen artxibatutako artikulu guztiak garbitu.</string>
     <string name="add_to_group">Taldera gehitu</string>
     <string name="move_to_group">Taldera mugitu</string>

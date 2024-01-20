@@ -262,6 +262,6 @@
     <string name="initial_open_app">Alkalmazás a hivatkozásra kattintáskor</string>
     <string name="auto_customtabs">Automatikus (egyéni lapok előnyben részesítése)</string>
     <string name="default_browser">Alapértelmezett böngésző kényszerítése</string>
-    <string name="open_link_something_wrong">A hivatkozás megnyitása beállítása figyelmen kívül hagyva, mert valamilyen hiba történt.</string>
+    <string name="open_link_something_wrong">A „Link megnyitása” beállítás figyelmen kívül hagyva, mert valami hiba történt.</string>
     <string name="open_link_specific_browser_not_selected">Nincs</string>
 </resources>

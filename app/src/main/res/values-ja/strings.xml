@@ -10,7 +10,7 @@
     <string name="all_allow_notification_toast">「%1$s」グループからのすべての通知が許可されます</string>
     <string name="parse_full_content">フルコンテンツを取得</string>
     <string name="clear_articles">記事をクリア</string>
-    <string name="clear_articles_feed_tips">「%1$s」フィードにアーカイブされている記事をすべて消去します。</string>
+    <string name="clear_articles_feed_tips">「%1$s」フィードにアーカイブされている記事をすべて消去します</string>
     <string name="add_to_group">グループへ追加</string>
     <string name="move_to_group">グループへ移動</string>
     <string name="all_move_to_group_tips">「%1$s」グループ内のすべてのフィードを「%2$s」グループに移動します。</string>
