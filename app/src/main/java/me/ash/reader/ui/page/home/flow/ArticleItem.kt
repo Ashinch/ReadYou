@@ -34,6 +34,7 @@ import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.base.RYAsyncImage
 import me.ash.reader.ui.component.base.SIZE_1000
 import me.ash.reader.ui.theme.Shape20
+import java.net.URI
 
 @Composable
 fun ArticleItem(
@@ -145,12 +146,17 @@ fun ArticleItem(
 
             // Image
             if (articleWithFeed.article.img != null && articleListImage.value) {
+                var imgUrl: String = articleWithFeed.article.img!!
+                if (imgUrl.startsWith("/")) {
+                    val uri = URI.create(articleWithFeed.feed.url)
+                    imgUrl = "${uri.scheme}://${uri.host}$imgUrl"
+                }
                 RYAsyncImage(
                     modifier = Modifier
                         .padding(start = 10.dp)
                         .size(80.dp)
                         .clip(Shape20),
-                    data = articleWithFeed.article.img,
+                    data = imgUrl,
                     scale = Scale.FILL,
                     precision = Precision.INEXACT,
                     size = SIZE_1000,
