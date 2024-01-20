@@ -3,14 +3,10 @@ package me.ash.reader.ui.page.home.flow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.DismissDirection
-import androidx.compose.material.DismissValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.SwipeToDismiss
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.rounded.CheckCircleOutline
 import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -33,7 +28,9 @@ import me.ash.reader.infrastructure.preference.*
 import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.base.RYAsyncImage
 import me.ash.reader.ui.component.base.SIZE_1000
+import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.theme.Shape20
+import me.ash.reader.ui.theme.palette.onDark
 
 @Composable
 fun ArticleItem(
@@ -165,6 +162,7 @@ fun ArticleItem(
 fun SwipeableArticleItem(
         articleWithFeed: ArticleWithFeed,
         isFilterUnread: Boolean,
+        articleListTonalElevation: Int,
         onClick: (ArticleWithFeed) -> Unit = {},
         onSwipeOut: (ArticleWithFeed) -> Unit = {},
 ) {
@@ -178,50 +176,47 @@ fun SwipeableArticleItem(
     })
     if (isArticleVisible) {
         SwipeToDismiss(
-                state = dismissState,
-                /***  create dismiss alert background box */
-                background = {
-                    if (dismissState.dismissDirection == DismissDirection.StartToEnd) {
-                        Box(
-                                modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(12.dp)
-                        ) {
-                            Column(modifier = Modifier.align(Alignment.CenterStart)) {
-                                Icon(
-                                        imageVector = Icons.Default.Check,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.inverseSurface,
-                                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                                )
-                                Text(
-                                        text = "Mark Read",
-                                        textAlign = TextAlign.Center,
-                                        color = MaterialTheme.colorScheme.inverseSurface
-                                )
-                            }
-
-                        }
-                    }
-                },
-                /**** Dismiss Content */
-                dismissContent = {
-                    val isDarkTheme = LocalDarkTheme.current.isDarkTheme()
-                    val isAmoledDarkTheme = LocalAmoledDarkTheme.current.value
-
-                    val articleItemBackgroundColor = if (isDarkTheme && isAmoledDarkTheme) {Color.Black}
-                        else {MaterialTheme.colorScheme.background}
-
+            state = dismissState,
+            /***  create dismiss alert background box */
+            background = {
+                if (dismissState.dismissDirection == DismissDirection.StartToEnd) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(articleItemBackgroundColor)
+                            // .background(MaterialTheme.colorScheme.surface)
+                            .padding(24.dp)
                     ) {
-                        ArticleItem(articleWithFeed, onClick)
+                        Column(modifier = Modifier.align(Alignment.CenterStart)) {
+                            Icon(
+                                imageVector = Icons.Rounded.CheckCircleOutline,
+                                contentDescription = stringResource(R.string.mark_as_read),
+                                tint = MaterialTheme.colorScheme.tertiary,
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
+                            Text(
+                                text = stringResource(R.string.mark_as_read),
+                                textAlign = TextAlign.Center,
+                                color = MaterialTheme.colorScheme.tertiary,
+                                style = MaterialTheme.typography.labelLarge,
+                            )
+                        }
+
                     }
-                },
-                /*** Set Direction to dismiss */
-                directions = setOf(DismissDirection.StartToEnd),
+                }
+            },
+            /**** Dismiss Content */
+            dismissContent = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.surfaceColorAtElevation(articleListTonalElevation.dp
+                        ) onDark MaterialTheme.colorScheme.surface)
+                ) {
+                    ArticleItem(articleWithFeed, onClick)
+                }
+            },
+            /*** Set Direction to dismiss */
+            directions = setOf(DismissDirection.StartToEnd),
         )
     }
 }

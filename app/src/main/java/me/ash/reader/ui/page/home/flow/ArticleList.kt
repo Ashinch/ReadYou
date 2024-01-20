@@ -26,12 +26,23 @@ fun LazyListScope.ArticleList(
         when (val item = pagingItems.peek(index)) {
             is ArticleFlowItem.Article -> {
                 item(key = item.articleWithFeed.article.id) {
-                    SwipeableArticleItem(
-                        articleWithFeed = item.articleWithFeed,
-                        isFilterUnread = isFilterUnread,
-                        onClick = { onClick(it) },
-                        onSwipeOut = { onSwipeOut(it) }
-                    )
+                    if (item.articleWithFeed.article.isUnread) {
+                        SwipeableArticleItem(
+                            articleWithFeed = item.articleWithFeed,
+                            isFilterUnread = isFilterUnread,
+                            articleListTonalElevation = articleListTonalElevation,
+                            onClick = { onClick(it) },
+                            onSwipeOut = { onSwipeOut(it) }
+                        )
+                    } else {
+                        // Currently we don't have swipe left to mark as unread,
+                        // so [SwipeableArticleItem] is not necessary for read articles.
+                        ArticleItem(
+                            articleWithFeed = (pagingItems[index] as ArticleFlowItem.Article).articleWithFeed,
+                        ) {
+                            onClick(it)
+                        }
+                    }
                 }
             }
 
