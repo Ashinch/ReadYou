@@ -46,8 +46,8 @@
 
 - [x] 订阅 RSS 链接
 - [x] 导入 / 导出 OPML 文件
-- [x] 文章更新通知
-- [x] 沉浸阅读（文章内容去干扰优化）
+- [x] 新文章通知
+- [x] 可读性优化（截取文章正文内容）
 - [x] 全文解析
 - [x] 支持多账户
 - [ ] 仿生阅读
@@ -55,15 +55,13 @@
 - [ ] Android 微件 / 小组件
 - [ ] ...
 
-[我目前在做什么？](https://github.com/users/Ashinch/projects/2)
-
 ## 集成
 
 **Read You** 也集成了一些第三方服务 API，支持您使用已有的云端账户来作为数据源。
 
 - [x] Fever
-- [ ] Google Reader
-- [ ] FreshRSS
+- [x] Google Reader
+- [x] FreshRSS
 - [ ] Miniflux
 - [ ] Tiny Tiny RSS
 - [ ] Inoreader

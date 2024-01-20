@@ -57,15 +57,13 @@ Nachfolgend sind die bisher erzielten Fortschritte und die Ziele aufgeführt, an
 - [ ] Android Widget
 - [ ] ...
 
-[Was mache ich gerade?](https://github.com/users/Ashinch/projects/2)
-
 ## Integration
 
 **Read You** ist mit einigen APIs von Drittanbietern kompatibel, um bei der Nutzung Ihrer bestehenden Cloud-Konten als Datenquellen zu unterstützen.
 
 - [x] Fever
-- [ ] Google Reader
-- [ ] FreshRSS
+- [x] Google Reader
+- [x] FreshRSS
 - [ ] Miniflux
 - [ ] Tiny Tiny RSS
 - [ ] Inoreader
