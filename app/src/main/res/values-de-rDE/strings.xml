@@ -246,7 +246,7 @@
     <string name="switch_account">Wechseln</string>
     <string name="add">Hinzufügen</string>
     <string name="accounts_tips">Auf den Kontonamen auf der Feed-Seite klicken, um zu wechseln</string>
-    <string name="username">Kontoname</string>
+    <string name="username">Benutzername</string>
     <string name="empty">Leer</string>
     <string name="server_url">Server URL</string>
     <string name="password">Passwort</string>
