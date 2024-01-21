@@ -185,15 +185,6 @@ fun FlowPageStylePage(
                         }
                     }
                     SettingItem(
-                        title = stringResource(R.string.tonal_elevation),
-                        desc = "${articleListTonalElevation.value}dp",
-                        onClick = {
-                            articleListTonalElevationDialogVisible = true
-                        },
-                    ) {}
-                    Tips(text = stringResource(R.string.tips_article_list_tonal_elevation))
-                    Spacer(modifier = Modifier.height(24.dp))
-                    SettingItem(
                         title = stringResource(R.string.article_list_always_highlight_starred),
                         onClick = {
                             (!articleListAlwaysHighlightStarred).put(context, scope)
@@ -203,6 +194,15 @@ fun FlowPageStylePage(
                             (!articleListAlwaysHighlightStarred).put(context, scope)
                         }
                     }
+                    SettingItem(
+                        title = stringResource(R.string.tonal_elevation),
+                        desc = "${articleListTonalElevation.value}dp",
+                        onClick = {
+                            articleListTonalElevationDialogVisible = true
+                        },
+                    ) {}
+                    Tips(text = stringResource(R.string.tips_article_list_tonal_elevation))
+                    Spacer(modifier = Modifier.height(24.dp))
                 }
 
                 // Filter Bar
