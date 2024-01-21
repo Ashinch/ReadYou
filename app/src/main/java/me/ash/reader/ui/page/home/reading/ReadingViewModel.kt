@@ -12,10 +12,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import me.ash.reader.domain.model.article.Article
+import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.domain.service.RssService
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,14 +30,38 @@ class ReadingViewModel @Inject constructor(
     private val _readingUiState = MutableStateFlow(ReadingUiState())
     val readingUiState: StateFlow<ReadingUiState> = _readingUiState.asStateFlow()
 
+    private val _readerState: MutableStateFlow<ReaderState> = MutableStateFlow(ReaderState())
+    val readerStateStateFlow = _readerState.asStateFlow()
+
+    private val currentArticle: Article?
+        get() = readingUiState.value.articleWithFeed?.article
+    private val currentFeed: Feed?
+        get() = readingUiState.value.articleWithFeed?.feed
+
     fun initData(articleId: String) {
         showLoading()
         viewModelScope.launch {
-            _readingUiState.update {
-                it.copy(articleWithFeed = rssService.get().findArticleById(articleId))
+            rssService.get().findArticleById(articleId)?.run {
+                _readingUiState.update {
+                    it.copy(
+                        articleWithFeed = this,
+                        articleId = article.id,
+                        isStarred = article.isStarred,
+                        isUnread = article.isUnread
+                    )
+                }
+                _readerState.update {
+                    it.copy(
+                        feedName = feed.name,
+                        title = article.title,
+                        author = article.author,
+                        link = article.link,
+                        publishedDate = article.date,
+                    )
+                }
             }
-            _readingUiState.value.articleWithFeed?.let {
-                if (it.feed.isFullContent) internalRenderFullContent()
+            currentFeed?.let {
+                if (it.isFullContent) internalRenderFullContent()
                 else renderDescriptionContent()
             }
             // java.lang.NullPointerException: Attempt to invoke virtual method
@@ -43,16 +70,16 @@ class ReadingViewModel @Inject constructor(
             if (_readingUiState.value.listState.firstVisibleItemIndex != 0) {
                 _readingUiState.value.listState.scrollToItem(0)
             }
-            hideLoading()
         }
     }
 
     fun renderDescriptionContent() {
-        _readingUiState.update {
+        _readerState.update {
             it.copy(
-                content = it.articleWithFeed?.article?.fullContent
-                    ?: it.articleWithFeed?.article?.rawDescription ?: "",
-                isFullContent = false
+                content = ReaderState.Description(
+                    content = currentArticle?.fullContent
+                        ?: currentArticle?.rawDescription ?: ""
+                )
             )
         }
     }
@@ -65,107 +92,103 @@ class ReadingViewModel @Inject constructor(
 
     private suspend fun internalRenderFullContent() {
         showLoading()
-        try {
-            _readingUiState.update {
-                it.copy(
-                    content = rssHelper.parseFullContent(
-                        _readingUiState.value.articleWithFeed?.article?.link ?: "",
-                        _readingUiState.value.articleWithFeed?.article?.title ?: ""
-                    ),
-                    isFullContent = true
-                )
-            }
-        } catch (e: Exception) {
-            Log.i("RLog", "renderFullContent: ${e.message}")
-            _readingUiState.update { it.copy(content = e.message) }
-        }
-        hideLoading()
-    }
-
-    fun markUnread(isUnread: Boolean) {
-        val articleWithFeed = _readingUiState.value.articleWithFeed ?: return
-        viewModelScope.launch {
-            _readingUiState.update {
-                it.copy(
-                    articleWithFeed = articleWithFeed.copy(
-                        article = articleWithFeed.article.copy(
-                            isUnread = isUnread
-                        )
-                    )
-                )
-            }
-            rssService.get().markAsRead(
-                groupId = null,
-                feedId = null,
-                articleId = _readingUiState.value.articleWithFeed!!.article.id,
-                before = null,
-                isUnread = isUnread,
+        runCatching {
+            rssHelper.parseFullContent(
+                currentArticle?.link ?: "",
+                currentArticle?.title ?: ""
             )
+        }.onSuccess { content ->
+            _readerState.update { it.copy(content = ReaderState.FullContent(content = content)) }
+        }.onFailure { th ->
+            Log.i("RLog", "renderFullContent: ${th.message}")
+            _readerState.update { it.copy(content = ReaderState.Error(th.message)) }
         }
     }
 
-    fun markStarred(isStarred: Boolean) {
-        val articleWithFeed = _readingUiState.value.articleWithFeed ?: return
+    fun updateReadStatus(isUnread: Boolean) {
+        currentArticle?.run {
+            viewModelScope.launch {
+                _readingUiState.update { it.copy(isUnread = isUnread) }
+                rssService.get().markAsRead(
+                    groupId = null,
+                    feedId = null,
+                    articleId = id,
+                    before = null,
+                    isUnread = isUnread,
+                )
+            }
+        }
+    }
+
+    fun markAsRead() = updateReadStatus(isUnread = false)
+
+    fun markAsUnread() = updateReadStatus(isUnread = true)
+
+    fun updateStarredStatus(isStarred: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            _readingUiState.update {
-                it.copy(
-                    articleWithFeed = articleWithFeed.copy(
-                        article = articleWithFeed.article.copy(
-                            isStarred = isStarred
-                        )
-                    )
+            _readingUiState.update { it.copy(isStarred = isStarred) }
+            currentArticle?.let {
+                rssService.get().markAsStarred(
+                    articleId = it.id,
+                    isStarred = isStarred,
                 )
             }
-            rssService.get().markAsStarred(
-                articleId = articleWithFeed.article.id,
-                isStarred = isStarred,
-            )
         }
     }
 
     private fun showLoading() {
-        _readingUiState.update {
-            it.copy(isLoading = true)
+        _readerState.update {
+            it.copy(content = ReaderState.Loading)
         }
     }
 
-    private fun hideLoading() {
-        _readingUiState.update {
-            it.copy(isLoading = false)
+    fun updateNextArticleId(pagingItems: ItemSnapshotList<ArticleFlowItem>) {
+        val items = pagingItems.items
+        val index = items.indexOfFirst { item ->
+            item is ArticleFlowItem.Article && item.articleWithFeed.article.id == currentArticle?.id
         }
-    }
-
-    fun recorderNextArticle(pagingItems: ItemSnapshotList<ArticleFlowItem>) {
-        if (pagingItems.size > 0) {
-            val cur = _readingUiState.value.articleWithFeed?.article
-            if (cur != null) {
-                var found = false
-                for (item in pagingItems) {
-                    if (item is ArticleFlowItem.Article) {
-                        val itemId = item.articleWithFeed.article.id
-                        if (itemId == cur.id) {
-                            found = true
-                            _readingUiState.update {
-                                it.copy(nextArticleId = "")
-                            }
-                        } else if (found) {
-                            _readingUiState.update {
-                                it.copy(nextArticleId = itemId)
-                            }
-                            break
-                        }
-                    }
-                }
+        items.subList(index + 1, items.size).forEach { item ->
+            if (item is ArticleFlowItem.Article) {
+                _readingUiState.update { it.copy(nextArticleId = item.articleWithFeed.article.id) }
+                return
             }
         }
+        _readingUiState.update { it.copy(nextArticleId = null) }
     }
 }
 
 data class ReadingUiState(
     val articleWithFeed: ArticleWithFeed? = null,
-    val content: String? = null,
-    val isFullContent: Boolean = false,
-    val isLoading: Boolean = true,
+    val articleId: String? = null,
+    val isUnread: Boolean = false,
+    val isStarred: Boolean = false,
     val listState: LazyListState = LazyListState(),
-    val nextArticleId: String = "",
+    val nextArticleId: String? = null,
 )
+
+data class ReaderState(
+    val feedName: String = "",
+    val title: String? = null,
+    val author: String? = null,
+    val link: String? = null,
+    val publishedDate: Date = Date(0L),
+    val content: ContentState = Description(null)
+) {
+    sealed interface ContentState {
+        val text: String?
+            get() {
+                return when (this) {
+                    is Description -> content
+                    is Error -> message
+                    is FullContent -> content
+                    Loading -> null
+                }
+            }
+    }
+
+    data class FullContent(val content: String?) : ContentState
+    data class Description(val content: String?) : ContentState
+    data class Error(val message: String?) : ContentState
+
+    object Loading: ContentState
+}
