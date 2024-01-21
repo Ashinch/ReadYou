@@ -58,7 +58,7 @@ fun FeedsPage(
 ) {
     var accountTabVisible by remember { mutableStateOf(false) }
 
-    val scope = rememberCoroutineScope()
+    // val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val topBarTonalElevation = LocalFeedsTopBarTonalElevation.current
     val groupListTonalElevation = LocalFeedsGroupListTonalElevation.current
