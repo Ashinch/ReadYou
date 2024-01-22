@@ -30,6 +30,7 @@ fun BottomBar(
     isShow: Boolean,
     isUnread: Boolean,
     isStarred: Boolean,
+    isNextArticleAvailable: Boolean,
     isFullContent: Boolean,
     onUnread: (isUnread: Boolean) -> Unit = {},
     onStarred: (isStarred: Boolean) -> Unit = {},
@@ -96,7 +97,7 @@ fun BottomBar(
                         onStarred(!isStarred)
                     }
                     CanBeDisabledIconButton(
-                        disabled = false,
+                        disabled = !isNextArticleAvailable,
                         modifier = Modifier.size(40.dp),
                         imageVector = Icons.Rounded.ExpandMore,
                         contentDescription = "Next Article",

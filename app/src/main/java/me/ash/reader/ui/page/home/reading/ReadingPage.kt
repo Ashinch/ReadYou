@@ -97,7 +97,8 @@ fun ReadingPage(
                             else {
                                 ContentTransform(
                                     targetContentEnter = EnterTransition.None,
-                                    initialContentExit = ExitTransition.None, sizeTransform = null)
+                                    initialContentExit = ExitTransition.None, sizeTransform = null
+                                )
                             }
                         }
                     ) {
@@ -122,6 +123,7 @@ fun ReadingPage(
                         isShow = isShowToolBar,
                         isUnread = readingUiState.isUnread,
                         isStarred = readingUiState.isStarred,
+                        isNextArticleAvailable = readingUiState.run { !nextArticleId.isNullOrEmpty() && nextArticleId != articleId },
                         isFullContent = readerState.content is ReaderState.FullContent,
                         onUnread = {
                             readingViewModel.updateReadStatus(it)
