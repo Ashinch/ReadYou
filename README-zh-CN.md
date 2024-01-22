@@ -62,8 +62,8 @@
 **Read You** 也集成了一些第三方服务 API，支持您使用已有的云端账户来作为数据源。
 
 - [x] Fever
-- [ ] Google Reader
-- [ ] FreshRSS
+- [X] Google Reader
+- [X] FreshRSS
 - [ ] Miniflux
 - [ ] Tiny Tiny RSS
 - [ ] Inoreader

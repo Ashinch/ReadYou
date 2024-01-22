@@ -64,8 +64,9 @@
     -   [ ] ویجت‌ها
     -   [ ] ...
 
--   [ ] پشتیبانی از Fever API
--   [ ] پشتیبانی از Google Reader API
+-   [X] پشتیبانی از Fever API
+-   [X] پشتیبانی از Google Reader API
+-   [X] پشتیبانی از FreshRSS API
 -   [ ] پشتیبانی از Inoreader API
 -   [ ] ...
 

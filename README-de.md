@@ -64,8 +64,8 @@ Nachfolgend sind die bisher erzielten Fortschritte und die Ziele aufgeführt, an
 **Read You** ist mit einigen APIs von Drittanbietern kompatibel, um bei der Nutzung Ihrer bestehenden Cloud-Konten als Datenquellen zu unterstützen.
 
 - [x] Fever
-- [ ] Google Reader
-- [ ] FreshRSS
+- [X] Google Reader
+- [X] FreshRSS
 - [ ] Miniflux
 - [ ] Tiny Tiny RSS
 - [ ] Inoreader

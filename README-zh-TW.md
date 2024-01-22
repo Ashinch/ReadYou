@@ -63,8 +63,9 @@
     -   [ ] 小工具
     -   [ ] ...
 
--   [ ] Fever API 支持
--   [ ] Google Reader API 支持
+-   [X] Fever API 支持
+-   [X] Google Reader API 支持
+-   [X] FreshRSS API 支持
 -   [ ] Inoreader API 支持
 -   [ ] ...
 
