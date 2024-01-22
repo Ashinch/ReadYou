@@ -397,7 +397,7 @@ class GoogleReaderRssService @Inject constructor(
         }
         if (markList.isNotEmpty()) googleReaderAPI.editTag(
             itemIds = markList,
-            mark = if (isUnread) null else GoogleReaderAPI.Stream.READ.tag,
+            mark = if (!isUnread)  GoogleReaderAPI.Stream.READ.tag else null,
             unmark = if (isUnread) GoogleReaderAPI.Stream.READ.tag else null,
         )
     }
