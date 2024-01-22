@@ -16,9 +16,5 @@ jobs:
 
             - uses: actions/upload-artifact@v3.1.1
               with:
-                  name: github-${{ github.sha }}
+                  name: ReadYou-GitHub-Build-${{ github.sha }}
                   path: app/build/outputs/apk/github/release/*.apk
-            - uses: actions/upload-artifact@v3
-              with:
-                  name: fdroid-${{ github.sha }}
-                  path: app/build/outputs/apk/fdroid/release/*.apk

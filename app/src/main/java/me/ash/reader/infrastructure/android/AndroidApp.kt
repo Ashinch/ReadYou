@@ -19,7 +19,7 @@ import me.ash.reader.infrastructure.rss.OPMLDataSource
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.ui.ext.del
 import me.ash.reader.ui.ext.getLatestApk
-import me.ash.reader.ui.ext.isFdroid
+import me.ash.reader.ui.ext.isGitHub
 import okhttp3.OkHttpClient
 import javax.inject.Inject
 
@@ -132,7 +132,7 @@ class AndroidApp : Application(), Configuration.Provider {
     }
 
     private suspend fun checkUpdate() {
-        if (isFdroid) return
+        if (!isGitHub) return
         withContext(ioDispatcher) {
             applicationContext.getLatestApk().let {
                 if (it.exists()) it.del()

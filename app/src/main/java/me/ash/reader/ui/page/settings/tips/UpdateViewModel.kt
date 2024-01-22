@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.ash.reader.domain.service.AppService
 import me.ash.reader.infrastructure.net.Download
-import me.ash.reader.ui.ext.notFdroid
+import me.ash.reader.ui.ext.isGitHub
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +22,7 @@ class UpdateViewModel @Inject constructor(
         preProcessor: suspend () -> Unit = {},
         postProcessor: suspend (Boolean) -> Unit = {},
     ) {
-        if (notFdroid) {
+        if (isGitHub) {
             viewModelScope.launch {
                 preProcessor()
                 appService.checkUpdate().let {
