@@ -1,7 +1,6 @@
 package me.ash.reader.domain.service
 
 import android.content.Context
-import android.text.Html
 import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker
@@ -28,16 +27,11 @@ import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI
-import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofCategoryIdToStreamId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofCategoryStreamIdToId
-import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofFeedIdToStreamId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofFeedStreamIdToId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofItemStreamIdToId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderDTO
-import me.ash.reader.ui.ext.currentAccountId
-import me.ash.reader.ui.ext.dollarLast
-import me.ash.reader.ui.ext.showToast
-import me.ash.reader.ui.ext.spacerDollar
+import me.ash.reader.ui.ext.*
 import net.dankito.readability4j.extended.Readability4JExtended
 import java.util.*
 import javax.inject.Inject
@@ -216,13 +210,13 @@ class GoogleReaderRssService @Inject constructor(
             val groupIds = mutableSetOf<String>()
             val feedIds = mutableSetOf<String>()
             val lastUpdateAt = Calendar.getInstance().apply {
-                if (account.updateAt != null) {
-                    time = account.updateAt!!
-                    add(Calendar.HOUR, -1)
-                } else {
+                // if (account.updateAt != null) {
+                //     time = account.updateAt!!
+                //     add(Calendar.HOUR, -1)
+                // } else {
                     time = Date()
                     add(Calendar.MONTH, -1)
-                }
+                // }
             }.time.time / 1000
 
             // 1. Fetch list of feeds and folders
@@ -242,12 +236,12 @@ class GoogleReaderRssService @Inject constructor(
                     groupIds.add(groupId)
 
                     // Handle feeds
-                    feedDao.insert(
-                        *feeds.map {
+                    feedDao.insertOrUpdate(
+                        feeds.map {
                             val feedId = accountId.spacerDollar(it.id?.ofFeedStreamIdToId()!!)
                             Feed(
                                 id = feedId,
-                                name = it.title ?: context.getString(R.string.empty),
+                                name = it.title.decodeHTML() ?: context.getString(R.string.empty),
                                 url = it.url!!,
                                 groupId = groupId,
                                 accountId = accountId,
@@ -255,8 +249,16 @@ class GoogleReaderRssService @Inject constructor(
                             ).also {
                                 feedIds.add(feedId)
                             }
-                        }.toTypedArray()
+                        }
                     )
+
+                    // Handle empty icon for feeds
+                    val noIconFeeds = feedDao.queryNoIcon(accountId)
+                    Log.i("RLog", "sync: $noIconFeeds")
+                    noIconFeeds.forEach {
+                        it.icon = rssHelper.queryRssIconLink(it.url)
+                    }
+                    feedDao.update(*noIconFeeds.toTypedArray())
                 }
 
             // Remove orphaned groups and feeds
@@ -273,7 +275,7 @@ class GoogleReaderRssService @Inject constructor(
             fetchItemsContents(unreadItems, googleReaderAPI, accountId, feedIds, unreadIds, listOf())
 
             // 4. Fetch ids of starred items
-            val starredItems = googleReaderAPI.getStarredItemIds(lastUpdateAt).itemRefs
+            val starredItems = googleReaderAPI.getStarredItemIds().itemRefs
             val starredIds = starredItems?.map { it.id }
             fetchItemsContents(starredItems, googleReaderAPI, accountId, feedIds, unreadIds, starredIds)
 
@@ -285,7 +287,7 @@ class GoogleReaderRssService @Inject constructor(
 
             // 7. Mark/unmark items read/starred/tagged in you app comparing
             // local state and ids you've got from the GoogleReader
-            val articlesMeta = articleDao.queryArticleMetadataAll(accountId)
+            val articlesMeta = articleDao.queryMetadataAll(accountId)
             for (meta: ArticleMeta in articlesMeta) {
                 val articleId = meta.id.dollarLast()
                 val shouldBeUnread = unreadIds?.contains(articleId)
@@ -330,7 +332,7 @@ class GoogleReaderRssService @Inject constructor(
                     Article(
                         id = accountId.spacerDollar(articleId),
                         date = it.published?.run { Date(this * 1000) } ?: Date(),
-                        title = Html.fromHtml(it.title ?: context.getString(R.string.empty)).toString(),
+                        title = it.title.decodeHTML() ?: context.getString(R.string.empty),
                         author = it.author,
                         rawDescription = it.summary?.content ?: "",
                         shortDescription = (Readability4JExtended("", it.summary?.content ?: "")
@@ -362,39 +364,42 @@ class GoogleReaderRssService @Inject constructor(
         isUnread: Boolean,
     ) {
         super.markAsRead(groupId, feedId, articleId, before, isUnread)
+        val accountId = context.currentAccountId
         val googleReaderAPI = getGoogleReaderAPI()
-        val sinceTime = before?.time
-        when {
+        val markList: List<String> = when {
             groupId != null -> {
-                googleReaderAPI.markAllAsRead(
-                    streamId = groupId.dollarLast().ofCategoryIdToStreamId(),
-                    sinceTimestamp = sinceTime
-                )
+                if (before == null) {
+                    articleDao.queryMetadataByGroupId(accountId, groupId)
+                } else {
+                    articleDao.queryMetadataByGroupId(accountId, groupId, before)
+                }.map { it.id.dollarLast() }
             }
 
             feedId != null -> {
-                // TODO: Nothing happened???
-                googleReaderAPI.markAllAsRead(
-                    streamId = feedId.dollarLast().ofFeedIdToStreamId(),
-                    sinceTimestamp = sinceTime
-                )
+                if (before == null) {
+                    articleDao.queryMetadataByFeedId(accountId, feedId)
+                } else {
+                    articleDao.queryMetadataByFeedId(accountId, feedId, before)
+                }.map { it.id.dollarLast() }
             }
 
             articleId != null -> {
-                googleReaderAPI.editTag(
-                    itemIds = listOf(articleId.dollarLast()),
-                    mark = if (!isUnread) GoogleReaderAPI.Stream.READ.tag else null,
-                    unmark = if (isUnread) GoogleReaderAPI.Stream.READ.tag else null,
-                )
+                listOf(articleId.dollarLast())
             }
 
             else -> {
-                googleReaderAPI.markAllAsRead(
-                    streamId = GoogleReaderAPI.Stream.ALL_ITEMS.tag,
-                    sinceTimestamp = sinceTime
-                )
+                if (before == null) {
+                    articleDao.queryMetadataAll(accountId)
+                } else {
+                    articleDao.queryMetadataAll(accountId, before)
+                }.map { it.id.dollarLast() }
             }
         }
+        if (markList.isNotEmpty()) googleReaderAPI.editTag(
+            itemIds = markList,
+            mark = if (isUnread) null else GoogleReaderAPI.Stream.READ.tag,
+            unmark = if (isUnread) GoogleReaderAPI.Stream.READ.tag else null,
+        )
     }
 
     override suspend fun markAsStarred(articleId: String, isStarred: Boolean) {

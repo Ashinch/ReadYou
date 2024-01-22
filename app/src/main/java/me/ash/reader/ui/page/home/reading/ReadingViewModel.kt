@@ -6,25 +6,28 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.ItemSnapshotList
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.ash.reader.domain.model.article.Article
-import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.ArticleWithFeed
-import me.ash.reader.infrastructure.rss.RssHelper
+import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.service.RssService
-import java.util.Date
+import me.ash.reader.infrastructure.di.IODispatcher
+import me.ash.reader.infrastructure.rss.RssHelper
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class ReadingViewModel @Inject constructor(
     private val rssService: RssService,
     private val rssHelper: RssHelper,
+    @IODispatcher
+    private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     private val _readingUiState = MutableStateFlow(ReadingUiState())
@@ -40,7 +43,7 @@ class ReadingViewModel @Inject constructor(
 
     fun initData(articleId: String) {
         showLoading()
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             rssService.get().findArticleById(articleId)?.run {
                 _readingUiState.update {
                     it.copy(
@@ -107,7 +110,7 @@ class ReadingViewModel @Inject constructor(
 
     fun updateReadStatus(isUnread: Boolean) {
         currentArticle?.run {
-            viewModelScope.launch {
+            viewModelScope.launch(ioDispatcher) {
                 _readingUiState.update { it.copy(isUnread = isUnread) }
                 rssService.get().markAsRead(
                     groupId = null,
@@ -125,7 +128,7 @@ class ReadingViewModel @Inject constructor(
     fun markAsUnread() = updateReadStatus(isUnread = true)
 
     fun updateStarredStatus(isStarred: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(ioDispatcher) {
             _readingUiState.update { it.copy(isStarred = isStarred) }
             currentArticle?.let {
                 rssService.get().markAsStarred(

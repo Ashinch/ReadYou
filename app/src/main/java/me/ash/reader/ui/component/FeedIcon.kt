@@ -27,7 +27,7 @@ fun FeedIcon(
     size: Dp = 20.dp,
     placeholderIcon: ImageVector? = null,
 ) {
-    if (iconUrl == null) {
+    if (iconUrl.isNullOrEmpty()) {
         if (placeholderIcon == null) {
             Box(
                 modifier = Modifier

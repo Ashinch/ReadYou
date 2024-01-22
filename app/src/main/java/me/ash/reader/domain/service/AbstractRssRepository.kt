@@ -29,6 +29,7 @@ import me.ash.reader.infrastructure.preference.KeepArchivedPreference
 import me.ash.reader.infrastructure.preference.SyncIntervalPreference
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.ui.ext.currentAccountId
+import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.spacerDollar
 import java.util.*
 
@@ -61,7 +62,7 @@ abstract class AbstractRssRepository(
         val accountId = context.currentAccountId
         val feed = Feed(
             id = accountId.spacerDollar(UUID.randomUUID().toString()),
-            name = searchedFeed.title!!,
+            name = searchedFeed.title.decodeHTML()!!,
             url = feedLink,
             groupId = groupId,
             accountId = accountId,
@@ -166,13 +167,9 @@ abstract class AbstractRssRepository(
         val latest = articleDao.queryLatestByFeedId(context.currentAccountId, feed.id)
         val articles = rssHelper.queryRssXml(feed, latest?.link)
         if (feed.icon == null) {
-            try {
-                val iconLink = rssHelper.queryRssIconLink(feed.url)
-                if (iconLink != null) {
-                    rssHelper.saveRssIcon(feedDao, feed, iconLink)
-                }
-            } catch (e: Exception) {
-                Log.i("RLog", "queryRssIcon is failed: ${e.message}")
+            val iconLink = rssHelper.queryRssIconLink(feed.url)
+            if (iconLink != null) {
+                rssHelper.saveRssIcon(feedDao, feed, iconLink)
             }
         }
         return FeedWithArticle(

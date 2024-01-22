@@ -36,7 +36,7 @@ class FlowViewModel @Inject constructor(
         articleId: String?,
         conditions: MarkAsReadConditions,
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             rssService.get().markAsRead(
                 groupId = groupId,
                 feedId = feedId,

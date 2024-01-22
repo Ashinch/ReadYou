@@ -274,6 +274,7 @@ class GoogleReaderAPI private constructor(
         }
     )
 
+    // Not all services support it
     suspend fun markAllAsRead(streamId: String, sinceTimestamp: Long? = null): String =
         retryablePostRequest<String>(
             query = "reader/api/0/mark-all-as-read",

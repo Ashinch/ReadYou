@@ -1,7 +1,6 @@
 package me.ash.reader.infrastructure.rss
 
 import android.content.Context
-import android.text.Html
 import android.util.Log
 import com.google.gson.Gson
 import com.rometools.rome.feed.synd.SyndEntry
@@ -17,6 +16,7 @@ import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.ui.ext.currentAccountId
+import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.spacerDollar
 import net.dankito.readability4j.extended.Readability4JExtended
 import okhttp3.OkHttpClient
@@ -112,7 +112,7 @@ class RssHelper @Inject constructor(
             accountId = accountId,
             feedId = feed.id,
             date = syndEntry.publishedDate ?: syndEntry.updatedDate ?: Date(),
-            title = Html.fromHtml(syndEntry.title ?: feed.name).toString(),
+            title = syndEntry.title.decodeHTML() ?: feed.name,
             author = syndEntry.author,
             rawDescription = (content ?: desc) ?: "",
             shortDescription = (Readability4JExtended("", desc ?: content ?: "")
@@ -135,12 +135,16 @@ class RssHelper @Inject constructor(
         return regex.find(rawDescription)?.groupValues?.get(2)?.takeIf { !it.startsWith("data:") }
     }
 
-    @Throws(Exception::class)
     suspend fun queryRssIconLink(feedLink: String): String? {
-        val request = response(okHttpClient, "https://besticon-demo.herokuapp.com/allicons.json?url=${feedLink}")
-        val content = request.body.string()
-        val favicon = Gson().fromJson(content, Favicon::class.java)
-        return favicon?.icons?.first { it.width != null && it.width >= 20 }?.url
+        return try {
+            val request = response(okHttpClient, "https://besticon-demo.herokuapp.com/allicons.json?url=${feedLink}")
+            val content = request.body.string()
+            val favicon = Gson().fromJson(content, Favicon::class.java)
+            favicon?.icons?.first { it.width != null && it.width >= 20 }?.url
+        } catch (e: Exception) {
+            Log.i("RLog", "queryRssIcon is failed: ${e.message}")
+            null
+        }
     }
 
     suspend fun saveRssIcon(feedDao: FeedDao, feed: Feed, iconLink: String) {

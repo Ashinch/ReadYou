@@ -1,5 +1,6 @@
 package me.ash.reader.ui.ext
 
+import android.text.Html
 import android.util.Base64
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -32,3 +33,5 @@ fun String.decodeBase64(): String = String(Base64.decode(this, Base64.DEFAULT))
 fun String.md5(): String =
     BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray()))
         .toString(16).padStart(32, '0')
+
+fun String?.decodeHTML(): String? = this?.run { Html.fromHtml(this).toString() }

@@ -562,9 +562,70 @@ interface ArticleDao {
         ORDER BY date DESC
         """
     )
-    fun queryArticleMetadataAll(
-        accountId: Int,
-    ): List<ArticleMeta>
+    fun queryMetadataAll(accountId: Int): List<ArticleMeta>
+
+    @Transaction
+    @Query(
+        """
+        SELECT id, isUnread, isStarred FROM article
+        WHERE accountId = :accountId
+        AND date < :before
+        ORDER BY date DESC
+        """
+    )
+    fun queryMetadataAll(accountId: Int, before: Date): List<ArticleMeta>
+
+    @Transaction
+    @Query(
+        """
+        SELECT id, isUnread, isStarred FROM article
+        WHERE accountId = :accountId
+        AND feedId = :feedId
+        ORDER BY date DESC
+        """
+    )
+    fun queryMetadataByFeedId(accountId: Int, feedId: String): List<ArticleMeta>
+
+    @Transaction
+    @Query(
+        """
+        SELECT id, isUnread, isStarred FROM article
+        WHERE accountId = :accountId
+        AND feedId = :feedId
+        AND date < :before
+        ORDER BY date DESC
+        """
+    )
+    fun queryMetadataByFeedId(accountId: Int, feedId: String, before: Date): List<ArticleMeta>
+
+    @Transaction
+    @Query(
+        """
+        SELECT a.id, a.isUnread, a.isStarred 
+        FROM article AS a
+        LEFT JOIN feed AS b ON b.id = a.feedId
+        LEFT JOIN `group` AS c ON c.id = b.groupId
+        WHERE c.id = :groupId
+        AND a.accountId = :accountId
+        ORDER BY a.date DESC
+        """
+    )
+    fun queryMetadataByGroupId(accountId: Int, groupId: String): List<ArticleMeta>
+
+    @Transaction
+    @Query(
+        """
+        SELECT a.id, a.isUnread, a.isStarred 
+        FROM article AS a
+        LEFT JOIN feed AS b ON b.id = a.feedId
+        LEFT JOIN `group` AS c ON c.id = b.groupId
+        WHERE c.id = :groupId
+        AND a.accountId = :accountId
+        AND a.date < :before
+        ORDER BY a.date DESC
+        """
+    )
+    fun queryMetadataByGroupId(accountId: Int, groupId: String, before: Date): List<ArticleMeta>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg article: Article)

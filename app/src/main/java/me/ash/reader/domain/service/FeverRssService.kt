@@ -1,7 +1,6 @@
 package me.ash.reader.domain.service
 
 import android.content.Context
-import android.text.Html
 import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker
@@ -29,10 +28,7 @@ import me.ash.reader.infrastructure.di.MainDispatcher
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.rss.provider.fever.FeverAPI
 import me.ash.reader.infrastructure.rss.provider.fever.FeverDTO
-import me.ash.reader.ui.ext.currentAccountId
-import me.ash.reader.ui.ext.dollarLast
-import me.ash.reader.ui.ext.showToast
-import me.ash.reader.ui.ext.spacerDollar
+import me.ash.reader.ui.ext.*
 import net.dankito.readability4j.extended.Readability4JExtended
 import java.util.*
 import javax.inject.Inject
@@ -177,7 +173,7 @@ class FeverRssService @Inject constructor(
                 feedsBody.feeds?.map {
                     Feed(
                         id = accountId.spacerDollar(it.id!!),
-                        name = it.title ?: context.getString(R.string.empty),
+                        name = it.title.decodeHTML() ?: context.getString(R.string.empty),
                         url = it.url!!,
                         groupId = accountId.spacerDollar(feedsGroupsMap[it.id.toString()]!!),
                         accountId = accountId,
@@ -185,6 +181,13 @@ class FeverRssService @Inject constructor(
                     )
                 } ?: emptyList()
             )
+
+            // Handle empty icon for feeds
+            val noIconFeeds = feedDao.queryNoIcon(accountId)
+            noIconFeeds.forEach {
+                it.icon = rssHelper.queryRssIconLink(it.url)
+            }
+            feedDao.update(*noIconFeeds.toTypedArray())
 
             // 3. Fetch the Fever articles (up to unlimited counts)
             var sinceId = account.lastArticleId?.dollarLast() ?: ""
@@ -195,7 +198,7 @@ class FeverRssService @Inject constructor(
                         Article(
                             id = accountId.spacerDollar(it.id!!),
                             date = it.created_on_time?.run { Date(this * 1000) } ?: Date(),
-                            title = Html.fromHtml(it.title ?: context.getString(R.string.empty)).toString(),
+                            title = it.title.decodeHTML() ?: context.getString(R.string.empty),
                             author = it.author,
                             rawDescription = it.html ?: "",
                             shortDescription = (Readability4JExtended("", it.html ?: "")
@@ -225,7 +228,7 @@ class FeverRssService @Inject constructor(
             // 4. Synchronize read/unread and starred/un-starred
             val unreadArticleIds = feverAPI.getUnreadItems().unread_item_ids?.split(",")
             val starredArticleIds = feverAPI.getSavedItems().saved_item_ids?.split(",")
-            val articleMeta = articleDao.queryArticleMetadataAll(accountId)
+            val articleMeta = articleDao.queryMetadataAll(accountId)
             for (meta: ArticleMeta in articleMeta) {
                 val articleId = meta.id.dollarLast()
                 val shouldBeUnread = unreadArticleIds?.contains(articleId)
