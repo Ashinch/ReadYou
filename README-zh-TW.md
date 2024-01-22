@@ -1,5 +1,5 @@
 <div align="center">
-    <img width="200" height="200" style="display: block; border: 1px solid #f5f5f5; border-radius: 9999px;" src="./fastlane/metadata/android/en-US/images/icon.png">
+    <img width="200" height="200" style="display: block; border: 1px solid #f5f5f5; border-radius: 9999px;" src="https://raw.githubusercontent.com/Ashinch/ReadYou/main/fastlane/metadata/android/zh-TW/images/icon.png">
 </div>
 
 <br>
@@ -31,11 +31,11 @@
     繁體中文</p>
     <br/>
     <br/>
-    <img src="./fastlane/metadata/android/zh-rTW/images/startup.png" width="19.2%" alt="startup" />
-    <img src="./fastlane/metadata/android/zh-rTW/images/feeds.png" width="19.2%" alt="startup" />
-    <img src="./fastlane/metadata/android/zh-rTW/images/flow.png" width="19.2%" alt="startup" />
-    <img src="./fastlane/metadata/android/zh-rTW/images/read.png" width="19.2%" alt="startup" />
-    <img src="./fastlane/metadata/android/zh-rTW/images/settings.png" width="19.2%" alt="startup" />
+    <img src="https://raw.githubusercontent.com/Ashinch/ReadYou/main/fastlane/metadata/android/zh-TW/images/phoneScreenshots/startup.png" width="19.2%"alt="startup" />
+    <img src="https://raw.githubusercontent.com/Ashinch/ReadYou/main/fastlane/metadata/android/zh-TW/images/phoneScreenshots/feeds.png" width="19.2%" alt="feeds" />
+    <img src="https://raw.githubusercontent.com/Ashinch/ReadYou/main/fastlane/metadata/android/zh-TW/images/phoneScreenshots/flow.png" width="19.2%" alt="flow" />
+    <img src="https://raw.githubusercontent.com/Ashinch/ReadYou/main/fastlane/metadata/android/zh-TW/images/phoneScreenshots/read.png" width="19.2%" alt="read" />
+    <img src="https://raw.githubusercontent.com/Ashinch/ReadYou/main/fastlane/metadata/android/zh-TW/images/phoneScreenshots/settings.png" width="19.2%" alt="settings" />
     <br/>
     <br/>
 </div>
