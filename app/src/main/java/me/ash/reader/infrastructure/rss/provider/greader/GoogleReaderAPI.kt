@@ -200,22 +200,26 @@ class GoogleReaderAPI private constructor(
                 Pair("n", MAXIMUM_ITEMS_LIMIT),
             ))
 
-    suspend fun getUnreadItemIds(): GoogleReaderDTO.ItemIds =
+    suspend fun getUnreadItemIds(since: Long? = null): GoogleReaderDTO.ItemIds =
         retryableGetRequest<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
-            params = listOf(
-                Pair("s", Stream.ALL_ITEMS.tag),
-                Pair("xt", Stream.READ.tag),
-                Pair("n", MAXIMUM_ITEMS_LIMIT),
-            ))
+            params = mutableListOf<Pair<String, String>>().apply {
+                add(Pair("s", Stream.ALL_ITEMS.tag))
+                add(Pair("xt", Stream.READ.tag))
+                add(Pair("n", MAXIMUM_ITEMS_LIMIT))
+                since?.let { add(Pair("ot", since.toString())) }
+            }
+        )
 
-    suspend fun getStarredItemIds(): GoogleReaderDTO.ItemIds =
+    suspend fun getStarredItemIds(since: Long? = null): GoogleReaderDTO.ItemIds =
         retryableGetRequest<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
-            params = listOf(
-                Pair("s", Stream.STARRED.tag),
-                Pair("n", MAXIMUM_ITEMS_LIMIT),
-            ))
+            params = mutableListOf<Pair<String, String>>().apply {
+                add(Pair("s", Stream.STARRED.tag))
+                add(Pair("n", MAXIMUM_ITEMS_LIMIT))
+                since?.let { add(Pair("ot", since.toString())) }
+            }
+        )
 
     suspend fun getItemsContents(ids: List<String>?) =
         retryablePostRequest<GoogleReaderDTO.ItemsContents>(

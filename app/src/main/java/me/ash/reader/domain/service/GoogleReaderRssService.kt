@@ -215,6 +215,15 @@ class GoogleReaderRssService @Inject constructor(
             val googleReaderAPI = getGoogleReaderAPI()
             val groupIds = mutableSetOf<String>()
             val feedIds = mutableSetOf<String>()
+            val lastUpdateAt = Calendar.getInstance().apply {
+                if (account.updateAt != null) {
+                    time = account.updateAt!!
+                    add(Calendar.HOUR, -1)
+                } else {
+                    time = Date()
+                    add(Calendar.MONTH, -1)
+                }
+            }.time.time / 1000
 
             // 1. Fetch list of feeds and folders
             googleReaderAPI.getSubscriptionList()
@@ -264,17 +273,12 @@ class GoogleReaderRssService @Inject constructor(
             fetchItemsContents(unreadItems, googleReaderAPI, accountId, feedIds, unreadIds, listOf())
 
             // 4. Fetch ids of starred items
-            val starredItems = googleReaderAPI.getStarredItemIds().itemRefs
+            val starredItems = googleReaderAPI.getStarredItemIds(lastUpdateAt).itemRefs
             val starredIds = starredItems?.map { it.id }
             fetchItemsContents(starredItems, googleReaderAPI, accountId, feedIds, unreadIds, starredIds)
 
             // 5. Fetch ids of read items since last month
-            val readItems = googleReaderAPI.getReadItemIds(
-                Calendar.getInstance().apply {
-                    time = Date()
-                    add(Calendar.MONTH, -1)
-                }.time.time / 1000
-            ).itemRefs
+            val readItems = googleReaderAPI.getReadItemIds(lastUpdateAt).itemRefs
 
             // 6. Fetch items contents for ids
             fetchItemsContents(readItems, googleReaderAPI, accountId, feedIds, unreadIds, starredIds)
