@@ -2,22 +2,27 @@ package me.ash.reader.ui.page.home.reading
 
 import android.util.Log
 import androidx.compose.animation.*
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.map
 import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.isScrollDown
+import me.ash.reader.ui.motion.materialSharedAxisY
 import me.ash.reader.ui.page.home.HomeViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -29,33 +34,35 @@ fun ReadingPage(
 ) {
     val tonalElevation = LocalReadingPageTonalElevation.current
     val readingUiState = readingViewModel.readingUiState.collectAsStateValue()
+    val readerState = readingViewModel.readerStateStateFlow.collectAsStateValue()
     val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
     val isShowToolBar = if (LocalReadingAutoHideToolbar.current.value) {
-        readingUiState.articleWithFeed != null && !readingUiState.listState.isScrollDown()
+        readingUiState.articleId != null && !readingUiState.listState.isScrollDown()
     } else {
         true
     }
 
     val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
-    readingViewModel.recorderNextArticle(pagingItems)
 
     LaunchedEffect(Unit) {
         navController.currentBackStackEntryFlow.collect {
             it.arguments?.getString("articleId")?.let { articleId ->
-                if (readingUiState.articleWithFeed?.article?.id != articleId) {
+                if (readingUiState.articleId != articleId) {
                     readingViewModel.initData(articleId)
                 }
             }
         }
     }
 
-    LaunchedEffect(readingUiState.articleWithFeed?.article?.id) {
+    LaunchedEffect(readingUiState.articleId) {
         Log.i("RLog", "ReadPage: ${readingUiState.articleWithFeed}")
-        readingUiState.articleWithFeed?.let {
-            if (it.article.isUnread) {
-                readingViewModel.markUnread(false)
+        readingUiState.articleId?.let {
+            readingViewModel.updateNextArticleId(pagingItems)
+            if (readingUiState.isUnread) {
+                readingViewModel.markAsRead()
             }
         }
+
     }
 
     RYScaffold(
@@ -69,61 +76,63 @@ fun ReadingPage(
                 TopBar(
                     navController = navController,
                     isShow = isShowToolBar,
-                    title = readingUiState.articleWithFeed?.article?.title,
-                    link = readingUiState.articleWithFeed?.article?.link,
+                    title = readerState.title,
+                    link = readerState.link,
                     onClose = {
                         navController.popBackStack()
                     },
                 )
 
-                // Content
-                if (readingUiState.articleWithFeed != null) {
+
+
+                if (readingUiState.articleId != null) {
+                    // Content
                     AnimatedContent(
-                        targetState = readingUiState.content ?: "",
+                        targetState = readerState,
                         transitionSpec = {
-                            slideInVertically(
-                                spring(
-                                    dampingRatio = Spring.DampingRatioNoBouncy,
-                                    stiffness = Spring.StiffnessLow,
+                            if (initialState.title != targetState.title)
+                                materialSharedAxisY(
+                                    initialOffsetY = { (it * 0.1f).toInt() },
+                                    targetOffsetY = { (it * -0.1f).toInt() })
+                            else {
+                                ContentTransform(
+                                    targetContentEnter = EnterTransition.None,
+                                    initialContentExit = ExitTransition.None, sizeTransform = null
                                 )
-                            ) { height -> height / 2 } with slideOutVertically { height -> -(height / 2) } + fadeOut(
-                                spring(
-                                    dampingRatio = Spring.DampingRatioNoBouncy,
-                                    stiffness = Spring.StiffnessLow,
-                                )
+                            }
+                        }
+                    ) {
+                        it.run {
+                            Content(
+                                content = content.text ?: "",
+                                feedName = feedName,
+                                title = title.toString(),
+                                author = author,
+                                link = link,
+                                publishedDate = publishedDate,
+                                isLoading = content is ReaderState.Loading,
+                                listState = readingUiState.listState,
+                                isShowToolBar = isShowToolBar,
                             )
                         }
-                    ) { target ->
-                        Content(
-                            content = target,
-                            feedName = readingUiState.articleWithFeed.feed.name,
-                            title = readingUiState.articleWithFeed.article.title,
-                            author = readingUiState.articleWithFeed.article.author,
-                            link = readingUiState.articleWithFeed.article.link,
-                            publishedDate = readingUiState.articleWithFeed.article.date,
-                            isLoading = readingUiState.isLoading,
-                            listState = readingUiState.listState,
-                            isShowToolBar = isShowToolBar,
-                        )
                     }
                 }
                 // Bottom Bar
-                if (readingUiState.articleWithFeed != null) {
+                if (readingUiState.articleId != null) {
                     BottomBar(
                         isShow = isShowToolBar,
-                        isUnread = readingUiState.articleWithFeed.article.isUnread,
-                        isStarred = readingUiState.articleWithFeed.article.isStarred,
-                        isFullContent = readingUiState.isFullContent,
+                        isUnread = readingUiState.isUnread,
+                        isStarred = readingUiState.isStarred,
+                        isNextArticleAvailable = readingUiState.run { !nextArticleId.isNullOrEmpty() && nextArticleId != articleId },
+                        isFullContent = readerState.content is ReaderState.FullContent,
                         onUnread = {
-                            readingViewModel.markUnread(it)
+                            readingViewModel.updateReadStatus(it)
                         },
                         onStarred = {
-                            readingViewModel.markStarred(it)
+                            readingViewModel.updateStarredStatus(it)
                         },
                         onNextArticle = {
-                            if (readingUiState.nextArticleId.isNotEmpty()) {
-                                readingViewModel.initData(readingUiState.nextArticleId)
-                            }
+                            readingUiState.nextArticleId?.let { readingViewModel.initData(it) }
                         },
                         onFullContent = {
                             if (it) readingViewModel.renderFullContent()

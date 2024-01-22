@@ -27,7 +27,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalDensity
@@ -107,6 +109,65 @@ public fun materialSharedAxisXOut(
                 easing = FastOutSlowInEasing
         ),
         targetOffsetX = targetOffsetX
+) + fadeOut(
+        animationSpec = tween(
+                durationMillis = durationMillis.ForOutgoing,
+                delayMillis = 0,
+                easing = FastOutLinearInEasing
+        )
+)
+
+
+/**
+ * [materialSharedAxisY] allows to switch a layout with shared Y-axis transition.
+ *
+ */
+@OptIn(ExperimentalAnimationApi::class)
+public fun materialSharedAxisY(
+        initialOffsetY: (fullWidth: Int) -> Int,
+        targetOffsetY: (fullWidth: Int) -> Int,
+        durationMillis: Int = MotionConstants.DefaultMotionDuration,
+): ContentTransform = ContentTransform(materialSharedAxisYIn(
+        initialOffsetY = initialOffsetY,
+        durationMillis = durationMillis
+), materialSharedAxisYOut(
+        targetOffsetY = targetOffsetY,
+        durationMillis = durationMillis
+))
+
+/**
+ * [materialSharedAxisYIn] allows to switch a layout with shared Y-axis enter transition.
+ */
+public fun materialSharedAxisYIn(
+        initialOffsetY: (fullWidth: Int) -> Int,
+        durationMillis: Int = MotionConstants.DefaultMotionDuration,
+): EnterTransition = slideInVertically(
+        animationSpec = tween(
+                durationMillis = durationMillis,
+                easing = FastOutSlowInEasing
+        ),
+        initialOffsetY = initialOffsetY
+) + fadeIn(
+        animationSpec = tween(
+                durationMillis = durationMillis.ForIncoming,
+                delayMillis = durationMillis.ForOutgoing,
+                easing = LinearOutSlowInEasing
+        )
+)
+
+/**
+ * [materialSharedAxisYOut] allows to switch a layout with shared X-axis exit transition.
+ *
+ */
+public fun materialSharedAxisYOut(
+        targetOffsetY: (fullWidth: Int) -> Int,
+        durationMillis: Int = MotionConstants.DefaultMotionDuration,
+): ExitTransition = slideOutVertically (
+        animationSpec = tween(
+                durationMillis = durationMillis,
+                easing = FastOutSlowInEasing
+        ),
+        targetOffsetY = targetOffsetY
 ) + fadeOut(
         animationSpec = tween(
                 durationMillis = durationMillis.ForOutgoing,
