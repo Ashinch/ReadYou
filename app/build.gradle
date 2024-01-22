@@ -44,6 +44,10 @@ android {
         fdroid {
             dimension "channel"
         }
+        googlePlay {
+            dimension "channel"
+            applicationIdSuffix ".google.play"
+        }
         github {
             dimension "channel"
         }
