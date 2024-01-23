@@ -8,7 +8,6 @@ object RouteName {
     // Home
     const val FEEDS = "feeds"
     const val FLOW = "flow"
-    const val READING = "reading"
 
     // Settings
     const val SETTINGS = "settings"

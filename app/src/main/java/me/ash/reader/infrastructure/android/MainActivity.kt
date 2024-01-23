@@ -11,6 +11,8 @@ import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.core.app.NotificationManagerCompat
@@ -28,6 +30,7 @@ import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.ui.ext.languages
 import me.ash.reader.ui.page.common.HomeEntry
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
+import me.ash.reader.ui.theme.palette.core.LocalWidthWindowSizeClass
 import java.lang.reflect.Field
 import javax.inject.Inject
 
@@ -43,6 +46,7 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var accountDao: AccountDao
 
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -83,8 +87,10 @@ class MainActivity : AppCompatActivity() {
 
 
         setContent {
+            val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
             CompositionLocalProvider(
                 LocalImageLoader provides imageLoader,
+                LocalWidthWindowSizeClass provides widthSizeClass,
             ) {
                 AccountSettingsProvider(accountDao) {
                     SettingsProvider {

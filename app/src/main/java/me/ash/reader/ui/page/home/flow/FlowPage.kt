@@ -1,12 +1,14 @@
 package me.ash.reader.ui.page.home.flow
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -24,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
@@ -59,6 +62,8 @@ import me.ash.reader.ui.component.base.SwipeRefresh
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
+import me.ash.reader.ui.page.home.reading.ReadingPage
+import me.ash.reader.ui.theme.palette.core.LocalWidthWindowSizeClass
 
 @OptIn(
     com.google.accompanist.pager.ExperimentalPagerApi::class,
@@ -69,6 +74,7 @@ fun FlowPage(
     navController: NavHostController,
     flowViewModel: FlowViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel,
+    onArticleClick: (String) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val topBarTonalElevation = LocalFlowTopBarTonalElevation.current
@@ -182,7 +188,10 @@ fun FlowPage(
         onSearch = false
     }
 
+    val isExpandedScreen = LocalWidthWindowSizeClass.current == WindowWidthSizeClass.Expanded
+    val width = if (isExpandedScreen) Modifier.width(334.dp) else Modifier
     RYScaffold(
+        modifier = width,
         topBarTonalElevation = topBarTonalElevation.value.dp,
         containerTonalElevation = articleListTonalElevation.value.dp,
         navigationIcon = {
@@ -328,9 +337,7 @@ fun FlowPage(
                         isSwipeEnabled = { listState.isScrollInProgress },
                         onClick = {
                             onSearch = false
-                            navController.navigate("${RouteName.READING}/${it.article.id}") {
-                                launchSingleTop = true
-                            }
+                            onArticleClick(it.article.id)
                         },
                         onToggleStarred = onToggleStarred,
                         onToggleRead = onToggleRead,
@@ -367,4 +374,25 @@ fun FlowPage(
             }
         }
     )
+}
+
+@Composable
+fun FlowWithArticleDetailsScreen(
+    navController: NavHostController,
+    homeViewModel: HomeViewModel,
+    flowViewModel: FlowViewModel,
+    onArticleClick: (String) -> Unit,
+) {
+    val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
+    Row {
+        FlowPage(
+            navController = navController,
+            onArticleClick = onArticleClick,
+            homeViewModel = homeViewModel,
+            flowViewModel = flowViewModel,
+        )
+        if (homeUiState.isArticleOpen) {
+            ReadingPage(navController = navController, homeViewModel = homeViewModel)
+        }
+    }
 }

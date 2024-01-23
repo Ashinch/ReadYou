@@ -7,8 +7,10 @@
 
 package me.ash.reader.ui.theme.palette.core
 
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import me.ash.reader.ui.theme.palette.colorspace.cielab.CieLab
 import me.ash.reader.ui.theme.palette.colorspace.ciexyz.CieXyz
@@ -30,6 +32,10 @@ val LocalRgbColorSpace = staticCompositionLocalOf {
 
 val LocalZcamViewingConditions = staticCompositionLocalOf {
     createZcamViewingConditions()
+}
+
+val LocalWidthWindowSizeClass = compositionLocalOf {
+    WindowWidthSizeClass.Compact
 }
 
 @Composable

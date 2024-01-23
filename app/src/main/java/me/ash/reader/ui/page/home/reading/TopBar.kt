@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +28,7 @@ import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYExtensibleVisibility
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.common.RouteName
+import me.ash.reader.ui.theme.palette.core.LocalWidthWindowSizeClass
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,6 +43,7 @@ fun TopBar(
     val context = LocalContext.current
     val tonalElevation = LocalReadingPageTonalElevation.current
     val sharedContent = LocalSharedContent.current
+    val isExpandedScreen = LocalWidthWindowSizeClass.current == WindowWidthSizeClass.Expanded
 
     Box(
         modifier = Modifier
@@ -54,12 +57,14 @@ fun TopBar(
                 modifier = Modifier,
                 windowInsets = windowInsets,
                 navigationIcon = {
-                    FeedbackIconButton(
-                        imageVector = Icons.Rounded.Close,
-                        contentDescription = stringResource(R.string.close),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    ) {
-                        onClose()
+                    if (!isExpandedScreen) {
+                        FeedbackIconButton(
+                            imageVector = Icons.Rounded.Close,
+                            contentDescription = stringResource(R.string.close),
+                            tint = MaterialTheme.colorScheme.onSurface
+                        ) {
+                            onClose()
+                        }
                     }
                 },
                 actions = {

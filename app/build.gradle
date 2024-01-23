@@ -177,6 +177,7 @@ dependencies {
 
     // https://developer.android.com/jetpack/androidx/releases/compose-material3
     implementation "androidx.compose.material3:material3:$material3"
+    implementation "androidx.compose.material3:material3-window-size-class:$material3"
 
     // https://github.com/google/accompanist/releases
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist"

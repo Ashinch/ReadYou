@@ -101,6 +101,18 @@ class HomeViewModel @Inject constructor(
         _homeUiState.update { it.copy(searchContent = content) }
         fetchArticles()
     }
+
+    fun selectArticle(articleId: String) {
+        _homeUiState.update {
+            it.copy(isArticleOpen = true, articleId = articleId)
+        }
+    }
+
+    fun backToFeed() {
+        _homeUiState.update {
+            it.copy(isArticleOpen = false, articleId = null)
+        }
+    }
 }
 
 data class FilterState(
@@ -112,4 +124,7 @@ data class FilterState(
 data class HomeUiState(
     val pagingData: Flow<PagingData<ArticleFlowItem>> = emptyFlow(),
     val searchContent: String = "",
+
+    val isArticleOpen: Boolean = false,
+    val articleId: String? = null,
 )

@@ -75,10 +75,12 @@ fun ReadingPage(
     }
 
     val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
+    val articleId = homeViewModel.homeUiState.collectAsStateValue().articleId
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(articleId) {
         navController.currentBackStackEntryFlow.collect {
-            it.arguments?.getString("articleId")?.let { articleId ->
+            val getArticleId : String? = articleId ?: it.arguments?.getString("articleId")
+            getArticleId?.let { articleId ->
                 if (readerState.articleId != articleId) {
                     readingViewModel.initData(articleId)
                 }
