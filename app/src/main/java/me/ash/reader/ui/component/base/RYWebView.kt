@@ -22,9 +22,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
+import me.ash.reader.infrastructure.preference.LocalReadingImageHorizontalPadding
+import me.ash.reader.infrastructure.preference.LocalReadingImageRoundedCorners
+import me.ash.reader.infrastructure.preference.LocalReadingLetterSpacing
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
+import me.ash.reader.infrastructure.preference.LocalReadingSubheadAlign
+import me.ash.reader.infrastructure.preference.LocalReadingSubheadBold
+import me.ash.reader.infrastructure.preference.LocalReadingTextAlign
+import me.ash.reader.infrastructure.preference.LocalReadingTextBold
+import me.ash.reader.infrastructure.preference.LocalReadingTextFontSize
+import me.ash.reader.infrastructure.preference.LocalReadingTextHorizontalPadding
 import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.ext.surfaceColorAtElevation
+import kotlin.math.absoluteValue
 
 const val INJECTION_TOKEN = "/android_asset_font/"
 
@@ -38,8 +48,23 @@ fun RYWebView(
     val openLink = LocalOpenLink.current
     val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
     val tonalElevation = LocalReadingPageTonalElevation.current
-    val color = MaterialTheme.colorScheme.onSurfaceVariant.toArgb()
-    val backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(tonalElevation.value.dp).toArgb()
+    val backgroundColor = MaterialTheme.colorScheme
+        .surfaceColorAtElevation(tonalElevation.value.dp).toArgb()
+    val bodyColor: Int = MaterialTheme.colorScheme.onSurfaceVariant.toArgb()
+    val linkColor: Int = MaterialTheme.colorScheme.primary.toArgb()
+    val subheadColor: Int = MaterialTheme.colorScheme.onSurface.toArgb()
+    val subheadBold: Boolean = LocalReadingSubheadBold.current.value
+    val subheadAlign: String = LocalReadingSubheadAlign.current.toTextAlignCSS()
+    val textBold: Boolean = LocalReadingTextBold.current.value
+    val textAlign: String = LocalReadingTextAlign.current.toTextAlignCSS()
+    val textFontSize: Int = LocalReadingTextFontSize.current
+    val textLetterSpacing: Double = LocalReadingLetterSpacing.current
+    val imageHorizontalPadding: Int = LocalReadingImageHorizontalPadding.current
+    val textHorizontalPadding: Int = LocalReadingTextHorizontalPadding.current
+    val imageShape: Int = LocalReadingImageRoundedCorners.current
+    val codeColor: Int = MaterialTheme.colorScheme.primary.toArgb()
+    val codeBackgroundColor: Int = MaterialTheme.colorScheme
+        .surfaceColorAtElevation((tonalElevation.value + 6).dp).toArgb()
     val webViewClient by remember {
         mutableStateOf(object : WebViewClient() {
 
@@ -107,7 +132,7 @@ fun RYWebView(
         })
     }
 
-    val webView by remember {
+    val webView by remember(backgroundColor) {
         mutableStateOf(WebView(context).apply {
             this.webViewClient = webViewClient
             setBackgroundColor(backgroundColor)
@@ -125,7 +150,23 @@ fun RYWebView(
                 settings.javaScriptEnabled = true
                 loadDataWithBaseURL(
                     null,
-                    getStyle(context, color) + content,
+                    getStyle(
+                        context = context,
+                        bodyColor = bodyColor,
+                        linkColor = linkColor,
+                        subheadColor = subheadColor,
+                        subheadBold = subheadBold,
+                        subheadAlign = subheadAlign,
+                        textBold = textBold,
+                        textAlign = textAlign,
+                        textFontSize = textFontSize,
+                        textLetterSpacing = textLetterSpacing,
+                        imageHorizontalPadding = imageHorizontalPadding,
+                        textHorizontalPadding = textHorizontalPadding,
+                        imageShape = imageShape,
+                        codeColor = codeColor,
+                        codeBackgroundColor = codeBackgroundColor,
+                    ) + content,
                     "text/HTML",
                     "UTF-8", null
                 )
@@ -138,31 +179,65 @@ fun RYWebView(
 fun argbToCssColor(argb: Int): String = String.format("#%06X", 0xFFFFFF and argb)
 
 @Stable
-fun getStyle(context: Context, argb: Int): String = """
+fun getStyle(
+    context: Context,
+    bodyColor: Int,
+    linkColor: Int,
+    subheadColor: Int,
+    subheadBold: Boolean,
+    subheadAlign: String,
+    textBold: Boolean,
+    textAlign: String,
+    textFontSize: Int,
+    textLetterSpacing: Double,
+    imageHorizontalPadding: Int,
+    textHorizontalPadding: Int,
+    imageShape: Int,
+    codeColor: Int,
+    codeBackgroundColor: Int,
+): String = """
 <html><head><style>
 *{
+    max-width: 840px;
     padding: 0;
     margin: 0;
-    color: ${argbToCssColor(argb)};
+    color: ${argbToCssColor(bodyColor)};
     font-family: url('/android_asset_font/${context.filesDir.absolutePath}/reading_font.ttf'),
 }
 
 html {
-    padding: 0 24px;
+    padding: 0 ${textHorizontalPadding}px;
 }
 
 figure > img, video, iframe {
-    margin: 0 -24px 20px;
-    width: calc(100% + 48px);
-    border-top: 1px solid ${argbToCssColor(argb)}08;
-    border-bottom: 1px solid ${argbToCssColor(argb)}08;
+    margin: 0 ${imageHorizontalPadding - 24}px 20px;
+    width: calc(100% + ${(imageHorizontalPadding - 24).absoluteValue * 2}px);
+    border-top: 1px solid ${argbToCssColor(bodyColor)}08;
+    border-bottom: 1px solid ${argbToCssColor(bodyColor)}08;
+    border-radius: ${imageShape}px;
+}
+
+figcaption {
+    text-size: 12px;
+    margin-bottom: 20px;
+    color: ${argbToCssColor(bodyColor)};
+    text-align: center;
 }
 
 p,span,a,ol,ul,blockquote,article,section {
-    text-align: left;
-    font-size: 16px;
+    font-weight: ${if (textBold) "600" else "400"}
+    text-align: ${textAlign};
+    font-size: ${textFontSize}px;
+    letter-spacing: ${textLetterSpacing}px;
+    color: ${argbToCssColor(bodyColor)};
     line-height: 24px;
     margin-bottom: 20px;
+}
+
+a {
+    font-size: ${textFontSize}px;
+    color: ${argbToCssColor(linkColor)};
+    text-decoration: underline;
 }
 
 ol,ul {
@@ -176,39 +251,92 @@ section ul {
 blockquote {
     margin-left: 0.5rem;
     padding-left: 0.7rem;
-    border-left: 1px solid ${argbToCssColor(argb)}33;
-    color: ${argbToCssColor(argb)}cc;
+    border-left: 1px solid ${argbToCssColor(bodyColor)}33;
+    color: ${argbToCssColor(bodyColor)}cc;
 }
 
 blockquote img, blockquote video, blockquote iframe {
     margin: unset;
     max-width: 100%;
+    border-radius: ${imageShape}px;
 }
 
 pre {
-    max-width: 100%;
-    background: ${argbToCssColor(argb)}11;
+    white-space: pre-wrap;
+    background: ${argbToCssColor(bodyColor)}11;
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 20px;
 }
 
+pre > code {
+    white-space: pre-wrap;
+    text-size: 14px;
+    font-family: monospace;
+    color: ${argbToCssColor(codeColor)};
+    background: ${argbToCssColor(codeBackgroundColor)};
+}
+
 code {
     white-space: pre-wrap;
+    text-size: 14px;
+    font-family: monospace;
+    color: ${argbToCssColor(codeColor)};
+    background: ${argbToCssColor(codeBackgroundColor)};
+    border-radius: 5px;
 }
 
 hr {
     height: 1px;
     border: none;
-    background: ${argbToCssColor(argb)}33;
+    background: ${argbToCssColor(bodyColor)}33;
     margin-bottom: 20px;
 }
 
-h1,h2,h3,h4,h5,h6,figure,br {
-    font-size: large;
+h1 {
+    font-size: 28px;
+    font-weight: ${if (subheadBold) "600" else "400"}
+    letter-spacing: 0px;
+    color: ${argbToCssColor(subheadColor)};
+    text-align: ${subheadAlign};
     margin-bottom: 20px;
 }
 
+h2 {
+    font-size: 28px;
+    font-weight: ${if (subheadBold) "600" else "400"}
+    letter-spacing: 0px;
+    color: ${argbToCssColor(subheadColor)};
+    text-align: ${subheadAlign};
+    margin-bottom: 20px;
+}
+
+h3 {
+    font-size: 19px;
+    font-weight: ${if (subheadBold) "600" else "400"}
+    letter-spacing: 0px;
+    color: ${argbToCssColor(subheadColor)};
+    text-align: ${subheadAlign};
+    margin-bottom: 20px;
+}
+
+h4 {
+    font-size: 17px;
+    font-weight: ${if (subheadBold) "600" else "400"}
+    letter-spacing: 0px;
+    color: ${argbToCssColor(subheadColor)};
+    text-align: ${subheadAlign};
+    margin-bottom: 20px;
+}
+
+h5 {
+    font-size: 17px;
+    font-weight: ${if (subheadBold) "600" else "400"}
+    letter-spacing: 0px;
+    color: ${argbToCssColor(subheadColor)};
+    text-align: ${subheadAlign};
+    margin-bottom: 20px;
+}
 
 /*.element::-webkit-scrollbar { width: 0 !important }*/
 </style></head></html>
