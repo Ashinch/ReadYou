@@ -20,11 +20,10 @@ class CrashHandler(private val context: Context) : UncaughtExceptionHandler {
      */
     override fun uncaughtException(p0: Thread, p1: Throwable) {
         val causeMessage = getCauseMessage(p1)
-        Log.e("RLog", "uncaughtException: $causeMessage")
+        Log.e("RLog", "uncaughtException: $causeMessage", p1)
         Looper.myLooper() ?: Looper.prepare()
         context.showToastLong(causeMessage)
         Looper.loop()
-        p1.printStackTrace()
         // android.os.Process.killProcess(android.os.Process.myPid());
         // exitProcess(1)
     }

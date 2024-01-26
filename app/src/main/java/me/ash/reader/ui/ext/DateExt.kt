@@ -1,12 +1,24 @@
 package me.ash.reader.ui.ext
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.core.os.ConfigurationCompat
 import me.ash.reader.R
 import java.text.DateFormat
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+
+@SuppressLint("SimpleDateFormat")
+object DateFormat {
+    val YYYY_MM_DD_HH_MM_SS = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    val YYYY_MM_DD_DASH_HH_MM_SS = SimpleDateFormat("yyyy-MM-dd-HH:mm:ss")
+}
+
+fun Date.toString(format: SimpleDateFormat): String {
+    return format.format(this)
+}
 
 fun Date.formatAsString(
     context: Context,

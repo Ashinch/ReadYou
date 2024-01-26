@@ -60,7 +60,7 @@ class OpmlService @Inject constructor(
      * Exports OPML file.
      */
     @Throws(Exception::class)
-    suspend fun saveToString(accountId: Int): String {
+    suspend fun saveToString(accountId: Int, attachInfo: Boolean): String {
         val defaultGroup = groupDao.queryById(getDefaultGroupId(accountId))!!
         return OpmlWriter().write(
             Opml(
@@ -73,21 +73,27 @@ class OpmlService @Inject constructor(
                 ),
                 Body(groupDao.queryAllGroupWithFeed(accountId).map {
                     Outline(
-                        mapOf(
+                        mutableMapOf(
                             "text" to it.group.name,
                             "title" to it.group.name,
-                            "isDefault" to (it.group.id == defaultGroup.id).toString()
-                        ),
+                        ).apply {
+                            if (attachInfo) {
+                                put("isDefault", (it.group.id == defaultGroup.id).toString())
+                            }
+                        },
                         it.feeds.map { feed ->
                             Outline(
-                                mapOf(
+                                mutableMapOf(
                                     "text" to feed.name,
                                     "title" to feed.name,
                                     "xmlUrl" to feed.url,
-                                    "htmlUrl" to feed.url,
-                                    "isNotification" to feed.isNotification.toString(),
-                                    "isFullContent" to feed.isFullContent.toString(),
-                                ),
+                                    "htmlUrl" to feed.url
+                                ).apply {
+                                    if (attachInfo) {
+                                        put("isNotification", feed.isNotification.toString())
+                                        put("isFullContent", feed.isFullContent.toString())
+                                    }
+                                },
                                 listOf()
                             )
                         }
