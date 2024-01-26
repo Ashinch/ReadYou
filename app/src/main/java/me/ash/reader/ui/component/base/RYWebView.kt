@@ -2,9 +2,18 @@ package me.ash.reader.ui.component.base
 
 import android.net.http.SslError
 import android.util.Log
-import android.webkit.*
+import android.webkit.SslErrorHandler
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -16,7 +25,7 @@ import me.ash.reader.ui.ext.openURL
 const val INJECTION_TOKEN = "/android_asset_font/"
 
 @Composable
-fun WebView(
+fun RYWebView(
     modifier: Modifier = Modifier,
     content: String,
     onReceivedError: (error: WebResourceError?) -> Unit = {},
@@ -121,7 +130,6 @@ fun WebView(
         factory = { webView },
         update = {
             it.apply {
-                Log.i("RLog", "CustomWebView: ${content}")
                 settings.javaScriptEnabled = true
                 loadDataWithBaseURL(
                     null,
@@ -145,12 +153,12 @@ fun getStyle(argb: Int): String = """
     padding: 0;
     margin: 0;
     color: ${argbToCssColor(argb)};
-    font-family: url('/android_asset_font/font/google_sans_text_regular.TTF'),
-        url('/android_asset_font/font/google_sans_text_medium_italic.TTF'),
-        url('/android_asset_font/font/google_sans_text_medium.TTF'),
-        url('/android_asset_font/font/google_sans_text_italic.TTF'),
-        url('/android_asset_font/font/google_sans_text_bold_italic.TTF'),
-        url('/android_asset_font/font/google_sans_text_bold.TTF');
+    // font-family: url('/android_asset_font/font/google_sans_text_regular.TTF'),
+    //     url('/android_asset_font/font/google_sans_text_medium_italic.TTF'),
+    //     url('/android_asset_font/font/google_sans_text_medium.TTF'),
+    //     url('/android_asset_font/font/google_sans_text_italic.TTF'),
+    //     url('/android_asset_font/font/google_sans_text_bold_italic.TTF'),
+    //     url('/android_asset_font/font/google_sans_text_bold.TTF');
 }
 
 html {
