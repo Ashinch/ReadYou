@@ -49,10 +49,12 @@ import me.ash.reader.ui.component.base.RadioDialogOption
 import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.component.base.Tips
+import me.ash.reader.ui.ext.DateFormat
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.ext.showToastLong
+import me.ash.reader.ui.ext.toString
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.page.settings.accounts.connection.AccountConnection
 import me.ash.reader.ui.theme.palette.onLight
@@ -403,16 +405,17 @@ fun AccountDetailsPage(
     RadioDialog(
         visible = exportOPMLModeDialogVisible,
         title = stringResource(R.string.export_as_opml),
+        description = stringResource(R.string.additional_info_desc),
         options = listOf(
             RadioDialogOption(
-                text = stringResource(R.string.attach_info),
+                text = stringResource(R.string.include_additional_info),
                 selected = uiState.exportOPMLMode == ExportOPMLMode.ATTACH_INFO,
             ) {
                 viewModel.changeExportOPMLMode(ExportOPMLMode.ATTACH_INFO)
                 launcherOPMLFile(context, launcher)
             },
             RadioDialogOption(
-                text = stringResource(R.string.no_attach),
+                text = stringResource(R.string.exclude),
                 selected = uiState.exportOPMLMode == ExportOPMLMode.NO_ATTACH,
             ) {
                 viewModel.changeExportOPMLMode(ExportOPMLMode.NO_ATTACH)
@@ -424,6 +427,12 @@ fun AccountDetailsPage(
     }
 }
 
-private fun launcherOPMLFile(context: Context, launcher: ManagedActivityResultLauncher<String, Uri?>) {
-    launcher.launch("${context.getString(R.string.read_you)}-${context.getCurrentVersion()}-export-${Date()}.opml")
+private fun launcherOPMLFile(
+    context: Context,
+    launcher: ManagedActivityResultLauncher<String, Uri?>,
+) {
+    launcher.launch("" +
+            "${context.getString(R.string.read_you)}-" +
+            "${context.getCurrentVersion()}-export-" +
+            "${Date().toString(DateFormat.YYYY_MM_DD_DASH_HH_MM_SS)}.opml")
 }

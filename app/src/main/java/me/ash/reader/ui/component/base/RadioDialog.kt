@@ -2,7 +2,9 @@ package me.ash.reader.ui.component.base
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,6 +29,7 @@ fun RadioDialog(
     modifier: Modifier = Modifier,
     visible: Boolean = false,
     title: String = "",
+    description: String? = null,
     options: List<RadioDialogOption> = emptyList(),
     onDismissRequest: () -> Unit = {},
 ) {
@@ -44,6 +47,14 @@ fun RadioDialog(
         },
         text = {
             LazyColumn {
+                if (description != null) {
+                    item {
+                        Text(text = description)
+                        if (options.isNotEmpty()) {
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                    }
+                }
                 items(options) { option ->
                     Row(
                         modifier = Modifier

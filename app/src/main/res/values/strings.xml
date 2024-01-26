@@ -403,6 +403,7 @@
     <string name="open_link_specific_browser">Browser</string>
     <string name="open_link_something_wrong">\"Open Link\" setting ignored because something went wrong.</string>
     <string name="open_link_ask_dialog_title">Open with…</string>
-    <string name="attach_info">Attach info</string>
-    <string name="no_attach">No attach</string>
+    <string name="include_additional_info">Include additional info</string>
+    <string name="exclude">Exclude</string>
+    <string name="additional_info_desc">Additional information includes configuration options for each feed, such as whether to allow notification, parse full content, etc. When you intend to use the exported OPML file with other readers, please select \"Exclude\".</string>
 </resources>

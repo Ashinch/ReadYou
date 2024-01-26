@@ -76,7 +76,6 @@ class OpmlService @Inject constructor(
                         mutableMapOf(
                             "text" to it.group.name,
                             "title" to it.group.name,
-                            "isDefault" to (it.group.id == defaultGroup.id).toString()
                         ).apply {
                             if (attachInfo) {
                                 put("isDefault", (it.group.id == defaultGroup.id).toString())
