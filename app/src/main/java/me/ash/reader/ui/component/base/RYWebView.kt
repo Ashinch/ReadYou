@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -45,6 +46,7 @@ fun RYWebView(
     onReceivedError: (error: WebResourceError?) -> Unit = {},
 ) {
     val context = LocalContext.current
+    val maxWidth = LocalConfiguration.current.screenWidthDp.dp.value
     val openLink = LocalOpenLink.current
     val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
     val tonalElevation = LocalReadingPageTonalElevation.current
@@ -146,12 +148,16 @@ fun RYWebView(
         factory = { webView },
         update = {
             it.apply {
+                Log.i("RLog", "maxWidth: ${maxWidth}")
+                Log.i("RLog", "readingFont: ${context.filesDir.absolutePath}")
                 Log.i("RLog", "CustomWebView: ${content}")
                 settings.javaScriptEnabled = true
+                settings.defaultFontSize = textFontSize
                 loadDataWithBaseURL(
                     null,
                     getStyle(
                         context = context,
+                        maxWidth = maxWidth,
                         bodyColor = bodyColor,
                         linkColor = linkColor,
                         subheadColor = subheadColor,
@@ -181,6 +187,7 @@ fun argbToCssColor(argb: Int): String = String.format("#%06X", 0xFFFFFF and argb
 @Stable
 fun getStyle(
     context: Context,
+    maxWidth: Float,
     bodyColor: Int,
     linkColor: Int,
     subheadColor: Int,
@@ -197,35 +204,50 @@ fun getStyle(
     codeBackgroundColor: Int,
 ): String = """
 <html><head><style>
+@font-face {
+    font-family: 'readingFont';
+    src: url('file://${context.filesDir.absolutePath}/reading_font.ttf') format('truetype');
+}
 *{
-    max-width: 840px;
+    width: ${maxWidth - textHorizontalPadding * 2}px;
     padding: 0;
     margin: 0;
     color: ${argbToCssColor(bodyColor)};
-    font-family: url('/android_asset_font/${context.filesDir.absolutePath}/reading_font.ttf'),
+    font-family: readingFont;
 }
 
 html {
     padding: 0 ${textHorizontalPadding}px;
 }
 
-figure > img, video, iframe {
+img, video, iframe {
     margin: 0 ${imageHorizontalPadding - 24}px 20px;
-    width: calc(100% + ${(imageHorizontalPadding - 24).absoluteValue * 2}px);
+    width: auto;
+    height: auto;
+    max-width: 100%;
     border-top: 1px solid ${argbToCssColor(bodyColor)}08;
     border-bottom: 1px solid ${argbToCssColor(bodyColor)}08;
     border-radius: ${imageShape}px;
+    /*box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.30), 0px 4px 8px 3px rgba(0, 0, 0, 0.15);*/
+}
+
+@media (min-width: 50%) {
+    img, video, iframe {
+       width: ${(maxWidth - textHorizontalPadding * 2) + ((imageHorizontalPadding - 24).absoluteValue * 2)}px;
+       max-width: ${maxWidth}px;
+    }
 }
 
 figcaption {
-    text-size: 12px;
+    text-size: ${textFontSize}px;
+    transform: scale(0.7);
     margin-bottom: 20px;
-    color: ${argbToCssColor(bodyColor)};
+    color: ${argbToCssColor(bodyColor)}B3;
     text-align: center;
 }
 
 p,span,a,ol,ul,blockquote,article,section {
-    font-weight: ${if (textBold) "600" else "400"}
+    font-weight: ${if (textBold) "600" else "400"};
     text-align: ${textAlign};
     font-size: ${textFontSize}px;
     letter-spacing: ${textLetterSpacing}px;
@@ -249,19 +271,32 @@ section ul {
 }
 
 blockquote {
+    max-width: 100%;
     margin-left: 0.5rem;
     padding-left: 0.7rem;
     border-left: 1px solid ${argbToCssColor(bodyColor)}33;
     color: ${argbToCssColor(bodyColor)}cc;
 }
 
-blockquote img, blockquote video, blockquote iframe {
+blockquote > img, blockquote > video, blockquote > iframe {
     margin: unset;
     max-width: 100%;
     border-radius: ${imageShape}px;
 }
 
+code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    text-size: 14px;
+    font-family: monospace;
+    color: ${argbToCssColor(codeColor)};
+    background: ${argbToCssColor(codeBackgroundColor)};
+    border-radius: 5px;
+}
+
 pre {
+    width: ${maxWidth - textHorizontalPadding * 2}px;
+    
     white-space: pre-wrap;
     background: ${argbToCssColor(bodyColor)}11;
     padding: 10px;
@@ -275,15 +310,9 @@ pre > code {
     font-family: monospace;
     color: ${argbToCssColor(codeColor)};
     background: ${argbToCssColor(codeBackgroundColor)};
-}
-
-code {
-    white-space: pre-wrap;
-    text-size: 14px;
-    font-family: monospace;
-    color: ${argbToCssColor(codeColor)};
-    background: ${argbToCssColor(codeBackgroundColor)};
-    border-radius: 5px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
 }
 
 hr {
@@ -295,7 +324,7 @@ hr {
 
 h1 {
     font-size: 28px;
-    font-weight: ${if (subheadBold) "600" else "400"}
+    font-weight: ${if (subheadBold) "600" else "400"};
     letter-spacing: 0px;
     color: ${argbToCssColor(subheadColor)};
     text-align: ${subheadAlign};
@@ -304,7 +333,7 @@ h1 {
 
 h2 {
     font-size: 28px;
-    font-weight: ${if (subheadBold) "600" else "400"}
+    font-weight: ${if (subheadBold) "600" else "400"};
     letter-spacing: 0px;
     color: ${argbToCssColor(subheadColor)};
     text-align: ${subheadAlign};
@@ -313,7 +342,7 @@ h2 {
 
 h3 {
     font-size: 19px;
-    font-weight: ${if (subheadBold) "600" else "400"}
+    font-weight: ${if (subheadBold) "600" else "400"};
     letter-spacing: 0px;
     color: ${argbToCssColor(subheadColor)};
     text-align: ${subheadAlign};
@@ -322,7 +351,7 @@ h3 {
 
 h4 {
     font-size: 17px;
-    font-weight: ${if (subheadBold) "600" else "400"}
+    font-weight: ${if (subheadBold) "600" else "400"};
     letter-spacing: 0px;
     color: ${argbToCssColor(subheadColor)};
     text-align: ${subheadAlign};
@@ -331,13 +360,18 @@ h4 {
 
 h5 {
     font-size: 17px;
-    font-weight: ${if (subheadBold) "600" else "400"}
+    font-weight: ${if (subheadBold) "600" else "400"};
     letter-spacing: 0px;
     color: ${argbToCssColor(subheadColor)};
     text-align: ${subheadAlign};
     margin-bottom: 20px;
 }
 
-/*.element::-webkit-scrollbar { width: 0 !important }*/
+.comment {
+    color: ${argbToCssColor(bodyColor)}80;
+    font-style: italic;
+}
+
+.element::-webkit-scrollbar { width: 0 !important }
 </style></head></html>
 """
