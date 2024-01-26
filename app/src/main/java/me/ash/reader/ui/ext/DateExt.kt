@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.core.os.ConfigurationCompat
 import me.ash.reader.R
+import java.text.DateFormat
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
 import java.util.Calendar
