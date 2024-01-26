@@ -46,6 +46,14 @@ sealed class ReadingSubheadAlignPreference(val value: Int) : Preference() {
             Justify -> TextAlign.Justify
         }
 
+    fun toTextAlignCSS(): String =
+        when (this) {
+            Left -> "left"
+            Right -> "right"
+            Center -> "center"
+            Justify -> "justify"
+        }
+
     companion object {
 
         val default = Start

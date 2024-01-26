@@ -1,5 +1,6 @@
 package me.ash.reader.ui.component.base
 
+import android.content.Context
 import android.net.http.SslError
 import android.util.Log
 import android.webkit.SslErrorHandler
@@ -17,10 +18,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
+import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.ui.ext.openURL
+import me.ash.reader.ui.ext.surfaceColorAtElevation
 
 const val INJECTION_TOKEN = "/android_asset_font/"
 
@@ -33,8 +37,9 @@ fun RYWebView(
     val context = LocalContext.current
     val openLink = LocalOpenLink.current
     val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
+    val tonalElevation = LocalReadingPageTonalElevation.current
     val color = MaterialTheme.colorScheme.onSurfaceVariant.toArgb()
-    val backgroundColor = MaterialTheme.colorScheme.surface.toArgb()
+    val backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(tonalElevation.value.dp).toArgb()
     val webViewClient by remember {
         mutableStateOf(object : WebViewClient() {
 
@@ -107,33 +112,20 @@ fun RYWebView(
             this.webViewClient = webViewClient
             setBackgroundColor(backgroundColor)
             isHorizontalScrollBarEnabled = false
-            isVerticalScrollBarEnabled = false
+            isVerticalScrollBarEnabled = true
         })
     }
 
-//    Column(
-//        modifier = modifier
-//            .height(if (viewState.isLoading) 100.dp else 0.dp),
-//    ) {
-//        Icon(
-//            modifier = modifier
-//                .size(50.dp),
-//            imageVector = Icons.Rounded.HourglassBottom,
-//            contentDescription = "Loading",
-//            tint = MaterialTheme.colorScheme.primary,
-//        )
-//        Spacer(modifier = modifier.height(50.dp))
-//    }
-
     AndroidView(
-        modifier = modifier,//.padding(horizontal = if (content.contains("class=\"page\"")) 0.dp else 24.dp),
+        modifier = modifier,
         factory = { webView },
         update = {
             it.apply {
+                Log.i("RLog", "CustomWebView: ${content}")
                 settings.javaScriptEnabled = true
                 loadDataWithBaseURL(
                     null,
-                    getStyle(color) + content,
+                    getStyle(context, color) + content,
                     "text/HTML",
                     "UTF-8", null
                 )
@@ -145,27 +137,21 @@ fun RYWebView(
 @Stable
 fun argbToCssColor(argb: Int): String = String.format("#%06X", 0xFFFFFF and argb)
 
-// TODO: Google sans is deprecated
 @Stable
-fun getStyle(argb: Int): String = """
+fun getStyle(context: Context, argb: Int): String = """
 <html><head><style>
 *{
     padding: 0;
     margin: 0;
     color: ${argbToCssColor(argb)};
-    // font-family: url('/android_asset_font/font/google_sans_text_regular.TTF'),
-    //     url('/android_asset_font/font/google_sans_text_medium_italic.TTF'),
-    //     url('/android_asset_font/font/google_sans_text_medium.TTF'),
-    //     url('/android_asset_font/font/google_sans_text_italic.TTF'),
-    //     url('/android_asset_font/font/google_sans_text_bold_italic.TTF'),
-    //     url('/android_asset_font/font/google_sans_text_bold.TTF');
+    font-family: url('/android_asset_font/${context.filesDir.absolutePath}/reading_font.ttf'),
 }
 
 html {
     padding: 0 24px;
 }
 
-img, video, iframe {
+figure > img, video, iframe {
     margin: 0 -24px 20px;
     width: calc(100% + 48px);
     border-top: 1px solid ${argbToCssColor(argb)}08;
@@ -194,6 +180,11 @@ blockquote {
     color: ${argbToCssColor(argb)}cc;
 }
 
+blockquote img, blockquote video, blockquote iframe {
+    margin: unset;
+    max-width: 100%;
+}
+
 pre {
     max-width: 100%;
     background: ${argbToCssColor(argb)}11;
@@ -218,6 +209,7 @@ h1,h2,h3,h4,h5,h6,figure,br {
     margin-bottom: 20px;
 }
 
-.element::-webkit-scrollbar { width: 0 !important }
+
+/*.element::-webkit-scrollbar { width: 0 !important }*/
 </style></head></html>
 """
