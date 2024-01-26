@@ -1,9 +1,17 @@
 package me.ash.reader.ui.page.settings.accounts
 
+import android.content.Context
+import android.net.Uri
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DeleteSweep
@@ -13,7 +21,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -26,13 +39,24 @@ import me.ash.reader.infrastructure.preference.KeepArchivedPreference
 import me.ash.reader.infrastructure.preference.SyncBlockListPreference
 import me.ash.reader.infrastructure.preference.SyncIntervalPreference
 import me.ash.reader.infrastructure.preference.not
-import me.ash.reader.ui.component.base.*
+import me.ash.reader.ui.component.base.DisplayText
+import me.ash.reader.ui.component.base.FeedbackIconButton
+import me.ash.reader.ui.component.base.RYDialog
+import me.ash.reader.ui.component.base.RYScaffold
+import me.ash.reader.ui.component.base.RYSwitch
+import me.ash.reader.ui.component.base.RadioDialog
+import me.ash.reader.ui.component.base.RadioDialogOption
+import me.ash.reader.ui.component.base.Subtitle
+import me.ash.reader.ui.component.base.TextFieldDialog
+import me.ash.reader.ui.component.base.Tips
 import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.ext.showToastLong
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.page.settings.accounts.connection.AccountConnection
 import me.ash.reader.ui.theme.palette.onLight
+import java.util.Date
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -54,6 +78,7 @@ fun AccountDetailsPage(
     var blockListDialogVisible by remember { mutableStateOf(false) }
     var syncIntervalDialogVisible by remember { mutableStateOf(false) }
     var keepArchivedDialogVisible by remember { mutableStateOf(false) }
+    var exportOPMLModeDialogVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         navController.currentBackStackEntryFlow.collect {
@@ -64,7 +89,7 @@ fun AccountDetailsPage(
     }
 
     val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.CreateDocument()
+        ActivityResultContracts.CreateDocument("*/*")
     ) { result ->
         viewModel.exportAsOPML(selectedAccount!!.id!!) { string ->
             result?.let { uri ->
@@ -184,7 +209,7 @@ fun AccountDetailsPage(
                     SettingItem(
                         title = stringResource(R.string.export_as_opml),
                         onClick = {
-                            launcher.launch("ReadYou.opml")
+                           exportOPMLModeDialogVisible = true
                         },
                     ) {}
                     SettingItem(
@@ -374,4 +399,31 @@ fun AccountDetailsPage(
             }
         },
     )
+
+    RadioDialog(
+        visible = exportOPMLModeDialogVisible,
+        title = stringResource(R.string.export_as_opml),
+        options = listOf(
+            RadioDialogOption(
+                text = stringResource(R.string.attach_info),
+                selected = uiState.exportOPMLMode == ExportOPMLMode.ATTACH_INFO,
+            ) {
+                viewModel.changeExportOPMLMode(ExportOPMLMode.ATTACH_INFO)
+                launcherOPMLFile(context, launcher)
+            },
+            RadioDialogOption(
+                text = stringResource(R.string.no_attach),
+                selected = uiState.exportOPMLMode == ExportOPMLMode.NO_ATTACH,
+            ) {
+                viewModel.changeExportOPMLMode(ExportOPMLMode.NO_ATTACH)
+                launcherOPMLFile(context, launcher)
+            }
+        )
+    ) {
+        exportOPMLModeDialogVisible = false
+    }
+}
+
+private fun launcherOPMLFile(context: Context, launcher: ManagedActivityResultLauncher<String, Uri?>) {
+    launcher.launch("${context.getString(R.string.read_you)}-${context.getCurrentVersion()}-export-${Date()}.opml")
 }

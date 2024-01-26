@@ -403,4 +403,6 @@
     <string name="open_link_specific_browser">Browser</string>
     <string name="open_link_something_wrong">\"Open Link\" setting ignored because something went wrong.</string>
     <string name="open_link_ask_dialog_title">Open with…</string>
+    <string name="attach_info">Attach info</string>
+    <string name="no_attach">No attach</string>
 </resources>
