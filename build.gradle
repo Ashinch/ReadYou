@@ -3,9 +3,9 @@ buildscript {
 //         https://developer.android.com/jetpack/androidx/releases/compose-ui
 //        compose = '1.2.0-beta02'
         // https://developer.android.com/jetpack/compose/bom
-        composeBom = '2023.10.01'
+        composeBom = '2024.01.00'
         // https://github.com/google/accompanist/releases
-        accompanist = '0.32.0'
+        accompanist = '0.34.0'
         // https://developer.android.com/jetpack/androidx/releases/compose-material3
         material3 = '1.1.2'
         // https://developer.android.com/jetpack/androidx/releases/lifecycle
@@ -45,7 +45,7 @@ buildscript {
 plugins {
     id 'com.android.application' version '8.2.1' apply false
     id 'com.android.library' version '8.2.1' apply false
-    id 'org.jetbrains.kotlin.android' version '1.9.21' apply false
+    id 'org.jetbrains.kotlin.android' version '1.9.22' apply false
 }
 
 task clean(type: Delete) {
