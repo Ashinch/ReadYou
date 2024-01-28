@@ -42,7 +42,7 @@ fun ArticleItem(
     val articleListImage = LocalFlowArticleListImage.current
     val articleListDesc = LocalFlowArticleListDesc.current
     val articleListDate = LocalFlowArticleListTime.current
-    val articleListAlwaysHighlightStarred = LocalFlowArticleListAlwaysHighlightStarred.current
+    val articleListReadIndicator = LocalFlowArticleListReadIndicator.current
 
     Column(
         modifier = Modifier
@@ -50,8 +50,19 @@ fun ArticleItem(
             .clip(Shape20)
             .clickable { onClick(articleWithFeed) }
             .padding(horizontal = 12.dp, vertical = 12.dp)
-            .alpha(if (articleWithFeed.article.isUnread ||
-                (articleWithFeed.article.isStarred && articleListAlwaysHighlightStarred.value)) 1f else 0.5f),
+            .alpha(
+                articleWithFeed.article.run {
+                    when (articleListReadIndicator) {
+                        FlowArticleReadIndicatorPreference.AllRead -> {
+                            if (isUnread) 1f else 0.5f
+                        }
+
+                        FlowArticleReadIndicatorPreference.ExcludingStarred -> {
+                            if (isUnread || isStarred) 1f else 0.5f
+                        }
+                    }
+                }
+            ),
     ) {
         // Top
         Row(
@@ -159,23 +170,25 @@ fun ArticleItem(
         }
     }
 }
+
 @ExperimentalMaterialApi
 @Composable
 fun SwipeableArticleItem(
-        articleWithFeed: ArticleWithFeed,
-        isFilterUnread: Boolean,
-        articleListTonalElevation: Int,
-        onClick: (ArticleWithFeed) -> Unit = {},
-        onSwipeOut: (ArticleWithFeed) -> Unit = {},
+    articleWithFeed: ArticleWithFeed,
+    isFilterUnread: Boolean,
+    articleListTonalElevation: Int,
+    onClick: (ArticleWithFeed) -> Unit = {},
+    onSwipeOut: (ArticleWithFeed) -> Unit = {},
 ) {
     var isArticleVisible by remember { mutableStateOf(true) }
-    val dismissState = rememberDismissState(initialValue = DismissValue.Default, confirmStateChange = {
-        if (it == DismissValue.DismissedToEnd) {
-            isArticleVisible = !isFilterUnread
-            onSwipeOut(articleWithFeed)
-        }
-        isFilterUnread
-    })
+    val dismissState =
+        rememberDismissState(initialValue = DismissValue.Default, confirmStateChange = {
+            if (it == DismissValue.DismissedToEnd) {
+                isArticleVisible = !isFilterUnread
+                onSwipeOut(articleWithFeed)
+            }
+            isFilterUnread
+        })
     if (isArticleVisible) {
         SwipeToDismiss(
             state = dismissState,
@@ -211,8 +224,11 @@ fun SwipeableArticleItem(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.surfaceColorAtElevation(articleListTonalElevation.dp
-                        ) onDark MaterialTheme.colorScheme.surface)
+                        .background(
+                            MaterialTheme.colorScheme.surfaceColorAtElevation(
+                                articleListTonalElevation.dp
+                            ) onDark MaterialTheme.colorScheme.surface
+                        )
                 ) {
                     ArticleItem(articleWithFeed, onClick)
                 }
