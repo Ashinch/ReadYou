@@ -1,16 +1,58 @@
 package me.ash.reader.domain.repository
 
 import androidx.paging.PagingSource
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.RewriteQueriesToDropUnusedColumns
+import androidx.room.Transaction
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.article.ArticleMeta
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.feed.ImportantNum
-import java.util.*
+import java.util.Date
 
 @Dao
 interface ArticleDao {
+
+    @Transaction
+    @RewriteQueriesToDropUnusedColumns
+    @Query(
+        """
+        SELECT count(1)
+        FROM article
+        WHERE feedId = :feedId
+        AND isStarred = :isStarred
+        AND accountId = :accountId
+        """
+    )
+    fun countByFeedIdWhenIsStarred(
+        accountId: Int,
+        feedId: String,
+        isStarred: Boolean,
+    ): Int
+
+    @Transaction
+    @RewriteQueriesToDropUnusedColumns
+    @Query(
+        """
+        SELECT count(1)
+        FROM article AS a
+        LEFT JOIN feed AS b ON b.id = a.feedId
+        LEFT JOIN `group` AS c ON c.id = b.groupId
+        WHERE c.id = :groupId
+        AND a.isStarred = :isStarred
+        AND a.accountId = :accountId
+        """
+    )
+    fun countByGroupIdWhenIsStarred(
+        accountId: Int,
+        groupId: String,
+        isStarred: Boolean,
+    ): Int
 
     @Transaction
     @Query(

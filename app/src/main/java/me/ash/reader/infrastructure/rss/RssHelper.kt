@@ -15,10 +15,10 @@ import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.infrastructure.di.IODispatcher
+import me.ash.reader.infrastructure.html.Readability
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.spacerDollar
-import net.dankito.readability4j.extended.Readability4JExtended
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.executeAsync
@@ -53,17 +53,14 @@ class RssHelper @Inject constructor(
         return withContext(ioDispatcher) {
             val response = response(okHttpClient, link)
             val content = response.body.string()
-            val readability4J = Readability4JExtended(link, content)
-            val articleContent = readability4J.parse().articleContent
-            if (articleContent == null) {
-                ""
-            } else {
+            val articleContent = Readability.parseToElement(content, link)
+            articleContent?.run {
                 val h1Element = articleContent.selectFirst("h1")
                 if (h1Element != null && h1Element.hasText() && h1Element.text() == title) {
                     h1Element.remove()
                 }
                 articleContent.toString()
-            }
+            } ?: ""
         }
     }
 
@@ -115,10 +112,7 @@ class RssHelper @Inject constructor(
             title = syndEntry.title.decodeHTML() ?: feed.name,
             author = syndEntry.author,
             rawDescription = (content ?: desc) ?: "",
-            shortDescription = (Readability4JExtended("", desc ?: content ?: "")
-                .parse().textContent ?: "")
-                .take(110)
-                .trim(),
+            shortDescription = Readability.parseToText(desc ?: content, syndEntry.link).take(110),
             fullContent = content,
             img = findImg((content ?: desc) ?: ""),
             link = syndEntry.link ?: "",

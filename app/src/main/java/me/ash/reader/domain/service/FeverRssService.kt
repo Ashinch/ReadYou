@@ -25,13 +25,18 @@ import me.ash.reader.infrastructure.android.NotificationHelper
 import me.ash.reader.infrastructure.di.DefaultDispatcher
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
+import me.ash.reader.infrastructure.html.Readability
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.rss.provider.fever.FeverAPI
 import me.ash.reader.infrastructure.rss.provider.fever.FeverDTO
-import me.ash.reader.ui.ext.*
-import net.dankito.readability4j.extended.Readability4JExtended
-import java.util.*
+import me.ash.reader.ui.ext.currentAccountId
+import me.ash.reader.ui.ext.decodeHTML
+import me.ash.reader.ui.ext.dollarLast
+import me.ash.reader.ui.ext.showToast
+import me.ash.reader.ui.ext.spacerDollar
+import java.util.Date
 import javax.inject.Inject
+import kotlin.collections.set
 
 class FeverRssService @Inject constructor(
     @ApplicationContext
@@ -96,11 +101,11 @@ class FeverRssService @Inject constructor(
         throw Exception("Unsupported")
     }
 
-    override suspend fun deleteGroup(group: Group) {
+    override suspend fun deleteGroup(group: Group, onlyDeleteNoStarred: Boolean?) {
         throw Exception("Unsupported")
     }
 
-    override suspend fun deleteFeed(feed: Feed) {
+    override suspend fun deleteFeed(feed: Feed, onlyDeleteNoStarred: Boolean?) {
         throw Exception("Unsupported")
     }
 
@@ -144,12 +149,6 @@ class FeverRssService @Inject constructor(
                 )
             } ?: emptyList()
             groupDao.insertOrUpdate(groups)
-            val groupIds = groups.map { it.id }
-            groupDao.queryAll(accountId).forEach {
-                if (!groupIds.contains(it.id)) {
-                    super.deleteGroup(it)
-                }
-            }
 
             // 2. Fetch the Fever feeds
             val feedsBody = feverAPI.getFeeds()
@@ -159,11 +158,6 @@ class FeverRssService @Inject constructor(
                     feedsGroups.feed_ids?.split(",")?.forEach { feedId ->
                         feedsGroupsMap[feedId] = groupId
                     }
-                }
-            }
-            feedDao.queryAll(accountId).forEach {
-                if (!feedsGroupsMap.contains(it.id.dollarLast())) {
-                    super.deleteFeed(it)
                 }
             }
 
@@ -201,10 +195,7 @@ class FeverRssService @Inject constructor(
                             title = it.title.decodeHTML() ?: context.getString(R.string.empty),
                             author = it.author,
                             rawDescription = it.html ?: "",
-                            shortDescription = (Readability4JExtended("", it.html ?: "")
-                                .parse().textContent ?: "")
-                                .take(110)
-                                .trim(),
+                            shortDescription = Readability.parseToText(it.html, it.url).take(110),
                             fullContent = it.html,
                             img = rssHelper.findImg(it.html ?: ""),
                             link = it.url ?: "",
@@ -238,6 +229,20 @@ class FeverRssService @Inject constructor(
                 }
                 if (meta.isStarred != shouldBeStarred) {
                     articleDao.markAsStarredByArticleId(accountId, meta.id, shouldBeStarred ?: false)
+                }
+            }
+
+            // Remove orphaned groups and feeds, after synchronizing the starred/un-starred
+            val groupIds = groups.map { it.id }
+            groupDao.queryAll(accountId).forEach {
+                if (!groupIds.contains(it.id)) {
+                    super.deleteGroup(it, true)
+                }
+            }
+
+            feedDao.queryAll(accountId).forEach {
+                if (!feedsGroupsMap.contains(it.id.dollarLast())) {
+                    super.deleteFeed(it, true)
                 }
             }
 

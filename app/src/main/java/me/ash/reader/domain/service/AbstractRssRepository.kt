@@ -31,7 +31,8 @@ import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.spacerDollar
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 abstract class AbstractRssRepository(
     private val context: Context,
@@ -311,13 +312,24 @@ abstract class AbstractRssRepository(
         feedDao.update(feed)
     }
 
-    open suspend fun deleteGroup(group: Group) {
+    open suspend fun deleteGroup(group: Group, onlyDeleteNoStarred: Boolean? = false) {
+        val accountId = context.currentAccountId
+        if (onlyDeleteNoStarred == true
+            && articleDao.countByGroupIdWhenIsStarred(accountId, group.id, true) > 0
+        ) {
+            return
+        }
         deleteArticles(group = group)
-        feedDao.deleteByGroupId(context.currentAccountId, group.id)
+        feedDao.deleteByGroupId(accountId, group.id)
         groupDao.delete(group)
     }
 
-    open suspend fun deleteFeed(feed: Feed) {
+    open suspend fun deleteFeed(feed: Feed, onlyDeleteNoStarred: Boolean? = false) {
+        if (onlyDeleteNoStarred == true
+            && articleDao.countByFeedIdWhenIsStarred(context.currentAccountId, feed.id, true) > 0
+        ) {
+            return
+        }
         deleteArticles(feed = feed)
         feedDao.delete(feed)
     }

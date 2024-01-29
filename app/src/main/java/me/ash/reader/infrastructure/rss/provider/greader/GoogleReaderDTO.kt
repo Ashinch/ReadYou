@@ -110,6 +110,7 @@ object GoogleReaderDTO {
      */
     data class ItemIds(
         val itemRefs: List<Item>?,
+        val continuation: String?,
     )
 
     /**
