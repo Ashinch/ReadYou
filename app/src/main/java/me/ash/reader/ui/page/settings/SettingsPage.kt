@@ -33,6 +33,7 @@ import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.tips.UpdateDialog
 import me.ash.reader.ui.page.settings.tips.UpdateViewModel
 import me.ash.reader.ui.theme.palette.onLight
+import java.util.Locale
 
 @Composable
 fun SettingsPage(
@@ -125,7 +126,7 @@ fun SettingsPage(
                 item {
                     SelectableSettingGroupItem(
                         title = stringResource(R.string.languages),
-                        desc = LocaleListCompat.getDefault()[0].toDisplayName(),
+                        desc = Locale.getDefault().toDisplayName(),
                         icon = Icons.Outlined.Language,
                     ) {
                         navController.navigate(RouteName.LANGUAGES) {

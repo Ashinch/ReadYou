@@ -77,7 +77,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
     }
 
 
-    private fun toLocale(): Locale? = when (this) {
+    fun toLocale(): Locale? = when (this) {
         UseDeviceLanguages -> null
         English -> Locale("en")
         ChineseSimplified -> Locale.forLanguageTag("zh-Hans")
