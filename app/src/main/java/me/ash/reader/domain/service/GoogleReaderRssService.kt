@@ -184,53 +184,20 @@ class GoogleReaderRssService @Inject constructor(
     }
 
     /**
-     * Google Reader API synchronous processing with object's ID to ensure idempotence
-     * and handle foreign key relationships such as read status, starred status, etc.
+     * This is a reference to Reeder's synchronization logic,
+     * which syncs well across multiple devices.
      *
-     * 1. /reader/api/0/tag/list
-     *     - Full list of categories/folders and tags/labels - and for InnoReader compatibility,
-     *     including the number of unread items in each tags/labels.
+     * 1. Fetch tags (not supported yet)
+     * 2. Fetch folder and subscription list
+     * 3. Fetch all unread item id list
+     * 4. Fetch all starred item id list
+     * 5. Fetch unread contents of items with differences
+     * 6. Fetch starred contents of items with differences
+     * 7. Fetch read contents of items with differences
+     * 8. Remove orphaned groups and feeds, after synchronizing the starred/un-starred
      *
-     * 2. /reader/api/0/subscription/list
-     *     - Full list of subscriptions/feeds, including their category/folder.
-     *     - This is where you get a distinction between categories/folders and tags/labels.
-     *
-     * 3. /reader/api/0/stream/contents/user/-/state/com.google/reading-list
-     * (with some filters in parameter to exclude read items with xt,
-     * and get only the new ones with ot, cf. log below)
-     *     - List of new unread items and their content
-     *     - The response contains among other things the read/unread state,
-     *     the starred/not-starred state, and the tags/labels for each entry.
-     *     - Since this request is very expensive for the client, the network, and the server,
-     *     it is important to use the filters appropriately.
-     *     - If there is no new item since the last synchronisation, the response should be empty,
-     *     and therefore efficient.
-     *
-     * 4. /reader/api/0/stream/items/ids
-     * (with a filter in parameter to exclude read items with xt)
-     *     - Longer list of unread items IDs
-     *     - This allows updating the read/unread status of the local cache of articles - assuming
-     *     the ones not in the list are read.
-     *
-     * 5. /reader/api/0/stream/contents/user/-/state/com.google/starred
-     * (with some filters in parameter to exclude read items with xt,
-     * and get only the new ones with ot)
-     *     - List of new unread starred items and their content
-     *     - If there is no new unread starred item since the last synchronisation,
-     *     the response should be empty, and therefore efficient
-     *     - This is a bit redundant with request 3 and 6,
-     *     but with the advantage of being able to retrieve a larger amount of unread starred items.
-     *
-     * 6. /reader/api/0/stream/contents/user/-/state/com.google/starred
-     * (with some other filters, which includes read starred items)
-     *     - List of starred items (also read ones) and their content.
-     *
-     * 7. /reader/api/0/stream/items/ids
-     * (with a filter to get only starred ones)
-     *     - Longer list of starred items IDs
-     *     - This allows updating the starred/non-starred status of
-     *     the local cache of articles - assuming the ones not in the list are not starred
-     *     - Similar than request 4 but for the starred status.
+     * The following link contains other great synchronization logic,
+     * but it was not adopted due to the solidified domain model of this application.
      *
      * @link https://github.com/FreshRSS/FreshRSS/issues/2566#issuecomment-541317776
      * @link https://github.com/bazqux/bazqux-api?tab=readme-ov-file
@@ -300,10 +267,12 @@ class GoogleReaderRssService @Inject constructor(
                 }
 
                 val localAllItems = articleDao.queryMetadataAll(accountId)
-                val localUnreadIds = localAllItems.filter { it.isUnread }.map { it.id.dollarLast() }.toSet()
-                val localStarredIds = localAllItems.filter { it.isStarred }.map { it.id.dollarLast() }.toSet()
+                val localUnreadIds =
+                    localAllItems.filter { it.isUnread }.map { it.id.dollarLast() }.toSet()
+                val localStarredIds =
+                    localAllItems.filter { it.isStarred }.map { it.id.dollarLast() }.toSet()
 
-                // 2. Fetch all unread item id list
+                // 3. Fetch all unread item id list
                 val unreadIds = fetchItemIdsAndContinue {
                     googleReaderAPI.getUnreadItemIds(continuationId = it)
                 }.toSet()
@@ -311,7 +280,7 @@ class GoogleReaderRssService @Inject constructor(
                 val toBeUnread = unreadIds - localUnreadIds
                 Log.i("RLog", "sync toBeUnread size: ${toBeUnread.size}")
                 if (toBeUnread.isNotEmpty()) {
-                    toBeUnread.chunked(100).forEach {
+                    toBeUnread.chunked(999).forEach {
                         articleDao.markAsReadByIdSet(
                             accountId = accountId,
                             ids = it.toSet(),
@@ -320,7 +289,7 @@ class GoogleReaderRssService @Inject constructor(
                     }
                 }
 
-                // 3. Fetch all starred item id list
+                // 4. Fetch all starred item id list
                 val starredIds = fetchItemIdsAndContinue {
                     googleReaderAPI.getStarredItemIds(continuationId = it)
                 }.toSet()
@@ -328,7 +297,7 @@ class GoogleReaderRssService @Inject constructor(
                 val toBeStarred = starredIds - localStarredIds
                 Log.i("RLog", "sync toBeStarred size: ${toBeStarred.size}")
                 if (toBeStarred.isNotEmpty()) {
-                    toBeStarred.chunked(100).forEach {
+                    toBeStarred.chunked(999).forEach {
                         articleDao.markAsStarredByIdSet(
                             accountId = accountId,
                             ids = it.toSet(),
@@ -337,7 +306,7 @@ class GoogleReaderRssService @Inject constructor(
                     }
                 }
 
-                // 4. Fetch unread contents of items with differences
+                // 5. Fetch unread contents of items with differences
                 fetchItemsContents(
                     itemIds = toBeUnread,
                     googleReaderAPI = googleReaderAPI,
@@ -348,7 +317,7 @@ class GoogleReaderRssService @Inject constructor(
                     preDate = preDate,
                 )
 
-                // 5. Fetch starred contents of items with differences
+                // 6. Fetch starred contents of items with differences
                 fetchItemsContents(
                     itemIds = toBeStarred,
                     googleReaderAPI = googleReaderAPI,
@@ -359,12 +328,13 @@ class GoogleReaderRssService @Inject constructor(
                     preDate = preDate,
                 )
 
-                // 6. Fetch read contents of items with differences
+                // 7. Fetch read contents of items with differences
                 val readIds = fetchItemIdsAndContinue {
                     googleReaderAPI.getReadItemIds(since = lastMonthAt, continuationId = it)
                 }.toSet()
                 Log.i("RLog", "sync readIds size: ${readIds.size}")
-                val localReadIds =  articleDao.queryMetadataAll(accountId).filter { !it.isUnread }.map { it.id.dollarLast() }.toSet()
+                val localReadIds = articleDao.queryMetadataAll(accountId).filter { !it.isUnread }
+                    .map { it.id.dollarLast() }.toSet()
                 val toBeRead = readIds - unreadIds - localReadIds
                 Log.i("RLog", "sync toBeRead size: ${toBeRead.size}")
                 if (toBeRead.isNotEmpty()) {
@@ -379,7 +349,7 @@ class GoogleReaderRssService @Inject constructor(
                     )
                 }
 
-                // 7. Remove orphaned groups and feeds, after synchronizing the starred/un-starred
+                // 8. Remove orphaned groups and feeds, after synchronizing the starred/un-starred
                 groupDao.queryAll(accountId)
                     .filter { it.id !in groupIds }
                     .forEach { super.deleteGroup(it, true) }
@@ -387,7 +357,6 @@ class GoogleReaderRssService @Inject constructor(
                     .filter { it.id !in feedIds }
                     .forEach { super.deleteFeed(it, true) }
 
-                // 8. Record the time of this synchronization
                 Log.i("RLog", "onCompletion: ${System.currentTimeMillis() - preTime}")
                 accountDao.update(account.apply {
                     updateAt = Date()
