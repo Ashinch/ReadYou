@@ -18,6 +18,32 @@ import java.util.Date
 @Dao
 interface ArticleDao {
 
+    @Query(
+        """
+        UPDATE article SET isStarred = :isStarred 
+        WHERE accountId = :accountId
+        AND id in (:ids)
+        """
+    )
+    fun markAsStarredByIdSet(
+        accountId: Int,
+        ids: Set<String>,
+        isStarred: Boolean,
+    ): Int
+
+    @Query(
+        """
+        UPDATE article SET isUnread = :isUnread 
+        WHERE accountId = :accountId
+        AND id in (:ids)
+        """
+    )
+    fun markAsReadByIdSet(
+        accountId: Int,
+        ids: Set<String>,
+        isUnread: Boolean,
+    ): Int
+
     @Transaction
     @RewriteQueriesToDropUnusedColumns
     @Query(
