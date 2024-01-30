@@ -406,4 +406,7 @@
     <string name="include_additional_info">Include additional info</string>
     <string name="exclude">Exclude</string>
     <string name="additional_info_desc">Additional information includes configuration options for each feed, such as whether to allow notification, parse full content, etc. When you intend to use the exported OPML file with other readers, please select \"Exclude\".</string>
+    <string name="grey_out_articles">Grey out articles</string>
+    <string name="all_read">All read</string>
+    <string name="read_excluding_starred">Read, excluding starred</string>
 </resources>

@@ -49,6 +49,7 @@ data class Settings(
     val flowArticleListTime: FlowArticleListTimePreference = FlowArticleListTimePreference.default,
     val flowArticleListDateStickyHeader: FlowArticleListDateStickyHeaderPreference = FlowArticleListDateStickyHeaderPreference.default,
     val flowArticleListTonalElevation: FlowArticleListTonalElevationPreference = FlowArticleListTonalElevationPreference.default,
+    val flowArticleListReadIndicator: FlowArticleReadIndicatorPreference = FlowArticleReadIndicatorPreference.default,
 
     // Reading page
     val readingTheme: ReadingThemePreference = ReadingThemePreference.default,
@@ -141,6 +142,8 @@ val LocalFlowArticleListDateStickyHeader =
     compositionLocalOf<FlowArticleListDateStickyHeaderPreference> { FlowArticleListDateStickyHeaderPreference.default }
 val LocalFlowArticleListTonalElevation =
     compositionLocalOf<FlowArticleListTonalElevationPreference> { FlowArticleListTonalElevationPreference.default }
+val LocalFlowArticleListReadIndicator =
+    compositionLocalOf<FlowArticleReadIndicatorPreference> { FlowArticleReadIndicatorPreference.default }
 
 // Reading page
 val LocalReadingTheme = compositionLocalOf<ReadingThemePreference> { ReadingThemePreference.default }
@@ -234,6 +237,7 @@ fun SettingsProvider(
         LocalFlowFilterBarFilled provides settings.flowFilterBarFilled,
         LocalFlowFilterBarPadding provides settings.flowFilterBarPadding,
         LocalFlowFilterBarTonalElevation provides settings.flowFilterBarTonalElevation,
+        LocalFlowArticleListReadIndicator provides settings.flowArticleListReadIndicator,
 
         // Reading page
         LocalReadingTheme provides settings.readingTheme,

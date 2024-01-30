@@ -39,6 +39,7 @@ fun FlowPageStylePage(
     val articleListTime = LocalFlowArticleListTime.current
     val articleListStickyDate = LocalFlowArticleListDateStickyHeader.current
     val articleListTonalElevation = LocalFlowArticleListTonalElevation.current
+    val articleListReadIndicator = LocalFlowArticleListReadIndicator.current
 
     val scope = rememberCoroutineScope()
 
@@ -47,6 +48,7 @@ fun FlowPageStylePage(
     var filterBarTonalElevationDialogVisible by remember { mutableStateOf(false) }
     var topBarTonalElevationDialogVisible by remember { mutableStateOf(false) }
     var articleListTonalElevationDialogVisible by remember { mutableStateOf(false) }
+    var articleListReadIndicatorDialogVisible by remember { mutableStateOf(false) }
 
     var filterBarPaddingValue: Int? by remember { mutableStateOf(filterBarPadding) }
 
@@ -184,6 +186,13 @@ fun FlowPageStylePage(
                         }
                     }
                     SettingItem(
+                        title = stringResource(R.string.grey_out_articles),
+                        desc = articleListReadIndicator.description,
+                        onClick = {
+                            articleListReadIndicatorDialogVisible = true
+                        }
+                    )
+                    SettingItem(
                         title = stringResource(R.string.tonal_elevation),
                         desc = "${articleListTonalElevation.value}dp",
                         onClick = {
@@ -316,5 +325,20 @@ fun FlowPageStylePage(
         }
     ) {
         articleListTonalElevationDialogVisible = false
+    }
+
+    RadioDialog(
+        visible = articleListReadIndicatorDialogVisible,
+        title = stringResource(id = R.string.grey_out_articles),
+        options = FlowArticleReadIndicatorPreference.values.map {
+            RadioDialogOption(
+                text = it.description,
+                selected = it == articleListReadIndicator
+            ) {
+                it.put(context, scope)
+            }
+        }
+    ) {
+        articleListReadIndicatorDialogVisible = false
     }
 }
