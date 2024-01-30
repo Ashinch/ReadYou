@@ -71,7 +71,7 @@ fun LanguagesPage(
                 item {
                     LanguagesPreference.values.map {
                         SettingItem(
-                            title = it.toDesc(context),
+                            title = it.toDesc(),
                             onClick = {
                                 it.put(context, scope)
                             },

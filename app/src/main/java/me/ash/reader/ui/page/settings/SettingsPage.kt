@@ -17,11 +17,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.core.os.LocaleListCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalNewVersionNumber
 import me.ash.reader.infrastructure.preference.LocalSkipVersionNumber
+import me.ash.reader.infrastructure.preference.toDisplayName
 import me.ash.reader.ui.component.base.Banner
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
@@ -123,7 +125,7 @@ fun SettingsPage(
                 item {
                     SelectableSettingGroupItem(
                         title = stringResource(R.string.languages),
-                        desc = stringResource(R.string.languages_desc),
+                        desc = LocaleListCompat.getDefault()[0].toDisplayName(),
                         icon = Icons.Outlined.Language,
                     ) {
                         navController.navigate(RouteName.LANGUAGES) {

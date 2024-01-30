@@ -66,14 +66,12 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
     }
 
     @Composable
-    fun toDesc(context: Context): String {
+    fun toDesc(): String {
         return when (this) {
             ChineseTraditional -> stringResource(id = R.string.chinese_traditional)
             ChineseSimplified -> stringResource(id = R.string.chinese_simplified)
             else -> {
-                this.toLocale()?.let { locale -> locale.getDisplayName(locale) } ?: stringResource(
-                    id = R.string.use_device_languages
-                )
+                this.toLocale().toDisplayName()
             }
         }
     }
@@ -82,7 +80,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
     private fun toLocale(): Locale? = when (this) {
         UseDeviceLanguages -> null
         English -> Locale("en")
-        ChineseSimplified -> Locale("zh", "CN")
+        ChineseSimplified -> Locale.forLanguageTag("zh-Hans")
         German -> Locale("de")
         French -> Locale("fr")
         Czech -> Locale("cs")
@@ -93,7 +91,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
         Russian -> Locale("ru")
         Basque -> Locale("eu")
         Indonesian -> Locale("in")
-        ChineseTraditional -> Locale("zh", "TW")
+        ChineseTraditional -> Locale.forLanguageTag("zh-Hant")
         Arabic -> Locale("ar")
         Bulgarian -> Locale("bg")
         Catalan -> Locale("ca")
@@ -212,3 +210,8 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
 
     }
 }
+
+@Composable
+fun Locale?.toDisplayName(): String = this?.getDisplayName(this) ?: stringResource(
+    id = R.string.use_device_languages
+)

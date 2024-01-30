@@ -21,6 +21,7 @@ import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.ui.ext.languages
 import me.ash.reader.ui.page.common.HomeEntry
 import java.lang.reflect.Field
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -50,6 +51,8 @@ class MainActivity : AppCompatActivity() {
                 LanguagesPreference.setLocale(it)
             }
         }
+
+        Log.d("RLog", "onCreate: ${Locale.getDefault().toLanguageTag()}")
 
         // Workaround for https://github.com/Ashinch/ReadYou/issues/312: increase cursor window size
         try {
