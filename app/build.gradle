@@ -99,10 +99,9 @@ android {
     }
 
 //    https://developer.android.com/guide/topics/resources/app-languages#auto-localeconfig
-//    Blocked by https://github.com/Ashinch/ReadYou/pull/502
-//    androidResources {
-//        generateLocaleConfig true
-//    }
+    androidResources {
+        generateLocaleConfig true
+    }
 
     namespace 'me.ash.reader'
 }
