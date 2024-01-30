@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
 import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.core.view.WindowCompat
 import androidx.profileinstaller.ProfileInstallerInitializer
@@ -28,7 +28,7 @@ import javax.inject.Inject
  * The Single-Activity Architecture.
  */
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var imageLoader: ImageLoader
@@ -46,8 +46,7 @@ class MainActivity : ComponentActivity() {
 
         // Set the language
         LanguagesPreference.fromValue(languages).let {
-            if (it == LanguagesPreference.UseDeviceLanguages) return@let
-            it.setLocale(this)
+            LanguagesPreference.setLocale(it)
         }
 
         // Workaround for https://github.com/Ashinch/ReadYou/issues/312: increase cursor window size
