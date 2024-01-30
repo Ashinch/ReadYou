@@ -14,7 +14,6 @@ import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.account.security.GoogleReaderSecurityKey
 import me.ash.reader.domain.model.article.Article
-import me.ash.reader.domain.model.article.ArticleMeta
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.group.Group
 import me.ash.reader.domain.repository.AccountDao
@@ -243,19 +242,15 @@ class GoogleReaderRssService @Inject constructor(
 
             try {
                 val preTime = System.currentTimeMillis()
+                val preDate = Date(preTime)
                 val accountId = context.currentAccountId
                 val account = accountDao.queryById(accountId)!!
                 val googleReaderAPI = getGoogleReaderAPI()
                 val groupIds = mutableSetOf<String>()
                 val feedIds = mutableSetOf<String>()
-                val lastUpdateAt = Calendar.getInstance().apply {
-                    if (account.updateAt != null) {
-                        time = account.updateAt!!
-                        add(Calendar.HOUR, -1)
-                    } else {
-                        time = Date(preTime)
-                        add(Calendar.MONTH, -1)
-                    }
+                val lastMonthAt = Calendar.getInstance().apply {
+                    time = preDate
+                    add(Calendar.MONTH, -1)
                 }.time.time / 1000
 
                 // 1. Fetch tags (not supported yet)
@@ -304,50 +299,87 @@ class GoogleReaderRssService @Inject constructor(
                     feedDao.update(*it.toTypedArray())
                 }
 
-                // 2. Fetch latest unread item contents since last sync
-                var unreadIds = fetchItemIdsAndContinue {
-                    googleReaderAPI.getUnreadItemIds(since = lastUpdateAt, continuationId = it)
-                }
-                fetchItemsContents(
-                    itemIds = unreadIds,
-                    googleReaderAPI = googleReaderAPI,
-                    accountId = accountId,
-                    feedIds = feedIds,
-                    unreadIds = unreadIds,
-                    starredIds = listOf())
+                val localAllItems = articleDao.queryMetadataAll(accountId)
+                val localUnreadIds = localAllItems.filter { it.isUnread }.map { it.id.dollarLast() }.toSet()
+                val localStarredIds = localAllItems.filter { it.isStarred }.map { it.id.dollarLast() }.toSet()
 
-                // 3. Fetch all starred item contents
+                // 2. Fetch all unread item id list
+                val unreadIds = fetchItemIdsAndContinue {
+                    googleReaderAPI.getUnreadItemIds(continuationId = it)
+                }.toSet()
+                Log.i("RLog", "sync unreadIds size: ${unreadIds.size}")
+                val toBeUnread = unreadIds - localUnreadIds
+                Log.i("RLog", "sync toBeUnread size: ${toBeUnread.size}")
+                if (toBeUnread.isNotEmpty()) {
+                    toBeUnread.chunked(100).forEach {
+                        articleDao.markAsReadByIdSet(
+                            accountId = accountId,
+                            ids = it.toSet(),
+                            isUnread = true,
+                        )
+                    }
+                }
+
+                // 3. Fetch all starred item id list
                 val starredIds = fetchItemIdsAndContinue {
                     googleReaderAPI.getStarredItemIds(continuationId = it)
+                }.toSet()
+                Log.i("RLog", "sync starredIds size: ${starredIds.size}")
+                val toBeStarred = starredIds - localStarredIds
+                Log.i("RLog", "sync toBeStarred size: ${toBeStarred.size}")
+                if (toBeStarred.isNotEmpty()) {
+                    toBeStarred.chunked(100).forEach {
+                        articleDao.markAsStarredByIdSet(
+                            accountId = accountId,
+                            ids = it.toSet(),
+                            isStarred = true,
+                        )
+                    }
                 }
+
+                // 4. Fetch unread contents of items with differences
                 fetchItemsContents(
-                    itemIds = starredIds,
+                    itemIds = toBeUnread,
+                    googleReaderAPI = googleReaderAPI,
+                    accountId = accountId,
+                    feedIds = feedIds,
+                    unreadIds = toBeUnread,
+                    starredIds = starredIds,
+                    preDate = preDate,
+                )
+
+                // 5. Fetch starred contents of items with differences
+                fetchItemsContents(
+                    itemIds = toBeStarred,
                     googleReaderAPI = googleReaderAPI,
                     accountId = accountId,
                     feedIds = feedIds,
                     unreadIds = unreadIds,
-                    starredIds = starredIds
+                    starredIds = toBeStarred,
+                    preDate = preDate,
                 )
 
-                // 4. Mark/unmarked items read/starred (/tagged)
-                // Fetch all unread item id list
-                unreadIds = fetchItemIdsAndContinue {
-                    googleReaderAPI.getUnreadItemIds(continuationId = it)
-                }
-                val articlesMeta = articleDao.queryMetadataAll(accountId)
-                for (meta: ArticleMeta in articlesMeta) {
-                    val articleId = meta.id.dollarLast()
-                    val shouldBeRead = !unreadIds.contains(articleId)
-                    val shouldBeUnStarred = !starredIds.contains(articleId)
-                    if (meta.isUnread && shouldBeRead) {
-                        articleDao.markAsReadByArticleId(accountId, meta.id, true)
-                    }
-                    if (meta.isStarred && shouldBeUnStarred) {
-                        articleDao.markAsStarredByArticleId(accountId, meta.id, false)
-                    }
+                // 6. Fetch read contents of items with differences
+                val readIds = fetchItemIdsAndContinue {
+                    googleReaderAPI.getReadItemIds(since = lastMonthAt, continuationId = it)
+                }.toSet()
+                Log.i("RLog", "sync readIds size: ${readIds.size}")
+                val localReadIds =  articleDao.queryMetadataAll(accountId).filter { !it.isUnread }.map { it.id.dollarLast() }.toSet()
+                val toBeRead = readIds - unreadIds - localReadIds
+                Log.i("RLog", "sync toBeRead size: ${toBeRead.size}")
+                if (toBeRead.isNotEmpty()) {
+                    fetchItemsContents(
+                        itemIds = toBeRead,
+                        googleReaderAPI = googleReaderAPI,
+                        accountId = accountId,
+                        feedIds = feedIds,
+                        unreadIds = setOf(),
+                        starredIds = starredIds,
+                        preDate = preDate,
+                    )
                 }
 
-                // 5. Remove orphaned groups and feeds, after synchronizing the starred/un-starred
+                // 7. Remove orphaned groups and feeds, after synchronizing the starred/un-starred
                 groupDao.queryAll(accountId)
                     .filter { it.id !in groupIds }
                     .forEach { super.deleteGroup(it, true) }
@@ -355,10 +387,10 @@ class GoogleReaderRssService @Inject constructor(
                     .filter { it.id !in feedIds }
                     .forEach { super.deleteFeed(it, true) }
 
-                // 6. Record the time of this synchronization
+                // 8. Record the time of this synchronization
                 Log.i("RLog", "onCompletion: ${System.currentTimeMillis() - preTime}")
                 accountDao.update(account.apply {
-                    updateAt = Date(preTime)
+                    updateAt = Date()
                 })
                 ListenableWorker.Result.success(SyncWorker.setIsSyncing(false))
             } catch (e: Exception) {
@@ -381,20 +413,21 @@ class GoogleReaderRssService @Inject constructor(
     }
 
     private suspend fun fetchItemsContents(
-        itemIds: List<String>?,
+        itemIds: Set<String>,
         googleReaderAPI: GoogleReaderAPI,
         accountId: Int,
         feedIds: MutableSet<String>,
-        unreadIds: List<String>?,
-        starredIds: List<String?>?,
+        unreadIds: Set<String>,
+        starredIds: Set<String>,
+        preDate: Date,
     ) {
-        itemIds?.chunked(100)?.forEach { chunkedIds ->
+        itemIds.chunked(100).forEach { chunkedIds ->
             articleDao.insert(
                 *googleReaderAPI.getItemsContents(chunkedIds).items?.map {
                     val articleId = it.id!!.ofItemStreamIdToId()
                     Article(
                         id = accountId.spacerDollar(articleId),
-                        date = it.published?.run { Date(this * 1000) } ?: Date(),
+                        date = it.published?.run { Date(this * 1000) } ?: preDate,
                         title = it.title.decodeHTML() ?: context.getString(R.string.empty),
                         author = it.author,
                         rawDescription = it.summary?.content ?: "",
@@ -406,9 +439,9 @@ class GoogleReaderRssService @Inject constructor(
                         feedId = accountId.spacerDollar(it.origin?.streamId?.ofFeedStreamIdToId()
                             ?: feedIds.first()),
                         accountId = accountId,
-                        isUnread = unreadIds?.contains(articleId) ?: true,
-                        isStarred = starredIds?.contains(articleId) ?: false,
-                        updateAt = it.crawlTimeMsec?.run { Date(this.toLong()) } ?: Date(),
+                        isUnread = unreadIds.contains(articleId),
+                        isStarred = starredIds.contains(articleId),
+                        updateAt = it.crawlTimeMsec?.run { Date(this.toLong()) } ?: preDate,
                     )
                 }?.toTypedArray() ?: emptyArray()
             )
