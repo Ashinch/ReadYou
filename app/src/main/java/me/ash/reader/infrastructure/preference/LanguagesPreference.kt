@@ -29,9 +29,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
     data object Russian : LanguagesPreference(10)
     data object Basque : LanguagesPreference(11)
     data object Indonesian : LanguagesPreference(12)
-
     data object ChineseTraditional : LanguagesPreference(13)
-
     data object Arabic : LanguagesPreference(14)
     data object Bulgarian : LanguagesPreference(15)
     data object Catalan : LanguagesPreference(16)

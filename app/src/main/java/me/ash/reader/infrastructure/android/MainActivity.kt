@@ -52,8 +52,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        Log.d("RLog", "onCreate: ${Locale.getDefault().toLanguageTag()}")
-
         // Workaround for https://github.com/Ashinch/ReadYou/issues/312: increase cursor window size
         try {
             val field: Field = CursorWindow::class.java.getDeclaredField("sCursorWindowSize")
