@@ -12,7 +12,12 @@ import me.ash.reader.domain.repository.AccountDao
 import me.ash.reader.domain.repository.ArticleDao
 import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.domain.repository.GroupDao
-import me.ash.reader.ui.ext.*
+import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.currentAccountId
+import me.ash.reader.ui.ext.dataStore
+import me.ash.reader.ui.ext.getDefaultGroupId
+import me.ash.reader.ui.ext.put
+import me.ash.reader.ui.ext.showToast
 import javax.inject.Inject
 
 class AccountService @Inject constructor(
@@ -72,6 +77,7 @@ class AccountService @Inject constructor(
             Looper.loop()
             return
         }
+        rssService.get().cancelSync()
         accountDao.queryById(accountId)?.let {
             articleDao.deleteByAccountId(accountId)
             feedDao.deleteByAccountId(accountId)
