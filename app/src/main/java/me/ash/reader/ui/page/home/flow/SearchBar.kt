@@ -62,11 +62,13 @@ fun SearchBar(
                         .height(56.dp)
                         .fillMaxWidth()
                         .focusRequester(focusRequester),
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        containerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
+                    colors = TextFieldDefaults.colors(
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
                     ),
                     value = value,
                     onValueChange = { onValueChange(it) },
