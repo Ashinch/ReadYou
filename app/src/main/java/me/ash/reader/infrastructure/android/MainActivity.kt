@@ -21,6 +21,7 @@ import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.ui.ext.languages
 import me.ash.reader.ui.page.common.HomeEntry
 import java.lang.reflect.Field
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -39,14 +40,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.addFlags(FLAG_LAYOUT_IN_SCREEN or FLAG_LAYOUT_NO_LIMITS)
         }
         Log.i("RLog", "onCreate: ${ProfileInstallerInitializer().create(this)}")
 
         // Set the language
-        LanguagesPreference.fromValue(languages).let {
-            LanguagesPreference.setLocale(it)
+        if (Build.VERSION.SDK_INT < 33) {
+            LanguagesPreference.fromValue(languages).let {
+                LanguagesPreference.setLocale(it)
+            }
         }
 
         // Workaround for https://github.com/Ashinch/ReadYou/issues/312: increase cursor window size
