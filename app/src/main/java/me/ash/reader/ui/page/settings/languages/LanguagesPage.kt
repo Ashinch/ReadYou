@@ -28,6 +28,7 @@ import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,7 +36,13 @@ fun LanguagesPage(
     navController: NavHostController,
 ) {
     val context = LocalContext.current
-    val languages = LocalLanguages.current
+    val currentLocale = Locale.getDefault()
+
+    val languages = LocalLanguages.current.run {
+        if (toLocale() == currentLocale) this
+        else LanguagesPreference.default
+    }
+
     val scope = rememberCoroutineScope()
 
     RYScaffold(
@@ -64,14 +71,17 @@ fun LanguagesPage(
                             )
                         },
                     ) {
-                        context.openURL(context.getString(R.string.translatable_url), OpenLinkPreference.AutoPreferCustomTabs)
+                        context.openURL(
+                            context.getString(R.string.translatable_url),
+                            OpenLinkPreference.AutoPreferCustomTabs
+                        )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                 }
                 item {
                     LanguagesPreference.values.map {
                         SettingItem(
-                            title = it.toDesc(context),
+                            title = it.toDesc(),
                             onClick = {
                                 it.put(context, scope)
                             },

@@ -61,7 +61,7 @@ android {
         }
     }
     lint {
-        disable += "MissingTranslation"
+        disable.addAll("MissingTranslation", "ExtraTranslation")
     }
     buildTypes {
         release {
