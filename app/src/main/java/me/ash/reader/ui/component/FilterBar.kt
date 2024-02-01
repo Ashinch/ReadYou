@@ -83,7 +83,9 @@ fun FilterBar(
                 colors = NavigationBarItemDefaults.colors(
                     indicatorColor = indicatorColor,
                     unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    selectedIconColor = MaterialTheme.colorScheme.contentColorFor(indicatorColor)
+                    selectedIconColor = MaterialTheme.colorScheme.contentColorFor(indicatorColor),
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    selectedTextColor = MaterialTheme.colorScheme.onSurface
                 )
             )
         }
