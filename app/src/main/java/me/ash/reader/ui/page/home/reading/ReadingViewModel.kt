@@ -71,12 +71,6 @@ class ReadingViewModel @Inject constructor(
                 if (it.isFullContent) internalRenderFullContent()
                 else renderDescriptionContent()
             }
-            // java.lang.NullPointerException: Attempt to invoke virtual method
-            // 'boolean androidx.compose.ui.node.LayoutNode.getNeedsOnPositionedDispatch$ui_release()'
-            // on a null object reference
-            if (_readingUiState.value.listState.firstVisibleItemIndex != 0) {
-                _readingUiState.value.listState.scrollToItem(0)
-            }
         }
     }
 
@@ -169,7 +163,6 @@ data class ReadingUiState(
     val articleId: String? = null,
     val isUnread: Boolean = false,
     val isStarred: Boolean = false,
-    val listState: LazyListState = LazyListState(),
     val nextArticleId: String? = null,
 )
 

@@ -4,10 +4,16 @@ import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -36,8 +42,11 @@ fun ReadingPage(
     val readingUiState = readingViewModel.readingUiState.collectAsStateValue()
     val readerState = readingViewModel.readerStateStateFlow.collectAsStateValue()
     val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
+
+    var isReaderScrollingDown by remember { mutableStateOf(false) }
+
     val isShowToolBar = if (LocalReadingAutoHideToolbar.current.value) {
-        readingUiState.articleId != null && !readingUiState.listState.isScrollDown()
+        readingUiState.articleId != null && !isReaderScrollingDown
     } else {
         true
     }
@@ -100,9 +109,16 @@ fun ReadingPage(
                                     initialContentExit = ExitTransition.None, sizeTransform = null
                                 )
                             }
-                        }
+                        }, label = ""
                     ) {
                         it.run {
+                            val listState = rememberSaveable(
+                                inputs = arrayOf(content),
+                                saver = LazyListState.Saver
+                            ) { LazyListState() }
+
+                            isReaderScrollingDown = listState.isScrollDown()
+
                             Content(
                                 content = content.text ?: "",
                                 feedName = feedName,
@@ -111,7 +127,7 @@ fun ReadingPage(
                                 link = link,
                                 publishedDate = publishedDate,
                                 isLoading = content is ReaderState.Loading,
-                                listState = readingUiState.listState,
+                                listState = listState,
                                 isShowToolBar = isShowToolBar,
                             )
                         }
