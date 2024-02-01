@@ -1,10 +1,16 @@
 package me.ash.reader.ui.page.settings.accounts.addition
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -44,6 +50,7 @@ fun AddFeverAccountDialog(
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val uiState = viewModel.additionUiState.collectAsStateValue()
+    val accountUiState = accountViewModel.accountUiState.collectAsStateValue()
 
     var feverServerUrl by rememberSaveable { mutableStateOf("") }
     var feverUsername by rememberSaveable { mutableStateOf("") }
@@ -55,14 +62,22 @@ fun AddFeverAccountDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         onDismissRequest = {
             focusManager.clearFocus()
+            accountViewModel.cancelAdd()
             viewModel.hideAddFeverAccountDialog()
         },
         icon = {
-            Icon(
-                modifier = Modifier.size(24.dp),
-                painter = painterResource(id = R.drawable.ic_fever),
-                contentDescription = stringResource(R.string.fever),
-            )
+            if (accountUiState.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            } else {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(id = R.drawable.ic_fever),
+                    contentDescription = stringResource(R.string.fever),
+                )
+            }
         },
         title = {
             Text(
@@ -77,6 +92,7 @@ fun AddFeverAccountDialog(
             ) {
                 Spacer(modifier = Modifier.height(10.dp))
                 RYOutlineTextField(
+                    readOnly = accountUiState.isLoading,
                     value = feverServerUrl,
                     onValueChange = { feverServerUrl = it },
                     label = stringResource(R.string.server_url),
@@ -85,6 +101,8 @@ fun AddFeverAccountDialog(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 RYOutlineTextField(
+                    requestFocus = false,
+                    readOnly = accountUiState.isLoading,
                     value = feverUsername,
                     onValueChange = { feverUsername = it },
                     label = stringResource(R.string.username),
@@ -93,6 +111,8 @@ fun AddFeverAccountDialog(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 RYOutlineTextField(
+                    requestFocus = false,
+                    readOnly = accountUiState.isLoading,
                     value = feverPassword,
                     onValueChange = { feverPassword = it },
                     isPassword = true,
@@ -105,7 +125,10 @@ fun AddFeverAccountDialog(
         },
         confirmButton = {
             TextButton(
-                enabled = feverServerUrl.isNotBlank() && feverUsername.isNotEmpty() && feverPassword.isNotEmpty(),
+                enabled = !accountUiState.isLoading
+                        && feverServerUrl.isNotBlank()
+                        && feverUsername.isNotEmpty()
+                        && feverPassword.isNotEmpty(),
                 onClick = {
                     focusManager.clearFocus()
                     accountViewModel.addAccount(Account(
@@ -136,6 +159,7 @@ fun AddFeverAccountDialog(
             TextButton(
                 onClick = {
                     focusManager.clearFocus()
+                    accountViewModel.cancelAdd()
                     viewModel.hideAddFeverAccountDialog()
                 }
             ) {

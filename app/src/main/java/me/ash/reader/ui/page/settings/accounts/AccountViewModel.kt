@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,6 +39,7 @@ class AccountViewModel @Inject constructor(
     private val _accountUiState = MutableStateFlow(AccountUiState())
     val accountUiState: StateFlow<AccountUiState> = _accountUiState.asStateFlow()
     val accounts = accountService.getAccounts()
+    var addAccountJob: Job? = null
 
     fun initData(accountId: Int) {
         viewModelScope.launch(ioDispatcher) {
@@ -98,7 +100,8 @@ class AccountViewModel @Inject constructor(
     }
 
     fun addAccount(account: Account, callback: (account: Account?, exception: Exception?) -> Unit) {
-        viewModelScope.launch(ioDispatcher) {
+        setLoading(true)
+        addAccountJob = viewModelScope.launch(ioDispatcher) {
             val addAccount = accountService.addAccount(account)
             try {
                 if (rssService.get(addAccount.type.id).validCredentials(account)) {
@@ -113,6 +116,8 @@ class AccountViewModel @Inject constructor(
                 withContext(mainDispatcher) {
                     callback(null, e)
                 }
+            } finally {
+                setLoading(false)
             }
         }
     }
@@ -135,6 +140,21 @@ class AccountViewModel @Inject constructor(
             }
         }
     }
+
+    private fun setLoading(isLoading: Boolean) {
+        viewModelScope.launch {
+            _accountUiState.update {
+                it.copy(
+                    isLoading = isLoading
+                )
+            }
+        }
+    }
+    
+    fun cancelAdd() {
+        addAccountJob?.cancel()
+        setLoading(false)
+    }
 }
 
 data class AccountUiState(
@@ -142,6 +162,7 @@ data class AccountUiState(
     val deleteDialogVisible: Boolean = false,
     val clearDialogVisible: Boolean = false,
     val exportOPMLMode: ExportOPMLMode = ExportOPMLMode.ATTACH_INFO,
+    val isLoading: Boolean = false,
 )
 
 sealed class ExportOPMLMode {
