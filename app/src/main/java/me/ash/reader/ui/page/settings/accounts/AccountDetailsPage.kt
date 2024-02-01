@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material.icons.outlined.PersonOff
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -55,6 +56,7 @@ import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.ext.showToastLong
 import me.ash.reader.ui.ext.toString
+import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.page.settings.accounts.connection.AccountConnection
 import me.ash.reader.ui.theme.palette.onLight
@@ -111,6 +113,17 @@ fun AccountDetailsPage(
                 tint = MaterialTheme.colorScheme.onSurface
             ) {
                 navController.popBackStack()
+            }
+        },
+        actions = {
+            FeedbackIconButton(
+                imageVector = Icons.Rounded.Close,
+                contentDescription = stringResource(R.string.close),
+                tint = MaterialTheme.colorScheme.onSurface
+            ) {
+                navController.navigate(RouteName.FEEDS) {
+                    launchSingleTop = true
+                }
             }
         },
         content = {

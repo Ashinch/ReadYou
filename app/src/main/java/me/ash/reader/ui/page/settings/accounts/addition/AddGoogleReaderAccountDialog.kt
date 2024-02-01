@@ -1,12 +1,18 @@
 package me.ash.reader.ui.page.settings.accounts.addition
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.RssFeed
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -45,6 +51,7 @@ fun AddGoogleReaderAccountDialog(
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val uiState = viewModel.additionUiState.collectAsStateValue()
+    val accountUiState = accountViewModel.accountUiState.collectAsStateValue()
 
     var googleReaderServerUrl by rememberSaveable { mutableStateOf("") }
     var googleReaderUsername by rememberSaveable { mutableStateOf("") }
@@ -56,14 +63,23 @@ fun AddGoogleReaderAccountDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         onDismissRequest = {
             focusManager.clearFocus()
+            accountViewModel.cancelAdd()
             viewModel.hideAddGoogleReaderAccountDialog()
         },
         icon = {
-            Icon(
-                modifier = Modifier.size(24.dp),
-                imageVector = Icons.Rounded.RssFeed,
-                contentDescription = stringResource(R.string.google_reader),
-            )
+            if (accountUiState.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(24.dp),
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            } else {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    imageVector = Icons.Rounded.RssFeed,
+                    contentDescription = stringResource(R.string.google_reader),
+                )
+            }
         },
         title = {
             Text(
@@ -78,6 +94,7 @@ fun AddGoogleReaderAccountDialog(
             ) {
                 Spacer(modifier = Modifier.height(10.dp))
                 RYOutlineTextField(
+                    readOnly = accountUiState.isLoading,
                     value = googleReaderServerUrl,
                     onValueChange = { googleReaderServerUrl = it },
                     label = stringResource(R.string.server_url),
@@ -86,6 +103,8 @@ fun AddGoogleReaderAccountDialog(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 RYOutlineTextField(
+                    requestFocus = false,
+                    readOnly = accountUiState.isLoading,
                     value = googleReaderUsername,
                     onValueChange = { googleReaderUsername = it },
                     label = stringResource(R.string.username),
@@ -94,6 +113,8 @@ fun AddGoogleReaderAccountDialog(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 RYOutlineTextField(
+                    requestFocus = false,
+                    readOnly = accountUiState.isLoading,
                     value = googleReaderPassword,
                     onValueChange = { googleReaderPassword = it },
                     isPassword = true,
@@ -106,7 +127,10 @@ fun AddGoogleReaderAccountDialog(
         },
         confirmButton = {
             TextButton(
-                enabled = googleReaderServerUrl.isNotBlank() && googleReaderUsername.isNotEmpty() && googleReaderPassword.isNotEmpty(),
+                enabled = !accountUiState.isLoading
+                        && googleReaderServerUrl.isNotBlank()
+                        && googleReaderUsername.isNotEmpty()
+                        && googleReaderPassword.isNotEmpty(),
                 onClick = {
                     focusManager.clearFocus()
                     if (!googleReaderServerUrl.endsWith("/")) {
@@ -140,6 +164,7 @@ fun AddGoogleReaderAccountDialog(
             TextButton(
                 onClick = {
                     focusManager.clearFocus()
+                    accountViewModel.cancelAdd()
                     viewModel.hideAddGoogleReaderAccountDialog()
                 }
             ) {
