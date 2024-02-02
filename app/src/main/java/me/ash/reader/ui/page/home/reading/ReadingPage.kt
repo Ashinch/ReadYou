@@ -1,28 +1,25 @@
 package me.ash.reader.ui.page.home.reading
 
 import android.util.Log
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.map
 import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.ui.component.base.RYScaffold
@@ -31,7 +28,6 @@ import me.ash.reader.ui.ext.isScrollDown
 import me.ash.reader.ui.motion.materialSharedAxisY
 import me.ash.reader.ui.page.home.HomeViewModel
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ReadingPage(
     navController: NavHostController,
@@ -44,6 +40,9 @@ fun ReadingPage(
     val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
 
     var isReaderScrollingDown by remember { mutableStateOf(false) }
+    var showFullScreenImageViewer by remember { mutableStateOf(false) }
+
+    var currentImageData by remember { mutableStateOf(ImageData()) }
 
     val isShowToolBar = if (LocalReadingAutoHideToolbar.current.value) {
         readingUiState.articleId != null && !isReaderScrollingDown
@@ -128,7 +127,10 @@ fun ReadingPage(
                                 publishedDate = publishedDate,
                                 isLoading = content is ReaderState.Loading,
                                 listState = listState,
-                                isShowToolBar = isShowToolBar,
+                                onImageClick = { imgUrl, altText ->
+                                    currentImageData = ImageData(imgUrl, altText)
+                                    showFullScreenImageViewer = true
+                                }
                             )
                         }
                     }
@@ -159,4 +161,7 @@ fun ReadingPage(
             }
         }
     )
+    if (showFullScreenImageViewer) {
+        ReaderImageViewer(imageData = currentImageData) { showFullScreenImageViewer = false }
+    }
 }

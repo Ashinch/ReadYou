@@ -68,6 +68,7 @@ fun LazyListScope.htmlFormattedText(
     subheadUpperCase: Boolean = false,
     baseUrl: String,
     @DrawableRes imagePlaceholder: Int,
+    onImageClick: ((imgUrl: String, altText: String) -> Unit)? = null,
     onLinkClick: (String) -> Unit,
 ) {
     Jsoup.parse(inputStream, null, baseUrl)
@@ -77,6 +78,7 @@ fun LazyListScope.htmlFormattedText(
                 element = body,
                 subheadUpperCase = subheadUpperCase,
                 imagePlaceholder = imagePlaceholder,
+                onImageClick = onImageClick,
                 onLinkClick = onLinkClick,
                 baseUrl = baseUrl,
             )
@@ -87,6 +89,7 @@ private fun LazyListScope.formatBody(
     element: Element,
     subheadUpperCase: Boolean = false,
     @DrawableRes imagePlaceholder: Int,
+    onImageClick: ((imgUrl: String, altText: String) -> Unit)? = null,
     onLinkClick: (String) -> Unit,
     baseUrl: String,
 ) {
@@ -129,6 +132,7 @@ private fun LazyListScope.formatBody(
         subheadUpperCase = subheadUpperCase,
         lazyListScope = this,
         imagePlaceholder = imagePlaceholder,
+        onImageClick = onImageClick,
         onLinkClick = onLinkClick,
         baseUrl = baseUrl,
     )
@@ -139,6 +143,7 @@ private fun LazyListScope.formatBody(
 private fun LazyListScope.formatCodeBlock(
     element: Element,
     @DrawableRes imagePlaceholder: Int,
+    onImageClick: ((imgUrl: String, altText: String) -> Unit)?,
     onLinkClick: (String) -> Unit,
     baseUrl: String,
 ) {
@@ -175,6 +180,7 @@ private fun LazyListScope.formatCodeBlock(
         element.childNodes(), preFormatted = true,
         lazyListScope = this,
         imagePlaceholder = imagePlaceholder,
+        onImageClick = onImageClick,
         onLinkClick = onLinkClick,
         baseUrl = baseUrl,
     )
@@ -188,6 +194,7 @@ private fun TextComposer.appendTextChildren(
     subheadUpperCase: Boolean = false,
     lazyListScope: LazyListScope,
     @DrawableRes imagePlaceholder: Int,
+    onImageClick: ((imgUrl: String, altText: String) -> Unit)?,
     onLinkClick: (String) -> Unit,
     baseUrl: String,
 ) {
@@ -225,6 +232,7 @@ private fun TextComposer.appendTextChildren(
                                 element.childNodes(),
                                 lazyListScope = lazyListScope,
                                 imagePlaceholder = imagePlaceholder,
+                                onImageClick = onImageClick,
                                 onLinkClick = onLinkClick,
                                 baseUrl = baseUrl,
                             )
@@ -234,6 +242,7 @@ private fun TextComposer.appendTextChildren(
                                     element.childNodes(),
                                     lazyListScope = lazyListScope,
                                     imagePlaceholder = imagePlaceholder,
+                                    onImageClick = onImageClick,
                                     onLinkClick = onLinkClick,
                                     baseUrl = baseUrl,
                                 )
@@ -247,7 +256,12 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h1Style().toSpanStyle() }
                             ) {
-                                append("\n${if (subheadUpperCase) element.text().uppercase() else element.text()}")
+                                append(
+                                    "\n${
+                                        if (subheadUpperCase) element.text()
+                                            .uppercase() else element.text()
+                                    }"
+                                )
                             }
                         }
                     }
@@ -257,7 +271,12 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h2Style().toSpanStyle() }
                             ) {
-                                append("\n${if (subheadUpperCase) element.text().uppercase() else element.text()}")
+                                append(
+                                    "\n${
+                                        if (subheadUpperCase) element.text()
+                                            .uppercase() else element.text()
+                                    }"
+                                )
                             }
                         }
                     }
@@ -267,7 +286,12 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h3Style().toSpanStyle() }
                             ) {
-                                append("\n${if (subheadUpperCase) element.text().uppercase() else element.text()}")
+                                append(
+                                    "\n${
+                                        if (subheadUpperCase) element.text()
+                                            .uppercase() else element.text()
+                                    }"
+                                )
                             }
                         }
                     }
@@ -277,7 +301,12 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h4Style().toSpanStyle() }
                             ) {
-                                append("\n${if (subheadUpperCase) element.text().uppercase() else element.text()}")
+                                append(
+                                    "\n${
+                                        if (subheadUpperCase) element.text()
+                                            .uppercase() else element.text()
+                                    }"
+                                )
                             }
                         }
                     }
@@ -287,7 +316,12 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h5Style().toSpanStyle() }
                             ) {
-                                append("\n${if (subheadUpperCase) element.text().uppercase() else element.text()}")
+                                append(
+                                    "\n${
+                                        if (subheadUpperCase) element.text()
+                                            .uppercase() else element.text()
+                                    }"
+                                )
                             }
                         }
                     }
@@ -297,7 +331,12 @@ private fun TextComposer.appendTextChildren(
                             withComposableStyle(
                                 style = { h6Style().toSpanStyle() }
                             ) {
-                                append("\n${if (subheadUpperCase) element.text().uppercase() else element.text()}")
+                                append(
+                                    "\n${
+                                        if (subheadUpperCase) element.text()
+                                            .uppercase() else element.text()
+                                    }"
+                                )
                             }
                         }
                     }
@@ -310,6 +349,7 @@ private fun TextComposer.appendTextChildren(
                                 element.childNodes(),
                                 lazyListScope = lazyListScope,
                                 imagePlaceholder = imagePlaceholder,
+                                onImageClick = onImageClick,
                                 onLinkClick = onLinkClick,
                                 baseUrl = baseUrl,
                             )
@@ -322,6 +362,7 @@ private fun TextComposer.appendTextChildren(
                                 element.childNodes(),
                                 lazyListScope = lazyListScope,
                                 imagePlaceholder = imagePlaceholder,
+                                onImageClick = onImageClick,
                                 onLinkClick = onLinkClick,
                                 baseUrl = baseUrl,
                             )
@@ -334,6 +375,7 @@ private fun TextComposer.appendTextChildren(
                                 element.childNodes(),
                                 lazyListScope = lazyListScope,
                                 imagePlaceholder = imagePlaceholder,
+                                onImageClick = onImageClick,
                                 onLinkClick = onLinkClick,
                                 baseUrl = baseUrl,
                             )
@@ -346,6 +388,7 @@ private fun TextComposer.appendTextChildren(
                                 element.childNodes(),
                                 lazyListScope = lazyListScope,
                                 imagePlaceholder = imagePlaceholder,
+                                onImageClick = onImageClick,
                                 onLinkClick = onLinkClick,
                                 baseUrl = baseUrl,
                             )
@@ -358,6 +401,7 @@ private fun TextComposer.appendTextChildren(
                                 element.childNodes(),
                                 lazyListScope = lazyListScope,
                                 imagePlaceholder = imagePlaceholder,
+                                onImageClick = onImageClick,
                                 onLinkClick = onLinkClick,
                                 baseUrl = baseUrl,
                             )
@@ -370,6 +414,7 @@ private fun TextComposer.appendTextChildren(
                                 element.childNodes(),
                                 lazyListScope = lazyListScope,
                                 imagePlaceholder = imagePlaceholder,
+                                onImageClick = onImageClick,
                                 onLinkClick = onLinkClick,
                                 baseUrl = baseUrl,
                             )
@@ -383,6 +428,7 @@ private fun TextComposer.appendTextChildren(
                                 element.childNodes(),
                                 lazyListScope = lazyListScope,
                                 imagePlaceholder = imagePlaceholder,
+                                onImageClick = onImageClick,
                                 onLinkClick = onLinkClick,
                                 baseUrl = baseUrl,
                             )
@@ -395,6 +441,7 @@ private fun TextComposer.appendTextChildren(
                             preFormatted = true,
                             lazyListScope = lazyListScope,
                             imagePlaceholder = imagePlaceholder,
+                            onImageClick = onImageClick,
                             onLinkClick = onLinkClick,
                             baseUrl = baseUrl,
                         )
@@ -406,6 +453,7 @@ private fun TextComposer.appendTextChildren(
                             lazyListScope.formatCodeBlock(
                                 element = element,
                                 imagePlaceholder = imagePlaceholder,
+                                onImageClick = onImageClick,
                                 onLinkClick = onLinkClick,
                                 baseUrl = baseUrl,
                             )
@@ -419,6 +467,7 @@ private fun TextComposer.appendTextChildren(
                                     preFormatted = preFormatted,
                                     lazyListScope = lazyListScope,
                                     imagePlaceholder = imagePlaceholder,
+                                    onImageClick = onImageClick,
                                     onLinkClick = onLinkClick,
                                     baseUrl = baseUrl,
                                 )
@@ -438,6 +487,7 @@ private fun TextComposer.appendTextChildren(
                                     element.childNodes(),
                                     lazyListScope = lazyListScope,
                                     imagePlaceholder = imagePlaceholder,
+                                    onImageClick = onImageClick,
                                     onLinkClick = onLinkClick,
                                     baseUrl = baseUrl,
                                 )
@@ -454,6 +504,7 @@ private fun TextComposer.appendTextChildren(
                                     element.childNodes(),
                                     lazyListScope = lazyListScope,
                                     imagePlaceholder = imagePlaceholder,
+                                    onImageClick = onImageClick,
                                     onLinkClick = onLinkClick,
                                     baseUrl = baseUrl,
                                 )
@@ -478,11 +529,11 @@ private fun TextComposer.appendTextChildren(
                                             BoxWithConstraints(
                                                 modifier = Modifier
                                                     .clip(RectangleShape)
-                                                    .clickable(
-                                                        enabled = onClick != null
-                                                    ) {
-                                                        onClick?.invoke()
-                                                    }
+//                                                    .clickable(
+//                                                        enabled = onClick != null
+//                                                    ) {
+//                                                        onClick?.invoke()
+//                                                    }
                                                     .fillMaxWidth()
                                                 // This makes scrolling a pain, find a way to solve that
 //                                            .pointerInput("imgzoom") {
@@ -497,17 +548,26 @@ private fun TextComposer.appendTextChildren(
 //                                            }
                                             ) {
                                                 val imageSize = maxImageSize()
+                                                val imgUrl = imageCandidates.getBestImageForMaxSize(
+                                                    pixelDensity = pixelDensity(),
+                                                    maxSize = imageSize,
+                                                )
                                                 RYAsyncImage(
                                                     modifier = Modifier
                                                         .align(Alignment.Center)
                                                         .fillMaxWidth()
                                                         .padding(horizontal = imageHorizontalPadding().dp)
                                                         .clip(imageShape())
-                                                        .clickable { },
-                                                    data = imageCandidates.getBestImageForMaxSize(
-                                                        pixelDensity = pixelDensity(),
-                                                        maxSize = imageSize,
-                                                    ),
+                                                        .run {
+                                                            if (onImageClick != null) {
+                                                                this.clickable {
+                                                                    onImageClick(imgUrl, alt)
+                                                                }
+                                                            } else {
+                                                                this
+                                                            }
+                                                        },
+                                                    data = imgUrl,
                                                     contentDescription = alt,
                                                     size = imageSize,
                                                     precision = Precision.INEXACT,
@@ -547,6 +607,7 @@ private fun TextComposer.appendTextChildren(
                                         lazyListScope = lazyListScope,
                                         imagePlaceholder = imagePlaceholder,
                                         onLinkClick = onLinkClick,
+                                        onImageClick = onImageClick,
                                         baseUrl = baseUrl,
                                     )
                                 }
@@ -565,6 +626,7 @@ private fun TextComposer.appendTextChildren(
                                         lazyListScope = lazyListScope,
                                         imagePlaceholder = imagePlaceholder,
                                         onLinkClick = onLinkClick,
+                                        onImageClick = onImageClick,
                                         baseUrl = baseUrl,
                                     )
                                 }
@@ -590,6 +652,7 @@ private fun TextComposer.appendTextChildren(
                                         lazyListScope = lazyListScope,
                                         imagePlaceholder = imagePlaceholder,
                                         onLinkClick = onLinkClick,
+                                        onImageClick = onImageClick,
                                         baseUrl = baseUrl,
                                     )
                                     ensureDoubleNewline()
@@ -608,6 +671,7 @@ private fun TextComposer.appendTextChildren(
                                         lazyListScope = lazyListScope,
                                         imagePlaceholder = imagePlaceholder,
                                         onLinkClick = onLinkClick,
+                                        onImageClick = onImageClick,
                                         baseUrl = baseUrl,
                                     )
                                     terminateCurrentText()
@@ -677,6 +741,7 @@ private fun TextComposer.appendTextChildren(
                             subheadUpperCase = subheadUpperCase,
                             lazyListScope = lazyListScope,
                             imagePlaceholder = imagePlaceholder,
+                            onImageClick = onImageClick,
                             onLinkClick = onLinkClick,
                             baseUrl = baseUrl,
                         )
@@ -709,7 +774,7 @@ private fun testIt() {
                 inputStream = stream,
                 baseUrl = "https://cowboyprogrammer.org",
                 imagePlaceholder = R.drawable.ic_telegram,
-                onLinkClick = {}
+                onLinkClick = {},
             )
         }
     }
