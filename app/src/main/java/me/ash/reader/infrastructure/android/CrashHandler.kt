@@ -1,8 +1,10 @@
 package me.ash.reader.infrastructure.android
 
 import android.content.Context
+import android.content.Intent
 import android.os.Looper
 import android.util.Log
+import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.ext.showToastLong
 import java.lang.Thread.UncaughtExceptionHandler
 
@@ -21,11 +23,10 @@ class CrashHandler(private val context: Context) : UncaughtExceptionHandler {
     override fun uncaughtException(p0: Thread, p1: Throwable) {
         val causeMessage = getCauseMessage(p1)
         Log.e("RLog", "uncaughtException: $causeMessage", p1)
-        Looper.myLooper() ?: Looper.prepare()
-        context.showToastLong(causeMessage)
-        Looper.loop()
-        // android.os.Process.killProcess(android.os.Process.myPid());
-        // exitProcess(1)
+        context.startActivity(Intent(context, CrashReportActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            putExtra(CrashReportActivity.ERROR_REPORT_KEY, p1.stackTraceToString())
+        })
     }
 
     private fun getCauseMessage(e: Throwable?): String? {
