@@ -127,6 +127,9 @@ dependencies {
     implementation("io.coil-kt:coil-svg:$coil")
     implementation("io.coil-kt:coil-gif:$coil")
 
+    // https://saket.github.io/telephoto/zoomableimage/
+    implementation("me.saket.telephoto:zoomable:0.7.1")
+
     // Cancel TLSv1.3 support pre Android10
     // implementation 'org.conscrypt:conscrypt-android:2.5.2'
 
