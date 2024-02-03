@@ -31,7 +31,7 @@ fun Content(
     publishedDate: Date,
     listState: LazyListState,
     isLoading: Boolean,
-    isShowToolBar: Boolean,
+    onImageClick: ((imgUrl: String, altText: String) -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val subheadUpperCase = LocalReadingSubheadUpperCase.current
@@ -90,6 +90,7 @@ fun Content(
                     subheadUpperCase = subheadUpperCase.value,
                     link = link ?: "",
                     content = content,
+                    onImageClick = onImageClick,
                     onLinkClick = {
                         context.openURL(it, openLink, openLinkSpecificBrowser)
                     }
