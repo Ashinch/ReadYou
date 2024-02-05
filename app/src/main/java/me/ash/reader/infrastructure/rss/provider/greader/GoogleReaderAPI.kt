@@ -256,7 +256,7 @@ class GoogleReaderAPI private constructor(
         retryablePostRequest<String>(
             query = "reader/api/0/edit-tag",
             form = mutableListOf<Pair<String, String>>().apply {
-                itemIds.forEach { add(Pair("i", it.ofItemIdToStreamId())) }
+                itemIds.forEach { add(Pair("i", it.ofItemIdToHexId())) }
                 mark?.let { add(Pair("a", mark)) }
                 unmark?.let { add(Pair("r", unmark)) }
             }
