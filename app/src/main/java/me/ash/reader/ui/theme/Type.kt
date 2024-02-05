@@ -6,6 +6,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.sp
 
+// TODO: Rename file to Typography.kt and add @Stable
+
 val SystemTypography = Typography(
     displayLarge = TextStyle(
         fontWeight = FontWeight.W400,
