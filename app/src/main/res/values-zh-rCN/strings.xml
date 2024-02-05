@@ -264,4 +264,5 @@
     <string name="include_additional_info">包含附加信息</string>
     <string name="exclude">不包含</string>
     <string name="additional_info_desc">附加信息中包含了每个订阅源的配置选项，例如是否允许通知、是否全文解析等。当您期望将导出的 OPML 文件用于其他阅读器时，请选择“不包含”。</string>
+    <string name="external_links">外部链接</string>
 </resources>
