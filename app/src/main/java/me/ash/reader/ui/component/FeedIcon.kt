@@ -12,11 +12,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import me.ash.reader.R
 import me.ash.reader.ui.component.base.Base64Image
 import me.ash.reader.ui.component.base.RYAsyncImage
 
@@ -29,25 +31,9 @@ fun FeedIcon(
 ) {
     if (iconUrl.isNullOrEmpty()) {
         if (placeholderIcon == null) {
-            Box(
-                modifier = Modifier
-                    .size(size)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = feedName.ifEmpty { " " }.first().toString(),
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontSize = 10.sp,
-                )
-            }
+            FontIcon(size, feedName)
         } else {
-            Icon(
-                imageVector = placeholderIcon,
-                contentDescription = feedName,
-            )
+            ImageIcon(placeholderIcon, feedName)
         }
     }
     // e.g. image/gif;base64,R0lGODlh...
@@ -56,7 +42,9 @@ fun FeedIcon(
             modifier = Modifier
                 .size(size)
                 .clip(CircleShape),
-            base64Uri = iconUrl)
+            base64Uri = iconUrl,
+            onEmpty = { FontIcon(size, feedName) },
+        )
     } else {
         RYAsyncImage(
             modifier = Modifier
@@ -69,8 +57,34 @@ fun FeedIcon(
     }
 }
 
+@Composable
+private fun ImageIcon(placeholderIcon: ImageVector, feedName: String) {
+    Icon(
+        imageVector = placeholderIcon,
+        contentDescription = feedName,
+    )
+}
+
+@Composable
+private fun FontIcon(size: Dp, feedName: String) {
+    Box(
+        modifier = Modifier
+            .size(size)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.primary),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = feedName.ifEmpty { " " }.first().toString(),
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontSize = 10.sp,
+        )
+    }
+}
+
 @Preview
 @Composable
-fun FeedIconPrev(){
-    FeedIcon("AFF", null)
+fun FeedIconPrev() {
+    FeedIcon(stringResource(R.string.preview_feed_name), null)
 }

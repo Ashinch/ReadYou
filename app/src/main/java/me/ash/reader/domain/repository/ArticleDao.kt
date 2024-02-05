@@ -286,11 +286,13 @@ interface ArticleDao {
         before: Date,
     )
 
+    @Transaction
     @Query(
         """
         UPDATE article SET isUnread = :isUnread 
         WHERE accountId = :accountId
         AND date < :before
+        AND isUnread != :isUnread
         """
     )
     suspend fun markAllAsRead(
@@ -299,6 +301,7 @@ interface ArticleDao {
         before: Date,
     )
 
+    @Transaction
     @Query(
         """
         UPDATE article SET isUnread = :isUnread 
@@ -307,6 +310,7 @@ interface ArticleDao {
             WHERE groupId = :groupId
         )
         AND accountId = :accountId
+        AND isUnread != :isUnread
         AND date < :before
         """
     )
@@ -317,11 +321,13 @@ interface ArticleDao {
         before: Date,
     )
 
+    @Transaction
     @Query(
         """
         UPDATE article SET isUnread = :isUnread 
         WHERE feedId = :feedId
         AND accountId = :accountId
+        AND isUnread != :isUnread
         AND date < :before
         """
     )
@@ -332,6 +338,7 @@ interface ArticleDao {
         before: Date,
     )
 
+    @Transaction
     @Query(
         """
         UPDATE article SET isUnread = :isUnread 
@@ -637,6 +644,17 @@ interface ArticleDao {
         """
         SELECT id, isUnread, isStarred FROM article
         WHERE accountId = :accountId
+        AND isUnread = :isUnread
+        ORDER BY date DESC
+        """
+    )
+    fun queryMetadataAll(accountId: Int, isUnread: Boolean): List<ArticleMeta>
+
+    @Transaction
+    @Query(
+        """
+        SELECT id, isUnread, isStarred FROM article
+        WHERE accountId = :accountId
         AND date < :before
         ORDER BY date DESC
         """
@@ -648,11 +666,12 @@ interface ArticleDao {
         """
         SELECT id, isUnread, isStarred FROM article
         WHERE accountId = :accountId
-        AND feedId = :feedId
+        AND isUnread = :isUnread
+        AND date < :before
         ORDER BY date DESC
         """
     )
-    fun queryMetadataByFeedId(accountId: Int, feedId: String): List<ArticleMeta>
+    fun queryMetadataAll(accountId: Int, isUnread: Boolean, before: Date): List<ArticleMeta>
 
     @Transaction
     @Query(
@@ -660,11 +679,24 @@ interface ArticleDao {
         SELECT id, isUnread, isStarred FROM article
         WHERE accountId = :accountId
         AND feedId = :feedId
+        AND isUnread = :isUnread
+        ORDER BY date DESC
+        """
+    )
+    fun queryMetadataByFeedId(accountId: Int, feedId: String, isUnread: Boolean): List<ArticleMeta>
+
+    @Transaction
+    @Query(
+        """
+        SELECT id, isUnread, isStarred FROM article
+        WHERE accountId = :accountId
+        AND feedId = :feedId
+        AND isUnread = :isUnread
         AND date < :before
         ORDER BY date DESC
         """
     )
-    fun queryMetadataByFeedId(accountId: Int, feedId: String, before: Date): List<ArticleMeta>
+    fun queryMetadataByFeedId(accountId: Int, feedId: String, isUnread: Boolean, before: Date): List<ArticleMeta>
 
     @Transaction
     @Query(
@@ -675,10 +707,11 @@ interface ArticleDao {
         LEFT JOIN `group` AS c ON c.id = b.groupId
         WHERE c.id = :groupId
         AND a.accountId = :accountId
+        AND a.isUnread = :isUnread
         ORDER BY a.date DESC
         """
     )
-    fun queryMetadataByGroupId(accountId: Int, groupId: String): List<ArticleMeta>
+    fun queryMetadataByGroupIdWhenIsUnread(accountId: Int, groupId: String, isUnread: Boolean): List<ArticleMeta>
 
     @Transaction
     @Query(
@@ -689,11 +722,12 @@ interface ArticleDao {
         LEFT JOIN `group` AS c ON c.id = b.groupId
         WHERE c.id = :groupId
         AND a.accountId = :accountId
+        AND a.isUnread = :isUnread
         AND a.date < :before
         ORDER BY a.date DESC
         """
     )
-    fun queryMetadataByGroupId(accountId: Int, groupId: String, before: Date): List<ArticleMeta>
+    fun queryMetadataByGroupIdWhenIsUnread(accountId: Int, groupId: String, isUnread: Boolean, before: Date): List<ArticleMeta>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg article: Article)

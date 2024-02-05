@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.ash.reader.domain.model.group.Group
 import me.ash.reader.domain.service.RssService
+import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
 import javax.inject.Inject
@@ -28,6 +29,8 @@ class GroupOptionViewModel @Inject constructor(
     private val mainDispatcher: CoroutineDispatcher,
     @IODispatcher
     private val ioDispatcher: CoroutineDispatcher,
+    @ApplicationScope
+    private val applicationScope: CoroutineScope,
 ) : ViewModel() {
 
     private val _groupOptionUiState = MutableStateFlow(GroupOptionUiState())
@@ -92,7 +95,7 @@ class GroupOptionViewModel @Inject constructor(
 
     fun delete(callback: () -> Unit = {}) {
         _groupOptionUiState.value.group?.let {
-            viewModelScope.launch(ioDispatcher) {
+            applicationScope.launch(ioDispatcher) {
                 rssService.get().deleteGroup(it)
                 withContext(mainDispatcher) {
                     callback()
@@ -161,7 +164,7 @@ class GroupOptionViewModel @Inject constructor(
 
     fun rename() {
         _groupOptionUiState.value.group?.let {
-            viewModelScope.launch {
+            applicationScope.launch {
                 rssService.get().renameGroup(it.copy(name = _groupOptionUiState.value.newName))
                 _groupOptionUiState.update { it.copy(renameDialogVisible = false) }
             }

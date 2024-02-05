@@ -17,6 +17,7 @@ import kotlinx.coroutines.withContext
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.group.Group
 import me.ash.reader.domain.service.RssService
+import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
 import javax.inject.Inject
@@ -29,6 +30,8 @@ class FeedOptionViewModel @Inject constructor(
     private val mainDispatcher: CoroutineDispatcher,
     @IODispatcher
     private val ioDispatcher: CoroutineDispatcher,
+    @ApplicationScope
+    private val applicationScope: CoroutineScope,
 ) : ViewModel() {
 
     private val _feedOptionUiState = MutableStateFlow(FeedOptionUiState())
@@ -87,7 +90,7 @@ class FeedOptionViewModel @Inject constructor(
 
     fun addNewGroup() {
         if (_feedOptionUiState.value.newGroupContent.isNotBlank()) {
-            viewModelScope.launch {
+            applicationScope.launch {
                 selectedGroup(rssService.get().addGroup(
                     destFeed = _feedOptionUiState.value.feed,
                     newGroupName = _feedOptionUiState.value.newGroupContent))
@@ -97,7 +100,7 @@ class FeedOptionViewModel @Inject constructor(
     }
 
     fun selectedGroup(groupId: String) {
-        viewModelScope.launch(ioDispatcher) {
+        applicationScope.launch(ioDispatcher) {
             _feedOptionUiState.value.feed?.let {
                 rssService.get().moveFeed(
                     originGroupId = it.groupId,
@@ -128,7 +131,7 @@ class FeedOptionViewModel @Inject constructor(
 
     fun delete(callback: () -> Unit = {}) {
         _feedOptionUiState.value.feed?.let {
-            viewModelScope.launch(ioDispatcher) {
+            applicationScope.launch(ioDispatcher) {
                 rssService.get().deleteFeed(it)
                 withContext(mainDispatcher) {
                     callback()
@@ -166,7 +169,7 @@ class FeedOptionViewModel @Inject constructor(
 
     fun renameFeed() {
         _feedOptionUiState.value.feed?.let {
-            viewModelScope.launch {
+            applicationScope.launch {
                 rssService.get().renameFeed(it.copy(name = _feedOptionUiState.value.newName))
                 _feedOptionUiState.update { it.copy(renameDialogVisible = false) }
             }
@@ -219,7 +222,7 @@ class FeedOptionViewModel @Inject constructor(
 
     fun changeFeedUrl() {
         _feedOptionUiState.value.feed?.let {
-            viewModelScope.launch {
+            applicationScope.launch {
                 rssService.get().changeFeedUrl(it.copy(url = _feedOptionUiState.value.newUrl))
                 _feedOptionUiState.update { it.copy(changeUrlDialogVisible = false) }
             }

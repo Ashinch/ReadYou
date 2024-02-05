@@ -5,14 +5,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rometools.rome.feed.synd.SyndFeed
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.domain.model.group.Group
 import me.ash.reader.domain.service.OpmlService
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.android.AndroidStringsHelper
+import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.ui.ext.formatUrl
 import java.io.InputStream
@@ -24,6 +31,8 @@ class SubscribeViewModel @Inject constructor(
     val rssService: RssService,
     private val rssHelper: RssHelper,
     private val androidStringsHelper: AndroidStringsHelper,
+    @ApplicationScope
+    private val applicationScope: CoroutineScope,
 ) : ViewModel() {
 
     private val _subscribeUiState = MutableStateFlow(SubscribeUiState())
@@ -48,7 +57,7 @@ class SubscribeViewModel @Inject constructor(
     }
 
     fun importFromInputStream(inputStream: InputStream) {
-        viewModelScope.launch {
+        applicationScope.launch {
             try {
                 opmlService.saveToDatabase(inputStream)
                 rssService.get().doSync()
@@ -64,7 +73,7 @@ class SubscribeViewModel @Inject constructor(
 
     fun addNewGroup() {
         if (_subscribeUiState.value.newGroupContent.isNotBlank()) {
-            viewModelScope.launch {
+            applicationScope.launch {
                 // TODO: How to add a single group without no feeds via Google Reader API?
                 selectedGroup(rssService.get().addGroup(null, _subscribeUiState.value.newGroupContent))
                 hideNewGroupDialog()
@@ -141,7 +150,7 @@ class SubscribeViewModel @Inject constructor(
     }
 
     fun subscribe() {
-        viewModelScope.launch {
+        applicationScope.launch {
             rssService.get().subscribe(
                 searchedFeed = _subscribeUiState.value.searchedFeed ?: return@launch,
                 feedLink = _subscribeUiState.value.linkContent,

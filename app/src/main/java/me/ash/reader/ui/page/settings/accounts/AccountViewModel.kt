@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +19,7 @@ import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.service.AccountService
 import me.ash.reader.domain.service.OpmlService
 import me.ash.reader.domain.service.RssService
+import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.DefaultDispatcher
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
@@ -34,6 +36,8 @@ class AccountViewModel @Inject constructor(
     private val defaultDispatcher: CoroutineDispatcher,
     @MainDispatcher
     private val mainDispatcher: CoroutineDispatcher,
+    @ApplicationScope
+    private val applicationScope: CoroutineScope,
 ) : ViewModel() {
 
     private val _accountUiState = MutableStateFlow(AccountUiState())
@@ -48,7 +52,7 @@ class AccountViewModel @Inject constructor(
     }
 
     fun update(accountId: Int, block: Account.() -> Unit) {
-        viewModelScope.launch(ioDispatcher) {
+        applicationScope.launch(ioDispatcher) {
             accountService.update(accountId, block)
             rssService.get(accountId).clearAuthorization()
         }
@@ -101,7 +105,7 @@ class AccountViewModel @Inject constructor(
 
     fun addAccount(account: Account, callback: (account: Account?, exception: Exception?) -> Unit) {
         setLoading(true)
-        addAccountJob = viewModelScope.launch(ioDispatcher) {
+        addAccountJob = applicationScope.launch(ioDispatcher) {
             val addAccount = accountService.addAccount(account)
             try {
                 if (rssService.get(addAccount.type.id).validCredentials(account)) {

@@ -409,4 +409,5 @@
     <string name="grey_out_articles">Grey out articles</string>
     <string name="all_read">All read</string>
     <string name="read_excluding_starred">Read, excluding starred</string>
+    <string name="external_links">External links</string>
 </resources>

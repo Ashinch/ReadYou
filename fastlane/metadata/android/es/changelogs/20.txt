@@ -4,7 +4,7 @@
 
 2. Añadir solicitud de permiso de notificación cuando sea relevante (#422) (@RafhaanShah)
 
-3. 3. Nueva función: Deslizar para marcar como leído (#455) (@boun, @nvllz)
+3. Nueva función: Deslizar para marcar como leído (#455) (@boun, @nvllz)
 
 4. Nueva opción: Manejo de enlaces externos (#428) (@S-H-Y-A)
 

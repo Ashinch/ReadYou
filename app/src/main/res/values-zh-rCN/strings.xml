@@ -267,4 +267,5 @@
     <string name="grey_out_articles">将文章置灰</string>
     <string name="all_read">所有已读</string>
     <string name="read_excluding_starred">已读，但已加星标的除外</string>
+    <string name="external_links">外部链接</string>
 </resources>
