@@ -270,4 +270,7 @@
     <string name="default_browser">Navegador por defecto</string>
     <string name="open_link_something_wrong">\"Abrir enlace\" ignorado porque algo ha ido mal.</string>
     <string name="open_link_specific_browser_not_selected">Ninguno</string>
+    <string name="exclude">Excluir</string>
+    <string name="include_additional_info">Incluir información adicional</string>
+    <string name="additional_info_desc">La información adicional incluye opciones de configuración para cada fuente, como permitir notificaciones, analizar el contenido completo, etc. Si desea utilizar el archivo OPML exportado con otros lectores, seleccione \"Excluir\".</string>
 </resources>
