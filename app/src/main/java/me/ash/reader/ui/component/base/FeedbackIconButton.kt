@@ -4,7 +4,13 @@ import android.view.HapticFeedbackConstants
 import android.view.SoundEffectConstants
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,6 +26,7 @@ fun FeedbackIconButton(
     imageVector: ImageVector,
     contentDescription: String?,
     tint: Color = LocalContentColor.current,
+    enabled: Boolean = true,
     showBadge: Boolean = false,
     isHaptic: Boolean? = true,
     isSound: Boolean? = true,
@@ -28,6 +35,7 @@ fun FeedbackIconButton(
     val view = LocalView.current
 
     IconButton(
+        enabled = enabled,
         onClick = {
             if (isHaptic == true) view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
             if (isSound == true) view.playSoundEffect(SoundEffectConstants.CLICK)

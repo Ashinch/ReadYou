@@ -16,7 +16,8 @@ import com.caverock.androidsvg.SVG
 @Composable
 fun Base64Image(
     modifier: Modifier = Modifier,
-    base64Uri: String
+    base64Uri: String,
+    onEmpty: @Composable () -> Unit = {},
 ) {
     val isSvg = base64Uri.startsWith("image/svg")
 
@@ -30,11 +31,15 @@ fun Base64Image(
         val bytes = base64ToBytes(base64Uri)
         val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 
-        Image(
-            bitmap = bitmap.asImageBitmap(),
-            modifier = modifier,
-            contentDescription = null
-        )
+        if (bitmap == null) {
+            onEmpty()
+        } else {
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                modifier = modifier,
+                contentDescription = null
+            )
+        }
     }
 }
 
