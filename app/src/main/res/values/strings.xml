@@ -412,4 +412,5 @@
     <string name="copy_error_report">Copy error report</string>
     <string name="submit_bug_report">submit a bug report on GitHub</string>
     <string name="unexpected_error_msg">The app encountered an unexpected error and had to close.\n\nTo help us identify and fix this issue quickly, you can %1$s with the error stack trace below.</string>
+    <string name="next_article">Next article</string>
 </resources>

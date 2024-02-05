@@ -64,7 +64,7 @@ android {
         disable.addAll("MissingTranslation", "ExtraTranslation")
     }
     buildTypes {
-        release {
+        configureEach {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"

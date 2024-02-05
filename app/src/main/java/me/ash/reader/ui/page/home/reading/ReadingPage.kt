@@ -2,32 +2,41 @@ package me.ash.reader.ui.page.home.reading
 
 import android.util.Log
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
-import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.collectAsStateValue
-import me.ash.reader.ui.ext.isScrollDown
 import me.ash.reader.ui.motion.materialSharedAxisY
 import me.ash.reader.ui.page.home.HomeViewModel
+import kotlin.math.abs
 
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun ReadingPage(
     navController: NavHostController,
@@ -45,7 +54,7 @@ fun ReadingPage(
     var currentImageData by remember { mutableStateOf(ImageData()) }
 
     val isShowToolBar = if (LocalReadingAutoHideToolbar.current.value) {
-        readingUiState.articleId != null && !isReaderScrollingDown
+        readerState.articleId != null && !isReaderScrollingDown
     } else {
         true
     }
@@ -55,28 +64,32 @@ fun ReadingPage(
     LaunchedEffect(Unit) {
         navController.currentBackStackEntryFlow.collect {
             it.arguments?.getString("articleId")?.let { articleId ->
-                if (readingUiState.articleId != articleId) {
+                if (readerState.articleId != articleId) {
                     readingViewModel.initData(articleId)
                 }
             }
         }
     }
 
-    LaunchedEffect(readingUiState.articleId) {
+    LaunchedEffect(readerState.articleId) {
         Log.i("RLog", "ReadPage: ${readingUiState.articleWithFeed}")
-        readingUiState.articleId?.let {
-            readingViewModel.updateNextArticleId(pagingItems)
+        readerState.articleId?.let {
             if (readingUiState.isUnread) {
                 readingViewModel.markAsRead()
             }
         }
-
     }
 
-    RYScaffold(
-        topBarTonalElevation = tonalElevation.value.dp,
-        containerTonalElevation = tonalElevation.value.dp,
-        content = {
+    LaunchedEffect(readerState.articleId, pagingItems.size) {
+        if (pagingItems.isNotEmpty() && readerState.articleId != null)
+            readingViewModel.prefetchArticleId(pagingItems)
+    }
+
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.surface,
+//        topBarTonalElevation = tonalElevation.value.dp,
+//        containerTonalElevation = tonalElevation.value.dp,
+        content = { paddings ->
             Log.i("RLog", "TopBar: recomposition")
 
             Box(modifier = Modifier.fillMaxSize()) {
@@ -84,64 +97,101 @@ fun ReadingPage(
                 TopBar(
                     navController = navController,
                     isShow = isShowToolBar,
+                    windowInsets = WindowInsets(top = paddings.calculateTopPadding()),
                     title = readerState.title,
                     link = readerState.link,
                     onClose = {
                         navController.popBackStack()
                     },
                 )
+                val context = LocalContext.current
+                val hapticFeedback = LocalHapticFeedback.current
 
+                val isNextArticleAvailable = !readerState.nextArticleId.isNullOrEmpty()
 
-
-                if (readingUiState.articleId != null) {
+                if (readerState.articleId != null) {
                     // Content
                     AnimatedContent(
                         targetState = readerState,
+                        contentKey = { it.content },
                         transitionSpec = {
-                            if (initialState.title != targetState.title)
-                                materialSharedAxisY(
-                                    initialOffsetY = { (it * 0.1f).toInt() },
-                                    targetOffsetY = { (it * -0.1f).toInt() })
-                            else {
-                                ContentTransform(
-                                    targetContentEnter = EnterTransition.None,
-                                    initialContentExit = ExitTransition.None, sizeTransform = null
-                                )
+                            val sign = when {
+                                initialState.nextArticleId == targetState.articleId -> 1
+                                initialState.previousArticleId == targetState.articleId -> -1
+                                else -> 1
                             }
+                            materialSharedAxisY(
+                                initialOffsetY = { (it * 0.1f * sign).toInt() },
+                                targetOffsetY = { (it * -0.1f * sign).toInt() })
                         }, label = ""
                     ) {
+
                         it.run {
+                            val state =
+                                rememberPullToLoadState(key = content,
+                                    onLoadNext = {
+                                        readingViewModel.loadNext()
+                                    },
+                                    onLoadPrevious = {
+                                        readingViewModel.loadPrevious()
+                                    },
+                                    onThresholdReached = {})
+
+
+                            LaunchedEffect(state.status) {
+                                when (state.status) {
+                                    PullToLoadState.Status.PulledDown, PullToLoadState.Status.PulledUp -> {
+                                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    }
+
+                                    else -> {}
+                                }
+                            }
+
                             val listState = rememberSaveable(
                                 inputs = arrayOf(content),
                                 saver = LazyListState.Saver
                             ) { LazyListState() }
 
-                            isReaderScrollingDown = listState.isScrollDown()
+                            CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
+                                Content(
+                                    modifier = Modifier
+                                        .nestedScroll(
+                                            ReaderNestedScrollConnection(
+                                                state = state,
+                                                enabled = true,
+                                                onScroll = { f ->
+                                                    if (abs(f) > 2f)
+                                                        isReaderScrollingDown = f < 0f
+                                                })
+                                        )
 
-                            Content(
-                                content = content.text ?: "",
-                                feedName = feedName,
-                                title = title.toString(),
-                                author = author,
-                                link = link,
-                                publishedDate = publishedDate,
-                                isLoading = content is ReaderState.Loading,
-                                listState = listState,
-                                onImageClick = { imgUrl, altText ->
-                                    currentImageData = ImageData(imgUrl, altText)
-                                    showFullScreenImageViewer = true
-                                }
-                            )
+                                        .padding(paddings),
+                                    content = content.text ?: "",
+                                    feedName = feedName,
+                                    title = title.toString(),
+                                    author = author,
+                                    link = link,
+                                    publishedDate = publishedDate,
+                                    isLoading = content is ReaderState.Loading,
+                                    listState = listState,
+                                    pullToLoadState = state,
+                                    onImageClick = { imgUrl, altText ->
+                                        currentImageData = ImageData(imgUrl, altText)
+                                        showFullScreenImageViewer = true
+                                    }
+                                )
+                            }
                         }
                     }
                 }
                 // Bottom Bar
-                if (readingUiState.articleId != null) {
+                if (readerState.articleId != null) {
                     BottomBar(
                         isShow = isShowToolBar,
                         isUnread = readingUiState.isUnread,
                         isStarred = readingUiState.isStarred,
-                        isNextArticleAvailable = readingUiState.run { !nextArticleId.isNullOrEmpty() && nextArticleId != articleId },
+                        isNextArticleAvailable = isNextArticleAvailable,
                         isFullContent = readerState.content is ReaderState.FullContent,
                         onUnread = {
                             readingViewModel.updateReadStatus(it)
@@ -150,7 +200,7 @@ fun ReadingPage(
                             readingViewModel.updateStarredStatus(it)
                         },
                         onNextArticle = {
-                            readingUiState.nextArticleId?.let { readingViewModel.initData(it) }
+                            readingViewModel.loadNext()
                         },
                         onFullContent = {
                             if (it) readingViewModel.renderFullContent()
