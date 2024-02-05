@@ -270,4 +270,10 @@
     <string name="default_browser">Примусове використання типового браузера</string>
     <string name="open_link_something_wrong">Налаштування \"Відкрити посилання\" проігноровано, оскільки щось пішло не так.</string>
     <string name="open_link_specific_browser_not_selected">Нічого</string>
+    <string name="exclude">Виключити</string>
+    <string name="include_additional_info">Додати додаткову інформацію</string>
+    <string name="additional_info_desc">Додаткова інформація включає параметри конфігурації для кожної стрічки, наприклад, чи дозволяти сповіщення, розбір повного вмісту тощо. Якщо ви маєте намір використовувати експортований OPML-файл в інших застосунках для читання, виберіть «Виключити».</string>
+    <string name="grey_out_articles">Статті виділені сірим кольором</string>
+    <string name="all_read">Все прочитане</string>
+    <string name="read_excluding_starred">Читати, виключаючи обране</string>
 </resources>

@@ -270,4 +270,10 @@
     <string name="specific_browser_name">Prohlížeč: %1$s</string>
     <string name="block_list">Seznam blokovaných</string>
     <string name="display">Zobrazení</string>
+    <string name="include_additional_info">Zahrnout dodatečné informace</string>
+    <string name="exclude">Nezahrnovat</string>
+    <string name="additional_info_desc">Dodatečné informace zahrnují možnosti konfigurace pro každý zdroj, jako například povolení oznámení, načítání celého obsahu atd. Pokud plánujete použít soubor OPML v jiných čtečkách, vyberte prosím „Nezahrnovat“.</string>
+    <string name="grey_out_articles">Zešedivět články</string>
+    <string name="all_read">Vše přečteno</string>
+    <string name="read_excluding_starred">Přečteno, mimo oblíbených</string>
 </resources>

@@ -36,7 +36,7 @@
     <string name="starred">مُميَّز بنجمة</string>
     <string name="mark_as_starred">علِّمه بنجمة</string>
     <string name="rename">أعد التسمية</string>
-    <string name="all_allow_notification_tips">اسمح لكلِّ التلقيمات في مجموعة «%1$s» بإرسال الإشعارات</string>
+    <string name="all_allow_notification_tips">اسمح لكلِّ الخلاصات في مجموعة «%1$s» بإرسال الإشعارات</string>
     <string name="selected">المحدَّد</string>
     <string name="all_parse_full_content_tips">تحليل كامل المحتوى من جميع مقالات مجموعة «%1$s»</string>
     <string name="all_deny_parse_full_content_toast">أوقِفَ تحليل كامل محتوى جميع مقالات مجموعة «%1$s»</string>
@@ -49,8 +49,8 @@
     <string name="clear_articles_feed_tips">امسح كلَّ المقالات المؤرشفة في تلقيم «%1$s»</string>
     <string name="clear_articles_group_tips">امسح كلَّ المقالات المؤرشفة في مجموعة «%1$s»</string>
     <string name="move_to_group">انقُل إلى المجموعة</string>
-    <string name="all_move_to_group_tips">انقُل كلَّ التلقيمات في مجموعة «%1$s» إلى مجموعة «%2$s»</string>
-    <string name="all_move_to_group_toast">نُقلت كل التلقيمات إلى مجموعة «%1$s»</string>
+    <string name="all_move_to_group_tips">انقُل كلَّ الخلاصات في مجموعة «%1$s» إلى مجموعة «%2$s»</string>
+    <string name="all_move_to_group_toast">نُقلت كل الخلاصات إلى مجموعة «%1$s»</string>
     <string name="change_url">غيِّر الرابط</string>
     <string name="rename_toast">أُعيدت التسمية إلى «%1$s»</string>
     <string name="create_new_group">أنشئ مجموعةً جديدةً</string>
@@ -62,7 +62,7 @@
     <string name="delete_group_tips">احذف مجموعة «%1$s» وجميع التلقيمات والمقالات المؤرشفة فيها</string>
     <string name="group_option_tips">تطبَّق الخيارات التالية على كلِّ التلقيمات في هذه المجموعة</string>
     <string name="date_at_time">%1$s في %2$s</string>
-    <string name="feed_or_site_url">رابط التلقيم أو الموقع</string>
+    <string name="feed_or_site_url">الرابط التشعبي للخلاصة أو الموقع</string>
     <string name="import_from_opml">استورد من OPML</string>
     <string name="preset">الإعداد المسبق</string>
     <string name="allow_notification">اسمح بالإشعارات</string>
@@ -95,7 +95,7 @@
         <item quantity="many">يوجد %1$d عنصرًا مميَّزا بنجمة</item>
         <item quantity="other">يوجد %1$d عنصر مميَّز بنجمة</item>
     </plurals>
-    <string name="feeds">التلقيمات</string>
+    <string name="feeds">الخلاصات</string>
     <string name="empty">فارغ</string>
     <string name="use_device_languages">استخدم لغة الجهاز</string>
     <string name="interaction">التفاعل</string>
@@ -129,7 +129,7 @@
     <string name="other">أخرى</string>
     <string name="amoled_dark_theme">سمة AMOLED الداكنة</string>
     <string name="basic_fonts">الخطوط الأساس</string>
-    <string name="feeds_page">صفحة التلقيمات</string>
+    <string name="feeds_page">صفحة الخلاصات</string>
     <string name="flow_page">صفحة الدفق</string>
     <string name="reading_page">صفحة القراءة</string>
     <string name="sponsor">موِّل</string>
@@ -155,7 +155,7 @@
     <string name="add_accounts">أضف حسابات</string>
     <string name="list">القائمة</string>
     <string name="must_have_an_account">يجب وجود حساب</string>
-    <string name="accounts_tips">انقر على اسم الحساب في صفحة التلقيم لتُبدِّل له</string>
+    <string name="accounts_tips">انقر على اسم الحساب في صفحة الخلاصة لتُبدِّل له</string>
     <string name="server_url">رابط الخادم</string>
     <string name="username">اسم المستخدم</string>
     <string name="password">كلمة المرور</string>
@@ -223,7 +223,7 @@
     <string name="preview_article_desc">«المغفَّل» هو المجلَّد الثامن والأخير لسلسلة «سيِّد الخفايا» لكاتبها «الحبَّار المحبُّ للسباحة».</string>
     <string name="value">قيمة</string>
     <string name="article_date_sticky_header">الترويسة الملصقة لتاريخ النشر (تجريبيٌّ)</string>
-    <string name="feed_names">أسماء التلقيمات</string>
+    <string name="feed_names">أسماء الخلاصات</string>
     <string name="group_list">قائمة المجموعات</string>
     <string name="always_expand">وسِّع دائمًا</string>
     <string name="top">أعلى</string>
@@ -276,4 +276,10 @@
     <string name="default_browser">فرض المتصفح الافتراضي</string>
     <string name="open_link_something_wrong">تم تجاهل إعداد \"فتح الرابط\" بسبب حدوث خطأ ما.</string>
     <string name="open_link_specific_browser_not_selected">بدون</string>
+    <string name="include_additional_info">إدراج معلومات إضافية</string>
+    <string name="exclude">استبعاد</string>
+    <string name="additional_info_desc">تتضمن المعلومات الإضافية خيارات تهيئة لكل موجز، مثل ما إذا كنت تريد السماح بالإشعار، وتحليل المحتوى الكامل، وما إلى ذلك. عندما تنوي استخدام ملف OPML المُصدَّر مع قارئات أخرى، يُرجى تحديد \"استبعاد\".</string>
+    <string name="grey_out_articles">المقالات باللون الرمادي</string>
+    <string name="all_read">الكل مقروء</string>
+    <string name="read_excluding_starred">قراءة الكل ، باستثناء المعلمة بنجمة</string>
 </resources>
