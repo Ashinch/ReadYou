@@ -49,6 +49,20 @@ class FlowViewModel @Inject constructor(
             )
         }
     }
+
+    fun updateStarredStatus(
+        articleId: String?,
+        isStarred: Boolean
+    ) {
+        applicationScope.launch(ioDispatcher) {
+            if (articleId != null) {
+                rssService.get().markAsStarred(
+                    articleId = articleId,
+                    isStarred = isStarred,
+                )
+            }
+        }
+    }
 }
 
 data class FlowUiState(

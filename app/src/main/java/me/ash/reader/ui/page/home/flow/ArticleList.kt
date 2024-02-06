@@ -20,29 +20,31 @@ fun LazyListScope.ArticleList(
     isShowStickyHeader: Boolean,
     articleListTonalElevation: Int,
     onClick: (ArticleWithFeed) -> Unit = {},
-    onSwipeOut: (ArticleWithFeed) -> Unit = {}
+    onSwipeStartToEnd: ((ArticleWithFeed) -> Unit)? = null,
+    onSwipeEndToStart: ((ArticleWithFeed) -> Unit)? = null,
 ) {
     for (index in 0 until pagingItems.itemCount) {
         when (val item = pagingItems.peek(index)) {
             is ArticleFlowItem.Article -> {
                 item(key = item.articleWithFeed.article.id) {
-                    if (item.articleWithFeed.article.isUnread) {
-                        SwipeableArticleItem(
-                            articleWithFeed = item.articleWithFeed,
-                            isFilterUnread = isFilterUnread,
-                            articleListTonalElevation = articleListTonalElevation,
-                            onClick = { onClick(it) },
-                            onSwipeOut = { onSwipeOut(it) }
-                        )
-                    } else {
-                        // Currently we don't have swipe left to mark as unread,
-                        // so [SwipeableArticleItem] is not necessary for read articles.
-                        ArticleItem(
-                            articleWithFeed = (pagingItems[index] as ArticleFlowItem.Article).articleWithFeed,
-                        ) {
-                            onClick(it)
-                        }
-                    }
+//                    if (item.articleWithFeed.article.isUnread) {
+                    SwipeableArticleItem(
+                        articleWithFeed = item.articleWithFeed,
+                        isFilterUnread = isFilterUnread,
+                        articleListTonalElevation = articleListTonalElevation,
+                        onClick = { onClick(it) },
+                        onSwipeStartToEnd = onSwipeStartToEnd,
+                        onSwipeEndToStart = onSwipeEndToStart
+                    )
+                    /*                    } else {
+                                            // Currently we don't have swipe left to mark as unread,
+                                            // so [SwipeableArticleItem] is not necessary for read articles.
+                                            ArticleItem(
+                                                articleWithFeed = (pagingItems[index] as ArticleFlowItem.Article).articleWithFeed,
+                                            ) {
+                                                onClick(it)
+                                            }
+                                        }*/
                 }
             }
 

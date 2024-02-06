@@ -23,7 +23,6 @@ import androidx.work.WorkInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.domain.model.general.MarkAsReadConditions
 import me.ash.reader.infrastructure.preference.*
@@ -238,20 +237,27 @@ fun FlowPage(
                         isShowFeedIcon = articleListFeedIcon.value,
                         isShowStickyHeader = articleListDateStickyHeader.value,
                         articleListTonalElevation = articleListTonalElevation.value,
-                        onClick =  {
+                        onClick = {
                             onSearch = false
                             navController.navigate("${RouteName.READING}/${it.article.id}") {
                                 launchSingleTop = true
                             }
+                        },
+                        onSwipeStartToEnd = {
+                            flowViewModel.markAsRead(
+                                groupId = null,
+                                feedId = null,
+                                articleId = it.article.id,
+                                MarkAsReadConditions.All
+                            )
+                        },
+                        onSwipeEndToStart = {
+                            flowViewModel.updateStarredStatus(
+                                articleId = it.article.id,
+                                isStarred = !it.article.isStarred
+                            )
                         }
-                    ) {
-                        flowViewModel.markAsRead(
-                            groupId = null,
-                            feedId = null,
-                            articleId = it.article.id,
-                            MarkAsReadConditions.All
-                        )
-                    }
+                    )
                     item {
                         Spacer(modifier = Modifier.height(128.dp))
                         Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
