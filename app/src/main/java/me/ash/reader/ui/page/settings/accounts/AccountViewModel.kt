@@ -108,7 +108,9 @@ class AccountViewModel @Inject constructor(
         addAccountJob = applicationScope.launch(ioDispatcher) {
             val addAccount = accountService.addAccount(account)
             try {
-                if (rssService.get(addAccount.type.id).validCredentials(account)) {
+                val rssService = rssService.get(addAccount.type.id)
+                if (rssService.validCredentials(account)) {
+                    rssService.doSyncOneTime()
                     withContext(mainDispatcher) {
                         callback(addAccount, null)
                     }

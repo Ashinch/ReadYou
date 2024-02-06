@@ -59,6 +59,7 @@ class FeverRssService @Inject constructor(
     feedDao, workManager, rssHelper, notificationHelper, ioDispatcher, defaultDispatcher
 ) {
 
+    override val importSubscription: Boolean = false
     override val addSubscription: Boolean = false
     override val moveSubscription: Boolean = false
     override val deleteSubscription: Boolean = false
