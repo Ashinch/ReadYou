@@ -277,6 +277,12 @@ sealed class DataStoreKeys<T> {
     }
 
     // Reading page
+    object ReadingRenderer : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("readingRenderer")
+    }
+
     object ReadingDarkTheme : DataStoreKeys<Int>() {
 
         override val key: Preferences.Key<Int>

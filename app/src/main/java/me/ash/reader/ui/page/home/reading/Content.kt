@@ -1,6 +1,15 @@
 package me.ash.reader.ui.page.home.reading
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.selection.DisableSelection
@@ -14,12 +23,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
+import me.ash.reader.infrastructure.preference.LocalReadingRenderer
 import me.ash.reader.infrastructure.preference.LocalReadingSubheadUpperCase
+import me.ash.reader.infrastructure.preference.ReadingRendererPreference
 import me.ash.reader.ui.component.base.RYExtensibleVisibility
+import me.ash.reader.ui.component.base.RYWebView
 import me.ash.reader.ui.component.reader.Reader
 import me.ash.reader.ui.ext.drawVerticalScrollbar
 import me.ash.reader.ui.ext.openURL
-import java.util.*
+import java.util.Date
 
 @Composable
 fun Content(
@@ -34,6 +46,7 @@ fun Content(
     onImageClick: ((imgUrl: String, altText: String) -> Unit)? = null,
 ) {
     val context = LocalContext.current
+    val renderer = LocalReadingRenderer.current
     val subheadUpperCase = LocalReadingSubheadUpperCase.current
     val openLink = LocalOpenLink.current
     val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
@@ -85,16 +98,26 @@ fun Content(
                 }
             }
             if (!isLoading) {
-                Reader(
-                    context = context,
-                    subheadUpperCase = subheadUpperCase.value,
-                    link = link ?: "",
-                    content = content,
-                    onImageClick = onImageClick,
-                    onLinkClick = {
-                        context.openURL(it, openLink, openLinkSpecificBrowser)
-                    }
-                )
+                when (renderer) {
+                    ReadingRendererPreference.WebView ->
+                        item {
+                            DisableSelection {
+                                RYWebView(content = content)
+                            }
+                        }
+
+                    ReadingRendererPreference.NativeComponent ->
+                        Reader(
+                            context = context,
+                            subheadUpperCase = subheadUpperCase.value,
+                            link = link ?: "",
+                            content = content,
+                            onImageClick = onImageClick,
+                            onLinkClick = {
+                                context.openURL(it, openLink, openLinkSpecificBrowser)
+                            }
+                        )
+                }
             }
             item {
                 Spacer(modifier = Modifier.height(128.dp))

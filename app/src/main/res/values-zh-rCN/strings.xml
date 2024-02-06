@@ -268,4 +268,6 @@
     <string name="all_read">所有已读项</string>
     <string name="read_excluding_starred">已读项，但已加星标的除外</string>
     <string name="external_links">外部链接</string>
+    <string name="content_renderer">内容渲染器</string>
+    <string name="native_component">原生组件（实验性）</string>
 </resources>

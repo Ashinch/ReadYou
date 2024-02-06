@@ -52,6 +52,7 @@ data class Settings(
     val flowArticleListReadIndicator: FlowArticleReadIndicatorPreference = FlowArticleReadIndicatorPreference.default,
 
     // Reading page
+    val readingRenderer: ReadingRendererPreference = ReadingRendererPreference.default,
     val readingTheme: ReadingThemePreference = ReadingThemePreference.default,
     val readingDarkTheme: ReadingDarkThemePreference = ReadingDarkThemePreference.default,
     val readingPageTonalElevation: ReadingPageTonalElevationPreference = ReadingPageTonalElevationPreference.default,
@@ -146,6 +147,7 @@ val LocalFlowArticleListReadIndicator =
     compositionLocalOf<FlowArticleReadIndicatorPreference> { FlowArticleReadIndicatorPreference.default }
 
 // Reading page
+val LocalReadingRenderer = compositionLocalOf<ReadingRendererPreference> { ReadingRendererPreference.default }
 val LocalReadingTheme = compositionLocalOf<ReadingThemePreference> { ReadingThemePreference.default }
 val LocalReadingDarkTheme = compositionLocalOf<ReadingDarkThemePreference> { ReadingDarkThemePreference.default }
 val LocalReadingPageTonalElevation =
@@ -240,6 +242,7 @@ fun SettingsProvider(
         LocalFlowArticleListReadIndicator provides settings.flowArticleListReadIndicator,
 
         // Reading page
+        LocalReadingRenderer provides settings.readingRenderer,
         LocalReadingTheme provides settings.readingTheme,
         LocalReadingDarkTheme provides settings.readingDarkTheme,
         LocalReadingPageTonalElevation provides settings.readingPageTonalElevation,

@@ -53,6 +53,7 @@ fun Preferences.toSettings(): Settings {
         flowArticleListTonalElevation = FlowArticleListTonalElevationPreference.fromPreferences(this),
 
         // Reading page
+        readingRenderer = ReadingRendererPreference.fromPreferences(this),
         readingTheme = ReadingThemePreference.fromPreferences(this),
         readingDarkTheme = ReadingDarkThemePreference.fromPreferences(this),
         readingPageTonalElevation = ReadingPageTonalElevationPreference.fromPreferences(this),
