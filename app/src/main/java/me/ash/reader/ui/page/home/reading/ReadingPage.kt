@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,6 +35,10 @@ import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.motion.materialSharedAxisY
 import me.ash.reader.ui.page.home.HomeViewModel
 import kotlin.math.abs
+
+
+private const val UPWARD = 1
+private const val DOWNWARD = -1
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -116,14 +119,21 @@ fun ReadingPage(
                         targetState = readerState,
                         contentKey = { it.content },
                         transitionSpec = {
-                            val sign = when {
-                                initialState.nextArticleId == targetState.articleId -> 1
-                                initialState.previousArticleId == targetState.articleId -> -1
-                                else -> 1
+                            val direction = when {
+                                initialState.nextArticleId == targetState.articleId -> UPWARD
+                                initialState.previousArticleId == targetState.articleId -> DOWNWARD
+                                initialState.articleId == targetState.articleId -> {
+                                    when (targetState.content) {
+                                        is ReaderState.Description -> DOWNWARD
+                                        else -> UPWARD
+                                    }
+                                }
+
+                                else -> UPWARD
                             }
                             materialSharedAxisY(
-                                initialOffsetY = { (it * 0.1f * sign).toInt() },
-                                targetOffsetY = { (it * -0.1f * sign).toInt() })
+                                initialOffsetY = { (it * 0.1f * direction).toInt() },
+                                targetOffsetY = { (it * -0.1f * direction).toInt() })
                         }, label = ""
                     ) {
 
