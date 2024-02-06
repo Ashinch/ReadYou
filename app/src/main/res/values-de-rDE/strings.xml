@@ -270,4 +270,5 @@
     <string name="grey_out_articles">Artikel ausgrauen</string>
     <string name="all_read">Alle gelesen</string>
     <string name="read_excluding_starred">Gelesen, ohne Sterne</string>
+    <string name="external_links">Externe links</string>
 </resources>

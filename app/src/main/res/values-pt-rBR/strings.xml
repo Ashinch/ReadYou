@@ -273,4 +273,5 @@
     <string name="all_read">Tudo lido</string>
     <string name="read_excluding_starred">Lido, excluindo favorito</string>
     <string name="grey_out_articles">Artigos em cinza</string>
+    <string name="external_links">Links externos</string>
 </resources>

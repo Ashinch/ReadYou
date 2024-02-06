@@ -3,23 +3,20 @@
     <string name="all">Vše</string>
     <plurals name="all_desc">
         <item quantity="one">%1$d archivovaná položka</item>
+        <item quantity="few">%1$d archivované položky</item>
         <item quantity="other">%1$d archivovaných položek</item>
-        <item quantity="many">%1$d archivovaných položek</item>
-        <item quantity="few">%1$d archivovaných položek</item>
     </plurals>
     <string name="unread">Nepřečtené</string>
     <plurals name="unread_desc">
         <item quantity="one">%1$d nepřečtená položka</item>
+        <item quantity="few">%1$d nepřečtené položky</item>
         <item quantity="other">%1$d nepřečtených položek</item>
-        <item quantity="many">%1$d nepřečtených položek</item>
-        <item quantity="few">%1$d nepřečtených položek</item>
     </plurals>
     <string name="starred">Oblíbené</string>
     <plurals name="starred_desc">
         <item quantity="one">%1$d oblíbená položka</item>
+        <item quantity="few">%1$d oblíbené položky</item>
         <item quantity="other">%1$d oblíbených položek</item>
-        <item quantity="many">%1$d oblíbených položek</item>
-        <item quantity="few">%1$d oblíbených položek</item>
     </plurals>
     <string name="feeds">Zdroje</string>
     <string name="syncing">Synchronizace…</string>
@@ -276,4 +273,5 @@
     <string name="grey_out_articles">Zešedivět články</string>
     <string name="all_read">Vše přečteno</string>
     <string name="read_excluding_starred">Přečteno, mimo oblíbených</string>
+    <string name="external_links">Externí odkazy</string>
 </resources>
