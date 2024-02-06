@@ -1,6 +1,15 @@
 package me.ash.reader.ui.page.home.reading
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -16,6 +25,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -25,6 +35,7 @@ import me.ash.reader.infrastructure.preference.LocalReadingSubheadUpperCase
 import me.ash.reader.ui.component.reader.Reader
 import me.ash.reader.ui.ext.drawVerticalScrollbar
 import me.ash.reader.ui.ext.openURL
+import me.ash.reader.ui.ext.pagerAnimate
 import java.util.*
 import kotlin.math.abs
 
@@ -71,7 +82,7 @@ fun Content(
                     modifier = modifier
                         .fillMaxSize()
                         .drawVerticalScrollbar(listState)
-                        .offset(x = 0.dp, y = (pullToLoadState.offsetFraction * 100).dp),
+                        .offset(x = 0.dp, y = (pullToLoadState.offsetFraction * 80).dp),
                     state = listState,
                 ) {
                     item {
@@ -113,7 +124,7 @@ fun Content(
             }
             pullToLoadState.status.run {
                 val fraction = pullToLoadState.offsetFraction
-
+                val absFraction = abs(fraction)
                 val imageVector = when (this) {
                     PullToLoadState.Status.PulledDown -> Icons.Outlined.KeyboardArrowUp
                     PullToLoadState.Status.PulledUp -> Icons.Outlined.KeyboardArrowDown
@@ -125,40 +136,50 @@ fun Content(
                 } else {
                     Alignment.TopCenter
                 }
-                if (this != PullToLoadState.Status.Idle)
+                if (this != PullToLoadState.Status.Idle) {
                     Surface(
-                        shape = MaterialTheme.shapes.extraLarge,
-                        color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier
                             .align(alignment)
-                            .padding(vertical = 72.dp)
+                            .padding(vertical = 80.dp)
                             .offset(y = (fraction * 48).dp)
+                            .width(36.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = MaterialTheme.shapes.extraLarge
                     ) {
-                        AnimatedContent(
-                            targetState = imageVector,
-                            label = ""
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.Center),
                         ) {
-                            it?.let {
-                                Icon(
-                                    imageVector = it,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onPrimary,
-                                    modifier = Modifier
-                                        .padding(
-                                            horizontal = 4.dp,
-                                            vertical = (abs(fraction) * 2).dp
-                                        )
-                                        .size(32.dp)
-                                )
-                            } ?: Spacer(
-                                modifier = Modifier.size(
-                                    width = 36.dp,
-                                    height = (abs(fraction) * 8).dp
-                                )
-                            )
-                        }
+                            AnimatedContent(
+                                targetState = imageVector, modifier = Modifier.align(
+                                    Alignment.CenterHorizontally
+                                ), transitionSpec = {
+                                    (fadeIn(animationSpec = tween(90, delayMillis = 0)))
+                                        .togetherWith(fadeOut(animationSpec = tween(90)))
+                                }, label = ""
+                            ) {
+                                if (it != null) {
+                                    Icon(
+                                        imageVector = it,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onPrimary,
+                                        modifier = Modifier
+                                            .padding(horizontal = 6.dp)
+                                            .padding(vertical = (2 * absFraction).dp)
+                                            .size(28.dp)
+                                    )
+                                } else {
+                                    Spacer(
+                                        modifier = Modifier
+                                            .width(36.dp)
+                                            .height((8 * absFraction).dp)
+                                    )
+                                }
+                            }
 
+                        }
                     }
+                }
 
             }
 
