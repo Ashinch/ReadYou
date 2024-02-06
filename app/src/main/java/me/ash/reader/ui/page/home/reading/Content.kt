@@ -122,67 +122,6 @@ fun Content(
                     }
                 }
             }
-            pullToLoadState.status.run {
-                val fraction = pullToLoadState.offsetFraction
-                val absFraction = abs(fraction)
-                val imageVector = when (this) {
-                    PullToLoadState.Status.PulledDown -> Icons.Outlined.KeyboardArrowUp
-                    PullToLoadState.Status.PulledUp -> Icons.Outlined.KeyboardArrowDown
-                    else -> null
-                }
-
-                val alignment = if (fraction < 0f) {
-                    Alignment.BottomCenter
-                } else {
-                    Alignment.TopCenter
-                }
-                if (this != PullToLoadState.Status.Idle) {
-                    Surface(
-                        modifier = Modifier
-                            .align(alignment)
-                            .padding(vertical = 80.dp)
-                            .offset(y = (fraction * 48).dp)
-                            .width(36.dp),
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = MaterialTheme.shapes.extraLarge
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.Center),
-                        ) {
-                            AnimatedContent(
-                                targetState = imageVector, modifier = Modifier.align(
-                                    Alignment.CenterHorizontally
-                                ), transitionSpec = {
-                                    (fadeIn(animationSpec = tween(90, delayMillis = 0)))
-                                        .togetherWith(fadeOut(animationSpec = tween(90)))
-                                }, label = ""
-                            ) {
-                                if (it != null) {
-                                    Icon(
-                                        imageVector = it,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onPrimary,
-                                        modifier = Modifier
-                                            .padding(horizontal = 6.dp)
-                                            .padding(vertical = (2 * absFraction).dp)
-                                            .size(28.dp)
-                                    )
-                                } else {
-                                    Spacer(
-                                        modifier = Modifier
-                                            .width(36.dp)
-                                            .height((8 * absFraction).dp)
-                                    )
-                                }
-                            }
-
-                        }
-                    }
-                }
-
-            }
-
         }
     }
 }
