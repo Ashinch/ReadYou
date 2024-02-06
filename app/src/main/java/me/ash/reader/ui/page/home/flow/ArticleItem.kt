@@ -234,8 +234,8 @@ fun SwipeableArticleItem(
     }
 //    val swipeState = rememberSwipeToDismissBoxState(positionalThreshold =, confirmValueChange =)
     val hapticFeedback = LocalHapticFeedback.current
-    LaunchedEffect(swipeState.progress > 0.15f) {
-        if (swipeState.progress > 0.15f && swipeState.targetValue != SwipeToDismissBoxValue.Settled) {
+    LaunchedEffect(swipeState.progress > PositionalThresholdFraction) {
+        if (swipeState.progress > PositionalThresholdFraction && swipeState.targetValue != SwipeToDismissBoxValue.Settled) {
             hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
         }
     }
@@ -282,7 +282,7 @@ fun SwipeableArticleItem(
                     ) {
                         Column(modifier = Modifier.align(Alignment.CenterEnd)) {
                             Icon(
-                                imageVector = if (articleWithFeed.article.isStarred) Icons.Rounded.Star else Icons.Rounded.Circle,
+                                imageVector = if (articleWithFeed.article.isStarred) Icons.Rounded.Star else Icons.Outlined.Star,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.tertiary,
                                 modifier = Modifier.align(Alignment.CenterHorizontally)
