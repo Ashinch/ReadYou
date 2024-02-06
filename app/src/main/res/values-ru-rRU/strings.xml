@@ -47,8 +47,8 @@
     <string name="mark_all_as_read">Отметить всё как прочитанное</string>
     <string name="mark_as_unread">Отметить как непрочитанное</string>
     <string name="one_day">1д</string>
-    <string name="three_days">2д</string>
-    <string name="seven_days">3д</string>
+    <string name="three_days">3д</string>
+    <string name="seven_days">7д</string>
     <string name="close">Закрыть</string>
     <string name="get_new_updates">Получить обновления</string>
     <string name="in_coding">В разработке</string>
