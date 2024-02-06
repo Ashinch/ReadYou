@@ -57,15 +57,13 @@ The following are the progress made so far and the goals to be worked on in the 
 - [ ] Android widget
 - [ ] ...
 
-[What am I doing now?](https://github.com/users/Ashinch/projects/2)
-
 ## Integration
 
 **Read You** integrates with some of third-party service APIs to support you in using your existing cloud accounts as data sources.
 
 - [x] Fever
-- [ ] Google Reader
-- [ ] FreshRSS
+- [x] Google Reader
+- [x] FreshRSS
 - [ ] Miniflux
 - [ ] Tiny Tiny RSS
 - [ ] Inoreader
@@ -84,6 +82,18 @@ The following are the progress made so far and the goals to be worked on in the 
      height="80">](https://f-droid.org/packages/me.ash.reader/)
 
 F-Droid releases can not upgrade to other releases and it is compiled, signed and distributed uniformly by [F-Droid](https://f-droid.org/docs/FAQ_-_General/).
+
+## Nightly
+
+We offer Nightly versions for testing purposes. These versions include the latest features and improvements but may not be as stable as our regular releases. Please note that Nightly builds might have bugs and are not recommended for everyday use.
+
+You can download the Nightly version from the following link:
+
+<a target="_blank" href="https://github.com/Ashinch/ReadYou/actions/workflows/build_commit.yaml">Check Nightly Builds</a>
+
+Choose the latest workflow from the GitHub Actions page and download the artifacts from the workflow's summary page (You may require logging in to GitHub).
+
+**Remember to back up your data before trying the Nightly version in case of any issues.**
 
 ## Sponsor
 

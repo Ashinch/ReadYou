@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.ItemSnapshotList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,9 +17,10 @@ import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.service.RssService
+import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.rss.RssHelper
-import java.util.*
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +29,8 @@ class ReadingViewModel @Inject constructor(
     private val rssHelper: RssHelper,
     @IODispatcher
     private val ioDispatcher: CoroutineDispatcher,
+    @ApplicationScope
+    private val applicationScope: CoroutineScope,
 ) : ViewModel() {
 
     private val _readingUiState = MutableStateFlow(ReadingUiState())
@@ -103,7 +107,7 @@ class ReadingViewModel @Inject constructor(
 
     fun updateReadStatus(isUnread: Boolean) {
         currentArticle?.run {
-            viewModelScope.launch(ioDispatcher) {
+            applicationScope.launch(ioDispatcher) {
                 _readingUiState.update { it.copy(isUnread = isUnread) }
                 rssService.get().markAsRead(
                     groupId = null,
@@ -121,7 +125,7 @@ class ReadingViewModel @Inject constructor(
     fun markAsUnread() = updateReadStatus(isUnread = true)
 
     fun updateStarredStatus(isStarred: Boolean) {
-        viewModelScope.launch(ioDispatcher) {
+        applicationScope.launch(ioDispatcher) {
             _readingUiState.update { it.copy(isStarred = isStarred) }
             currentArticle?.let {
                 rssService.get().markAsStarred(
@@ -197,8 +201,7 @@ data class ReadingUiState(
     val articleWithFeed: ArticleWithFeed? = null,
     val isUnread: Boolean = false,
     val isStarred: Boolean = false,
-
-    )
+)
 
 data class ReaderState(
     val articleId: String? = null,

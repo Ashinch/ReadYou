@@ -1,23 +1,43 @@
 package me.ash.reader.ui.page.settings.interaction
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.infrastructure.preference.*
-import me.ash.reader.ui.component.base.*
+import me.ash.reader.infrastructure.preference.InitialFilterPreference
+import me.ash.reader.infrastructure.preference.InitialPagePreference
+import me.ash.reader.infrastructure.preference.LocalInitialFilter
+import me.ash.reader.infrastructure.preference.LocalInitialPage
+import me.ash.reader.infrastructure.preference.LocalOpenLink
+import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
+import me.ash.reader.infrastructure.preference.OpenLinkPreference
+import me.ash.reader.ui.component.base.DisplayText
+import me.ash.reader.ui.component.base.FeedbackIconButton
+import me.ash.reader.ui.component.base.RYScaffold
+import me.ash.reader.ui.component.base.RadioDialog
+import me.ash.reader.ui.component.base.RadioDialogOption
+import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.ext.getBrowserAppList
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
-
 
 @Composable
 fun InteractionPage(
@@ -73,6 +93,10 @@ fun InteractionPage(
                             initialFilterDialogVisible = true
                         },
                     ) {}
+                    Subtitle(
+                        modifier = Modifier.padding(horizontal = 24.dp),
+                        text = stringResource(R.string.external_links),
+                    )
                     SettingItem(
                         title = stringResource(R.string.initial_open_app),
                         desc = openLink.toDesc(context),

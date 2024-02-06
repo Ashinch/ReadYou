@@ -27,6 +27,7 @@ import me.ash.reader.infrastructure.di.MainDispatcher
 import me.ash.reader.infrastructure.html.Readability
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI
+import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofCategoryIdToStreamId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofCategoryStreamIdToId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofFeedStreamIdToId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofItemStreamIdToId
@@ -61,6 +62,7 @@ class GoogleReaderRssService @Inject constructor(
     feedDao, workManager, rssHelper, notificationHelper, ioDispatcher, defaultDispatcher
 ) {
 
+    override val importSubscription: Boolean = false
     override val addSubscription: Boolean = true
     override val moveSubscription: Boolean = true
     override val deleteSubscription: Boolean = true
@@ -114,19 +116,18 @@ class GoogleReaderRssService @Inject constructor(
             isNotification = isNotification,
             isFullContent = isFullContent,
         ))
-        SyncWorker.enqueueOneTimeWork(workManager)
+        // TODO: When users need to subscribe to multiple feeds continuously, this makes them uncomfortable.
+        //  It is necessary to make syncWork support synchronizing individual specified feeds.
+        // super.doSyncOneTime()
     }
 
-    override suspend fun addGroup(
-        destFeed: Feed?,
-        newGroupName: String,
-    ): String {
+    override suspend fun addGroup(destFeed: Feed?, newGroupName: String): String {
         val accountId = context.currentAccountId
         getGoogleReaderAPI().subscriptionEdit(
             destFeedId = destFeed?.id?.dollarLast(),
             destCategoryId = newGroupName
         )
-        val id = accountId.spacerDollar(newGroupName)
+        val id = accountId.spacerDollar(newGroupName.ofCategoryIdToStreamId())
         groupDao.insert(
             Group(
                 id = id,
@@ -149,8 +150,8 @@ class GoogleReaderRssService @Inject constructor(
     override suspend fun moveFeed(originGroupId: String, feed: Feed) {
         getGoogleReaderAPI().subscriptionEdit(
             destFeedId = feed.id.dollarLast(),
-            destCategoryId = feed.groupId.dollarLast(),
-            originCategoryId = originGroupId.dollarLast(),
+            destCategoryId = feed.groupId.dollarLast().ofCategoryStreamIdToId(),
+            originCategoryId = originGroupId.dollarLast().ofCategoryStreamIdToId(),
         )
         super.moveFeed(originGroupId, feed)
     }
@@ -184,16 +185,16 @@ class GoogleReaderRssService @Inject constructor(
     }
 
     /**
-     * This is a reference to Reeder's synchronization logic,
+     * This is improved from Reeder's synchronization strategy,
      * which syncs well across multiple devices.
      *
      * 1. Fetch tags (not supported yet)
      * 2. Fetch folder and subscription list
      * 3. Fetch all unread item id list
      * 4. Fetch all starred item id list
-     * 5. Fetch unread contents of items with differences
+     * 5. Fetch unread contents of items with differences (up to 10k items per sync process)
      * 6. Fetch starred contents of items with differences
-     * 7. Fetch read contents of items with differences
+     * 7. Fetch read contents of items with differences (up to one month old)
      * 8. Remove orphaned groups and feeds, after synchronizing the starred/un-starred
      *
      * The following link contains other great synchronization logic,
@@ -277,16 +278,16 @@ class GoogleReaderRssService @Inject constructor(
                     googleReaderAPI.getUnreadItemIds(continuationId = it)
                 }.toSet()
                 Log.i("RLog", "sync unreadIds size: ${unreadIds.size}")
-                val toBeUnread = unreadIds - localUnreadIds
+                val toBeUnread = (unreadIds - localUnreadIds).run {
+                    if (size > 10000) take(10000).toSet() else this
+                }
                 Log.i("RLog", "sync toBeUnread size: ${toBeUnread.size}")
-                if (toBeUnread.isNotEmpty()) {
-                    toBeUnread.chunked(999).forEach {
-                        articleDao.markAsReadByIdSet(
-                            accountId = accountId,
-                            ids = it.toSet(),
-                            isUnread = true,
-                        )
-                    }
+                toBeUnread.takeIf { it.isNotEmpty() }?.chunked(500)?.forEach {
+                    articleDao.markAsReadByIdSet(
+                        accountId = accountId,
+                        ids = it.toSet(),
+                        isUnread = true,
+                    )
                 }
 
                 // 4. Fetch all starred item id list
@@ -296,17 +297,15 @@ class GoogleReaderRssService @Inject constructor(
                 Log.i("RLog", "sync starredIds size: ${starredIds.size}")
                 val toBeStarred = starredIds - localStarredIds
                 Log.i("RLog", "sync toBeStarred size: ${toBeStarred.size}")
-                if (toBeStarred.isNotEmpty()) {
-                    toBeStarred.chunked(999).forEach {
-                        articleDao.markAsStarredByIdSet(
-                            accountId = accountId,
-                            ids = it.toSet(),
-                            isStarred = true,
-                        )
-                    }
+                toBeStarred.takeIf { it.isNotEmpty() }?.chunked(500)?.forEach {
+                    articleDao.markAsStarredByIdSet(
+                        accountId = accountId,
+                        ids = it.toSet(),
+                        isStarred = true,
+                    )
                 }
 
-                // 5. Fetch unread contents of items with differences
+                // 5. Fetch unread contents of items with differences (up to 10k items per sync process)
                 fetchItemsContents(
                     itemIds = toBeUnread,
                     googleReaderAPI = googleReaderAPI,
@@ -328,14 +327,14 @@ class GoogleReaderRssService @Inject constructor(
                     preDate = preDate,
                 )
 
-                // 7. Fetch read contents of items with differences
+                // 7. Fetch read contents of items with differences (up to one month old)
                 val readIds = fetchItemIdsAndContinue {
                     googleReaderAPI.getReadItemIds(since = lastMonthAt, continuationId = it)
                 }.toSet()
                 Log.i("RLog", "sync readIds size: ${readIds.size}")
                 val localReadIds = articleDao.queryMetadataAll(accountId).filter { !it.isUnread }
                     .map { it.id.dollarLast() }.toSet()
-                val toBeRead = readIds - unreadIds - localReadIds
+                var toBeRead = readIds - unreadIds - localReadIds
                 Log.i("RLog", "sync toBeRead size: ${toBeRead.size}")
                 if (toBeRead.isNotEmpty()) {
                     fetchItemsContents(
@@ -346,6 +345,16 @@ class GoogleReaderRssService @Inject constructor(
                         unreadIds = setOf(),
                         starredIds = starredIds,
                         preDate = preDate,
+                    )
+                }
+                // Sync the read status of articles prior to last month
+                toBeRead = localUnreadIds - unreadIds
+                Log.i("RLog", "sync toBeRead (last month) size: ${toBeRead.size}")
+                toBeRead.takeIf { it.isNotEmpty() }?.chunked(500)?.forEach {
+                    articleDao.markAsReadByIdSet(
+                        accountId = accountId,
+                        ids = it.toSet(),
+                        isUnread = false,
                     )
                 }
 
@@ -428,23 +437,25 @@ class GoogleReaderRssService @Inject constructor(
         before: Date?,
         isUnread: Boolean,
     ) {
-        super.markAsRead(groupId, feedId, articleId, before, isUnread)
         val accountId = context.currentAccountId
         val googleReaderAPI = getGoogleReaderAPI()
         val markList: List<String> = when {
             groupId != null -> {
                 if (before == null) {
-                    articleDao.queryMetadataByGroupId(accountId, groupId)
+                    articleDao.queryMetadataByGroupIdWhenIsUnread(accountId, groupId, !isUnread)
                 } else {
-                    articleDao.queryMetadataByGroupId(accountId, groupId, before)
+                    articleDao.queryMetadataByGroupIdWhenIsUnread(accountId,
+                        groupId,
+                        !isUnread,
+                        before)
                 }.map { it.id.dollarLast() }
             }
 
             feedId != null -> {
                 if (before == null) {
-                    articleDao.queryMetadataByFeedId(accountId, feedId)
+                    articleDao.queryMetadataByFeedId(accountId, feedId, !isUnread)
                 } else {
-                    articleDao.queryMetadataByFeedId(accountId, feedId, before)
+                    articleDao.queryMetadataByFeedId(accountId, feedId, !isUnread, before)
                 }.map { it.id.dollarLast() }
             }
 
@@ -454,17 +465,21 @@ class GoogleReaderRssService @Inject constructor(
 
             else -> {
                 if (before == null) {
-                    articleDao.queryMetadataAll(accountId)
+                    articleDao.queryMetadataAll(accountId, !isUnread)
                 } else {
-                    articleDao.queryMetadataAll(accountId, before)
+                    articleDao.queryMetadataAll(accountId, !isUnread, before)
                 }.map { it.id.dollarLast() }
             }
         }
-        if (markList.isNotEmpty()) googleReaderAPI.editTag(
-            itemIds = markList,
-            mark = if (!isUnread) GoogleReaderAPI.Stream.READ.tag else null,
-            unmark = if (isUnread) GoogleReaderAPI.Stream.READ.tag else null,
-        )
+        super.markAsRead(groupId, feedId, articleId, before, isUnread)
+        markList.takeIf { it.isNotEmpty() }?.chunked(500)?.forEach {
+            Log.d("RLog", "sync markAsRead: ${it.size} num")
+            googleReaderAPI.editTag(
+                itemIds = it,
+                mark = if (!isUnread) GoogleReaderAPI.Stream.READ.tag else null,
+                unmark = if (isUnread) GoogleReaderAPI.Stream.READ.tag else null,
+            )
+        }
     }
 
     override suspend fun markAsStarred(articleId: String, isStarred: Boolean) {

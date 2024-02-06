@@ -46,8 +46,8 @@
 
 - [x] 订阅 RSS 链接
 - [x] 导入 / 导出 OPML 文件
-- [x] 文章更新通知
-- [x] 沉浸阅读（文章内容去干扰优化）
+- [x] 新文章通知
+- [x] 可读性优化（截取文章正文内容）
 - [x] 全文解析
 - [x] 支持多账户
 - [ ] 仿生阅读
@@ -55,15 +55,13 @@
 - [ ] Android 微件 / 小组件
 - [ ] ...
 
-[我目前在做什么？](https://github.com/users/Ashinch/projects/2)
-
 ## 集成
 
 **Read You** 也集成了一些第三方服务 API，支持您使用已有的云端账户来作为数据源。
 
 - [x] Fever
-- [ ] Google Reader
-- [ ] FreshRSS
+- [x] Google Reader
+- [x] FreshRSS
 - [ ] Miniflux
 - [ ] Tiny Tiny RSS
 - [ ] Inoreader
@@ -82,6 +80,16 @@
      height="80">](https://f-droid.org/packages/me.ash.reader/)
 
 F-Droid 版本与其他版本不兼容，您无法通过覆盖安装包来升级、切换至其他版本，需要卸载后再重新安装，届时所有本地数据将被清除。整个应用的编译、签名和分发均由 [F-Droid](https://f-droid.org/docs/FAQ_-_General/) 统一完成。
+
+## 夜间构建
+
+我们提供夜间构建用于测试目的，这些版本包含最新的功能和改进，但可能不如常规版本稳定。请注意，夜间版本可能存在 bug，并且不建议日常使用。
+
+<a target="_blank" href="https://github.com/Ashinch/ReadYou/actions/workflows/build_commit.yaml">检查夜间构建</a>
+
+从 GitHub Actions 页面选择最新的 workflow，并从该 workflow 的摘要页面下载构建文件（您可能需要登录 GitHub）。
+
+**在尝试夜间版本之前，请备份好您的数据。**
 
 ## 捐赠
 

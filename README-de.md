@@ -57,15 +57,13 @@ Nachfolgend sind die bisher erzielten Fortschritte und die Ziele aufgeführt, an
 - [ ] Android Widget
 - [ ] ...
 
-[Was mache ich gerade?](https://github.com/users/Ashinch/projects/2)
-
 ## Integration
 
 **Read You** ist mit einigen APIs von Drittanbietern kompatibel, um bei der Nutzung Ihrer bestehenden Cloud-Konten als Datenquellen zu unterstützen.
 
 - [x] Fever
-- [ ] Google Reader
-- [ ] FreshRSS
+- [x] Google Reader
+- [x] FreshRSS
 - [ ] Miniflux
 - [ ] Tiny Tiny RSS
 - [ ] Inoreader
@@ -84,6 +82,18 @@ Nachfolgend sind die bisher erzielten Fortschritte und die Ziele aufgeführt, an
      height="80">](https://f-droid.org/packages/me.ash.reader/)
 
 F-Droid-Versionen können nicht auf andere Versionen aktualisiert werden und werden kompiliert, signiert und einheitlich verteilt von [F-Droid](https://f-droid.org/docs/FAQ_-_General/).
+
+## Nightly
+
+Wir bieten Nightly-Versionen zu Testzwecken an. Diese Versionen enthalten die neuesten Funktionen und Verbesserungen, sind jedoch möglicherweise nicht so stabil wie unsere regulären Versionen. Bitte beachten Sie, dass Nightly-Builds möglicherweise Fehler enthalten und nicht für den täglichen Gebrauch empfohlen werden.
+
+Sie können die Nightly-Version über den folgenden Link herunterladen:
+
+<a target="_blank" href="https://github.com/Ashinch/ReadYou/actions/workflows/build_commit.yaml">Nightly-Builds überprüfen</a>
+
+Wählen Sie den neuesten Workflow auf der GitHub Actions-Seite aus und laden Sie die Artefakte von der Zusammenfassungsseite des Workflows herunter (Es ist möglicherweise erforderlich, sich bei GitHub anzumelden).
+
+**Denken Sie daran, Ihre Daten vor dem Ausprobieren der Nightly-Version zur Sicherheit zu sichern, falls Probleme auftreten.**
 
 ## Spenden
 

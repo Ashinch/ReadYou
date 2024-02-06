@@ -1,0 +1,16 @@
+<i>Read You</i> Moderná a elegantná čítačka RSS s dizajnom <a href='https://m3.material.io/' target='_blank' rel='nofollow'>Material You </a>
+
+<b>Funkcie:</b>
+
+* Odber informačných kanálov RSS
+* Import z OPML
+* Synchronizácia článkov
+* Oznámenia o nových článkoch
+* Načítanie celého obsahu
+* Filtrovanie neprečítaných a obľúbených
+* Zoskupovanie informačných kanálov
+* Lokalizácia
+* Export do OPML
+* Vyhľadávanie článkov
+
+A bude viac…

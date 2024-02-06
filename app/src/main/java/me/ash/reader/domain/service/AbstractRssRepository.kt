@@ -47,6 +47,7 @@ abstract class AbstractRssRepository(
     private val dispatcherDefault: CoroutineDispatcher,
 ) {
 
+    open val importSubscription: Boolean = true
     open val addSubscription: Boolean = true
     open val moveSubscription: Boolean = true
     open val deleteSubscription: Boolean = true
@@ -140,7 +141,7 @@ abstract class AbstractRssRepository(
                 )
             }
 
-            feedId != null && articleId == null -> {
+            feedId != null -> {
                 articleDao.markAllAsReadByFeedId(
                     accountId = accountId,
                     feedId = feedId,
@@ -190,6 +191,11 @@ abstract class AbstractRssRepository(
 
     fun cancelSync() {
         workManager.cancelAllWork()
+    }
+
+    fun doSyncOneTime() {
+        workManager.cancelAllWork()
+        SyncWorker.enqueueOneTimeWork(workManager)
     }
 
     suspend fun doSync(isOnStart: Boolean = false) {

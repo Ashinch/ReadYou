@@ -4,24 +4,24 @@
     <string name="delete">Apagar</string>
     <string name="settings">Configurações</string>
     <string name="refresh">Atualizar</string>
-    <string name="searching">Buscando…</string>
+    <string name="searching">Procurando…</string>
     <string name="all">Todos</string>
     <string name="unread">Não lido</string>
     <plurals name="unread_desc">
-        <item quantity="one">%1$d Item Não Lido</item>
-        <item quantity="many">%1$d Itens Não Lidos</item>
-        <item quantity="other">%1$d Itens Não Lidos</item>
+        <item quantity="one">%1$d Item não lido</item>
+        <item quantity="many">%1$d Itens não lidos</item>
+        <item quantity="other">%1$d Itens não lidos</item>
     </plurals>
     <plurals name="all_desc">
-        <item quantity="one">%1$d Item Arquivado</item>
-        <item quantity="many">%1$d Itens Arquivados</item>
-        <item quantity="other">%1$d Itens Arquivados</item>
+        <item quantity="one">%1$d Item arquivado</item>
+        <item quantity="many">%1$d Itens arquivados</item>
+        <item quantity="other">%1$d Itens arquivados</item>
     </plurals>
     <string name="starred">Favoritos</string>
     <plurals name="starred_desc">
-        <item quantity="one">%1$d Item Favoritado</item>
-        <item quantity="many">%1$d Itens Favoritados</item>
-        <item quantity="other">%1$d Itens Favoritados</item>
+        <item quantity="one">%1$d item favorito</item>
+        <item quantity="many">%1$d Itens favoritos</item>
+        <item quantity="other">%1$d Itens favoritos</item>
     </plurals>
     <string name="feeds">Feeds</string>
     <string name="syncing">Sincronizando…</string>
@@ -38,15 +38,15 @@
     <string name="go_to">Ir para</string>
     <string name="subscribe">Inscrever-se</string>
     <string name="already_subscribed">Já inscrito</string>
-    <string name="feed_or_site_url">URL do Site ou Feed</string>
-    <string name="import_from_opml">Importar de Arquivo OPML</string>
+    <string name="feed_or_site_url">URL do feed ou site</string>
+    <string name="import_from_opml">Importar do Arquivo OPML</string>
     <string name="preset">Predefinido</string>
     <string name="selected">Selecionado</string>
     <string name="allow_notification">Permitir Notificações</string>
     <string name="all_allow_notification_tips">Permitir que todos os feeds no grupo \"%1$s\" enviem notificações</string>
     <string name="all_deny_notification_toast">Todas as notificações do grupo \"%1$s\" foram negadas</string>
     <string name="all_allow_notification_toast">Todas as notificações do grupo \"%1$s\" foram permitidas</string>
-    <string name="parse_full_content">Visualizar o Conteúdo Completo</string>
+    <string name="parse_full_content">Visualizar conteúdo completo</string>
     <string name="clear_articles_in_feed_toast">Todos os artigos arquivados no feed \"%1$s\" foram removidos</string>
     <string name="all_parse_full_content_toast">Visualizar o conteúdo completo de todas as publicações no grupo \"%1$s\"</string>
     <string name="all_deny_parse_full_content_toast">Não mais visualizando o conteúdo completo de todas as publicações no grupo \"%1$s\"</string>
@@ -117,7 +117,7 @@
     <string name="initial_page">Página Inicial</string>
     <string name="initial_filter">Filtro Inicial</string>
     <string name="paste">Colar</string>
-    <string name="search">Buscar</string>
+    <string name="search">Pesquisar</string>
     <string name="clear">Limpar</string>
     <string name="all_parse_full_content_tips">Visualizar o conteúdo completo de todas as publicações no grupo \"%1$s\"</string>
     <string name="clear_articles">Limpar Artigos</string>
@@ -239,7 +239,7 @@
     <string name="only_when_charging">Apenas enquanto carrega</string>
     <string name="keep_archived_articles">Manter artigos arquivados</string>
     <string name="block_list">Lista de bloqueados</string>
-    <string name="export_as_opml">Exportar como OPML</string>
+    <string name="export_as_opml">Exportar como Arquivo OPML</string>
     <string name="clear_all_articles">Remover todos os artigos</string>
     <string name="delete_account">Apagar conta</string>
     <string name="must_have_an_account">Deve ter uma conta</string>
@@ -256,4 +256,22 @@
     <string name="connection">Conexão</string>
     <string name="system_default">Sistema</string>
     <string name="open_link_ask_dialog_title">Abrir com…</string>
+    <string name="open_link_something_wrong">A configuração \"Open Link\" foi ignorada porque algo deu errado.</string>
+    <string name="specific_browser">Forçar navegador específico</string>
+    <string name="initial_open_app">Aplicativo quando o link é clicado</string>
+    <string name="open_link_specific_browser_not_selected">Nenhum</string>
+    <string name="auto_customtabs">Auto (prefira guias personalizadas)</string>
+    <string name="auto_default_browser">Auto (Preferir navegador padrão)</string>
+    <string name="custom_tabs">Forçar guias personalizadas</string>
+    <string name="specific_browser_name">Navegador: %1$s</string>
+    <string name="default_browser">Forçar navegador padrão</string>
+    <string name="always_ask">Sempre perguntar</string>
+    <string name="open_link_specific_browser">Navegador</string>
+    <string name="include_additional_info">Incluir informações adicionais</string>
+    <string name="exclude">Excluir</string>
+    <string name="additional_info_desc">Informações adicionais incluem opções de configuração para cada feed, como permitir notificação, analisar conteúdo completo, etc. Quando você pretende usar o arquivo OPML exportado com outros leitores, selecione \"Excluir\".</string>
+    <string name="all_read">Tudo lido</string>
+    <string name="read_excluding_starred">Lido, excluindo favorito</string>
+    <string name="grey_out_articles">Artigos em cinza</string>
+    <string name="external_links">Links externos</string>
 </resources>

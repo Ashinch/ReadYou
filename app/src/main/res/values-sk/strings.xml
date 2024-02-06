@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unread">Neprečítané</string>
+    <string name="starred">Obľúbené</string>
+    <plurals name="starred_desc">
+        <item quantity="one">%1$d obľúbená položka</item>
+        <item quantity="few">%1$d obľúbené položky</item>
+        <item quantity="other">%1$d obľúbených položiek</item>
+    </plurals>
+    <string name="feeds">Informačné kanály</string>
+    <string name="syncing">Synchronizácia…</string>
+    <string name="loading">Načítanie…</string>
+    <string name="expand_less">Zmenšiť</string>
+    <string name="expand_more">Rozšíriť</string>
+    <string name="cancel">Zrušiť</string>
+    <string name="deny">Odmietnuť</string>
+    <string name="defaults">Predvolené</string>
+    <string name="back">Späť</string>
+    <string name="go_to">Prejsť na</string>
+    <string name="settings">Nastavenia</string>
+    <string name="refresh">Obnoviť</string>
+    <string name="search">Hľadať</string>
+    <string name="searching">Vyhľadávanie…</string>
+    <string name="subscribe">Odoberať</string>
+    <string name="already_subscribed">Už odoberané</string>
+    <string name="clear">Vyčistiť</string>
+    <string name="paste">Vložiť</string>
+    <string name="feed_or_site_url">Adresa URL informačného kanála alebo webovej stránky</string>
+    <string name="import_from_opml">Importovať z OPML</string>
+    <string name="preset">Predvoľby</string>
+    <string name="selected">Vybrané</string>
+    <string name="allow_notification">Povoliť oznámenia</string>
+    <string name="all_allow_notification_tips">Povolí posielanie oznámení všetkým informačným kanálom v skupine \"%1$s\"</string>
+    <string name="all_deny_notification_toast">Všetky oznámenia zo skupiny \"%1$s\" sú odmietnuté</string>
+    <string name="all_parse_full_content_tips">Načíta obsah všetkých článkov v skupine \"%1$s\"</string>
+    <string name="clear_articles">Vymazať články</string>
+    <string name="clear_articles_in_group_toast">V skupine \"%1$s\" boli vymazané všetky archivované články</string>
+    <string name="clear_articles_feed_tips">Vymazať všetky archivované články v informačnom kanáli \"%1$s\"</string>
+    <string name="add_to_group">Pridať do skupiny</string>
+    <string name="move_to_group">Presunúť do skupiny</string>
+    <string name="rename">Premenovať</string>
+    <string name="change_url">Zmeniť adresu URL</string>
+    <string name="create_new_group">Vytvoriť novú skupinu</string>
+    <string name="name">Názov</string>
+    <string name="open_with">Otvoriť %1$s</string>
+    <string name="delete">Odstrániť</string>
+    <string name="unsubscribe">Zrušiť odber</string>
+    <string name="delete_group">Odstrániť skupinu</string>
+    <string name="group_option_tips">Nasledujúce možnosti budú použité pre všetky informačné kanály v tejto skupine</string>
+    <string name="yesterday">Včera</string>
+    <string name="date_at_time">%1$s v %2$s</string>
+    <string name="all_move_to_group_toast">Všetky informačné kanály boli presunuté do skupiny \"%1$s\"</string>
+    <string name="rename_toast">Premenované na \"%1$s\"</string>
+    <string name="delete_toast">Odstránené \"%1$s\"</string>
+    <string name="delete_group_tips">Odstráni skupinu \"%1$s\" a všetky informačné kanály a archivované články, ktoré obsahuje</string>
+    <string name="search_for">Hľadať %1$s položky</string>
+    <string name="mark_all_as_read">Označiť všetko ako prečítané</string>
+    <string name="mark_as_unread">Označiť ako neprečítané</string>
+    <string name="mark_as_starred">Označiť ako obľúbené</string>
+    <string name="mark_as_read_three_days">Označiť ako prečítané staršie ako 3 dni</string>
+    <string name="mark_as_read_seven_days">Označiť ako prečítané staršie ako 7 dní</string>
+    <string name="one_day">1d</string>
+    <string name="three_days">3d</string>
+    <string name="seven_days">7d</string>
+    <string name="close">Zavrieť</string>
+    <string name="get_new_updates">Získať nové aktualizácie</string>
+    <string name="in_coding">Vo vývoji</string>
+    <string name="coming_soon">Už čoskoro</string>
+    <string name="accounts">Účty</string>
+    <string name="accounts_desc">Miestne, FreshRSS</string>
+    <string name="color_and_style">Farba a štýl</string>
+    <string name="color_and_style_desc">Téma, farebný štýl, veľkosť písma</string>
+    <string name="languages_desc">Angličtina, čínština a ďalšie</string>
+    <string name="languages">Jazyky</string>
+    <string name="help_translate">Pomôžte s prekladom</string>
+    <string name="use_device_languages">Použiť jazyk zariadenia</string>
+    <string name="tips_and_support_desc">O aplikácii, open source licencie</string>
+    <string name="welcome">Vitajte</string>
+    <string name="browse_tos_tips">Pozrite si <i><u>Zmluvné podmienky a Zásady ochrany osobných údajov</u></i></string>
+    <string name="terms_of_service">Zmluvné podmienky</string>
+    <plurals name="all_desc">
+        <item quantity="one">%1$d archivovaná položka</item>
+        <item quantity="few">%1$d archivované položky</item>
+        <item quantity="other">%1$d archivovaných položiek</item>
+    </plurals>
+    <string name="confirm">Potvrdiť</string>
+    <string name="parse_full_content">Načítať celý obsah</string>
+    <string name="allow">Povoliť</string>
+    <string name="unknown">Neznáme</string>
+    <plurals name="unread_desc">
+        <item quantity="one">%1$d neprečítaná položka</item>
+        <item quantity="few">%1$d neprečítané položky</item>
+        <item quantity="other">%1$d neprečítaných položiek</item>
+    </plurals>
+    <string name="clear_articles_group_tips">Vymazať všetky archivované články v skupine \"%1$s\"</string>
+    <string name="all_move_to_group_tips">Presunúť všetky informačné kanály v skupine \"%1$s\" do skupiny \"%2$s\"</string>
+    <string name="options">Možnosti</string>
+    <string name="unsubscribe_tips">Zruší odber \"%1$s\" a odstráni z neho všetky archivované články</string>
+    <string name="today">Dnes</string>
+    <string name="all_allow_notification_toast">Všetky oznámenia zo skupiny \"%1$s\" sú povolené</string>
+    <string name="all_parse_full_content_toast">Načítanie obsahu všetkých článkov v skupine \"%1$s\"</string>
+    <string name="all_deny_parse_full_content_toast">Už nebude načítaný obsah všetkých článkov v skupine \"%1$s\"</string>
+    <string name="clear_articles_in_feed_toast">V informačnom kanáli \"%1$s\" boli vymazané všetky archivované články</string>
+    <string name="search_for_in">Hľadať %1$s položiek v \"%2$s\"</string>
+    <string name="mark_as_read">Označiť ako prečítané</string>
+    <string name="mark_as_unstar">Odobrať z obľúbených</string>
+    <string name="mark_as_read_one_day">Označiť ako prečítané staršie ako 1 deň</string>
+    <string name="get_new_updates_desc">K dispozícii je nová verzia %1$s</string>
+    <string name="interaction">Interakcia</string>
+    <string name="interaction_desc">Úvodná stránka, hmatová odozva</string>
+    <string name="tips_and_support">Tipy a podpora</string>
+    <string name="tos_tips">Ak chcete pokračovať, prečítajte si a vyjadrite súhlas s Podmienkami používania Read You a Zásadami ochrany osobných údajov.</string>
+    <string name="agree">Súhlasím</string>
+    <string name="wallpaper_colors">Farby tapety</string>
+    <string name="no_palettes">Žiadne palety</string>
+    <string name="only_android_8.1_plus">Len Android 8.1+</string>
+    <string name="basic_colors">Základné farby</string>
+    <string name="primary_color">Primárna farba</string>
+    <string name="primary_color_hint">Napríklad #666666 alebo 666666</string>
+    <string name="appearance">Vzhľad</string>
+    <string name="style">Štýl</string>
+    <string name="dark_theme">Tmavá téma</string>
+    <string name="use_device_theme">Použiť tému zariadenia</string>
+    <string name="on">Zap</string>
+    <string name="off">Vyp</string>
+    <string name="other">Ďalšie</string>
+    <string name="amoled_dark_theme">Tmavá téma AMOLED</string>
+    <string name="tonal_elevation">Zvýraznenie tonácie</string>
+    <string name="reading_fonts">Písmo čítania</string>
+    <string name="basic_fonts">Základné písmo</string>
+    <string name="tos_content"><h5> Zásady ochrany osobných údajov </h5> <br/>
+\n <p> Vaše súkromie berieme veľmi vážne. </p> <br/> 
+\n<p> <b>Read You</b> nezhromažďuje žiadne používateľské údaje a všetky citlivé informácie (heslá a ďalšie informácie o účte) sú bezpečne uložené v lokálnej databáze aplikácie vo vašom zariadení. </p> <br/> 
+\n<p> <b>Read You</b> použije na poskytovanie služby nasledujúce povolenia. </p> <br/> 
+\n<p> - Povolenie na prístup k sieti (na prístup k obsahu online, ako určíte) </p> 
+\n<p> - Povolenie na získanie stavu siete (na určenie, či má zariadenie momentálne prístup k sieti) </p> 
+\n<p> – Povolenie služby na pozadí (na pravidelnú automatickú synchronizáciu vašich obľúbených položiek) </p> <br/> <br/> 
+\n<h5> Služby tretích strán </h5> <br/> 
+\n<p> Tieto zásady sa nevzťahujú na služby tretích strán, ktoré používate s <b>Read You</b>. Zásady ochrany osobných údajov služieb tretích strán, ktoré používate, si môžete prečítať na ich webových stránkach </p> <br/> 
+\n<br/> 
+\n<h5> Vylúčenie zodpovednosti </h5> <br/> <p> <b>Read You</b> je iba nástroj na zhromažďovanie obsahu. Vaše používanie <b>Read You</b> podlieha zákonom a predpisom vašej krajiny a regiónu a akúkoľvek zodpovednosť vyplývajúcu z vašich činov budete niesť vy osobne. </p> <br/> <br/> <h5> Open Source licencia </h5> <br/> <p> <b>Read You</b> je projekt s otvoreným zdrojovým kódom pod GNU GPL 3.0 Open Source License[1], ktorá vám umožňuje bezplatne používať, odkazovať a upravovať zdrojový kód <b>Read You</b>, ale neumožňuje distribuovať a predávať upravený a odvodený kód ako uzavretý zdroj komerčného softvéru. Podrobnosti nájdete v úplnom znení GNU GPL 3.0 Open Source License[2]. </p> <br/> <br/> <h5> Príloha </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
+    <string name="feeds_page">Stránka informačných kanálov</string>
+</resources>

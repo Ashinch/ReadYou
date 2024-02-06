@@ -2,7 +2,13 @@ package me.ash.reader.ui.page.home.feeds.subscribe
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.with
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CreateNewFolder
@@ -170,7 +176,7 @@ fun SubscribeDialog(
             }
         },
         dismissButton = {
-            if (subscribeUiState.isSearchPage) {
+            if (subscribeUiState.isSearchPage && subscribeViewModel.rssService.get().importSubscription) {
                 TextButton(
                     onClick = {
                         focusManager.clearFocus()

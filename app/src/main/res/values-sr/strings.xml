@@ -267,4 +267,10 @@
     <string name="alignment">Поравнање</string>
     <string name="clear_articles">Очисти чланке</string>
     <string name="rate_limit">Стопа захтева је ограничена</string>
+    <string name="include_additional_info">Укључи додатне информације</string>
+    <string name="exclude">Искључи</string>
+    <string name="additional_info_desc">Додатне информације укључују опције конфигурације за сваки фид, као што су да ли да се дозволи обавештење, рашчлани цео садржај итд. Када намеравате да користите извезени OPML фајл с другим читачима, изаберите „Искључи“.</string>
+    <string name="grey_out_articles">Затамни чланке</string>
+    <string name="all_read">Све прочитано</string>
+    <string name="read_excluding_starred">Прочитано, изузимајући означено са звездицом</string>
 </resources>

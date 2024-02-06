@@ -1,7 +1,6 @@
 package me.ash.reader.ui.page.home
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -10,7 +9,13 @@ import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.mapPagingFlowItem
@@ -18,8 +23,8 @@ import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.domain.model.group.Group
 import me.ash.reader.domain.service.RssService
-import me.ash.reader.infrastructure.android.AndroidStringsHelper
 import me.ash.reader.domain.service.SyncWorker
+import me.ash.reader.infrastructure.android.AndroidStringsHelper
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import javax.inject.Inject
@@ -44,7 +49,7 @@ class HomeViewModel @Inject constructor(
     val syncWorkLiveData = workManager.getWorkInfosByTagLiveData(SyncWorker.WORK_NAME)
 
     fun sync() {
-        viewModelScope.launch(ioDispatcher) {
+        applicationScope.launch(ioDispatcher) {
             rssService.get().doSync()
         }
     }

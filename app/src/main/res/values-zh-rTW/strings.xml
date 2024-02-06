@@ -35,7 +35,7 @@
     <string name="paste">貼上</string>
     <string name="feed_or_site_url">消息來源或網址</string>
     <string name="import_from_opml">從 OPML 檔案匯入</string>
-    <string name="preset">預設</string>
+    <string name="preset">選項</string>
     <string name="selected">已選擇</string>
     <string name="allow_notification">允許通知</string>
     <string name="all_allow_notification_tips">允許「%1$s」群組中的所有來源傳送通知</string>
@@ -143,9 +143,7 @@
     <string name="initial_page">起始頁面</string>
     <string name="initial_filter">起始篩選條件</string>
     <string name="preview_article_title">嗚嗚嗚，黎明之劍完結了</string>
-    <string name="preview_article_desc">
-        是宴席，就有結束的時候，但這本書真的陪了我好久啊，好捨不得，而且主線結束了坑卻沒填完，不知道什麼時候才有番外啊
-    </string>
+    <string name="preview_article_desc">雖然說「天下無不散的筵席」，但這本書真的陪了我好久，好捨不得！而且主線結束了坑卻沒填完，不知啥時才有番外啊。</string>
     <string name="preview_feed_name">漩渦書院</string>
     <string name="value">值</string>
     <string name="horizontal_padding">水平邊距</string>
@@ -237,7 +235,7 @@
     <string name="synchronous_tips">需要重新啟動才能套用變更</string>
     <string name="delete_account_toast">已刪除帳戶</string>
     <string name="self_hosted">自行託管</string>
-    <string name="fever_desc">已棄用，不推薦。</string>
+    <string name="fever_desc">已淘汰，不推薦。</string>
     <string name="block_list">封鎖清單</string>
     <string name="clear_all_articles_tips">確定要清除此帳戶的文章清單嗎？</string>
     <string name="delete_account_tips">確定要刪除此帳戶嗎？</string>
@@ -252,7 +250,7 @@
     <string name="connection">連線</string>
     <string name="system_default">系統</string>
     <string name="custom_tabs">內建瀏覽器</string>
-    <string name="open_link_ask_dialog_title">開啟方式</string>
+    <string name="open_link_ask_dialog_title">選擇開啟工具…</string>
     <string name="open_link_specific_browser">指定瀏覽器</string>
     <string name="auto_default_browser">自動 (預設瀏覽器優先)</string>
     <string name="always_ask">一律詢問</string>
@@ -263,4 +261,10 @@
     <string name="default_browser">預設瀏覽器</string>
     <string name="open_link_something_wrong">由於發生未知的錯誤，已取消詢問連結開啟方式。</string>
     <string name="open_link_specific_browser_not_selected">無</string>
+    <string name="exclude">不要附加</string>
+    <string name="additional_info_desc">額外資訊包括各消息來源的配置，例如允許通知與否、全文解析與否等。如要將匯出的 OPML 檔案用於其他閱讀器，請選擇「不要附加」。</string>
+    <string name="include_additional_info">附加額外資訊</string>
+    <string name="grey_out_articles">淡化顯示</string>
+    <string name="all_read">已讀的文章</string>
+    <string name="read_excluding_starred">已讀且未加星號的文章</string>
 </resources>
