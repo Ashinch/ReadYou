@@ -191,11 +191,12 @@ fun FlowPage(
                             },
                         ) {
                             markAsRead = false
-                            flowViewModel.markAsRead(
+                            flowViewModel.updateReadStatus(
                                 groupId = filterUiState.group?.id,
                                 feedId = filterUiState.feed?.id,
                                 articleId = null,
                                 conditions = it,
+                                isUnread = false
                             )
                         }
                         RYExtensibleVisibility(visible = onSearch) {
@@ -244,11 +245,12 @@ fun FlowPage(
                             }
                         },
                         onSwipeStartToEnd = {
-                            flowViewModel.markAsRead(
+                            flowViewModel.updateReadStatus(
                                 groupId = null,
                                 feedId = null,
                                 articleId = it.article.id,
-                                MarkAsReadConditions.All
+                                conditions = MarkAsReadConditions.All,
+                                isUnread = !it.article.isUnread
                             )
                         },
                         onSwipeEndToStart = {

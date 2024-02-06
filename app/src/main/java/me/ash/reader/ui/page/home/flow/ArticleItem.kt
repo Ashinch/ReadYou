@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.rounded.CheckCircleOutline
+import androidx.compose.material.icons.rounded.Circle
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -180,7 +182,7 @@ fun ArticleItem(
     }
 }
 
-private const val PositionalThresholdFraction = 0.15f
+private const val PositionalThresholdFraction = 0.2f
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -255,18 +257,17 @@ fun SwipeableArticleItem(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            // .background(MaterialTheme.colorScheme.surface)
                             .padding(24.dp)
                     ) {
                         Column(modifier = Modifier.align(Alignment.CenterStart)) {
                             Icon(
-                                imageVector = Icons.Rounded.CheckCircleOutline,
+                                imageVector = if (articleWithFeed.article.isUnread) Icons.Rounded.CheckCircleOutline else Icons.Outlined.Circle,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.tertiary,
                                 modifier = Modifier.align(Alignment.CenterHorizontally)
                             )
                             Text(
-                                text = stringResource(R.string.mark_as_read),
+                                text = stringResource(if (articleWithFeed.article.isUnread) R.string.mark_as_read else R.string.mark_as_unread),
                                 textAlign = TextAlign.Center,
                                 color = MaterialTheme.colorScheme.tertiary,
                                 style = MaterialTheme.typography.labelLarge,
@@ -277,12 +278,11 @@ fun SwipeableArticleItem(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            // .background(MaterialTheme.colorScheme.surface)
                             .padding(24.dp)
                     ) {
                         Column(modifier = Modifier.align(Alignment.CenterEnd)) {
                             Icon(
-                                imageVector = if (articleWithFeed.article.isStarred) Icons.Rounded.Star else Icons.Outlined.Star,
+                                imageVector = if (articleWithFeed.article.isStarred) Icons.Rounded.Star else Icons.Rounded.Circle,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.tertiary,
                                 modifier = Modifier.align(Alignment.CenterHorizontally)

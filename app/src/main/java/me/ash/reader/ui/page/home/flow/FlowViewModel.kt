@@ -33,11 +33,12 @@ class FlowViewModel @Inject constructor(
         }
     }
 
-    fun markAsRead(
+    fun updateReadStatus(
         groupId: String?,
         feedId: String?,
         articleId: String?,
         conditions: MarkAsReadConditions,
+        isUnread: Boolean
     ) {
         applicationScope.launch(ioDispatcher) {
             rssService.get().markAsRead(
@@ -45,7 +46,7 @@ class FlowViewModel @Inject constructor(
                 feedId = feedId,
                 articleId = articleId,
                 before = conditions.toDate(),
-                isUnread = false,
+                isUnread = isUnread,
             )
         }
     }
