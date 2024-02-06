@@ -1,7 +1,6 @@
 package me.ash.reader.ui.page.home.reading
 
 import android.util.Log
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.ItemSnapshotList
@@ -46,19 +45,19 @@ class ReadingViewModel @Inject constructor(
         get() = readingUiState.value.articleWithFeed?.feed
 
     fun initData(articleId: String) {
-        showLoading()
+        setLoading()
         viewModelScope.launch(ioDispatcher) {
             rssService.get().findArticleById(articleId)?.run {
                 _readingUiState.update {
                     it.copy(
                         articleWithFeed = this,
-                        articleId = article.id,
                         isStarred = article.isStarred,
                         isUnread = article.isUnread
                     )
                 }
                 _readerState.update {
                     it.copy(
+                        articleId = article.id,
                         feedName = feed.name,
                         title = article.title,
                         author = article.author,
@@ -92,7 +91,7 @@ class ReadingViewModel @Inject constructor(
     }
 
     private suspend fun internalRenderFullContent() {
-        showLoading()
+        setLoading()
         runCatching {
             rssHelper.parseFullContent(
                 currentArticle?.link ?: "",
@@ -102,7 +101,7 @@ class ReadingViewModel @Inject constructor(
             _readerState.update { it.copy(content = ReaderState.FullContent(content = content)) }
         }.onFailure { th ->
             Log.i("RLog", "renderFullContent: ${th.message}")
-            _readerState.update { it.copy(content = ReaderState.Error(th.message)) }
+            _readerState.update { it.copy(content = ReaderState.Error(th.message.toString())) }
         }
     }
 
@@ -137,42 +136,83 @@ class ReadingViewModel @Inject constructor(
         }
     }
 
-    private fun showLoading() {
+    private fun setLoading() {
         _readerState.update {
             it.copy(content = ReaderState.Loading)
         }
     }
 
-    fun updateNextArticleId(pagingItems: ItemSnapshotList<ArticleFlowItem>) {
+    fun prefetchArticleId(pagingItems: ItemSnapshotList<ArticleFlowItem>) {
         val items = pagingItems.items
+        val currentId = currentArticle?.id
         val index = items.indexOfFirst { item ->
-            item is ArticleFlowItem.Article && item.articleWithFeed.article.id == currentArticle?.id
+            item is ArticleFlowItem.Article && item.articleWithFeed.article.id == currentId
         }
-        items.subList(index + 1, items.size).forEach { item ->
-            if (item is ArticleFlowItem.Article) {
-                _readingUiState.update { it.copy(nextArticleId = item.articleWithFeed.article.id) }
-                return
+        var previousId: String? = null
+        var nextId: String? = null
+
+        if (index != -1 || currentId == null) {
+            val prevIterator = items.listIterator(index)
+            while (prevIterator.hasPrevious()) {
+                Log.d("Log", "index: $index, previous: ${prevIterator.previousIndex()}")
+                val prev = prevIterator.previous()
+                if (prev is ArticleFlowItem.Article) {
+                    previousId = prev.articleWithFeed.article.id
+                    break
+                }
+            }
+            val nextIterator = items.listIterator(index + 1)
+            while (nextIterator.hasNext()) {
+                Log.d("Log", "index: $index, next: ${nextIterator.nextIndex()}")
+                val next = nextIterator.next()
+                if (next is ArticleFlowItem.Article && next.articleWithFeed.article.id != currentId) {
+                    nextId = next.articleWithFeed.article.id
+                    break
+                }
             }
         }
-        _readingUiState.update { it.copy(nextArticleId = null) }
+
+        _readerState.update {
+            it.copy(
+                nextArticleId = nextId,
+                previousArticleId = previousId
+            )
+        }
+
+
+    }
+
+    fun loadPrevious(): Boolean {
+        readerStateStateFlow.value.previousArticleId?.run {
+            initData(this)
+        } ?: return false
+        return true
+    }
+
+    fun loadNext(): Boolean {
+        readerStateStateFlow.value.nextArticleId?.run {
+            initData(this)
+        } ?: return false
+        return true
     }
 }
 
 data class ReadingUiState(
     val articleWithFeed: ArticleWithFeed? = null,
-    val articleId: String? = null,
     val isUnread: Boolean = false,
     val isStarred: Boolean = false,
-    val nextArticleId: String? = null,
 )
 
 data class ReaderState(
+    val articleId: String? = null,
     val feedName: String = "",
     val title: String? = null,
     val author: String? = null,
     val link: String? = null,
     val publishedDate: Date = Date(0L),
-    val content: ContentState = Description(null)
+    val content: ContentState = Loading,
+    val nextArticleId: String? = null,
+    val previousArticleId: String? = null
 ) {
     sealed interface ContentState {
         val text: String?
@@ -186,9 +226,8 @@ data class ReaderState(
             }
     }
 
-    data class FullContent(val content: String?) : ContentState
-    data class Description(val content: String?) : ContentState
-    data class Error(val message: String?) : ContentState
-
-    object Loading: ContentState
+    data class FullContent(val content: String) : ContentState
+    data class Description(val content: String) : ContentState
+    data class Error(val message: String) : ContentState
+    data object Loading : ContentState
 }

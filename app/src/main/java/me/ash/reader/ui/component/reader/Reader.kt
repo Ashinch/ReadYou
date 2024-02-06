@@ -34,7 +34,7 @@ fun LazyListScope.Reader(
     onImageClick: ((imgUrl: String, altText: String) -> Unit)? = null,
     onLinkClick: (String) -> Unit
 ) {
-    Log.i("RLog", "Reader: ")
+//    Log.i("RLog", "Reader: ")
     htmlFormattedText(
         inputStream = content.byteInputStream(),
         subheadUpperCase = subheadUpperCase,

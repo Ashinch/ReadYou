@@ -32,6 +32,7 @@ import me.ash.reader.ui.page.common.RouteName
 fun TopBar(
     navController: NavHostController,
     isShow: Boolean,
+    windowInsets: WindowInsets = WindowInsets(0.dp),
     title: String? = "",
     link: String? = "",
     onClose: () -> Unit = {},
@@ -49,7 +50,7 @@ fun TopBar(
             TopAppBar(
                 title = {},
                 modifier = Modifier,
-                windowInsets = WindowInsets(0.dp),
+                windowInsets = windowInsets,
                 navigationIcon = {
                     FeedbackIconButton(
                         imageVector = Icons.Rounded.Close,
