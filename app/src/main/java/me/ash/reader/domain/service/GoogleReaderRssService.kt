@@ -27,6 +27,7 @@ import me.ash.reader.infrastructure.di.MainDispatcher
 import me.ash.reader.infrastructure.html.Readability
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI
+import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofCategoryIdToStreamId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofCategoryStreamIdToId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofFeedStreamIdToId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofItemStreamIdToId
@@ -61,6 +62,7 @@ class GoogleReaderRssService @Inject constructor(
     feedDao, workManager, rssHelper, notificationHelper, ioDispatcher, defaultDispatcher
 ) {
 
+    override val importSubscription: Boolean = false
     override val addSubscription: Boolean = true
     override val moveSubscription: Boolean = true
     override val deleteSubscription: Boolean = true
@@ -114,19 +116,18 @@ class GoogleReaderRssService @Inject constructor(
             isNotification = isNotification,
             isFullContent = isFullContent,
         ))
-        SyncWorker.enqueueOneTimeWork(workManager)
+        // TODO: When users need to subscribe to multiple feeds continuously, this makes them uncomfortable.
+        //  It is necessary to make syncWork support synchronizing individual specified feeds.
+        // super.doSyncOneTime()
     }
 
-    override suspend fun addGroup(
-        destFeed: Feed?,
-        newGroupName: String,
-    ): String {
+    override suspend fun addGroup(destFeed: Feed?, newGroupName: String): String {
         val accountId = context.currentAccountId
         getGoogleReaderAPI().subscriptionEdit(
             destFeedId = destFeed?.id?.dollarLast(),
             destCategoryId = newGroupName
         )
-        val id = accountId.spacerDollar(newGroupName)
+        val id = accountId.spacerDollar(newGroupName.ofCategoryIdToStreamId())
         groupDao.insert(
             Group(
                 id = id,
@@ -149,8 +150,8 @@ class GoogleReaderRssService @Inject constructor(
     override suspend fun moveFeed(originGroupId: String, feed: Feed) {
         getGoogleReaderAPI().subscriptionEdit(
             destFeedId = feed.id.dollarLast(),
-            destCategoryId = feed.groupId.dollarLast(),
-            originCategoryId = originGroupId.dollarLast(),
+            destCategoryId = feed.groupId.dollarLast().ofCategoryStreamIdToId(),
+            originCategoryId = originGroupId.dollarLast().ofCategoryStreamIdToId(),
         )
         super.moveFeed(originGroupId, feed)
     }

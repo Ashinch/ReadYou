@@ -341,8 +341,10 @@ class GoogleReaderAPI private constructor(
             return "user/-/label/$this"
         }
 
+        private val categoryStreamIdRegex = "user/[^/]+/label/".toRegex()
+
         fun String.ofCategoryStreamIdToId(): String {
-            return replace("user/-/label/", "")
+            return replace(categoryStreamIdRegex, "")
         }
 
         private val instances: ConcurrentHashMap<String, GoogleReaderAPI> = ConcurrentHashMap()
