@@ -2,40 +2,20 @@ package me.ash.reader.ui.page.home.flow
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.DismissDirection
-import androidx.compose.material.DismissValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.SwipeToDismiss
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircleOutline
 import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -44,13 +24,7 @@ import coil.size.Precision
 import coil.size.Scale
 import me.ash.reader.R
 import me.ash.reader.domain.model.article.ArticleWithFeed
-import me.ash.reader.infrastructure.preference.FlowArticleReadIndicatorPreference
-import me.ash.reader.infrastructure.preference.LocalFlowArticleListDesc
-import me.ash.reader.infrastructure.preference.LocalFlowArticleListFeedIcon
-import me.ash.reader.infrastructure.preference.LocalFlowArticleListFeedName
-import me.ash.reader.infrastructure.preference.LocalFlowArticleListImage
-import me.ash.reader.infrastructure.preference.LocalFlowArticleListReadIndicator
-import me.ash.reader.infrastructure.preference.LocalFlowArticleListTime
+import me.ash.reader.infrastructure.preference.*
 import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.base.RYAsyncImage
 import me.ash.reader.ui.component.base.SIZE_1000
@@ -69,18 +43,6 @@ fun ArticleItem(
     val articleListDesc = LocalFlowArticleListDesc.current
     val articleListDate = LocalFlowArticleListTime.current
     val articleListReadIndicator = LocalFlowArticleListReadIndicator.current
-    var titleHeight by remember { mutableStateOf(0) }
-    val density = LocalDensity.current
-    var descriptionLines by remember { mutableStateOf(1) }
-    LaunchedEffect(titleHeight) {
-        with(density) {
-            descriptionLines = if (titleHeight > 0 && titleHeight + 16.dp.roundToPx() / 16 > 32) {
-                1
-            } else {
-                2
-            }
-        }
-    }
 
     Column(
         modifier = Modifier
@@ -174,15 +136,8 @@ fun ArticleItem(
                     text = articleWithFeed.article.title,
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.titleMedium,
-                    // maxLines = if (articleListDesc.value) 2 else 4,
+                    maxLines = if (articleListDesc.value) 2 else 4,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.onGloballyPositioned {coordinates ->
-                        if (titleHeight == 0) {
-                            titleHeight = with(density) {
-                                coordinates.size.height.toDp().value.toInt()
-                            }
-                        }
-                    }
                 )
 
                 // Description
@@ -192,7 +147,7 @@ fun ArticleItem(
                         text = articleWithFeed.article.shortDescription,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall,
-                        maxLines = descriptionLines,
+                        maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
