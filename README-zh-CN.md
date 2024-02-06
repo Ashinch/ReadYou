@@ -81,6 +81,16 @@
 
 F-Droid 版本与其他版本不兼容，您无法通过覆盖安装包来升级、切换至其他版本，需要卸载后再重新安装，届时所有本地数据将被清除。整个应用的编译、签名和分发均由 [F-Droid](https://f-droid.org/docs/FAQ_-_General/) 统一完成。
 
+## 夜间构建
+
+我们提供夜间构建用于测试目的，这些版本包含最新的功能和改进，但可能不如常规版本稳定。请注意，夜间版本可能存在 bug，并且不建议日常使用。
+
+<a target="_blank" href="https://github.com/Ashinch/ReadYou/actions/workflows/build_commit.yaml">检查夜间构建</a>
+
+从 GitHub Actions 页面选择最新的 workflow，并从该 workflow 的摘要页面下载构建文件（您可能需要登录 GitHub）。
+
+**在尝试夜间版本之前，请备份好您的数据。**
+
 ## 捐赠
 
 **Read You** 是一款免费的自由开源软件，它受益于开源社区，每一位用户都能够免费享受到它完整的功能，如果您赞赏我目前的工作，可以选择请我喝一杯咖啡 ☕️。

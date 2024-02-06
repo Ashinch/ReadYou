@@ -83,6 +83,18 @@ Nachfolgend sind die bisher erzielten Fortschritte und die Ziele aufgeführt, an
 
 F-Droid-Versionen können nicht auf andere Versionen aktualisiert werden und werden kompiliert, signiert und einheitlich verteilt von [F-Droid](https://f-droid.org/docs/FAQ_-_General/).
 
+## Nightly
+
+Wir bieten Nightly-Versionen zu Testzwecken an. Diese Versionen enthalten die neuesten Funktionen und Verbesserungen, sind jedoch möglicherweise nicht so stabil wie unsere regulären Versionen. Bitte beachten Sie, dass Nightly-Builds möglicherweise Fehler enthalten und nicht für den täglichen Gebrauch empfohlen werden.
+
+Sie können die Nightly-Version über den folgenden Link herunterladen:
+
+<a target="_blank" href="https://github.com/Ashinch/ReadYou/actions/workflows/build_commit.yaml">Nightly-Builds überprüfen</a>
+
+Wählen Sie den neuesten Workflow auf der GitHub Actions-Seite aus und laden Sie die Artefakte von der Zusammenfassungsseite des Workflows herunter (Es ist möglicherweise erforderlich, sich bei GitHub anzumelden).
+
+**Denken Sie daran, Ihre Daten vor dem Ausprobieren der Nightly-Version zur Sicherheit zu sichern, falls Probleme auftreten.**
+
 ## Spenden
 
 **Read You** ist eine kostenlose Open-Source-Software, die von der Open-Source-Gemeinschaft profitiert, und jeder Benutzer kann ihre volle Funktionalität kostenlos genießen. Wenn Sie also meine aktuelle Arbeit wertschätzen, können Sie mir gerne eine Tasse Kaffee spendieren ☕️.
