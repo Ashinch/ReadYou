@@ -60,6 +60,7 @@ class ReaderNestedScrollConnection(
         return when {
             !enabled || available.y == 0f -> Offset.Zero
 
+            // Scroll down to reduce the progress when the offset is currently pulled up, same for the opposite
             source == Drag && state.offsetFraction.signOpposites(available.y) -> {
                 Offset(0f, state.onPull(available.y))
             }
@@ -79,7 +80,8 @@ class ReaderNestedScrollConnection(
 
     override suspend fun onPreFling(available: Velocity): Velocity {
         return if (abs(state.progress) > 1f) {
-            Velocity(0f, y = state.onRelease(available.y))
+            state.onRelease(available.y)
+            Velocity.Zero
         } else {
             state.animateDistanceTo(0f)
             Velocity.Zero
@@ -91,7 +93,7 @@ class ReaderNestedScrollConnection(
 /**
  * Creates a [PullToLoadState] that is remembered across compositions.
  *
- * Changes from [ReaderNestedScrollConnection] will result in [PullToLoadState] being updated.
+ * Changes from [ReaderNestedScrollConnection] will result in this state being updated.
  *
  *
  * @param key Key used for remembering the state

@@ -59,67 +59,57 @@ fun Content(
     val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
 
     if (isLoading) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center,
-        ) {
-            Column {
-                Spacer(modifier = Modifier.height(22.dp))
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(30.dp),
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-                Spacer(modifier = Modifier.height(22.dp))
-            }
+        Column {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .size(30.dp),
+                color = MaterialTheme.colorScheme.onSurface,
+            )
         }
     } else {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            SelectionContainer {
-                LazyColumn(
-                    modifier = modifier
-                        .fillMaxSize()
-                        .drawVerticalScrollbar(listState)
-                        .offset(x = 0.dp, y = (pullToLoadState.offsetFraction * 80).dp),
-                    state = listState,
-                ) {
-                    item {
-                        // Top bar height
-                        Spacer(modifier = Modifier.height(64.dp))
-                        // padding
-                        Spacer(modifier = Modifier.height(22.dp))
-                        Column(
-                            modifier = Modifier
-                                .padding(horizontal = 12.dp)
-                        ) {
-                            DisableSelection {
-                                Metadata(
-                                    feedName = feedName,
-                                    title = title,
-                                    author = author,
-                                    link = link,
-                                    publishedDate = publishedDate,
-                                )
-                            }
-                        }
-                    }
-                    Reader(
-                        context = context,
-                        subheadUpperCase = subheadUpperCase.value,
-                        link = link ?: "",
-                        content = content,
-                        onImageClick = onImageClick,
-                        onLinkClick = {
-                            context.openURL(it, openLink, openLinkSpecificBrowser)
-                        }
-                    )
 
-                    item {
-                        Spacer(modifier = Modifier.height(128.dp))
-                        Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+        SelectionContainer {
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxSize()
+                    .drawVerticalScrollbar(listState)
+                    .offset(x = 0.dp, y = (pullToLoadState.offsetFraction * 80).dp),
+                state = listState,
+            ) {
+                item {
+                    // Top bar height
+                    Spacer(modifier = Modifier.height(64.dp))
+                    // padding
+                    Spacer(modifier = Modifier.height(22.dp))
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp)
+                    ) {
+                        DisableSelection {
+                            Metadata(
+                                feedName = feedName,
+                                title = title,
+                                author = author,
+                                link = link,
+                                publishedDate = publishedDate,
+                            )
+                        }
                     }
+                }
+                Reader(
+                    context = context,
+                    subheadUpperCase = subheadUpperCase.value,
+                    link = link ?: "",
+                    content = content,
+                    onImageClick = onImageClick,
+                    onLinkClick = {
+                        context.openURL(it, openLink, openLinkSpecificBrowser)
+                    }
+                )
+
+                item {
+                    Spacer(modifier = Modifier.height(128.dp))
+                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
             }
         }

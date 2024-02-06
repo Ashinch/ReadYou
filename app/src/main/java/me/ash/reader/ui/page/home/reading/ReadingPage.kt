@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -128,14 +129,15 @@ fun ReadingPage(
 
                         it.run {
                             val state =
-                                rememberPullToLoadState(key = content,
+                                rememberPullToLoadState(
+                                    key = content,
                                     onLoadNext = {
                                         readingViewModel.loadNext()
                                     },
                                     onLoadPrevious = {
                                         readingViewModel.loadPrevious()
-                                    },
-                                    onThresholdReached = {})
+                                    }
+                                )
 
 
                             LaunchedEffect(state.status) {
@@ -154,33 +156,39 @@ fun ReadingPage(
                             ) { LazyListState() }
 
                             CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
-                                Content(
-                                    modifier = Modifier
-                                        .nestedScroll(
-                                            ReaderNestedScrollConnection(
-                                                state = state,
-                                                enabled = true,
-                                                onScroll = { f ->
-                                                    if (abs(f) > 2f)
-                                                        isReaderScrollingDown = f < 0f
-                                                })
-                                        )
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Content(
+                                        modifier = Modifier
+                                            .nestedScroll(
+                                                ReaderNestedScrollConnection(
+                                                    state = state,
+                                                    enabled = true,
+                                                    onScroll = { f ->
+                                                        if (abs(f) > 2f)
+                                                            isReaderScrollingDown = f < 0f
+                                                    })
+                                            )
 
-                                        .padding(paddings),
-                                    content = content.text ?: "",
-                                    feedName = feedName,
-                                    title = title.toString(),
-                                    author = author,
-                                    link = link,
-                                    publishedDate = publishedDate,
-                                    isLoading = content is ReaderState.Loading,
-                                    listState = listState,
-                                    pullToLoadState = state,
-                                    onImageClick = { imgUrl, altText ->
-                                        currentImageData = ImageData(imgUrl, altText)
-                                        showFullScreenImageViewer = true
-                                    }
-                                )
+                                            .padding(paddings),
+                                        content = content.text ?: "",
+                                        feedName = feedName,
+                                        title = title.toString(),
+                                        author = author,
+                                        link = link,
+                                        publishedDate = publishedDate,
+                                        isLoading = content is ReaderState.Loading,
+                                        listState = listState,
+                                        pullToLoadState = state,
+                                        onImageClick = { imgUrl, altText ->
+                                            currentImageData = ImageData(imgUrl, altText)
+                                            showFullScreenImageViewer = true
+                                        }
+                                    )
+                                    PullToLoadIndicator(state = state)
+                                }
                             }
                         }
                     }
