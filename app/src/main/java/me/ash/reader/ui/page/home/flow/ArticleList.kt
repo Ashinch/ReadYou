@@ -4,7 +4,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
@@ -12,13 +11,14 @@ import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.ArticleWithFeed
 
 @Suppress("FunctionName")
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.ArticleList(
     pagingItems: LazyPagingItems<ArticleFlowItem>,
     isFilterUnread: Boolean,
     isShowFeedIcon: Boolean,
     isShowStickyHeader: Boolean,
     articleListTonalElevation: Int,
+    isScrollInProgress: () -> Boolean = { false },
     onClick: (ArticleWithFeed) -> Unit = {},
     onSwipeStartToEnd: ((ArticleWithFeed) -> Unit)? = null,
     onSwipeEndToStart: ((ArticleWithFeed) -> Unit)? = null,
@@ -33,6 +33,7 @@ fun LazyListScope.ArticleList(
                         isFilterUnread = isFilterUnread,
                         articleListTonalElevation = articleListTonalElevation,
                         onClick = { onClick(it) },
+                        isScrollInProgress = isScrollInProgress,
                         onSwipeStartToEnd = onSwipeStartToEnd,
                         onSwipeEndToStart = onSwipeEndToStart
                     )

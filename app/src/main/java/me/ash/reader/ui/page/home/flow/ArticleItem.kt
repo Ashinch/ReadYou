@@ -1,32 +1,41 @@
 package me.ash.reader.ui.page.home.flow
 
+import android.view.HapticFeedbackConstants
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.rounded.CheckCircleOutline
-import androidx.compose.material.icons.rounded.Circle
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxState
-import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberSwipeToDismissBoxState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -35,7 +44,13 @@ import coil.size.Precision
 import coil.size.Scale
 import me.ash.reader.R
 import me.ash.reader.domain.model.article.ArticleWithFeed
-import me.ash.reader.infrastructure.preference.*
+import me.ash.reader.infrastructure.preference.FlowArticleReadIndicatorPreference
+import me.ash.reader.infrastructure.preference.LocalFlowArticleListDesc
+import me.ash.reader.infrastructure.preference.LocalFlowArticleListFeedIcon
+import me.ash.reader.infrastructure.preference.LocalFlowArticleListFeedName
+import me.ash.reader.infrastructure.preference.LocalFlowArticleListImage
+import me.ash.reader.infrastructure.preference.LocalFlowArticleListReadIndicator
+import me.ash.reader.infrastructure.preference.LocalFlowArticleListTime
 import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.base.RYAsyncImage
 import me.ash.reader.ui.component.base.SIZE_1000
@@ -191,10 +206,10 @@ fun SwipeableArticleItem(
     isFilterUnread: Boolean,
     articleListTonalElevation: Int,
     onClick: (ArticleWithFeed) -> Unit = {},
+    isScrollInProgress: () -> Boolean = { false },
     onSwipeStartToEnd: ((ArticleWithFeed) -> Unit)? = null,
     onSwipeEndToStart: ((ArticleWithFeed) -> Unit)? = null,
 ) {
-    var isArticleVisible by remember { mutableStateOf(true) }
 
     val density = LocalDensity.current
     val confirmValueChange: (SwipeToDismissBoxValue) -> Boolean = {
@@ -217,26 +232,32 @@ fun SwipeableArticleItem(
     val positionalThreshold: (totalDistance: Float) -> Float = {
         it * PositionalThresholdFraction
     }
+    val velocityThreshold: () -> Float = { Float.POSITIVE_INFINITY }
+    val animationSpec: AnimationSpec<Float> = spring(stiffness = Spring.StiffnessMediumLow)
     val swipeState = rememberSaveable(
         articleWithFeed,
         saver = SwipeToDismissBoxState.Saver(
             confirmValueChange = confirmValueChange,
             density = density,
+            animationSpec = animationSpec,
+            velocityThreshold = velocityThreshold,
             positionalThreshold = positionalThreshold
         )
     ) {
         SwipeToDismissBoxState(
             initialValue = SwipeToDismissBoxValue.Settled,
             density = density,
+            animationSpec = animationSpec,
             confirmValueChange = confirmValueChange,
-            positionalThreshold = positionalThreshold
+            positionalThreshold = positionalThreshold,
+            velocityThreshold = velocityThreshold
         )
     }
 //    val swipeState = rememberSwipeToDismissBoxState(positionalThreshold =, confirmValueChange =)
-    val hapticFeedback = LocalHapticFeedback.current
+    val view = LocalView.current
     LaunchedEffect(swipeState.progress > PositionalThresholdFraction) {
         if (swipeState.progress > PositionalThresholdFraction && swipeState.targetValue != SwipeToDismissBoxValue.Settled) {
-            hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
         }
     }
 
@@ -248,72 +269,71 @@ fun SwipeableArticleItem(
 //            }
 //            isFilterUnread
 //        })
-    if (isArticleVisible) {
-        SwipeToDismissBox(
-            state = swipeState,
-            /***  create dismiss alert background box */
-            backgroundContent = {
-                if (swipeState.dismissDirection == SwipeToDismissBoxValue.StartToEnd) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(24.dp)
-                    ) {
-                        Column(modifier = Modifier.align(Alignment.CenterStart)) {
-                            Icon(
-                                imageVector = if (articleWithFeed.article.isUnread) Icons.Rounded.CheckCircleOutline else Icons.Outlined.Circle,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.tertiary,
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
-                            )
-                            Text(
-                                text = stringResource(if (articleWithFeed.article.isUnread) R.string.mark_as_read else R.string.mark_as_unread),
-                                textAlign = TextAlign.Center,
-                                color = MaterialTheme.colorScheme.tertiary,
-                                style = MaterialTheme.typography.labelLarge,
-                            )
-                        }
-                    }
-                } else if (swipeState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(24.dp)
-                    ) {
-                        Column(modifier = Modifier.align(Alignment.CenterEnd)) {
-                            Icon(
-                                imageVector = if (articleWithFeed.article.isStarred) Icons.Rounded.Star else Icons.Outlined.Star,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.tertiary,
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
-                            )
-                            Text(
-                                text = stringResource(if (articleWithFeed.article.isStarred) R.string.mark_as_unstar else R.string.mark_as_starred),
-                                textAlign = TextAlign.Center,
-                                color = MaterialTheme.colorScheme.tertiary,
-                                style = MaterialTheme.typography.labelLarge,
-                            )
-                        }
-                    }
-                }
-            },
-            /**** Dismiss Content */
-            content = {
+    SwipeToDismissBox(
+        state = swipeState,
+        enabled = !isScrollInProgress(),
+        /***  create dismiss alert background box */
+        backgroundContent = {
+            if (swipeState.dismissDirection == SwipeToDismissBoxValue.StartToEnd) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(
-                            MaterialTheme.colorScheme.surfaceColorAtElevation(
-                                articleListTonalElevation.dp
-                            ) onDark MaterialTheme.colorScheme.surface
-                        )
+                        .padding(24.dp)
                 ) {
-                    ArticleItem(articleWithFeed, onClick)
+                    Column(modifier = Modifier.align(Alignment.CenterStart)) {
+                        Icon(
+                            imageVector = if (articleWithFeed.article.isUnread) Icons.Rounded.CheckCircleOutline else Icons.Outlined.Circle,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                        Text(
+                            text = stringResource(if (articleWithFeed.article.isUnread) R.string.mark_as_read else R.string.mark_as_unread),
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.tertiary,
+                            style = MaterialTheme.typography.labelLarge,
+                        )
+                    }
                 }
-            },
-            /*** Set Direction to dismiss */
-            enableDismissFromEndToStart = onSwipeEndToStart != null,
-            enableDismissFromStartToEnd = onSwipeStartToEnd != null
-        )
-    }
+            } else if (swipeState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(24.dp)
+                ) {
+                    Column(modifier = Modifier.align(Alignment.CenterEnd)) {
+                        Icon(
+                            imageVector = if (articleWithFeed.article.isStarred) Icons.Rounded.Star else Icons.Outlined.StarOutline,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                        Text(
+                            text = stringResource(if (articleWithFeed.article.isStarred) R.string.mark_as_unstar else R.string.mark_as_starred),
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.tertiary,
+                            style = MaterialTheme.typography.labelLarge,
+                        )
+                    }
+                }
+            }
+        },
+        /**** Dismiss Content */
+        content = {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        MaterialTheme.colorScheme.surfaceColorAtElevation(
+                            articleListTonalElevation.dp
+                        ) onDark MaterialTheme.colorScheme.surface
+                    )
+            ) {
+                ArticleItem(articleWithFeed, onClick)
+            }
+        },
+        /*** Set Direction to dismiss */
+        enableDismissFromEndToStart = onSwipeEndToStart != null,
+        enableDismissFromStartToEnd = onSwipeStartToEnd != null
+    )
 }

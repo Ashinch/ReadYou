@@ -238,6 +238,7 @@ fun FlowPage(
                         isShowFeedIcon = articleListFeedIcon.value,
                         isShowStickyHeader = articleListDateStickyHeader.value,
                         articleListTonalElevation = articleListTonalElevation.value,
+                        isScrollInProgress = { listState.isScrollInProgress },
                         onClick = {
                             onSearch = false
                             navController.navigate("${RouteName.READING}/${it.article.id}") {
