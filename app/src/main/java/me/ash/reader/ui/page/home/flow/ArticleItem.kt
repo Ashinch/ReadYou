@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.flow
 
+import android.util.Log
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.animateColorAsState
@@ -30,9 +31,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -207,7 +210,7 @@ fun ArticleItem(
     }
 }
 
-private const val PositionalThresholdFraction = 0.2f
+private const val PositionalThresholdFraction = 0.15f
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -220,18 +223,20 @@ fun SwipeableArticleItem(
     onSwipeStartToEnd: ((ArticleWithFeed) -> Unit)? = null,
     onSwipeEndToStart: ((ArticleWithFeed) -> Unit)? = null,
 ) {
+    val swipeToStartAction = LocalArticleListSwipeStartAction.current
+    val swipeToEndAction = LocalArticleListSwipeEndAction.current
 
     val density = LocalDensity.current
     val confirmValueChange: (SwipeToDismissBoxValue) -> Boolean = {
         when (it) {
             SwipeToDismissBoxValue.StartToEnd -> {
                 onSwipeStartToEnd?.invoke(articleWithFeed)
-                isFilterUnread
+                swipeToEndAction == SwipeEndActionPreference.ToggleRead && isFilterUnread
             }
 
             SwipeToDismissBoxValue.EndToStart -> {
                 onSwipeEndToStart?.invoke(articleWithFeed)
-                false
+                swipeToStartAction == SwipeStartActionPreference.ToggleRead && isFilterUnread
             }
 
             SwipeToDismissBoxValue.Settled -> {
@@ -245,7 +250,7 @@ fun SwipeableArticleItem(
     val velocityThreshold: () -> Float = { Float.POSITIVE_INFINITY }
     val animationSpec: AnimationSpec<Float> = spring(stiffness = Spring.StiffnessMediumLow)
     val swipeState = rememberSaveable(
-        articleWithFeed, saver = SwipeToDismissBoxState.Saver(
+        articleWithFeed.article, saver = SwipeToDismissBoxState.Saver(
             confirmValueChange = confirmValueChange,
             density = density,
             animationSpec = animationSpec,
@@ -262,26 +267,18 @@ fun SwipeableArticleItem(
             velocityThreshold = velocityThreshold
         )
     }
-//    val swipeState = rememberSwipeToDismissBoxState(positionalThreshold =, confirmValueChange =)
     val view = LocalView.current
     var isActive by remember(articleWithFeed) { mutableStateOf(false) }
     LaunchedEffect(swipeState.progress > PositionalThresholdFraction) {
         if (swipeState.progress > PositionalThresholdFraction && swipeState.targetValue != SwipeToDismissBoxValue.Settled) {
             isActive = true
-            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+            view.performHapticFeedback(HapticFeedbackConstants.GESTURE_THRESHOLD_ACTIVATE)
+
         } else {
             isActive = false
         }
     }
 
-//    val dismissState =
-//        rememberDismissState(initialValue = DismissValue.Default, confirmStateChange = {
-//            if (it == DismissValue.DismissedToEnd) {
-//                isArticleVisible = !isFilterUnread
-//                onSwipeOut(articleWithFeed)
-//            }
-//            isFilterUnread
-//        })
     SwipeToDismissBox(
         state = swipeState,
         enabled = !isScrollInProgress(),
@@ -404,8 +401,7 @@ private fun RowScope.SwipeToDismissBoxBackgroundContent(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .drawBehind { drawRect(backgroundColor.value) }
-            .padding(24.dp)
+            .drawBehind { drawRect(backgroundColor.value) },
     ) {
         Column(modifier = Modifier.align(alignment = alignment)) {
             imageVector?.let {
@@ -413,15 +409,9 @@ private fun RowScope.SwipeToDismissBoxBackgroundContent(
                     imageVector = it,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-            }
-            text?.let {
-                Text(
-                    text = it,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(horizontal = 24.dp)
                 )
             }
         }

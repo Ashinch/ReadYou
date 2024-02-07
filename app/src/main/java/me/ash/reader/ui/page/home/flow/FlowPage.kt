@@ -76,7 +76,8 @@ fun FlowPage(
     val onToggleStarred: State<(ArticleWithFeed) -> Unit> = rememberUpdatedState {
         flowViewModel.updateStarredStatus(
             articleId = it.article.id,
-            isStarred = !it.article.isStarred
+            isStarred = !it.article.isStarred,
+            withDelay = 300
         )
     }
 
@@ -86,7 +87,8 @@ fun FlowPage(
             feedId = null,
             articleId = it.article.id,
             conditions = MarkAsReadConditions.All,
-            isUnread = !it.article.isUnread
+            isUnread = !it.article.isUnread,
+            withDelay = 300
         )
     }
 
