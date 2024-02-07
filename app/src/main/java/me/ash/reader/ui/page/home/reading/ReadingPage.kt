@@ -75,18 +75,14 @@ fun ReadingPage(
         }
     }
 
-    LaunchedEffect(readerState.articleId) {
-        Log.i("RLog", "ReadPage: ${readingUiState.articleWithFeed}")
-        readerState.articleId?.let {
+    LaunchedEffect(readerState.articleId, pagingItems.size) {
+        if (pagingItems.isNotEmpty() && readerState.articleId != null) {
+//            Log.i("RLog", "ReadPage: ${readingUiState.articleWithFeed}")
+            readingViewModel.prefetchArticleId(pagingItems)
             if (readingUiState.isUnread) {
                 readingViewModel.markAsRead()
             }
         }
-    }
-
-    LaunchedEffect(readerState.articleId, pagingItems.size) {
-        if (pagingItems.isNotEmpty() && readerState.articleId != null)
-            readingViewModel.prefetchArticleId(pagingItems)
     }
 
     Scaffold(
