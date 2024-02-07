@@ -76,6 +76,8 @@ fun Preferences.toSettings(): Settings {
         // Interaction
         initialPage = InitialPagePreference.fromPreferences(this),
         initialFilter = InitialFilterPreference.fromPreferences(this),
+        swipeStartAction = SwipeStartActionPreference.fromPreferences(this),
+        swipeEndAction = SwipeEndActionPreference.fromPreferences(this),
         openLink = OpenLinkPreference.fromPreferences(this),
         openLinkSpecificBrowser = OpenLinkSpecificBrowserPreference.fromPreferences(this),
 

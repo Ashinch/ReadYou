@@ -23,6 +23,7 @@ import androidx.work.WorkInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.domain.model.general.MarkAsReadConditions
 import me.ash.reader.infrastructure.preference.*
@@ -51,6 +52,8 @@ fun FlowPage(
     val filterBarFilled = LocalFlowFilterBarFilled.current
     val filterBarPadding = LocalFlowFilterBarPadding.current
     val filterBarTonalElevation = LocalFlowFilterBarTonalElevation.current
+    val swipeToStartAction = LocalArticleListSwipeStartAction.current
+    val swipeToEndAction = LocalArticleListSwipeEndAction.current
 
     val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
     val flowUiState = flowViewModel.flowUiState.collectAsStateValue()
@@ -68,6 +71,35 @@ fun FlowPage(
     var isSyncing by remember { mutableStateOf(false) }
     homeViewModel.syncWorkLiveData.observe(owner) {
         it?.let { isSyncing = it.any { it.state == WorkInfo.State.RUNNING } }
+    }
+
+    val onToggleStarred: State<(ArticleWithFeed) -> Unit> = rememberUpdatedState {
+        flowViewModel.updateStarredStatus(
+            articleId = it.article.id,
+            isStarred = !it.article.isStarred
+        )
+    }
+
+    val onToggleRead: State<(ArticleWithFeed) -> Unit> = rememberUpdatedState {
+        flowViewModel.updateReadStatus(
+            groupId = null,
+            feedId = null,
+            articleId = it.article.id,
+            conditions = MarkAsReadConditions.All,
+            isUnread = !it.article.isUnread
+        )
+    }
+
+    val onSwipeEndToStart = when (swipeToStartAction) {
+        SwipeStartActionPreference.None -> null
+        SwipeStartActionPreference.ToggleRead -> onToggleRead.value
+        SwipeStartActionPreference.ToggleStarred -> onToggleStarred.value
+    }
+
+    val onSwipeStartToEnd = when (swipeToEndAction) {
+        SwipeEndActionPreference.None -> null
+        SwipeEndActionPreference.ToggleRead -> onToggleRead.value
+        SwipeEndActionPreference.ToggleStarred -> onToggleStarred.value
     }
 
     LaunchedEffect(onSearch) {
@@ -245,21 +277,8 @@ fun FlowPage(
                                 launchSingleTop = true
                             }
                         },
-                        onSwipeStartToEnd = {
-                            flowViewModel.updateReadStatus(
-                                groupId = null,
-                                feedId = null,
-                                articleId = it.article.id,
-                                conditions = MarkAsReadConditions.All,
-                                isUnread = !it.article.isUnread
-                            )
-                        },
-                        onSwipeEndToStart = {
-                            flowViewModel.updateStarredStatus(
-                                articleId = it.article.id,
-                                isStarred = !it.article.isStarred
-                            )
-                        }
+                        onSwipeStartToEnd = onSwipeStartToEnd,
+                        onSwipeEndToStart = onSwipeEndToStart
                     )
                     item {
                         Spacer(modifier = Modifier.height(128.dp))

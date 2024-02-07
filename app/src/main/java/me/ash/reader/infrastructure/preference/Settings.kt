@@ -75,6 +75,8 @@ data class Settings(
     // Interaction
     val initialPage: InitialPagePreference = InitialPagePreference.default,
     val initialFilter: InitialFilterPreference = InitialFilterPreference.default,
+    val swipeStartAction: SwipeStartActionPreference = SwipeStartActionPreference.default,
+    val swipeEndAction: SwipeEndActionPreference = SwipeEndActionPreference.default,
     val openLink: OpenLinkPreference = OpenLinkPreference.default,
     val openLinkSpecificBrowser: OpenLinkSpecificBrowserPreference = OpenLinkSpecificBrowserPreference.default,
 
@@ -177,6 +179,8 @@ val LocalReadingImageMaximize =
 val LocalInitialPage = compositionLocalOf<InitialPagePreference> { InitialPagePreference.default }
 val LocalInitialFilter =
     compositionLocalOf<InitialFilterPreference> { InitialFilterPreference.default }
+val LocalArticleListSwipeEndAction = compositionLocalOf { SwipeEndActionPreference.default }
+val LocalArticleListSwipeStartAction = compositionLocalOf { SwipeStartActionPreference.default }
 val LocalOpenLink =
     compositionLocalOf<OpenLinkPreference> { OpenLinkPreference.default }
 val LocalOpenLinkSpecificBrowser =
@@ -263,6 +267,8 @@ fun SettingsProvider(
         // Interaction
         LocalInitialPage provides settings.initialPage,
         LocalInitialFilter provides settings.initialFilter,
+        LocalArticleListSwipeStartAction provides settings.swipeStartAction,
+        LocalArticleListSwipeEndAction provides settings.swipeEndAction,
         LocalOpenLink provides settings.openLink,
         LocalOpenLinkSpecificBrowser provides settings.openLinkSpecificBrowser,
 
