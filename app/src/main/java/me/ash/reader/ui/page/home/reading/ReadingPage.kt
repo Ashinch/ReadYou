@@ -75,7 +75,7 @@ fun ReadingPage(
         }
     }
 
-    LaunchedEffect(readerState.articleId, pagingItems.size) {
+    LaunchedEffect(readerState.articleId, pagingItems.isNotEmpty()) {
         if (pagingItems.isNotEmpty() && readerState.articleId != null) {
 //            Log.i("RLog", "ReadPage: ${readingUiState.articleWithFeed}")
             readingViewModel.prefetchArticleId(pagingItems)
