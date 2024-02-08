@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.reading
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,18 +13,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
+import coil.compose.rememberAsyncImagePainter
 import me.ash.reader.R
 import me.ash.reader.ui.component.base.RYAsyncImage
 import me.saket.telephoto.zoomable.ZoomSpec
+import me.saket.telephoto.zoomable.ZoomableContentLocation
 import me.saket.telephoto.zoomable.rememberZoomableState
 import me.saket.telephoto.zoomable.zoomable
 
@@ -44,17 +49,27 @@ fun ReaderImageViewer(imageData: ImageData, onDismissRequest: () -> Unit = {}) {
             val dialogWindowProvider = LocalView.current.parent as? DialogWindowProvider
             dialogWindowProvider?.window?.setDimAmount(1f)
 
-            val zoomableState = rememberZoomableState().apply {
-                contentAlignment = Alignment.Center
+            val zoomableState =
+                rememberZoomableState(zoomSpec = ZoomSpec(maxZoomFactor = 4f))
+
+            val painter = rememberAsyncImagePainter(model = imageData.imageUrl)
+
+            LaunchedEffect(painter.intrinsicSize) {
+                zoomableState.setContentLocation(
+                    ZoomableContentLocation.scaledInsideAndCenterAligned(painter.intrinsicSize)
+                )
             }
 
-            RYAsyncImage(
-                data = imageData.imageUrl,
+
+
+            Image(
+                painter = painter,
                 contentDescription = imageData.altText,
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .zoomable(zoomableState)
+                    .zoomable(state = zoomableState, clipToBounds = true)
                     .fillMaxSize(),
+                alignment = Alignment.Center,
+                contentScale = ContentScale.Inside
             )
 
             IconButton(
