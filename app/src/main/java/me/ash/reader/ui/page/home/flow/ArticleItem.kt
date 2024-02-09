@@ -96,20 +96,19 @@ fun ArticleItem(
                     if (articleWithFeed.article.isStarred) {
                         Icon(
                             modifier = Modifier
-                                .alpha(0.7f)
                                 .size(14.dp)
                                 .padding(end = 2.dp),
                             imageVector = Icons.Rounded.Star,
                             contentDescription = stringResource(R.string.starred),
-                            tint = MaterialTheme.colorScheme.outline,
+                            tint = MaterialTheme.colorScheme.outlineVariant,
                         )
                     }
 
                     // Date
                     Text(
-                        modifier = Modifier.alpha(0.7f),
+                        modifier = Modifier,
                         text = articleWithFeed.article.dateString ?: "",
-                        color = MaterialTheme.colorScheme.outline,
+                        color = MaterialTheme.colorScheme.outlineVariant,
                         style = MaterialTheme.typography.labelMedium,
                     )
                 }
@@ -118,7 +117,7 @@ fun ArticleItem(
 
         // Bottom
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
         ) {
             // Feed icon
             if (articleListFeedIcon.value) {
@@ -143,7 +142,7 @@ fun ArticleItem(
                 // Description
                 if (articleListDesc.value && articleWithFeed.article.shortDescription.isNotBlank()) {
                     Text(
-                        modifier = Modifier.alpha(0.7f),
+                        modifier = Modifier.padding(top = 4.dp),
                         text = articleWithFeed.article.shortDescription,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall,
