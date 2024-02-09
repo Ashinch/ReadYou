@@ -47,8 +47,7 @@ sealed class SwipeEndActionPreference(val action: Int) : Preference() {
         )
 
         fun fromPreferences(preferences: Preferences): SwipeEndActionPreference {
-            return when (preferences[DataStoreKeys.SwipeEndAction.key]
-                ?: SwipeGestureActions.ToggleStarred) {
+            return when (preferences[DataStoreKeys.SwipeEndAction.key]) {
                 SwipeGestureActions.None -> None
                 SwipeGestureActions.ToggleRead -> ToggleRead
                 SwipeGestureActions.ToggleStarred -> ToggleStarred
@@ -88,8 +87,7 @@ sealed class SwipeStartActionPreference(val action: Int) : Preference() {
         )
 
         fun fromPreferences(preferences: Preferences): SwipeStartActionPreference {
-            return when (preferences[DataStoreKeys.SwipeStartAction.key]
-                ?: SwipeGestureActions.ToggleStarred) {
+            return when (preferences[DataStoreKeys.SwipeStartAction.key]) {
                 SwipeGestureActions.None -> None
                 SwipeGestureActions.ToggleRead -> ToggleRead
                 SwipeGestureActions.ToggleStarred -> ToggleStarred
