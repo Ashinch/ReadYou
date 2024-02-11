@@ -404,6 +404,18 @@ sealed class DataStoreKeys<T> {
             get() = intPreferencesKey("initialFilter")
     }
 
+    data object SwipeStartAction : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("swipeStartAction")
+    }
+
+    data object SwipeEndAction : DataStoreKeys<Int>() {
+
+        override val key: Preferences.Key<Int>
+            get() = intPreferencesKey("swipeEndAction")
+    }
+
     object OpenLink : DataStoreKeys<Int>() {
 
         override val key: Preferences.Key<Int>

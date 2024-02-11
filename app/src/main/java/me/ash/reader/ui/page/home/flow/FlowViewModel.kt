@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,20 +34,40 @@ class FlowViewModel @Inject constructor(
         }
     }
 
-    fun markAsRead(
+    fun updateReadStatus(
         groupId: String?,
         feedId: String?,
         articleId: String?,
         conditions: MarkAsReadConditions,
+        isUnread: Boolean,
+        withDelay: Long = 0,
     ) {
         applicationScope.launch(ioDispatcher) {
+            delay(withDelay)
             rssService.get().markAsRead(
                 groupId = groupId,
                 feedId = feedId,
                 articleId = articleId,
                 before = conditions.toDate(),
-                isUnread = false,
+                isUnread = isUnread,
             )
+        }
+    }
+
+    fun updateStarredStatus(
+        articleId: String?,
+        isStarred: Boolean,
+        withDelay: Long = 0,
+    ) {
+        applicationScope.launch(ioDispatcher) {
+            // FIXME: a dirty hack to ensure the swipe animation doesn't get interrupted when recomposed, remove this after implementing a lazy tag!
+            delay(withDelay)
+            if (articleId != null) {
+                rssService.get().markAsStarred(
+                    articleId = articleId,
+                    isStarred = isStarred,
+                )
+            }
         }
     }
 }

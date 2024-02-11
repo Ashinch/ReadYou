@@ -23,7 +23,7 @@ import androidx.work.WorkInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.domain.model.article.ArticleFlowItem
+import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.domain.model.general.MarkAsReadConditions
 import me.ash.reader.infrastructure.preference.*
@@ -52,6 +52,8 @@ fun FlowPage(
     val filterBarFilled = LocalFlowFilterBarFilled.current
     val filterBarPadding = LocalFlowFilterBarPadding.current
     val filterBarTonalElevation = LocalFlowFilterBarTonalElevation.current
+    val swipeToStartAction = LocalArticleListSwipeStartAction.current
+    val swipeToEndAction = LocalArticleListSwipeEndAction.current
 
     val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
     val flowUiState = flowViewModel.flowUiState.collectAsStateValue()
@@ -69,6 +71,37 @@ fun FlowPage(
     var isSyncing by remember { mutableStateOf(false) }
     homeViewModel.syncWorkLiveData.observe(owner) {
         it?.let { isSyncing = it.any { it.state == WorkInfo.State.RUNNING } }
+    }
+
+    val onToggleStarred: State<(ArticleWithFeed) -> Unit> = rememberUpdatedState {
+        flowViewModel.updateStarredStatus(
+            articleId = it.article.id,
+            isStarred = !it.article.isStarred,
+            withDelay = 300
+        )
+    }
+
+    val onToggleRead: State<(ArticleWithFeed) -> Unit> = rememberUpdatedState {
+        flowViewModel.updateReadStatus(
+            groupId = null,
+            feedId = null,
+            articleId = it.article.id,
+            conditions = MarkAsReadConditions.All,
+            isUnread = !it.article.isUnread,
+            withDelay = 300
+        )
+    }
+
+    val onSwipeEndToStart = when (swipeToStartAction) {
+        SwipeStartActionPreference.None -> null
+        SwipeStartActionPreference.ToggleRead -> onToggleRead.value
+        SwipeStartActionPreference.ToggleStarred -> onToggleStarred.value
+    }
+
+    val onSwipeStartToEnd = when (swipeToEndAction) {
+        SwipeEndActionPreference.None -> null
+        SwipeEndActionPreference.ToggleRead -> onToggleRead.value
+        SwipeEndActionPreference.ToggleStarred -> onToggleStarred.value
     }
 
     LaunchedEffect(onSearch) {
@@ -192,11 +225,12 @@ fun FlowPage(
                             },
                         ) {
                             markAsRead = false
-                            flowViewModel.markAsRead(
+                            flowViewModel.updateReadStatus(
                                 groupId = filterUiState.group?.id,
                                 feedId = filterUiState.feed?.id,
                                 articleId = null,
                                 conditions = it,
+                                isUnread = false
                             )
                         }
                         RYExtensibleVisibility(visible = onSearch) {
@@ -238,20 +272,16 @@ fun FlowPage(
                         isShowFeedIcon = articleListFeedIcon.value,
                         isShowStickyHeader = articleListDateStickyHeader.value,
                         articleListTonalElevation = articleListTonalElevation.value,
-                        onClick =  {
+                        isScrollInProgress = { listState.isScrollInProgress },
+                        onClick = {
                             onSearch = false
                             navController.navigate("${RouteName.READING}/${it.article.id}") {
                                 launchSingleTop = true
                             }
-                        }
-                    ) {
-                        flowViewModel.markAsRead(
-                            groupId = null,
-                            feedId = null,
-                            articleId = it.article.id,
-                            MarkAsReadConditions.All
-                        )
-                    }
+                        },
+                        onSwipeStartToEnd = onSwipeStartToEnd,
+                        onSwipeEndToStart = onSwipeEndToStart
+                    )
                     item {
                         Spacer(modifier = Modifier.height(128.dp))
                         Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))

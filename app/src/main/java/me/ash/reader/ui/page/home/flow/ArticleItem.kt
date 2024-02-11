@@ -1,21 +1,51 @@
 package me.ash.reader.ui.page.home.flow
 
+import android.util.Log
+import android.view.HapticFeedbackConstants
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Circle
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.rounded.CheckCircleOutline
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -24,7 +54,18 @@ import coil.size.Precision
 import coil.size.Scale
 import me.ash.reader.R
 import me.ash.reader.domain.model.article.ArticleWithFeed
-import me.ash.reader.infrastructure.preference.*
+import me.ash.reader.domain.model.constant.ElevationTokens
+import me.ash.reader.infrastructure.preference.FlowArticleReadIndicatorPreference
+import me.ash.reader.infrastructure.preference.LocalArticleListSwipeEndAction
+import me.ash.reader.infrastructure.preference.LocalArticleListSwipeStartAction
+import me.ash.reader.infrastructure.preference.LocalFlowArticleListDesc
+import me.ash.reader.infrastructure.preference.LocalFlowArticleListFeedIcon
+import me.ash.reader.infrastructure.preference.LocalFlowArticleListFeedName
+import me.ash.reader.infrastructure.preference.LocalFlowArticleListImage
+import me.ash.reader.infrastructure.preference.LocalFlowArticleListReadIndicator
+import me.ash.reader.infrastructure.preference.LocalFlowArticleListTime
+import me.ash.reader.infrastructure.preference.SwipeEndActionPreference
+import me.ash.reader.infrastructure.preference.SwipeStartActionPreference
 import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.base.RYAsyncImage
 import me.ash.reader.ui.component.base.SIZE_1000
@@ -50,19 +91,17 @@ fun ArticleItem(
             .clip(Shape20)
             .clickable { onClick(articleWithFeed) }
             .padding(horizontal = 12.dp, vertical = 12.dp)
-            .alpha(
-                articleWithFeed.article.run {
-                    when (articleListReadIndicator) {
-                        FlowArticleReadIndicatorPreference.AllRead -> {
-                            if (isUnread) 1f else 0.5f
-                        }
+            .alpha(articleWithFeed.article.run {
+                when (articleListReadIndicator) {
+                    FlowArticleReadIndicatorPreference.AllRead -> {
+                        if (isUnread) 1f else 0.5f
+                    }
 
-                        FlowArticleReadIndicatorPreference.ExcludingStarred -> {
-                            if (isUnread || isStarred) 1f else 0.5f
-                        }
+                    FlowArticleReadIndicatorPreference.ExcludingStarred -> {
+                        if (isUnread || isStarred) 1f else 0.5f
                     }
                 }
-            ),
+            }),
     ) {
         // Top
         Row(
@@ -170,70 +209,212 @@ fun ArticleItem(
     }
 }
 
-@ExperimentalMaterialApi
+private const val PositionalThresholdFraction = 0.15f
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwipeableArticleItem(
     articleWithFeed: ArticleWithFeed,
     isFilterUnread: Boolean,
     articleListTonalElevation: Int,
     onClick: (ArticleWithFeed) -> Unit = {},
-    onSwipeOut: (ArticleWithFeed) -> Unit = {},
+    isScrollInProgress: () -> Boolean = { false },
+    onSwipeStartToEnd: ((ArticleWithFeed) -> Unit)? = null,
+    onSwipeEndToStart: ((ArticleWithFeed) -> Unit)? = null,
 ) {
-    var isArticleVisible by remember { mutableStateOf(true) }
-    val dismissState =
-        rememberDismissState(initialValue = DismissValue.Default, confirmStateChange = {
-            if (it == DismissValue.DismissedToEnd) {
-                isArticleVisible = !isFilterUnread
-                onSwipeOut(articleWithFeed)
-            }
-            isFilterUnread
-        })
-    if (isArticleVisible) {
-        SwipeToDismiss(
-            state = dismissState,
-            /***  create dismiss alert background box */
-            background = {
-                if (dismissState.dismissDirection == DismissDirection.StartToEnd) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            // .background(MaterialTheme.colorScheme.surface)
-                            .padding(24.dp)
-                    ) {
-                        Column(modifier = Modifier.align(Alignment.CenterStart)) {
-                            Icon(
-                                imageVector = Icons.Rounded.CheckCircleOutline,
-                                contentDescription = stringResource(R.string.mark_as_read),
-                                tint = MaterialTheme.colorScheme.tertiary,
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
-                            )
-                            Text(
-                                text = stringResource(R.string.mark_as_read),
-                                textAlign = TextAlign.Center,
-                                color = MaterialTheme.colorScheme.tertiary,
-                                style = MaterialTheme.typography.labelLarge,
-                            )
-                        }
+    val swipeToStartAction = LocalArticleListSwipeStartAction.current
+    val swipeToEndAction = LocalArticleListSwipeEndAction.current
 
-                    }
-                }
-            },
-            /**** Dismiss Content */
-            dismissContent = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            MaterialTheme.colorScheme.surfaceColorAtElevation(
-                                articleListTonalElevation.dp
-                            ) onDark MaterialTheme.colorScheme.surface
-                        )
-                ) {
-                    ArticleItem(articleWithFeed, onClick)
-                }
-            },
-            /*** Set Direction to dismiss */
-            directions = setOf(DismissDirection.StartToEnd),
+    val density = LocalDensity.current
+    val confirmValueChange: (SwipeToDismissBoxValue) -> Boolean = {
+        when (it) {
+            SwipeToDismissBoxValue.StartToEnd -> {
+                onSwipeStartToEnd?.invoke(articleWithFeed)
+                swipeToEndAction == SwipeEndActionPreference.ToggleRead && isFilterUnread
+            }
+
+            SwipeToDismissBoxValue.EndToStart -> {
+                onSwipeEndToStart?.invoke(articleWithFeed)
+                swipeToStartAction == SwipeStartActionPreference.ToggleRead && isFilterUnread
+            }
+
+            SwipeToDismissBoxValue.Settled -> {
+                true
+            }
+        }
+    }
+    val positionalThreshold: (totalDistance: Float) -> Float = {
+        it * PositionalThresholdFraction
+    }
+    val velocityThreshold: () -> Float = { Float.POSITIVE_INFINITY }
+    val animationSpec: AnimationSpec<Float> = spring(stiffness = Spring.StiffnessMediumLow)
+    val swipeState = rememberSaveable(
+        articleWithFeed.article, saver = SwipeToDismissBoxState.Saver(
+            confirmValueChange = confirmValueChange,
+            density = density,
+            animationSpec = animationSpec,
+            velocityThreshold = velocityThreshold,
+            positionalThreshold = positionalThreshold
+        )
+    ) {
+        SwipeToDismissBoxState(
+            initialValue = SwipeToDismissBoxValue.Settled,
+            density = density,
+            animationSpec = animationSpec,
+            confirmValueChange = confirmValueChange,
+            positionalThreshold = positionalThreshold,
+            velocityThreshold = velocityThreshold
         )
     }
+    val view = LocalView.current
+    var isActive by remember(articleWithFeed) { mutableStateOf(false) }
+    LaunchedEffect(swipeState.progress > PositionalThresholdFraction) {
+        if (swipeState.progress > PositionalThresholdFraction && swipeState.targetValue != SwipeToDismissBoxValue.Settled) {
+            isActive = true
+            view.performHapticFeedback(HapticFeedbackConstants.GESTURE_THRESHOLD_ACTIVATE)
+
+        } else {
+            isActive = false
+        }
+    }
+
+    SwipeToDismissBox(
+        state = swipeState,
+        enabled = !isScrollInProgress(),
+        /***  create dismiss alert background box */
+        backgroundContent = {
+            SwipeToDismissBoxBackgroundContent(
+                direction = swipeState.dismissDirection,
+                isActive = isActive,
+                isStarred = articleWithFeed.article.isStarred,
+                isRead = !articleWithFeed.article.isUnread
+            )
+        },
+        /**** Dismiss Content */
+        content = {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        MaterialTheme.colorScheme.surfaceColorAtElevation(
+                            articleListTonalElevation.dp
+                        ) onDark MaterialTheme.colorScheme.surface
+                    )
+            ) {
+                ArticleItem(articleWithFeed, onClick)
+            }
+        },
+        /*** Set Direction to dismiss */
+        enableDismissFromEndToStart = onSwipeEndToStart != null,
+        enableDismissFromStartToEnd = onSwipeStartToEnd != null
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RowScope.SwipeToDismissBoxBackgroundContent(
+    direction: SwipeToDismissBoxValue,
+    isActive: Boolean,
+    isStarred: Boolean,
+    isRead: Boolean,
+) {
+    val containerColor = MaterialTheme.colorScheme.surface
+    val containerColorElevated = MaterialTheme.colorScheme.tertiaryContainer
+    val backgroundColor = remember { Animatable(containerColor) }
+
+    LaunchedEffect(isActive) {
+        backgroundColor.animateTo(
+            if (isActive) {
+                containerColorElevated
+            } else {
+                containerColor
+            }
+        )
+    }
+    val alignment = when (direction) {
+        SwipeToDismissBoxValue.StartToEnd -> Alignment.CenterStart
+        SwipeToDismissBoxValue.EndToStart -> Alignment.CenterEnd
+        SwipeToDismissBoxValue.Settled -> Alignment.Center
+    }
+    val swipeToStartAction = LocalArticleListSwipeStartAction.current
+    val swipeToEndAction = LocalArticleListSwipeEndAction.current
+
+    val starImageVector =
+        remember(isStarred) { if (isStarred) Icons.Outlined.StarOutline else Icons.Rounded.Star }
+
+    val readImageVector =
+        remember(isRead) { if (isRead) Icons.Outlined.Circle else Icons.Rounded.CheckCircleOutline }
+
+    val starText =
+        stringResource(if (isStarred) R.string.mark_as_unstar else R.string.mark_as_starred)
+
+    val readText =
+        stringResource(if (isRead) R.string.mark_as_unread else R.string.mark_as_read)
+
+    val imageVector = remember(direction) {
+        when (direction) {
+            SwipeToDismissBoxValue.StartToEnd -> {
+
+                when (swipeToEndAction) {
+                    SwipeEndActionPreference.None -> null
+                    SwipeEndActionPreference.ToggleRead -> readImageVector
+                    SwipeEndActionPreference.ToggleStarred -> starImageVector
+                }
+            }
+
+            SwipeToDismissBoxValue.EndToStart -> {
+                when (swipeToStartAction) {
+                    SwipeStartActionPreference.None -> null
+                    SwipeStartActionPreference.ToggleRead -> readImageVector
+                    SwipeStartActionPreference.ToggleStarred -> starImageVector
+                }
+            }
+
+            SwipeToDismissBoxValue.Settled -> null
+        }
+    }
+
+    val text = remember(direction) {
+        when (direction) {
+            SwipeToDismissBoxValue.StartToEnd -> {
+                when (swipeToEndAction) {
+                    SwipeEndActionPreference.None -> null
+                    SwipeEndActionPreference.ToggleRead -> readText
+                    SwipeEndActionPreference.ToggleStarred -> starText
+                }
+            }
+
+            SwipeToDismissBoxValue.EndToStart -> {
+                when (swipeToStartAction) {
+                    SwipeStartActionPreference.None -> null
+                    SwipeStartActionPreference.ToggleRead -> readText
+                    SwipeStartActionPreference.ToggleStarred -> starText
+                }
+            }
+
+            SwipeToDismissBoxValue.Settled -> null
+        }
+    }
+
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .drawBehind { drawRect(backgroundColor.value) },
+    ) {
+        Column(modifier = Modifier.align(alignment = alignment)) {
+            imageVector?.let {
+                Icon(
+                    imageVector = it,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(horizontal = 24.dp)
+                )
+            }
+        }
+    }
+
+
 }
