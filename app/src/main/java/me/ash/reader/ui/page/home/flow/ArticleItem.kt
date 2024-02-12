@@ -593,10 +593,8 @@ fun ArticleItemMenuContent(
                 )
             })
     }
-    if (onShare != null) {
-        HorizontalDivider()
-    }
     onShare?.let {
+        HorizontalDivider()
         DropdownMenuItem(text = { Text(text = stringResource(id = R.string.share)) }, onClick = {
             onShare(articleWithFeed)
             onItemClick?.invoke()

@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -31,6 +32,7 @@ import me.ash.reader.infrastructure.preference.*
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.share
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
 
@@ -53,7 +55,7 @@ fun FlowPage(
     val filterBarFilled = LocalFlowFilterBarFilled.current
     val filterBarPadding = LocalFlowFilterBarPadding.current
     val filterBarTonalElevation = LocalFlowFilterBarTonalElevation.current
-    val hapticFeedback = LocalHapticFeedback.current
+    val context = LocalContext.current
 
     val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
     val flowUiState = flowViewModel.flowUiState.collectAsStateValue()
@@ -114,8 +116,12 @@ fun FlowPage(
     }
 
     val onShare: ((ArticleWithFeed) -> Unit)? = remember {
-        {
-            //todo
+        { articleWithFeed ->
+            with(articleWithFeed.article) {
+                context.share(
+                    arrayOf(title, link).filter { it.isNotBlank() }.joinToString(separator = "\n")
+                )
+            }
         }
     }
 
