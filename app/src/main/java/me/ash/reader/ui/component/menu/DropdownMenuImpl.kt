@@ -1,41 +1,15 @@
-/*
- * Copyright 2023 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package me.ash.reader.ui.component.menu
 
-import android.util.Log
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.rememberTransition
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.shrinkOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -47,17 +21,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.LookaheadScope
-import androidx.compose.ui.layout.intermediateLayout
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
@@ -121,12 +89,11 @@ internal object MenuPosition {
      * The given [offset] is [LayoutDirection]-aware. It will be added to the resulting x position
      * for [LayoutDirection.Ltr] and subtracted for [LayoutDirection.Rtl].
      */
-    fun startToAnchorStart(offset: Int = 0): Horizontal =
-        AnchorAlignmentOffsetPosition.Horizontal(
-            menuAlignment = Alignment.Start,
-            anchorAlignment = Alignment.Start,
-            offset = offset,
-        )
+    fun startToAnchorStart(offset: Int = 0): Horizontal = AnchorAlignmentOffsetPosition.Horizontal(
+        menuAlignment = Alignment.Start,
+        anchorAlignment = Alignment.Start,
+        offset = offset,
+    )
 
     /**
      * Returns a [MenuPosition.Horizontal] which aligns the end of the menu to the end of the
@@ -135,12 +102,11 @@ internal object MenuPosition {
      * The given [offset] is [LayoutDirection]-aware. It will be added to the resulting x position
      * for [LayoutDirection.Ltr] and subtracted for [LayoutDirection.Rtl].
      */
-    fun endToAnchorEnd(offset: Int = 0): Horizontal =
-        AnchorAlignmentOffsetPosition.Horizontal(
-            menuAlignment = Alignment.End,
-            anchorAlignment = Alignment.End,
-            offset = offset,
-        )
+    fun endToAnchorEnd(offset: Int = 0): Horizontal = AnchorAlignmentOffsetPosition.Horizontal(
+        menuAlignment = Alignment.End,
+        anchorAlignment = Alignment.End,
+        offset = offset,
+    )
 
     /**
      * Returns a [MenuPosition.Horizontal] which aligns the left of the menu to the left of the
@@ -149,11 +115,10 @@ internal object MenuPosition {
      * The resulting x position will be coerced so that the menu remains within the area inside the
      * given [margin] from the left and right edges of the window.
      */
-    fun leftToWindowLeft(margin: Int = 0): Horizontal =
-        WindowAlignmentMarginPosition.Horizontal(
-            alignment = AbsoluteAlignment.Left,
-            margin = margin,
-        )
+    fun leftToWindowLeft(margin: Int = 0): Horizontal = WindowAlignmentMarginPosition.Horizontal(
+        alignment = AbsoluteAlignment.Left,
+        margin = margin,
+    )
 
     /**
      * Returns a [MenuPosition.Horizontal] which aligns the right of the menu to the right of the
@@ -162,44 +127,40 @@ internal object MenuPosition {
      * The resulting x position will be coerced so that the menu remains within the area inside the
      * given [margin] from the left and right edges of the window.
      */
-    fun rightToWindowRight(margin: Int = 0): Horizontal =
-        WindowAlignmentMarginPosition.Horizontal(
-            alignment = AbsoluteAlignment.Right,
-            margin = margin,
-        )
+    fun rightToWindowRight(margin: Int = 0): Horizontal = WindowAlignmentMarginPosition.Horizontal(
+        alignment = AbsoluteAlignment.Right,
+        margin = margin,
+    )
 
     /**
      * Returns a [MenuPosition.Vertical] which aligns the top of the menu to the bottom of the
      * anchor.
      */
-    fun topToAnchorBottom(offset: Int = 0): Vertical =
-        AnchorAlignmentOffsetPosition.Vertical(
-            menuAlignment = Alignment.Top,
-            anchorAlignment = Alignment.Bottom,
-            offset = offset,
-        )
+    fun topToAnchorBottom(offset: Int = 0): Vertical = AnchorAlignmentOffsetPosition.Vertical(
+        menuAlignment = Alignment.Top,
+        anchorAlignment = Alignment.Bottom,
+        offset = offset,
+    )
 
     /**
      * Returns a [MenuPosition.Vertical] which aligns the bottom of the menu to the top of the
      * anchor.
      */
-    fun bottomToAnchorTop(offset: Int = 0): Vertical =
-        AnchorAlignmentOffsetPosition.Vertical(
-            menuAlignment = Alignment.Bottom,
-            anchorAlignment = Alignment.Top,
-            offset = offset,
-        )
+    fun bottomToAnchorTop(offset: Int = 0): Vertical = AnchorAlignmentOffsetPosition.Vertical(
+        menuAlignment = Alignment.Bottom,
+        anchorAlignment = Alignment.Top,
+        offset = offset,
+    )
 
     /**
      * Returns a [MenuPosition.Vertical] which aligns the center of the menu to the top of the
      * anchor.
      */
-    fun centerToAnchorTop(offset: Int = 0): Vertical =
-        AnchorAlignmentOffsetPosition.Vertical(
-            menuAlignment = Alignment.CenterVertically,
-            anchorAlignment = Alignment.Top,
-            offset = offset,
-        )
+    fun centerToAnchorTop(offset: Int = 0): Vertical = AnchorAlignmentOffsetPosition.Vertical(
+        menuAlignment = Alignment.CenterVertically,
+        anchorAlignment = Alignment.Top,
+        offset = offset,
+    )
 
     /**
      * Returns a [MenuPosition.Vertical] which aligns the top of the menu to the top of the
@@ -208,11 +169,10 @@ internal object MenuPosition {
      * The resulting y position will be coerced so that the menu remains within the area inside the
      * given [margin] from the top and bottom edges of the window.
      */
-    fun topToWindowTop(margin: Int = 0): Vertical =
-        WindowAlignmentMarginPosition.Vertical(
-            alignment = Alignment.Top,
-            margin = margin,
-        )
+    fun topToWindowTop(margin: Int = 0): Vertical = WindowAlignmentMarginPosition.Vertical(
+        alignment = Alignment.Top,
+        margin = margin,
+    )
 
     /**
      * Returns a [MenuPosition.Vertical] which aligns the bottom of the menu to the bottom of the
@@ -221,11 +181,10 @@ internal object MenuPosition {
      * The resulting y position will be coerced so that the menu remains within the area inside the
      * given [margin] from the top and bottom edges of the window.
      */
-    fun bottomToWindowBottom(margin: Int = 0): Vertical =
-        WindowAlignmentMarginPosition.Vertical(
-            alignment = Alignment.Bottom,
-            margin = margin,
-        )
+    fun bottomToWindowBottom(margin: Int = 0): Vertical = WindowAlignmentMarginPosition.Vertical(
+        alignment = Alignment.Bottom,
+        margin = margin,
+    )
 }
 
 @Immutable
@@ -408,9 +367,7 @@ internal data class DropdownMenuPositionProvider(
         popupContentSize: IntSize
     ): IntOffset {
         val xCandidates = listOf(
-            startToAnchorStart,
-            endToAnchorEnd,
-            if (anchorBounds.center.x < windowSize.width / 2) {
+            startToAnchorStart, endToAnchorEnd, if (anchorBounds.center.x < windowSize.width / 2) {
                 leftToWindowLeft
             } else {
                 rightToWindowRight
@@ -444,19 +401,19 @@ internal data class DropdownMenuPositionProvider(
             )
         }
         val y = yCandidates.fastFirstOrNull {
-            it >= verticalMargin &&
-                    it + popupContentSize.height <= windowSize.height - verticalMargin
+            it >= verticalMargin && it + popupContentSize.height <= windowSize.height - verticalMargin
         } ?: yCandidates.last()
 
         val menuOffset = IntOffset(x, y)
-        onPositionCalculated(
-            /* anchorBounds = */anchorBounds,
-            /* menuBounds = */IntRect(offset = menuOffset, size = popupContentSize)
+        onPositionCalculated(/* anchorBounds = */anchorBounds,/* menuBounds = */
+            IntRect(offset = menuOffset, size = popupContentSize)
         )
         return menuOffset
     }
 }
 
+// The shadow disappears when the surface is fading out, delay the animation to make it less noticeable
+private const val FadeOutDuration = 80
 
 @Composable
 fun DropdownMenuContent(
@@ -466,37 +423,13 @@ fun DropdownMenuContent(
     content: @Composable ColumnScope.() -> Unit
 ) {
     AnimatedVisibility(
-        visibleState = expandedState,
-        label = "",
-        enter = fadeIn(
+        visibleState = expandedState, label = "", enter = EnterTransition.None, exit = fadeOut(
             animationSpec = tween(
-                durationMillis = EnterDuration,
-                easing = EmphasizedDecelerate
-            )
-        ) +
-                expandVertically(
-                    animationSpec = tween(
-                        durationMillis = EnterDuration,
-                        easing = EmphasizedDecelerate
-                    ),
-                    expandFrom = Alignment.Top,
-                ),
-        exit =
-        fadeOut(
-            animationSpec = tween(
-                // Why??
-                durationMillis = ExitDuration - 20,
+                delayMillis = ExitDuration - FadeOutDuration,
+                durationMillis = FadeOutDuration,
                 easing = EmphasizedAccelerate
             )
-        ) +
-                shrinkVertically(
-                    animationSpec = tween(
-                        durationMillis = ExitDuration,
-                        easing = EmphasizedAccelerate
-                    ),
-                    shrinkTowards = Alignment.Top,
-                ),
-        modifier = Modifier
+        ), modifier = Modifier
     ) {
         Surface(
             modifier = Modifier,
@@ -505,54 +438,48 @@ fun DropdownMenuContent(
             tonalElevation = ElevationTokens.Level2.dp,
             shadowElevation = ElevationTokens.Level2.dp
         ) {
-            Column(
-                modifier = modifier
-                    .padding(vertical = DropdownMenuVerticalPadding)
-                    .width(IntrinsicSize.Max)
-                    .verticalScroll(scrollState),
-                content = content
-            )
+            AnimatedVisibility(
+                visibleState = expandedState, label = "", enter = fadeIn(
+                    animationSpec = tween(
+                        durationMillis = EnterDuration, easing = EmphasizedDecelerate
+                    )
+                ) + expandVertically(
+                    animationSpec = tween(
+                        durationMillis = EnterDuration, easing = EmphasizedDecelerate
+                    ),
+                    expandFrom = Alignment.Top,
+                ) + slideInVertically(
+                    animationSpec = tween(
+                        durationMillis = EnterDuration, easing = EmphasizedDecelerate
+                    ),
+                    initialOffsetY = { -it / 10 },
+                ), exit = fadeOut(
+                    animationSpec = tween(
+                        // Why ???
+                        durationMillis = ExitDuration - 40,
+                        easing = EmphasizedAccelerate
+                    )
+                ) + shrinkVertically(
+                    animationSpec = tween(
+                        durationMillis = ExitDuration, easing = EmphasizedAccelerate
+                    ),
+                    shrinkTowards = Alignment.Top,
+                ) + slideOutVertically(animationSpec = tween(
+                    durationMillis = ExitDuration, easing = EmphasizedAccelerate
+                ), targetOffsetY = { -it / 10 }), modifier = Modifier
+            ) {
+                Column(
+                    modifier = modifier
+                        .padding(vertical = DropdownMenuVerticalPadding)
+                        .width(IntrinsicSize.Max)
+                        .verticalScroll(scrollState), content = content
+                )
+            }
         }
-
     }
 }
 
-internal fun calculateTransformOrigin(
-    anchorBounds: IntRect,
-    menuBounds: IntRect
-): TransformOrigin {
-    val pivotX = when {
-        menuBounds.left >= anchorBounds.right -> 0f
-        menuBounds.right <= anchorBounds.left -> 1f
-        menuBounds.width == 0 -> 0f
-        else -> {
-            val intersectionCenter =
-                (max(anchorBounds.left, menuBounds.left) +
-                        min(anchorBounds.right, menuBounds.right)) / 2
-            (intersectionCenter - menuBounds.left).toFloat() / menuBounds.width
-        }
-    }
-    val pivotY = when {
-        menuBounds.top >= anchorBounds.bottom -> 0f
-        menuBounds.bottom <= anchorBounds.top -> 1f
-        menuBounds.height == 0 -> 0f
-        else -> {
-            val intersectionCenter =
-                (max(anchorBounds.top, menuBounds.top) +
-                        min(anchorBounds.bottom, menuBounds.bottom)) / 2
-            (intersectionCenter - menuBounds.top).toFloat() / menuBounds.height
-        }
-    }
-    return TransformOrigin(pivotX, pivotY)
-}
 
 // Size defaults.
 internal val MenuVerticalMargin = 48.dp
-private val DropdownMenuItemHorizontalPadding = 12.dp
 internal val DropdownMenuVerticalPadding = 8.dp
-private val DropdownMenuItemDefaultMinWidth = 112.dp
-private val DropdownMenuItemDefaultMaxWidth = 280.dp
-
-// Menu open/close animation.
-internal const val InTransitionDuration = 120
-internal const val OutTransitionDuration = 75
