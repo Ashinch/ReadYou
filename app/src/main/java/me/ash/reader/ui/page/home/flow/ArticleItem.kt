@@ -84,6 +84,7 @@ import me.ash.reader.infrastructure.preference.SwipeStartActionPreference
 import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.base.RYAsyncImage
 import me.ash.reader.ui.component.base.SIZE_1000
+import me.ash.reader.ui.component.menu.AnimatedDropdownMenu
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.settings.color.flow.generateArticleWithFeedPreview
 import me.ash.reader.ui.theme.Shape20
@@ -371,7 +372,7 @@ fun SwipeableArticleItem(
                 )
                 with(articleWithFeed.article) {
                     if (isMenuEnabled) {
-                        DropdownMenu(
+                        AnimatedDropdownMenu(
                             expanded = expanded,
                             onDismissRequest = { expanded = false },
                             offset = density.run {
