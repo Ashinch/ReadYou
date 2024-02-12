@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -52,8 +53,7 @@ fun FlowPage(
     val filterBarFilled = LocalFlowFilterBarFilled.current
     val filterBarPadding = LocalFlowFilterBarPadding.current
     val filterBarTonalElevation = LocalFlowFilterBarTonalElevation.current
-    val swipeToStartAction = LocalArticleListSwipeStartAction.current
-    val swipeToEndAction = LocalArticleListSwipeEndAction.current
+    val hapticFeedback = LocalHapticFeedback.current
 
     val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
     val flowUiState = flowViewModel.flowUiState.collectAsStateValue()
@@ -79,43 +79,43 @@ fun FlowPage(
         onDispose { homeViewModel.syncWorkLiveData.removeObservers(owner) }
     }
 
-
-    val onToggleStarred: (ArticleWithFeed) -> Unit = remember {
-        {
+    val onToggleStarred: (ArticleWithFeed, Long) -> Unit = remember {
+        { article, delay ->
             flowViewModel.updateStarredStatus(
-                articleId = it.article.id,
-                isStarred = !it.article.isStarred,
-                withDelay = 300
+                articleId = article.article.id,
+                isStarred = !article.article.isStarred,
+                withDelay = delay
             )
         }
     }
 
-    val onToggleRead: (ArticleWithFeed) -> Unit = remember {
-        {
+    val onToggleRead: (ArticleWithFeed, Long) -> Unit = remember {
+        { article, delay ->
             flowViewModel.updateReadStatus(
                 groupId = null,
                 feedId = null,
-                articleId = it.article.id,
+                articleId = article.article.id,
                 conditions = MarkAsReadConditions.All,
-                isUnread = !it.article.isUnread,
-                withDelay = 300
+                isUnread = !article.article.isUnread,
+                withDelay = delay
             )
         }
     }
-
-    val onSwipeEndToStart = remember(swipeToStartAction) {
-        when (swipeToStartAction) {
-            SwipeStartActionPreference.None -> null
-            SwipeStartActionPreference.ToggleRead -> onToggleRead
-            SwipeStartActionPreference.ToggleStarred -> onToggleStarred
+    val onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? = remember {
+        {
+            //todo
         }
     }
 
-    val onSwipeStartToEnd = remember(swipeToEndAction) {
-        when (swipeToEndAction) {
-            SwipeEndActionPreference.None -> null
-            SwipeEndActionPreference.ToggleRead -> onToggleRead
-            SwipeEndActionPreference.ToggleStarred -> onToggleStarred
+    val onMarkBelowAsRead: ((ArticleWithFeed) -> Unit)? = remember {
+        {
+            //todo
+        }
+    }
+
+    val onShare: ((ArticleWithFeed) -> Unit)? = remember {
+        {
+            //todo
         }
     }
 
@@ -215,6 +215,7 @@ fun FlowPage(
                     }
                 }
             ) {
+                var showMenu by remember { mutableStateOf(false) }
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     state = listState,
@@ -287,15 +288,18 @@ fun FlowPage(
                         isShowFeedIcon = articleListFeedIcon.value,
                         isShowStickyHeader = articleListDateStickyHeader.value,
                         articleListTonalElevation = articleListTonalElevation.value,
-                        isScrollInProgress = { listState.isScrollInProgress },
+                        isSwipeEnabled = { listState.isScrollInProgress },
                         onClick = {
                             onSearch = false
                             navController.navigate("${RouteName.READING}/${it.article.id}") {
                                 launchSingleTop = true
                             }
                         },
-                        onSwipeStartToEnd = onSwipeStartToEnd,
-                        onSwipeEndToStart = onSwipeEndToStart
+                        onToggleStarred = onToggleStarred,
+                        onToggleRead = onToggleRead,
+                        onMarkAboveAsRead = onMarkAboveAsRead,
+                        onMarkBelowAsRead = onMarkBelowAsRead,
+                        onShare = onShare,
                     )
                     item {
                         Spacer(modifier = Modifier.height(128.dp))

@@ -421,4 +421,6 @@
     <string name="toggle_starred">Toggle starred</string>
     <string name="export">Export</string>
     <string name="pull_to_switch_article">Pull to switch article</string>
+    <string name="mark_above_as_read">Mark above as read</string>
+    <string name="mark_below_as_read">Mark below as read</string>
 </resources>
