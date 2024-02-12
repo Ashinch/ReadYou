@@ -419,4 +419,6 @@
     <string name="none">None</string>
     <string name="toggle_read">Toggle read</string>
     <string name="toggle_starred">Toggle starred</string>
+    <string name="mark_above_as_read">Mark above as read</string>
+    <string name="mark_below_as_read">Mark below as read</string>
 </resources>
