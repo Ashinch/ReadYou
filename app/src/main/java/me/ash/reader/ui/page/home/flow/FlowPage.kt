@@ -69,9 +69,16 @@ fun FlowPage(
 
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
-    homeViewModel.syncWorkLiveData.observe(owner) {
-        it?.let { isSyncing = it.any { it.state == WorkInfo.State.RUNNING } }
+
+    DisposableEffect(owner) {
+        homeViewModel.syncWorkLiveData.observe(owner) { workInfoList ->
+            workInfoList.let {
+                isSyncing = it.any { workInfo -> workInfo.state == WorkInfo.State.RUNNING }
+            }
+        }
+        onDispose { homeViewModel.syncWorkLiveData.removeObservers(owner) }
     }
+
 
     val onToggleStarred: State<(ArticleWithFeed) -> Unit> = rememberUpdatedState {
         flowViewModel.updateStarredStatus(
