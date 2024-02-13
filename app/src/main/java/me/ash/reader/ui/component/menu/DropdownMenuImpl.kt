@@ -2,6 +2,7 @@ package me.ash.reader.ui.component.menu
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -427,7 +428,7 @@ fun DropdownMenuContent(
             animationSpec = tween(
                 delayMillis = ExitDuration - FadeOutDuration,
                 durationMillis = FadeOutDuration,
-                easing = EmphasizedAccelerate
+                easing = LinearEasing
             )
         ), modifier = Modifier
     ) {
@@ -456,7 +457,7 @@ fun DropdownMenuContent(
                 ), exit = fadeOut(
                     animationSpec = tween(
                         // Why ???
-                        durationMillis = ExitDuration - 40,
+                        durationMillis = ExitDuration - 20,
                         easing = EmphasizedAccelerate
                     )
                 ) + shrinkVertically(
