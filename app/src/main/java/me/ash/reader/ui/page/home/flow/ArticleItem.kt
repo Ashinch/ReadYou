@@ -45,10 +45,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import coil.size.Precision
 import coil.size.Scale
@@ -156,7 +158,9 @@ fun ArticleItem(
 
         // Bottom
         Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp),
         ) {
             // Feed icon
             if (articleListFeedIcon.value) {
@@ -331,9 +335,12 @@ private fun RowScope.SwipeToDismissBoxBackgroundContent(
             }
         )
     }
+    // FIXME: Remove this once SwipeToDismissBox has proper RTL support
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+
     val alignment = when (direction) {
-        SwipeToDismissBoxValue.StartToEnd -> Alignment.CenterStart
-        SwipeToDismissBoxValue.EndToStart -> Alignment.CenterEnd
+        SwipeToDismissBoxValue.StartToEnd -> if (isRtl) Alignment.CenterEnd else Alignment.CenterStart
+        SwipeToDismissBoxValue.EndToStart -> if (isRtl) Alignment.CenterStart else Alignment.CenterEnd
         SwipeToDismissBoxValue.Settled -> Alignment.Center
     }
     val swipeToStartAction = LocalArticleListSwipeStartAction.current

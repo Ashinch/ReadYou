@@ -283,7 +283,7 @@ fun SwipeToDismissBox(
     enableDismissFromEndToStart: Boolean = true,
     content: @Composable RowScope.() -> Unit,
 ) {
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+//    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     Box(
         modifier
@@ -291,7 +291,7 @@ fun SwipeToDismissBox(
                 state = state.anchoredDraggableState,
                 orientation = Orientation.Horizontal,
                 enabled = enabled && state.currentValue == SwipeToDismissBoxValue.Settled,
-                reverseDirection = isRtl,
+//                reverseDirection = isRtl,
             ),
         propagateMinConstraints = true
     ) {
