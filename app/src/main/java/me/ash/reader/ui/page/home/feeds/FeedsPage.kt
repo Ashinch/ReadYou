@@ -315,7 +315,7 @@ fun FeedsPage(
         }
     )
 
-    SubscribeDialog()
+    SubscribeDialog(subscribeViewModel = subscribeViewModel)
     GroupOptionDrawer()
     FeedOptionDrawer()
 
