@@ -430,14 +430,14 @@ fun DropdownMenuContent(
                 durationMillis = FadeOutDuration,
                 easing = LinearEasing
             )
-        ), modifier = Modifier
+        ), modifier = modifier
     ) {
         Surface(
             modifier = Modifier,
             shape = MaterialTheme.shapes.extraSmall,
             color = MaterialTheme.colorScheme.surface,
             tonalElevation = ElevationTokens.Level2.dp,
-            shadowElevation = ElevationTokens.Level2.dp
+            shadowElevation = ElevationTokens.Level1.dp
         ) {
             AnimatedVisibility(
                 visibleState = expandedState, label = "", enter = fadeIn(
@@ -470,7 +470,7 @@ fun DropdownMenuContent(
                 ), targetOffsetY = { -it / 10 }), modifier = Modifier
             ) {
                 Column(
-                    modifier = modifier
+                    modifier = Modifier
                         .padding(vertical = DropdownMenuVerticalPadding)
                         .width(IntrinsicSize.Max)
                         .verticalScroll(scrollState), content = content

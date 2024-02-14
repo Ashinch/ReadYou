@@ -373,6 +373,7 @@ fun SwipeableArticleItem(
                 with(articleWithFeed.article) {
                     if (isMenuEnabled) {
                         AnimatedDropdownMenu(
+                            modifier = Modifier.padding(12.dp),
                             expanded = expanded,
                             onDismissRequest = { expanded = false },
                             offset = density.run {
