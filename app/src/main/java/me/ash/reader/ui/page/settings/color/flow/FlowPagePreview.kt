@@ -77,7 +77,7 @@ fun FlowPagePreview(
                     tint = MaterialTheme.colorScheme.onSurface,
                 ) {}
             }, colors = TopAppBarDefaults.smallTopAppBarColors(
-                containerColor = Color.Transparent,
+                containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(topBarTonalElevation.value.dp),
             )
         )
         Spacer(modifier = Modifier.height(12.dp))

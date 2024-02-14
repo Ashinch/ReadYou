@@ -24,7 +24,7 @@ fun BlockButton(
     modifier: Modifier = Modifier,
     text: String = "",
     selected: Boolean = false,
-    containerColor: Color = MaterialTheme.colorScheme.surface.copy(0.7f) onDark MaterialTheme.colorScheme.inverseOnSurface,
+    containerColor: Color = MaterialTheme.colorScheme.surfaceContainer onDark MaterialTheme.colorScheme.inverseOnSurface,
     selectedContainerColor: Color = MaterialTheme.colorScheme.primaryContainer alwaysLight true,
     contentColor: Color = MaterialTheme.colorScheme.inverseSurface,
     selectedContentColor: Color = MaterialTheme.colorScheme.onSurface alwaysLight true,
