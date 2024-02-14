@@ -21,6 +21,7 @@ import me.ash.reader.infrastructure.preference.LocalReadingDarkTheme
 import me.ash.reader.ui.ext.*
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage
+import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.page.home.flow.FlowPage
 import me.ash.reader.ui.page.home.reading.ReadingPage
 import me.ash.reader.ui.page.settings.SettingsPage
@@ -42,10 +43,12 @@ import me.ash.reader.ui.theme.AppTheme
 @Composable
 fun HomeEntry(
     homeViewModel: HomeViewModel = hiltViewModel(),
+    subscribeViewModel: SubscribeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     var isReadingPage by rememberSaveable { mutableStateOf(false) }
     val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
+    val subscribeUiState = subscribeViewModel.subscribeUiState.collectAsStateValue()
     val navController = rememberAnimatedNavController()
 
     val intent by rememberSaveable { mutableStateOf(context.findActivity()?.intent) }
@@ -81,7 +84,23 @@ fun HomeEntry(
             Log.i("RLog", "currentBackStackEntry: ${navController.currentDestination?.route}")
             // Animation duration takes 310 ms
             delay(310L)
-            isReadingPage = navController.currentDestination?.route == "${RouteName.READING}/{articleId}"
+            isReadingPage =
+                navController.currentDestination?.route == "${RouteName.READING}/{articleId}"
+        }
+    }
+
+    DisposableEffect(subscribeUiState.shouldNavigateToFeedPage) {
+        if (subscribeUiState.shouldNavigateToFeedPage) {
+            if (navController.currentDestination?.route != RouteName.FEEDS) {
+                navController.popBackStack(
+                    route = RouteName.FEEDS,
+                    inclusive = false,
+                    saveState = true
+                )
+            }
+        }
+        onDispose {
+            subscribeViewModel.onIntentConsumed()
         }
     }
 
@@ -126,7 +145,11 @@ fun HomeEntry(
 
             // Home
             forwardAndBackwardComposable(route = RouteName.FEEDS) {
-                FeedsPage(navController = navController, homeViewModel = homeViewModel)
+                FeedsPage(
+                    navController = navController,
+                    homeViewModel = homeViewModel,
+                    subscribeViewModel = subscribeViewModel
+                )
             }
             forwardAndBackwardComposable(route = RouteName.FLOW) {
                 FlowPage(
