@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.*
+import me.ash.reader.infrastructure.preference.ReadingTextLineHeightPreference.coerceToRange
 import me.ash.reader.ui.component.base.*
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
@@ -31,18 +32,21 @@ fun ReadingTextPage(
 
     val readingTheme = LocalReadingTheme.current
     val fontSize = LocalReadingTextFontSize.current
+    val lineHeight = LocalReadingTextLineHeight.current
     val letterSpacing = LocalReadingLetterSpacing.current
     val horizontalPadding = LocalReadingTextHorizontalPadding.current
     val align = LocalReadingTextAlign.current
     val bold = LocalReadingTextBold.current
 
     var fontSizeDialogVisible by remember { mutableStateOf(false) }
+    var lineHeightDialogVisible by remember { mutableStateOf(false) }
     var letterSpacingDialogVisible by remember { mutableStateOf(false) }
     var horizontalPaddingDialogVisible by remember { mutableStateOf(false) }
     var alignDialogVisible by remember { mutableStateOf(false) }
 
     var fontSizeValue: Int? by remember { mutableStateOf(fontSize) }
     var letterSpacingValue: String? by remember { mutableStateOf(letterSpacing.toString()) }
+    var lineHeightMultipleValue: String by remember(lineHeight) { mutableStateOf(lineHeight.toString()) }
     var horizontalPaddingValue: Int? by remember { mutableStateOf(horizontalPadding) }
 
     RYScaffold(
@@ -111,6 +115,11 @@ fun ReadingTextPage(
                         onClick = { letterSpacingDialogVisible = true },
                     ) {}
                     SettingItem(
+                        title = stringResource(R.string.line_height_multiple),
+                        desc = lineHeightMultipleValue,
+                        onClick = { lineHeightDialogVisible = true },
+                    ) {}
+                    SettingItem(
                         title = stringResource(R.string.horizontal_padding),
                         desc = "${horizontalPadding}dp",
                         onClick = { horizontalPaddingDialogVisible = true },
@@ -149,6 +158,29 @@ fun ReadingTextPage(
     )
 
     TextFieldDialog(
+        visible = lineHeightDialogVisible,
+        title = stringResource(R.string.line_height_multiple),
+        value = lineHeightMultipleValue,
+        placeholder = stringResource(R.string.value),
+        onValueChange = {
+            lineHeightMultipleValue = it
+        },
+        onDismissRequest = {
+            lineHeightDialogVisible = false
+        },
+        onConfirm = {
+            ReadingTextLineHeightPreference.put(
+                context,
+                scope,
+                (lineHeightMultipleValue.toFloatOrNull()
+                    ?: ReadingTextLineHeightPreference.default).coerceToRange()
+            )
+            ReadingThemePreference.Custom.put(context, scope)
+            lineHeightDialogVisible = false
+        }
+    )
+
+    TextFieldDialog(
         visible = letterSpacingDialogVisible,
         title = stringResource(R.string.letter_spacing),
         value = (letterSpacingValue ?: "").toString(),
@@ -160,7 +192,11 @@ fun ReadingTextPage(
             letterSpacingDialogVisible = false
         },
         onConfirm = {
-            ReadingLetterSpacingPreference.put(context, scope, letterSpacingValue?.toDoubleOrNull() ?: 0.0)
+            ReadingLetterSpacingPreference.put(
+                context,
+                scope,
+                letterSpacingValue?.toDoubleOrNull() ?: 0.0
+            )
             ReadingThemePreference.Custom.put(context, scope)
             letterSpacingDialogVisible = false
         }

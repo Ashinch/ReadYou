@@ -295,6 +295,12 @@ sealed class DataStoreKeys<T> {
             get() = intPreferencesKey("readingTextFontSize")
     }
 
+    object ReadingLineHeight : DataStoreKeys<Float>() {
+
+        override val key: Preferences.Key<Float>
+            get() = floatPreferencesKey("readingTextLineHeight")
+    }
+
     object ReadingLetterSpacing : DataStoreKeys<Double>() {
 
         override val key: Preferences.Key<Double>
