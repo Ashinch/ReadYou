@@ -312,8 +312,9 @@ fun FlowPage(
                         flowUiState.listState.scrollToItem(0)
                     }
                 }
-                homeViewModel.changeFilter(filterUiState.copy(filter = it))
-                homeViewModel.fetchArticles()
+                if (filterUiState.filter != it) {
+                    homeViewModel.changeFilter(filterUiState.copy(filter = it))
+                }
             }
         }
     )
