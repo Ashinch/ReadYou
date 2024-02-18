@@ -2,7 +2,7 @@
 <resources>
     <string name="all">全部</string>
     <plurals name="all_desc">
-        <item quantity="other">%1$d 則已封存</item>
+        <item quantity="other">%1$d 則已存檔</item>
     </plurals>
     <string name="unread">未讀</string>
     <plurals name="unread_desc">
@@ -46,27 +46,27 @@
     <string name="all_parse_full_content_toast">全文解析「%1$s」群組中的所有文章</string>
     <string name="all_deny_parse_full_content_toast">不再全文解析「%1$s」群組中的所有文章</string>
     <string name="clear_articles">清除文章</string>
-    <string name="clear_articles_in_feed_toast">已全部清除來源「%1$s」的已封存文章</string>
-    <string name="clear_articles_in_group_toast">已全部清除「%1$s」群組的已封存文章</string>
-    <string name="clear_articles_feed_tips">將來源「%1$s」的已封存文章全部清除</string>
-    <string name="clear_articles_group_tips">將「%1$s」群組的已封存文章全部清除</string>
+    <string name="clear_articles_in_feed_toast">已全部清除來源「%1$s」的文章存檔</string>
+    <string name="clear_articles_in_group_toast">已全部清除「%1$s」群組的文章存檔</string>
+    <string name="clear_articles_feed_tips">將來源「%1$s」的文章存檔全部清除</string>
+    <string name="clear_articles_group_tips">將「%1$s」群組的文章存檔全部清除</string>
     <string name="add_to_group">新增至群組</string>
     <string name="move_to_group">移動至群組</string>
     <string name="all_move_to_group_tips">將「%1$s」群組中的所有來源移動至「%2$s」群組</string>
     <string name="all_move_to_group_toast">已全部移動至「%1$s」群組</string>
     <string name="rename">重新命名</string>
-    <string name="change_url">更改網址</string>
+    <string name="change_url">變更網址</string>
     <string name="rename_toast">已重新命名為「%1$s」</string>
     <string name="create_new_group">建立新群組</string>
     <string name="name">名稱</string>
     <string name="open_with">打開 %1$s</string>
     <string name="options">選項</string>
     <string name="delete">刪除</string>
-    <string name="delete_toast">「%1$s」已刪除</string>
+    <string name="delete_toast">已刪除「%1$s」</string>
     <string name="unsubscribe">取消訂閱</string>
-    <string name="unsubscribe_tips">不再訂閱「%1$s」，並刪除其所有已封存的文章</string>
+    <string name="unsubscribe_tips">不再訂閱「%1$s」，並刪除其所有的文章存檔</string>
     <string name="delete_group">刪除群組</string>
-    <string name="delete_group_tips">刪除「%1$s」群組，同時刪除其所有來源和已封存的文章</string>
+    <string name="delete_group_tips">刪除「%1$s」群組，同時刪除其所有來源和文章存檔</string>
     <string name="group_option_tips">下列選項將套用至本群組中的所有來源</string>
     <string name="today">今天</string>
     <string name="yesterday">昨天</string>
@@ -229,7 +229,7 @@
     <string name="synchronous">同步</string>
     <string name="sync_interval">同步週期</string>
     <string name="sync_once_on_start">啟動時同步</string>
-    <string name="keep_archived_articles">保留已封存的文章</string>
+    <string name="keep_archived_articles">保留文章存檔</string>
     <string name="export_as_opml">匯出為 OPML</string>
     <string name="clear_all_articles">清除所有文章</string>
     <string name="synchronous_tips">需要重新啟動才能套用變更</string>
@@ -267,4 +267,16 @@
     <string name="grey_out_articles">淡化顯示</string>
     <string name="all_read">已讀的文章</string>
     <string name="read_excluding_starred">已讀且未加星號的文章</string>
+    <string name="submit_bug_report">前往 GitHub 回報錯誤</string>
+    <string name="external_links">外部連結</string>
+    <string name="unexpected_error_title">糟糕！發生錯誤…</string>
+    <string name="copy_error_report">複製偵錯資訊</string>
+    <string name="unexpected_error_msg">由於發生未預期的錯誤，本應用程式必須關閉。
+\n
+\n如要協助我們儘速調查並修正此問題，請%1$s，並附上以下偵錯資訊。</string>
+    <string name="swipe_to_start">向左滑動</string>
+    <string name="swipe_to_end">向右滑動</string>
+    <string name="none">無</string>
+    <string name="toggle_read">標為已讀/未讀</string>
+    <string name="toggle_starred">加上/移除星號</string>
 </resources>

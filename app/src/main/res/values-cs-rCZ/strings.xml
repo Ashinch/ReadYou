@@ -180,7 +180,7 @@
     <string name="letter_spacing">Odsazení písmen</string>
     <string name="line_spacing">Odsazení řádků</string>
     <string name="alignment">Zarovnání</string>
-    <string name="general">General</string>
+    <string name="general">Všeobecné</string>
     <string name="auto_hide_toolbars">Automaticky skrývat lišty</string>
     <string name="rearrange_buttons">Změnit pořadí tlačítek</string>
     <string name="bionic_reading">Bionické čtení</string>
@@ -274,4 +274,16 @@
     <string name="all_read">Vše přečteno</string>
     <string name="read_excluding_starred">Přečteno, mimo oblíbených</string>
     <string name="external_links">Externí odkazy</string>
+    <string name="submit_bug_report">poslat hlášení o chybě na GitHub</string>
+    <string name="unexpected_error_title">Jejda! Něco se pokazilo…</string>
+    <string name="copy_error_report">Kopírovat hlášení o chybě</string>
+    <string name="unexpected_error_msg">V aplikaci se vyskytla nečekaná chyba a musela být ukončena.
+\n
+\nPokud nám chcete pomoci identifikovat a rychle opravit tuto chybu, můžete %1$s s protokolem níže.</string>
+    <string name="next_article">Další článek</string>
+    <string name="swipe_to_start">Posunutí vlevo</string>
+    <string name="swipe_to_end">Posunutí vpravo</string>
+    <string name="none">Nic</string>
+    <string name="toggle_read">Přepnout stav přečtení</string>
+    <string name="toggle_starred">Přepnout stav oblíbení</string>
 </resources>

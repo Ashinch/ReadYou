@@ -252,4 +252,35 @@
     <string name="bionic_reading">Lectura Bionic</string>
     <string name="images">Imatges</string>
     <string name="clear_all_articles_tips">Estàs segur que vols esborrar la llista d\'articles d\'aquest compte\?</string>
+    <string name="initial_open_app">Aplicació quan es fa clic a l\'enllaç</string>
+    <string name="auto_customtabs">Automàtic (prefereix pestanyes personalitzades)</string>
+    <string name="auto_default_browser">Automàtic (prefereix el navegador predeterminat)</string>
+    <string name="custom_tabs">Força pestanyes personalitzades</string>
+    <string name="specific_browser">Força un navegador específic</string>
+    <string name="specific_browser_name">Navegador: %1$s</string>
+    <string name="default_browser">Força un navegador per defecte</string>
+    <string name="always_ask">Pregunta sempre</string>
+    <string name="open_link_something_wrong">La configuració \"Obre l\'enllaç\" s\'ha ignorat perquè hi ha hagut un error.</string>
+    <string name="open_link_ask_dialog_title">Obrir amb…</string>
+    <string name="grey_out_articles">Talleu els articles en gris</string>
+    <string name="all_read">Tots llegits</string>
+    <string name="read_excluding_starred">Llegir, excloent els destacats</string>
+    <string name="external_links">Enllaços externs</string>
+    <string name="unexpected_error_title">Vaja! Alguna cosa ha anat malament…</string>
+    <string name="submit_bug_report">envia un informe d\'error a GitHub</string>
+    <string name="unexpected_error_msg">L\'aplicació ha trobat un error inesperat i s\'ha hagut de tancar.
+\n
+\nPer ajudar-nos a identificar i solucionar aquest problema ràpidament, podeu %1$s amb el seguiment de la pila d\'errors a continuació.</string>
+    <string name="next_article">Article següent</string>
+    <string name="include_additional_info">Incloeu informació addicional</string>
+    <string name="exclude">Excluir</string>
+    <string name="additional_info_desc">La informació addicional inclou opcions de configuració per a cada feed, com ara si voleu permetre la notificació, analitzar el contingut complet, etc. Quan tingueu intenció d\'utilitzar el fitxer OPML exportat amb altres lectors, seleccioneu \"Exclou\".</string>
+    <string name="swipe_to_start">Llisca cap a l\'esquerra</string>
+    <string name="swipe_to_end">Llisca cap a la dreta</string>
+    <string name="none">Cap</string>
+    <string name="toggle_read">Commuta la lectura</string>
+    <string name="toggle_starred">Commuta els preferits</string>
+    <string name="open_link_specific_browser">Navegador</string>
+    <string name="copy_error_report">Copia l\'informe d\'error</string>
+    <string name="open_link_specific_browser_not_selected">Cap</string>
 </resources>

@@ -276,4 +276,17 @@
     <string name="grey_out_articles">Статті виділені сірим кольором</string>
     <string name="all_read">Все прочитане</string>
     <string name="read_excluding_starred">Читати, виключаючи обране</string>
+    <string name="external_links">Зовнішні посилання</string>
+    <string name="next_article">Наступна стаття</string>
+    <string name="swipe_to_start">Проведіть ліворуч</string>
+    <string name="swipe_to_end">Проведіть праворуч</string>
+    <string name="none">Нічого</string>
+    <string name="toggle_read">Змінити статус читання</string>
+    <string name="unexpected_error_title">Ой! Щось пішло не так…</string>
+    <string name="unexpected_error_msg">У застосунку сталася несподівана помилка, тому його було закрито.
+\n
+\nЩоб допомогти нам швидко визначити та вирішити цю проблему, ви можете %1$s за допомогою трасування стека помилок нижче.</string>
+    <string name="copy_error_report">Скопіювати звіт про помилку</string>
+    <string name="submit_bug_report">надіслати звіт про помилку на GitHub</string>
+    <string name="toggle_starred">Змінити статус обраного</string>
 </resources>

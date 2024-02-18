@@ -273,4 +273,17 @@
     <string name="grey_out_articles">Затамни чланке</string>
     <string name="all_read">Све прочитано</string>
     <string name="read_excluding_starred">Прочитано, изузимајући означено са звездицом</string>
+    <string name="external_links">Спољни линкови</string>
+    <string name="unexpected_error_title">Упс! Дошло је до грешке…</string>
+    <string name="copy_error_report">Копирај извештај о грешци</string>
+    <string name="submit_bug_report">поднесите извештај о грешци на GitHub-у</string>
+    <string name="next_article">Следећи артикл</string>
+    <string name="swipe_to_start">Превуци налево</string>
+    <string name="swipe_to_end">Превуци надесно</string>
+    <string name="none">Ниједно</string>
+    <string name="toggle_read">Укључи читање</string>
+    <string name="toggle_starred">Укључи са звездицом</string>
+    <string name="unexpected_error_msg">Апликација је наишла на неочекивану грешку и морала је да се затвори.
+\n
+\nДа бисте нам помогли да брзо идентификујемо и решимо овај проблем, можете %1$s помоћу праћења грешака у наставку.</string>
 </resources>

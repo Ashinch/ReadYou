@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="all">Усе</string>
+    <plurals name="all_desc">
+        <item quantity="one">%1$d заархіваваны элемент</item>
+        <item quantity="few">%1$d заархіваваныя элементы</item>
+        <item quantity="many">%1$d заархіваваных элементаў</item>
+        <item quantity="other">%1$d заархіваваных элементаў</item>
+    </plurals>
+    <plurals name="unread_desc">
+        <item quantity="one">%1$d непрачытаны элемент</item>
+        <item quantity="few">%1$d непрачытаных элементаў</item>
+        <item quantity="many">%1$d непрачытаных элементаў</item>
+        <item quantity="other">%1$d непрачытаных элементаў</item>
+    </plurals>
+    <string name="search">Пошук</string>
+    <string name="back">Назад</string>
+    <string name="already_subscribed">Ужо падпісаны</string>
+    <string name="feed_or_site_url">Канал або URL сайта</string>
+    <string name="preset">Прадусталёўка</string>
+    <string name="import_from_opml">Імпарт з OPML</string>
+    <string name="paste">Уставіць</string>
+    <string name="allow_notification">Дазволіць апавяшчэнне</string>
+    <string name="defaults">Па змаўчанні</string>
+    <string name="unread">Непрачытанае</string>
+    <string name="starred">Абранае</string>
+    <string name="feeds">Каналы</string>
+    <string name="syncing">Сінхранізацыя…</string>
+    <string name="loading">Загрузка…</string>
+    <string name="expand_less">Згарнуць</string>
+    <string name="expand_more">Разгарнуць</string>
+    <string name="confirm">Пацвердзіць</string>
+    <string name="cancel">Скасаваць</string>
+    <string name="allow">Дазволіць</string>
+    <string name="deny">Адмовіць</string>
+    <string name="unknown">Невядома</string>
+    <string name="empty">Пусты</string>
+    <string name="go_to">Перайсці да</string>
+    <string name="settings">Налады</string>
+    <string name="refresh">Абнавіць</string>
+    <string name="searching">Ідзе пошук…</string>
+    <string name="subscribe">Падпісацца</string>
+    <string name="clear">Ачысціць</string>
+    <string name="selected">Выбрана</string>
+</resources>

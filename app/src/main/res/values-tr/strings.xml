@@ -271,4 +271,16 @@
     <string name="grey_out_articles">Makaleleri gri renkle işaretle</string>
     <string name="all_read">Tüm okunanlar</string>
     <string name="read_excluding_starred">Okunanlar, yıldızlananlar hariç</string>
+    <string name="unexpected_error_title">Tüh! Bir şeyler yanlış gitti…</string>
+    <string name="copy_error_report">Hata raporunu kopyala</string>
+    <string name="submit_bug_report">GitHub\'da bir hata bildirimi gönderin</string>
+    <string name="unexpected_error_msg">Uygulama beklenmedik bir hatayla karşılaştı ve kapanmak zorunda kaldı.
+\n
+\nBu sorunu hızlı bir şekilde tanımlamamıza ve düzeltmemize yardımcı olmak için aşağıdaki hata yığın iziyle %1$s.</string>
+    <string name="next_article">Sonraki makale</string>
+    <string name="swipe_to_start">Sola kaydır</string>
+    <string name="swipe_to_end">Sağa kaydır</string>
+    <string name="none">Hiçbiri</string>
+    <string name="toggle_read">Okunduyu değiştir</string>
+    <string name="toggle_starred">Yıldızlıyı değiştir</string>
 </resources>

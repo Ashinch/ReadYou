@@ -31,12 +31,12 @@
     <string name="clear">മായിക്കുക</string>
     <string name="selected">തിരഞ്ഞെടുത്തത്</string>
     <string name="syncing">സമന്വയിപ്പിക്കുന്നു…</string>
-    <string name="feed_or_site_url">ഫീഡ് അല്ലെങ്കിൽ URL</string>
+    <string name="feed_or_site_url">ഫീഡ് അല്ലെങ്കിൽ സൈറ്റ് ലിങ്ക്</string>
     <string name="deny">നിഷേധിക്കുക</string>
     <string name="unknown">അജ്ഞാതം</string>
     <string name="import_from_opml">OPML-ൽ നിന്ന് ഇംപോർട്ട് ചെയ്യുക</string>
     <plurals name="all_desc">
-        <item quantity="one">%1$d ആർക്കൈവ് ചെയ്ത ഇനങ്ങൾ</item>
+        <item quantity="one">%1$d ആർക്കൈവ് ചെയ്ത ഇനം</item>
         <item quantity="other">%1$d ആർക്കൈവ് ചെയ്ത ഇനങ്ങൾ</item>
     </plurals>
     <string name="allow_notification">അറിയിപ്പ് അനുവദിക്കുക</string>
@@ -57,4 +57,30 @@
     <string name="clear_articles_group_tips">\"%1$s\" ഗ്രൂപ്പിലെ ലേഖനങ്ങളുടെ എല്ലാ ആർക്കൈവും മായ്‌ക്കുക</string>
     <string name="clear_articles_in_group_toast">\"%1$s\" ഫീഡിലെ ലേഖനങ്ങളുടെ എല്ലാ ആർക്കൈവും വൃത്തിയാക്കി</string>
     <string name="clear_articles">വ്യക്തമായ ലേഖനങ്ങൾ</string>
+    <string name="delete_group">ഗ്രൂപ്പ് ഇല്ലാതാക്കുക</string>
+    <string name="yesterday">ഇന്നലെ</string>
+    <string name="mark_all_as_read">എല്ലാം വായിച്ചതായി അടയാളപ്പെടുത്തുക</string>
+    <string name="mark_as_unread">വായിക്കാത്തതായി അടയാളപ്പെടുത്തുക</string>
+    <string name="unsubscribe">വരിക്കാരാകരുത്</string>
+    <string name="delete_group_tips">\"%1$s\" ഗ്രൂപ്പും അതിൽ അടങ്ങിയിരിക്കുന്ന എല്ലാ ഫീഡുകളും ആർക്കൈവുചെയ്‌ത ലേഖനങ്ങളും ഇല്ലാതാക്കുക</string>
+    <string name="group_option_tips">ഈ ഗ്രൂപ്പിലെ എല്ലാ ഫീഡുകൾക്കും ഇനിപ്പറയുന്ന ഓപ്ഷനുകൾ ബാധകമാണ്</string>
+    <string name="search_for_in">\"%2$s\" എന്നതിൽ %1$s ഇനങ്ങൾക്കായി തിരയുക</string>
+    <string name="search_for">%1$s ഇനങ്ങൾ തിരയുക</string>
+    <string name="create_new_group">പുതിയ ഗ്രൂപ്പ് ഉണ്ടാക്കുക</string>
+    <string name="unsubscribe_tips">\"%1$s\"-ൽ നിന്ന് അൺസബ്‌സ്‌ക്രൈബുചെയ്‌ത് അതിൽ ആർക്കൈവുചെയ്‌ത എല്ലാ ലേഖനങ്ങളും ഇല്ലാതാക്കുക</string>
+    <string name="open_with">%1$s തുറക്കുക</string>
+    <string name="options">ഓപ്ഷനുകൾ</string>
+    <string name="all_move_to_group_toast">എല്ലാ ഫീഡുകളും \"%1$s\" ഗ്രൂപ്പിലേക്ക് നീക്കി</string>
+    <string name="rename">പേരുമാറ്റുക</string>
+    <string name="change_url">യു ആർ എൽ മാറ്റുക</string>
+    <string name="rename_toast">\"%1$s\" എന്ന് പേരുമാറ്റി</string>
+    <string name="name">പേര്</string>
+    <string name="delete">ഇല്ലാതാക്കുക</string>
+    <string name="delete_toast">\"%1$s\" ഇല്ലാതാക്കി</string>
+    <string name="today">ഇന്ന്</string>
+    <string name="date_at_time">%1$sx-ന് %2$sമണി</string>
+    <string name="mark_as_read">വായിച്ചതായി അടയാളപ്പെടുത്തുക</string>
+    <string name="mark_as_starred">നക്ഷത്രമിട്ടതായി അടയാളപ്പെടുത്തുക</string>
+    <string name="mark_as_unstar">നക്ഷത്രം ഇല്ലാത്തതായി അടയാളപ്പെടുത്തുക</string>
+    <string name="mark_as_read_one_day">ഒരു ദിവസത്തേക്കാൾ പഴയത് വായിച്ചതായി അടയാളപ്പെടുത്തുക</string>
 </resources>

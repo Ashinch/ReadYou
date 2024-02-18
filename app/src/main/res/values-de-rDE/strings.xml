@@ -137,7 +137,7 @@
     <string name="update">Aktualisieren</string>
     <string name="skip_this_version">Version überspringen</string>
     <string name="checking_updates">Suche nach Aktualisierungen…</string>
-    <string name="is_latest_version">Dies ist die neueste Version</string>
+    <string name="is_latest_version">Dies ist die neueste Version der App</string>
     <string name="check_failure">Suche nach Updates fehlgeschlagen</string>
     <string name="download_failure">Fehler beim Herunterladen des Updates</string>
     <string name="rate_limit">Die Anfragerate ist limitiert</string>
@@ -271,4 +271,11 @@
     <string name="all_read">Alle gelesen</string>
     <string name="read_excluding_starred">Gelesen, ohne Sterne</string>
     <string name="external_links">Externe links</string>
+    <string name="unexpected_error_title">Ups! Da ist etwas schief gelaufen…</string>
+    <string name="copy_error_report">Fehlerbericht kopieren</string>
+    <string name="submit_bug_report">einen Fehlerbericht auf GitHub einreichen</string>
+    <string name="next_article">Nächster Artikel</string>
+    <string name="unexpected_error_msg">Die App ist auf einen unerwarteten Fehler gestoßen und musste beendet werden.
+\n
+\nUm das Problem zügig zu identifizieren und zu beheben, können Sie %1$s mit unten stehenden Fehler-Stacktrace angeben.</string>
 </resources>

@@ -264,4 +264,23 @@
     <string name="specific_browser_name">ಬ್ರೌಸರ್: %1$s</string>
     <string name="default_browser">ಡೀಫಾಲ್ಟ್ ಬ್ರೌಸರ್ ಅನ್ನು ಒತ್ತಾಯಿಸಿ</string>
     <string name="always_ask">ಯಾವಾಗಲೂ ಕೇಳಿ</string>
+    <string name="grey_out_articles">ಲೇಖನಗಳನ್ನು ಗ್ರೇ ಔಟ್ ಮಾಡಿ</string>
+    <string name="all_read">ಎಲ್ಲಾ ಓದಿದೆ</string>
+    <string name="read_excluding_starred">ನಕ್ಷತ್ರ ಹಾಕಿರುವುದನ್ನು ಹೊರತುಪಡಿಸಿ, ಓದಿ</string>
+    <string name="external_links">ಬಾಹ್ಯ ಲಿಂಕ್‌ಗಳು</string>
+    <string name="unexpected_error_title">ಅಯ್ಯೋ! ಏನೋ ತಪ್ಪಾಗಿದೆ…</string>
+    <string name="copy_error_report">ದೋಷ ವರದಿಯನ್ನು ನಕಲಿಸಿ</string>
+    <string name="submit_bug_report">GitHub ನಲ್ಲಿ ದೋಷ ವರದಿಯನ್ನು ಸಲ್ಲಿಸಿ</string>
+    <string name="include_additional_info">ಹೆಚ್ಚುವರಿ ಮಾಹಿತಿಯನ್ನು ಸೇರಿಸಿ</string>
+    <string name="exclude">ಹೊರತುಪಡಿಸಿ</string>
+    <string name="toggle_read">ಈಗಾಗಲೇ ಓದಿದ ಲೇಖನಗಳನ್ನು ತೋರಿಸಿ</string>
+    <string name="additional_info_desc">ಹೆಚ್ಚುವರಿ ಮಾಹಿತಿಯು ಪ್ರತಿ ಫೀಡ್‌ಗೆ ಕಾನ್ಫಿಗರೇಶನ್ ಆಯ್ಕೆಗಳನ್ನು ಒಳಗೊಂಡಿರುತ್ತದೆ, ಉದಾಹರಣೆಗೆ ಅಧಿಸೂಚನೆಯನ್ನು ಅನುಮತಿಸಬೇಕೆ, ಪೂರ್ಣ ವಿಷಯವನ್ನು ಪಾರ್ಸ್ ಮಾಡುವುದು ಇತ್ಯಾದಿ. ನೀವು ರಫ್ತು ಮಾಡಲಾದ OPML ಫೈಲ್ ಅನ್ನು ಇತರ ರೀಡರ್ ಅಪ್ಲಿಕೇಶನ್‌ಗಳೊಂದಿಗೆ ಬಳಸಲು ಬಯಸಿದಾಗ, ದಯವಿಟ್ಟು \"ಹೊರತುಪಡಿಸಿ\" ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="swipe_to_start">ಎಡಕ್ಕೆ ಸ್ವೈಪ್ ಮಾಡಿ</string>
+    <string name="unexpected_error_msg">ಅಪ್ಲಿಕೇಶನ್ ಅನಿರೀಕ್ಷಿತ ದೋಷವನ್ನು ಎದುರಿಸಿದೆ ಮತ್ತು ಮುಚ್ಚಬೇಕಾಯಿತು.
+\n
+\nಈ ಸಮಸ್ಯೆಯನ್ನು ತ್ವರಿತವಾಗಿ ಗುರುತಿಸಲು ಮತ್ತು ಸರಿಪಡಿಸಲು ನಮಗೆ ಸಹಾಯ ಮಾಡಲು, ಕೆಳಗಿನ ದೋಷ ಸ್ಟ್ಯಾಕ್ ಟ್ರೇಸ್‌ನೊಂದಿಗೆ ನೀವು %1$s ಮಾಡಬಹುದು.</string>
+    <string name="next_article">ಮುಂದಿನ ಲೇಖನ</string>
+    <string name="swipe_to_end">ಬಲಕ್ಕೆ ಸ್ವೈಪ್ ಮಾಡಿ</string>
+    <string name="none">ಯಾವುದೂ ಇಲ್ಲ</string>
+    <string name="toggle_starred">ನಕ್ಷತ್ರ ಹಾಕಿದ ಲೇಖನಗಳನ್ನು ತೋರಿಸಿ</string>
 </resources>

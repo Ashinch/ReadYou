@@ -274,4 +274,16 @@
     <string name="read_excluding_starred">Lido, excluindo favorito</string>
     <string name="grey_out_articles">Artigos em cinza</string>
     <string name="external_links">Links externos</string>
+    <string name="copy_error_report">Copiar relatório de erros</string>
+    <string name="unexpected_error_title">Ops! Algo deu errado…</string>
+    <string name="unexpected_error_msg">O aplicativo encontrou um erro inesperado e teve que ser fechado.
+\n
+\nPara nos ajudar a identificar e corrigir esse problema rapidamente, você pode %1$s usar o rastreamento de pilha de erros abaixo.</string>
+    <string name="submit_bug_report">envie um relatório de bug no GitHub</string>
+    <string name="next_article">Próximo artigo</string>
+    <string name="swipe_to_start">Deslizar para a esquerda</string>
+    <string name="none">Nenhum</string>
+    <string name="toggle_read">Alternar leitura</string>
+    <string name="swipe_to_end">Deslizar para a direita</string>
+    <string name="toggle_starred">Alternar favorito</string>
 </resources>

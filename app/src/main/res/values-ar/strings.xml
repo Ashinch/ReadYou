@@ -282,4 +282,17 @@
     <string name="grey_out_articles">المقالات باللون الرمادي</string>
     <string name="all_read">الكل مقروء</string>
     <string name="read_excluding_starred">قراءة الكل ، باستثناء المعلمة بنجمة</string>
+    <string name="external_links">الروابط الخارجية</string>
+    <string name="unexpected_error_title">للاسف! حدث خطأ ما …</string>
+    <string name="copy_error_report">نسخ تقرير الخطأ</string>
+    <string name="submit_bug_report">تقديم تقرير الخطأ عبر چيتهب</string>
+    <string name="next_article">المقالة التالية</string>
+    <string name="unexpected_error_msg">واجه التطبيق خطأ غير متوقع وكان لا بد من إغلاقه.
+\n
+\nلمساعدتنا في تحديد هذه المشكلة وحلها سريعًا، يمكنك %1$s من خلال تتبع مجموعة الأخطاء أدناه.</string>
+    <string name="swipe_to_start">اسحب لليسار</string>
+    <string name="swipe_to_end">اسحب لليمين</string>
+    <string name="none">لا شيء</string>
+    <string name="toggle_read">تبديل القراءة</string>
+    <string name="toggle_starred">تبديل المميزة بنجمة</string>
 </resources>
