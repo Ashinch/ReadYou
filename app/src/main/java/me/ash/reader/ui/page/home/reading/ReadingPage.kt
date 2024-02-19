@@ -115,7 +115,7 @@ fun ReadingPage(
                     // Content
                     AnimatedContent(
                         targetState = readerState,
-                        contentKey = { it.content },
+                        contentKey = { it.articleId + it.content.text },
                         transitionSpec = {
                             val direction = when {
                                 initialState.nextArticleId == targetState.articleId -> UPWARD
