@@ -42,14 +42,14 @@ private const val TAG = "PullRelease"
  * And you should manually handle the offset of components
  * with [PullToLoadState.progress] or [PullToLoadState.offsetFraction]
  *
- * @param state The [PullToLoadState] associated with this pull-to-load component.
- * The state will be updated by this connection.
  * @param enabled If not enabled, all scroll delta and fling velocity will be ignored.
  * @param onScroll Used for detecting if the reader is scrolling down
  */
 class ReaderNestedScrollConnection(
-    private val state: PullToLoadState,
     private val enabled: Boolean,
+    private val onPreScroll: (Float) -> Float,
+    private val onPostScroll: (Float) -> Float,
+    private val onRelease: (Float) -> Unit,
     private val onScroll: (Float) -> Unit
 ) : NestedScrollConnection {
 
@@ -61,8 +61,8 @@ class ReaderNestedScrollConnection(
             !enabled || available.y == 0f -> Offset.Zero
 
             // Scroll down to reduce the progress when the offset is currently pulled up, same for the opposite
-            source == Drag && state.offsetFraction.signOpposites(available.y) -> {
-                Offset(0f, state.onPull(available.y))
+            source == Drag -> {
+                Offset(0f, onPreScroll(available.y))
             }
 
             else -> Offset.Zero
@@ -74,18 +74,13 @@ class ReaderNestedScrollConnection(
         consumed: Offset, available: Offset, source: NestedScrollSource
     ): Offset = when {
         !enabled -> Offset.Zero
-        source == Drag -> Offset(0f, state.onPull(available.y)) // Pull to load
+        source == Drag -> Offset(0f, onPostScroll(available.y)) // Pull to load
         else -> Offset.Zero
     }
 
     override suspend fun onPreFling(available: Velocity): Velocity {
-        return if (abs(state.progress) > 1f) {
-            state.onRelease(available.y)
-            Velocity.Zero
-        } else {
-            state.animateDistanceTo(0f)
-            Velocity.Zero
-        }
+        onRelease(available.y)
+        return Velocity.Zero
     }
 }
 
@@ -212,23 +207,15 @@ class PullToLoadState internal constructor(
                     TAG,
                     "onPull: currentOffset = $offsetPulled, pullDelta = $pullDelta, consumed = $consumed"
                 )*/
-
-
         offsetPulled += consumed
         return consumed
     }
 
+    internal fun onPullBack(pullDelta: Float): Float {
+        return if (offsetPulled.signOpposites(pullDelta)) onPull(pullDelta) else 0f
+    }
+
     internal fun onRelease(velocity: Float): Float {
-//        val consumed = when {
-//            // We are flinging without having dragged the pull refresh (for example a fling inside
-//            // a list) - don't consume
-//            distancePulled == 0f -> 0f
-//            // If the velocity is negative, the fling is upwards, and we don't want to prevent the
-//            // the list from scrolling
-//            velocity < 0f -> 0f
-//            // We are showing the indicator, and the fling is downwards - consume everything
-//            else -> velocity
-//        }
         when (status) {
             // We don't change the pull offset here because the animation for loading another content
             // should be handled outside, and this state will be soon disposed

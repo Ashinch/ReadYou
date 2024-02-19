@@ -174,8 +174,10 @@ fun ReadingPage(
                                         modifier = Modifier
                                             .nestedScroll(
                                                 ReaderNestedScrollConnection(
-                                                    state = state,
                                                     enabled = true,
+                                                    onPreScroll = state::onPullBack,
+                                                    onPostScroll = state::onPull,
+                                                    onRelease = state::onRelease,
                                                     onScroll = { f ->
                                                         if (abs(f) > 2f)
                                                             isReaderScrollingDown = f < 0f
