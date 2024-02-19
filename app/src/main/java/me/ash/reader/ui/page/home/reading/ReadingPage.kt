@@ -7,6 +7,7 @@ import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.ExperimentalMaterialApi
@@ -26,6 +27,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -129,11 +131,13 @@ fun ReadingPage(
                             }
                             materialSharedAxisY(
                                 initialOffsetY = { (it * 0.1f * direction).toInt() },
-                                targetOffsetY = { (it * -0.1f * direction).toInt() })
+                                targetOffsetY = { (it * -0.1f * direction).toInt() },
+                                durationMillis = 400
+                            )
                         }, label = ""
                     ) {
 
-                        it.run {
+                        remember { it }.run {
                             val state =
                                 rememberPullToLoadState(
                                     key = content,
@@ -177,8 +181,8 @@ fun ReadingPage(
                                                             isReaderScrollingDown = f < 0f
                                                     })
                                             )
-
-                                            .padding(paddings),
+                                            .padding(paddings)
+                                            .offset(x = 0.dp, y = (state.offsetFraction * 80).dp),
                                         content = content.text ?: "",
                                         feedName = feedName,
                                         title = title.toString(),
@@ -187,7 +191,6 @@ fun ReadingPage(
                                         publishedDate = publishedDate,
                                         isLoading = content is ReaderState.Loading,
                                         listState = listState,
-                                        pullToLoadState = state,
                                         onImageClick = { imgUrl, altText ->
                                             currentImageData = ImageData(imgUrl, altText)
                                             showFullScreenImageViewer = true
