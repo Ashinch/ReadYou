@@ -419,4 +419,5 @@
     <string name="none">None</string>
     <string name="toggle_read">Toggle read</string>
     <string name="toggle_starred">Toggle starred</string>
+    <string name="export">Export</string>
 </resources>
