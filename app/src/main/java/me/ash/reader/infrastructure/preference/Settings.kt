@@ -78,6 +78,7 @@ data class Settings(
     val initialFilter: InitialFilterPreference = InitialFilterPreference.default,
     val swipeStartAction: SwipeStartActionPreference = SwipeStartActionPreference.default,
     val swipeEndAction: SwipeEndActionPreference = SwipeEndActionPreference.default,
+    val pullToSwitchArticle: PullToSwitchArticlePreference = PullToSwitchArticlePreference.default,
     val openLink: OpenLinkPreference = OpenLinkPreference.default,
     val openLinkSpecificBrowser: OpenLinkSpecificBrowserPreference = OpenLinkSpecificBrowserPreference.default,
 
@@ -193,6 +194,7 @@ val LocalInitialFilter =
     compositionLocalOf<InitialFilterPreference> { InitialFilterPreference.default }
 val LocalArticleListSwipeEndAction = compositionLocalOf { SwipeEndActionPreference.default }
 val LocalArticleListSwipeStartAction = compositionLocalOf { SwipeStartActionPreference.default }
+val LocalPullToSwitchArticle = compositionLocalOf { PullToSwitchArticlePreference.default }
 val LocalOpenLink =
     compositionLocalOf<OpenLinkPreference> { OpenLinkPreference.default }
 val LocalOpenLinkSpecificBrowser =
@@ -282,6 +284,7 @@ fun SettingsProvider(
         LocalInitialFilter provides settings.initialFilter,
         LocalArticleListSwipeStartAction provides settings.swipeStartAction,
         LocalArticleListSwipeEndAction provides settings.swipeEndAction,
+        LocalPullToSwitchArticle provides settings.pullToSwitchArticle,
         LocalOpenLink provides settings.openLink,
         LocalOpenLinkSpecificBrowser provides settings.openLinkSpecificBrowser,
 

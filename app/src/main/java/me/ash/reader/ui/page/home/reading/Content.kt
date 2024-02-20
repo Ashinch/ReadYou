@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.reading
 
+import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -50,7 +51,6 @@ fun Content(
     publishedDate: Date,
     listState: LazyListState,
     isLoading: Boolean,
-    pullToLoadState: PullToLoadState,
     onImageClick: ((imgUrl: String, altText: String) -> Unit)? = null,
 ) {
     val context = LocalContext.current
@@ -72,8 +72,7 @@ fun Content(
             LazyColumn(
                 modifier = modifier
                     .fillMaxSize()
-                    .drawVerticalScrollbar(listState)
-                    .offset(x = 0.dp, y = (pullToLoadState.offsetFraction * 80).dp),
+                    .drawVerticalScrollbar(listState),
                 state = listState,
             ) {
                 item {

@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.TextUnit
@@ -33,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
 import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.infrastructure.preference.LocalReadingTextLineHeight
@@ -53,6 +53,7 @@ fun ReadingPage(
     readingViewModel: ReadingViewModel = hiltViewModel(),
 ) {
     val tonalElevation = LocalReadingPageTonalElevation.current
+    val isPullToSwitchArticleEnabled = LocalPullToSwitchArticle.current.value
     val readingUiState = readingViewModel.readingUiState.collectAsStateValue()
     val readerState = readingViewModel.readerStateStateFlow.collectAsStateValue()
     val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
@@ -118,7 +119,7 @@ fun ReadingPage(
                     // Content
                     AnimatedContent(
                         targetState = readerState,
-                        contentKey = { it.content },
+                        contentKey = { it.articleId + it.content.text },
                         transitionSpec = {
                             val direction = when {
                                 initialState.nextArticleId == targetState.articleId -> UPWARD
@@ -134,11 +135,13 @@ fun ReadingPage(
                             }
                             materialSharedAxisY(
                                 initialOffsetY = { (it * 0.1f * direction).toInt() },
-                                targetOffsetY = { (it * -0.1f * direction).toInt() })
+                                targetOffsetY = { (it * -0.1f * direction).toInt() },
+                                durationMillis = 400
+                            )
                         }, label = ""
                     ) {
 
-                        it.run {
+                        remember { it }.run {
                             val state =
                                 rememberPullToLoadState(
                                     key = content,
@@ -166,27 +169,29 @@ fun ReadingPage(
                                 saver = LazyListState.Saver
                             ) { LazyListState() }
 
-                            CompositionLocalProvider(LocalOverscrollConfiguration provides null,
+
+                            CompositionLocalProvider(
+                                LocalOverscrollConfiguration provides
+                                        if (isPullToSwitchArticleEnabled) null else LocalOverscrollConfiguration.current,
                                 LocalTextStyle provides LocalTextStyle.current.run {
                                     merge(lineHeight = if (lineHeight.isSpecified) (lineHeight.value * LocalReadingTextLineHeight.current).sp else TextUnit.Unspecified)
-                                }) {
+                                }
+                            ) {
                                 Box(
                                     modifier = Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Content(
                                         modifier = Modifier
-                                            .nestedScroll(
-                                                ReaderNestedScrollConnection(
-                                                    state = state,
-                                                    enabled = true,
-                                                    onScroll = { f ->
-                                                        if (abs(f) > 2f)
-                                                            isReaderScrollingDown = f < 0f
-                                                    })
-                                            )
-
-                                            .padding(paddings),
+                                            .padding(paddings)
+                                            .pullToLoad(
+                                                state = state,
+                                                onScroll = { f ->
+                                                    if (abs(f) > 2f)
+                                                        isReaderScrollingDown = f < 0f
+                                                },
+                                                enabled = isPullToSwitchArticleEnabled
+                                            ),
                                         content = content.text ?: "",
                                         feedName = feedName,
                                         title = title.toString(),
@@ -195,7 +200,6 @@ fun ReadingPage(
                                         publishedDate = publishedDate,
                                         isLoading = content is ReaderState.Loading,
                                         listState = listState,
-                                        pullToLoadState = state,
                                         onImageClick = { imgUrl, altText ->
                                             currentImageData = ImageData(imgUrl, altText)
                                             showFullScreenImageViewer = true

@@ -32,7 +32,7 @@ buildscript {
         // https://github.com/dankito/Readability4J
         readability4j = '1.0.8'
         // https://github.com/mdewilde/opml-parser
-        opmlParser = '2.2.0'
+        opmlParser = '3.1.0'
         // http://bigbadaboom.github.io/androidsvg/release_notes.html
         androidSVG = '1.4'
     }

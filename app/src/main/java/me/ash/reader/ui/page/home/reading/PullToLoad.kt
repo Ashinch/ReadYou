@@ -5,6 +5,7 @@ import androidx.compose.animation.core.FloatExponentialDecaySpec
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDecay
 import androidx.compose.foundation.MutatorMutex
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import me.ash.reader.ui.page.home.reading.PullToLoadDefaults.ContentOffsetMultiple
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -42,27 +44,27 @@ private const val TAG = "PullRelease"
  * And you should manually handle the offset of components
  * with [PullToLoadState.progress] or [PullToLoadState.offsetFraction]
  *
- * @param state The [PullToLoadState] associated with this pull-to-load component.
- * The state will be updated by this connection.
  * @param enabled If not enabled, all scroll delta and fling velocity will be ignored.
  * @param onScroll Used for detecting if the reader is scrolling down
  */
-class ReaderNestedScrollConnection(
-    private val state: PullToLoadState,
+private class ReaderNestedScrollConnection(
     private val enabled: Boolean,
-    private val onScroll: (Float) -> Unit
+    private val onPreScroll: (Float) -> Float,
+    private val onPostScroll: (Float) -> Float,
+    private val onRelease: (Float) -> Unit,
+    private val onScroll: ((Float) -> Unit)? = null
 ) : NestedScrollConnection {
 
     override fun onPreScroll(
         available: Offset, source: NestedScrollSource
     ): Offset {
-        onScroll(available.y)
+        onScroll?.invoke(available.y)
         return when {
             !enabled || available.y == 0f -> Offset.Zero
 
             // Scroll down to reduce the progress when the offset is currently pulled up, same for the opposite
-            source == Drag && state.offsetFraction.signOpposites(available.y) -> {
-                Offset(0f, state.onPull(available.y))
+            source == Drag -> {
+                Offset(0f, onPreScroll(available.y))
             }
 
             else -> Offset.Zero
@@ -74,18 +76,13 @@ class ReaderNestedScrollConnection(
         consumed: Offset, available: Offset, source: NestedScrollSource
     ): Offset = when {
         !enabled -> Offset.Zero
-        source == Drag -> Offset(0f, state.onPull(available.y)) // Pull to load
+        source == Drag -> Offset(0f, onPostScroll(available.y)) // Pull to load
         else -> Offset.Zero
     }
 
     override suspend fun onPreFling(available: Velocity): Velocity {
-        return if (abs(state.progress) > 1f) {
-            state.onRelease(available.y)
-            Velocity.Zero
-        } else {
-            state.animateDistanceTo(0f)
-            Velocity.Zero
-        }
+        onRelease(available.y)
+        return Velocity.Zero
     }
 }
 
@@ -212,23 +209,15 @@ class PullToLoadState internal constructor(
                     TAG,
                     "onPull: currentOffset = $offsetPulled, pullDelta = $pullDelta, consumed = $consumed"
                 )*/
-
-
         offsetPulled += consumed
         return consumed
     }
 
+    internal fun onPullBack(pullDelta: Float): Float {
+        return if (offsetPulled.signOpposites(pullDelta)) onPull(pullDelta) else 0f
+    }
+
     internal fun onRelease(velocity: Float): Float {
-//        val consumed = when {
-//            // We are flinging without having dragged the pull refresh (for example a fling inside
-//            // a list) - don't consume
-//            distancePulled == 0f -> 0f
-//            // If the velocity is negative, the fling is upwards, and we don't want to prevent the
-//            // the list from scrolling
-//            velocity < 0f -> 0f
-//            // We are showing the indicator, and the fling is downwards - consume everything
-//            else -> velocity
-//        }
         when (status) {
             // We don't change the pull offset here because the animation for loading another content
             // should be handled outside, and this state will be soon disposed
@@ -307,11 +296,31 @@ private fun Float.signOpposites(f: Float): Boolean =
 /**
  * Default parameter values for [rememberPullToLoadState].
  */
-@ExperimentalMaterialApi
 object PullToLoadDefaults {
     /**
      * If the indicator is below this threshold offset when it is released, the load action
      * will be triggered.
      */
     val LoadThreshold = 120.dp
+
+    const val ContentOffsetMultiple = 80
 }
+
+fun Modifier.pullToLoad(
+    state: PullToLoadState,
+    contentOffsetMultiple: Int = ContentOffsetMultiple,
+    onScroll: ((Float) -> Unit)? = null,
+    enabled: Boolean = true
+): Modifier =
+    nestedScroll(
+        ReaderNestedScrollConnection(
+            enabled = enabled,
+            onPreScroll = state::onPullBack,
+            onPostScroll = state::onPull,
+            onRelease = state::onRelease,
+            onScroll = onScroll
+        )
+    ).run {
+        if (enabled) offset(x = 0.dp, y = (state.offsetFraction * contentOffsetMultiple).dp)
+        else this
+    }

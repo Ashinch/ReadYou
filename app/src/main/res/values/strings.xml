@@ -420,4 +420,6 @@
     <string name="toggle_read">Toggle read</string>
     <string name="toggle_starred">Toggle starred</string>
     <string name="line_height_multiple">Line height multiple</string>
+    <string name="export">Export</string>
+    <string name="pull_to_switch_article">Pull to switch article</string>
 </resources>

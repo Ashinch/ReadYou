@@ -80,35 +80,43 @@ fun FlowPage(
     }
 
 
-    val onToggleStarred: State<(ArticleWithFeed) -> Unit> = rememberUpdatedState {
-        flowViewModel.updateStarredStatus(
-            articleId = it.article.id,
-            isStarred = !it.article.isStarred,
-            withDelay = 300
-        )
+    val onToggleStarred: (ArticleWithFeed) -> Unit = remember {
+        {
+            flowViewModel.updateStarredStatus(
+                articleId = it.article.id,
+                isStarred = !it.article.isStarred,
+                withDelay = 300
+            )
+        }
     }
 
-    val onToggleRead: State<(ArticleWithFeed) -> Unit> = rememberUpdatedState {
-        flowViewModel.updateReadStatus(
-            groupId = null,
-            feedId = null,
-            articleId = it.article.id,
-            conditions = MarkAsReadConditions.All,
-            isUnread = !it.article.isUnread,
-            withDelay = 300
-        )
+    val onToggleRead: (ArticleWithFeed) -> Unit = remember {
+        {
+            flowViewModel.updateReadStatus(
+                groupId = null,
+                feedId = null,
+                articleId = it.article.id,
+                conditions = MarkAsReadConditions.All,
+                isUnread = !it.article.isUnread,
+                withDelay = 300
+            )
+        }
     }
 
-    val onSwipeEndToStart = when (swipeToStartAction) {
-        SwipeStartActionPreference.None -> null
-        SwipeStartActionPreference.ToggleRead -> onToggleRead.value
-        SwipeStartActionPreference.ToggleStarred -> onToggleStarred.value
+    val onSwipeEndToStart = remember(swipeToStartAction) {
+        when (swipeToStartAction) {
+            SwipeStartActionPreference.None -> null
+            SwipeStartActionPreference.ToggleRead -> onToggleRead
+            SwipeStartActionPreference.ToggleStarred -> onToggleStarred
+        }
     }
 
-    val onSwipeStartToEnd = when (swipeToEndAction) {
-        SwipeEndActionPreference.None -> null
-        SwipeEndActionPreference.ToggleRead -> onToggleRead.value
-        SwipeEndActionPreference.ToggleStarred -> onToggleStarred.value
+    val onSwipeStartToEnd = remember(swipeToEndAction) {
+        when (swipeToEndAction) {
+            SwipeEndActionPreference.None -> null
+            SwipeEndActionPreference.ToggleRead -> onToggleRead
+            SwipeEndActionPreference.ToggleStarred -> onToggleStarred
+        }
     }
 
     LaunchedEffect(onSearch) {
@@ -312,8 +320,9 @@ fun FlowPage(
                         flowUiState.listState.scrollToItem(0)
                     }
                 }
-                homeViewModel.changeFilter(filterUiState.copy(filter = it))
-                homeViewModel.fetchArticles()
+                if (filterUiState.filter != it) {
+                    homeViewModel.changeFilter(filterUiState.copy(filter = it))
+                }
             }
         }
     )
