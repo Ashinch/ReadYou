@@ -14,6 +14,7 @@ import java.util.Locale
 object DateFormat {
     val YYYY_MM_DD_HH_MM_SS = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     val YYYY_MM_DD_DASH_HH_MM_SS = SimpleDateFormat("yyyy-MM-dd-HH:mm:ss")
+    val YYYY_MM_DD_DASH_HH_MM_SS_DASH = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss")
 }
 
 fun Date.toString(format: SimpleDateFormat): String {
