@@ -5,6 +5,7 @@ import androidx.compose.animation.core.FloatExponentialDecaySpec
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDecay
 import androidx.compose.foundation.MutatorMutex
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import me.ash.reader.ui.page.home.reading.PullToLoadDefaults.ContentOffsetMultiple
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -45,18 +47,18 @@ private const val TAG = "PullRelease"
  * @param enabled If not enabled, all scroll delta and fling velocity will be ignored.
  * @param onScroll Used for detecting if the reader is scrolling down
  */
-class ReaderNestedScrollConnection(
+private class ReaderNestedScrollConnection(
     private val enabled: Boolean,
     private val onPreScroll: (Float) -> Float,
     private val onPostScroll: (Float) -> Float,
     private val onRelease: (Float) -> Unit,
-    private val onScroll: (Float) -> Unit
+    private val onScroll: ((Float) -> Unit)? = null
 ) : NestedScrollConnection {
 
     override fun onPreScroll(
         available: Offset, source: NestedScrollSource
     ): Offset {
-        onScroll(available.y)
+        onScroll?.invoke(available.y)
         return when {
             !enabled || available.y == 0f -> Offset.Zero
 
@@ -294,11 +296,31 @@ private fun Float.signOpposites(f: Float): Boolean =
 /**
  * Default parameter values for [rememberPullToLoadState].
  */
-@ExperimentalMaterialApi
 object PullToLoadDefaults {
     /**
      * If the indicator is below this threshold offset when it is released, the load action
      * will be triggered.
      */
     val LoadThreshold = 120.dp
+
+    const val ContentOffsetMultiple = 80
 }
+
+fun Modifier.pullToLoad(
+    state: PullToLoadState,
+    contentOffsetMultiple: Int = ContentOffsetMultiple,
+    onScroll: ((Float) -> Unit)? = null,
+    enabled: Boolean = true
+): Modifier =
+    nestedScroll(
+        ReaderNestedScrollConnection(
+            enabled = enabled,
+            onPreScroll = state::onPullBack,
+            onPostScroll = state::onPull,
+            onRelease = state::onRelease,
+            onScroll = onScroll
+        )
+    ).run {
+        if (enabled) offset(x = 0.dp, y = (state.offsetFraction * contentOffsetMultiple).dp)
+        else this
+    }

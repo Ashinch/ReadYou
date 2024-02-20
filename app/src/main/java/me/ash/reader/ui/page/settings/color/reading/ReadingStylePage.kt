@@ -47,6 +47,8 @@ fun ReadingStylePage(
     val tonalElevation = LocalReadingPageTonalElevation.current
     val fonts = LocalReadingFonts.current
     val autoHideToolbar = LocalReadingAutoHideToolbar.current
+    val pullToSwitchArticle = LocalPullToSwitchArticle.current
+
 
     var tonalElevationDialogVisible by remember { mutableStateOf(false) }
     var fontsDialogVisible by remember { mutableStateOf(false) }
@@ -169,6 +171,11 @@ fun ReadingStylePage(
                         enabled = false,
                         onClick = {},
                     ) {}
+                    SettingItem(
+                        title = stringResource(id = R.string.pull_to_switch_article),
+                        onClick = { pullToSwitchArticle.toggle(context, scope) }) {
+                        RYSwitch(activated = pullToSwitchArticle.value)
+                    }
                     SettingItem(
                         title = stringResource(R.string.tonal_elevation),
                         desc = "${tonalElevation.value}dp",

@@ -7,7 +7,6 @@ import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.ExperimentalMaterialApi
@@ -24,13 +23,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
 import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.ui.ext.collectAsStateValue
@@ -50,6 +48,7 @@ fun ReadingPage(
     readingViewModel: ReadingViewModel = hiltViewModel(),
 ) {
     val tonalElevation = LocalReadingPageTonalElevation.current
+    val isPullToSwitchArticleEnabled = LocalPullToSwitchArticle.current.value
     val readingUiState = readingViewModel.readingUiState.collectAsStateValue()
     val readerState = readingViewModel.readerStateStateFlow.collectAsStateValue()
     val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
@@ -165,26 +164,25 @@ fun ReadingPage(
                                 saver = LazyListState.Saver
                             ) { LazyListState() }
 
-                            CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
+                            CompositionLocalProvider(
+                                LocalOverscrollConfiguration provides
+                                        if (isPullToSwitchArticleEnabled) null else LocalOverscrollConfiguration.current
+                            ) {
                                 Box(
                                     modifier = Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Content(
                                         modifier = Modifier
-                                            .nestedScroll(
-                                                ReaderNestedScrollConnection(
-                                                    enabled = true,
-                                                    onPreScroll = state::onPullBack,
-                                                    onPostScroll = state::onPull,
-                                                    onRelease = state::onRelease,
-                                                    onScroll = { f ->
-                                                        if (abs(f) > 2f)
-                                                            isReaderScrollingDown = f < 0f
-                                                    })
-                                            )
                                             .padding(paddings)
-                                            .offset(x = 0.dp, y = (state.offsetFraction * 80).dp),
+                                            .pullToLoad(
+                                                state = state,
+                                                onScroll = { f ->
+                                                    if (abs(f) > 2f)
+                                                        isReaderScrollingDown = f < 0f
+                                                },
+                                                enabled = isPullToSwitchArticleEnabled
+                                            ),
                                         content = content.text ?: "",
                                         feedName = feedName,
                                         title = title.toString(),

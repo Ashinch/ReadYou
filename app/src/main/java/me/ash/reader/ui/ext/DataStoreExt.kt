@@ -416,6 +416,11 @@ sealed class DataStoreKeys<T> {
             get() = intPreferencesKey("swipeEndAction")
     }
 
+    data object PullToSwitchArticle : DataStoreKeys<Boolean>() {
+        override val key: Preferences.Key<Boolean>
+            get() = booleanPreferencesKey("pullToSwitchArticle")
+    }
+
     object OpenLink : DataStoreKeys<Int>() {
 
         override val key: Preferences.Key<Int>
@@ -425,7 +430,7 @@ sealed class DataStoreKeys<T> {
     object OpenLinkAppSpecificBrowser : DataStoreKeys<String>() {
 
         override val key: Preferences.Key<String>
-                get() = stringPreferencesKey("openLppSpecificBrowser")
+            get() = stringPreferencesKey("openLppSpecificBrowser")
     }
 
     // Languages
