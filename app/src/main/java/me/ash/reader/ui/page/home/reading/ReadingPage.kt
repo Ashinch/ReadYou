@@ -28,10 +28,12 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
 import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.motion.materialSharedAxisY
 import me.ash.reader.ui.page.home.HomeViewModel
 import kotlin.math.abs
@@ -40,7 +42,9 @@ import kotlin.math.abs
 private const val UPWARD = 1
 private const val DOWNWARD = -1
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(
+    ExperimentalFoundationApi::class, ExperimentalMaterialApi::class
+)
 @Composable
 fun ReadingPage(
     navController: NavHostController,
@@ -48,6 +52,7 @@ fun ReadingPage(
     readingViewModel: ReadingViewModel = hiltViewModel(),
 ) {
     val tonalElevation = LocalReadingPageTonalElevation.current
+    val context = LocalContext.current
     val isPullToSwitchArticleEnabled = LocalPullToSwitchArticle.current.value
     val readingUiState = readingViewModel.readingUiState.collectAsStateValue()
     val readerState = readingViewModel.readerStateStateFlow.collectAsStateValue()
@@ -229,6 +234,20 @@ fun ReadingPage(
         }
     )
     if (showFullScreenImageViewer) {
-        ReaderImageViewer(imageData = currentImageData) { showFullScreenImageViewer = false }
+
+        ReaderImageViewer(
+            imageData = currentImageData,
+            onDownloadImage = {
+                readingViewModel.downloadImage(
+                    it,
+                    onSuccess = { context.showToast(context.getString(R.string.image_saved)) },
+                    onFailure = {
+                        // FIXME: crash the app for error report
+                        th -> throw th
+                    }
+                )
+            },
+            onDismissRequest = { showFullScreenImageViewer = false }
+        )
     }
 }
