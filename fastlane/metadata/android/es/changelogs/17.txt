@@ -1,6 +1,6 @@
 ## 0.9.6
 
-1. Compatibilidad con la API de fiebre (beta)
+1. Compatibilidad con la API de Fever (beta)
 
 2. Traducciones mejoradas (gracias a los colaboradores)
 
