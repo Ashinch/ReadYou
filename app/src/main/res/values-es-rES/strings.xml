@@ -32,7 +32,7 @@
     <string name="back">Atrás</string>
     <string name="go_to">Ir a</string>
     <string name="settings">Ajustes</string>
-    <string name="refresh">Actualizar</string>
+    <string name="refresh">Refrescar</string>
     <string name="search">Buscar</string>
     <string name="searching">Buscando…</string>
     <string name="subscribe">Suscribir</string>
@@ -87,8 +87,8 @@
     <string name="mark_as_read_one_day">Marcar como leído hace más de 1 día</string>
     <string name="mark_as_read_three_days">Marcar como leído hace más de 3 días</string>
     <string name="mark_as_read_seven_days">Marcar como leído hace más de 7 días</string>
-    <string name="one_day">1 día</string>
-    <string name="three_days">3 días</string>
+    <string name="one_day">1 d</string>
+    <string name="three_days">3d</string>
     <string name="seven_days">7 días</string>
     <string name="close">Cerrar</string>
     <string name="get_new_updates">Obtener nuevas actualizaciones</string>
@@ -273,4 +273,20 @@
     <string name="exclude">Excluir</string>
     <string name="include_additional_info">Incluir información adicional</string>
     <string name="additional_info_desc">La información adicional incluye opciones de configuración para cada fuente, como permitir notificaciones, analizar el contenido completo, etc. Si desea utilizar el archivo OPML exportado con otros lectores, seleccione \"Excluir\".</string>
+    <string name="read_excluding_starred">Leer, sin estrellas</string>
+    <string name="external_links">Enlaces externos</string>
+    <string name="unexpected_error_title">¡Uy! Algo salió mal…</string>
+    <string name="unexpected_error_msg">La aplicación ha encontrado un error inesperado y ha tenido que cerrarse.
+\n
+\nPara ayudarnos a identificar y solucionar este problema rápidamente, puedes %1$s con el rastreo de pila de error a continuación.</string>
+    <string name="next_article">Artículo siguiente</string>
+    <string name="grey_out_articles">Artículos en gris</string>
+    <string name="all_read">Leer todo</string>
+    <string name="copy_error_report">Copiar el informe de error</string>
+    <string name="submit_bug_report">envíe un informe de error a GitHub</string>
+    <string name="swipe_to_start">Desliza a la izquierda</string>
+    <string name="swipe_to_end">Desliza a la derecha</string>
+    <string name="none">Nada</string>
+    <string name="toggle_read">Alterna leídos</string>
+    <string name="toggle_starred">Alterna favoritos</string>
 </resources>

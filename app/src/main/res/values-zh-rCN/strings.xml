@@ -268,5 +268,17 @@
     <string name="all_read">所有已读项</string>
     <string name="read_excluding_starred">已读项，但已加星标的除外</string>
     <string name="external_links">外部链接</string>
+    <string name="submit_bug_report">在 GitHub 上提交故障报告</string>
+    <string name="unexpected_error_title">哎呀！出问题了…</string>
+    <string name="copy_error_report">复制错误报告</string>
+    <string name="unexpected_error_msg">应用碰到了未预期的错误必须关闭。
+\n
+\n要帮助我们快速查明并修复问题，你可以 %1$s 下方的错误堆栈踪迹。</string>
+    <string name="next_article">下一篇文章</string>
+    <string name="swipe_to_start">左滑</string>
+    <string name="swipe_to_end">右滑</string>
+    <string name="none">无</string>
+    <string name="toggle_read">切换“已读”状态</string>
+    <string name="toggle_starred">切换“加星”状态</string>
     <string name="export">导出</string>
 </resources>
