@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.SwipeLeft
-import androidx.compose.material.icons.rounded.SwipeRight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,12 +30,14 @@ import me.ash.reader.infrastructure.preference.LocalInitialFilter
 import me.ash.reader.infrastructure.preference.LocalInitialPage
 import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
+import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
 import me.ash.reader.infrastructure.preference.OpenLinkPreference
 import me.ash.reader.infrastructure.preference.SwipeEndActionPreference
 import me.ash.reader.infrastructure.preference.SwipeStartActionPreference
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold
+import me.ash.reader.ui.component.base.RYSwitch
 import me.ash.reader.ui.component.base.RadioDialog
 import me.ash.reader.ui.component.base.RadioDialogOption
 import me.ash.reader.ui.component.base.Subtitle
@@ -54,6 +54,7 @@ fun InteractionPage(
     val initialFilter = LocalInitialFilter.current
     val swipeToStartAction = LocalArticleListSwipeStartAction.current
     val swipeToEndAction = LocalArticleListSwipeEndAction.current
+    val pullToSwitchArticle = LocalPullToSwitchArticle.current
     val openLink = LocalOpenLink.current
     val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
     val scope = rememberCoroutineScope()
@@ -123,6 +124,17 @@ fun InteractionPage(
                             swipeEndDialogVisible = true
                         },
                     ) {}
+
+                    Subtitle(
+                        modifier = Modifier.padding(horizontal = 24.dp),
+                        text = stringResource(R.string.reading_page),
+                    )
+
+                    SettingItem(
+                        title = stringResource(id = R.string.pull_to_switch_article),
+                        onClick = { pullToSwitchArticle.toggle(context, scope) }) {
+                        RYSwitch(activated = pullToSwitchArticle.value)
+                    }
 
                     Subtitle(
                         modifier = Modifier.padding(horizontal = 24.dp),

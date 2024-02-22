@@ -77,6 +77,7 @@ data class Settings(
     val initialFilter: InitialFilterPreference = InitialFilterPreference.default,
     val swipeStartAction: SwipeStartActionPreference = SwipeStartActionPreference.default,
     val swipeEndAction: SwipeEndActionPreference = SwipeEndActionPreference.default,
+    val pullToSwitchArticle: PullToSwitchArticlePreference = PullToSwitchArticlePreference.default,
     val openLink: OpenLinkPreference = OpenLinkPreference.default,
     val openLinkSpecificBrowser: OpenLinkSpecificBrowserPreference = OpenLinkSpecificBrowserPreference.default,
 
@@ -148,30 +149,40 @@ val LocalFlowArticleListReadIndicator =
     compositionLocalOf<FlowArticleReadIndicatorPreference> { FlowArticleReadIndicatorPreference.default }
 
 // Reading page
-val LocalReadingTheme = compositionLocalOf<ReadingThemePreference> { ReadingThemePreference.default }
-val LocalReadingDarkTheme = compositionLocalOf<ReadingDarkThemePreference> { ReadingDarkThemePreference.default }
+val LocalReadingTheme =
+    compositionLocalOf<ReadingThemePreference> { ReadingThemePreference.default }
+val LocalReadingDarkTheme =
+    compositionLocalOf<ReadingDarkThemePreference> { ReadingDarkThemePreference.default }
 val LocalReadingPageTonalElevation =
     compositionLocalOf<ReadingPageTonalElevationPreference> { ReadingPageTonalElevationPreference.default }
 val LocalReadingAutoHideToolbar =
     compositionLocalOf<ReadingAutoHideToolbarPreference> { ReadingAutoHideToolbarPreference.default }
 val LocalReadingTextFontSize = compositionLocalOf { ReadingTextFontSizePreference.default }
 val LocalReadingLetterSpacing = compositionLocalOf { ReadingLetterSpacingPreference.default }
-val LocalReadingTextHorizontalPadding = compositionLocalOf { ReadingTextHorizontalPaddingPreference.default }
-val LocalReadingTextAlign = compositionLocalOf<ReadingTextAlignPreference> { ReadingTextAlignPreference.default }
-val LocalReadingTextBold = compositionLocalOf<ReadingTextBoldPreference> { ReadingTextBoldPreference.default }
-val LocalReadingTitleAlign = compositionLocalOf<ReadingTitleAlignPreference> { ReadingTitleAlignPreference.default }
+val LocalReadingTextHorizontalPadding =
+    compositionLocalOf { ReadingTextHorizontalPaddingPreference.default }
+val LocalReadingTextAlign =
+    compositionLocalOf<ReadingTextAlignPreference> { ReadingTextAlignPreference.default }
+val LocalReadingTextBold =
+    compositionLocalOf<ReadingTextBoldPreference> { ReadingTextBoldPreference.default }
+val LocalReadingTitleAlign =
+    compositionLocalOf<ReadingTitleAlignPreference> { ReadingTitleAlignPreference.default }
 val LocalReadingSubheadAlign =
     compositionLocalOf<ReadingSubheadAlignPreference> { ReadingSubheadAlignPreference.default }
-val LocalReadingFonts = compositionLocalOf<ReadingFontsPreference> { ReadingFontsPreference.default }
-val LocalReadingTitleBold = compositionLocalOf<ReadingTitleBoldPreference> { ReadingTitleBoldPreference.default }
+val LocalReadingFonts =
+    compositionLocalOf<ReadingFontsPreference> { ReadingFontsPreference.default }
+val LocalReadingTitleBold =
+    compositionLocalOf<ReadingTitleBoldPreference> { ReadingTitleBoldPreference.default }
 val LocalReadingSubheadBold =
     compositionLocalOf<ReadingSubheadBoldPreference> { ReadingSubheadBoldPreference.default }
 val LocalReadingTitleUpperCase =
     compositionLocalOf<ReadingTitleUpperCasePreference> { ReadingTitleUpperCasePreference.default }
 val LocalReadingSubheadUpperCase =
     compositionLocalOf<ReadingSubheadUpperCasePreference> { ReadingSubheadUpperCasePreference.default }
-val LocalReadingImageHorizontalPadding = compositionLocalOf { ReadingImageHorizontalPaddingPreference.default }
-val LocalReadingImageRoundedCorners = compositionLocalOf { ReadingImageRoundedCornersPreference.default }
+val LocalReadingImageHorizontalPadding =
+    compositionLocalOf { ReadingImageHorizontalPaddingPreference.default }
+val LocalReadingImageRoundedCorners =
+    compositionLocalOf { ReadingImageRoundedCornersPreference.default }
 val LocalReadingImageMaximize =
     compositionLocalOf<ReadingImageMaximizePreference> { ReadingImageMaximizePreference.default }
 
@@ -181,6 +192,7 @@ val LocalInitialFilter =
     compositionLocalOf<InitialFilterPreference> { InitialFilterPreference.default }
 val LocalArticleListSwipeEndAction = compositionLocalOf { SwipeEndActionPreference.default }
 val LocalArticleListSwipeStartAction = compositionLocalOf { SwipeStartActionPreference.default }
+val LocalPullToSwitchArticle = compositionLocalOf { PullToSwitchArticlePreference.default }
 val LocalOpenLink =
     compositionLocalOf<OpenLinkPreference> { OpenLinkPreference.default }
 val LocalOpenLinkSpecificBrowser =
@@ -269,6 +281,7 @@ fun SettingsProvider(
         LocalInitialFilter provides settings.initialFilter,
         LocalArticleListSwipeStartAction provides settings.swipeStartAction,
         LocalArticleListSwipeEndAction provides settings.swipeEndAction,
+        LocalPullToSwitchArticle provides settings.pullToSwitchArticle,
         LocalOpenLink provides settings.openLink,
         LocalOpenLinkSpecificBrowser provides settings.openLinkSpecificBrowser,
 

@@ -280,4 +280,5 @@
     <string name="none">无</string>
     <string name="toggle_read">切换“已读”状态</string>
     <string name="toggle_starred">切换“加星”状态</string>
+    <string name="export">导出</string>
 </resources>
