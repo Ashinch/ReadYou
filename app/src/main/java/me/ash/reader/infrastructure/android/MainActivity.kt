@@ -1,5 +1,6 @@
 package me.ash.reader.infrastructure.android
 
+import android.Manifest
 import android.content.Intent
 import android.database.CursorWindow
 import android.os.Build
@@ -8,9 +9,11 @@ import android.util.Log
 import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
 import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Consumer
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -63,6 +66,21 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.e("RLog", "Unable to increase cursor window size: ${e.printStackTrace()}")
         }
+
+        val requestPermissionLauncher = this.registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+            } else { // Permission denied }
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            !NotificationManagerCompat.from(this).areNotificationsEnabled()
+        ) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+
 
         setContent {
             CompositionLocalProvider(
