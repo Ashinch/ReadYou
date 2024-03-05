@@ -70,7 +70,7 @@ fun GroupItem(
             Text(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(start = 28.dp),
+                    .padding(horizontal = 28.dp),
                 text = group.name,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
