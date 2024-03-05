@@ -40,8 +40,8 @@ fun LazyListScope.ArticleList(
                         isMenuEnabled = isMenuEnabled,
                         onToggleStarred = onToggleStarred,
                         onToggleRead = onToggleRead,
-                        onMarkAboveAsRead = onMarkAboveAsRead,
-                        onMarkBelowAsRead = onMarkBelowAsRead,
+                        onMarkAboveAsRead = if (index == 0) null else onMarkAboveAsRead,
+                        onMarkBelowAsRead = if (index == pagingItems.itemCount - 1) null else onMarkBelowAsRead,
                         onShare = onShare
                     )
                 }

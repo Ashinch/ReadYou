@@ -482,6 +482,19 @@ class GoogleReaderRssService @Inject constructor(
         }
     }
 
+    override suspend fun updateReadStatusByIdSet(articleIdSet: Set<String>, isUnread: Boolean) {
+        super.updateReadStatusByIdSet(articleIdSet, isUnread)
+        val googleReaderAPI = getGoogleReaderAPI()
+        articleIdSet.takeIf { it.isNotEmpty() }?.chunked(500)?.forEach {
+            Log.d("RLog", "sync markAsRead: ${it.size} num")
+            googleReaderAPI.editTag(
+                itemIds = it,
+                mark = if (!isUnread) GoogleReaderAPI.Stream.READ.tag else null,
+                unmark = if (isUnread) GoogleReaderAPI.Stream.READ.tag else null,
+            )
+        }
+    }
+
     override suspend fun markAsStarred(articleId: String, isStarred: Boolean) {
         super.markAsStarred(articleId, isStarred)
         getGoogleReaderAPI().editTag(

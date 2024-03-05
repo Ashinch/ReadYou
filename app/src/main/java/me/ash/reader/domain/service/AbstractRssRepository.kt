@@ -160,6 +160,14 @@ abstract class AbstractRssRepository(
         }
     }
 
+    open suspend fun updateReadStatusByIdSet(
+        articleIdSet: Set<String>,
+        isUnread: Boolean,
+    ) {
+        val accountId = context.currentAccountId
+        articleDao.markAsReadByIdSet(accountId = accountId, ids = articleIdSet, isUnread = isUnread)
+    }
+
     open suspend fun markAsStarred(articleId: String, isStarred: Boolean) {
         val accountId = context.currentAccountId
         articleDao.markAsStarredByArticleId(accountId, articleId, isStarred)

@@ -105,13 +105,21 @@ fun FlowPage(
     }
     val onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? = remember {
         {
-            //todo
+            flowViewModel.markAsReadFromListByDate(
+                date = it.article.date,
+                isBefore = false,
+                lazyPagingItems = pagingItems
+            )
         }
     }
 
     val onMarkBelowAsRead: ((ArticleWithFeed) -> Unit)? = remember {
         {
-            //todo
+            flowViewModel.markAsReadFromListByDate(
+                date = it.article.date,
+                isBefore = true,
+                lazyPagingItems = pagingItems
+            )
         }
     }
 
