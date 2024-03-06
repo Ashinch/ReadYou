@@ -421,4 +421,7 @@
     <string name="toggle_starred">Toggle starred</string>
     <string name="export">Export</string>
     <string name="pull_to_switch_article">Pull to switch article</string>
+    <string name="save">Save</string>
+    <string name="image_saved">Image saved</string>
+    <string name="permission_denied">Permission denied</string>
 </resources>
