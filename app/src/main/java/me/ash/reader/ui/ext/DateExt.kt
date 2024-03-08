@@ -86,3 +86,5 @@ private fun String.parseToDate(
     }
     return null
 }
+
+fun Date.isFuture(staticDate: Date = Date()): Boolean = this.time > staticDate.time

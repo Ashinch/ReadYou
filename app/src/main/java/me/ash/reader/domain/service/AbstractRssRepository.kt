@@ -98,11 +98,12 @@ abstract class AbstractRssRepository(
         supervisorScope {
             coroutineWorker.setProgress(SyncWorker.setIsSyncing(true))
             val preTime = System.currentTimeMillis()
+            val preDate = Date(preTime)
             val accountId = context.currentAccountId
             feedDao.queryAll(accountId)
                 .chunked(16)
                 .forEach {
-                    it.map { feed -> async { syncFeed(feed) } }
+                    it.map { feed -> async { syncFeed(feed, preDate) } }
                         .awaitAll()
                         .forEach {
                             if (it.feed.isNotification) {
@@ -165,9 +166,9 @@ abstract class AbstractRssRepository(
         articleDao.markAsStarredByArticleId(accountId, articleId, isStarred)
     }
 
-    private suspend fun syncFeed(feed: Feed): FeedWithArticle {
+    private suspend fun syncFeed(feed: Feed, preDate: Date = Date()): FeedWithArticle {
         val latest = articleDao.queryLatestByFeedId(context.currentAccountId, feed.id)
-        val articles = rssHelper.queryRssXml(feed, latest?.link)
+        val articles = rssHelper.queryRssXml(feed, latest?.link, preDate)
         if (feed.icon == null) {
             val iconLink = rssHelper.queryRssIconLink(feed.url)
             if (iconLink != null) {
