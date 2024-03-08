@@ -325,15 +325,15 @@ class FeverRssService @Inject constructor(
         }
     }
 
-    override suspend fun updateReadStatusByIdSet(articleIdSet: Set<String>, isUnread: Boolean) {
-        articleIdSet.forEach { id ->
-            delay(500) // request interval to avoid hitting the rate limit
-            markAsRead(
-                groupId = null,
-                feedId = null,
-                before = null,
-                articleId = id,
-                isUnread = isUnread
+
+    override suspend fun batchMarkAsRead(articleIds: Set<String>, isUnread: Boolean) {
+        super.batchMarkAsRead(articleIds, isUnread)
+        val feverAPI = getFeverAPI()
+        articleIds.takeIf { it.isNotEmpty() }?.forEachIndexed { index, it ->
+            Log.d("RLog", "sync markAsRead: ${index}/${articleIds.size} num")
+            feverAPI.markItem(
+                status = if (isUnread) FeverDTO.StatusEnum.Unread else FeverDTO.StatusEnum.Read,
+                id = it.dollarLast(),
             )
         }
     }
