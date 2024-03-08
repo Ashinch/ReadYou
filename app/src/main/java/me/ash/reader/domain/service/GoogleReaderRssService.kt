@@ -476,10 +476,23 @@ class GoogleReaderRssService @Inject constructor(
             }
         }
         super.markAsRead(groupId, feedId, articleId, before, isUnread)
-        markList.takeIf { it.isNotEmpty() }?.chunked(500)?.forEach {
-            Log.d("RLog", "sync markAsRead: ${it.size} num")
+        markList.takeIf { it.isNotEmpty() }?.chunked(500)?.forEachIndexed { index, it ->
+            Log.d("RLog", "sync markAsRead:  ${(index * 500) + it.size}/${markList.size} num")
             googleReaderAPI.editTag(
                 itemIds = it,
+                mark = if (!isUnread) GoogleReaderAPI.Stream.READ.tag else null,
+                unmark = if (isUnread) GoogleReaderAPI.Stream.READ.tag else null,
+            )
+        }
+    }
+
+    override suspend fun batchMarkAsRead(articleIds: Set<String>, isUnread: Boolean) {
+        super.batchMarkAsRead(articleIds, isUnread)
+        val googleReaderAPI = getGoogleReaderAPI()
+        articleIds.takeIf { it.isNotEmpty() }?.chunked(500)?.forEachIndexed { index, it ->
+            Log.d("RLog", "sync markAsRead:  ${(index * 500) + it.size}/${articleIds.size} num")
+            googleReaderAPI.editTag(
+                itemIds = it.map { it.dollarLast() },
                 mark = if (!isUnread) GoogleReaderAPI.Stream.READ.tag else null,
                 unmark = if (isUnread) GoogleReaderAPI.Stream.READ.tag else null,
             )

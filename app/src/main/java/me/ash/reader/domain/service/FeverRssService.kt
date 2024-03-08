@@ -323,6 +323,18 @@ class FeverRssService @Inject constructor(
         }
     }
 
+    override suspend fun batchMarkAsRead(articleIds: Set<String>, isUnread: Boolean) {
+        super.batchMarkAsRead(articleIds, isUnread)
+        val feverAPI = getFeverAPI()
+        articleIds.takeIf { it.isNotEmpty() }?.forEachIndexed { index, it ->
+            Log.d("RLog", "sync markAsRead: ${index}/${articleIds.size} num")
+            feverAPI.markItem(
+                status = if (isUnread) FeverDTO.StatusEnum.Unread else FeverDTO.StatusEnum.Read,
+                id = it.dollarLast(),
+            )
+        }
+    }
+
     override suspend fun markAsStarred(articleId: String, isStarred: Boolean) {
         super.markAsStarred(articleId, isStarred)
         val feverAPI = getFeverAPI()
