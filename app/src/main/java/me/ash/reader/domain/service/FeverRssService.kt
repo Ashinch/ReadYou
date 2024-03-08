@@ -34,6 +34,7 @@ import me.ash.reader.infrastructure.rss.provider.fever.FeverDTO
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.dollarLast
+import me.ash.reader.ui.ext.isFuture
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.ext.spacerDollar
 import java.util.Date
@@ -140,6 +141,7 @@ class FeverRssService @Inject constructor(
 
             try {
                 val preTime = System.currentTimeMillis()
+                val preDate = Date(preTime)
                 val accountId = context.currentAccountId
                 val account = accountDao.queryById(accountId)!!
                 val feverAPI = getFeverAPI()
@@ -196,7 +198,10 @@ class FeverRssService @Inject constructor(
                         *itemsBody.items?.map {
                             Article(
                                 id = accountId.spacerDollar(it.id!!),
-                                date = it.created_on_time?.run { Date(this * 1000) } ?: Date(),
+                                date = it.created_on_time
+                                    ?.run { Date(this * 1000) }
+                                    ?.takeIf { !it.isFuture(preDate) }
+                                    ?: preDate,
                                 title = it.title.decodeHTML() ?: context.getString(R.string.empty),
                                 author = it.author,
                                 rawDescription = it.html ?: "",
@@ -209,7 +214,7 @@ class FeverRssService @Inject constructor(
                                 accountId = accountId,
                                 isUnread = (it.is_read ?: 0) <= 0,
                                 isStarred = (it.is_saved ?: 0) > 0,
-                                updateAt = Date(),
+                                updateAt = preDate,
                             ).also {
                                 sinceId = it.id.dollarLast()
                             }

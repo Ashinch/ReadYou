@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.reading
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,6 +21,7 @@ import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.rss.RssHelper
+import me.ash.reader.infrastructure.storage.AndroidImageDownloader
 import java.util.Date
 import javax.inject.Inject
 
@@ -31,6 +33,7 @@ class ReadingViewModel @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher,
     @ApplicationScope
     private val applicationScope: CoroutineScope,
+    private val imageDownloader: AndroidImageDownloader
 ) : ViewModel() {
 
     private val _readingUiState = MutableStateFlow(ReadingUiState())
@@ -194,6 +197,16 @@ class ReadingViewModel @Inject constructor(
             initData(this)
         } ?: return false
         return true
+    }
+
+    fun downloadImage(
+        url: String,
+        onSuccess: (Uri) -> Unit = {},
+        onFailure: (Throwable) -> Unit = {}
+    ) {
+        viewModelScope.launch {
+            imageDownloader.downloadImage(url).onSuccess(onSuccess).onFailure(onFailure)
+        }
     }
 }
 
