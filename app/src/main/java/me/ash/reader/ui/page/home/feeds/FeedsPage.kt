@@ -62,6 +62,7 @@ import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.ext.alphaLN
 import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.findActivity
 import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.page.common.RouteName
@@ -338,6 +339,14 @@ fun FeedsPage(
                     restoreState = true
                 }
             }
+        },
+        onClickSettings = {
+            accountTabVisible = false
+            navController.navigate("${RouteName.ACCOUNT_DETAILS}/${context.currentAccountId}")
+        },
+        onClickManage = {
+            accountTabVisible = false
+            navController.navigate(RouteName.ACCOUNTS)
         },
         onDismissRequest = {
             accountTabVisible = false
