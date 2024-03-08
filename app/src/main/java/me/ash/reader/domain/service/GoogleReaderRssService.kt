@@ -35,6 +35,7 @@ import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderDTO
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.dollarLast
+import me.ash.reader.ui.ext.isFuture
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.ext.spacerDollar
 import java.util.Calendar
@@ -405,7 +406,10 @@ class GoogleReaderRssService @Inject constructor(
                     val articleId = it.id!!.ofItemStreamIdToId()
                     Article(
                         id = accountId.spacerDollar(articleId),
-                        date = it.published?.run { Date(this * 1000) } ?: preDate,
+                        date = it.published
+                            ?.run { Date(this * 1000) }
+                            ?.takeIf { !it.isFuture(preDate) }
+                            ?: preDate,
                         title = it.title.decodeHTML() ?: context.getString(R.string.empty),
                         author = it.author,
                         rawDescription = it.summary?.content ?: "",
