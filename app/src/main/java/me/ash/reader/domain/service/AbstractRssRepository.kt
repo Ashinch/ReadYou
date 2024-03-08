@@ -161,6 +161,14 @@ abstract class AbstractRssRepository(
         }
     }
 
+    open suspend fun batchMarkAsRead(articleIds: Set<String>, isUnread: Boolean) {
+        val accountId = context.currentAccountId
+        articleIds.takeIf { it.isNotEmpty() }?.chunked(500)?.forEachIndexed { index, it ->
+            Log.d("RLog", "sync markAsRead: ${(index * 500) + it.size}/${articleIds.size} num")
+            articleDao.markAsReadByIdSet(accountId, it.toSet(), isUnread)
+        }
+    }
+
     open suspend fun markAsStarred(articleId: String, isStarred: Boolean) {
         val accountId = context.currentAccountId
         articleDao.markAsStarredByArticleId(accountId, articleId, isStarred)
