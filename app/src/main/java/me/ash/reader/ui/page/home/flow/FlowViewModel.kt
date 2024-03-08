@@ -94,7 +94,7 @@ class FlowViewModel @Inject constructor(
                 }
                 .map { it.id }
                 .toSet()
-            rssService.get().updateReadStatusByIdSet(articleIdSet = articleIdSet, isUnread = false)
+            rssService.get().batchMarkAsRead(articleIds = articleIdSet, isUnread = false)
         }
     }
 }
