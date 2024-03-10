@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.infrastructure.preference.FlowFilterBarStylePreference
 import me.ash.reader.infrastructure.preference.LocalThemeIndex
@@ -37,10 +38,9 @@ fun FilterBar(
     } onDark MaterialTheme.colorScheme.secondaryContainer
 
     NavigationBar(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(filterBarTonalElevation))
-            .navigationBarsPadding(),
-        tonalElevation = filterBarTonalElevation,
+        modifier = Modifier,
+        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(filterBarTonalElevation),
+        tonalElevation = 0.dp
     ) {
         Spacer(modifier = Modifier.width(filterBarPadding))
         Filter.values.forEach { item ->

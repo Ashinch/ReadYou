@@ -30,7 +30,7 @@ fun dynamicLightColorScheme(): ColorScheme {
         onTertiaryContainer = palettes tertiary 10,
         background = palettes neutral 99,
         onBackground = palettes neutral 10,
-        surface = palettes neutral 99,
+        surface = palettes neutral 98,
         onSurface = palettes neutral 10,
         surfaceVariant = palettes neutralVariant 90,
         onSurfaceVariant = palettes neutralVariant 30,
@@ -38,6 +38,14 @@ fun dynamicLightColorScheme(): ColorScheme {
         inverseSurface = palettes neutral 20,
         inverseOnSurface = palettes neutral 95,
         outline = palettes neutralVariant 50,
+        outlineVariant = palettes neutralVariant 80,
+        surfaceBright = palettes neutral 98,
+        surfaceDim = palettes neutral 87,
+        surfaceContainerLowest = palettes neutral 100,
+        surfaceContainerLow = palettes neutral 96,
+        surfaceContainer = palettes neutral 94,
+        surfaceContainerHigh = palettes neutral 92,
+        surfaceContainerHighest = palettes neutral 90,
     )
 }
 
@@ -70,6 +78,14 @@ fun dynamicDarkColorScheme(): ColorScheme {
         inverseSurface = palettes neutral 90,
         inverseOnSurface = palettes neutral 20,
         outline = palettes neutralVariant 60,
+        outlineVariant = palettes neutralVariant 30,
+        surfaceBright = palettes neutral 24,
+        surfaceDim = palettes neutral 6,
+        surfaceContainerLowest = palettes neutral 4,
+        surfaceContainerLow = palettes neutral 10,
+        surfaceContainer = palettes neutral 12,
+        surfaceContainerHigh = palettes neutral 17,
+        surfaceContainerHighest = palettes neutral 22,
     )
 }
 

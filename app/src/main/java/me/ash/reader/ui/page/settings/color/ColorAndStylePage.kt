@@ -251,7 +251,7 @@ fun Palettes(
                 .clip(RoundedCornerShape(16.dp))
                 .background(
                     MaterialTheme.colorScheme.inverseOnSurface
-                            onLight MaterialTheme.colorScheme.surface.copy(0.7f),
+                            onLight MaterialTheme.colorScheme.surfaceContainer,
                 )
                 .clickable {},
             horizontalArrangement = Arrangement.Center,
@@ -330,7 +330,7 @@ fun SelectableMiniPalette(
                 .copy(0.5f) onDark MaterialTheme.colorScheme.onPrimaryContainer.copy(0.3f)
         } else {
             MaterialTheme.colorScheme
-                .inverseOnSurface onLight MaterialTheme.colorScheme.surface.copy(0.7f)
+                .inverseOnSurface onLight MaterialTheme.colorScheme.surfaceContainer
         },
     ) {
         Surface(
