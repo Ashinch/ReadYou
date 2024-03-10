@@ -28,7 +28,7 @@ fun LazyListScope.ArticleList(
     onShare: ((ArticleWithFeed) -> Unit)? = null,
 ) {
     for (index in 0 until pagingItems.itemCount) {
-        when (val item = pagingItems[index]) {
+        when (val item = pagingItems.peek(index)) {
             is ArticleFlowItem.Article -> {
                 item(key = item.articleWithFeed.article.id) {
                     SwipeableArticleItem(
