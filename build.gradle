@@ -13,7 +13,7 @@ buildscript {
         // https://developer.android.com/jetpack/androidx/releases/navigation
         navigation = '2.5.0-rc01'
         // https://developer.android.com/jetpack/androidx/releases/paging
-        paging = '3.1.1'
+        paging = '3.2.1'
         // https://developer.android.com/jetpack/androidx/releases/room
         room = '2.6.1'
         // https://developer.android.com/jetpack/androidx/releases/datastore

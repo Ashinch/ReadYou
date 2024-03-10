@@ -1,14 +1,15 @@
 package me.ash.reader.ui.page.home.flow
 
-import android.util.Log
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.Animatable
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,43 +21,55 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Circle
+import androidx.compose.material.icons.outlined.FiberManualRecord
 import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material.icons.rounded.ArrowDownward
+import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.CheckCircleOutline
+import androidx.compose.material.icons.rounded.FiberManualRecord
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import coil.size.Precision
 import coil.size.Scale
 import me.ash.reader.R
 import me.ash.reader.domain.model.article.ArticleWithFeed
-import me.ash.reader.domain.model.constant.ElevationTokens
 import me.ash.reader.infrastructure.preference.FlowArticleReadIndicatorPreference
 import me.ash.reader.infrastructure.preference.LocalArticleListSwipeEndAction
 import me.ash.reader.infrastructure.preference.LocalArticleListSwipeStartAction
@@ -71,14 +84,19 @@ import me.ash.reader.infrastructure.preference.SwipeStartActionPreference
 import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.base.RYAsyncImage
 import me.ash.reader.ui.component.base.SIZE_1000
+import me.ash.reader.ui.component.menu.AnimatedDropdownMenu
 import me.ash.reader.ui.ext.surfaceColorAtElevation
+import me.ash.reader.ui.page.settings.color.flow.generateArticleWithFeedPreview
 import me.ash.reader.ui.theme.Shape20
 import me.ash.reader.ui.theme.palette.onDark
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ArticleItem(
+    modifier: Modifier = Modifier,
     articleWithFeed: ArticleWithFeed,
     onClick: (ArticleWithFeed) -> Unit = {},
+    onLongClick: (() -> Unit)? = null
 ) {
     val articleListFeedIcon = LocalFlowArticleListFeedIcon.current
     val articleListFeedName = LocalFlowArticleListFeedName.current
@@ -88,10 +106,13 @@ fun ArticleItem(
     val articleListReadIndicator = LocalFlowArticleListReadIndicator.current
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 12.dp)
             .clip(Shape20)
-            .clickable { onClick(articleWithFeed) }
+            .combinedClickable(
+                onClick = { onClick(articleWithFeed) },
+                onLongClick = onLongClick,
+            )
             .padding(horizontal = 12.dp, vertical = 12.dp)
             .alpha(articleWithFeed.article.run {
                 when (articleListReadIndicator) {
@@ -214,31 +235,47 @@ fun ArticleItem(
 }
 
 private const val PositionalThresholdFraction = 0.15f
+private const val SwipeActionDelay = 300L
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SwipeableArticleItem(
     articleWithFeed: ArticleWithFeed,
-    isFilterUnread: Boolean,
-    articleListTonalElevation: Int,
+    isFilterUnread: Boolean = false,
+    articleListTonalElevation: Int = 0,
     onClick: (ArticleWithFeed) -> Unit = {},
-    isScrollInProgress: () -> Boolean = { false },
-    onSwipeStartToEnd: ((ArticleWithFeed) -> Unit)? = null,
-    onSwipeEndToStart: ((ArticleWithFeed) -> Unit)? = null,
+    isSwipeEnabled: () -> Boolean = { false },
+    isMenuEnabled: Boolean = true,
+    onToggleStarred: (ArticleWithFeed, Long) -> Unit = { _, _ -> },
+    onToggleRead: (ArticleWithFeed, Long) -> Unit = { _, _ -> },
+    onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? = null,
+    onMarkBelowAsRead: ((ArticleWithFeed) -> Unit)? = null,
+    onShare: ((ArticleWithFeed) -> Unit)? = null,
 ) {
     val swipeToStartAction = LocalArticleListSwipeStartAction.current
     val swipeToEndAction = LocalArticleListSwipeEndAction.current
 
+    val onSwipeEndToStart = when (swipeToStartAction) {
+        SwipeStartActionPreference.None -> null
+        SwipeStartActionPreference.ToggleRead -> onToggleRead
+        SwipeStartActionPreference.ToggleStarred -> onToggleStarred
+    }
+
+    val onSwipeStartToEnd = when (swipeToEndAction) {
+        SwipeEndActionPreference.None -> null
+        SwipeEndActionPreference.ToggleRead -> onToggleRead
+        SwipeEndActionPreference.ToggleStarred -> onToggleStarred
+    }
     val density = LocalDensity.current
     val confirmValueChange: (SwipeToDismissBoxValue) -> Boolean = {
         when (it) {
             SwipeToDismissBoxValue.StartToEnd -> {
-                onSwipeStartToEnd?.invoke(articleWithFeed)
+                onSwipeStartToEnd?.invoke(articleWithFeed, SwipeActionDelay)
                 swipeToEndAction == SwipeEndActionPreference.ToggleRead && isFilterUnread
             }
 
             SwipeToDismissBoxValue.EndToStart -> {
-                onSwipeEndToStart?.invoke(articleWithFeed)
+                onSwipeEndToStart?.invoke(articleWithFeed, SwipeActionDelay)
                 swipeToStartAction == SwipeStartActionPreference.ToggleRead && isFilterUnread
             }
 
@@ -271,25 +308,38 @@ fun SwipeableArticleItem(
         )
     }
     val view = LocalView.current
-    var isActive by remember(articleWithFeed) { mutableStateOf(false) }
+    var isThresholdPassed by remember(articleWithFeed) { mutableStateOf(false) }
+
     LaunchedEffect(swipeState.progress > PositionalThresholdFraction) {
         if (swipeState.progress > PositionalThresholdFraction && swipeState.targetValue != SwipeToDismissBoxValue.Settled) {
-            isActive = true
-            view.performHapticFeedback(HapticFeedbackConstants.GESTURE_THRESHOLD_ACTIVATE)
-
+            isThresholdPassed = true
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
         } else {
-            isActive = false
+            isThresholdPassed = false
         }
     }
 
+    var expanded by remember { mutableStateOf(false) }
+
+
+    val onLongClick = if (isMenuEnabled) {
+        {
+            view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            expanded = true
+        }
+    } else {
+        null
+    }
+    var menuOffset by remember { mutableStateOf(Offset(0f, 0f)) }
+
     SwipeToDismissBox(
         state = swipeState,
-        enabled = !isScrollInProgress(),
+        enabled = !isSwipeEnabled(),
         /***  create dismiss alert background box */
         backgroundContent = {
             SwipeToDismissBoxBackgroundContent(
                 direction = swipeState.dismissDirection,
-                isActive = isActive,
+                isActive = isThresholdPassed,
                 isStarred = articleWithFeed.article.isStarred,
                 isRead = !articleWithFeed.article.isUnread
             )
@@ -299,13 +349,52 @@ fun SwipeableArticleItem(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
+                    .pointerInput(expanded) {
+                        awaitEachGesture {
+                            while (true) {
+                                awaitFirstDown(requireUnconsumed = false).let {
+                                    menuOffset = it.position
+                                }
+                            }
+                        }
+                    }
                     .background(
                         MaterialTheme.colorScheme.surfaceColorAtElevation(
                             articleListTonalElevation.dp
                         ) onDark MaterialTheme.colorScheme.surface
                     )
+                    .wrapContentSize()
             ) {
-                ArticleItem(articleWithFeed, onClick)
+                ArticleItem(
+                    articleWithFeed = articleWithFeed,
+                    onClick = onClick,
+                    onLongClick = onLongClick
+                )
+                with(articleWithFeed.article) {
+                    if (isMenuEnabled) {
+                        AnimatedDropdownMenu(
+                            modifier = Modifier.padding(12.dp),
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            offset = density.run {
+                                if (LocalLayoutDirection.current == LayoutDirection.Ltr)
+                                    DpOffset(menuOffset.x.toDp(), 0.dp)
+                                else DpOffset(0.dp, 0.dp)
+                            },
+                        ) {
+                            ArticleItemMenuContent(
+                                articleWithFeed = articleWithFeed,
+                                isStarred = isStarred,
+                                isRead = !isUnread,
+                                onToggleStarred = onToggleStarred,
+                                onToggleRead = onToggleRead,
+                                onMarkAboveAsRead = onMarkAboveAsRead,
+                                onMarkBelowAsRead = onMarkBelowAsRead,
+                                onShare = onShare
+                            ) { expanded = false }
+                        }
+                    }
+                }
             }
         },
         /*** Set Direction to dismiss */
@@ -413,7 +502,7 @@ private fun RowScope.SwipeToDismissBoxBackgroundContent(
             imageVector?.let {
                 Icon(
                     imageVector = it,
-                    contentDescription = null,
+                    contentDescription = text,
                     tint = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
@@ -422,6 +511,117 @@ private fun RowScope.SwipeToDismissBoxBackgroundContent(
             }
         }
     }
+}
 
 
+@Composable
+fun ArticleItemMenuContent(
+    articleWithFeed: ArticleWithFeed,
+    iconSize: DpSize = DpSize(width = 20.dp, height = 20.dp),
+    isStarred: Boolean = false,
+    isRead: Boolean = false,
+    onToggleStarred: (ArticleWithFeed, Long) -> Unit = { _, _ -> },
+    onToggleRead: (ArticleWithFeed, Long) -> Unit = { _, _ -> },
+    onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? = null,
+    onMarkBelowAsRead: ((ArticleWithFeed) -> Unit)? = null,
+    onShare: ((ArticleWithFeed) -> Unit)? = null,
+    onItemClick: (() -> Unit)? = null,
+) {
+    val starImageVector =
+        remember(isStarred) { if (isStarred) Icons.Outlined.StarOutline else Icons.Rounded.Star }
+
+    val readImageVector =
+        remember(isRead) { if (isRead) Icons.Outlined.FiberManualRecord else Icons.Rounded.FiberManualRecord }
+
+    val starText =
+        stringResource(if (isStarred) R.string.mark_as_unstar else R.string.mark_as_starred)
+
+    val readText =
+        stringResource(if (isRead) R.string.mark_as_unread else R.string.mark_as_read)
+
+    DropdownMenuItem(text = { Text(text = readText) }, onClick = {
+        onToggleRead(articleWithFeed, 0)
+        onItemClick?.invoke()
+    }, leadingIcon = {
+        Icon(
+            imageVector = readImageVector,
+            contentDescription = null,
+            modifier = Modifier.size(iconSize)
+        )
+    })
+    DropdownMenuItem(
+        text = { Text(text = starText) },
+        onClick = {
+            onToggleStarred(articleWithFeed, 0)
+            onItemClick?.invoke()
+        },
+        leadingIcon = {
+            Icon(
+                imageVector = starImageVector,
+                contentDescription = null,
+                modifier = Modifier.size(iconSize)
+            )
+        })
+
+    if (onMarkAboveAsRead != null || onMarkBelowAsRead != null) {
+        HorizontalDivider()
+    }
+    onMarkAboveAsRead?.let {
+        DropdownMenuItem(
+            text = { Text(text = stringResource(id = R.string.mark_above_as_read)) },
+            onClick = {
+                onMarkAboveAsRead(articleWithFeed)
+                onItemClick?.invoke()
+            },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Rounded.ArrowUpward,
+                    contentDescription = null,
+                    modifier = Modifier.size(iconSize)
+                )
+            })
+    }
+    onMarkBelowAsRead?.let {
+        DropdownMenuItem(
+            text = { Text(text = stringResource(id = R.string.mark_below_as_read)) },
+            onClick = {
+                onMarkBelowAsRead(articleWithFeed)
+                onItemClick?.invoke()
+            },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Rounded.ArrowDownward,
+                    contentDescription = null,
+                    modifier = Modifier.size(iconSize)
+                )
+            })
+    }
+    onShare?.let {
+        HorizontalDivider()
+        DropdownMenuItem(text = { Text(text = stringResource(id = R.string.share)) }, onClick = {
+            onShare(articleWithFeed)
+            onItemClick?.invoke()
+        }, leadingIcon = {
+            Icon(
+                imageVector = Icons.Rounded.Share, contentDescription = null,
+                modifier = Modifier.size(iconSize)
+            )
+        })
+    }
+}
+
+@Preview
+@Composable
+fun MenuContentPreview() {
+    MaterialTheme {
+        Surface() {
+            Column(modifier = Modifier.padding()) {
+                ArticleItemMenuContent(
+                    articleWithFeed = generateArticleWithFeedPreview(),
+                    onMarkBelowAsRead = {},
+                    onMarkAboveAsRead = {},
+                    onShare = {})
+            }
+        }
+    }
 }

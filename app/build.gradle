@@ -155,9 +155,9 @@ dependencies {
     kapt "androidx.room:room-compiler:$room"
 
     // https://developer.android.com/jetpack/androidx/releases/paging
-    implementation "androidx.paging:paging-common:$paging"
-    implementation "androidx.paging:paging-runtime:$paging"
-    implementation "androidx.paging:paging-compose:1.0.0-alpha14"
+    implementation "androidx.paging:paging-common-ktx:$paging"
+    implementation "androidx.paging:paging-runtime-ktx:$paging"
+    implementation "androidx.paging:paging-compose:$paging"
 
     // https://developer.android.com/jetpack/androidx/releases/paging
     implementation "androidx.browser:browser:1.5.0"

@@ -108,15 +108,17 @@ class GoogleReaderRssService @Inject constructor(
             destCategoryId = groupId.dollarLast(),
             destFeedName = searchedFeed.title!!
         )
-        feedDao.insert(Feed(
-            id = accountId.spacerDollar(feedId),
-            name = searchedFeed.title!!,
-            url = feedLink,
-            groupId = groupId,
-            accountId = accountId,
-            isNotification = isNotification,
-            isFullContent = isFullContent,
-        ))
+        feedDao.insert(
+            Feed(
+                id = accountId.spacerDollar(feedId),
+                name = searchedFeed.title!!,
+                url = feedLink,
+                groupId = groupId,
+                accountId = accountId,
+                isNotification = isNotification,
+                isFullContent = isFullContent,
+            )
+        )
         // TODO: When users need to subscribe to multiple feeds continuously, this makes them uncomfortable.
         //  It is necessary to make syncWork support synchronizing individual specified feeds.
         // super.doSyncOneTime()
@@ -233,11 +235,13 @@ class GoogleReaderRssService @Inject constructor(
 
                         // Handle folders
                         groupDao.insertOrUpdate(
-                            listOf(Group(
-                                id = groupId,
-                                name = category.label!!,
-                                accountId = accountId,
-                            ))
+                            listOf(
+                                Group(
+                                    id = groupId,
+                                    name = category.label!!,
+                                    accountId = accountId,
+                                )
+                            )
                         )
                         groupIds.add(groupId)
 
@@ -418,8 +422,10 @@ class GoogleReaderRssService @Inject constructor(
                         fullContent = it.summary?.content ?: "",
                         img = rssHelper.findImg(it.summary?.content ?: ""),
                         link = findArticleURL(it),
-                        feedId = accountId.spacerDollar(it.origin?.streamId?.ofFeedStreamIdToId()
-                            ?: feedIds.first()),
+                        feedId = accountId.spacerDollar(
+                            it.origin?.streamId?.ofFeedStreamIdToId()
+                                ?: feedIds.first()
+                        ),
                         accountId = accountId,
                         isUnread = unreadIds.contains(articleId),
                         isStarred = starredIds.contains(articleId),
@@ -448,10 +454,12 @@ class GoogleReaderRssService @Inject constructor(
                 if (before == null) {
                     articleDao.queryMetadataByGroupIdWhenIsUnread(accountId, groupId, !isUnread)
                 } else {
-                    articleDao.queryMetadataByGroupIdWhenIsUnread(accountId,
+                    articleDao.queryMetadataByGroupIdWhenIsUnread(
+                        accountId,
                         groupId,
                         !isUnread,
-                        before)
+                        before
+                    )
                 }.map { it.id.dollarLast() }
             }
 
