@@ -57,6 +57,7 @@ data class Settings(
     val readingPageTonalElevation: ReadingPageTonalElevationPreference = ReadingPageTonalElevationPreference.default,
     val readingAutoHideToolbar: ReadingAutoHideToolbarPreference = ReadingAutoHideToolbarPreference.default,
     val readingTextFontSize: Int = ReadingTextFontSizePreference.default,
+    val readingTextLineHeight: Float = ReadingTextLineHeightPreference.default,
     val readingLetterSpacing: Double = ReadingLetterSpacingPreference.default,
     val readingTextHorizontalPadding: Int = ReadingTextHorizontalPaddingPreference.default,
     val readingTextAlign: ReadingTextAlignPreference = ReadingTextAlignPreference.default,
@@ -158,6 +159,7 @@ val LocalReadingPageTonalElevation =
 val LocalReadingAutoHideToolbar =
     compositionLocalOf<ReadingAutoHideToolbarPreference> { ReadingAutoHideToolbarPreference.default }
 val LocalReadingTextFontSize = compositionLocalOf { ReadingTextFontSizePreference.default }
+val LocalReadingTextLineHeight = compositionLocalOf { ReadingTextLineHeightPreference.default }
 val LocalReadingLetterSpacing = compositionLocalOf { ReadingLetterSpacingPreference.default }
 val LocalReadingTextHorizontalPadding =
     compositionLocalOf { ReadingTextHorizontalPaddingPreference.default }
@@ -261,6 +263,7 @@ fun SettingsProvider(
         LocalReadingPageTonalElevation provides settings.readingPageTonalElevation,
         LocalReadingAutoHideToolbar provides settings.readingAutoHideToolbar,
         LocalReadingTextFontSize provides settings.readingTextFontSize,
+        LocalReadingTextLineHeight provides settings.readingTextLineHeight,
         LocalReadingLetterSpacing provides settings.readingLetterSpacing,
         LocalReadingTextHorizontalPadding provides settings.readingTextHorizontalPadding,
         LocalReadingTextAlign provides settings.readingTextAlign,

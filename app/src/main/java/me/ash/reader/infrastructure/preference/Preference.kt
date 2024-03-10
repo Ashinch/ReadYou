@@ -58,6 +58,7 @@ fun Preferences.toSettings(): Settings {
         readingPageTonalElevation = ReadingPageTonalElevationPreference.fromPreferences(this),
         readingAutoHideToolbar = ReadingAutoHideToolbarPreference.fromPreferences(this),
         readingTextFontSize = ReadingTextFontSizePreference.fromPreferences(this),
+        readingTextLineHeight = ReadingTextLineHeightPreference.fromPreferences(this),
         readingLetterSpacing = ReadingLetterSpacingPreference.fromPreferences(this),
         readingTextHorizontalPadding = ReadingTextHorizontalPaddingPreference.fromPreferences(this),
         readingTextAlign = ReadingTextAlignPreference.fromPreferences(this),
