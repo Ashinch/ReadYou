@@ -1,6 +1,8 @@
 package me.ash.reader.infrastructure.rss.provider.greader
 
 import me.ash.reader.infrastructure.di.USER_AGENT_STRING
+import me.ash.reader.infrastructure.exception.GoogleReaderAPIException
+import me.ash.reader.infrastructure.exception.RetryException
 import me.ash.reader.infrastructure.rss.provider.ProviderAPI
 import okhttp3.FormBody
 import okhttp3.Request
@@ -32,11 +34,11 @@ class GoogleReaderAPI private constructor(
     private val authData = AuthData(null, null)
 
     suspend fun validCredentials(): Boolean {
-        reauthenticate()
+        reAuthenticate()
         return authData.clientLoginToken?.isNotEmpty() ?: false
     }
 
-    private suspend fun reauthenticate() {
+    private suspend fun reAuthenticate() {
         // Get client login token
         val clResponse = client.newCall(
             Request.Builder()
@@ -55,10 +57,10 @@ class GoogleReaderAPI private constructor(
 
         val clBody = clResponse.body.string()
         when (clResponse.code) {
-            400 -> throw Exception("BadRequest for CL Token")
-            401 -> throw Exception("Unauthorized for CL Token")
+            400 -> throw GoogleReaderAPIException("BadRequest for CL Token")
+            401 -> throw GoogleReaderAPIException("Unauthorized for CL Token")
             !in 200..299 -> {
-                throw Exception(clBody)
+                throw GoogleReaderAPIException(clBody)
             }
         }
 
@@ -69,7 +71,7 @@ class GoogleReaderAPI private constructor(
                 .split("\n")
                 .find { it.startsWith("Auth=") }
                 ?.substring(5)
-                ?: throw Exception("body format error for CL Token:\n$clBody")
+                ?: throw GoogleReaderAPIException("body format error for CL Token:\n$clBody")
         }
 
         // Get action token
@@ -87,8 +89,6 @@ class GoogleReaderAPI private constructor(
         }
         authData.actionToken = actBody
     }
-
-    class RetryException(message: String) : Exception(message)
 
     private suspend inline fun <reified T> retryableGetRequest(
         query: String,
@@ -122,7 +122,7 @@ class GoogleReaderAPI private constructor(
         params: List<Pair<String, String>>? = null,
     ): T {
         if (authData.clientLoginToken.isNullOrEmpty()) {
-            reauthenticate()
+            reAuthenticate()
         }
 
         val response = client.newCall(
@@ -136,7 +136,7 @@ class GoogleReaderAPI private constructor(
 
         val body = response.body.string()
         when (response.code) {
-            400 -> throw Exception("BadRequest")
+            400 -> throw GoogleReaderAPIException("BadRequest")
             401 -> throw RetryException("Unauthorized")
             !in 200..299 -> {
                 val gReaderError = try {
@@ -144,7 +144,7 @@ class GoogleReaderAPI private constructor(
                 } catch (ignore: Exception) {
                     GoogleReaderDTO.GReaderError(listOf(body))
                 }
-                throw Exception(gReaderError.errors.joinToString(";\n "))
+                throw GoogleReaderAPIException(gReaderError.errors.joinToString(";\n "))
             }
         }
 
@@ -157,7 +157,7 @@ class GoogleReaderAPI private constructor(
         form: List<Pair<String, String>>? = null,
     ): T {
         if (authData.clientLoginToken.isNullOrEmpty()) {
-            reauthenticate()
+            reAuthenticate()
         }
         val response = client.newCall(
             Request.Builder()
@@ -175,10 +175,10 @@ class GoogleReaderAPI private constructor(
 
         val responseBody = response.body.string()
         when (response.code) {
-            400 -> throw Exception("BadRequest")
+            400 -> throw GoogleReaderAPIException("BadRequest")
             401 -> throw RetryException("Unauthorized")
             !in 200..299 -> {
-                throw Exception(responseBody)
+                throw GoogleReaderAPIException(responseBody)
             }
         }
 

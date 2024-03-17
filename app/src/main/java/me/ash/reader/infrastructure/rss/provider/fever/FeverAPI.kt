@@ -1,5 +1,6 @@
 package me.ash.reader.infrastructure.rss.provider.fever
 
+import me.ash.reader.infrastructure.exception.FeverAPIException
 import me.ash.reader.infrastructure.rss.provider.ProviderAPI
 import me.ash.reader.ui.ext.encodeBase64
 import me.ash.reader.ui.ext.md5
@@ -29,8 +30,8 @@ class FeverAPI private constructor(
             .executeAsync()
 
         when (response.code) {
-            401 -> throw Exception("Unauthorized")
-            !in 200..299 -> throw Exception("Forbidden")
+            401 -> throw FeverAPIException("Unauthorized")
+            !in 200..299 -> throw FeverAPIException("Forbidden")
         }
 
         return toDTO(response.body.string())
@@ -38,14 +39,14 @@ class FeverAPI private constructor(
 
     private fun checkAuth(authMap: Map<String, Any>): Int = checkAuth(authMap["auth"] as Int?)
 
-    private fun checkAuth(auth: Int?): Int = auth?.takeIf { it > 0 } ?: throw Exception("Unauthorized")
+    private fun checkAuth(auth: Int?): Int = auth?.takeIf { it > 0 } ?: throw FeverAPIException("Unauthorized")
 
     @Throws
     suspend fun validCredentials(): Int = checkAuth(postRequest<FeverDTO.Common>(null).auth)
 
     suspend fun getApiVersion(): Long =
         postRequest<Map<String, Any>>(null)["api_version"] as Long?
-            ?: throw Exception("Unable to get version")
+            ?: throw FeverAPIException("Unable to get version")
 
     suspend fun getGroups(): FeverDTO.Groups =
         postRequest<FeverDTO.Groups>("groups").apply { checkAuth(auth) }
@@ -66,7 +67,7 @@ class FeverAPI private constructor(
         postRequest<FeverDTO.Items>("items&max_id=$id").apply { checkAuth(auth) }
 
     suspend fun getItemsWith(ids: List<String>): FeverDTO.Items =
-        if (ids.size > 50) throw Exception("Too many ids")
+        if (ids.size > 50) throw FeverAPIException("Too many ids")
         else postRequest<FeverDTO.Items>("items&with_ids=${ids.joinToString(",")}").apply { checkAuth(auth) }
 
     suspend fun getLinks(): FeverDTO.Links =
