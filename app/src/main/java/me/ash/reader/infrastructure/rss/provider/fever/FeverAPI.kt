@@ -83,14 +83,14 @@ class FeverAPI private constructor(
         postRequest<FeverDTO.ItemsByStarred>("saved_item_ids").apply { checkAuth(auth) }
 
     suspend fun markItem(status: FeverDTO.StatusEnum, id: String): FeverDTO.Common =
-        postRequest<FeverDTO.Common>("&mark=item&as=${status.value}&id=$id").apply { checkAuth(auth) }
+        postRequest<FeverDTO.Common>("mark=item&as=${status.value}&id=$id").apply { checkAuth(auth) }
 
     private suspend fun markFeedOrGroup(
         act: String,
         status: FeverDTO.StatusEnum,
         id: Long,
         before: Long,
-    ): FeverDTO.Common = postRequest<FeverDTO.Common>("&mark=$act&as=${status.value}&id=$id&before=$before")
+    ): FeverDTO.Common = postRequest<FeverDTO.Common>("mark=$act&as=${status.value}&id=$id&before=$before")
         .apply { checkAuth(auth) }
 
     suspend fun markGroup(status: FeverDTO.StatusEnum, id: Long, before: Long) =
