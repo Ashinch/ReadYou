@@ -8,8 +8,6 @@ import androidx.work.WorkManager
 import com.rometools.rome.feed.synd.SyndFeed
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
 import me.ash.reader.R
@@ -27,6 +25,7 @@ import me.ash.reader.infrastructure.android.NotificationHelper
 import me.ash.reader.infrastructure.di.DefaultDispatcher
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
+import me.ash.reader.infrastructure.exception.FeverAPIException
 import me.ash.reader.infrastructure.html.Readability
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.rss.provider.fever.FeverAPI
@@ -90,35 +89,35 @@ class FeverRssService @Inject constructor(
         feedLink: String, searchedFeed: SyndFeed, groupId: String,
         isNotification: Boolean, isFullContent: Boolean,
     ) {
-        throw Exception("Unsupported")
+        throw FeverAPIException("Unsupported")
     }
 
     override suspend fun addGroup(destFeed: Feed?, newGroupName: String): String {
-        throw Exception("Unsupported")
+        throw FeverAPIException("Unsupported")
     }
 
     override suspend fun renameGroup(group: Group) {
-        throw Exception("Unsupported")
+        throw FeverAPIException("Unsupported")
     }
 
     override suspend fun renameFeed(feed: Feed) {
-        throw Exception("Unsupported")
+        throw FeverAPIException("Unsupported")
     }
 
     override suspend fun deleteGroup(group: Group, onlyDeleteNoStarred: Boolean?) {
-        throw Exception("Unsupported")
+        throw FeverAPIException("Unsupported")
     }
 
     override suspend fun deleteFeed(feed: Feed, onlyDeleteNoStarred: Boolean?) {
-        throw Exception("Unsupported")
+        throw FeverAPIException("Unsupported")
     }
 
     override suspend fun moveFeed(originGroupId: String, feed: Feed) {
-        throw Exception("Unsupported")
+        throw FeverAPIException("Unsupported")
     }
 
     override suspend fun changeFeedUrl(feed: Feed) {
-        throw Exception("Unsupported")
+        throw FeverAPIException("Unsupported")
     }
 
     /**
