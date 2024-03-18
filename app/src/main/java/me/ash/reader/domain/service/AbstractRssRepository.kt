@@ -334,7 +334,7 @@ abstract class AbstractRssRepository(
         ) {
             return
         }
-        deleteArticles(group = group)
+        deleteArticles(group = group, includeStarred = true)
         feedDao.deleteByGroupId(accountId, group.id)
         groupDao.delete(group)
     }
@@ -345,14 +345,14 @@ abstract class AbstractRssRepository(
         ) {
             return
         }
-        deleteArticles(feed = feed)
+        deleteArticles(feed = feed, includeStarred = true)
         feedDao.delete(feed)
     }
 
-    suspend fun deleteArticles(group: Group? = null, feed: Feed? = null) {
+    suspend fun deleteArticles(group: Group? = null, feed: Feed? = null, includeStarred: Boolean = false) {
         when {
-            group != null -> articleDao.deleteByGroupId(context.currentAccountId, group.id)
-            feed != null -> articleDao.deleteByFeedId(context.currentAccountId, feed.id)
+            group != null -> articleDao.deleteByGroupId(context.currentAccountId, group.id, includeStarred)
+            feed != null -> articleDao.deleteByFeedId(context.currentAccountId, feed.id, includeStarred)
         }
     }
 

@@ -370,9 +370,10 @@ interface ArticleDao {
         DELETE FROM article
         WHERE accountId = :accountId
         AND feedId = :feedId
+        AND (isStarred = :includeStarred OR :includeStarred = 1)
         """
     )
-    suspend fun deleteByFeedId(accountId: Int, feedId: String)
+    suspend fun deleteByFeedId(accountId: Int, feedId: String, includeStarred: Boolean = false)
 
     @Query(
         """
@@ -383,10 +384,11 @@ interface ArticleDao {
             AND a.feedId = b.id
             AND b.groupId = c.id
             AND c.id = :groupId
+            AND (a.isStarred = :includeStarred OR :includeStarred = 1)
         )
         """
     )
-    suspend fun deleteByGroupId(accountId: Int, groupId: String)
+    suspend fun deleteByGroupId(accountId: Int, groupId: String, includeStarred: Boolean = false)
 
     @Query(
         """
