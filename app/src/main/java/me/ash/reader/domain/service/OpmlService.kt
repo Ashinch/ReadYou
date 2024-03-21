@@ -61,7 +61,7 @@ class OpmlService @Inject constructor(
      */
     @Throws(Exception::class)
     suspend fun saveToString(accountId: Int, attachInfo: Boolean): String {
-        val defaultGroup = groupDao.queryById(getDefaultGroupId(accountId))!!
+        val defaultGroup = groupDao.queryById(getDefaultGroupId(accountId))
         return OpmlWriter().write(
             Opml(
                 "2.0",
@@ -78,7 +78,7 @@ class OpmlService @Inject constructor(
                             "title" to it.group.name,
                         ).apply {
                             if (attachInfo) {
-                                put("isDefault", (it.group.id == defaultGroup.id).toString())
+                                put("isDefault", (it.group.id == defaultGroup?.id).toString())
                             }
                         },
                         it.feeds.map { feed ->
