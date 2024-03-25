@@ -286,4 +286,12 @@
     <string name="none">Nič</string>
     <string name="toggle_read">Prepnúť stav prečítania</string>
     <string name="toggle_starred">Prepnúť stav obľúbenosti</string>
+    <string name="export">Export</string>
+    <string name="pull_to_switch_article">Potiahnutím prepnúť článok</string>
+    <string name="save">Uložiť</string>
+    <string name="image_saved">Obrázok uložený</string>
+    <string name="permission_denied">Povolenie zamietnuté</string>
+    <string name="mark_above_as_read">Označiť vyššie uvedené ako prečítané</string>
+    <string name="mark_below_as_read">Označiť nižšie uvedené ako prečítané</string>
+    <string name="line_height_multiple">Násobok výšky riadku</string>
 </resources>

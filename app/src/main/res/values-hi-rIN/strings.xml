@@ -284,4 +284,12 @@
 \n
 \nइस समस्या को शीघ्रता से पहचानने और ठीक करने में हमारी सहायता के लिए, आप नीचे दिए गए त्रुटि स्टैक ट्रेस के साथ %1$s कर सकते हैं।</string>
     <string name="swipe_to_end">दाएं स्वाइप करें</string>
+    <string name="export">निर्यात</string>
+    <string name="pull_to_switch_article">आलेख स्विच करने के लिए खींचें</string>
+    <string name="save">सहेजें</string>
+    <string name="image_saved">छवि सहेजी गई</string>
+    <string name="permission_denied">अनुमति नहीं मिली</string>
+    <string name="mark_below_as_read">नीचे को पढ़ा हुआ चिह्नित करें</string>
+    <string name="line_height_multiple">रेखा की ऊँचाई एकाधिक</string>
+    <string name="mark_above_as_read">ऊपर को पढ़ा हुआ चिह्नित करें</string>
 </resources>

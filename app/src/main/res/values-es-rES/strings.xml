@@ -289,4 +289,12 @@
     <string name="none">Nada</string>
     <string name="toggle_read">Alterna leídos</string>
     <string name="toggle_starred">Alterna favoritos</string>
+    <string name="export">Exportar</string>
+    <string name="pull_to_switch_article">Tirar para cambiar de artículo</string>
+    <string name="save">Guardar</string>
+    <string name="image_saved">Imagen guardada</string>
+    <string name="permission_denied">Permiso denegado</string>
+    <string name="mark_below_as_read">Marque a continuación como leído</string>
+    <string name="mark_above_as_read">Marcar arriba como leído</string>
+    <string name="line_height_multiple">Altura de la línea múltiple</string>
 </resources>

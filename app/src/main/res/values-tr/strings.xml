@@ -283,4 +283,12 @@
     <string name="none">Hiçbiri</string>
     <string name="toggle_read">Okunduyu değiştir</string>
     <string name="toggle_starred">Yıldızlıyı değiştir</string>
+    <string name="export">Dışa aktar</string>
+    <string name="pull_to_switch_article">Makaleyi değiştirmek için çekin</string>
+    <string name="save">Kaydet</string>
+    <string name="image_saved">Resim kaydedildi</string>
+    <string name="permission_denied">İzin reddedildi</string>
+    <string name="mark_below_as_read">Aşağıdakini okundu olarak işaretle</string>
+    <string name="line_height_multiple">Çoklu satır yüksekliği</string>
+    <string name="mark_above_as_read">Yukarıdakini okundu olarak işaretle</string>
 </resources>

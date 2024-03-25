@@ -281,4 +281,11 @@
     <string name="toggle_read">切换“已读”状态</string>
     <string name="toggle_starred">切换“加星”状态</string>
     <string name="export">导出</string>
+    <string name="pull_to_switch_article">下拉切换文章</string>
+    <string name="save">保存</string>
+    <string name="image_saved">图片已保存</string>
+    <string name="permission_denied">权限被拒绝</string>
+    <string name="mark_below_as_read">将下方文章标为已读</string>
+    <string name="line_height_multiple">行高倍数</string>
+    <string name="mark_above_as_read">将上方文章标为已读</string>
 </resources>

@@ -282,4 +282,12 @@
     <string name="toggle_starred">Alterna favoritos</string>
     <string name="toggle_read">Alterna lidos</string>
     <string name="none">Nada</string>
+    <string name="export">Exportar</string>
+    <string name="pull_to_switch_article">Arrastra para cambiar de artigo</string>
+    <string name="line_height_multiple">Alto de liña múltiple</string>
+    <string name="mark_above_as_read">Marcar enriba como lido</string>
+    <string name="mark_below_as_read">Marcar enbaixo como lido</string>
+    <string name="save">Gardar</string>
+    <string name="image_saved">Imaxe gardada</string>
+    <string name="permission_denied">Permiso denegado</string>
 </resources>

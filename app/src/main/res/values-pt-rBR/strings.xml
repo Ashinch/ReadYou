@@ -286,4 +286,12 @@
     <string name="toggle_read">Alternar leitura</string>
     <string name="swipe_to_end">Deslizar para a direita</string>
     <string name="toggle_starred">Alternar favorito</string>
+    <string name="pull_to_switch_article">Puxe para mudar de artigo</string>
+    <string name="export">Exportar</string>
+    <string name="permission_denied">Permissão negada</string>
+    <string name="save">Salvar</string>
+    <string name="image_saved">Imagem salva</string>
+    <string name="mark_above_as_read">Marcar acima como lido</string>
+    <string name="mark_below_as_read">Marque abaixo como lido</string>
+    <string name="line_height_multiple">Altura da linha múltipla</string>
 </resources>

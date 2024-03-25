@@ -286,4 +286,12 @@
     <string name="none">Nic</string>
     <string name="toggle_read">Přepnout stav přečtení</string>
     <string name="toggle_starred">Přepnout stav oblíbení</string>
+    <string name="export">Export</string>
+    <string name="pull_to_switch_article">Tažením přepnout článek</string>
+    <string name="save">Uložit</string>
+    <string name="image_saved">Obrázek uloźen</string>
+    <string name="permission_denied">Povolení zamítnuto</string>
+    <string name="line_height_multiple">Násobek výšky řádku</string>
+    <string name="mark_above_as_read">Označit vše výše jako přečtené</string>
+    <string name="mark_below_as_read">Označit vše níže jako přečtené</string>
 </resources>

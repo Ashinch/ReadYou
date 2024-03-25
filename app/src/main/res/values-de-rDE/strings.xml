@@ -278,4 +278,17 @@
     <string name="unexpected_error_msg">Die App ist auf einen unerwarteten Fehler gestoßen und musste beendet werden.
 \n
 \nUm das Problem zügig zu identifizieren und zu beheben, können Sie %1$s mit unten stehenden Fehler-Stacktrace angeben.</string>
+    <string name="pull_to_switch_article">Zum Artikelwechsel ziehen</string>
+    <string name="export">Exportieren</string>
+    <string name="swipe_to_start">Wische links</string>
+    <string name="swipe_to_end">Wische rechts</string>
+    <string name="toggle_starred">Markiert umschalten</string>
+    <string name="none">Keine</string>
+    <string name="toggle_read">Gelesen umschalten</string>
+    <string name="mark_above_as_read">Oben als gelesen markieren</string>
+    <string name="mark_below_as_read">Unten als gelesen markieren</string>
+    <string name="image_saved">Bild gespeichert</string>
+    <string name="line_height_multiple">Zeilenhöhe mehrfach</string>
+    <string name="save">Speichern</string>
+    <string name="permission_denied">Erlaubnis verweigert</string>
 </resources>
