@@ -427,4 +427,7 @@
     <string name="save">Save</string>
     <string name="image_saved">Image saved</string>
     <string name="permission_denied">Permission denied</string>
+    <string name="shared_content">Shared content</string>
+    <string name="only_link">Only link</string>
+    <string name="title_and_link">Title and link</string>
 </resources>

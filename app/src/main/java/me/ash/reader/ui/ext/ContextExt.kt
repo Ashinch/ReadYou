@@ -66,16 +66,6 @@ fun Context.showToastLong(message: String?) {
     showToast(message, Toast.LENGTH_LONG)
 }
 
-fun Context.share(content: String) {
-    startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
-        putExtra(
-            Intent.EXTRA_TEXT,
-            content,
-        )
-        type = "text/plain"
-    }, getString(R.string.share)))
-}
-
 fun Context.openURL(
     url: String?,
     openLink: OpenLinkPreference,

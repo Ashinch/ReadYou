@@ -82,6 +82,7 @@ fun Preferences.toSettings(): Settings {
         pullToSwitchArticle = PullToSwitchArticlePreference.fromPreference(this),
         openLink = OpenLinkPreference.fromPreferences(this),
         openLinkSpecificBrowser = OpenLinkSpecificBrowserPreference.fromPreferences(this),
+        sharedContent = SharedContentPreference.fromPreferences(this),
 
         // Languages
         languages = LanguagesPreference.fromPreferences(this),

@@ -31,7 +31,9 @@ import me.ash.reader.infrastructure.preference.LocalInitialPage
 import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
+import me.ash.reader.infrastructure.preference.LocalSharedContent
 import me.ash.reader.infrastructure.preference.OpenLinkPreference
+import me.ash.reader.infrastructure.preference.SharedContentPreference
 import me.ash.reader.infrastructure.preference.SwipeEndActionPreference
 import me.ash.reader.infrastructure.preference.SwipeStartActionPreference
 import me.ash.reader.ui.component.base.DisplayText
@@ -57,6 +59,7 @@ fun InteractionPage(
     val pullToSwitchArticle = LocalPullToSwitchArticle.current
     val openLink = LocalOpenLink.current
     val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
+    val sharedContent = LocalSharedContent.current
     val scope = rememberCoroutineScope()
     val isOpenLinkSpecificBrowserItemEnabled = remember(openLink) {
         openLink == OpenLinkPreference.SpecificBrowser
@@ -67,6 +70,7 @@ fun InteractionPage(
     var swipeEndDialogVisible by remember { mutableStateOf(false) }
     var openLinkDialogVisible by remember { mutableStateOf(false) }
     var openLinkSpecificBrowserDialogVisible by remember { mutableStateOf(false) }
+    var sharedContentDialogVisible by remember { mutableStateOf(false) }
 
     RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
@@ -156,6 +160,17 @@ fun InteractionPage(
                             if (isOpenLinkSpecificBrowserItemEnabled) {
                                 openLinkSpecificBrowserDialogVisible = true
                             }
+                        },
+                    ) {}
+                    Subtitle(
+                        modifier = Modifier.padding(horizontal = 24.dp),
+                        text = stringResource(R.string.share),
+                    )
+                    SettingItem(
+                        title = stringResource(R.string.shared_content),
+                        desc = sharedContent.toDesc(context),
+                        onClick = {
+                            sharedContentDialogVisible = true
                         },
                     ) {}
                 }
@@ -264,4 +279,18 @@ fun InteractionPage(
         }
     )
 
+    RadioDialog(
+        visible = sharedContentDialogVisible,
+        title = stringResource(R.string.shared_content),
+        options = SharedContentPreference.values.map {
+            RadioDialogOption(
+                text = it.toDesc(context),
+                selected = it == sharedContent,
+            ) {
+                it.put(context, scope)
+            }
+        },
+    ) {
+        sharedContentDialogVisible = false
+    }
 }
