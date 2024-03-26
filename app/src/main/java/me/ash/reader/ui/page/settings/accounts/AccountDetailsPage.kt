@@ -223,7 +223,7 @@ fun AccountDetailsPage(
                     //     title = stringResource(R.string.block_list),
                     //     onClick = { blockListDialogVisible = true },
                     // ) {}
-                    Tips(text = stringResource(R.string.synchronous_tips))
+                    Tips(text = stringResource(R.string.synchronous_tips) + "\n\n" + stringResource(R.string.keep_archived_tips))
                     Spacer(modifier = Modifier.height(24.dp))
                 }
                 item {
