@@ -36,6 +36,7 @@ fun TopBar(
     windowInsets: WindowInsets = WindowInsets(0.dp),
     title: String? = "",
     link: String? = "",
+    isExpandedScreen: Boolean,
     onClose: () -> Unit = {},
 ) {
     val context = LocalContext.current
@@ -54,12 +55,14 @@ fun TopBar(
                 modifier = Modifier,
                 windowInsets = windowInsets,
                 navigationIcon = {
-                    FeedbackIconButton(
-                        imageVector = Icons.Rounded.Close,
-                        contentDescription = stringResource(R.string.close),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    ) {
-                        onClose()
+                    if (!isExpandedScreen) {
+                        FeedbackIconButton(
+                            imageVector = Icons.Rounded.Close,
+                            contentDescription = stringResource(R.string.close),
+                            tint = MaterialTheme.colorScheme.onSurface
+                        ) {
+                            onClose()
+                        }
                     }
                 },
                 actions = {

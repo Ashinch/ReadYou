@@ -54,6 +54,8 @@ private const val DOWNWARD = -1
 fun ReadingPage(
     navController: NavHostController,
     homeViewModel: HomeViewModel,
+    isExpandedScreen: Boolean,
+    articleId: String? = null,
     readingViewModel: ReadingViewModel = hiltViewModel(),
 ) {
     val tonalElevation = LocalReadingPageTonalElevation.current
@@ -76,9 +78,10 @@ fun ReadingPage(
 
     val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(articleId) {
         navController.currentBackStackEntryFlow.collect {
-            it.arguments?.getString("articleId")?.let { articleId ->
+            val getArticleId : String? = articleId ?: it.arguments?.getString("articleId")
+            getArticleId?.let { articleId ->
                 if (readerState.articleId != articleId) {
                     readingViewModel.initData(articleId)
                 }
@@ -111,6 +114,7 @@ fun ReadingPage(
                     windowInsets = WindowInsets(top = paddings.calculateTopPadding()),
                     title = readerState.title,
                     link = readerState.link,
+                    isExpandedScreen = isExpandedScreen,
                     onClose = {
                         navController.popBackStack()
                     },

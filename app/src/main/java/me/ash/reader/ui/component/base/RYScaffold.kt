@@ -17,6 +17,7 @@ import me.ash.reader.ui.theme.palette.onDark
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RYScaffold(
+    modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surface,
     topBarTonalElevation: Dp = 0.dp,
     containerTonalElevation: Dp = 0.dp,
@@ -27,7 +28,7 @@ fun RYScaffold(
     content: @Composable () -> Unit = {},
 ) {
     Scaffold(
-        modifier = Modifier
+        modifier = modifier
             .background(
                 MaterialTheme.colorScheme.surfaceColorAtElevation(
                     topBarTonalElevation,

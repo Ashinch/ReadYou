@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -23,6 +24,7 @@ import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.page.home.flow.FlowPage
+import me.ash.reader.ui.page.home.flow.FlowRoute
 import me.ash.reader.ui.page.home.reading.ReadingPage
 import me.ash.reader.ui.page.settings.SettingsPage
 import me.ash.reader.ui.page.settings.accounts.AccountDetailsPage
@@ -44,6 +46,7 @@ import me.ash.reader.ui.theme.AppTheme
 fun HomeEntry(
     homeViewModel: HomeViewModel = hiltViewModel(),
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
+    widthSizeClass: WindowWidthSizeClass,
 ) {
     val context = LocalContext.current
     var isReadingPage by rememberSaveable { mutableStateOf(false) }
@@ -57,6 +60,8 @@ fun HomeEntry(
     }.also {
         intent?.replaceExtras(null)
     }
+
+    val isExpandedScreen = widthSizeClass == WindowWidthSizeClass.Expanded
 
     LaunchedEffect(Unit) {
         when (context.initialPage) {
@@ -152,13 +157,14 @@ fun HomeEntry(
                 )
             }
             forwardAndBackwardComposable(route = RouteName.FLOW) {
-                FlowPage(
+                FlowRoute(
                     navController = navController,
-                    homeViewModel = homeViewModel,
+                    isExpandedScreen = isExpandedScreen,
+                    homeViewModel = homeViewModel
                 )
             }
             forwardAndBackwardComposable(route = "${RouteName.READING}/{articleId}") {
-                ReadingPage(navController = navController, homeViewModel = homeViewModel)
+                ReadingPage(navController = navController, homeViewModel = homeViewModel, isExpandedScreen = isExpandedScreen)
             }
 
             // Settings
