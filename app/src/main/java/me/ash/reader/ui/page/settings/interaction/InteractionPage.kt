@@ -108,11 +108,12 @@ fun InteractionPage(
                             initialFilterDialogVisible = true
                         },
                     ) {}
+                    Spacer(modifier = Modifier.height(24.dp))
+
                     Subtitle(
                         modifier = Modifier.padding(horizontal = 24.dp),
                         text = stringResource(R.string.article_list),
                     )
-
                     SettingItem(
                         title = stringResource(R.string.swipe_to_start),
                         desc = swipeToStartAction.desc,
@@ -120,7 +121,6 @@ fun InteractionPage(
                             swipeStartDialogVisible = true
                         },
                     ) {}
-
                     SettingItem(
                         title = stringResource(R.string.swipe_to_end),
                         desc = swipeToEndAction.desc,
@@ -128,17 +128,20 @@ fun InteractionPage(
                             swipeEndDialogVisible = true
                         },
                     ) {}
+                    Spacer(modifier = Modifier.height(24.dp))
 
                     Subtitle(
                         modifier = Modifier.padding(horizontal = 24.dp),
                         text = stringResource(R.string.reading_page),
                     )
-
                     SettingItem(
                         title = stringResource(id = R.string.pull_to_switch_article),
                         onClick = { pullToSwitchArticle.toggle(context, scope) }) {
-                        RYSwitch(activated = pullToSwitchArticle.value)
+                        RYSwitch(activated = pullToSwitchArticle.value) {
+                            pullToSwitchArticle.toggle(context, scope)
+                        }
                     }
+                    Spacer(modifier = Modifier.height(24.dp))
 
                     Subtitle(
                         modifier = Modifier.padding(horizontal = 24.dp),
@@ -162,6 +165,8 @@ fun InteractionPage(
                             }
                         },
                     ) {}
+                    Spacer(modifier = Modifier.height(24.dp))
+
                     Subtitle(
                         modifier = Modifier.padding(horizontal = 24.dp),
                         text = stringResource(R.string.share),
@@ -173,6 +178,7 @@ fun InteractionPage(
                             sharedContentDialogVisible = true
                         },
                     ) {}
+                    Spacer(modifier = Modifier.height(24.dp))
                 }
                 item {
                     Spacer(modifier = Modifier.height(24.dp))
