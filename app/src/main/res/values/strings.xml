@@ -260,6 +260,7 @@
     <string name="open_source_licenses">Open source licenses</string>
     <string name="github_link" translatable="false">https://github.com/Ashinch/ReadYou</string>
     <string name="telegram_link" translatable="false">https://t.me/ReadYouApp</string>
+    <string name="wiki_link" translatable="false">https://github.com/Ashinch/ReadYou/wiki/Getting-Started</string>
     <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
     <string name="change_log">Changelog</string>
     <string name="update">Update</string>

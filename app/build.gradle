@@ -4,6 +4,7 @@ plugins {
     id "kotlin-kapt"
     id "dagger.hilt.android.plugin"
     id "com.google.dagger.hilt.android"
+    id 'com.mikepenz.aboutlibraries.plugin'
 }
 
 def gitCommitHash = "git rev-parse --verify --short HEAD".execute().text.trim()
@@ -107,6 +108,11 @@ android {
 }
 
 dependencies {
+    // https://github.com/mikepenz/AboutLibraries/releases
+    implementation "com.mikepenz:aboutlibraries-core:${aboutLibsRelease}"
+    implementation "com.mikepenz:aboutlibraries-compose-m3:${aboutLibsRelease}"
+
+    // https://github.com/ireward/compose-html/tags
     implementation "com.github.ireward:compose-html:1.0.2"
 
     // http://bigbadaboom.github.io/androidsvg/release_notes.html

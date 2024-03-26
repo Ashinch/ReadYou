@@ -4,8 +4,13 @@ import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -18,7 +23,12 @@ import kotlinx.coroutines.flow.collectLatest
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.infrastructure.preference.LocalDarkTheme
 import me.ash.reader.infrastructure.preference.LocalReadingDarkTheme
-import me.ash.reader.ui.ext.*
+import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.findActivity
+import me.ash.reader.ui.ext.forwardAndBackwardComposable
+import me.ash.reader.ui.ext.initialFilter
+import me.ash.reader.ui.ext.initialPage
+import me.ash.reader.ui.ext.isFirstLaunch
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
@@ -32,9 +42,15 @@ import me.ash.reader.ui.page.settings.color.ColorAndStylePage
 import me.ash.reader.ui.page.settings.color.DarkThemePage
 import me.ash.reader.ui.page.settings.color.feeds.FeedsPageStylePage
 import me.ash.reader.ui.page.settings.color.flow.FlowPageStylePage
-import me.ash.reader.ui.page.settings.color.reading.*
+import me.ash.reader.ui.page.settings.color.reading.ReadingDarkThemePage
+import me.ash.reader.ui.page.settings.color.reading.ReadingImagePage
+import me.ash.reader.ui.page.settings.color.reading.ReadingStylePage
+import me.ash.reader.ui.page.settings.color.reading.ReadingTextPage
+import me.ash.reader.ui.page.settings.color.reading.ReadingTitlePage
+import me.ash.reader.ui.page.settings.color.reading.ReadingVideoPage
 import me.ash.reader.ui.page.settings.interaction.InteractionPage
 import me.ash.reader.ui.page.settings.languages.LanguagesPage
+import me.ash.reader.ui.page.settings.tips.LicenseListPage
 import me.ash.reader.ui.page.settings.tips.TipsAndSupportPage
 import me.ash.reader.ui.page.startup.StartupPage
 import me.ash.reader.ui.theme.AppTheme
@@ -224,6 +240,9 @@ fun HomeEntry(
             // Tips & Support
             forwardAndBackwardComposable(route = RouteName.TIPS_AND_SUPPORT) {
                 TipsAndSupportPage(navController)
+            }
+            forwardAndBackwardComposable(route = RouteName.LICENSE_LIST) {
+                LicenseListPage(navController)
             }
         }
     }
