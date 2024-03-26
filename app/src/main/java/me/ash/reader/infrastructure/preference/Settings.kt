@@ -81,6 +81,7 @@ data class Settings(
     val pullToSwitchArticle: PullToSwitchArticlePreference = PullToSwitchArticlePreference.default,
     val openLink: OpenLinkPreference = OpenLinkPreference.default,
     val openLinkSpecificBrowser: OpenLinkSpecificBrowserPreference = OpenLinkSpecificBrowserPreference.default,
+    val sharedContent: SharedContentPreference = SharedContentPreference.default,
 
     // Languages
     val languages: LanguagesPreference = LanguagesPreference.default,
@@ -195,10 +196,9 @@ val LocalInitialFilter =
 val LocalArticleListSwipeEndAction = compositionLocalOf { SwipeEndActionPreference.default }
 val LocalArticleListSwipeStartAction = compositionLocalOf { SwipeStartActionPreference.default }
 val LocalPullToSwitchArticle = compositionLocalOf { PullToSwitchArticlePreference.default }
-val LocalOpenLink =
-    compositionLocalOf<OpenLinkPreference> { OpenLinkPreference.default }
-val LocalOpenLinkSpecificBrowser =
-    compositionLocalOf { OpenLinkSpecificBrowserPreference.default }
+val LocalOpenLink = compositionLocalOf<OpenLinkPreference> { OpenLinkPreference.default }
+val LocalOpenLinkSpecificBrowser = compositionLocalOf { OpenLinkSpecificBrowserPreference.default }
+val LocalSharedContent = compositionLocalOf<SharedContentPreference> { SharedContentPreference.default }
 
 // Languages
 val LocalLanguages =
@@ -287,6 +287,7 @@ fun SettingsProvider(
         LocalPullToSwitchArticle provides settings.pullToSwitchArticle,
         LocalOpenLink provides settings.openLink,
         LocalOpenLinkSpecificBrowser provides settings.openLinkSpecificBrowser,
+        LocalSharedContent provides settings.sharedContent,
 
         // Languages
         LocalLanguages provides settings.languages,

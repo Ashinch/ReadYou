@@ -1,7 +1,13 @@
 package me.ash.reader.ui.page.home.flow
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -9,11 +15,18 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -28,11 +41,22 @@ import me.ash.reader.R
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.domain.model.general.MarkAsReadConditions
-import me.ash.reader.infrastructure.preference.*
+import me.ash.reader.infrastructure.preference.LocalFlowArticleListDateStickyHeader
+import me.ash.reader.infrastructure.preference.LocalFlowArticleListFeedIcon
+import me.ash.reader.infrastructure.preference.LocalFlowArticleListTonalElevation
+import me.ash.reader.infrastructure.preference.LocalFlowFilterBarFilled
+import me.ash.reader.infrastructure.preference.LocalFlowFilterBarPadding
+import me.ash.reader.infrastructure.preference.LocalFlowFilterBarStyle
+import me.ash.reader.infrastructure.preference.LocalFlowFilterBarTonalElevation
+import me.ash.reader.infrastructure.preference.LocalFlowTopBarTonalElevation
+import me.ash.reader.infrastructure.preference.LocalSharedContent
 import me.ash.reader.ui.component.FilterBar
-import me.ash.reader.ui.component.base.*
+import me.ash.reader.ui.component.base.DisplayText
+import me.ash.reader.ui.component.base.FeedbackIconButton
+import me.ash.reader.ui.component.base.RYExtensibleVisibility
+import me.ash.reader.ui.component.base.RYScaffold
+import me.ash.reader.ui.component.base.SwipeRefresh
 import me.ash.reader.ui.ext.collectAsStateValue
-import me.ash.reader.ui.ext.share
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
 
@@ -55,6 +79,7 @@ fun FlowPage(
     val filterBarFilled = LocalFlowFilterBarFilled.current
     val filterBarPadding = LocalFlowFilterBarPadding.current
     val filterBarTonalElevation = LocalFlowFilterBarTonalElevation.current
+    val sharedContent = LocalSharedContent.current
     val context = LocalContext.current
 
     val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
@@ -126,9 +151,7 @@ fun FlowPage(
     val onShare: ((ArticleWithFeed) -> Unit)? = remember {
         { articleWithFeed ->
             with(articleWithFeed.article) {
-                context.share(
-                    arrayOf(title, link).filter { it.isNotBlank() }.joinToString(separator = "\n")
-                )
+                sharedContent.share(context, title, link)
             }
         }
     }

@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.settings.accounts
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -60,12 +59,8 @@ class AccountViewModel @Inject constructor(
 
     fun exportAsOPML(accountId: Int, callback: (String) -> Unit = {}) {
         viewModelScope.launch(defaultDispatcher) {
-            try {
-                callback(opmlService.saveToString(accountId,
-                    _accountUiState.value.exportOPMLMode == ExportOPMLMode.ATTACH_INFO))
-            } catch (e: Exception) {
-                Log.e("FeedsViewModel", "exportAsOpml: ", e)
-            }
+            callback(opmlService.saveToString(accountId,
+                _accountUiState.value.exportOPMLMode == ExportOPMLMode.ATTACH_INFO))
         }
     }
 
