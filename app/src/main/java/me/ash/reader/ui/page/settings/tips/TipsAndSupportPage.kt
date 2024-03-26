@@ -8,7 +8,17 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -16,8 +26,20 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Balance
 import androidx.compose.material.icons.rounded.TipsAndUpdates
 import androidx.compose.material.icons.rounded.VolunteerActivism
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -38,7 +60,13 @@ import me.ash.reader.infrastructure.preference.OpenLinkPreference
 import me.ash.reader.ui.component.base.CurlyCornerShape
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold
-import me.ash.reader.ui.ext.*
+import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.dataStore
+import me.ash.reader.ui.ext.getCurrentVersion
+import me.ash.reader.ui.ext.openURL
+import me.ash.reader.ui.ext.put
+import me.ash.reader.ui.ext.showToast
+import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.theme.palette.alwaysLight
 import me.ash.reader.ui.theme.palette.onLight
 
@@ -80,7 +108,9 @@ fun TipsAndSupportPage(
                 contentDescription = stringResource(R.string.open_source_licenses),
                 tint = MaterialTheme.colorScheme.onSurface
             ) {
-                context.showToast(context.getString(R.string.coming_soon))
+                navController.navigate(RouteName.LICENSE_LIST) {
+                    launchSingleTop = true
+                }
             }
         },
         content = {
@@ -213,7 +243,7 @@ fun TipsAndSupportPage(
                         ) {
                             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             view.playSoundEffect(SoundEffectConstants.CLICK)
-                            context.showToast(context.getString(R.string.coming_soon))
+                            context.openURL(context.getString(R.string.wiki_link), OpenLinkPreference.AutoPreferCustomTabs)
                         })
                     }
                     Spacer(modifier = Modifier.height(48.dp))
