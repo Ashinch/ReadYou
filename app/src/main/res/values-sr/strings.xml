@@ -286,4 +286,12 @@
     <string name="unexpected_error_msg">Апликација је наишла на неочекивану грешку и морала је да се затвори.
 \n
 \nДа бисте нам помогли да брзо идентификујемо и решимо овај проблем, можете %1$s помоћу праћења грешака у наставку.</string>
+    <string name="export">Извези</string>
+    <string name="pull_to_switch_article">Повуците да бисте променили чланак</string>
+    <string name="save">Сачувај</string>
+    <string name="image_saved">Слика је сачувана</string>
+    <string name="permission_denied">Дозвола је одбијена</string>
+    <string name="mark_below_as_read">Означи доле као прочитано</string>
+    <string name="mark_above_as_read">Означи горе као прочитано</string>
+    <string name="line_height_multiple">Висина линије вишеструка</string>
 </resources>

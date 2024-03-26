@@ -265,6 +265,26 @@
     <string name="initial_open_app">Application lorsque le lien est cliqué</string>
     <string name="auto_customtabs">Automatique (Préférer CustomTabs)</string>
     <string name="default_browser">Forcer le navigateur par défaut</string>
-    <string name="open_link_something_wrong">Paramètre Ouvrir le Lien a été ignoré car quelque chose s\'est mal passé.</string>
+    <string name="open_link_something_wrong">Le paramètre \"Ouvrir le lien\" a été ignoré car quelque chose s\'est mal passé.</string>
     <string name="open_link_specific_browser_not_selected">Aucun</string>
+    <string name="external_links">Liens externes</string>
+    <string name="exclude">Exclure</string>
+    <string name="additional_info_desc">Les informations additionnelles incluent les paramètres de configuration pour chaque flux, comme l\'envoi de notification, l\'option \"Afficher le contenu complet\" et autres. Si vous comptez utiliser le fichier OPML exporté dans d\'autres lecteurs, veuillez sélectionner \"Exclure\".</string>
+    <string name="grey_out_articles">Afficher les articles en gris</string>
+    <string name="all_read">Lus</string>
+    <string name="read_excluding_starred">Lus, sans les favoris</string>
+    <string name="submit_bug_report">Créer un signalement de bug sur GitHub</string>
+    <string name="unexpected_error_title">Une erreur est survenue…</string>
+    <string name="copy_error_report">Copier le rapport d\'erreur</string>
+    <string name="unexpected_error_msg">L\'application a rencontré une erreur inattendue et s\'est fermée.
+\nAfin de nous aider à identifier et corriger ce problème, vous pouvez %1$s avec le rapport d\'erreur ci-dessous.</string>
+    <string name="next_article">Article suivant</string>
+    <string name="include_additional_info">Ajouter des informations complémentaires</string>
+    <string name="export">Exporter</string>
+    <string name="pull_to_switch_article">Tirer pour passer à un autre article</string>
+    <string name="swipe_to_start">Glisser à gauche</string>
+    <string name="swipe_to_end">Glisser à droite</string>
+    <string name="none">Aucun</string>
+    <string name="toggle_read">Afficher ou masquer les articles lus</string>
+    <string name="toggle_starred">Afficher les favoris</string>
 </resources>

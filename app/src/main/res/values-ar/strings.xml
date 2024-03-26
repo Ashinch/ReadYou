@@ -295,4 +295,12 @@
     <string name="none">لا شيء</string>
     <string name="toggle_read">تبديل القراءة</string>
     <string name="toggle_starred">تبديل المميزة بنجمة</string>
+    <string name="export">تصدير</string>
+    <string name="pull_to_switch_article">اسحب لتبديل المقالة</string>
+    <string name="save">حفظ</string>
+    <string name="image_saved">تم حفظ الصورة</string>
+    <string name="permission_denied">تم رفض الإذن</string>
+    <string name="line_height_multiple">ارتفاع الخط متعدد</string>
+    <string name="mark_above_as_read">ضع علامة أعلاه كمقروءة</string>
+    <string name="mark_below_as_read">ضع علامة أدناه كمقروءة</string>
 </resources>

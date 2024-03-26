@@ -279,4 +279,13 @@
     <string name="none">無</string>
     <string name="toggle_read">標為已讀/未讀</string>
     <string name="toggle_starred">加上/移除星號</string>
+    <string name="next_article">下一篇</string>
+    <string name="line_height_multiple">行高倍率</string>
+    <string name="export">匯出</string>
+    <string name="pull_to_switch_article">下拉切換文章</string>
+    <string name="mark_above_as_read">將上方文章標為已讀</string>
+    <string name="mark_below_as_read">將下方文章標為已讀</string>
+    <string name="save">儲存</string>
+    <string name="image_saved">已儲存圖片</string>
+    <string name="permission_denied">權限被拒絕</string>
 </resources>

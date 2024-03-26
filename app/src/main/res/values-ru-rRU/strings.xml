@@ -258,4 +258,17 @@
     <string name="password">Пароль</string>
     <string name="connection">Связь</string>
     <string name="system_default">Следовать системным настройкам</string>
+    <string name="open_link_specific_browser_not_selected">Нет</string>
+    <string name="specific_browser">Принудительно использовать выбранный браузер</string>
+    <string name="specific_browser_name">Браузер: %1$s</string>
+    <string name="default_browser">Принудительно использовать браузер по умолчанию</string>
+    <string name="always_ask">Всегда спрашивать</string>
+    <string name="open_link_ask_dialog_title">Открыть с помощью…</string>
+    <string name="open_link_specific_browser">Браузер</string>
+    <string name="unexpected_error_title">Упс! Что-то пошло не так…</string>
+    <string name="copy_error_report">Скопировать отчёт об ошибке</string>
+    <string name="submit_bug_report">отправить отчёт об ошибке на GitHub</string>
+    <string name="external_links">Внешние ссылки</string>
+    <string name="initial_open_app">Приложение при нажатии на ссылку</string>
+    <string name="next_article">Следующая статья</string>
 </resources>
