@@ -11,6 +11,7 @@ import me.ash.reader.ui.ext.DataStoreKeys
 import me.ash.reader.ui.ext.ExternalFonts
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
+import me.ash.reader.ui.ext.restart
 import me.ash.reader.ui.theme.SystemTypography
 
 sealed class BasicFontsPreference(val value: Int) : Preference() {
@@ -20,6 +21,9 @@ sealed class BasicFontsPreference(val value: Int) : Preference() {
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
             context.dataStore.put(DataStoreKeys.BasicFonts, value)
+            if (this@BasicFontsPreference == External) {
+                context.restart()
+            }
         }
     }
 

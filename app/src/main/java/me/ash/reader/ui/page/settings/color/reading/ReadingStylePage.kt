@@ -59,6 +59,8 @@ import me.ash.reader.ui.component.base.RadioDialog
 import me.ash.reader.ui.component.base.RadioDialogOption
 import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.ext.ExternalFonts
+import me.ash.reader.ui.ext.MimeType
+import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
@@ -82,11 +84,11 @@ fun ReadingStylePage(
     var tonalElevationDialogVisible by remember { mutableStateOf(false) }
     var fontsDialogVisible by remember { mutableStateOf(false) }
 
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let {
             ExternalFonts(context, it, ExternalFonts.FontType.ReadingFont).copyToInternalStorage()
             ReadingFontsPreference.External.put(context, scope)
-        }
+        } ?: context.showToast("Cannot get activity result with launcher")
     }
 
     RYScaffold(
@@ -298,7 +300,7 @@ fun ReadingStylePage(
                 selected = it == fonts,
             ) {
                 if (it.value == ReadingFontsPreference.External.value) {
-                    launcher.launch("*/*")
+                    launcher.launch(arrayOf(MimeType.FONT))
                 } else {
                     it.put(context, scope)
                 }

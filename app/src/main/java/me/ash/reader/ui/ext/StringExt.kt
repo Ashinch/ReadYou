@@ -5,6 +5,14 @@ import android.util.Base64
 import java.math.BigInteger
 import java.security.MessageDigest
 
+object MimeType {
+
+    const val ANY = "*/*"
+    const val FONT = "font/ttf"  // Not supported yet
+    const val OPML = "text/x-opml"  // Not supported yet
+    const val JSON = "application/json"
+}
+
 fun String.formatUrl(): String {
     if (this.startsWith("//")) {
         return "https:$this"

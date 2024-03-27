@@ -4,24 +4,45 @@ import android.content.Context
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,16 +52,39 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.infrastructure.preference.*
-import me.ash.reader.ui.component.base.*
+import me.ash.reader.infrastructure.preference.BasicFontsPreference
+import me.ash.reader.infrastructure.preference.CustomPrimaryColorPreference
+import me.ash.reader.infrastructure.preference.LocalBasicFonts
+import me.ash.reader.infrastructure.preference.LocalCustomPrimaryColor
+import me.ash.reader.infrastructure.preference.LocalDarkTheme
+import me.ash.reader.infrastructure.preference.LocalThemeIndex
+import me.ash.reader.infrastructure.preference.ThemeIndexPreference
+import me.ash.reader.infrastructure.preference.not
+import me.ash.reader.ui.component.base.BlockRadioButton
+import me.ash.reader.ui.component.base.BlockRadioGroupButtonItem
+import me.ash.reader.ui.component.base.DisplayText
+import me.ash.reader.ui.component.base.DynamicSVGImage
+import me.ash.reader.ui.component.base.FeedbackIconButton
+import me.ash.reader.ui.component.base.RYScaffold
+import me.ash.reader.ui.component.base.RYSwitch
+import me.ash.reader.ui.component.base.RadioDialog
+import me.ash.reader.ui.component.base.RadioDialogOption
+import me.ash.reader.ui.component.base.Subtitle
+import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.ext.ExternalFonts
+import me.ash.reader.ui.ext.MimeType
+import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.svg.PALETTE
 import me.ash.reader.ui.svg.SVGString
-import me.ash.reader.ui.theme.palette.*
+import me.ash.reader.ui.theme.palette.TonalPalettes
 import me.ash.reader.ui.theme.palette.TonalPalettes.Companion.toTonalPalettes
+import me.ash.reader.ui.theme.palette.checkColorHex
 import me.ash.reader.ui.theme.palette.dynamic.extractTonalPalettesFromUserWallpaper
+import me.ash.reader.ui.theme.palette.onDark
+import me.ash.reader.ui.theme.palette.onLight
+import me.ash.reader.ui.theme.palette.safeHexToColor
 
 @Composable
 fun ColorAndStylePage(
@@ -58,11 +102,11 @@ fun ColorAndStylePage(
     var radioButtonSelected by remember { mutableStateOf(if (themeIndex > 4) 0 else 1) }
     var fontsDialogVisible by remember { mutableStateOf(false) }
 
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let {
             ExternalFonts(context, it, ExternalFonts.FontType.BasicFont).copyToInternalStorage()
             BasicFontsPreference.External.put(context, scope)
-        }
+        } ?: context.showToast("Cannot get activity result with launcher")
     }
 
     RYScaffold(
@@ -218,7 +262,7 @@ fun ColorAndStylePage(
                 selected = it == fonts,
             ) {
                 if (it.value == BasicFontsPreference.External.value) {
-                    launcher.launch("*/*")
+                    launcher.launch(arrayOf(MimeType.FONT))
                 } else {
                     it.put(context, scope)
                 }

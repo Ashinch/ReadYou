@@ -21,6 +21,12 @@ import me.ash.reader.infrastructure.preference.OpenLinkPreference
 import me.ash.reader.infrastructure.preference.OpenLinkSpecificBrowserPreference
 import java.io.File
 
+fun Context.restart() {
+    packageManager.getLaunchIntentForPackage(packageName)?.let {
+        startActivity(Intent.makeRestartActivityTask(it.component))
+        Runtime.getRuntime().exit(0)
+    }
+}
 
 fun Context.findActivity(): Activity? = when (this) {
     is Activity -> this
