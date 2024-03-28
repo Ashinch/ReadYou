@@ -183,3 +183,9 @@ fun Context.getCustomTabsPackages(): List<String> {
         return@mapNotNull null
     }.toList()
 }
+
+fun Context.getPreferencesFile(): File =
+    File(filesDir.absolutePath + File.separator +
+            "datastore" + File.separator +
+            "settings.preferences_pb"
+    )

@@ -410,7 +410,7 @@
     <string name="grey_out_articles">Grey out articles</string>
     <string name="all_read">All read</string>
     <string name="read_excluding_starred">Read, excluding starred</string>
-    <string name="external_links">External links</string>
+    <string name="external_links">External Links</string>
     <string name="unexpected_error_title">Oops! Something went wrong…</string>
     <string name="copy_error_report">Copy error report</string>
     <string name="submit_bug_report">submit a bug report on GitHub</string>
@@ -432,4 +432,12 @@
     <string name="shared_content">Shared content</string>
     <string name="only_link">Only link</string>
     <string name="title_and_link">Title and link</string>
+    <string name="troubleshooting">Troubleshooting</string>
+    <string name="troubleshooting_desc">Bug report, debug tools</string>
+    <string name="bug_report">Bug report</string>
+    <string name="issue_tracer_url" translatable="false">https://github.com/Ashinch/ReadYou/issues</string>
+    <string name="app_preferences">App preferences</string>
+    <string name="import_from_protobuf_file">Import from protobuf file</string>
+    <string name="export_as_protobuf_file">Export as protobuf file</string>
+    <string name="invalid_protobuf_file_warning">This file may not be a valid protobuf file. Importing it could potentially corrupt the app and result in the loss of current preferences. Are you sure you want to proceed?</string>
 </resources>

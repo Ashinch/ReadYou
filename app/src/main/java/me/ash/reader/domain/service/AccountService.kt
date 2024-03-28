@@ -94,12 +94,5 @@ class AccountService @Inject constructor(
         rssService.get().cancelSync()
         context.dataStore.put(DataStoreKeys.CurrentAccountId, account.id!!)
         context.dataStore.put(DataStoreKeys.CurrentAccountType, account.type.id)
-
-        // Restart
-        // context.packageManager.getLaunchIntentForPackage(context.packageName)?.let {
-        //     it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        //     context.startActivity(it)
-        //     android.os.Process.killProcess(android.os.Process.myPid())
-        // }
     }
 }

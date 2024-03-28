@@ -152,7 +152,7 @@ fun CrashReportPage(
                 val startIndex = msg.indexOf(hyperLinkText)
                 val endIndex = startIndex + hyperLinkText.length
                 addUrlAnnotation(
-                    UrlAnnotation("https://github.com/Ashinch/ReadYou/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title="),
+                    UrlAnnotation(stringResource(R.string.issue_tracer_url)),
                     start = startIndex,
                     end = endIndex
                 )

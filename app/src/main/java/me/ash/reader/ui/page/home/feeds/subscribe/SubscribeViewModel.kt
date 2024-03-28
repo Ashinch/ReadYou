@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.feeds.subscribe
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rometools.rome.feed.synd.SyndFeed
@@ -59,12 +58,8 @@ class SubscribeViewModel @Inject constructor(
 
     fun importFromInputStream(inputStream: InputStream) {
         applicationScope.launch {
-            try {
-                opmlService.saveToDatabase(inputStream)
-                rssService.get().doSync()
-            } catch (e: Exception) {
-                Log.e("FeedsViewModel", "importFromInputStream: ", e)
-            }
+            opmlService.saveToDatabase(inputStream)
+            rssService.get().doSync()
         }
     }
 

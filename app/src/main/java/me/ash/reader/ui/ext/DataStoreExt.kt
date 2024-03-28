@@ -27,9 +27,9 @@ val Context.skipVersionNumber: String
 val Context.isFirstLaunch: Boolean
     get() = this.dataStore.get(DataStoreKeys.IsFirstLaunch) ?: true
 val Context.currentAccountId: Int
-    get() = this.dataStore.get(DataStoreKeys.CurrentAccountId)!!
+    get() = this.dataStore.get(DataStoreKeys.CurrentAccountId) ?: 1
 val Context.currentAccountType: Int
-    get() = this.dataStore.get(DataStoreKeys.CurrentAccountType)!!
+    get() = this.dataStore.get(DataStoreKeys.CurrentAccountType) ?: 1
 
 val Context.initialPage: Int
     get() = this.dataStore.get(DataStoreKeys.InitialPage) ?: 0

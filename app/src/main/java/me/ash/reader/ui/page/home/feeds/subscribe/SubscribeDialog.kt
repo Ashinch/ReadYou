@@ -35,8 +35,10 @@ import me.ash.reader.ui.component.RenameDialog
 import me.ash.reader.ui.component.base.ClipboardTextField
 import me.ash.reader.ui.component.base.RYDialog
 import me.ash.reader.ui.component.base.TextFieldDialog
+import me.ash.reader.ui.ext.MimeType
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.roundClick
+import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.page.home.feeds.FeedOptionView
 
 @OptIn(
@@ -51,12 +53,12 @@ fun SubscribeDialog(
     val focusManager = LocalFocusManager.current
     val subscribeUiState = subscribeViewModel.subscribeUiState.collectAsStateValue()
     val groupsState = subscribeUiState.groups.collectAsState(initial = emptyList())
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) {
         it?.let { uri ->
             context.contentResolver.openInputStream(uri)?.let { inputStream ->
                 subscribeViewModel.importFromInputStream(inputStream)
-            }
-        }
+            } ?: context.showToast("Cannot open Input Stream with content resolver")
+        } ?: context.showToast("Cannot get activity result with launcher")
     }
 
     LaunchedEffect(subscribeUiState.visible) {
@@ -180,7 +182,7 @@ fun SubscribeDialog(
                 TextButton(
                     onClick = {
                         focusManager.clearFocus()
-                        launcher.launch("*/*")
+                        launcher.launch(arrayOf(MimeType.ANY))
                         subscribeViewModel.hideDrawer()
                     }
                 ) {

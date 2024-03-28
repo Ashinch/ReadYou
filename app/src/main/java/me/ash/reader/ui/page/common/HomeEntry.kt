@@ -52,6 +52,7 @@ import me.ash.reader.ui.page.settings.interaction.InteractionPage
 import me.ash.reader.ui.page.settings.languages.LanguagesPage
 import me.ash.reader.ui.page.settings.tips.LicenseListPage
 import me.ash.reader.ui.page.settings.tips.TipsAndSupportPage
+import me.ash.reader.ui.page.settings.troubleshooting.TroubleshootingPage
 import me.ash.reader.ui.page.startup.StartupPage
 import me.ash.reader.ui.theme.AppTheme
 
@@ -235,6 +236,11 @@ fun HomeEntry(
             // Languages
             forwardAndBackwardComposable(route = RouteName.LANGUAGES) {
                 LanguagesPage(navController = navController)
+            }
+
+            // Troubleshooting
+            forwardAndBackwardComposable(route = RouteName.TROUBLESHOOTING) {
+                TroubleshootingPage(navController = navController)
             }
 
             // Tips & Support
