@@ -8,7 +8,7 @@ import java.security.MessageDigest
 object MimeType {
 
     const val ANY = "*/*"
-    const val FONT = "font/ttf"  // Not supported yet
+    const val FONT = "font/ttf"
     const val OPML = "text/x-opml"  // Not supported yet
     const val JSON = "application/json"
 }

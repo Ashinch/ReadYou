@@ -36,3 +36,7 @@ fun File.mkDir() {
         if (!newF.exists()) newF.mkdir()
     }
 }
+
+fun ByteArray.isProbableProtobuf(): Boolean =
+    if (size < 2) false
+    else get(0) == 0x0a.toByte() && get(1) == 0x16.toByte()

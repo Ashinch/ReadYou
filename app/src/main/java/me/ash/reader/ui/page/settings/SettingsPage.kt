@@ -1,10 +1,21 @@
 package me.ash.reader.ui.page.settings
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.BugReport
+import androidx.compose.material.icons.outlined.Language
+import androidx.compose.material.icons.outlined.Lightbulb
+import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.TipsAndUpdates
+import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -17,7 +28,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.core.os.LocaleListCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import me.ash.reader.R
@@ -130,6 +140,17 @@ fun SettingsPage(
                         icon = Icons.Outlined.Language,
                     ) {
                         navController.navigate(RouteName.LANGUAGES) {
+                            launchSingleTop = true
+                        }
+                    }
+                }
+                item {
+                    SelectableSettingGroupItem(
+                        title = stringResource(R.string.troubleshooting),
+                        desc = stringResource(R.string.troubleshooting_desc),
+                        icon = Icons.Outlined.BugReport,
+                    ) {
+                        navController.navigate(RouteName.TROUBLESHOOTING) {
                             launchSingleTop = true
                         }
                     }

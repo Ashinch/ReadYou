@@ -19,9 +19,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material.icons.outlined.PersonOff
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -61,6 +61,7 @@ import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.component.base.Tips
 import me.ash.reader.ui.ext.DateFormat
+import me.ash.reader.ui.ext.MimeType
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.ext.showToast
@@ -103,14 +104,14 @@ fun AccountDetailsPage(
     }
 
     val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.CreateDocument("*/*")
+        ActivityResultContracts.CreateDocument(MimeType.ANY)
     ) { result ->
         viewModel.exportAsOPML(selectedAccount!!.id!!) { string ->
             result?.let { uri ->
                 context.contentResolver.openOutputStream(uri)?.use { outputStream ->
                     outputStream.write(string.toByteArray())
-                }
-            }
+                }  ?: context.showToast("Cannot open Input Stream with content resolver")
+            } ?: context.showToast("Cannot get activity result with launcher")
         }
     }
 
@@ -483,7 +484,7 @@ fun AccountDetailsPage(
             TextButton(
                 onClick = {
                     exportOPMLModeDialogVisible = false
-                    launcherOPMLFile(context, launcher)
+                    subscriptionOPMLFileLauncher(context, launcher)
                 }
             ) {
                 Text(stringResource(R.string.export))
@@ -502,11 +503,11 @@ fun AccountDetailsPage(
     )
 }
 
-private fun launcherOPMLFile(
+private fun subscriptionOPMLFileLauncher(
     context: Context,
     launcher: ManagedActivityResultLauncher<String, Uri?>,
 ) {
     launcher.launch("Read-You-" +
-            "${context.getCurrentVersion()}-export-" +
+            "${context.getCurrentVersion()}-subscription-" +
             "${Date().toString(DateFormat.YYYY_MM_DD_DASH_HH_MM_SS_DASH)}.opml")
 }
