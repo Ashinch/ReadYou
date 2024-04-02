@@ -110,8 +110,8 @@ fun AccountDetailsPage(
             result?.let { uri ->
                 context.contentResolver.openOutputStream(uri)?.use { outputStream ->
                     outputStream.write(string.toByteArray())
-                }  ?: context.showToast("Cannot open Input Stream with content resolver")
-            } ?: context.showToast("Cannot get activity result with launcher")
+                }
+            }
         }
     }
 

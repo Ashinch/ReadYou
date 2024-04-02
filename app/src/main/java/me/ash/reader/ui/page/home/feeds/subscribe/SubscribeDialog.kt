@@ -38,7 +38,6 @@ import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.ext.MimeType
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.roundClick
-import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.page.home.feeds.FeedOptionView
 
 @OptIn(
@@ -57,8 +56,8 @@ fun SubscribeDialog(
         it?.let { uri ->
             context.contentResolver.openInputStream(uri)?.let { inputStream ->
                 subscribeViewModel.importFromInputStream(inputStream)
-            } ?: context.showToast("Cannot open Input Stream with content resolver")
-        } ?: context.showToast("Cannot get activity result with launcher")
+            }
+        }
     }
 
     LaunchedEffect(subscribeUiState.visible) {

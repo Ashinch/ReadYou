@@ -46,7 +46,6 @@ import me.ash.reader.ui.ext.MimeType
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.ext.openURL
-import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.ext.toString
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
@@ -69,8 +68,8 @@ fun TroubleshootingPage(
             result?.let { uri ->
                 context.contentResolver.openOutputStream(uri)?.use { outputStream ->
                     outputStream.write(byteArray)
-                } ?: context.showToast("Cannot open Input Stream with content resolver")
-            } ?: context.showToast("Cannot get activity result with launcher")
+                }
+            }
         }
     }
 
@@ -81,8 +80,8 @@ fun TroubleshootingPage(
             context.contentResolver.openInputStream(uri)?.use { inputStream ->
                 byteArray = inputStream.readBytes()
                 viewModel.tryImport(context, byteArray)
-            } ?: context.showToast("Cannot open Input Stream with content resolver")
-        } ?: context.showToast("Cannot get activity result with launcher")
+            }
+        }
     }
 
     RYScaffold(
