@@ -27,6 +27,9 @@ import java.io.InputStream
 import java.util.*
 import javax.inject.Inject
 
+val enclosureRegex = """<enclosure\s+url="([^"]+)"\s+type=".*"\s*/>""".toRegex()
+val imgRegex = """img.*?src=(["'])((?!data).*?)\1""".toRegex(RegexOption.DOT_MATCHES_ALL)
+
 /**
  * Some operations on RSS.
  */
@@ -117,19 +120,23 @@ class RssHelper @Inject constructor(
             rawDescription = (content ?: desc) ?: "",
             shortDescription = Readability.parseToText(desc ?: content, syndEntry.link).take(110),
             fullContent = content,
-            img = findImg((content ?: desc) ?: ""),
+            img = findThumbnail(content ?: desc),
             link = syndEntry.link ?: "",
             updateAt = preDate,
         )
     }
 
-    fun findImg(rawDescription: String): String? {
-        // From: https://gitlab.com/spacecowboy/Feeder
+    fun findThumbnail(text: String?): String? {
+        text ?: return null
+        val enclosure = enclosureRegex.find(text)?.groupValues?.get(1)
+        if (enclosure?.isNotBlank() == true) {
+            return enclosure
+        }
+        // From https://gitlab.com/spacecowboy/Feeder
         // Using negative lookahead to skip data: urls, being inline base64
         // And capturing original quote to use as ending quote
-        val regex = """img.*?src=(["'])((?!data).*?)\1""".toRegex(RegexOption.DOT_MATCHES_ALL)
         // Base64 encoded images can be quite large - and crash database cursors
-        return regex.find(rawDescription)?.groupValues?.get(2)?.takeIf { !it.startsWith("data:") }
+        return imgRegex.find(text)?.groupValues?.get(2)?.takeIf { !it.startsWith("data:") }
     }
 
     suspend fun queryRssIconLink(feedLink: String): String? {

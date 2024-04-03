@@ -420,7 +420,7 @@ class GoogleReaderRssService @Inject constructor(
                         shortDescription = Readability
                             .parseToText(it.summary?.content, findArticleURL(it)).take(110),
                         fullContent = it.summary?.content ?: "",
-                        img = rssHelper.findImg(it.summary?.content ?: ""),
+                        img = rssHelper.findThumbnail(it.summary?.content),
                         link = findArticleURL(it),
                         feedId = accountId.spacerDollar(
                             it.origin?.streamId?.ofFeedStreamIdToId()
