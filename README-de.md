@@ -99,7 +99,7 @@ Wählen Sie den neuesten Workflow auf der GitHub Actions-Seite aus und laden Sie
 
 **Read You** ist eine kostenlose Open-Source-Software, die von der Open-Source-Gemeinschaft profitiert, und jeder Benutzer kann ihre volle Funktionalität kostenlos genießen. Wenn Sie also meine aktuelle Arbeit wertschätzen, können Sie mir gerne eine Tasse Kaffee spendieren ☕️.
 
-<a href="https://www.buymeacoffee.com/ashinch"><img width="200px" src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=ashinch&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
+[<img src="https://s1.ax1x.com/2023/01/12/pSnHqpQ.png" alt="donate" height="80">](https://afdian.net/a/ashinch)
 
 Danke für all die Liebe und Unterstützung ❤️
 
