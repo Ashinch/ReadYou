@@ -207,7 +207,7 @@ class FeverRssService @Inject constructor(
                                 shortDescription = Readability.parseToText(it.html, it.url)
                                     .take(110),
                                 fullContent = it.html,
-                                img = rssHelper.findImg(it.html ?: ""),
+                                img = rssHelper.findThumbnail(it.html),
                                 link = it.url ?: "",
                                 feedId = accountId.spacerDollar(it.feed_id!!),
                                 accountId = accountId,
