@@ -240,6 +240,7 @@ private const val SwipeActionDelay = 300L
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SwipeableArticleItem(
+    modifier: Modifier = Modifier,
     articleWithFeed: ArticleWithFeed,
     isFilterUnread: Boolean = false,
     articleListTonalElevation: Int = 0,
@@ -333,6 +334,7 @@ fun SwipeableArticleItem(
     var menuOffset by remember { mutableStateOf(Offset(0f, 0f)) }
 
     SwipeToDismissBox(
+        modifier = modifier,
         state = swipeState,
         enabled = !isSwipeEnabled(),
         /***  create dismiss alert background box */

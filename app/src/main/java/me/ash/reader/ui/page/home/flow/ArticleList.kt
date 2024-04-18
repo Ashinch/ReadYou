@@ -32,6 +32,7 @@ fun LazyListScope.ArticleList(
             is ArticleFlowItem.Article -> {
                 item(key = item.articleWithFeed.article.id) {
                     SwipeableArticleItem(
+                        modifier = Modifier.animateItemPlacement(),
                         articleWithFeed = item.articleWithFeed,
                         isFilterUnread = isFilterUnread,
                         articleListTonalElevation = articleListTonalElevation,
