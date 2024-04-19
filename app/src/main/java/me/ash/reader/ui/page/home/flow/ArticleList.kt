@@ -52,11 +52,21 @@ fun LazyListScope.ArticleList(
                 if (item.showSpacer) item { Spacer(modifier = Modifier.height(40.dp)) }
                 if (isShowStickyHeader) {
                     stickyHeader(key = item.date) {
-                        StickyHeader(item.date, isShowFeedIcon, articleListTonalElevation)
+                        StickyHeader(
+                            modifier = Modifier.animateItemPlacement(),
+                            dateString = item.date,
+                            isShowFeedIcon = isShowFeedIcon,
+                            articleListTonalElevation = articleListTonalElevation
+                        )
                     }
                 } else {
                     item(key = item.date) {
-                        StickyHeader(item.date, isShowFeedIcon, articleListTonalElevation)
+                        StickyHeader(
+                            modifier = Modifier.animateItemPlacement(),
+                            dateString = item.date,
+                            isShowFeedIcon = isShowFeedIcon,
+                            articleListTonalElevation = articleListTonalElevation
+                        )
                     }
                 }
             }

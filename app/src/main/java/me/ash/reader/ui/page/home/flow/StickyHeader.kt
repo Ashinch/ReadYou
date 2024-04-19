@@ -15,12 +15,13 @@ import me.ash.reader.ui.theme.palette.onDark
 
 @Composable
 fun StickyHeader(
+    modifier: Modifier = Modifier,
     dateString: String,
     isShowFeedIcon: Boolean,
     articleListTonalElevation: Int,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(
                 MaterialTheme.colorScheme.surfaceColorAtElevation(articleListTonalElevation.dp)
