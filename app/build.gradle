@@ -179,7 +179,6 @@ dependencies {
     implementation "androidx.compose.material3:material3:$material3"
 
     // https://github.com/google/accompanist/releases
-    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist"
     implementation "com.google.accompanist:accompanist-pager:$accompanist"
     implementation "com.google.accompanist:accompanist-flowlayout:$accompanist"
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist"

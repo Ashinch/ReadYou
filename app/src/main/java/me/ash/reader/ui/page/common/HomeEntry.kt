@@ -12,12 +12,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import me.ash.reader.domain.model.general.Filter
@@ -143,12 +141,6 @@ fun HomeEntry(
         useDarkTheme = if (isReadingPage) LocalReadingDarkTheme.current.isDarkTheme()
         else LocalDarkTheme.current.isDarkTheme()
     ) {
-
-        rememberSystemUiController().run {
-            setStatusBarColor(Color.Transparent, !useDarkTheme)
-            setSystemBarsColor(Color.Transparent, !useDarkTheme)
-            setNavigationBarColor(Color.Transparent, !useDarkTheme)
-        }
 
         AnimatedNavHost(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface),
