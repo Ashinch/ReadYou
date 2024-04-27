@@ -1,9 +1,11 @@
+
 package me.ash.reader.infrastructure.android
 
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -55,11 +57,9 @@ import me.ash.reader.ui.theme.AppTheme
 class CrashReportActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { v, insets ->
-            v.setPadding(0, 0, 0, 0)
-            insets
-        }
+
+        enableEdgeToEdge()
+
         val errorMessage: String = intent.getStringExtra(ERROR_REPORT_KEY).toString()
 
         setContent {
