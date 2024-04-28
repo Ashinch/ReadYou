@@ -377,9 +377,7 @@ fun SwipeableArticleItem(
                             expanded = expanded,
                             onDismissRequest = { expanded = false },
                             offset = density.run {
-                                if (LocalLayoutDirection.current == LayoutDirection.Ltr)
-                                    DpOffset(menuOffset.x.toDp(), 0.dp)
-                                else DpOffset(0.dp, 0.dp)
+                                DpOffset(menuOffset.x.toDp(), 0.dp)
                             },
                         ) {
                             ArticleItemMenuContent(

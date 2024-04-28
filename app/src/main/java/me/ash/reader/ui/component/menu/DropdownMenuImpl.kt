@@ -1,5 +1,6 @@
 package me.ash.reader.ui.component.menu
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.LinearEasing
@@ -26,7 +27,6 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
@@ -38,12 +38,14 @@ import androidx.compose.ui.util.fastFirstOrNull
 import androidx.compose.ui.util.fastMap
 import androidx.compose.ui.window.PopupPositionProvider
 import me.ash.reader.domain.model.constant.ElevationTokens
+import me.ash.reader.ui.component.menu.MenuPosition.Horizontal
+import me.ash.reader.ui.component.menu.MenuPosition.Vertical
 import me.ash.reader.ui.motion.EmphasizedAccelerate
 import me.ash.reader.ui.motion.EmphasizedDecelerate
 import me.ash.reader.ui.motion.EnterDuration
 import me.ash.reader.ui.motion.ExitDuration
-import kotlin.math.max
-import kotlin.math.min
+
+private const val TAG = "DropdownMenuImpl"
 
 /**
  * Interfaces for positioning a menu within a window. This is the same purpose as the interface
@@ -385,25 +387,32 @@ internal data class DropdownMenuPositionProvider(
             it >= 0 && it + popupContentSize.width <= windowSize.width
         } ?: xCandidates.last()
 
-        val yCandidates = listOf(
-            topToAnchorBottom,
-            bottomToAnchorTop,
-            centerToAnchorTop,
-            if (anchorBounds.center.y < windowSize.height / 2) {
-                topToWindowTop
-            } else {
-                bottomToWindowBottom
-            }
-        ).fastMap {
-            it.position(
+        /* val yCandidates = listOf(
+             topToAnchorBottom,
+             bottomToAnchorTop,
+             centerToAnchorTop,
+             if (anchorBounds.center.y < windowSize.height / 2) {
+                 topToWindowTop
+             } else {
+                 bottomToWindowBottom
+             }
+         ).fastMap {
+             it.position(
+                 anchorBounds = anchorBounds,
+                 windowSize = windowSize,
+                 menuHeight = popupContentSize.height
+             )
+         }
+         val y = yCandidates.fastFirstOrNull {
+             it >= verticalMargin && it + popupContentSize.height <= windowSize.height - verticalMargin
+         } ?: yCandidates.last()*/
+
+        val y =
+            (if (anchorBounds.top < windowSize.height / 2) topToAnchorBottom else bottomToAnchorTop).position(
                 anchorBounds = anchorBounds,
                 windowSize = windowSize,
                 menuHeight = popupContentSize.height
             )
-        }
-        val y = yCandidates.fastFirstOrNull {
-            it >= verticalMargin && it + popupContentSize.height <= windowSize.height - verticalMargin
-        } ?: yCandidates.last()
 
         val menuOffset = IntOffset(x, y)
         onPositionCalculated(/* anchorBounds = */anchorBounds,/* menuBounds = */
