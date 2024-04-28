@@ -23,7 +23,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.TextUnit
@@ -115,10 +114,10 @@ fun ReadingPage(
                         navController.popBackStack()
                     },
                 )
-                val context = LocalContext.current
-                val hapticFeedback = LocalHapticFeedback.current
 
                 val isNextArticleAvailable = !readerState.nextArticleId.isNullOrEmpty()
+                val isPreviousArticleAvailable = !readerState.previousArticleId.isNullOrEmpty()
+
 
                 if (readerState.articleId != null) {
                     // Content
@@ -158,16 +157,6 @@ fun ReadingPage(
                                     }
                                 )
 
-
-                            LaunchedEffect(state.status) {
-                                when (state.status) {
-                                    PullToLoadState.Status.PulledDown, PullToLoadState.Status.PulledUp -> {
-                                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    }
-
-                                    else -> {}
-                                }
-                            }
 
                             val listState = rememberSaveable(
                                 inputs = arrayOf(content),
@@ -210,7 +199,11 @@ fun ReadingPage(
                                             showFullScreenImageViewer = true
                                         }
                                     )
-                                    PullToLoadIndicator(state = state)
+                                    PullToLoadIndicator(
+                                        state = state,
+                                        canLoadPrevious = isPreviousArticleAvailable,
+                                        canLoadNext = isNextArticleAvailable
+                                    )
                                 }
                             }
                         }
@@ -252,7 +245,8 @@ fun ReadingPage(
                     onSuccess = { context.showToast(context.getString(R.string.image_saved)) },
                     onFailure = {
                         // FIXME: crash the app for error report
-                        th -> throw th
+                            th ->
+                        throw th
                     }
                 )
             },

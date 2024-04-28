@@ -2,8 +2,10 @@ package me.ash.reader.ui.page.home.reading
 
 
 import androidx.compose.animation.core.FloatExponentialDecaySpec
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateDecay
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.MutatorMutex
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material.ExperimentalMaterialApi
@@ -33,7 +35,7 @@ import me.ash.reader.ui.page.home.reading.PullToLoadDefaults.ContentOffsetMultip
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-private const val TAG = "PullRelease"
+private const val TAG = "PullToLoad"
 
 /**
  * A [NestedScrollConnection] that provides scroll events to a hoisted [state].
@@ -51,7 +53,7 @@ private class ReaderNestedScrollConnection(
     private val enabled: Boolean,
     private val onPreScroll: (Float) -> Float,
     private val onPostScroll: (Float) -> Float,
-    private val onRelease: (Float) -> Unit,
+    private val onRelease: () -> Unit,
     private val onScroll: ((Float) -> Unit)? = null
 ) : NestedScrollConnection {
 
@@ -81,7 +83,7 @@ private class ReaderNestedScrollConnection(
     }
 
     override suspend fun onPreFling(available: Velocity): Velocity {
-        onRelease(available.y)
+        onRelease()
         return Velocity.Zero
     }
 }
@@ -217,21 +219,22 @@ class PullToLoadState internal constructor(
         return if (offsetPulled.signOpposites(pullDelta)) onPull(pullDelta) else 0f
     }
 
-    internal fun onRelease(velocity: Float): Float {
+    internal fun onRelease(): Float {
+        // Snap to 0f and hide the indicator
+        animateDistanceTo(0f)
+
         when (status) {
-            // We don't change the pull offset here because the animation for loading another content
-            // should be handled outside, and this state will be soon disposed
             Status.PulledDown -> {
                 onLoadPrevious.value()
             }
 
             Status.PulledUp -> {
+                animateDistanceTo(0f)
                 onLoadNext.value()
             }
 
             else -> {
-                // Snap to 0f and hide the indicator
-                animateDistanceTo(0f)
+
             }
         }
         return 0f
@@ -247,7 +250,8 @@ class PullToLoadState internal constructor(
                 animate(
                     initialValue = offsetPulled,
                     targetValue = float,
-                    initialVelocity = velocity
+                    initialVelocity = velocity,
+                    animationSpec = spring(dampingRatio = Spring.DampingRatioNoBouncy)
                 ) { value, _ ->
                     offsetPulled = value
                 }
@@ -310,7 +314,7 @@ fun Modifier.pullToLoad(
     state: PullToLoadState,
     contentOffsetMultiple: Int = ContentOffsetMultiple,
     onScroll: ((Float) -> Unit)? = null,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ): Modifier =
     nestedScroll(
         ReaderNestedScrollConnection(
