@@ -3,6 +3,7 @@ package me.ash.reader.ui.page.home.feeds.drawer.group
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.ui.unit.Density
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -196,7 +197,10 @@ class GroupOptionViewModel @Inject constructor(
 
 @OptIn(ExperimentalMaterialApi::class)
 data class GroupOptionUiState(
-    var drawerState: ModalBottomSheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden),
+    var drawerState: ModalBottomSheetState = ModalBottomSheetState(
+        ModalBottomSheetValue.Hidden,
+        Density(0f, 1f)
+    ),
     val group: Group? = null,
     val targetGroup: Group? = null,
     val groups: List<Group> = emptyList(),

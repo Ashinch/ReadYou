@@ -185,8 +185,8 @@ dependencies {
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist"
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist"
 
-    implementation platform("androidx.compose:compose-bom:$composeBom")
-    androidTestImplementation(platform("androidx.compose:compose-bom:$composeBom"))
+    implementation platform("dev.chrisbanes.compose:compose-bom:$composeBom")
+    androidTestImplementation(platform("dev.chrisbanes.compose:compose-bom:$composeBom"))
 
     // https://developer.android.com/jetpack/androidx/releases/compose-animation
     implementation "androidx.compose.animation:animation-graphics"

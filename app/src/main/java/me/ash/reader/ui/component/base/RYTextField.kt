@@ -46,8 +46,9 @@ fun RYTextField(
 
     TextField(
         modifier = Modifier.focusRequester(focusRequester),
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color.Transparent,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color.Transparent,
+            unfocusedTextColor = Color.Transparent,
         ),
         maxLines = if (singleLine) 1 else Int.MAX_VALUE,
         enabled = !readOnly,

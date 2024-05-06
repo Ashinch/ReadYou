@@ -32,7 +32,7 @@ fun LazyListScope.ArticleList(
             is ArticleFlowItem.Article -> {
                 item(key = item.articleWithFeed.article.id) {
                     SwipeableArticleItem(
-                        modifier = Modifier.animateItemPlacement(),
+                        modifier = Modifier.animateItem(),
                         articleWithFeed = item.articleWithFeed,
                         isFilterUnread = isFilterUnread,
                         articleListTonalElevation = articleListTonalElevation,
@@ -53,7 +53,7 @@ fun LazyListScope.ArticleList(
                 if (isShowStickyHeader) {
                     stickyHeader(key = item.date) {
                         StickyHeader(
-                            modifier = Modifier.animateItemPlacement(),
+                            modifier = Modifier.animateItem(),
                             dateString = item.date,
                             isShowFeedIcon = isShowFeedIcon,
                             articleListTonalElevation = articleListTonalElevation
@@ -62,7 +62,7 @@ fun LazyListScope.ArticleList(
                 } else {
                     item(key = item.date) {
                         StickyHeader(
-                            modifier = Modifier.animateItemPlacement(),
+                            modifier = Modifier.animateItem(),
                             dateString = item.date,
                             isShowFeedIcon = isShowFeedIcon,
                             articleListTonalElevation = articleListTonalElevation

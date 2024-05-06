@@ -3,6 +3,7 @@ package me.ash.reader.ui.page.home.feeds.drawer.feed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.ui.unit.Density
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -232,7 +233,10 @@ class FeedOptionViewModel @Inject constructor(
 
 @OptIn(ExperimentalMaterialApi::class)
 data class FeedOptionUiState(
-    var drawerState: ModalBottomSheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden),
+    var drawerState: ModalBottomSheetState = ModalBottomSheetState(
+        ModalBottomSheetValue.Hidden,
+        Density(0f, 1f)
+    ),
     val feed: Feed? = null,
     val selectedGroupId: String = "",
     val newGroupContent: String = "",

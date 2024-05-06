@@ -3,7 +3,9 @@ package me.ash.reader.ui.page.home.flow
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -290,11 +292,13 @@ fun SwipeableArticleItem(
     }
     val velocityThreshold: () -> Float = { Float.POSITIVE_INFINITY }
     val animationSpec: AnimationSpec<Float> = spring(stiffness = Spring.StiffnessMediumLow)
+    val decayAnimationSpec: DecayAnimationSpec<Float> = exponentialDecay()
     val swipeState = rememberSaveable(
         articleWithFeed.article, saver = SwipeToDismissBoxState.Saver(
             confirmValueChange = confirmValueChange,
             density = density,
             animationSpec = animationSpec,
+            decayAnimationSpec = decayAnimationSpec,
             velocityThreshold = velocityThreshold,
             positionalThreshold = positionalThreshold
         )
