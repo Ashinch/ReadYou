@@ -53,7 +53,6 @@ fun LazyListScope.ArticleList(
                 if (isShowStickyHeader) {
                     stickyHeader(key = item.date) {
                         StickyHeader(
-                            modifier = Modifier.animateItem(),
                             dateString = item.date,
                             isShowFeedIcon = isShowFeedIcon,
                             articleListTonalElevation = articleListTonalElevation
