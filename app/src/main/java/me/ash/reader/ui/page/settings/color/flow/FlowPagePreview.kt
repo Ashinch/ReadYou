@@ -76,7 +76,7 @@ fun FlowPagePreview(
                     contentDescription = stringResource(R.string.search),
                     tint = MaterialTheme.colorScheme.onSurface,
                 ) {}
-            }, colors = TopAppBarDefaults.smallTopAppBarColors(
+            }, colors = TopAppBarDefaults.mediumTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(topBarTonalElevation.value.dp),
             )
         )

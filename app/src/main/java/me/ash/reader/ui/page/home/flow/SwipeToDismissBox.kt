@@ -18,6 +18,8 @@ package me.ash.reader.ui.page.home.flow
 
 import androidx.annotation.FloatRange
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.DecayAnimationSpec
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.AnchoredDraggableState
@@ -88,13 +90,15 @@ class SwipeToDismissBoxState(
     initialValue: SwipeToDismissBoxValue,
     internal val density: Density,
     animationSpec: AnimationSpec<Float> = spring(),
+    decayAnimationSpec: DecayAnimationSpec<Float> = exponentialDecay(),
     confirmValueChange: (SwipeToDismissBoxValue) -> Boolean = { true },
     velocityThreshold: () -> Float = { with(density) { DismissThreshold.toPx() } },
     positionalThreshold: (totalDistance: Float) -> Float
 ) {
     internal val anchoredDraggableState = AnchoredDraggableState(
         initialValue = initialValue,
-        animationSpec = animationSpec,
+        snapAnimationSpec = animationSpec,
+        decayAnimationSpec = decayAnimationSpec,
         confirmValueChange = confirmValueChange,
         positionalThreshold = positionalThreshold,
         velocityThreshold = velocityThreshold
@@ -200,6 +204,7 @@ class SwipeToDismissBoxState(
             positionalThreshold: (totalDistance: Float) -> Float,
             velocityThreshold: () -> Float,
             animationSpec: AnimationSpec<Float>,
+            decayAnimationSpec: DecayAnimationSpec<Float>,
             density: Density
         ) = Saver<SwipeToDismissBoxState, SwipeToDismissBoxValue>(
             save = { it.currentValue },
@@ -208,6 +213,7 @@ class SwipeToDismissBoxState(
                     it,
                     density,
                     animationSpec,
+                    decayAnimationSpec,
                     confirmValueChange,
                     velocityThreshold,
                     positionalThreshold

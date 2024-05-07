@@ -3,7 +3,9 @@ package me.ash.reader.ui.page.home.flow
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -240,6 +242,7 @@ private const val SwipeActionDelay = 300L
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SwipeableArticleItem(
+    modifier: Modifier = Modifier,
     articleWithFeed: ArticleWithFeed,
     isFilterUnread: Boolean = false,
     articleListTonalElevation: Int = 0,
@@ -289,11 +292,13 @@ fun SwipeableArticleItem(
     }
     val velocityThreshold: () -> Float = { Float.POSITIVE_INFINITY }
     val animationSpec: AnimationSpec<Float> = spring(stiffness = Spring.StiffnessMediumLow)
+    val decayAnimationSpec: DecayAnimationSpec<Float> = exponentialDecay()
     val swipeState = rememberSaveable(
         articleWithFeed.article, saver = SwipeToDismissBoxState.Saver(
             confirmValueChange = confirmValueChange,
             density = density,
             animationSpec = animationSpec,
+            decayAnimationSpec = decayAnimationSpec,
             velocityThreshold = velocityThreshold,
             positionalThreshold = positionalThreshold
         )
@@ -333,6 +338,7 @@ fun SwipeableArticleItem(
     var menuOffset by remember { mutableStateOf(Offset(0f, 0f)) }
 
     SwipeToDismissBox(
+        modifier = modifier,
         state = swipeState,
         enabled = !isSwipeEnabled(),
         /***  create dismiss alert background box */
