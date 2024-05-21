@@ -229,6 +229,7 @@ class GoogleReaderRssService @Inject constructor(
                 // 2. Fetch folder and subscription list
                 googleReaderAPI.getSubscriptionList()
                     .subscriptions.groupBy { it.categories?.first() }
+                    .toSortedMap { c1, c2 -> c1?.label.toString().compareTo(c2?.label.toString()) }
                     .forEach { (category, feeds) ->
                         val groupId =
                             accountId.spacerDollar(category?.id?.ofCategoryStreamIdToId()!!)
