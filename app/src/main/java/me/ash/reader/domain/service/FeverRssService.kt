@@ -287,7 +287,7 @@ class FeverRssService @Inject constructor(
     ) {
         super.markAsRead(groupId, feedId, articleId, before, isUnread)
         val feverAPI = getFeverAPI()
-        val beforeUnixTimestamp = (before?.time ?: Date(Long.MAX_VALUE).time) / 1000
+        val beforeUnixTimestamp = (before?.time ?: Date().time) / 1000
         when {
             groupId != null -> {
                 feverAPI.markGroup(
