@@ -429,7 +429,7 @@ class GoogleReaderRssService @Inject constructor(
                         accountId = accountId,
                         isUnread = unreadIds.contains(articleId),
                         isStarred = starredIds.contains(articleId),
-                        updateAt = it.crawlTimeMsec?.run { Date(this.toLong()) } ?: preDate,
+                        updateAt = it.timestampUsec?.run { Date(this.toLong()/1000) } ?: preDate,
                     )
                 }?.toTypedArray() ?: emptyArray()
             )
