@@ -271,4 +271,34 @@
     <string name="external_links">Внешние ссылки</string>
     <string name="initial_open_app">Приложение при нажатии на ссылку</string>
     <string name="next_article">Следующая статья</string>
+    <string name="auto_customtabs">Автоматически (предпочитать просмотр в приложении)</string>
+    <string name="auto_default_browser">Автоматически (предпочитать браузер по умолчанию)</string>
+    <string name="custom_tabs">Принудительно использовать просмотр в приложении</string>
+    <string name="open_link_something_wrong">Настройка \"Открыть ссылку\" была проигнорирована, потому что произошла ошибка.</string>
+    <string name="grey_out_articles">Статьи, выделенные серым цветом</string>
+    <string name="all_read">Все прочитанные</string>
+    <string name="read_excluding_starred">Прочитанные, за исключением избранных</string>
+    <string name="toggle_read">Переключить на чтение</string>
+    <string name="swipe_to_start">Свайпнуть влево</string>
+    <string name="none">Ничего не делать</string>
+    <string name="toggle_starred">Переключить на избранные</string>
+    <string name="image_saved">Изображение сохранено</string>
+    <string name="permission_denied">Разрешение отклонено</string>
+    <string name="shared_content">Только содержание</string>
+    <string name="keep_archived_tips">Архивированные элементы, которые не отмечены как прочитанные, избранные статьи или статьи без тегов. Настройка \"Сохранять архивированные статьи\" применяется только на этом устройстве. Старые архивированные статьи будут удалены с устройство. Удаление статей отменить невозможно.</string>
+    <string name="swipe_to_end">Свайпнуть вправо</string>
+    <string name="unexpected_error_msg">Приложение столкнулось с непредвиденной ошибкой и было вынуждено закрыться.
+\n
+\nЧтобы помочь нам быстро выявить и устранить эту проблему, вы можете %1$s с трассировкой стека ошибки ниже.</string>
+    <string name="only_link">Только ссылка</string>
+    <string name="title_and_link">Заголовок и ссылка</string>
+    <string name="exclude">Исключить</string>
+    <string name="additional_info_desc">Дополнительная информация включает в себя параметры конфигурации для каждого источника, такие как разрешение уведомлений, разбор полного содержимого и т. д. Если вы собираетесь использовать экспортированный OPML-файл с другими читателями, выберите \"Исключить\".</string>
+    <string name="include_additional_info">Включать дополнительную информацию</string>
+    <string name="pull_to_switch_article">Опустить для смены статьи</string>
+    <string name="export">Экспортировать</string>
+    <string name="mark_above_as_read">Пометить контент выше как прочитанный</string>
+    <string name="mark_below_as_read">Пометить контент ниже как прочитанный</string>
+    <string name="save">Сохранить</string>
+    <string name="bug_report">Отчёт об ошибке</string>
 </resources>

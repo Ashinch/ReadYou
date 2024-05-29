@@ -252,7 +252,7 @@
     <string name="empty">Boş</string>
     <string name="server_url">Sunucu URL\'si</string>
     <string name="system_default">Sistem</string>
-    <string name="external_links">Dış bağlantılar</string>
+    <string name="external_links">Dış Bağlantılar</string>
     <string name="auto_default_browser">Otomatik (Öntanımlı Tarayıcıyı Tercih Et)</string>
     <string name="specific_browser_name">Tarayıcı: %1$s</string>
     <string name="specific_browser">Belirli tarayıcıyı zorla</string>
@@ -291,4 +291,15 @@
     <string name="mark_below_as_read">Aşağıdakini okundu olarak işaretle</string>
     <string name="line_height_multiple">Çoklu satır yüksekliği</string>
     <string name="mark_above_as_read">Yukarıdakini okundu olarak işaretle</string>
+    <string name="shared_content">Paylaşılan içerik</string>
+    <string name="only_link">Yalnızca bağlantı</string>
+    <string name="title_and_link">Başlık ve bağlantı</string>
+    <string name="keep_archived_tips">Arşivlenen ögeler okundu olarak işaretlenen, yıldızlanmayan ve etiketlenmeyen makalelerdir. \"Arşivlenmiş makaleleri sakla\" ayarı yalnızca bu aygıtlarda etkilidir. Daha eski arşivlenmiş makaleler bu aygıtlardan silinecektir. Makalelerin silinmesi geri alınamaz.</string>
+    <string name="troubleshooting">Sorun giderme</string>
+    <string name="troubleshooting_desc">Hata bildirimi, hata ayıklama araçları</string>
+    <string name="bug_report">Hata bildirimi</string>
+    <string name="app_preferences">Uygulama tercihleri</string>
+    <string name="import_from_protobuf_file">Protobuf dosyasından içe aktar</string>
+    <string name="export_as_protobuf_file">Protobuf dosyası olarak dışa aktar</string>
+    <string name="invalid_protobuf_file_warning">Bu dosya geçerli bir protobuf dosyası olmayabilir. Bu dosyayı içe aktarmak uygulamayı bozabilir ve geçerli tercihlerin kaybolmasına neden olabilir. Devam etmek istediğinizden emin misiniz?</string>
 </resources>

@@ -294,4 +294,15 @@
     <string name="line_height_multiple">Násobek výšky řádku</string>
     <string name="mark_above_as_read">Označit vše výše jako přečtené</string>
     <string name="mark_below_as_read">Označit vše níže jako přečtené</string>
+    <string name="title_and_link">Název a odkaz</string>
+    <string name="keep_archived_tips">Archivované položky jsou články označené jako přečtené, bez hvězdičky a bez označení. Nastavení „Ponechat archivované články“ bude platit pouze na tomto zařízení. Starší archivované články budou z tohoto zařízení odstraněny. Jejich odstranění nelze vrátit zpět.</string>
+    <string name="shared_content">Sdílený obsah</string>
+    <string name="only_link">Pouze odkaz</string>
+    <string name="app_preferences">Předvolby aplikace</string>
+    <string name="import_from_protobuf_file">Importovat ze souboru protobuf</string>
+    <string name="troubleshooting">Řešení chyb</string>
+    <string name="troubleshooting_desc">Hlášení chyb, ladicí nástroje</string>
+    <string name="bug_report">Nahlásit chybu</string>
+    <string name="export_as_protobuf_file">Exportovat do souboru protobuf</string>
+    <string name="invalid_protobuf_file_warning">Tento soubor nejspíše není platným souborem protobuf. Jeho importováním můžete potenciálně poškodit aplikaci a ztratit aktuální předvolby. Opravdu chcete pokračovat?</string>
 </resources>

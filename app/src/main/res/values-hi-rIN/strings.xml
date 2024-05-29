@@ -292,4 +292,15 @@
     <string name="mark_below_as_read">नीचे को पढ़ा हुआ चिह्नित करें</string>
     <string name="line_height_multiple">रेखा की ऊँचाई एकाधिक</string>
     <string name="mark_above_as_read">ऊपर को पढ़ा हुआ चिह्नित करें</string>
+    <string name="shared_content">साझा की गई सामग्री</string>
+    <string name="keep_archived_tips">संग्रहीत आइटम वे लेख हैं जिन्हें पढ़ा गया के रूप में चिह्नित किया गया है, तारांकित नहीं किया गया है और टैग नहीं किया गया है। \"संग्रहीत लेख रखें\" सेटिंग केवल इस डिवाइस पर प्रभावी है। पुराने संग्रहीत आलेख इस डिवाइस से हटा दिए जाएंगे. लेखों का विलोपन पूर्ववत नहीं किया जा सकता।</string>
+    <string name="only_link">केवल लिंक</string>
+    <string name="title_and_link">शीर्षक और लिंक</string>
+    <string name="troubleshooting">समस्या निवारण</string>
+    <string name="import_from_protobuf_file">protobuf फाइल से आयात करें</string>
+    <string name="export_as_protobuf_file">protobuf फाइल के रूप में निर्यात करें</string>
+    <string name="troubleshooting_desc">बग रिपोर्ट, डिबग टूल</string>
+    <string name="invalid_protobuf_file_warning">यह फाइल वैध protobuf फाइल नहीं हो सकती है। इसे आयात करने से ऐप संभावित रूप से दूषित हो सकता है और परिणामस्वरूप वर्तमान प्राथमिकताएँ नष्ट हो सकती हैं। क्या आप सुनिश्चित रूप से आगे बढ़ना चाहते हैं?</string>
+    <string name="bug_report">बग रिपोर्ट</string>
+    <string name="app_preferences">ऐप प्राथमिकताएँ</string>
 </resources>

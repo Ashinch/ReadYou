@@ -294,4 +294,15 @@
     <string name="mark_below_as_read">Означи доле као прочитано</string>
     <string name="mark_above_as_read">Означи горе као прочитано</string>
     <string name="line_height_multiple">Висина линије вишеструка</string>
+    <string name="shared_content">Дељени садржај</string>
+    <string name="only_link">Само линк</string>
+    <string name="title_and_link">Наслов и линк</string>
+    <string name="troubleshooting">Решавање проблема</string>
+    <string name="bug_report">Пријава проблема</string>
+    <string name="troubleshooting_desc">Пријава проблема, алатке за отклањање грешака</string>
+    <string name="app_preferences">Преференце апликације</string>
+    <string name="import_from_protobuf_file">Увоз из protobuf фајла</string>
+    <string name="export_as_protobuf_file">Извоз као protobuf фајл</string>
+    <string name="invalid_protobuf_file_warning">Ова датотека можда није важећа protobuf фајл. Увоз би могао потенцијално да оштети апликацију и резултира губитком тренутних преференција. Желите ли заиста да наставите?</string>
+    <string name="keep_archived_tips">Архивиране ставке су чланци који су означени као прочитани, немају звездицу и нису означени. Подешавање „Чувај архивиране чланке“ је ефективно само на овим уређајима. Старији архивирани чланци ће бити избрисани са овог уређаја. Брисање чланака се не може опозвати.</string>
 </resources>

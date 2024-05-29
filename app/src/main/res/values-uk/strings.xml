@@ -297,4 +297,15 @@
     <string name="line_height_multiple">Висота рядка кратна</string>
     <string name="mark_above_as_read">Позначити все вище як прочитане</string>
     <string name="mark_below_as_read">Позначити вже нижче як прочитане</string>
+    <string name="shared_content">Спільний вміст</string>
+    <string name="only_link">Лише посилання</string>
+    <string name="title_and_link">Назва та посилання</string>
+    <string name="keep_archived_tips">Архівні елементи — це статті, які позначені як прочитані, не в улюблених та без тегів. Налаштування «Зберігати архівні статті» діє лише на цих пристроях. Старі архівні статті будуть видалені з цих пристроїв. Видалення статей неможливо скасувати.</string>
+    <string name="troubleshooting">Вирішення проблем</string>
+    <string name="troubleshooting_desc">Звіт про помилки, інструменти налагодження</string>
+    <string name="bug_report">Звіт про помилки</string>
+    <string name="app_preferences">Налаштування застосунку</string>
+    <string name="import_from_protobuf_file">Імпортувати з файла «protobuf»</string>
+    <string name="export_as_protobuf_file">Експортувати як файл «protobuf»</string>
+    <string name="invalid_protobuf_file_warning">Цей файл може бути недійсним файлом protobuf. Імпорт може потенційно пошкодити застосунок та призвести до втрати поточних налаштувань. Ви впевнені, що хочете продовжити?</string>
 </resources>

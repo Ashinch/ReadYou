@@ -95,7 +95,7 @@
     <string name="color_and_style">颜色和样式</string>
     <string name="color_and_style_desc">主题、色调样式、字体大小</string>
     <string name="interaction">交互</string>
-    <string name="interaction_desc">初始页面，触感反馈</string>
+    <string name="interaction_desc">初始页面、触感反馈</string>
     <string name="languages">语言</string>
     <string name="languages_desc">英语、简体中文、更多</string>
     <string name="use_device_languages">跟随系统设置</string>
@@ -288,4 +288,15 @@
     <string name="mark_below_as_read">将下方文章标为已读</string>
     <string name="line_height_multiple">行高倍数</string>
     <string name="mark_above_as_read">将上方文章标为已读</string>
+    <string name="shared_content">分享内容</string>
+    <string name="only_link">仅链接</string>
+    <string name="title_and_link">标题和链接</string>
+    <string name="keep_archived_tips">已归档的项目是指标记为已读、未加星标和未加标签的文章。\"保留已归档的文章\"设置仅在此设备上有效，较旧的已归档文章将从此设备中删除，文章的删除是无法撤销的。</string>
+    <string name="troubleshooting">故障排除</string>
+    <string name="troubleshooting_desc">错误报告、调试工具</string>
+    <string name="bug_report">错误报告</string>
+    <string name="app_preferences">应用程序偏好设置</string>
+    <string name="import_from_protobuf_file">导入 protobuf 文件</string>
+    <string name="export_as_protobuf_file">导出为 protobuf 文件</string>
+    <string name="invalid_protobuf_file_warning">该文件可能不是有效的 protobuf 文件！导入该文件可能会损坏应用程序并导致当前偏好设置丢失，您确定要继续吗？</string>
 </resources>

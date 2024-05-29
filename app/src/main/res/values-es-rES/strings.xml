@@ -297,4 +297,15 @@
     <string name="mark_below_as_read">Marque a continuación como leído</string>
     <string name="mark_above_as_read">Marcar arriba como leído</string>
     <string name="line_height_multiple">Altura de la línea múltiple</string>
+    <string name="shared_content">Contenidos compartidos</string>
+    <string name="only_link">Único enlace</string>
+    <string name="title_and_link">Título y enlace</string>
+    <string name="keep_archived_tips">Los artículos archivados son artículos marcados como leídos, sin estrellas y sin etiquetas. El ajuste \"Conservar artículos archivados\" sólo es efectivo en estos dispositivos. Los artículos archivados más antiguos se eliminarán de estos dispositivos. La eliminación de artículos no se puede deshacer.</string>
+    <string name="troubleshooting">Solución de problemas</string>
+    <string name="troubleshooting_desc">Informe de errores, herramientas de depuración</string>
+    <string name="bug_report">Informe de error</string>
+    <string name="app_preferences">Ajustes de la aplicación</string>
+    <string name="import_from_protobuf_file">Importar desde archivo protobuf</string>
+    <string name="export_as_protobuf_file">Exportar como archivo protobuf</string>
+    <string name="invalid_protobuf_file_warning">Este archivo puede no ser un archivo protobuf válido. Importarlo podría corromper la aplicación y provocar la pérdida de las preferencias actuales. ¿Está seguro de que desea continuar?</string>
 </resources>
