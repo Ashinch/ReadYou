@@ -84,7 +84,7 @@ fun bodyStyle(): TextStyle = LocalTextStyle.current.merge(
         fontFamily = LocalReadingFonts.current.asFontFamily(LocalContext.current),
         fontWeight = if (LocalReadingTextBold.current.value) FontWeight.SemiBold else FontWeight.Normal,
         fontSize = LocalReadingTextFontSize.current.sp,
-        letterSpacing = LocalReadingLetterSpacing.current.sp,
+        letterSpacing = LocalReadingTextLetterSpacing.current.sp,
         color = bodyForeground(),
         textAlign = LocalReadingTextAlign.current.toTextAlign(),
     )

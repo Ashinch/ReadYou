@@ -18,9 +18,9 @@ import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.DefaultDispatcher
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
-import me.ash.reader.ui.ext.getPreferencesFile
+import me.ash.reader.ui.ext.fromDataStoreToJSONString
+import me.ash.reader.ui.ext.fromJSONStringToDataStore
 import me.ash.reader.ui.ext.isProbableProtobuf
-import me.ash.reader.ui.ext.restart
 import javax.inject.Inject
 
 @HiltViewModel
@@ -60,17 +60,13 @@ class TroubleshootingViewModel @Inject constructor(
 
     fun importPreferencesFromJSON(context: Context, byteArray: ByteArray) {
         viewModelScope.launch(ioDispatcher) {
-            val file = context.getPreferencesFile()
-            if (file.exists()) file.delete()
-            if (file.createNewFile()) file.writeBytes(byteArray)
-            context.restart()
+            String(byteArray).fromJSONStringToDataStore(context)
         }
     }
 
     fun exportPreferencesAsJSON(context: Context, callback: (ByteArray) -> Unit = {}) {
         viewModelScope.launch(ioDispatcher) {
-            val file = context.getPreferencesFile()
-            callback(if (file.exists()) file.readBytes() else byteArrayOf())
+            callback(context.fromDataStoreToJSONString().toByteArray())
         }
     }
 }

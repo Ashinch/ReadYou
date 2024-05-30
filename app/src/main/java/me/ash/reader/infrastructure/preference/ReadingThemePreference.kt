@@ -2,12 +2,17 @@ package me.ash.reader.infrastructure.preference
 
 import android.content.Context
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
+import me.ash.reader.ui.ext.DataStoreKey.Companion.readingTheme
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
+
+val LocalReadingTheme =
+    compositionLocalOf<ReadingThemePreference> { ReadingThemePreference.default }
 
 @Immutable
 sealed class ReadingThemePreference(val value: Int) : Preference() {
@@ -19,7 +24,7 @@ sealed class ReadingThemePreference(val value: Int) : Preference() {
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
-            context.dataStore.put(DataStoreKeys.ReadingTheme, value)
+            context.dataStore.put(DataStoreKey.readingTheme, value)
         }
     }
 
@@ -44,7 +49,7 @@ sealed class ReadingThemePreference(val value: Int) : Preference() {
                 ReadingTextHorizontalPaddingPreference.put(context, scope,
                     ReadingTextHorizontalPaddingPreference.default)
                 ReadingTextAlignPreference.default.put(context, scope)
-                ReadingLetterSpacingPreference.put(context, scope, ReadingLetterSpacingPreference.default)
+                ReadingTextLetterSpacingPreference.put(context, scope, ReadingTextLetterSpacingPreference.default)
                 ReadingTextFontSizePreference.put(context, scope, ReadingTextFontSizePreference.default)
                 ReadingImageRoundedCornersPreference.put(context, scope, ReadingImageRoundedCornersPreference.default)
                 ReadingImageHorizontalPaddingPreference.put(context, scope,
@@ -63,7 +68,7 @@ sealed class ReadingThemePreference(val value: Int) : Preference() {
                 ReadingTextHorizontalPaddingPreference.put(context, scope,
                     ReadingTextHorizontalPaddingPreference.default)
                 ReadingTextAlignPreference.default.put(context, scope)
-                ReadingLetterSpacingPreference.put(context, scope, ReadingLetterSpacingPreference.default)
+                ReadingTextLetterSpacingPreference.put(context, scope, ReadingTextLetterSpacingPreference.default)
                 ReadingTextFontSizePreference.put(context, scope, 18)
                 ReadingImageRoundedCornersPreference.put(context, scope, 0)
                 ReadingImageHorizontalPaddingPreference.put(context, scope, 0)
@@ -81,7 +86,7 @@ sealed class ReadingThemePreference(val value: Int) : Preference() {
                 ReadingTextHorizontalPaddingPreference.put(context, scope,
                     ReadingTextHorizontalPaddingPreference.default)
                 ReadingTextAlignPreference.Center.put(context, scope)
-                ReadingLetterSpacingPreference.put(context, scope, ReadingLetterSpacingPreference.default)
+                ReadingTextLetterSpacingPreference.put(context, scope, ReadingTextLetterSpacingPreference.default)
                 ReadingTextFontSizePreference.put(context, scope, 20)
                 ReadingImageRoundedCornersPreference.put(context, scope, 0)
                 ReadingImageHorizontalPaddingPreference.put(context, scope,
@@ -100,7 +105,7 @@ sealed class ReadingThemePreference(val value: Int) : Preference() {
                 ReadingTextHorizontalPaddingPreference.put(context, scope,
                     ReadingTextHorizontalPaddingPreference.default)
                 ReadingTextAlignPreference.default.put(context, scope)
-                ReadingLetterSpacingPreference.put(context, scope, ReadingLetterSpacingPreference.default)
+                ReadingTextLetterSpacingPreference.put(context, scope, ReadingTextLetterSpacingPreference.default)
                 ReadingTextFontSizePreference.put(context, scope, ReadingTextFontSizePreference.default)
                 ReadingImageRoundedCornersPreference.put(context, scope, ReadingImageRoundedCornersPreference.default)
                 ReadingImageHorizontalPaddingPreference.put(context, scope,
@@ -116,7 +121,7 @@ sealed class ReadingThemePreference(val value: Int) : Preference() {
         val values = listOf(MaterialYou, Reeder, Paper, Custom)
 
         fun fromPreferences(preferences: Preferences): ReadingThemePreference =
-            when (preferences[DataStoreKeys.ReadingTheme.key]) {
+            when (preferences[DataStoreKey.keys[readingTheme]?.key as Preferences.Key<Int>]) {
                 0 -> MaterialYou
                 1 -> Reeder
                 2 -> Paper

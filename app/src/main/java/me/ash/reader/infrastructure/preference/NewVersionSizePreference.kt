@@ -1,13 +1,17 @@
 package me.ash.reader.infrastructure.preference
 
 import android.content.Context
+import androidx.compose.runtime.compositionLocalOf
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
+import me.ash.reader.ui.ext.DataStoreKey.Companion.newVersionSize
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
+
+val LocalNewVersionSize = compositionLocalOf { NewVersionSizePreference.default }
 
 object NewVersionSizePreference {
 
@@ -20,10 +24,10 @@ object NewVersionSizePreference {
 
     fun put(context: Context, scope: CoroutineScope, value: String) {
         scope.launch(Dispatchers.IO) {
-            context.dataStore.put(DataStoreKeys.NewVersionSize, value)
+            context.dataStore.put(newVersionSize, value)
         }
     }
 
     fun fromPreferences(preferences: Preferences) =
-        preferences[DataStoreKeys.NewVersionSize.key] ?: default
+        preferences[DataStoreKey.keys[newVersionSize]?.key as Preferences.Key<String>] ?: default
 }

@@ -1,12 +1,17 @@
 package me.ash.reader.infrastructure.preference
 
 import android.content.Context
+import androidx.compose.runtime.compositionLocalOf
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
+import me.ash.reader.ui.ext.DataStoreKey.Companion.flowArticleListDesc
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
+
+val LocalFlowArticleListDesc =
+    compositionLocalOf<FlowArticleListDescPreference> { FlowArticleListDescPreference.default }
 
 sealed class FlowArticleListDescPreference(val value: Boolean) : Preference() {
     object ON : FlowArticleListDescPreference(true)
@@ -15,7 +20,7 @@ sealed class FlowArticleListDescPreference(val value: Boolean) : Preference() {
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
             context.dataStore.put(
-                DataStoreKeys.FlowArticleListDesc,
+                DataStoreKey.flowArticleListDesc,
                 value
             )
         }
@@ -27,7 +32,7 @@ sealed class FlowArticleListDescPreference(val value: Boolean) : Preference() {
         val values = listOf(ON, OFF)
 
         fun fromPreferences(preferences: Preferences) =
-            when (preferences[DataStoreKeys.FlowArticleListDesc.key]) {
+            when (preferences[DataStoreKey.keys[flowArticleListDesc]?.key as Preferences.Key<Boolean>]) {
                 true -> ON
                 false -> OFF
                 else -> default

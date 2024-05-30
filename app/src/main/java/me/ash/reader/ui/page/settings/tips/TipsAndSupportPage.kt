@@ -60,7 +60,7 @@ import me.ash.reader.infrastructure.preference.OpenLinkPreference
 import me.ash.reader.ui.component.base.CurlyCornerShape
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.ext.openURL
@@ -137,10 +137,7 @@ fun TipsAndSupportPage(
                                         updateViewModel.checkUpdate(
                                             {
                                                 context.showToast(context.getString(R.string.checking_updates))
-                                                context.dataStore.put(
-                                                    DataStoreKeys.SkipVersionNumber,
-                                                    ""
-                                                )
+                                                context.dataStore.put(DataStoreKey.skipVersionNumber, "")
                                             },
                                             {
                                                 if (!it) {

@@ -1,13 +1,18 @@
 package me.ash.reader.infrastructure.preference
 
 import android.content.Context
+import androidx.compose.runtime.compositionLocalOf
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
+import me.ash.reader.ui.ext.DataStoreKey.Companion.initialFilter
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
+
+val LocalInitialFilter =
+    compositionLocalOf<InitialFilterPreference> { InitialFilterPreference.default }
 
 sealed class InitialFilterPreference(val value: Int) : Preference() {
     object Starred : InitialFilterPreference(0)
@@ -17,7 +22,7 @@ sealed class InitialFilterPreference(val value: Int) : Preference() {
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
             context.dataStore.put(
-                DataStoreKeys.InitialFilter,
+                DataStoreKey.initialFilter,
                 value
             )
         }
@@ -36,7 +41,7 @@ sealed class InitialFilterPreference(val value: Int) : Preference() {
         val values = listOf(Starred, Unread, All)
 
         fun fromPreferences(preferences: Preferences) =
-            when (preferences[DataStoreKeys.InitialFilter.key]) {
+            when (preferences[DataStoreKey.keys[initialFilter]?.key as Preferences.Key<Int>]) {
                 0 -> Starred
                 1 -> Unread
                 2 -> All

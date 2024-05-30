@@ -6,24 +6,22 @@ import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.ash.reader.ui.ext.DataStoreKey
-import me.ash.reader.ui.ext.DataStoreKey.Companion.readingTextLineHeight
+import me.ash.reader.ui.ext.DataStoreKey.Companion.readingTextLetterSpacing
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
-val LocalReadingTextLineHeight = compositionLocalOf { ReadingTextLineHeightPreference.default }
+val LocalReadingTextLetterSpacing = compositionLocalOf { ReadingTextLetterSpacingPreference.default }
 
-data object ReadingTextLineHeightPreference {
-    const val default = 1f
-    private val range = 0.8f..2f
+object ReadingTextLetterSpacingPreference {
+
+    const val default = 0.5F
 
     fun put(context: Context, scope: CoroutineScope, value: Float) {
         scope.launch {
-            context.dataStore.put(DataStoreKey.readingTextLineHeight, value)
+            context.dataStore.put(DataStoreKey.readingTextLetterSpacing, value)
         }
     }
 
-    fun Float.coerceToRange() = coerceIn(range)
-
     fun fromPreferences(preferences: Preferences) =
-        preferences[DataStoreKey.keys[readingTextLineHeight]?.key as Preferences.Key<Float>] ?: default
+        preferences[DataStoreKey.keys[readingTextLetterSpacing]?.key as Preferences.Key<Float>] ?: default
 }

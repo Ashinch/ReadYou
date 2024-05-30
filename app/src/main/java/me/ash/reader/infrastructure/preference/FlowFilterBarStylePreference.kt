@@ -1,13 +1,18 @@
 package me.ash.reader.infrastructure.preference
 
 import android.content.Context
+import androidx.compose.runtime.compositionLocalOf
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
+import me.ash.reader.ui.ext.DataStoreKey.Companion.flowFilterBarStyle
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
+
+val LocalFlowFilterBarStyle =
+    compositionLocalOf<FlowFilterBarStylePreference> { FlowFilterBarStylePreference.default }
 
 sealed class FlowFilterBarStylePreference(val value: Int) : Preference() {
     object Icon : FlowFilterBarStylePreference(0)
@@ -17,7 +22,7 @@ sealed class FlowFilterBarStylePreference(val value: Int) : Preference() {
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
             context.dataStore.put(
-                DataStoreKeys.FlowFilterBarStyle,
+                DataStoreKey.flowFilterBarStyle,
                 value
             )
         }
@@ -36,7 +41,7 @@ sealed class FlowFilterBarStylePreference(val value: Int) : Preference() {
         val values = listOf(Icon, IconLabel, IconLabelOnlySelected)
 
         fun fromPreferences(preferences: Preferences) =
-            when (preferences[DataStoreKeys.FlowFilterBarStyle.key]) {
+            when (preferences[DataStoreKey.keys[flowFilterBarStyle]?.key as Preferences.Key<Int>]) {
                 0 -> Icon
                 1 -> IconLabel
                 2 -> IconLabelOnlySelected

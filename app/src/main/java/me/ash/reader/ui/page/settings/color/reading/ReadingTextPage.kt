@@ -2,13 +2,26 @@ package me.ash.reader.ui.page.settings.color.reading
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,9 +30,29 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import me.ash.reader.R
-import me.ash.reader.infrastructure.preference.*
+import me.ash.reader.infrastructure.preference.LocalReadingTextLetterSpacing
+import me.ash.reader.infrastructure.preference.LocalReadingTextAlign
+import me.ash.reader.infrastructure.preference.LocalReadingTextBold
+import me.ash.reader.infrastructure.preference.LocalReadingTextFontSize
+import me.ash.reader.infrastructure.preference.LocalReadingTextHorizontalPadding
+import me.ash.reader.infrastructure.preference.LocalReadingTextLineHeight
+import me.ash.reader.infrastructure.preference.LocalReadingTheme
+import me.ash.reader.infrastructure.preference.ReadingTextLetterSpacingPreference
+import me.ash.reader.infrastructure.preference.ReadingTextAlignPreference
+import me.ash.reader.infrastructure.preference.ReadingTextFontSizePreference
+import me.ash.reader.infrastructure.preference.ReadingTextHorizontalPaddingPreference
+import me.ash.reader.infrastructure.preference.ReadingTextLineHeightPreference
 import me.ash.reader.infrastructure.preference.ReadingTextLineHeightPreference.coerceToRange
-import me.ash.reader.ui.component.base.*
+import me.ash.reader.infrastructure.preference.ReadingThemePreference
+import me.ash.reader.infrastructure.preference.not
+import me.ash.reader.ui.component.base.DisplayText
+import me.ash.reader.ui.component.base.FeedbackIconButton
+import me.ash.reader.ui.component.base.RYScaffold
+import me.ash.reader.ui.component.base.RYSwitch
+import me.ash.reader.ui.component.base.RadioDialog
+import me.ash.reader.ui.component.base.RadioDialogOption
+import me.ash.reader.ui.component.base.Subtitle
+import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
 
@@ -33,7 +66,7 @@ fun ReadingTextPage(
     val readingTheme = LocalReadingTheme.current
     val fontSize = LocalReadingTextFontSize.current
     val lineHeight = LocalReadingTextLineHeight.current
-    val letterSpacing = LocalReadingLetterSpacing.current
+    val letterSpacing = LocalReadingTextLetterSpacing.current
     val horizontalPadding = LocalReadingTextHorizontalPadding.current
     val align = LocalReadingTextAlign.current
     val bold = LocalReadingTextBold.current
@@ -192,10 +225,10 @@ fun ReadingTextPage(
             letterSpacingDialogVisible = false
         },
         onConfirm = {
-            ReadingLetterSpacingPreference.put(
+            ReadingTextLetterSpacingPreference.put(
                 context,
                 scope,
-                letterSpacingValue?.toDoubleOrNull() ?: 0.0
+                letterSpacingValue?.toFloatOrNull() ?: 0F
             )
             ReadingThemePreference.Custom.put(context, scope)
             letterSpacingDialogVisible = false

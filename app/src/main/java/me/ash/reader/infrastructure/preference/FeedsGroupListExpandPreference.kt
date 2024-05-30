@@ -1,12 +1,17 @@
 package me.ash.reader.infrastructure.preference
 
 import android.content.Context
+import androidx.compose.runtime.compositionLocalOf
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
+import me.ash.reader.ui.ext.DataStoreKey.Companion.feedsGroupListExpand
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
+
+val LocalFeedsGroupListExpand =
+    compositionLocalOf<FeedsGroupListExpandPreference> { FeedsGroupListExpandPreference.default }
 
 sealed class FeedsGroupListExpandPreference(val value: Boolean) : Preference() {
     object ON : FeedsGroupListExpandPreference(true)
@@ -15,7 +20,7 @@ sealed class FeedsGroupListExpandPreference(val value: Boolean) : Preference() {
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
             context.dataStore.put(
-                DataStoreKeys.FeedsGroupListExpand,
+                DataStoreKey.feedsGroupListExpand,
                 value
             )
         }
@@ -27,7 +32,7 @@ sealed class FeedsGroupListExpandPreference(val value: Boolean) : Preference() {
         val values = listOf(ON, OFF)
 
         fun fromPreferences(preferences: Preferences) =
-            when (preferences[DataStoreKeys.FeedsGroupListExpand.key]) {
+            when (preferences[DataStoreKey.keys[feedsGroupListExpand]?.key as Preferences.Key<Boolean>]) {
                 true -> ON
                 false -> OFF
                 else -> default

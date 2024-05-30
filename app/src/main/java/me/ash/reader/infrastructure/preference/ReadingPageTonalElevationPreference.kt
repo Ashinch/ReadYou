@@ -1,13 +1,18 @@
 package me.ash.reader.infrastructure.preference
 
 import android.content.Context
+import androidx.compose.runtime.compositionLocalOf
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.ash.reader.domain.model.constant.ElevationTokens
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
+import me.ash.reader.ui.ext.DataStoreKey.Companion.readingPageTonalElevation
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
+
+val LocalReadingPageTonalElevation =
+    compositionLocalOf<ReadingPageTonalElevationPreference> { ReadingPageTonalElevationPreference.default }
 
 sealed class ReadingPageTonalElevationPreference(val value: Int) : Preference() {
     object Level0 : ReadingPageTonalElevationPreference(ElevationTokens.Level0)
@@ -19,7 +24,7 @@ sealed class ReadingPageTonalElevationPreference(val value: Int) : Preference() 
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
-            context.dataStore.put(DataStoreKeys.ReadingPageTonalElevation, value)
+            context.dataStore.put(DataStoreKey.readingPageTonalElevation, value)
         }
     }
 
@@ -39,7 +44,7 @@ sealed class ReadingPageTonalElevationPreference(val value: Int) : Preference() 
         val values = listOf(Level0, Level1, Level2, Level3, Level4, Level5)
 
         fun fromPreferences(preferences: Preferences) =
-            when (preferences[DataStoreKeys.ReadingPageTonalElevation.key]) {
+            when (preferences[DataStoreKey.keys[readingPageTonalElevation]?.key as Preferences.Key<Int>]) {
                 ElevationTokens.Level0 -> Level0
                 ElevationTokens.Level1 -> Level1
                 ElevationTokens.Level2 -> Level2

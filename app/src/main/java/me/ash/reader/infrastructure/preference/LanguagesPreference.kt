@@ -3,6 +3,7 @@ package me.ash.reader.infrastructure.preference
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.LocaleListCompat
 import androidx.datastore.preferences.core.Preferences
@@ -10,10 +11,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
+import me.ash.reader.ui.ext.DataStoreKey.Companion.languages
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
-import java.util.*
+import java.util.Locale
+
+val LocalLanguages =
+    compositionLocalOf<LanguagesPreference> { LanguagesPreference.default }
 
 sealed class LanguagesPreference(val value: Int) : Preference() {
     data object UseDeviceLanguages : LanguagesPreference(0)
@@ -57,7 +62,7 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
             context.dataStore.put(
-                DataStoreKeys.Languages, value
+                DataStoreKey.languages, value
             )
             scope.launch(Dispatchers.Main) { setLocale(this@LanguagesPreference) }
         }
@@ -160,7 +165,8 @@ sealed class LanguagesPreference(val value: Int) : Preference() {
         )
 
         fun fromPreferences(preferences: Preferences): LanguagesPreference =
-            fromValue(preferences[DataStoreKeys.Languages.key] ?: 0)
+            fromValue(preferences[DataStoreKey.keys[languages]?.key as Preferences.Key<Int>] ?: 0)
+
 
         fun fromValue(value: Int): LanguagesPreference = when (value) {
             0 -> UseDeviceLanguages

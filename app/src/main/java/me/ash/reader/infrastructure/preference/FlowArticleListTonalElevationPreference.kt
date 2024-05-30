@@ -1,13 +1,18 @@
 package me.ash.reader.infrastructure.preference
 
 import android.content.Context
+import androidx.compose.runtime.compositionLocalOf
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.ash.reader.domain.model.constant.ElevationTokens
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
+import me.ash.reader.ui.ext.DataStoreKey.Companion.flowArticleListTonalElevation
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
+
+val LocalFlowArticleListTonalElevation =
+    compositionLocalOf<FlowArticleListTonalElevationPreference> { FlowArticleListTonalElevationPreference.default }
 
 sealed class FlowArticleListTonalElevationPreference(val value: Int) : Preference() {
     object Level0 : FlowArticleListTonalElevationPreference(ElevationTokens.Level0)
@@ -20,7 +25,7 @@ sealed class FlowArticleListTonalElevationPreference(val value: Int) : Preferenc
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
             context.dataStore.put(
-                DataStoreKeys.FlowArticleListTonalElevation,
+                DataStoreKey.flowArticleListTonalElevation,
                 value
             )
         }
@@ -42,7 +47,7 @@ sealed class FlowArticleListTonalElevationPreference(val value: Int) : Preferenc
         val values = listOf(Level0, Level1, Level2, Level3, Level4, Level5)
 
         fun fromPreferences(preferences: Preferences) =
-            when (preferences[DataStoreKeys.FlowArticleListTonalElevation.key]) {
+            when (preferences[DataStoreKey.keys[flowArticleListTonalElevation]?.key as Preferences.Key<Int>]) {
                 ElevationTokens.Level0 -> Level0
                 ElevationTokens.Level1 -> Level1
                 ElevationTokens.Level2 -> Level2
