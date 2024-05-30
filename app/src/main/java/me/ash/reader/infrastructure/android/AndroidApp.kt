@@ -117,7 +117,8 @@ class AndroidApp : Application(), Configuration.Provider {
     /**
      * Override the [Configuration.Builder] to provide the [HiltWorkerFactory].
      */
-    override fun getWorkManagerConfiguration(): Configuration =
+    override val workManagerConfiguration: Configuration
+        get() =
         Configuration.Builder()
             .setWorkerFactory(workerFactory)
             .setMinimumLoggingLevel(android.util.Log.DEBUG)

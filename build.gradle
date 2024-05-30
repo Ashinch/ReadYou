@@ -3,25 +3,25 @@ buildscript {
 //         https://developer.android.com/jetpack/androidx/releases/compose-ui
 //        compose = '1.2.0-beta02'
         // https://developer.android.com/jetpack/compose/bom
-        composeBom = '2024.01.00'
+        composeBom = '2024.05.00'
         // https://github.com/google/accompanist/releases
         accompanist = '0.34.0'
         // https://developer.android.com/jetpack/androidx/releases/compose-material3
-        material3 = '1.2.0-rc01'
+//        material3 = '1.2.0-rc01'
         // https://developer.android.com/jetpack/androidx/releases/lifecycle
-        lifecycle = '2.6.2'
+        lifecycle = '2.8.1'
         // https://developer.android.com/jetpack/androidx/releases/navigation
-        navigation = '2.5.0-rc01'
+        navigation = '2.7.7'
         // https://developer.android.com/jetpack/androidx/releases/paging
-        paging = '3.2.1'
+        paging = '3.3.0'
         // https://developer.android.com/jetpack/androidx/releases/room
         room = '2.6.1'
         // https://developer.android.com/jetpack/androidx/releases/datastore
-        datastore = '1.0.0'
+        datastore = '1.1.1'
         // https://developer.android.com/jetpack/androidx/releases/work
-        work = '2.8.0-alpha02'
+        work = '2.9.0'
         // https://developer.android.com/jetpack/androidx/releases/profileinstaller
-        profileinstaller = '1.2.0-beta02'
+        profileinstaller = '1.3.1'
         // https://square.github.io/okhttp/changelogs/changelog/
         okhttp = '5.0.0-alpha.12'
         retrofit2 = '2.9.0'
