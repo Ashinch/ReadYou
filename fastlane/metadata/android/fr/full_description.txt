@@ -2,7 +2,7 @@
 
 <b>Fonctions:</b>
 
-* S'abonner au liens de flux
+* S'abonner aux liens de flux
 * Importer de OPML
 * Synchronisation des articles
 * Notifications pour mise-à-jour des articles
