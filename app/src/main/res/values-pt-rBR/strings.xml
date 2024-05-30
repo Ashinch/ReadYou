@@ -107,7 +107,7 @@
     <string name="basic_fonts">Fontes Básicas</string>
     <string name="feeds_page">Página de Feeds</string>
     <string name="flow_page">Página de Flow</string>
-    <string name="change_log">Changelog</string>
+    <string name="change_log">Histórico de atualizações</string>
     <string name="skip_this_version">Pular Esta Versão</string>
     <string name="checking_updates">Verificando atualizações…</string>
     <string name="is_latest_version">Esta é a versão mais recente do app</string>
@@ -292,6 +292,17 @@
     <string name="save">Salvar</string>
     <string name="image_saved">Imagem salva</string>
     <string name="mark_above_as_read">Marcar acima como lido</string>
-    <string name="mark_below_as_read">Marque abaixo como lido</string>
+    <string name="mark_below_as_read">Marcar abaixo como lido</string>
     <string name="line_height_multiple">Altura da linha múltipla</string>
+    <string name="only_link">Somente link</string>
+    <string name="title_and_link">Título e link</string>
+    <string name="keep_archived_tips">Itens arquivados são artigos marcados como lidos, sem estrela e sem tag. A configuração \"Manter artigos arquivados\" só tem efeito nestes dispositivos. Artigos arquivados mais antigos serão excluídos destes dispositivos. A exclusão de artigos não pode ser desfeita.</string>
+    <string name="shared_content">Conteúdo compartilhado</string>
+    <string name="troubleshooting">Solução de problemas</string>
+    <string name="troubleshooting_desc">Relatório de erro, ferramentas de depuração</string>
+    <string name="bug_report">Relatório de erro</string>
+    <string name="app_preferences">Preferências de aplicativos</string>
+    <string name="import_from_protobuf_file">Importar do arquivo protobuf</string>
+    <string name="invalid_protobuf_file_warning">Este arquivo pode não ser um arquivo protobuf válido. Importá-lo pode corromper o aplicativo e resultar na perda das preferências atuais. Tem certeza de que deseja continuar?</string>
+    <string name="export_as_protobuf_file">Exportar como arquivo protobuf</string>
 </resources>

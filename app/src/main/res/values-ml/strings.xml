@@ -83,4 +83,16 @@
     <string name="mark_as_starred">നക്ഷത്രമിട്ടതായി അടയാളപ്പെടുത്തുക</string>
     <string name="mark_as_unstar">നക്ഷത്രം ഇല്ലാത്തതായി അടയാളപ്പെടുത്തുക</string>
     <string name="mark_as_read_one_day">ഒരു ദിവസത്തേക്കാൾ പഴയത് വായിച്ചതായി അടയാളപ്പെടുത്തുക</string>
+    <string name="get_new_updates_desc">പുതിയ പതിപ്പ് %1$s ലഭ്യമാണ്</string>
+    <string name="accounts">അക്കൗണ്ടുകൾ</string>
+    <string name="mark_as_read_three_days">3 ദിവസത്തേക്കാൾ പഴയത് വായിച്ചതായി അടയാളപ്പെടുത്തുക</string>
+    <string name="mark_as_read_seven_days">7 ദിവസത്തേക്കാൾ പഴയത് വായിച്ചതായി അടയാളപ്പെടുത്തുക</string>
+    <string name="in_coding">കോഡിംഗിൽ</string>
+    <string name="one_day">1 ദിവസം</string>
+    <string name="three_days">3 ദിവസം</string>
+    <string name="seven_days">7 ദിവസം</string>
+    <string name="close">അടയ്ക്കുക</string>
+    <string name="get_new_updates">പുതിയ അപ്ഡേറ്റുകൾ നേടുക</string>
+    <string name="coming_soon">ഉടൻ വരുന്നു</string>
+    <string name="accounts_desc">ലോക്കൽ, ഫ്രെഷ്ആർഎസ്എസ്</string>
 </resources>

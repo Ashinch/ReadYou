@@ -303,4 +303,15 @@
     <string name="line_height_multiple">ارتفاع الخط متعدد</string>
     <string name="mark_above_as_read">ضع علامة أعلاه كمقروءة</string>
     <string name="mark_below_as_read">ضع علامة أدناه كمقروءة</string>
+    <string name="title_and_link">العنوان والصلة</string>
+    <string name="keep_archived_tips">العناصر المؤرشفة هي مقالات تم وضع علامة عليها كمقروءة، ولم يتم تمييزها بنجمة ولم يتم وضع علامة عليها. لا يكون إعداد \"الاحتفاظ بالمقالات المؤرشفة\" فعالاً إلا على هذه الأجهزة. سيتم حذف المقالات المؤرشفة الأقدم من هذه الأجهزة. لا يمكن التراجع عن حذف المقالات.</string>
+    <string name="shared_content">المحتوى المشترك</string>
+    <string name="only_link">الرابط الوحيد</string>
+    <string name="troubleshooting">استكشاف الاخطاء</string>
+    <string name="troubleshooting_desc">تقرير الأخطاء، أدوات التصحيح</string>
+    <string name="bug_report">تقرير الاخطاء</string>
+    <string name="app_preferences">تفضيلات التطبيق</string>
+    <string name="import_from_protobuf_file">استيراد من ملف protobuf</string>
+    <string name="export_as_protobuf_file">تصدير كملف protobuf</string>
+    <string name="invalid_protobuf_file_warning">قد لا يكون هذا الملف ملف protobuf صالحًا. قد يؤدي استيراده إلى إتلاف بيانات التطبيق وفقدان التفضيلات الحالية. هل انت متأكد انك تريد المتابعة؟</string>
 </resources>

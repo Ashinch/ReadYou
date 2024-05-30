@@ -292,4 +292,8 @@
     <string name="line_height_multiple">Beberapa ketinggian baris</string>
     <string name="mark_above_as_read">Tandai di atas sebagai dibaca</string>
     <string name="mark_below_as_read">Tandai di bawah sebagai dibaca</string>
+    <string name="keep_archived_tips">Item yang diarsip adalah artikel yang ditandai sebagai dibaca, tidak dibintang, dan tidak ditandai. Pengaturan \"Simpan artikel terarsip\" hanya berlaku pada perangkat ini. Artikel terarsip lama akan dihapus dari perangkat ini. Penghapusan artikel tidak dapat diurungkan.</string>
+    <string name="only_link">Hanya tautan</string>
+    <string name="shared_content">Konten terbagi</string>
+    <string name="title_and_link">Judul dan tautan</string>
 </resources>

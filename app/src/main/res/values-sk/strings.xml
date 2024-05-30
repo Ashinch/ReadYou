@@ -294,4 +294,15 @@
     <string name="mark_above_as_read">Označiť vyššie uvedené ako prečítané</string>
     <string name="mark_below_as_read">Označiť nižšie uvedené ako prečítané</string>
     <string name="line_height_multiple">Násobok výšky riadku</string>
+    <string name="title_and_link">Názov a odkaz</string>
+    <string name="keep_archived_tips">Archivované položky sú články, ktoré sú označené ako prečítané, nie sú obľúbené a nie sú označené. Nastavenie \"Uchovávať archivované články\" je účinné len na týchto zariadeniach. Staršie archivované články sa z tohto zariadenia odstránia. Vymazanie článkov sa nedá vrátiť späť.</string>
+    <string name="shared_content">Zdieľaný obsah</string>
+    <string name="only_link">Len odkaz</string>
+    <string name="troubleshooting">$Riešenie problémov</string>
+    <string name="troubleshooting_desc">Hlásenie chýb, nástroje na ladenie</string>
+    <string name="bug_report">Nahlásiť chybu</string>
+    <string name="app_preferences">Predvoľby aplikácie</string>
+    <string name="import_from_protobuf_file">Importovať zo súboru protobuf</string>
+    <string name="export_as_protobuf_file">Exportovať do súbor protobuf</string>
+    <string name="invalid_protobuf_file_warning">Tento súbor nemusí byť platným súborom protobuf. Jeho importovanie by mohlo spôsobiť poškodenie aplikácie a stratu aktuálnych predvolieb. Ste si istí, že chcete pokračovať?</string>
 </resources>

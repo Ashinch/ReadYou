@@ -270,7 +270,7 @@
     <string name="grey_out_articles">Artikel ausgrauen</string>
     <string name="all_read">Alle gelesen</string>
     <string name="read_excluding_starred">Gelesen, ohne Sterne</string>
-    <string name="external_links">Externe links</string>
+    <string name="external_links">Externe Links</string>
     <string name="unexpected_error_title">Ups! Da ist etwas schief gelaufen…</string>
     <string name="copy_error_report">Fehlerbericht kopieren</string>
     <string name="submit_bug_report">einen Fehlerbericht auf GitHub einreichen</string>
@@ -291,4 +291,15 @@
     <string name="line_height_multiple">Zeilenhöhe mehrfach</string>
     <string name="save">Speichern</string>
     <string name="permission_denied">Erlaubnis verweigert</string>
+    <string name="title_and_link">Titel und Link</string>
+    <string name="keep_archived_tips">Archivierte Artikel sind Artikel, die als gelesen markiert, nicht markiert und nicht getaggt sind. Die Einstellung \"Archivierte Artikel behalten\" ist nur auf diesen Geräten wirksam. Ältere archivierte Artikel werden von diesem Gerät gelöscht. Löschen von Artikeln kann nicht rückgängig gemacht werden.</string>
+    <string name="only_link">Nur Link</string>
+    <string name="shared_content">Gemeinsamer Inhalt</string>
+    <string name="app_preferences">App Einstellungen</string>
+    <string name="import_from_protobuf_file">Importieren aus Protobuf-Datei</string>
+    <string name="export_as_protobuf_file">Export als Protobuf-Datei</string>
+    <string name="invalid_protobuf_file_warning">Diese Datei ist eventuell keine gültige Protobuf-Datei. Importieren der Datei kann die App möglicherweise beschädigen und zum Verlust der aktuellen Einstellungen führen. Sind Sie sicher, dass Sie fortfahren möchten?</string>
+    <string name="troubleshooting">Fehlerbehebung</string>
+    <string name="troubleshooting_desc">Fehlerbericht, Fehlersuchwerkzeuge</string>
+    <string name="bug_report">Fehlerbericht</string>
 </resources>

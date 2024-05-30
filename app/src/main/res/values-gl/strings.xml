@@ -290,4 +290,15 @@
     <string name="save">Gardar</string>
     <string name="image_saved">Imaxe gardada</string>
     <string name="permission_denied">Permiso denegado</string>
+    <string name="shared_content">Contido partillado</string>
+    <string name="only_link">Só ligazón</string>
+    <string name="title_and_link">Título e ligazón</string>
+    <string name="keep_archived_tips">Os elementos arquivados son artigos marcados como lidos, non faveados nin etiquetados. A configuración \"Manter artigos arquivados\" só é efectiva nestes dispositivos. Artigos vellos arquivados serán borrados destes dispositivos. O borrado dos artigos non se pode desfacer.</string>
+    <string name="troubleshooting">Tratamento de erros</string>
+    <string name="troubleshooting_desc">Informe de erros, ferramentas de depurado</string>
+    <string name="bug_report">Informe de erro</string>
+    <string name="app_preferences">Preferencias da aplicación</string>
+    <string name="import_from_protobuf_file">Importar de arquivo protobuf</string>
+    <string name="export_as_protobuf_file">Exportar como arquivo protobuf</string>
+    <string name="invalid_protobuf_file_warning">Este arquivo pode non ser un arquivo protobuf válido. Importalo podería chegar a corromper a aplicación e conlevar a perda da configuración actual. Quere proceder?</string>
 </resources>

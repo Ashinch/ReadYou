@@ -288,4 +288,15 @@
     <string name="save">儲存</string>
     <string name="image_saved">已儲存圖片</string>
     <string name="permission_denied">權限被拒絕</string>
+    <string name="shared_content">分享內容</string>
+    <string name="keep_archived_tips">已歸檔文章是指已標示為已讀、未加星號和未加标签的文章。「保留已歸檔文章」設置僅在此設備上有效。啟用此設置後，較舊的已歸檔文章將從此設備中刪除。刪除文章後無法復原。</string>
+    <string name="only_link">僅連結</string>
+    <string name="title_and_link">標題和連結</string>
+    <string name="troubleshooting">疑難排解</string>
+    <string name="troubleshooting_desc">錯誤報告、偵錯工具</string>
+    <string name="bug_report">錯誤報告</string>
+    <string name="app_preferences">應用程式偏好設定</string>
+    <string name="import_from_protobuf_file">從 protobuf 檔案匯入</string>
+    <string name="export_as_protobuf_file">匯出為 protobuf 檔案</string>
+    <string name="invalid_protobuf_file_warning">該檔案似乎不是有效的 protobuf 檔，匯入後可能會損毀本應用程式並遺失現有偏好設定。你確定要繼續嗎？</string>
 </resources>
