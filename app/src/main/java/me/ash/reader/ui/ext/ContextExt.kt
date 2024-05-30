@@ -78,7 +78,7 @@ fun Context.openURL(
     specificBrowser: OpenLinkSpecificBrowserPreference = OpenLinkSpecificBrowserPreference.default
 ) {
     if (!url.isNullOrBlank()) {
-        val uri = url.toUri()
+        val uri = url.trim { it.isWhitespace() || it == '\n' }.toUri()
         val intent = Intent(Intent.ACTION_VIEW, uri)
         val customTabsIntent = CustomTabsIntent.Builder().setShowTitle(true).build()
         try {
