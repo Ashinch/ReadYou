@@ -62,7 +62,7 @@ fun TroubleshootingPage(
     var byteArray by remember { mutableStateOf(ByteArray(0)) }
 
     val exportLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.CreateDocument(MimeType.ANY)
+        ActivityResultContracts.CreateDocument(MimeType.JSON)
     ) { result ->
         viewModel.exportPreferencesAsJSON(context) { byteArray ->
             result?.let { uri ->
@@ -118,18 +118,19 @@ fun TroubleshootingPage(
                     Spacer(modifier = Modifier.height(16.dp))
                 }
                 item {
+                    Spacer(modifier = Modifier.height(24.dp))
                     Subtitle(
                         modifier = Modifier.padding(horizontal = 24.dp),
                         text = stringResource(R.string.app_preferences),
                     )
                     SettingItem(
-                        title = stringResource(R.string.import_from_protobuf_file),
+                        title = stringResource(R.string.import_from_json),
                         onClick = {
                             importLauncher.launch(arrayOf(MimeType.ANY))
                         },
                     ) {}
                     SettingItem(
-                        title = stringResource(R.string.export_as_protobuf_file),
+                        title = stringResource(R.string.export_as_json),
                         onClick = {
                             preferenceFileLauncher(context, exportLauncher)
                         },
@@ -150,14 +151,14 @@ fun TroubleshootingPage(
         icon = {
             Icon(
                 imageVector = Icons.Outlined.ReportGmailerrorred,
-                contentDescription = stringResource(R.string.import_from_protobuf_file),
+                contentDescription = stringResource(R.string.import_from_json),
             )
         },
         title = {
-            Text(text = stringResource(R.string.import_from_protobuf_file))
+            Text(text = stringResource(R.string.import_from_json))
         },
         text = {
-            Text(text = stringResource(R.string.invalid_protobuf_file_warning))
+            Text(text = stringResource(R.string.invalid_json_file_warning))
         },
         confirmButton = {
             TextButton(
@@ -183,5 +184,5 @@ private fun preferenceFileLauncher(
 ) {
     launcher.launch("Read-You-" +
             "${context.getCurrentVersion()}-settings-" +
-            "${Date().toString(DateFormat.YYYY_MM_DD_DASH_HH_MM_SS_DASH)}.preferences_pb")
+            "${Date().toString(DateFormat.YYYY_MM_DD_DASH_HH_MM_SS_DASH)}.json")
 }

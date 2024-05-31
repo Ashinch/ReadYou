@@ -1,16 +1,21 @@
 package me.ash.reader.infrastructure.preference
 
 import android.content.Context
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.text.font.FontFamily
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
+import me.ash.reader.ui.ext.DataStoreKey.Companion.readingFonts
 import me.ash.reader.ui.ext.ExternalFonts
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 import me.ash.reader.ui.ext.restart
+
+val LocalReadingFonts =
+    compositionLocalOf<ReadingFontsPreference> { ReadingFontsPreference.default }
 
 sealed class ReadingFontsPreference(val value: Int) : Preference() {
     object System : ReadingFontsPreference(0)
@@ -22,7 +27,7 @@ sealed class ReadingFontsPreference(val value: Int) : Preference() {
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
-            context.dataStore.put(DataStoreKeys.ReadingFonts, value)
+            context.dataStore.put(DataStoreKey.readingFonts, value)
             if (this@ReadingFontsPreference == External) {
                 context.restart()
             }
@@ -55,7 +60,7 @@ sealed class ReadingFontsPreference(val value: Int) : Preference() {
         val values = listOf(System, Serif, SansSerif, Monospace, Cursive, External)
 
         fun fromPreferences(preferences: Preferences): ReadingFontsPreference =
-            when (preferences[DataStoreKeys.ReadingFonts.key]) {
+            when (preferences[DataStoreKey.keys[readingFonts]?.key as Preferences.Key<Int>]) {
                 0 -> System
                 1 -> Serif
                 2 -> SansSerif

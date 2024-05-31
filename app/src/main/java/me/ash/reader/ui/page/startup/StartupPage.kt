@@ -11,8 +11,17 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Balance
 import androidx.compose.material.icons.rounded.CheckCircleOutline
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -21,8 +30,12 @@ import androidx.navigation.NavHostController
 import com.ireward.htmlcompose.HtmlText
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.ui.component.base.*
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.component.base.DisplayText
+import me.ash.reader.ui.component.base.DynamicSVGImage
+import me.ash.reader.ui.component.base.RYDialog
+import me.ash.reader.ui.component.base.RYScaffold
+import me.ash.reader.ui.component.base.Tips
+import me.ash.reader.ui.ext.DataStoreKey
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 import me.ash.reader.ui.page.common.RouteName
@@ -85,7 +98,7 @@ fun StartupPage(
                         launchSingleTop = true
                     }
                     scope.launch {
-                        context.dataStore.put(DataStoreKeys.IsFirstLaunch, false)
+                        context.dataStore.put(DataStoreKey.isFirstLaunch, false)
                     }
                 },
                 icon = {
@@ -129,7 +142,7 @@ fun StartupPage(
                         launchSingleTop = true
                     }
                     scope.launch {
-                        context.dataStore.put(DataStoreKeys.IsFirstLaunch, false)
+                        context.dataStore.put(DataStoreKey.isFirstLaunch, false)
                     }
                 }
             ) {

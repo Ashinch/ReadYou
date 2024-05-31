@@ -1,12 +1,17 @@
 package me.ash.reader.infrastructure.preference
 
 import android.content.Context
+import androidx.compose.runtime.compositionLocalOf
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
+import me.ash.reader.ui.ext.DataStoreKey.Companion.flowFilterBarPadding
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
+
+val LocalFlowFilterBarPadding =
+    compositionLocalOf { FlowFilterBarPaddingPreference.default }
 
 object FlowFilterBarPaddingPreference {
 
@@ -14,10 +19,10 @@ object FlowFilterBarPaddingPreference {
 
     fun put(context: Context, scope: CoroutineScope, value: Int) {
         scope.launch {
-            context.dataStore.put(DataStoreKeys.FlowFilterBarPadding, value)
+            context.dataStore.put(DataStoreKey.flowFilterBarPadding, value)
         }
     }
 
     fun fromPreferences(preferences: Preferences) =
-        preferences[DataStoreKeys.FlowFilterBarPadding.key] ?: default
+        preferences[DataStoreKey.keys[flowFilterBarPadding]?.key as Preferences.Key<Int>] ?: default
 }

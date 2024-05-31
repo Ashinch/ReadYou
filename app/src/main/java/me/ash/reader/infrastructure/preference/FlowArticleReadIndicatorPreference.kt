@@ -2,14 +2,19 @@ package me.ash.reader.infrastructure.preference
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.res.stringResource
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
+import me.ash.reader.ui.ext.DataStoreKey.Companion.flowArticleListReadIndicator
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
+
+val LocalFlowArticleListReadIndicator =
+    compositionLocalOf<FlowArticleReadIndicatorPreference> { FlowArticleReadIndicatorPreference.default }
 
 sealed class FlowArticleReadIndicatorPreference(val value: Boolean) : Preference() {
     object ExcludingStarred : FlowArticleReadIndicatorPreference(true)
@@ -18,7 +23,7 @@ sealed class FlowArticleReadIndicatorPreference(val value: Boolean) : Preference
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
             context.dataStore.put(
-                DataStoreKeys.FlowArticleListReadIndicator,
+                DataStoreKey.flowArticleListReadIndicator,
                 value
             )
         }
@@ -38,7 +43,7 @@ sealed class FlowArticleReadIndicatorPreference(val value: Boolean) : Preference
         val values = listOf(ExcludingStarred, AllRead)
 
         fun fromPreferences(preferences: Preferences) =
-            when (preferences[DataStoreKeys.FlowArticleListReadIndicator.key]) {
+            when (preferences[DataStoreKey.keys[flowArticleListReadIndicator]?.key as Preferences.Key<Boolean>]) {
                 true -> ExcludingStarred
                 false -> AllRead
                 else -> default

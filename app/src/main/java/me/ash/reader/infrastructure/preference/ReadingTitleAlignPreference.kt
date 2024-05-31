@@ -2,14 +2,19 @@ package me.ash.reader.infrastructure.preference
 
 import android.content.Context
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.text.style.TextAlign
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
+import me.ash.reader.ui.ext.DataStoreKey.Companion.readingTitleAlign
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
+
+val LocalReadingTitleAlign =
+    compositionLocalOf<ReadingTitleAlignPreference> { ReadingTitleAlignPreference.default }
 
 sealed class ReadingTitleAlignPreference(val value: Int) : Preference() {
     object Left : ReadingTitleAlignPreference(0)
@@ -20,7 +25,7 @@ sealed class ReadingTitleAlignPreference(val value: Int) : Preference() {
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
             context.dataStore.put(
-                DataStoreKeys.ReadingTitleAlign,
+                DataStoreKey.readingTitleAlign,
                 value
             )
         }
@@ -50,7 +55,7 @@ sealed class ReadingTitleAlignPreference(val value: Int) : Preference() {
         val values = listOf(Left, Right, Center, Justify)
 
         fun fromPreferences(preferences: Preferences): ReadingTitleAlignPreference =
-            when (preferences[DataStoreKeys.ReadingTitleAlign.key]) {
+            when (preferences[DataStoreKey.keys[readingTitleAlign]?.key as Preferences.Key<Int>]) {
                 0 -> Left
                 1 -> Right
                 2 -> Center

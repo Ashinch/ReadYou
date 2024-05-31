@@ -4,13 +4,18 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
+import me.ash.reader.ui.ext.DataStoreKey.Companion.readingDarkTheme
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
+
+val LocalReadingDarkTheme =
+    compositionLocalOf<ReadingDarkThemePreference> { ReadingDarkThemePreference.default }
 
 sealed class ReadingDarkThemePreference(val value: Int) : Preference() {
     object UseAppTheme : ReadingDarkThemePreference(0)
@@ -20,7 +25,7 @@ sealed class ReadingDarkThemePreference(val value: Int) : Preference() {
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
             context.dataStore.put(
-                DataStoreKeys.ReadingDarkTheme,
+                DataStoreKey.readingDarkTheme,
                 value
             )
         }
@@ -47,7 +52,7 @@ sealed class ReadingDarkThemePreference(val value: Int) : Preference() {
         val values = listOf(UseAppTheme, ON, OFF)
 
         fun fromPreferences(preferences: Preferences) =
-            when (preferences[DataStoreKeys.ReadingDarkTheme.key]) {
+            when (preferences[DataStoreKey.keys[readingDarkTheme]?.key as Preferences.Key<Int>]) {
                 0 -> UseAppTheme
                 1 -> ON
                 2 -> OFF

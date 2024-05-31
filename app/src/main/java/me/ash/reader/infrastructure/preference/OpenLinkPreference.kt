@@ -1,13 +1,18 @@
 package me.ash.reader.infrastructure.preference
 
 import android.content.Context
+import androidx.compose.runtime.compositionLocalOf
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.ui.ext.DataStoreKeys
+import me.ash.reader.ui.ext.DataStoreKey
+import me.ash.reader.ui.ext.DataStoreKey.Companion.openLink
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
+
+val LocalOpenLink =
+    compositionLocalOf<OpenLinkPreference> { OpenLinkPreference.default }
 
 sealed class OpenLinkPreference(val value: Int) : Preference() {
     object AutoPreferCustomTabs : OpenLinkPreference(0)
@@ -20,7 +25,7 @@ sealed class OpenLinkPreference(val value: Int) : Preference() {
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
             context.dataStore.put(
-                DataStoreKeys.OpenLink,
+                DataStoreKey.openLink,
                 value
             )
         }
@@ -42,7 +47,7 @@ sealed class OpenLinkPreference(val value: Int) : Preference() {
         val values = listOf(AutoPreferCustomTabs, AutoPreferDefaultBrowser, CustomTabs, DefaultBrowser, SpecificBrowser, AlwaysAsk)
 
         fun fromPreferences(preferences: Preferences) =
-            when (preferences[DataStoreKeys.OpenLink.key]) {
+            when (preferences[DataStoreKey.keys[openLink]?.key as Preferences.Key<Int>]) {
                 0 -> AutoPreferCustomTabs
                 1 -> AutoPreferDefaultBrowser
                 2 -> CustomTabs

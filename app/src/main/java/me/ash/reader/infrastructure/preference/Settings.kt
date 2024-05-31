@@ -3,7 +3,6 @@ package me.ash.reader.infrastructure.preference
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.flow.map
@@ -58,7 +57,7 @@ data class Settings(
     val readingAutoHideToolbar: ReadingAutoHideToolbarPreference = ReadingAutoHideToolbarPreference.default,
     val readingTextFontSize: Int = ReadingTextFontSizePreference.default,
     val readingTextLineHeight: Float = ReadingTextLineHeightPreference.default,
-    val readingLetterSpacing: Double = ReadingLetterSpacingPreference.default,
+    val readingLetterSpacing: Float = ReadingTextLetterSpacingPreference.default,
     val readingTextHorizontalPadding: Int = ReadingTextHorizontalPaddingPreference.default,
     val readingTextAlign: ReadingTextAlignPreference = ReadingTextAlignPreference.default,
     val readingTextBold: ReadingTextBoldPreference = ReadingTextBoldPreference.default,
@@ -87,123 +86,6 @@ data class Settings(
     val languages: LanguagesPreference = LanguagesPreference.default,
 )
 
-// Version
-val LocalNewVersionNumber = compositionLocalOf { NewVersionNumberPreference.default }
-val LocalSkipVersionNumber = compositionLocalOf { SkipVersionNumberPreference.default }
-val LocalNewVersionPublishDate = compositionLocalOf { NewVersionPublishDatePreference.default }
-val LocalNewVersionLog = compositionLocalOf { NewVersionLogPreference.default }
-val LocalNewVersionSize = compositionLocalOf { NewVersionSizePreference.default }
-val LocalNewVersionDownloadUrl = compositionLocalOf { NewVersionDownloadUrlPreference.default }
-
-// Theme
-val LocalThemeIndex =
-    compositionLocalOf { ThemeIndexPreference.default }
-val LocalCustomPrimaryColor =
-    compositionLocalOf { CustomPrimaryColorPreference.default }
-val LocalDarkTheme =
-    compositionLocalOf<DarkThemePreference> { DarkThemePreference.default }
-val LocalAmoledDarkTheme =
-    compositionLocalOf<AmoledDarkThemePreference> { AmoledDarkThemePreference.default }
-val LocalBasicFonts = compositionLocalOf<BasicFontsPreference> { BasicFontsPreference.default }
-
-// Feeds page
-val LocalFeedsFilterBarStyle =
-    compositionLocalOf<FeedsFilterBarStylePreference> { FeedsFilterBarStylePreference.default }
-val LocalFeedsFilterBarFilled =
-    compositionLocalOf<FeedsFilterBarFilledPreference> { FeedsFilterBarFilledPreference.default }
-val LocalFeedsFilterBarPadding =
-    compositionLocalOf { FeedsFilterBarPaddingPreference.default }
-val LocalFeedsFilterBarTonalElevation =
-    compositionLocalOf<FeedsFilterBarTonalElevationPreference> { FeedsFilterBarTonalElevationPreference.default }
-val LocalFeedsTopBarTonalElevation =
-    compositionLocalOf<FeedsTopBarTonalElevationPreference> { FeedsTopBarTonalElevationPreference.default }
-val LocalFeedsGroupListExpand =
-    compositionLocalOf<FeedsGroupListExpandPreference> { FeedsGroupListExpandPreference.default }
-val LocalFeedsGroupListTonalElevation =
-    compositionLocalOf<FeedsGroupListTonalElevationPreference> { FeedsGroupListTonalElevationPreference.default }
-
-// Flow page
-val LocalFlowFilterBarStyle =
-    compositionLocalOf<FlowFilterBarStylePreference> { FlowFilterBarStylePreference.default }
-val LocalFlowFilterBarFilled =
-    compositionLocalOf<FlowFilterBarFilledPreference> { FlowFilterBarFilledPreference.default }
-val LocalFlowFilterBarPadding =
-    compositionLocalOf { FlowFilterBarPaddingPreference.default }
-val LocalFlowFilterBarTonalElevation =
-    compositionLocalOf<FlowFilterBarTonalElevationPreference> { FlowFilterBarTonalElevationPreference.default }
-val LocalFlowTopBarTonalElevation =
-    compositionLocalOf<FlowTopBarTonalElevationPreference> { FlowTopBarTonalElevationPreference.default }
-val LocalFlowArticleListFeedIcon =
-    compositionLocalOf<FlowArticleListFeedIconPreference> { FlowArticleListFeedIconPreference.default }
-val LocalFlowArticleListFeedName =
-    compositionLocalOf<FlowArticleListFeedNamePreference> { FlowArticleListFeedNamePreference.default }
-val LocalFlowArticleListImage =
-    compositionLocalOf<FlowArticleListImagePreference> { FlowArticleListImagePreference.default }
-val LocalFlowArticleListDesc =
-    compositionLocalOf<FlowArticleListDescPreference> { FlowArticleListDescPreference.default }
-val LocalFlowArticleListTime =
-    compositionLocalOf<FlowArticleListTimePreference> { FlowArticleListTimePreference.default }
-val LocalFlowArticleListDateStickyHeader =
-    compositionLocalOf<FlowArticleListDateStickyHeaderPreference> { FlowArticleListDateStickyHeaderPreference.default }
-val LocalFlowArticleListTonalElevation =
-    compositionLocalOf<FlowArticleListTonalElevationPreference> { FlowArticleListTonalElevationPreference.default }
-val LocalFlowArticleListReadIndicator =
-    compositionLocalOf<FlowArticleReadIndicatorPreference> { FlowArticleReadIndicatorPreference.default }
-
-// Reading page
-val LocalReadingTheme =
-    compositionLocalOf<ReadingThemePreference> { ReadingThemePreference.default }
-val LocalReadingDarkTheme =
-    compositionLocalOf<ReadingDarkThemePreference> { ReadingDarkThemePreference.default }
-val LocalReadingPageTonalElevation =
-    compositionLocalOf<ReadingPageTonalElevationPreference> { ReadingPageTonalElevationPreference.default }
-val LocalReadingAutoHideToolbar =
-    compositionLocalOf<ReadingAutoHideToolbarPreference> { ReadingAutoHideToolbarPreference.default }
-val LocalReadingTextFontSize = compositionLocalOf { ReadingTextFontSizePreference.default }
-val LocalReadingTextLineHeight = compositionLocalOf { ReadingTextLineHeightPreference.default }
-val LocalReadingLetterSpacing = compositionLocalOf { ReadingLetterSpacingPreference.default }
-val LocalReadingTextHorizontalPadding =
-    compositionLocalOf { ReadingTextHorizontalPaddingPreference.default }
-val LocalReadingTextAlign =
-    compositionLocalOf<ReadingTextAlignPreference> { ReadingTextAlignPreference.default }
-val LocalReadingTextBold =
-    compositionLocalOf<ReadingTextBoldPreference> { ReadingTextBoldPreference.default }
-val LocalReadingTitleAlign =
-    compositionLocalOf<ReadingTitleAlignPreference> { ReadingTitleAlignPreference.default }
-val LocalReadingSubheadAlign =
-    compositionLocalOf<ReadingSubheadAlignPreference> { ReadingSubheadAlignPreference.default }
-val LocalReadingFonts =
-    compositionLocalOf<ReadingFontsPreference> { ReadingFontsPreference.default }
-val LocalReadingTitleBold =
-    compositionLocalOf<ReadingTitleBoldPreference> { ReadingTitleBoldPreference.default }
-val LocalReadingSubheadBold =
-    compositionLocalOf<ReadingSubheadBoldPreference> { ReadingSubheadBoldPreference.default }
-val LocalReadingTitleUpperCase =
-    compositionLocalOf<ReadingTitleUpperCasePreference> { ReadingTitleUpperCasePreference.default }
-val LocalReadingSubheadUpperCase =
-    compositionLocalOf<ReadingSubheadUpperCasePreference> { ReadingSubheadUpperCasePreference.default }
-val LocalReadingImageHorizontalPadding =
-    compositionLocalOf { ReadingImageHorizontalPaddingPreference.default }
-val LocalReadingImageRoundedCorners =
-    compositionLocalOf { ReadingImageRoundedCornersPreference.default }
-val LocalReadingImageMaximize =
-    compositionLocalOf<ReadingImageMaximizePreference> { ReadingImageMaximizePreference.default }
-
-// Interaction
-val LocalInitialPage = compositionLocalOf<InitialPagePreference> { InitialPagePreference.default }
-val LocalInitialFilter =
-    compositionLocalOf<InitialFilterPreference> { InitialFilterPreference.default }
-val LocalArticleListSwipeEndAction = compositionLocalOf { SwipeEndActionPreference.default }
-val LocalArticleListSwipeStartAction = compositionLocalOf { SwipeStartActionPreference.default }
-val LocalPullToSwitchArticle = compositionLocalOf { PullToSwitchArticlePreference.default }
-val LocalOpenLink = compositionLocalOf<OpenLinkPreference> { OpenLinkPreference.default }
-val LocalOpenLinkSpecificBrowser = compositionLocalOf { OpenLinkSpecificBrowserPreference.default }
-val LocalSharedContent = compositionLocalOf<SharedContentPreference> { SharedContentPreference.default }
-
-// Languages
-val LocalLanguages =
-    compositionLocalOf<LanguagesPreference> { LanguagesPreference.default }
-
 @Composable
 fun SettingsProvider(
     content: @Composable () -> Unit,
@@ -218,7 +100,7 @@ fun SettingsProvider(
 
     CompositionLocalProvider(
         // Version
-        LocalNewVersionNumber provides settings.newVersionNumber,
+        NewVersionNumberPreference.provide(settings),
         LocalSkipVersionNumber provides settings.skipVersionNumber,
         LocalNewVersionPublishDate provides settings.newVersionPublishDate,
         LocalNewVersionLog provides settings.newVersionLog,
@@ -264,7 +146,7 @@ fun SettingsProvider(
         LocalReadingAutoHideToolbar provides settings.readingAutoHideToolbar,
         LocalReadingTextFontSize provides settings.readingTextFontSize,
         LocalReadingTextLineHeight provides settings.readingTextLineHeight,
-        LocalReadingLetterSpacing provides settings.readingLetterSpacing,
+        LocalReadingTextLetterSpacing provides settings.readingLetterSpacing,
         LocalReadingTextHorizontalPadding provides settings.readingTextHorizontalPadding,
         LocalReadingTextAlign provides settings.readingTextAlign,
         LocalReadingTextBold provides settings.readingTextBold,
