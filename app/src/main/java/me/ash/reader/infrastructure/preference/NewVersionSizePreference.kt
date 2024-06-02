@@ -7,7 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.ash.reader.ui.ext.DataStoreKey
-import me.ash.reader.ui.ext.DataStoreKey.Companion.newVersionSize
+import me.ash.reader.ui.ext.DataStoreKey.Companion.newVersionSizeString
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.put
 
@@ -24,10 +24,10 @@ object NewVersionSizePreference {
 
     fun put(context: Context, scope: CoroutineScope, value: String) {
         scope.launch(Dispatchers.IO) {
-            context.dataStore.put(newVersionSize, value)
+            context.dataStore.put(newVersionSizeString, value)
         }
     }
 
     fun fromPreferences(preferences: Preferences) =
-        preferences[DataStoreKey.keys[newVersionSize]?.key as Preferences.Key<String>] ?: default
+        preferences[DataStoreKey.keys[newVersionSizeString]?.key as Preferences.Key<String>] ?: default
 }

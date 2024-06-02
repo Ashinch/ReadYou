@@ -97,7 +97,7 @@ data class DataStoreKey<T>(
         const val isFirstLaunch = "isFirstLaunch"
         const val newVersionPublishDate = "newVersionPublishDate"
         const val newVersionLog = "newVersionLog"
-        const val newVersionSize = "newVersionSize"
+        const val newVersionSizeString = "newVersionSizeString"
         const val newVersionDownloadUrl = "newVersionDownloadUrl"
         const val newVersionNumber = "newVersionNumber"
         const val skipVersionNumber = "skipVersionNumber"
@@ -173,7 +173,7 @@ data class DataStoreKey<T>(
             isFirstLaunch to DataStoreKey(booleanPreferencesKey(isFirstLaunch), Boolean::class.java),
             newVersionPublishDate to DataStoreKey(stringPreferencesKey(newVersionPublishDate), String::class.java),
             newVersionLog to DataStoreKey(stringPreferencesKey(newVersionLog), String::class.java),
-            newVersionSize to DataStoreKey(stringPreferencesKey(newVersionSize), String::class.java),
+            newVersionSizeString to DataStoreKey(stringPreferencesKey(newVersionSizeString), String::class.java),
             newVersionDownloadUrl to DataStoreKey(stringPreferencesKey(newVersionDownloadUrl), String::class.java),
             newVersionNumber to DataStoreKey(stringPreferencesKey(newVersionNumber), String::class.java),
             skipVersionNumber to DataStoreKey(stringPreferencesKey(skipVersionNumber), String::class.java),
