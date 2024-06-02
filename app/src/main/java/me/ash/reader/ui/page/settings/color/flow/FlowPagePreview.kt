@@ -16,7 +16,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -27,6 +26,7 @@ import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.infrastructure.preference.FlowArticleListTonalElevationPreference
 import me.ash.reader.infrastructure.preference.FlowTopBarTonalElevationPreference
+import me.ash.reader.infrastructure.preference.LocalDarkTheme
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.ext.surfaceColorAtElevation
@@ -77,13 +77,31 @@ fun FlowPagePreview(
                     tint = MaterialTheme.colorScheme.onSurface,
                 ) {}
             }, colors = TopAppBarDefaults.smallTopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(topBarTonalElevation.value.dp),
+                containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+                    topBarTonalElevation.value.dp
+                ),
             )
         )
         Spacer(modifier = Modifier.height(12.dp))
+
+        val preview = generateArticleWithFeedPreview()
+        val feed = preview.feed
+        val article = preview.article
+
         ArticleItem(
-            articleWithFeed = generateArticleWithFeedPreview(),
+            modifier = Modifier,
+            feedName = feed.name,
+            feedIconUrl = feed.icon,
+            title = article.title,
+            shortDescription = article.shortDescription,
+            dateString = article.dateString,
+            imgData = R.drawable.animation,
+            isStarred = article.isStarred,
+            isUnread = article.isUnread,
+            onClick = {},
+            onLongClick = null
         )
+
         Spacer(modifier = Modifier.height(12.dp))
         FilterBar(
             filter = filter,
@@ -111,7 +129,7 @@ fun generateArticleWithFeedPreview(): ArticleWithFeed =
             accountId = 0,
             date = Date(1654053729L),
             isStarred = true,
-            img = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=800&q=60"
+            img = null
         ),
         feed = Feed(
             id = "",
