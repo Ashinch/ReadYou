@@ -308,4 +308,7 @@
     <string name="import_from_protobuf_file">Імпортувати з файла «protobuf»</string>
     <string name="export_as_protobuf_file">Експортувати як файл «protobuf»</string>
     <string name="invalid_protobuf_file_warning">Цей файл може бути недійсним файлом protobuf. Імпорт може потенційно пошкодити застосунок та призвести до втрати поточних налаштувань. Ви впевнені, що хочете продовжити?</string>
+    <string name="import_from_json">Імпортувати з JSON</string>
+    <string name="export_as_json">Експортувати як JSON</string>
+    <string name="invalid_json_file_warning">Цей файл може бути недійсним файлом JSON. Імпорт може потенційно пошкодити застосунок і призвести до втрати поточних налаштувань. Ви впевнені, що хочете продовжити?</string>
 </resources>

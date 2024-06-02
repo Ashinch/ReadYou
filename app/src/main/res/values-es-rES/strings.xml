@@ -308,4 +308,7 @@
     <string name="import_from_protobuf_file">Importar desde archivo protobuf</string>
     <string name="export_as_protobuf_file">Exportar como archivo protobuf</string>
     <string name="invalid_protobuf_file_warning">Este archivo puede no ser un archivo protobuf válido. Importarlo podría corromper la aplicación y provocar la pérdida de las preferencias actuales. ¿Está seguro de que desea continuar?</string>
+    <string name="export_as_json">Exportar como JSON</string>
+    <string name="import_from_json">Importar desde JSON</string>
+    <string name="invalid_json_file_warning">Es posible que este archivo no sea un archivo JSON válido. Importarlo podría dañar la aplicación y provocar la pérdida de las preferencias actuales. ¿Estas seguro que deseas continuar?</string>
 </resources>

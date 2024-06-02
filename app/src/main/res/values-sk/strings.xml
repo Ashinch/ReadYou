@@ -305,4 +305,7 @@
     <string name="import_from_protobuf_file">Importovať zo súboru protobuf</string>
     <string name="export_as_protobuf_file">Exportovať do súbor protobuf</string>
     <string name="invalid_protobuf_file_warning">Tento súbor nemusí byť platným súborom protobuf. Jeho importovanie by mohlo spôsobiť poškodenie aplikácie a stratu aktuálnych predvolieb. Ste si istí, že chcete pokračovať?</string>
+    <string name="export_as_json">Exportovať ako JSON</string>
+    <string name="import_from_json">Importovať z JSON</string>
+    <string name="invalid_json_file_warning">Tento súbor nemusí byť platným súborom JSON. Jeho importovanie môže spôsobiť poškodenie aplikácie a stratu aktuálnych predvolieb. Ste si istí, že chcete pokračovať?</string>
 </resources>

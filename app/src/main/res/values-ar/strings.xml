@@ -314,4 +314,7 @@
     <string name="import_from_protobuf_file">استيراد من ملف protobuf</string>
     <string name="export_as_protobuf_file">تصدير كملف protobuf</string>
     <string name="invalid_protobuf_file_warning">قد لا يكون هذا الملف ملف protobuf صالحًا. قد يؤدي استيراده إلى إتلاف بيانات التطبيق وفقدان التفضيلات الحالية. هل انت متأكد انك تريد المتابعة؟</string>
+    <string name="import_from_json">استيراد من JSON</string>
+    <string name="export_as_json">تصدير كـ JSON</string>
+    <string name="invalid_json_file_warning">قد لا يكون هذا الملف ملف JSON صالحًا. قد يؤدي استيراده إلى إتلاف التطبيق وفقدان التفضيلات الحالية. هل انت متأكد انك تريد المتابعة؟</string>
 </resources>

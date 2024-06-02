@@ -302,4 +302,7 @@
     <string name="import_from_protobuf_file">Protobuf dosyasından içe aktar</string>
     <string name="export_as_protobuf_file">Protobuf dosyası olarak dışa aktar</string>
     <string name="invalid_protobuf_file_warning">Bu dosya geçerli bir protobuf dosyası olmayabilir. Bu dosyayı içe aktarmak uygulamayı bozabilir ve geçerli tercihlerin kaybolmasına neden olabilir. Devam etmek istediğinizden emin misiniz?</string>
+    <string name="import_from_json">JSON\'dan içe aktar</string>
+    <string name="export_as_json">JSON olarak dışa aktar</string>
+    <string name="invalid_json_file_warning">Bu dosya geçerli bir JSON dosyası olmayabilir. Dosyayı içe aktarmak uygulamayı bozabilir ve geçerli tercihlerin kaybolmasına neden olabilir. Devam etmek istediğinizden emin misiniz?</string>
 </resources>

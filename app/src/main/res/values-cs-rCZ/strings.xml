@@ -305,4 +305,7 @@
     <string name="bug_report">Nahlásit chybu</string>
     <string name="export_as_protobuf_file">Exportovat do souboru protobuf</string>
     <string name="invalid_protobuf_file_warning">Tento soubor nejspíše není platným souborem protobuf. Jeho importováním můžete potenciálně poškodit aplikaci a ztratit aktuální předvolby. Opravdu chcete pokračovat?</string>
+    <string name="import_from_json">Importovat ze souboru JSON</string>
+    <string name="export_as_json">Exportovat jako JSON</string>
+    <string name="invalid_json_file_warning">Tento soubor nejspíš není platný soubor JSON. Jeho importováním můžete poškodit aplikaci, což může mít za následek ztrátu aktuálních nastavení. Opravdu chcete pokračovat?</string>
 </resources>
