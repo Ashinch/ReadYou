@@ -44,7 +44,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.rememberNavController
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.KeepArchivedPreference
 import me.ash.reader.infrastructure.preference.SyncBlockListPreference
@@ -76,7 +76,7 @@ import java.util.Date
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AccountDetailsPage(
-    navController: NavHostController = rememberAnimatedNavController(),
+    navController: NavHostController = rememberNavController(),
     viewModel: AccountViewModel = hiltViewModel(),
 ) {
     val uiState = viewModel.accountUiState.collectAsStateValue()

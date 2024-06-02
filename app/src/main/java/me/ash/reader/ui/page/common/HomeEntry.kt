@@ -3,6 +3,7 @@ package me.ash.reader.ui.page.common
 import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -14,8 +15,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import me.ash.reader.domain.model.general.Filter
@@ -23,7 +24,7 @@ import me.ash.reader.infrastructure.preference.LocalDarkTheme
 import me.ash.reader.infrastructure.preference.LocalReadingDarkTheme
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.findActivity
-import me.ash.reader.ui.ext.forwardAndBackwardComposable
+import me.ash.reader.ui.ext.animatedComposable
 import me.ash.reader.ui.ext.initialFilter
 import me.ash.reader.ui.ext.initialPage
 import me.ash.reader.ui.ext.isFirstLaunch
@@ -54,7 +55,7 @@ import me.ash.reader.ui.page.settings.troubleshooting.TroubleshootingPage
 import me.ash.reader.ui.page.startup.StartupPage
 import me.ash.reader.ui.theme.AppTheme
 
-@OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
+@OptIn(androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
 fun HomeEntry(
     homeViewModel: HomeViewModel = hiltViewModel(),
@@ -64,7 +65,7 @@ fun HomeEntry(
     var isReadingPage by rememberSaveable { mutableStateOf(false) }
     val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
     val subscribeUiState = subscribeViewModel.subscribeUiState.collectAsStateValue()
-    val navController = rememberAnimatedNavController()
+    val navController = rememberNavController()
 
     val intent by rememberSaveable { mutableStateOf(context.findActivity()?.intent) }
     var openArticleId by rememberSaveable {
@@ -142,104 +143,106 @@ fun HomeEntry(
         else LocalDarkTheme.current.isDarkTheme()
     ) {
 
-        AnimatedNavHost(
-            modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+        NavHost(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
             navController = navController,
             startDestination = if (context.isFirstLaunch) RouteName.STARTUP else RouteName.FEEDS,
         ) {
             // Startup
-            forwardAndBackwardComposable(route = RouteName.STARTUP) {
+            animatedComposable(route = RouteName.STARTUP) {
                 StartupPage(navController)
             }
 
             // Home
-            forwardAndBackwardComposable(route = RouteName.FEEDS) {
+            animatedComposable(route = RouteName.FEEDS) {
                 FeedsPage(
                     navController = navController,
                     homeViewModel = homeViewModel,
                     subscribeViewModel = subscribeViewModel
                 )
             }
-            forwardAndBackwardComposable(route = RouteName.FLOW) {
+            animatedComposable(route = RouteName.FLOW) {
                 FlowPage(
                     navController = navController,
                     homeViewModel = homeViewModel,
                 )
             }
-            forwardAndBackwardComposable(route = "${RouteName.READING}/{articleId}") {
+            animatedComposable(route = "${RouteName.READING}/{articleId}") {
                 ReadingPage(navController = navController, homeViewModel = homeViewModel)
             }
 
             // Settings
-            forwardAndBackwardComposable(route = RouteName.SETTINGS) {
+            animatedComposable(route = RouteName.SETTINGS) {
                 SettingsPage(navController)
             }
 
             // Accounts
-            forwardAndBackwardComposable(route = RouteName.ACCOUNTS) {
+            animatedComposable(route = RouteName.ACCOUNTS) {
                 AccountsPage(navController)
             }
 
-            forwardAndBackwardComposable(route = "${RouteName.ACCOUNT_DETAILS}/{accountId}") {
+            animatedComposable(route = "${RouteName.ACCOUNT_DETAILS}/{accountId}") {
                 AccountDetailsPage(navController)
             }
 
-            forwardAndBackwardComposable(route = RouteName.ADD_ACCOUNTS) {
+            animatedComposable(route = RouteName.ADD_ACCOUNTS) {
                 AddAccountsPage(navController)
             }
 
             // Color & Style
-            forwardAndBackwardComposable(route = RouteName.COLOR_AND_STYLE) {
+            animatedComposable(route = RouteName.COLOR_AND_STYLE) {
                 ColorAndStylePage(navController)
             }
-            forwardAndBackwardComposable(route = RouteName.DARK_THEME) {
+            animatedComposable(route = RouteName.DARK_THEME) {
                 DarkThemePage(navController)
             }
-            forwardAndBackwardComposable(route = RouteName.FEEDS_PAGE_STYLE) {
+            animatedComposable(route = RouteName.FEEDS_PAGE_STYLE) {
                 FeedsPageStylePage(navController)
             }
-            forwardAndBackwardComposable(route = RouteName.FLOW_PAGE_STYLE) {
+            animatedComposable(route = RouteName.FLOW_PAGE_STYLE) {
                 FlowPageStylePage(navController)
             }
-            forwardAndBackwardComposable(route = RouteName.READING_PAGE_STYLE) {
+            animatedComposable(route = RouteName.READING_PAGE_STYLE) {
                 ReadingStylePage(navController)
             }
-            forwardAndBackwardComposable(route = RouteName.READING_DARK_THEME) {
+            animatedComposable(route = RouteName.READING_DARK_THEME) {
                 ReadingDarkThemePage(navController)
             }
-            forwardAndBackwardComposable(route = RouteName.READING_PAGE_TITLE) {
+            animatedComposable(route = RouteName.READING_PAGE_TITLE) {
                 ReadingTitlePage(navController)
             }
-            forwardAndBackwardComposable(route = RouteName.READING_PAGE_TEXT) {
+            animatedComposable(route = RouteName.READING_PAGE_TEXT) {
                 ReadingTextPage(navController)
             }
-            forwardAndBackwardComposable(route = RouteName.READING_PAGE_IMAGE) {
+            animatedComposable(route = RouteName.READING_PAGE_IMAGE) {
                 ReadingImagePage(navController)
             }
-            forwardAndBackwardComposable(route = RouteName.READING_PAGE_VIDEO) {
+            animatedComposable(route = RouteName.READING_PAGE_VIDEO) {
                 ReadingVideoPage(navController)
             }
 
             // Interaction
-            forwardAndBackwardComposable(route = RouteName.INTERACTION) {
+            animatedComposable(route = RouteName.INTERACTION) {
                 InteractionPage(navController)
             }
 
             // Languages
-            forwardAndBackwardComposable(route = RouteName.LANGUAGES) {
+            animatedComposable(route = RouteName.LANGUAGES) {
                 LanguagesPage(navController = navController)
             }
 
             // Troubleshooting
-            forwardAndBackwardComposable(route = RouteName.TROUBLESHOOTING) {
+            animatedComposable(route = RouteName.TROUBLESHOOTING) {
                 TroubleshootingPage(navController = navController)
             }
 
             // Tips & Support
-            forwardAndBackwardComposable(route = RouteName.TIPS_AND_SUPPORT) {
+            animatedComposable(route = RouteName.TIPS_AND_SUPPORT) {
                 TipsAndSupportPage(navController)
             }
-            forwardAndBackwardComposable(route = RouteName.LICENSE_LIST) {
+            animatedComposable(route = RouteName.LICENSE_LIST) {
                 LicenseListPage(navController)
             }
         }
