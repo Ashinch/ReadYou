@@ -22,8 +22,8 @@ android {
         applicationId "me.ash.reader"
         minSdk 26
         targetSdk 33
-        versionCode 23
-        versionName "0.9.12"
+        versionCode 24
+        versionName "0.10.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -42,15 +42,15 @@ android {
 
     flavorDimensions "channel"
     productFlavors {
+        github {
+            dimension "channel"
+        }
         fdroid {
             dimension "channel"
         }
         googlePlay {
             dimension "channel"
             applicationIdSuffix ".google.play"
-        }
-        github {
-            dimension "channel"
         }
     }
     signingConfigs {
