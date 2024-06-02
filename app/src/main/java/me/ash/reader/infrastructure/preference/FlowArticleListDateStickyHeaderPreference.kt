@@ -23,7 +23,7 @@ sealed class FlowArticleListDateStickyHeaderPreference(val value: Boolean) : Pre
 
     companion object {
 
-        val default = OFF
+        val default = ON
         val values = listOf(ON, OFF)
 
         fun fromPreferences(preferences: Preferences) =
