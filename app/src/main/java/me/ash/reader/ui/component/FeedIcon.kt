@@ -76,9 +76,11 @@ private fun FontIcon(size: Dp, feedName: String) {
     ) {
         Text(
             text = feedName.ifEmpty { " " }.first().toString(),
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onPrimary,
-            fontSize = 10.sp,
+            style = MaterialTheme.typography.bodyMedium.merge(
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Bold,
+            )
         )
     }
 }
