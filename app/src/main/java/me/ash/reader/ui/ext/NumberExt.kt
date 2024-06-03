@@ -1,6 +1,6 @@
 package me.ash.reader.ui.ext
 
-fun Int.spacerDollar(str: Any): String = "$this$$str"
+infix fun Int.spacerDollar(str: Any): String = "$this$$str"
 
 fun String.dollarLast(): String = split("$").last()
 
