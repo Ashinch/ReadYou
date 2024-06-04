@@ -122,8 +122,8 @@
     <string name="images">Resimler</string>
     <string name="rounded_corners">Yuvarlatılmış köşeler</string>
     <string name="videos">Videolar</string>
-    <string name="align_left">Sola hizala</string>
-    <string name="align_right">Sağa hizala</string>
+    <string name="align_start">Sola hizala</string>
+    <string name="align_end">Sağa hizala</string>
     <string name="center_text">Metni ortala</string>
     <string name="external_fonts">Harici yazı tipleri</string>
     <string name="title">Başlık</string>

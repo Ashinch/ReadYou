@@ -184,8 +184,8 @@
     <string name="images">Bilder</string>
     <string name="rounded_corners">Abgerundete Ecken</string>
     <string name="videos">Videos</string>
-    <string name="align_left">Linksbündig</string>
-    <string name="align_right">Rechtsbündig</string>
+    <string name="align_start">Linksbündig</string>
+    <string name="align_end">Rechtsbündig</string>
     <string name="center_text">Zentriert</string>
     <string name="justify">Blocksatz</string>
     <string name="external_fonts">Externe Schriftart</string>

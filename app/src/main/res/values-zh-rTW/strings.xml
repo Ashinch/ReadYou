@@ -181,8 +181,8 @@
     <string name="images">圖片</string>
     <string name="rounded_corners">圓角</string>
     <string name="videos">影片</string>
-    <string name="align_left">靠左</string>
-    <string name="align_right">靠右</string>
+    <string name="align_start">靠左</string>
+    <string name="align_end">靠右</string>
     <string name="center_text">置中</string>
     <string name="justify">左右</string>
     <string name="external_fonts">外部字型</string>

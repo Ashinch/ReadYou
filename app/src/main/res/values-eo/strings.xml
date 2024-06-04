@@ -131,7 +131,7 @@
     <string name="images">Bildoj</string>
     <string name="rounded_corners">Rondigitaj anguloj</string>
     <string name="videos">Videoj</string>
-    <string name="align_left">Vicigi maldekstren</string>
+    <string name="align_start">Vicigi maldekstren</string>
     <string name="justify">Alkadrigi</string>
     <string name="external_fonts">Eksteraj tiparoj</string>
     <string name="upper_case">Majuskla</string>
@@ -236,7 +236,7 @@
     <string name="alignment">Vicigo</string>
     <string name="rearrange_buttons">Reordigi butonojn</string>
     <string name="bionic_reading">Bionika Legado</string>
-    <string name="align_right">Vicigi dekstren</string>
+    <string name="align_end">Vicigi dekstren</string>
     <string name="title">Titolo</string>
     <string name="bold">Grasa</string>
     <string name="dark_reading_theme">Malhela legada haŭto</string>

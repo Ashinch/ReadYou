@@ -195,8 +195,8 @@
     <string name="touch_to_play_video">Klepnutím prehráte video</string>
     <string name="font_size">Veľkosť písma</string>
     <string name="alignment">Zarovnanie</string>
-    <string name="align_left">Zarovnať vľavo</string>
-    <string name="align_right">Zarovnať vpravo</string>
+    <string name="align_start">Zarovnať vľavo</string>
+    <string name="align_end">Zarovnať vpravo</string>
     <string name="center_text">Zarovnať text na stred</string>
     <string name="external_fonts">Externé písma</string>
     <string name="bold">Tučné</string>

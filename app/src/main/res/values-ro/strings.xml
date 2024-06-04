@@ -112,7 +112,7 @@
     <string name="every_15_minutes">La fiecare 15 minute</string>
     <string name="interaction">Interacțiune</string>
     <string name="check_failure">Nu s-au putut căuta actualizări</string>
-    <string name="align_left">Aliniază la stânga</string>
+    <string name="align_start">Aliniază la stânga</string>
     <string name="keep_archived_articles">Păstrează articolele arhivate</string>
     <string name="selected">Selectat</string>
     <string name="icons">Pictograme</string>
@@ -161,7 +161,7 @@
     <string name="sponsor">Sponsor</string>
     <string name="for_3_days">3 zile</string>
     <string name="deny">Refuză</string>
-    <string name="align_right">Aliniază la dreapta</string>
+    <string name="align_end">Aliniază la dreapta</string>
     <string name="block_list">Lista de blocați</string>
     <string name="specific_browser_name">Browser: %1$s</string>
     <string name="specific_browser">Forțează browserul specific</string>

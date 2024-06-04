@@ -199,7 +199,7 @@
     <string name="auto_customtabs">ಸ್ವಯಂ (ಕಸ್ಟಮ್ ಟ್ಯಾಬ್‌ಗಳಿಗೆ ಆದ್ಯತೆ ನೀಡಿ)</string>
     <string name="open_link_specific_browser">ಬ್ರೌಸರ್</string>
     <string name="open_link_something_wrong">ಏನೋ ತಪ್ಪಾಗಿರುವ ಕಾರಣ \"ಲಿಂಕ್ ತೆರೆಯಿರಿ\" ಸೆಟ್ಟಿಂಗ್ ಅನ್ನು ನಿರ್ಲಕ್ಷಿಸಲಾಗಿದೆ.</string>
-    <string name="align_right">ಬಲಕ್ಕೆ ಜೋಡಿಸಿ</string>
+    <string name="align_end">ಬಲಕ್ಕೆ ಜೋಡಿಸಿ</string>
     <string name="one_day">1 ದಿನ</string>
     <string name="three_days">3 ದಿನ</string>
     <string name="seven_days">7 ದಿನ</string>
@@ -225,7 +225,7 @@
     <string name="images">ಚಿತ್ರಗಳು</string>
     <string name="rounded_corners">ದುಂಡಾದ ಮೂಲೆಗಳು</string>
     <string name="videos">ವೀಡಿಯೊಗಳು</string>
-    <string name="align_left">ಎಡಕ್ಕೆ ಜೋಡಿಸಿ</string>
+    <string name="align_start">ಎಡಕ್ಕೆ ಜೋಡಿಸಿ</string>
     <string name="justify">ಸಮರ್ಥಿಸಿ</string>
     <string name="external_fonts">ಬಾಹ್ಯ ಫಾಂಟ್‌ಗಳು</string>
     <string name="title">ಶೀರ್ಷಿಕೆ</string>

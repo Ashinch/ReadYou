@@ -148,7 +148,7 @@
     <string name="auto_hide_toolbars">Werkbalken automatisch verbergen</string>
     <string name="alignment">Uitlijning</string>
     <string name="images">Afbeeldingen</string>
-    <string name="align_right">Rechts uitlijnen</string>
+    <string name="align_end">Rechts uitlijnen</string>
     <string name="subhead">Subkop</string>
     <string name="dark_reading_theme">Thema donker lezen</string>
     <string name="images_desc">Afgeronde hoeken, horizontale vulling</string>
@@ -242,7 +242,7 @@
     <string name="preview_feed_name">Reddit</string>
     <string name="value">waarde</string>
     <string name="horizontal_padding">Horizontale opvulling</string>
-    <string name="align_left">Links uitlijnen</string>
+    <string name="align_start">Links uitlijnen</string>
     <string name="add">Toevoegen</string>
     <string name="server_url">Server URL</string>
     <string name="username">Gebruikersnaam</string>

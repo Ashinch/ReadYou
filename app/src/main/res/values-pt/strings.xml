@@ -169,7 +169,7 @@
     <string name="auto_hide_toolbars">Esconder automaticamente a barra de ferramentas</string>
     <string name="rounded_corners">Cantos arredondados</string>
     <string name="videos">Vídeos</string>
-    <string name="align_left">Alinhar a esquerda</string>
+    <string name="align_start">Alinhar a esquerda</string>
     <string name="bold">Negrito</string>
     <string name="upper_case">Letra maiúscula</string>
     <string name="title_desc">Negrito, maiúsculas, alinhamento</string>
@@ -208,7 +208,7 @@
     <string name="rearrange_buttons">Rearranjar os botões</string>
     <string name="bionic_reading">Leitura Biônica</string>
     <string name="images">Imagens</string>
-    <string name="align_right">Alinhar a direita</string>
+    <string name="align_end">Alinhar a direita</string>
     <string name="center_text">Centralizar o texto</string>
     <string name="justify">Justificar o texto</string>
     <string name="external_fonts">Fontes externas</string>

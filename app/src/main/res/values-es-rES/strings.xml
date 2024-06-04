@@ -190,8 +190,8 @@
     <string name="images">Imágenes</string>
     <string name="rounded_corners">Esquinas redondeadas</string>
     <string name="videos">Vídeos</string>
-    <string name="align_left">Alinear a la izquierda</string>
-    <string name="align_right">Alinear a la derecha</string>
+    <string name="align_start">Alinear a la izquierda</string>
+    <string name="align_end">Alinear a la derecha</string>
     <string name="center_text">Centrar texto</string>
     <string name="justify">Justificar</string>
     <string name="external_fonts">Fuentes externas</string>

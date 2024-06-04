@@ -178,8 +178,8 @@
     <string name="tips_group_list_tonal_elevation">Tông màu danh sách nhóm chỉ có thể thấy trong chủ đề sáng</string>
     <string name="images">Hình ảnh</string>
     <string name="videos">Video</string>
-    <string name="align_left">Căn trái</string>
-    <string name="align_right">Căn phải</string>
+    <string name="align_start">Căn trái</string>
+    <string name="align_end">Căn phải</string>
     <string name="center_text">Căn giữa</string>
     <string name="rounded_corners">Viền tròn góc</string>
     <string name="bionic_reading">Đọc sinh học</string>
