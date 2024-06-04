@@ -11,11 +11,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import me.ash.reader.infrastructure.preference.*
+import me.ash.reader.ui.component.reader.bodyStyle
 import me.ash.reader.ui.ext.formatAsString
 import me.ash.reader.ui.ext.openURL
+import me.ash.reader.ui.ext.requiresBidi
 import me.ash.reader.ui.ext.roundClick
+import me.ash.reader.ui.theme.applyTextDirection
 import java.util.*
 
 @Composable
@@ -65,6 +69,8 @@ fun Metadata(
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontFamily = LocalReadingFonts.current.asFontFamily(context),
                 fontWeight = if (titleBold.value) FontWeight.SemiBold else FontWeight.Normal,
+            ).applyTextDirection(
+                requiresBidi = title.requiresBidi()
             ),
             textAlign = titleAlign.toTextAlign(),
         )

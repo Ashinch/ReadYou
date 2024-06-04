@@ -4,6 +4,7 @@ import android.text.Html
 import android.util.Base64
 import java.math.BigInteger
 import java.security.MessageDigest
+import java.text.Bidi
 
 object MimeType {
 
@@ -46,3 +47,5 @@ fun String?.decodeHTML(): String? = this?.run { Html.fromHtml(this).toString() }
 
 fun String?.orNotEmpty(l: (value: String) -> String): String =
     if (this.isNullOrBlank()) "" else l(this)
+
+fun String.requiresBidi(): Boolean = Bidi.requiresBidi(this.toCharArray(), 0, this.length)
