@@ -102,16 +102,24 @@ class GoogleReaderRssService @Inject constructor(
     ) {
         val accountId = context.currentAccountId
         val quickAdd = getGoogleReaderAPI().subscriptionQuickAdd(feedLink)
-        val feedId = quickAdd.streamId?.ofFeedStreamIdToId()!!
+        val feedId = quickAdd.streamId?.ofFeedStreamIdToId()
+        requireNotNull(feedId) {
+            "feedId is null"
+        }
+        val feedTitle = searchedFeed.title
+        requireNotNull(feedTitle) {
+            "feedTitle is null"
+        }
+
         getGoogleReaderAPI().subscriptionEdit(
             destFeedId = feedId,
             destCategoryId = groupId.dollarLast(),
-            destFeedName = searchedFeed.title!!
+            destFeedName = feedTitle
         )
         feedDao.insert(
             Feed(
                 id = accountId.spacerDollar(feedId),
-                name = searchedFeed.title!!,
+                name = feedTitle,
                 url = feedLink,
                 groupId = groupId,
                 accountId = accountId,
@@ -215,7 +223,10 @@ class GoogleReaderRssService @Inject constructor(
                 val preTime = System.currentTimeMillis()
                 val preDate = Date(preTime)
                 val accountId = context.currentAccountId
-                val account = accountDao.queryById(accountId)!!
+                val account = accountDao.queryById(accountId)
+                requireNotNull(account) {
+                    "cannot find account"
+                }
                 val googleReaderAPI = getGoogleReaderAPI()
                 val groupIds = mutableSetOf<String>()
                 val feedIds = mutableSetOf<String>()
@@ -231,15 +242,19 @@ class GoogleReaderRssService @Inject constructor(
                     .subscriptions.groupBy { it.categories?.first() }
                     .toSortedMap { c1, c2 -> c1?.label.toString().compareTo(c2?.label.toString()) }
                     .forEach { (category, feeds) ->
+                        val categoryId = category?.id
+                        requireNotNull(categoryId) {
+                            "category id is null"
+                        }
                         val groupId =
-                            accountId.spacerDollar(category?.id?.ofCategoryStreamIdToId()!!)
+                            accountId spacerDollar categoryId.ofCategoryStreamIdToId()
 
                         // Handle folders
                         groupDao.insertOrUpdate(
                             listOf(
                                 Group(
                                     id = groupId,
-                                    name = category.label!!,
+                                    name = category.label.toString(),
                                     accountId = accountId,
                                 )
                             )
@@ -249,12 +264,18 @@ class GoogleReaderRssService @Inject constructor(
                         // Handle feeds
                         feedDao.insertOrUpdate(
                             feeds.map {
-                                val feedId = accountId.spacerDollar(it.id?.ofFeedStreamIdToId()!!)
+                                requireNotNull(it.id) {
+                                    "feed id is null"
+                                }
+                                requireNotNull(it.url) {
+                                    "feed url is null"
+                                }
+                                val feedId = accountId spacerDollar it.id.ofFeedStreamIdToId()
                                 Feed(
                                     id = feedId,
                                     name = it.title.decodeHTML()
                                         ?: context.getString(R.string.empty),
-                                    url = it.url!!,
+                                    url = it.url,
                                     groupId = groupId,
                                     accountId = accountId,
                                     icon = it.iconUrl
@@ -408,7 +429,10 @@ class GoogleReaderRssService @Inject constructor(
         itemIds.chunked(100).forEach { chunkedIds ->
             articleDao.insert(
                 *googleReaderAPI.getItemsContents(chunkedIds).items?.map {
-                    val articleId = it.id!!.ofItemStreamIdToId()
+                    val articleId = it.id?.ofItemStreamIdToId()
+                    requireNotNull(articleId) {
+                        "articleId is null"
+                    }
                     Article(
                         id = accountId.spacerDollar(articleId),
                         date = it.published
