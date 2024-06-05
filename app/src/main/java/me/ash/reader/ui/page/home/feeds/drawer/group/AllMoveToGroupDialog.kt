@@ -1,6 +1,7 @@
 package me.ash.reader.ui.page.home.feeds.drawer.group
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.DriveFileMove
 import androidx.compose.material.icons.outlined.DriveFileMove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -35,7 +36,7 @@ fun AllMoveToGroupDialog(
         },
         icon = {
             Icon(
-                imageVector = Icons.Outlined.DriveFileMove,
+                imageVector = Icons.AutoMirrored.Outlined.DriveFileMove,
                 contentDescription = stringResource(R.string.move_to_group),
             )
         },

@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Add
@@ -216,7 +217,7 @@ fun FeedsPage(
                         icon = filterUiState.filter.iconOutline,
                         action = {
                             Icon(
-                                imageVector = Icons.Outlined.KeyboardArrowRight,
+                                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                                 contentDescription = stringResource(R.string.go_to),
                             )
                         },

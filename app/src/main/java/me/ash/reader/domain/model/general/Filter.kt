@@ -1,6 +1,7 @@
 package me.ash.reader.domain.model.general
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Subject
 import androidx.compose.material.icons.outlined.FiberManualRecord
 import androidx.compose.material.icons.rounded.FiberManualRecord
 import androidx.compose.material.icons.rounded.Star
@@ -65,8 +66,8 @@ class Filter private constructor(
         )
         val All = Filter(
             index = 2,
-            iconOutline = Icons.Rounded.Subject,
-            iconFilled = Icons.Rounded.Subject,
+            iconOutline = Icons.AutoMirrored.Rounded.Subject,
+            iconFilled = Icons.AutoMirrored.Rounded.Subject,
         )
         val values = listOf(Starred, Unread, All)
     }

@@ -3,6 +3,8 @@ package me.ash.reader.ui.page.home.reading
 import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Article
+import androidx.compose.material.icons.automirrored.rounded.Article
 import androidx.compose.material.icons.filled.FiberManualRecord
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.FiberManualRecord
@@ -119,9 +121,9 @@ fun BottomBar(
                         disabled = false,
                         modifier = Modifier.size(40.dp),
                         imageVector = if (isFullContent) {
-                            Icons.Rounded.Article
+                            Icons.AutoMirrored.Rounded.Article
                         } else {
-                            Icons.Outlined.Article
+                            Icons.AutoMirrored.Outlined.Article
                         },
                         contentDescription = stringResource(R.string.parse_full_content),
                         tint = if (isFullContent) {

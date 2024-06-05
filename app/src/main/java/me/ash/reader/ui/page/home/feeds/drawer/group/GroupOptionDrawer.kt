@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Notifications
@@ -182,7 +183,7 @@ private fun Preset(
             selected = false,
             selectedIcon = {
                 Icon(
-                    imageVector = Icons.Outlined.Article,
+                    imageVector = Icons.AutoMirrored.Outlined.Article,
                     contentDescription = stringResource(R.string.parse_full_content),
                     modifier = Modifier
                         .padding(start = 8.dp)

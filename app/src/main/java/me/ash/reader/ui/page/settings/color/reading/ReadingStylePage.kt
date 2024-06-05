@@ -20,6 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.Segment
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Movie
 import androidx.compose.material.icons.rounded.Segment
@@ -237,7 +238,7 @@ fun ReadingStylePage(
                     SettingItem(
                         title = stringResource(R.string.text),
                         desc = stringResource(R.string.text_desc),
-                        icon = Icons.Rounded.Segment,
+                        icon = Icons.AutoMirrored.Rounded.Segment,
                         onClick = {
                             navController.navigate(RouteName.READING_PAGE_TEXT) {
                                 launchSingleTop = true

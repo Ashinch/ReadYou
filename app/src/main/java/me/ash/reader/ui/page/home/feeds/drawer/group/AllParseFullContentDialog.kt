@@ -1,6 +1,7 @@
 package me.ash.reader.ui.page.home.feeds.drawer.group
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -33,7 +34,7 @@ fun AllParseFullContentDialog(
         },
         icon = {
             Icon(
-                imageVector = Icons.Outlined.Article,
+                imageVector = Icons.AutoMirrored.Outlined.Article,
                 contentDescription = stringResource(R.string.parse_full_content),
             )
         },

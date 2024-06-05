@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Notifications
@@ -163,7 +164,7 @@ private fun Preset(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .size(20.dp),
-                    imageVector = Icons.Outlined.Article,
+                    imageVector = Icons.AutoMirrored.Outlined.Article,
                     contentDescription = stringResource(R.string.parse_full_content),
                     tint = MaterialTheme.colorScheme.onSurface alwaysLight true,
                 )

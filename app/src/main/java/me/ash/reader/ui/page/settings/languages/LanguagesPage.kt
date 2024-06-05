@@ -3,6 +3,7 @@ package me.ash.reader.ui.page.settings.languages
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
@@ -66,7 +67,7 @@ fun LanguagesPage(
                         icon = Icons.Outlined.Lightbulb,
                         action = {
                             Icon(
-                                imageVector = Icons.Outlined.KeyboardArrowRight,
+                                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                                 contentDescription = stringResource(R.string.go_to),
                             )
                         },
