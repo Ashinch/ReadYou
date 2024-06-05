@@ -11,28 +11,28 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.mock
 
-const val enclosureUrlString1: String = "https://example.com/enclosure.jpg"
-const val enclosureUrlString2: String = "https://github.blog/wp-content/uploads/2024/03/github_copilot_header.png"
-const val imageUrlString: String = "https://example.com/image.jpg"
-const val enclosureHtmlCase1: String = """
+internal const val enclosureUrlString1: String = "https://example.com/enclosure.jpg"
+internal const val enclosureUrlString2: String = "https://github.blog/wp-content/uploads/2024/03/github_copilot_header.png"
+internal const val imageUrlString: String = "https://example.com/image.jpg"
+internal const val enclosureHtmlCase1: String = """
         <enclosure url="$enclosureUrlString1" type="image/jpeg"/>
         <img src="$imageUrlString"/>
     """
-const val enclosureHtmlCase2: String = """
+internal const val enclosureHtmlCase2: String = """
         <img src="$imageUrlString"/>
         <enclosure url="$enclosureUrlString1" type="image/jpeg"/>
         <img src="$imageUrlString"/> 
     """
-const val enclosureHtmlCase3: String = """
+internal const val enclosureHtmlCase3: String = """
         <img src="$imageUrlString"/>
         <enclosure url="$enclosureUrlString2" type="image/png"/>
         <img src="$imageUrlString"/> 
     """
-const val imageHtmlCase1: String = """
+internal const val imageHtmlCase1: String = """
         <img src="$enclosureUrlString1"/>
         <img src="$imageUrlString"/> 
     """
-const val imageHtmlCase2: String = """
+internal const val imageHtmlCase2: String = """
         <img src="$imageUrlString"/> 
         <img src="$enclosureUrlString1"/> 
         <img src="$enclosureUrlString1"/> 
