@@ -30,7 +30,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.selection.DisableSelection
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,6 +46,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.size.Precision
@@ -54,6 +55,8 @@ import coil.size.pxOrElse
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalReadingImageMaximize
 import me.ash.reader.ui.component.base.RYAsyncImage
+import me.ash.reader.ui.ext.requiresBidi
+import me.ash.reader.ui.theme.applyTextDirection
 import org.jsoup.Jsoup
 import org.jsoup.helper.StringUtil
 import org.jsoup.nodes.Element
@@ -96,6 +99,8 @@ private fun LazyListScope.formatBody(
     val composer = TextComposer { paragraphBuilder ->
         item {
             val paragraph = paragraphBuilder.toAnnotatedString()
+            val requiresBidi = paragraph.toString().requiresBidi()
+            val textStyle = bodyStyle().applyTextDirection(requiresBidi = requiresBidi)
 
             // ClickableText prevents taps from deselecting selected text
             // So use regular Text if possible
@@ -104,7 +109,7 @@ private fun LazyListScope.formatBody(
             ) {
                 ClickableText(
                     text = paragraph,
-                    style = bodyStyle(),
+                    style = textStyle,
                     modifier = Modifier
                         .padding(horizontal = textHorizontalPadding().dp)
                         .width(MAX_CONTENT_WIDTH.dp)
@@ -118,7 +123,7 @@ private fun LazyListScope.formatBody(
             } else {
                 Text(
                     text = paragraph,
-                    style = bodyStyle(),
+                    style = textStyle,
                     modifier = Modifier
                         .padding(horizontal = textHorizontalPadding().dp)
                         .width(MAX_CONTENT_WIDTH.dp)

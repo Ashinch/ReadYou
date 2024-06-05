@@ -5,6 +5,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.sp
+import java.text.Bidi
 
 // TODO: Rename file to Typography.kt and add @Stable
 
@@ -101,7 +102,16 @@ val SystemTypography = Typography(
     ),
 )
 
-internal fun TextStyle.applyTextDirection() = this.copy(textDirection = TextDirection.Content)
+internal fun TextStyle.applyTextDirection(textDirection: TextDirection = TextDirection.Content) =
+    this.copy(textDirection = textDirection)
+
+/**
+ * Resolve the text to Rtl if the text requires BiDirectional
+ * @see [android.view.View.TEXT_DIRECTION_ANY_RTL]
+ * @see [Bidi.requiresBidi]
+ */
+fun TextStyle.applyTextDirection(requiresBidi: Boolean) =
+    this.applyTextDirection(textDirection = if (requiresBidi) TextDirection.Rtl else TextDirection.Ltr)
 
 internal fun Typography.applyTextDirection() = this.copy(
     displayLarge = displayLarge.applyTextDirection(),
