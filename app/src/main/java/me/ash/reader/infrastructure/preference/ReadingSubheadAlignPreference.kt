@@ -16,8 +16,8 @@ val LocalReadingSubheadAlign =
     compositionLocalOf<ReadingSubheadAlignPreference> { ReadingSubheadAlignPreference.default }
 
 sealed class ReadingSubheadAlignPreference(val value: Int) : Preference() {
-    object Left : ReadingSubheadAlignPreference(0)
-    object Right : ReadingSubheadAlignPreference(1)
+    object Start : ReadingSubheadAlignPreference(0)
+    object End : ReadingSubheadAlignPreference(1)
     object Center : ReadingSubheadAlignPreference(2)
     object Justify : ReadingSubheadAlignPreference(3)
 
@@ -32,29 +32,29 @@ sealed class ReadingSubheadAlignPreference(val value: Int) : Preference() {
 
     fun toDesc(context: Context): String =
         when (this) {
-            Left -> context.getString(R.string.align_left)
-            Right -> context.getString(R.string.align_right)
+            Start -> context.getString(R.string.align_start)
+            End -> context.getString(R.string.align_end)
             Center -> context.getString(R.string.center_text)
             Justify -> context.getString(R.string.justify)
         }
 
     fun toTextAlign(): TextAlign =
         when (this) {
-            Left -> TextAlign.Start
-            Right -> TextAlign.End
+            Start -> TextAlign.Start
+            End -> TextAlign.End
             Center -> TextAlign.Center
             Justify -> TextAlign.Justify
         }
 
     companion object {
 
-        val default = Left
-        val values = listOf(Left, Right, Center, Justify)
+        val default = Start
+        val values = listOf(Start, End, Center, Justify)
 
         fun fromPreferences(preferences: Preferences): ReadingSubheadAlignPreference =
             when (preferences[DataStoreKey.keys[readingSubheadAlign]?.key as Preferences.Key<Int>]) {
-                0 -> Left
-                1 -> Right
+                0 -> Start
+                1 -> End
                 2 -> Center
                 3 -> Justify
                 else -> default

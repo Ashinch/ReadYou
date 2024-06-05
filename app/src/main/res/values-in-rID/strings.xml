@@ -185,8 +185,8 @@
     <string name="images">Gambar</string>
     <string name="rounded_corners">Sudut membulat</string>
     <string name="videos">Video</string>
-    <string name="align_left">Sejajar ke kiri</string>
-    <string name="align_right">Sejajar ke kanan</string>
+    <string name="align_start">Sejajar ke kiri</string>
+    <string name="align_end">Sejajar ke kanan</string>
     <string name="center_text">Teks di tengah</string>
     <string name="justify">Diperbenar</string>
     <string name="external_fonts">Fon eksternal</string>

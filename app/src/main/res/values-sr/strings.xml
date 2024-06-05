@@ -112,7 +112,7 @@
     <string name="every_15_minutes">Сваких 15 минута</string>
     <string name="interaction">Интеракција</string>
     <string name="check_failure">Провера ажурирања није успела</string>
-    <string name="align_left">Поравнај лево</string>
+    <string name="align_start">Поравнај лево</string>
     <string name="keep_archived_articles">Чување архивираних чланака</string>
     <string name="selected">Изабрано</string>
     <string name="icons">Иконице</string>
@@ -161,7 +161,7 @@
     <string name="sponsor">Спонзор</string>
     <string name="for_3_days">3 дана</string>
     <string name="deny">Одбиј</string>
-    <string name="align_right">Поравнај десно</string>
+    <string name="align_end">Поравнај десно</string>
     <string name="block_list">Блок листа</string>
     <string name="specific_browser_name">Претраживач: %1$s</string>
     <string name="specific_browser">Присили одређени претраживач</string>

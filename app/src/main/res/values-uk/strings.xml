@@ -201,8 +201,8 @@
     <string name="rearrange_buttons">Змінити порядок кнопок</string>
     <string name="bionic_reading">Біонічне читання</string>
     <string name="videos">Відео</string>
-    <string name="align_left">Вирівняти ліворуч</string>
-    <string name="align_right">Вирівняти праворуч</string>
+    <string name="align_start">Вирівняти ліворуч</string>
+    <string name="align_end">Вирівняти праворуч</string>
     <string name="center_text">Центрувати текст</string>
     <string name="justify">Вирівняти</string>
     <string name="external_fonts">Зовнішні шрифти</string>

@@ -209,8 +209,8 @@
     <string name="bionic_reading">Bionikus olvasás</string>
     <string name="rounded_corners">Lekerekített sarkok</string>
     <string name="videos">Videók</string>
-    <string name="align_left">Igazítás balra</string>
-    <string name="align_right">Igazítás jobbra</string>
+    <string name="align_start">Igazítás balra</string>
+    <string name="align_end">Igazítás jobbra</string>
     <string name="center_text">Szöveg középre igazítása</string>
     <string name="justify">Sorkizárt</string>
     <string name="external_fonts">Külső betűkészletek</string>

@@ -196,10 +196,10 @@
     <string name="mark_as_read_button_position">\"Markera som Läst\" knapplats</string>
     <string name="filter_bar">Filtreringsmeny</string>
     <string name="tips_article_list_tonal_elevation">Denna förhöjda ton är enbart tillgänglig i ljust tema.</string>
-    <string name="align_right">Högerjustera</string>
+    <string name="align_end">Högerjustera</string>
     <string name="images">Bilder</string>
     <string name="videos">Videor</string>
-    <string name="align_left">Vänsterjustera</string>
+    <string name="align_start">Vänsterjustera</string>
     <string name="rounded_corners">Rundade hörn</string>
     <string name="every_15_minutes">Var 15:e minut</string>
     <string name="every_30_minutes">Var 30:e minut</string>

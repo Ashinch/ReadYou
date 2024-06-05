@@ -180,8 +180,8 @@
     <string name="font_size">גודל גופן</string>
     <string name="letter_spacing">ריווח אותיות</string>
     <string name="alignment">יישור</string>
-    <string name="align_right">יישור לימין</string>
-    <string name="align_left">יישור לשמאל</string>
+    <string name="align_end">יישור לימין</string>
+    <string name="align_start">יישור לשמאל</string>
     <string name="every_2_hours">כל שעתיים</string>
     <string name="for_2_days">יומיים</string>
     <string name="local">מקומי</string>

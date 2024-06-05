@@ -159,8 +159,8 @@
     <string name="rearrange_buttons">تنظیم مجدد دکمه ها</string>
     <string name="bionic_reading">خواندن بیونیک</string>
     <string name="images">تصاویر</string>
-    <string name="align_left">چپ چین</string>
-    <string name="align_right">راست چین</string>
+    <string name="align_start">چپ چین</string>
+    <string name="align_end">راست چین</string>
     <string name="center_text">متن وسط</string>
     <string name="justify">توجیه</string>
     <string name="external_fonts">فونت های خارجی</string>

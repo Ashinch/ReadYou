@@ -182,7 +182,7 @@
     <string name="for_1_month">1 måned</string>
     <string name="keep_archived_articles">Behold arkiverede artikler</string>
     <string name="share">Del</string>
-    <string name="align_right">Højrejuster</string>
+    <string name="align_end">Højrejuster</string>
     <string name="bold">Fed</string>
     <string name="upper_case">Store bogstaver</string>
     <string name="subhead">Underrubrik</string>
@@ -191,7 +191,7 @@
     <string name="tips_group_list_tonal_elevation">Tonal højde for gruppelisten er kun tilgængelig i det lyse tema</string>
     <string name="bionic_reading">Bionisk læsning</string>
     <string name="images">Billeder</string>
-    <string name="align_left">Venstrejuster</string>
+    <string name="align_start">Venstrejuster</string>
     <string name="rearrange_buttons">Omarranger knapper</string>
     <string name="title">Titel</string>
     <string name="alignment">Justering</string>

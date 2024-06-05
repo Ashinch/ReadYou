@@ -183,7 +183,7 @@
     <string name="letter_spacing">تباعد الحروف</string>
     <string name="bionic_reading">القراءة الحيويَّة</string>
     <string name="videos">الفيديوهات</string>
-    <string name="align_right">حاذِ يمينًا</string>
+    <string name="align_end">حاذِ يمينًا</string>
     <string name="subhead">عنوان فرعيٌّ</string>
     <string name="use_app_theme">استخدم سمة التطبيق</string>
     <string name="advanced">متقدِّم</string>
@@ -251,7 +251,7 @@
     <string name="tips_top_bar_tonal_elevation">يتوفَّر ارتفاع الطابَع للشريط العلويِّ عند التمرير فقط</string>
     <string name="rearrange_buttons">أعِد ترتيب الأزرار</string>
     <string name="for_1_day">يوم</string>
-    <string name="align_left">حاذِ يسارًا</string>
+    <string name="align_start">حاذِ يسارًا</string>
     <string name="title_desc">ثخين، حرف كبير، المحاذاة</string>
     <string name="text_desc">حجم الخطِّ، تباعد الحروف، المحاذاة</string>
     <string name="manually">يدويًّا</string>

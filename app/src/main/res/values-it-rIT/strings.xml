@@ -187,8 +187,8 @@
     <string name="images">Immagini</string>
     <string name="rounded_corners">Angoli arrotondati</string>
     <string name="videos">Video</string>
-    <string name="align_left">Allinea a sinistra</string>
-    <string name="align_right">Allinea a destra</string>
+    <string name="align_start">Allinea a sinistra</string>
+    <string name="align_end">Allinea a destra</string>
     <string name="center_text">Testo Centrato</string>
     <string name="justify">Giustifica</string>
     <string name="external_fonts">Font esterni</string>

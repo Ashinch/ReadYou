@@ -178,8 +178,8 @@
     <string name="auto_hide_toolbars">Amaga automàticament les barres d\'eines</string>
     <string name="rounded_corners">Cantonades rodones</string>
     <string name="videos">Vídeos</string>
-    <string name="align_left">Alinear a l\'esquerra</string>
-    <string name="align_right">Alinear a la dreta</string>
+    <string name="align_start">Alinear a l\'esquerra</string>
+    <string name="align_end">Alinear a la dreta</string>
     <string name="center_text">Centrar text</string>
     <string name="justify">Justificar</string>
     <string name="external_fonts">Fonts externes</string>

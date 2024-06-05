@@ -17,8 +17,8 @@ val LocalReadingTextAlign =
     compositionLocalOf<ReadingTextAlignPreference> { ReadingTextAlignPreference.default }
 
 sealed class ReadingTextAlignPreference(val value: Int) : Preference() {
-    object Left : ReadingTextAlignPreference(0)
-    object Right : ReadingTextAlignPreference(1)
+    object Start : ReadingTextAlignPreference(0)
+    object End : ReadingTextAlignPreference(1)
     object Center : ReadingTextAlignPreference(2)
     object Justify : ReadingTextAlignPreference(3)
 
@@ -33,37 +33,37 @@ sealed class ReadingTextAlignPreference(val value: Int) : Preference() {
 
     fun toDesc(context: Context): String =
         when (this) {
-            Left -> context.getString(R.string.align_left)
-            Right -> context.getString(R.string.align_right)
+            Start -> context.getString(R.string.align_start)
+            End -> context.getString(R.string.align_end)
             Center -> context.getString(R.string.center_text)
             Justify -> context.getString(R.string.justify)
         }
 
     fun toTextAlign(): TextAlign =
         when (this) {
-            Left -> TextAlign.Start
-            Right -> TextAlign.End
+            Start -> TextAlign.Start
+            End -> TextAlign.End
             Center -> TextAlign.Center
             Justify -> TextAlign.Justify
         }
 
     fun toAlignment(): Alignment.Horizontal =
         when (this) {
-            Left -> Alignment.Start
-            Right -> Alignment.End
+            Start -> Alignment.Start
+            End -> Alignment.End
             Center -> Alignment.CenterHorizontally
             Justify -> Alignment.Start
         }
 
     companion object {
 
-        val default = Left
-        val values = listOf(Left, Right, Center, Justify)
+        val default = Start
+        val values = listOf(Start, End, Center, Justify)
 
         fun fromPreferences(preferences: Preferences): ReadingTextAlignPreference =
             when (preferences[DataStoreKey.keys[readingTextAlign]?.key as Preferences.Key<Int>]) {
-                0 -> Left
-                1 -> Right
+                0 -> Start
+                1 -> End
                 2 -> Center
                 3 -> Justify
                 else -> default

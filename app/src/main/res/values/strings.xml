@@ -315,8 +315,8 @@
     <string name="images">Images</string>
     <string name="rounded_corners">Rounded corners</string>
     <string name="videos">Videos</string>
-    <string name="align_left">Align left</string>
-    <string name="align_right">Align right</string>
+    <string name="align_start">Align left</string>
+    <string name="align_end">Align right</string>
     <string name="center_text">Center text</string>
     <string name="justify">Justify</string>
     <string name="external_fonts">External fonts</string>

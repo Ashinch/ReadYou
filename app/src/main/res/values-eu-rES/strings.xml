@@ -295,8 +295,8 @@
     <string name="images">Irudiak</string>
     <string name="rounded_corners">Izkin biribilduak</string>
     <string name="videos">Bideoak</string>
-    <string name="align_left">Esker-lerrokatzea</string>
-    <string name="align_right">Eskuin-lerrokatzea</string>
+    <string name="align_start">Esker-lerrokatzea</string>
+    <string name="align_end">Eskuin-lerrokatzea</string>
     <string name="center_text">Testua zentratu</string>
     <string name="justify">Justifikatu</string>
     <string name="external_fonts">Kanpoko letra-motak</string>

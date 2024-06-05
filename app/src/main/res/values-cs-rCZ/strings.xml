@@ -187,8 +187,8 @@
     <string name="images">Obrázky</string>
     <string name="rounded_corners">Zaoblené rohy</string>
     <string name="videos">Videa</string>
-    <string name="align_left">Zarovnat vlevo</string>
-    <string name="align_right">Zarovnat vpravo</string>
+    <string name="align_start">Zarovnat vlevo</string>
+    <string name="align_end">Zarovnat vpravo</string>
     <string name="center_text">Vystředit text</string>
     <string name="justify">Zarovnat</string>
     <string name="external_fonts">Externí písma</string>

@@ -149,8 +149,8 @@
     <string name="images">Imaxes</string>
     <string name="rounded_corners">Esquinas arredondadas</string>
     <string name="videos">Videos</string>
-    <string name="align_left">Aliñar á esquerda</string>
-    <string name="align_right">Aliñar á dereita</string>
+    <string name="align_start">Aliñar á esquerda</string>
+    <string name="align_end">Aliñar á dereita</string>
     <string name="external_fonts">Tipografías externas</string>
     <string name="title">Título</string>
     <string name="bold">Grosa</string>

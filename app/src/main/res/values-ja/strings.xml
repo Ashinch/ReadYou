@@ -180,8 +180,8 @@
     <string name="images">画像</string>
     <string name="rounded_corners">丸みを帯びた角</string>
     <string name="videos">動画</string>
-    <string name="align_left">左揃え</string>
-    <string name="align_right">右揃え</string>
+    <string name="align_start">左揃え</string>
+    <string name="align_end">右揃え</string>
     <string name="center_text">中央揃え</string>
     <string name="justify">行揃え</string>
     <string name="external_fonts">外部フォント</string>

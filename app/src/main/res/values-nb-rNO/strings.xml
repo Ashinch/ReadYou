@@ -113,7 +113,7 @@
     <string name="touch_to_play_video">Trykk for å spille video</string>
     <string name="text">Tekst</string>
     <string name="images">Bilder</string>
-    <string name="align_right">Høyrejuster</string>
+    <string name="align_end">Høyrejuster</string>
     <string name="center_text">Tekstsentrering</string>
     <string name="justify">Juster</string>
     <string name="external_fonts">Skrifter annensteds fra</string>
@@ -154,7 +154,7 @@
     <string name="auto_hide_toolbars">Skjul verktøylinjer automatisk</string>
     <string name="clear_articles_in_group_toast">Tømte alle arkiverte artikler i «%1$s»-gruppen</string>
     <string name="options">Alternativer</string>
-    <string name="align_left">Venstrejuster</string>
+    <string name="align_start">Venstrejuster</string>
     <string name="delete">Slett</string>
     <string name="delete_toast">Slettet «%1$s»</string>
     <string name="unsubscribe">Opphev abonnement</string>

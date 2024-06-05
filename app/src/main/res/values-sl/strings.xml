@@ -107,8 +107,8 @@
     <string name="images">Slike</string>
     <string name="rounded_corners">Zaobljeni vogali</string>
     <string name="videos">Videoposnetki</string>
-    <string name="align_left">Poravnaj levo</string>
-    <string name="align_right">Poravnaj desno</string>
+    <string name="align_start">Poravnaj levo</string>
+    <string name="align_end">Poravnaj desno</string>
     <string name="center_text">Besedilo v sredini</string>
     <string name="justify">Poravnaj</string>
     <string name="external_fonts">Zunanje pisave</string>

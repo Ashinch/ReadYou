@@ -160,8 +160,8 @@
     <string name="maximize">Увеличить до предела</string>
     <string name="justify">Выровнять</string>
     <string name="center_text">По центру</string>
-    <string name="align_right">Справа</string>
-    <string name="align_left">Слева</string>
+    <string name="align_end">Справа</string>
+    <string name="align_start">Слева</string>
     <string name="letter_spacing">Межбуквенное расстояние</string>
     <string name="line_spacing">Расстояние между строк</string>
     <string name="icons_and_labels">Иконки и заголовки</string>

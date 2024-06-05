@@ -296,8 +296,8 @@
     <string name="images">Obrazy</string>
     <string name="rounded_corners">Zaokrąglone rogi</string>
     <string name="videos">Filmy</string>
-    <string name="align_left">Do lewej</string>
-    <string name="align_right">Do prawej</string>
+    <string name="align_start">Do lewej</string>
+    <string name="align_end">Do prawej</string>
     <string name="center_text">Do środka</string>
     <string name="justify">Wyjustuj</string>
     <string name="external_fonts">Zewnętrzne czcionki</string>

@@ -184,8 +184,8 @@
     <string name="images">छवियां</string>
     <string name="rounded_corners">गोल कोने </string>
     <string name="videos">वीडियो</string>
-    <string name="align_left">बाएं संरेखित करें</string>
-    <string name="align_right">दाएं संरेखित करें</string>
+    <string name="align_start">बाएं संरेखित करें</string>
+    <string name="align_end">दाएं संरेखित करें</string>
     <string name="center_text">केंद्र पाठ</string>
     <string name="justify">संरेखित करें</string>
     <string name="external_fonts">बाहरी फॉन्ट</string>
