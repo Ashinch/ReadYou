@@ -5,7 +5,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.sp
-import org.w3c.dom.Text
 import java.text.Bidi
 
 // TODO: Rename file to Typography.kt and add @Stable
