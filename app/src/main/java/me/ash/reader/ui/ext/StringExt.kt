@@ -46,3 +46,14 @@ fun String?.decodeHTML(): String? = this?.run { Html.fromHtml(this).toString() }
 
 fun String?.orNotEmpty(l: (value: String) -> String): String =
     if (this.isNullOrBlank()) "" else l(this)
+
+fun String?.extractDomain(): String {
+    if (this.isNullOrBlank()) return ""
+    val urlMatchResult = Regex("(?<=://)([\\w\\d.-]+)").find(this)
+    if (urlMatchResult != null) {
+        return urlMatchResult.value
+    }
+    val domainRegex = Regex("[\\w\\d.-]+\\.[\\w\\d.-]+")
+    val domainMatchResult = domainRegex.find(this)
+    return domainMatchResult?.value ?: ""
+}
