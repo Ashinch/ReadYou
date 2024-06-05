@@ -181,7 +181,6 @@ dependencies {
     // https://github.com/google/accompanist/releases
     implementation "com.google.accompanist:accompanist-pager:$accompanist"
     implementation "com.google.accompanist:accompanist-flowlayout:$accompanist"
-    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist"
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist"
 
     implementation platform("androidx.compose:compose-bom:$composeBom")
