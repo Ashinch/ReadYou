@@ -43,6 +43,7 @@ import kotlin.math.abs
 @Composable
 fun Content(
     modifier: Modifier = Modifier,
+    contentPaddingValues: PaddingValues,
     content: String,
     feedName: String,
     title: String,
@@ -71,6 +72,7 @@ fun Content(
         SelectionContainer {
             LazyColumn(
                 modifier = modifier
+                    .padding(top = contentPaddingValues.calculateTopPadding())
                     .fillMaxSize()
                     .drawVerticalScrollbar(listState),
                 state = listState,
@@ -80,9 +82,10 @@ fun Content(
                     Spacer(modifier = Modifier.height(64.dp))
                     // padding
                     Spacer(modifier = Modifier.height(22.dp))
+                }
+                item {
                     Column(
-                        modifier = Modifier
-                            .padding(horizontal = 12.dp)
+                        modifier = Modifier.padding(horizontal = 12.dp)
                     ) {
                         DisableSelection {
                             Metadata(
@@ -108,7 +111,7 @@ fun Content(
 
                 item {
                     Spacer(modifier = Modifier.height(128.dp))
-                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                    Spacer(modifier = Modifier.height(contentPaddingValues.calculateBottomPadding()))
                 }
             }
         }
