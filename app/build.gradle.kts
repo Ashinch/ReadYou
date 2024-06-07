@@ -142,7 +142,6 @@ dependencies {
     implementation(libs.lifecycleViewModelCompose)
     implementation(libs.lifecycleRuntimeKtx)
     implementation(libs.composeMaterial3)
-    implementation(libs.accompanistPager)
     implementation(libs.accompanistFlowlayout)
     implementation(libs.accompanistSwiperefresh)
     implementation(platform(libs.composeBom))

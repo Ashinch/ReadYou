@@ -61,7 +61,6 @@ import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
 
 @OptIn(
-    com.google.accompanist.pager.ExperimentalPagerApi::class,
     androidx.compose.ui.ExperimentalComposeUiApi::class,
 )
 @Composable
