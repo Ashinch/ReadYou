@@ -8,6 +8,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.mikepenz.aboutlibraries.plugin")
     id("com.google.devtools.ksp")
+    id("androidx.room")
 }
 
 fun fetchGitCommitHash(): String {
@@ -40,13 +41,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments.putAll(mapOf(
-                    "room.schemaLocation" to "$projectDir/schemas",
-                    "room.incremental" to "true"
-                ))
-            }
+        room {
+            schemaDirectory("$projectDir/schemas")
+        }
+
+        ksp {
+            arg("room.incremental","true")
         }
     }
 
