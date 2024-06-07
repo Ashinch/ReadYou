@@ -2,13 +2,13 @@ import java.util.Properties
 import java.io.FileInputStream
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    kotlin("android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.aboutlibraries.plugin)
+    alias(libs.plugins.room)
     id("dagger.hilt.android.plugin")
     id("com.google.dagger.hilt.android")
-    id("com.mikepenz.aboutlibraries.plugin")
-    id("com.google.devtools.ksp")
-    id("androidx.room")
 }
 
 fun fetchGitCommitHash(): String {
