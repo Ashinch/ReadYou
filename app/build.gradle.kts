@@ -20,7 +20,7 @@ fun fetchGitCommitHash(): String {
 
 val gitCommitHash = fetchGitCommitHash()
 val keyProps = Properties()
-val keyPropsFile = rootProject.file("signature/keystore.properties")
+val keyPropsFile: File = rootProject.file("signature/keystore.properties")
 if (keyPropsFile.exists()) {
     println("Loading keystore properties from ${keyPropsFile.absolutePath}")
     keyProps.load(FileInputStream(keyPropsFile))
