@@ -5,11 +5,11 @@ buildscript {
 }
 
 plugins {
-    id("com.android.application") version libs.versions.androidGradlePlugin.get() apply false
-    id("com.android.library") version libs.versions.androidGradlePlugin.get() apply false
-    id("org.jetbrains.kotlin.android") version libs.versions.kotlin.get() apply false
-    id("com.mikepenz.aboutlibraries.plugin") version libs.versions.aboutLibsRelease.get() apply false
-    id("com.google.devtools.ksp") version libs.versions.ksp.get() apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.aboutlibraries.plugin) apply false
 }
 
 tasks.register<Delete>("clean") {
