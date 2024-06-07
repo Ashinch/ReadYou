@@ -9,6 +9,7 @@ browser = "1.8.0"
 coil = "2.5.0"
 composeBom = "2024.05.00"
 composeCompiler = "1.5.8"
+composeHtml = "1.0.2"
 coreKtx = "1.13.1"
 daggerHilt = "2.50"
 datastore = "1.1.1"
@@ -41,7 +42,7 @@ work = "2.9.0"
 daggerHiltPlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "daggerHilt" }
 aboutLibrariesCore = { group = "com.mikepenz", name = "aboutlibraries-core", version.ref = "aboutLibsRelease" }
 aboutLibrariesComposeM3 = { group = "com.mikepenz", name = "aboutlibraries-compose-m3", version.ref = "aboutLibsRelease" }
-composeHtml = { group = "com.github.ireward", name = "compose-html", version = "1.0.2" }
+composeHtml = { group = "com.github.ireward", name = "compose-html", version.ref = "composeHtml" }
 androidSVG = { group = "com.caverock", name = "androidsvg-aar", version.ref = "androidSVG" }
 opmlParser = { group = "be.ceau", name = "opml-parser", version.ref = "opmlParser" }
 readability4j = { group = "net.dankito.readability4j", name = "readability4j", version.ref = "readability4j" }
