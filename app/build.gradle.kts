@@ -7,8 +7,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.aboutlibraries.plugin)
     alias(libs.plugins.room)
-    id("dagger.hilt.android.plugin")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.hilt)
 }
 
 fun fetchGitCommitHash(): String {
