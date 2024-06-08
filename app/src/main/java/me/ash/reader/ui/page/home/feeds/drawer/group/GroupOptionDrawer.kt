@@ -27,9 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.flowlayout.MainAxisAlignment
+import androidx.compose.foundation.layout.FlowRow
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.domain.model.group.Group
@@ -149,6 +147,7 @@ fun GroupOptionDrawer(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun Preset(
     viewModel: GroupOptionViewModel,
@@ -156,10 +155,8 @@ private fun Preset(
     context: Context,
 ) {
     FlowRow(
-        mainAxisAlignment = MainAxisAlignment.Start,
-        crossAxisAlignment = FlowCrossAxisAlignment.Center,
-        crossAxisSpacing = 10.dp,
-        mainAxisSpacing = 10.dp,
+        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
     ) {
         RYSelectionChip(
             modifier = Modifier.animateContentSize(),
@@ -212,6 +209,7 @@ private fun Preset(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun FlowRowGroups(
     groupOptionUiState: GroupOptionUiState,
@@ -219,10 +217,8 @@ private fun FlowRowGroups(
     groupOptionViewModel: GroupOptionViewModel,
 ) {
     FlowRow(
-        mainAxisAlignment = MainAxisAlignment.Start,
-        crossAxisAlignment = FlowCrossAxisAlignment.Center,
-        crossAxisSpacing = 10.dp,
-        mainAxisSpacing = 10.dp,
+        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
     ) {
         groupOptionUiState.groups.forEach {
             if (it.id != group?.id) {

@@ -22,15 +22,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.flowlayout.MainAxisAlignment
+import androidx.compose.foundation.layout.FlowRow
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.ui.component.base.RYDialog
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.theme.palette.alwaysLight
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AccountsTab(
     modifier: Modifier = Modifier,
@@ -58,10 +57,8 @@ fun AccountsTab(
         },
         text = {
             FlowRow(
-                mainAxisAlignment = MainAxisAlignment.Start,
-                crossAxisAlignment = FlowCrossAxisAlignment.Start,
-                crossAxisSpacing = 10.dp,
-                mainAxisSpacing = 10.dp,
+                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+                verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
             ) {
                 accounts.forEach { account ->
                     Column(
