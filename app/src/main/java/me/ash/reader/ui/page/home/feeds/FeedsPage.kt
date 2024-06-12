@@ -255,6 +255,7 @@ fun FeedsPage(
                                 },
                                 group = groupWithFeed.group,
                                 alpha = groupAlpha,
+                                badgeAlpha = feedBadgeAlpha,
                                 indicatorAlpha = groupIndicatorAlpha,
                                 roundedBottomCorner = { index == groupWithFeedList.lastIndex || groupWithFeed.group.feeds == 0 },
                                 onExpanded = {
