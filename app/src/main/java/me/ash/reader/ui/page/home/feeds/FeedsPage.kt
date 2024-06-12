@@ -203,12 +203,9 @@ fun FeedsPage(
             ) {
                 item {
                     DisplayText(
-                        modifier = Modifier.clickable {
-                            accountTabVisible = true
-                        },
                         text = feedsUiState.account?.name ?: "",
                         desc = if (isSyncing) stringResource(R.string.syncing) else "",
-                    )
+                    ) { accountTabVisible = true }
                 }
                 item {
                     Banner(
