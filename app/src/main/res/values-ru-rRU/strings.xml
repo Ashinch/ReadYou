@@ -87,7 +87,6 @@
     <string name="interaction">Взаимодействие</string>
     <string name="interaction_desc">При запуске, тактильная обратная связь</string>
     <string name="languages">Локализация</string>
-    <string name="languages_desc">Английский, Китайский, и прочие</string>
     <string name="color_and_style">Цвет &amp; стиль</string>
     <string name="subhead">Подзаголовок</string>
     <string name="use_app_theme">Использовать тему устройства</string>
