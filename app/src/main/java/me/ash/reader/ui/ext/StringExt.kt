@@ -43,7 +43,7 @@ fun String.md5(): String =
     BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray()))
         .toString(16).padStart(32, '0')
 
-fun String?.decodeHTML(): String? = this?.run { Html.fromHtml(this).toString() }
+fun String?.decodeHTML(): String? = this?.run { Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY).toString() }
 
 fun String?.orNotEmpty(l: (value: String) -> String): String =
     if (this.isNullOrBlank()) "" else l(this)
