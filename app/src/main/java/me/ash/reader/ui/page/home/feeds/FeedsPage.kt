@@ -160,6 +160,28 @@ fun FeedsPage(
         }
     }
 
+    fun expandAll() {
+        groupWithFeedList.forEach { groupWithFeed ->
+            when (groupWithFeed) {
+                is GroupFeedsView.Group -> {
+                    groupsVisible[groupWithFeed.group.id] = true
+                }
+                else -> {}
+            }
+        }
+    }
+
+    fun collapseAll() {
+        groupWithFeedList.forEach { groupWithFeed ->
+            when (groupWithFeed) {
+                is GroupFeedsView.Group -> {
+                    groupsVisible[groupWithFeed.group.id] = false
+                }
+                else -> {}
+            }
+        }
+    }
+
     LaunchedEffect(Unit) {
         feedsViewModel.fetchAccount()
     }
@@ -265,7 +287,8 @@ fun FeedsPage(
                                     .padding(end = 16.dp) // Space between icons
                                     .size(24.dp)
                                     .clip(CircleShape)
-                                    .background(MaterialTheme.colorScheme.surfaceTint.copy(alpha = groupIndicatorAlpha)),
+                                    .background(MaterialTheme.colorScheme.surfaceTint.copy(alpha = groupIndicatorAlpha))
+                                    .clickable { collapseAll() },
                                 horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
@@ -279,7 +302,8 @@ fun FeedsPage(
                                 modifier = Modifier
                                     .size(24.dp)
                                     .clip(CircleShape)
-                                    .background(MaterialTheme.colorScheme.surfaceTint.copy(alpha = groupIndicatorAlpha)),
+                                    .background(MaterialTheme.colorScheme.surfaceTint.copy(alpha = groupIndicatorAlpha))
+                                    .clickable { expandAll() },
                                 horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
@@ -290,7 +314,6 @@ fun FeedsPage(
                                 )
                             }
                         }
-
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                 }
