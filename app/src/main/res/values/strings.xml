@@ -21,6 +21,8 @@
     <string name="loading">Loading…</string>
     <string name="expand_less">Shrink</string>
     <string name="expand_more">Expand</string>
+    <string name="unfold_more">Expand All</string>
+    <string name="unfold_less">Collapse All</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="allow">Allow</string>
