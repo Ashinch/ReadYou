@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -73,6 +74,10 @@ fun ReadingPage(
         true
     }
 
+    var showTopDivider by remember {
+        mutableStateOf(false)
+    }
+
     val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
 
     LaunchedEffect(Unit) {
@@ -97,23 +102,22 @@ fun ReadingPage(
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
-//        topBarTonalElevation = tonalElevation.value.dp,
-//        containerTonalElevation = tonalElevation.value.dp,
         content = { paddings ->
             Log.i("RLog", "TopBar: recomposition")
 
             Box(modifier = Modifier.fillMaxSize()) {
-                // Top Bar
-                TopBar(
-                    navController = navController,
-                    isShow = isShowToolBar,
-                    windowInsets = WindowInsets(top = paddings.calculateTopPadding()),
-                    title = readerState.title,
-                    link = readerState.link,
-                    onClose = {
-                        navController.popBackStack()
-                    },
-                )
+                if (readerState.articleId != null) {
+                    TopBar(
+                        navController = navController,
+                        isShow = isShowToolBar,
+                        showDivider = showTopDivider,
+                        title = readerState.title,
+                        link = readerState.link,
+                        onClose = {
+                            navController.popBackStack()
+                        },
+                    )
+                }
 
                 val isNextArticleAvailable = !readerState.nextArticleId.isNullOrEmpty()
                 val isPreviousArticleAvailable = !readerState.previousArticleId.isNullOrEmpty()
@@ -163,6 +167,9 @@ fun ReadingPage(
                                 saver = LazyListState.Saver
                             ) { LazyListState() }
 
+                            showTopDivider = snapshotFlow {
+                                listState.firstVisibleItemIndex != 0
+                            }.collectAsStateValue(initial = false)
 
                             CompositionLocalProvider(
                                 LocalOverscrollConfiguration provides
@@ -176,16 +183,15 @@ fun ReadingPage(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Content(
-                                        modifier = Modifier
-                                            .padding(paddings)
-                                            .pullToLoad(
-                                                state = state,
-                                                onScroll = { f ->
-                                                    if (abs(f) > 2f)
-                                                        isReaderScrollingDown = f < 0f
-                                                },
-                                                enabled = isPullToSwitchArticleEnabled
-                                            ),
+                                        modifier = Modifier.pullToLoad(
+                                            state = state,
+                                            onScroll = { f ->
+                                                if (abs(f) > 2f)
+                                                    isReaderScrollingDown = f < 0f
+                                            },
+                                            enabled = isPullToSwitchArticleEnabled
+                                        ),
+                                        contentPaddingValues = paddings,
                                         content = content.text ?: "",
                                         feedName = feedName,
                                         title = title.toString(),
