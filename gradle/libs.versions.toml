@@ -38,63 +38,63 @@ telephoto = "0.7.1"
 work = "2.9.0"
 
 [libraries]
-aboutLibrariesCore = { group = "com.mikepenz", name = "aboutlibraries-core", version.ref = "aboutLibsRelease" }
-aboutLibrariesComposeM3 = { group = "com.mikepenz", name = "aboutlibraries-compose-m3", version.ref = "aboutLibsRelease" }
-composeHtml = { group = "com.github.ireward", name = "compose-html", version.ref = "composeHtml" }
-androidSVG = { group = "com.caverock", name = "androidsvg-aar", version.ref = "androidSVG" }
-opmlParser = { group = "be.ceau", name = "opml-parser", version.ref = "opmlParser" }
+aboutlibraries-core = { group = "com.mikepenz", name = "aboutlibraries-core", version.ref = "aboutLibsRelease" }
+aboutlibraries-compose = { group = "com.mikepenz", name = "aboutlibraries-compose-m3", version.ref = "aboutLibsRelease" }
+compose-html = { group = "com.github.ireward", name = "compose-html", version.ref = "composeHtml" }
+android-svg = { group = "com.caverock", name = "androidsvg-aar", version.ref = "androidSVG" }
+opml-parser = { group = "be.ceau", name = "opml-parser", version.ref = "opmlParser" }
 readability4j = { group = "net.dankito.readability4j", name = "readability4j", version.ref = "readability4j" }
 rome = { group = "com.rometools", name = "rome", version.ref = "rome" }
-coilBase = { group = "io.coil-kt", name = "coil-base", version.ref = "coil" }
-coilCompose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-coilSvg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
-coilGif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil" }
+coil-base = { group = "io.coil-kt", name = "coil-base", version.ref = "coil" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+coil-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
+coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil" }
 telephoto = { group = "me.saket.telephoto", name = "zoomable", version.ref = "telephoto" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
-okhttpCoroutines = { group = "com.squareup.okhttp3", name = "okhttp-coroutines-jvm", version.ref = "okhttp" }
+okhttp-coroutines = { group = "com.squareup.okhttp3", name = "okhttp-coroutines-jvm", version.ref = "okhttp" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
-retrofitGson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit2" }
+retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit2" }
 profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
-workRuntimeKtx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
-datastorePreferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
-roomPaging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
-roomCommon = { group = "androidx.room", name = "room-common", version.ref = "room" }
-roomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
-roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-pagingCommonKtx = { group = "androidx.paging", name = "paging-common-ktx", version.ref = "paging" }
-pagingRuntimeKtx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
-pagingCompose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
+work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
+room-common = { group = "androidx.room", name = "room-common", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+paging-common-ktx = { group = "androidx.paging", name = "paging-common-ktx", version.ref = "paging" }
+paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
+paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
-navigationCompose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
-lifecycleViewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
-lifecycleRuntimeKtx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
-composeMaterial3 = { group = "androidx.compose.material3", name = "material3" }
-accompanistPager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
-accompanistFlowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanist" }
-accompanistSwiperefresh = { group = "com.google.accompanist", name = "accompanist-swiperefresh", version.ref = "accompanist" }
-composeBom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-composeAnimationGraphics = { group = "androidx.compose.animation", name = "animation-graphics" }
-composeUi = { group = "androidx.compose.ui", name = "ui" }
-composeUiUtil = { group = "androidx.compose.ui", name = "ui-util" }
-composeMaterial = { group = "androidx.compose.material", name = "material" }
-composeMaterialIconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
-composeUiTooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-composeUiToolingPreview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-composeUiTestJunit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-hiltWork = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
-hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltAndroid" }
-hiltAndroidCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltAndroid" }
-hiltCompiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltCompiler" }
-hiltNavigationCompose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
-coreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-activityCompose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
+accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanist" }
+accompanist-swiperefresh = { group = "com.google.accompanist", name = "accompanist-swiperefresh", version.ref = "accompanist" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+compose-animation-graphics = { group = "androidx.compose.animation", name = "animation-graphics" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
+compose-material = { group = "androidx.compose.material", name = "material" }
+compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltAndroid" }
+hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltAndroid" }
+hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltCompiler" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-junitExt = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
-espressoCore = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
-mockitoCore = { group = "org.mockito", name = "mockito-core", version.ref = "mockitoCore" }
-mockitoJUnitJupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockitoJUnitJupiter" }
-mockitoKotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockitoKotlin" }
+junit-ext = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
+espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockitoCore" }
+mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockitoJUnitJupiter" }
+mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockitoKotlin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
