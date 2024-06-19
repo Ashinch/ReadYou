@@ -102,7 +102,6 @@
     <string name="interaction">Interazione</string>
     <string name="interaction_desc">Pagina iniziale, feedback aptico</string>
     <string name="languages">Lingue</string>
-    <string name="languages_desc">Inglese, Cinese, altre</string>
     <string name="help_translate">Aiuta a tradurre</string>
     <string name="use_device_languages">Usa la lingua del dispositivo</string>
     <string name="tips_and_support">Note e supporto</string>

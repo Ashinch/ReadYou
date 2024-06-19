@@ -122,4 +122,4 @@ object UserAgentInterceptor : Interceptor {
     }
 }
 
-const val USER_AGENT_STRING = "ReadYou/${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})"
+const val USER_AGENT_STRING = BuildConfig.USER_AGENT_STRING

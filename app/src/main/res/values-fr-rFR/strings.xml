@@ -102,7 +102,6 @@
     <string name="interaction">Comportement</string>
     <string name="interaction_desc">Page de démarrage, retour haptique</string>
     <string name="languages">Langues</string>
-    <string name="languages_desc">Français, anglais et plus</string>
     <string name="help_translate">Aidez-nous à traduire</string>
     <string name="use_device_languages">Utiliser la langue système</string>
     <string name="tips_and_support">Aide et assistance</string>

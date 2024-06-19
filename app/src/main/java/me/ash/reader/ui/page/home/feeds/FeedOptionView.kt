@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,9 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.flowlayout.MainAxisAlignment
+import androidx.compose.foundation.layout.FlowRow
 import me.ash.reader.R
 import me.ash.reader.domain.model.group.Group
 import me.ash.reader.ui.component.base.RYSelectionChip
@@ -119,6 +116,7 @@ private fun EditableUrl(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun Preset(
     selectedAllowNotificationPreset: Boolean = false,
@@ -133,10 +131,8 @@ private fun Preset(
     Subtitle(text = stringResource(R.string.preset))
     Spacer(modifier = Modifier.height(10.dp))
     FlowRow(
-        mainAxisAlignment = MainAxisAlignment.Start,
-        crossAxisAlignment = FlowCrossAxisAlignment.Center,
-        crossAxisSpacing = 10.dp,
-        mainAxisSpacing = 10.dp,
+        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
     ) {
         RYSelectionChip(
             modifier = Modifier.animateContentSize(),
@@ -193,6 +189,7 @@ private fun Preset(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun AddToGroup(
     isMoveToGroup: Boolean = false,
@@ -222,10 +219,8 @@ private fun AddToGroup(
         }
     } else {
         FlowRow(
-            mainAxisAlignment = MainAxisAlignment.Start,
-            crossAxisAlignment = FlowCrossAxisAlignment.Center,
-            crossAxisSpacing = 10.dp,
-            mainAxisSpacing = 10.dp,
+            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+            verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
         ) {
             groups.forEach {
                 RYSelectionChip(

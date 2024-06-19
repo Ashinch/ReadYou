@@ -74,7 +74,6 @@
     <string name="mark_as_starred">Позначити як Обране</string>
     <string name="mark_as_read_one_day">Позначити як прочитане більше 1 дня</string>
     <string name="mark_as_read_seven_days">Позначити як прочитане більше 7 днів тому</string>
-    <string name="languages_desc">Англійська, Китайська, інші</string>
     <string name="welcome">Ласкаво Просимо</string>
     <string name="tips_and_support_desc">Про застосунок, ліцензії з відкритим кодом</string>
     <string name="tos_tips">Будь ласка, прочитайте та прийміть Умови надання послуг та Політику конфіденційності, щоб продовжити.</string>

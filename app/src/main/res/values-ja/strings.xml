@@ -33,7 +33,6 @@
     <string name="interaction">操作</string>
     <string name="interaction_desc">起動時のページ、触覚フィードバック</string>
     <string name="languages">言語</string>
-    <string name="languages_desc">英語、中国語、その他</string>
     <string name="help_translate">翻訳を手伝う</string>
     <string name="welcome">ようこそ</string>
     <string name="terms_of_service">利用規約</string>

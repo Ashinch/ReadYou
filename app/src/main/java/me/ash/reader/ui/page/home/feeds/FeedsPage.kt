@@ -66,6 +66,7 @@ import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.findActivity
 import me.ash.reader.ui.ext.getCurrentVersion
+import me.ash.reader.ui.ext.getDefaultGroupId
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.HomeViewModel
@@ -203,12 +204,9 @@ fun FeedsPage(
             ) {
                 item {
                     DisplayText(
-                        modifier = Modifier.clickable {
-                            accountTabVisible = true
-                        },
                         text = feedsUiState.account?.name ?: "",
                         desc = if (isSyncing) stringResource(R.string.syncing) else "",
-                    )
+                    ) { accountTabVisible = true }
                 }
                 item {
                     Banner(
@@ -232,6 +230,7 @@ fun FeedsPage(
                         )
                     }
                 }
+
                 item {
                     Spacer(modifier = Modifier.height(24.dp))
                     Subtitle(
@@ -240,39 +239,46 @@ fun FeedsPage(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
+
+                val defaultGroupId = context.currentAccountId.getDefaultGroupId()
+
                 itemsIndexed(groupWithFeedList) { index, groupWithFeed ->
                     when (groupWithFeed) {
                         is GroupFeedsView.Group -> {
                             if (index != 0) {
                                 Spacer(modifier = Modifier.height(16.dp))
                             }
-                            GroupItem(
-                                isExpanded = {
-                                    groupsVisible.getOrPut(
-                                        groupWithFeed.group.id,
-                                        groupListExpand::value
+
+                            if (groupWithFeed.group.id != defaultGroupId ||  groupWithFeed.group.feeds > 0) {
+                                GroupItem(
+                                    isExpanded = {
+                                        groupsVisible.getOrPut(
+                                            groupWithFeed.group.id,
+                                            groupListExpand::value
+                                        )
+                                    },
+                                    group = groupWithFeed.group,
+                                    alpha = groupAlpha,
+                                    badgeAlpha = feedBadgeAlpha,
+                                    indicatorAlpha = groupIndicatorAlpha,
+                                    roundedBottomCorner = { index == groupWithFeedList.lastIndex || groupWithFeed.group.feeds == 0 },
+                                    onExpanded = {
+                                        groupsVisible[groupWithFeed.group.id] =
+                                            groupsVisible.getOrPut(
+                                                groupWithFeed.group.id,
+                                                groupListExpand::value
+                                            ).not()
+                                    }
+                                ) {
+                                    filterChange(
+                                        navController = navController,
+                                        homeViewModel = homeViewModel,
+                                        filterState = filterUiState.copy(
+                                            group = groupWithFeed.group,
+                                            feed = null,
+                                        )
                                     )
-                                },
-                                group = groupWithFeed.group,
-                                alpha = groupAlpha,
-                                badgeAlpha = feedBadgeAlpha,
-                                indicatorAlpha = groupIndicatorAlpha,
-                                roundedBottomCorner = { index == groupWithFeedList.lastIndex || groupWithFeed.group.feeds == 0 },
-                                onExpanded = {
-                                    groupsVisible[groupWithFeed.group.id] = groupsVisible.getOrPut(
-                                        groupWithFeed.group.id,
-                                        groupListExpand::value
-                                    ).not()
                                 }
-                            ) {
-                                filterChange(
-                                    navController = navController,
-                                    homeViewModel = homeViewModel,
-                                    filterState = filterUiState.copy(
-                                        group = groupWithFeed.group,
-                                        feed = null,
-                                    )
-                                )
                             }
                         }
 

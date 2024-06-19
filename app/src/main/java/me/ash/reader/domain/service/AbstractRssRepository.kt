@@ -8,6 +8,7 @@ import androidx.work.ListenableWorker
 import androidx.work.WorkManager
 import com.rometools.rome.feed.synd.SyndFeed
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
@@ -274,6 +275,7 @@ abstract class AbstractRssRepository(
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun pullImportant(
         isStarred: Boolean,
         isUnread: Boolean,

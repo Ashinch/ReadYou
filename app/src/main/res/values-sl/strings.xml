@@ -164,7 +164,6 @@
     <string name="yesterday">Včeraj</string>
     <string name="mark_as_starred">Dodaj med priljubljene</string>
     <string name="unsubscribe_tips">Odjavite se od \"%1$s\" in izbrišite vse arhivirane novice iz tega vira</string>
-    <string name="languages_desc">angleščina, kitajščina, več</string>
     <string name="group_option_tips">Naslednje možnosti veljajo za vse vire v tej skupini</string>
     <string name="welcome">Dobrodošli</string>
     <string name="mark_as_read">Označi kot prebrano</string>

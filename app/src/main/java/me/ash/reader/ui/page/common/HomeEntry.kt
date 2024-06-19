@@ -69,7 +69,7 @@ fun HomeEntry(
 
     val intent by rememberSaveable { mutableStateOf(context.findActivity()?.intent) }
     var openArticleId by rememberSaveable {
-        mutableStateOf(intent?.extras?.get(ExtraName.ARTICLE_ID)?.toString() ?: "")
+        mutableStateOf(intent?.extras?.getString(ExtraName.ARTICLE_ID) ?: "")
     }.also {
         intent?.replaceExtras(null)
     }
