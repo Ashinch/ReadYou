@@ -81,7 +81,7 @@ fun TopBar(
                     ) {
                         sharedContent.share(context, title, link)
                     }
-                }, colors = TopAppBarDefaults.smallTopAppBarColors(
+                }, colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(tonalElevation.value.dp),
                 )
             )

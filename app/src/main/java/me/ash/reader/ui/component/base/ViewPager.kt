@@ -1,26 +1,24 @@
 package me.ash.reader.ui.component.base
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ViewPager(
     modifier: Modifier = Modifier,
-    state: PagerState = com.google.accompanist.pager.rememberPagerState(),
     composableList: List<@Composable () -> Unit>,
     userScrollEnabled: Boolean = true,
 ) {
     HorizontalPager(
-        count = composableList.size,
-        state = state,
+        state = rememberPagerState { composableList.size },
         verticalAlignment = Alignment.Top,
         modifier = modifier
             .animateContentSize()

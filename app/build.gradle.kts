@@ -2,7 +2,7 @@ import java.util.Properties
 import java.io.FileInputStream
 
 plugins {
-alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.android.application)
     alias(libs.plugins.ksp)
     alias(libs.plugins.aboutlibraries)
@@ -130,8 +130,6 @@ dependencies {
     implementation(libs.compose.material3)
 
     // Accompanist
-    implementation(libs.accompanist.pager)
-    implementation(libs.accompanist.flowlayout)
     implementation(libs.accompanist.swiperefresh)
 
     // Coil

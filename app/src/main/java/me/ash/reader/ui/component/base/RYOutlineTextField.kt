@@ -60,8 +60,9 @@ fun RYOutlineTextField(
 
     OutlinedTextField(
         modifier = Modifier.focusRequester(focusRequester),
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color.Transparent,
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = Color.Transparent,
+            focusedContainerColor = Color.Transparent
         ),
         maxLines = if (singleLine) 1 else Int.MAX_VALUE,
         enabled = !readOnly,
