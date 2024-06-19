@@ -170,7 +170,6 @@
     <string name="use_device_theme">Cihaz temasını kullan</string>
     <string name="interaction_desc">İlk sayfa, haptik geribildirim</string>
     <string name="primary_color_hint">#666666 veya 666666 gibi</string>
-    <string name="languages_desc">İngilizce, Çince, daha fazlası</string>
     <string name="help_translate">Çeviriye yardım et</string>
     <string name="primary_color">Ana Renk</string>
     <string name="update">Güncelle</string>

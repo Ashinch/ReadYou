@@ -96,7 +96,6 @@
     <string name="interaction">互動</string>
     <string name="interaction_desc">起始頁面、觸覺回饋</string>
     <string name="languages">語言</string>
-    <string name="languages_desc">英文、中文、更多</string>
     <string name="use_device_languages">使用裝置語言</string>
     <string name="help_translate">協助翻譯</string>
     <string name="tips_and_support">提示和支援</string>
