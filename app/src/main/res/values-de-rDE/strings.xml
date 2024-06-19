@@ -99,7 +99,6 @@
     <string name="interaction">Interaktion</string>
     <string name="interaction_desc">Haptisches Feedback beim Start</string>
     <string name="languages">Sprachen</string>
-    <string name="languages_desc">Deutsch, Englisch, andere</string>
     <string name="help_translate">Hilf uns beim Übersetzen</string>
     <string name="use_device_languages">Gerätesprache verwenden</string>
     <string name="tips_and_support">Tipps &amp; Support</string>

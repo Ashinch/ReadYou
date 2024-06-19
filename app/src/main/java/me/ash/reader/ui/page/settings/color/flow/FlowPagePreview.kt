@@ -26,7 +26,6 @@ import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.infrastructure.preference.FlowArticleListTonalElevationPreference
 import me.ash.reader.infrastructure.preference.FlowTopBarTonalElevationPreference
-import me.ash.reader.infrastructure.preference.LocalDarkTheme
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.ext.surfaceColorAtElevation
@@ -76,7 +75,7 @@ fun FlowPagePreview(
                     contentDescription = stringResource(R.string.search),
                     tint = MaterialTheme.colorScheme.onSurface,
                 ) {}
-            }, colors = TopAppBarDefaults.smallTopAppBarColors(
+            }, colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
                     topBarTonalElevation.value.dp
                 ),

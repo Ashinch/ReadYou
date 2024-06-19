@@ -88,7 +88,7 @@ fun FeedsPagePreview(
                     contentDescription = stringResource(R.string.subscribe),
                     tint = MaterialTheme.colorScheme.onSurface,
                 )
-            }, colors = TopAppBarDefaults.smallTopAppBarColors(
+            }, colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
                     topBarTonalElevation.value.dp
                 ),

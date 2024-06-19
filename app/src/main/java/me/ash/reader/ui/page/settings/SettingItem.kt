@@ -85,11 +85,11 @@ fun SettingItem(
             }
             action?.let {
                 if (separatedActions) {
-                    Divider(
+                    HorizontalDivider(
                         modifier = Modifier
                             .padding(start = 16.dp)
                             .size(1.dp, 32.dp),
-                        color = tonalPalettes neutralVariant 80 onDark (tonalPalettes neutralVariant 30),
+                        color = tonalPalettes neutralVariant 80 onDark (tonalPalettes neutralVariant 30)
                     )
                 }
                 Box(Modifier.padding(start = 16.dp)) {

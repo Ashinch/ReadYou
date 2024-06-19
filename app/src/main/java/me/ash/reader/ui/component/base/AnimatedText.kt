@@ -46,7 +46,7 @@ fun AnimatedText(
                     200,
                     easing = FastOutSlowInEasing
                 )
-            ) { height -> height } with slideOutVertically { height -> -height } + fadeOut(
+            ) { height -> height } togetherWith slideOutVertically { height -> -height } + fadeOut(
                 tween(
                     200,
                     easing = FastOutSlowInEasing

@@ -97,7 +97,6 @@
     <string name="interaction">交互</string>
     <string name="interaction_desc">初始页面、触感反馈</string>
     <string name="languages">语言</string>
-    <string name="languages_desc">英语、简体中文、更多</string>
     <string name="use_device_languages">跟随系统设置</string>
     <string name="help_translate">帮助我们翻译</string>
     <string name="tips_and_support">提示和支持</string>

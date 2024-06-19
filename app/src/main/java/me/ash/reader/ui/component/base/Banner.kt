@@ -44,7 +44,7 @@ fun Banner(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(if (!desc.isNullOrBlank()) 88.dp else Dp.Unspecified),
+            .height(Dp.Unspecified),
         color = Color.Unspecified,
     ) {
         Row(
@@ -57,7 +57,7 @@ fun Banner(
                     view.playSoundEffect(SoundEffectConstants.CLICK)
                     onClick()
                 }
-                .padding(16.dp, 20.dp),
+                .padding(16.dp, 15.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             icon?.let { icon ->

@@ -101,7 +101,6 @@
     <string name="interaction">Interacció</string>
     <string name="interaction_desc">Pàgina d\'inici, feedback hàptic</string>
     <string name="languages">Llenguatges</string>
-    <string name="languages_desc">Anglès, xinès i altres</string>
     <string name="help_translate">Ajuda a la traducció</string>
     <string name="use_device_languages">Aplica el llenguatge del dispositiu</string>
     <string name="tips_and_support_desc">Sobre les llicències de codi obert</string>
