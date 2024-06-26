@@ -46,7 +46,7 @@ class OpmlService @Inject constructor(
         withContext(ioDispatcher) {
             val defaultGroup = groupDao.queryById(getDefaultGroupId(context.currentAccountId))!!
             val groupWithFeedList =
-                OPMLDataSource.parseFileInputStream(inputStream, defaultGroup)
+                OPMLDataSource.parseFileInputStream(inputStream, defaultGroup, context.currentAccountId)
             groupWithFeedList.forEach { groupWithFeed ->
                 if (groupWithFeed.group != defaultGroup) {
                     groupDao.insert(groupWithFeed.group)
