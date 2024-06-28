@@ -1,9 +1,7 @@
 package me.ash.reader.ui.component.base
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -11,13 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import me.ash.reader.ui.ext.roundClick
 
 @Composable
 fun DisplayText(
     modifier: Modifier = Modifier,
     text: String,
     desc: String,
-    onTextClick: () -> Unit = {},
+    onTextClick: (() -> Unit)? = null,
 ) {
     Column(
         modifier = modifier
@@ -30,7 +29,7 @@ fun DisplayText(
             )
     ) {
         Text(
-            modifier = Modifier.clickable { onTextClick() },
+            modifier = Modifier.roundClick(enabled = onTextClick != null) { onTextClick?.invoke() },
             text = text,
             style = MaterialTheme.typography.displaySmall,
             color = MaterialTheme.colorScheme.onSurface,
