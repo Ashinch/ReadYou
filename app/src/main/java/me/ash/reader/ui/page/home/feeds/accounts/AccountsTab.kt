@@ -2,7 +2,14 @@ package me.ash.reader.ui.page.home.feeds.accounts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.People
@@ -22,7 +29,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.layout.FlowRow
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.ui.component.base.RYDialog
@@ -75,14 +81,14 @@ fun AccountsTab(
                                 .clip(CircleShape)
                                 .background(
                                     if (account.id == context.currentAccountId) {
-                                        MaterialTheme.colorScheme.tertiaryContainer alwaysLight true
-                                    } else {
                                         MaterialTheme.colorScheme.primaryContainer alwaysLight true
+                                    } else {
+                                        MaterialTheme.colorScheme.surfaceDim alwaysLight true
                                     }
                                 ),
                             contentAlignment = Alignment.Center,
                         ) {
-                            Icon(account = account)
+                            AccountTypeIcon(account = account)
                         }
                         Text(
                             modifier = Modifier
@@ -117,7 +123,7 @@ fun AccountsTab(
 }
 
 @Composable
-fun Icon(
+fun AccountTypeIcon(
     account: Account,
 ) {
     val icon = account.type.toIcon().takeIf { it is ImageVector }?.let { it as ImageVector }
