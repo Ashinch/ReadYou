@@ -6,7 +6,6 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -25,11 +23,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
-import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.ExpandLess
-import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.UnfoldLess
 import androidx.compose.material.icons.rounded.UnfoldMore
@@ -73,7 +68,6 @@ import me.ash.reader.ui.component.base.Banner
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold
-import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.ext.alphaLN
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.currentAccountId
@@ -124,6 +118,7 @@ fun FeedsPage(
     val groupWithFeedList =
         feedsUiState.groupWithFeedList.collectAsStateValue(initial = emptyList())
     val groupsVisible: SnapshotStateMap<String, Boolean> = feedsUiState.groupsVisible
+    var hasGroupVisible by remember { mutableStateOf(groupListExpand.value) }
 
     val newVersion = LocalNewVersionNumber.current
     val skipVersion = LocalSkipVersionNumber.current
@@ -161,7 +156,7 @@ fun FeedsPage(
         }
     }
 
-    fun expandAll() {
+    fun expandAllGroups() {
         groupWithFeedList.forEach { groupWithFeed ->
             when (groupWithFeed) {
                 is GroupFeedsView.Group -> {
@@ -170,9 +165,10 @@ fun FeedsPage(
                 else -> {}
             }
         }
+        hasGroupVisible = true
     }
 
-    fun collapseAll() {
+    fun collapseAllGroups() {
         groupWithFeedList.forEach { groupWithFeed ->
             when (groupWithFeed) {
                 is GroupFeedsView.Group -> {
@@ -181,6 +177,7 @@ fun FeedsPage(
                 else -> {}
             }
         }
+        hasGroupVisible = false
     }
 
     LaunchedEffect(Unit) {
@@ -280,38 +277,20 @@ fun FeedsPage(
                             color = MaterialTheme.colorScheme.primary,
                             style = MaterialTheme.typography.labelLarge,
                         )
-                        Row() {
-                            Row(
-                                modifier = Modifier
-                                    .padding(end = 16.dp) // Space between icons
-                                    .size(24.dp)
-                                    .clip(CircleShape)
-                                    .background(MaterialTheme.colorScheme.surfaceTint.copy(alpha = groupIndicatorAlpha))
-                                    .clickable { collapseAll() },
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Rounded.UnfoldLess,
-                                    contentDescription = stringResource(R.string.unfold_less),
-                                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                                )
-                            }
-                            Row(
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .clip(CircleShape)
-                                    .background(MaterialTheme.colorScheme.surfaceTint.copy(alpha = groupIndicatorAlpha))
-                                    .clickable { expandAll() },
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Rounded.UnfoldMore,
-                                    contentDescription = stringResource(R.string.unfold_more),
-                                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                                )
-                            }
+                        Row(
+                            modifier = Modifier
+                                .padding(end = 12.dp)
+                                .size(20.dp)
+                                .clip(CircleShape)
+                                .clickable { if (hasGroupVisible) collapseAllGroups() else expandAllGroups() },
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                imageVector = if (hasGroupVisible) Icons.Rounded.UnfoldLess else Icons.Rounded.UnfoldMore,
+                                contentDescription = stringResource(R.string.unfold_less),
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
                         }
                     }
                     Spacer(modifier = Modifier.height(8.dp))
@@ -342,6 +321,11 @@ fun FeedsPage(
                                                 groupWithFeed.group.id,
                                                 groupListExpand::value
                                             ).not()
+                                        hasGroupVisible = if (groupsVisible[groupWithFeed.group.id] == true) {
+                                            true
+                                        } else {
+                                            groupsVisible.any { it.value }
+                                        }
                                     }
                                 ) {
                                     filterChange(
