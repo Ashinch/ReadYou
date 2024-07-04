@@ -7,8 +7,11 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
@@ -17,14 +20,17 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
-import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.UnfoldLess
+import androidx.compose.material.icons.rounded.UnfoldMore
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -36,7 +42,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -60,7 +68,6 @@ import me.ash.reader.ui.component.base.Banner
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold
-import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.ext.alphaLN
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.currentAccountId
@@ -111,6 +118,7 @@ fun FeedsPage(
     val groupWithFeedList =
         feedsUiState.groupWithFeedList.collectAsStateValue(initial = emptyList())
     val groupsVisible: SnapshotStateMap<String, Boolean> = feedsUiState.groupsVisible
+    var hasGroupVisible by remember { mutableStateOf(groupListExpand.value) }
 
     val newVersion = LocalNewVersionNumber.current
     val skipVersion = LocalSkipVersionNumber.current
@@ -146,6 +154,30 @@ fun FeedsPage(
                 weight = 1.4f
             )
         }
+    }
+
+    fun expandAllGroups() {
+        groupWithFeedList.forEach { groupWithFeed ->
+            when (groupWithFeed) {
+                is GroupFeedsView.Group -> {
+                    groupsVisible[groupWithFeed.group.id] = true
+                }
+                else -> {}
+            }
+        }
+        hasGroupVisible = true
+    }
+
+    fun collapseAllGroups() {
+        groupWithFeedList.forEach { groupWithFeed ->
+            when (groupWithFeed) {
+                is GroupFeedsView.Group -> {
+                    groupsVisible[groupWithFeed.group.id] = false
+                }
+                else -> {}
+            }
+        }
+        hasGroupVisible = false
     }
 
     LaunchedEffect(Unit) {
@@ -233,10 +265,34 @@ fun FeedsPage(
 
                 item {
                     Spacer(modifier = Modifier.height(24.dp))
-                    Subtitle(
-                        modifier = Modifier.padding(start = 26.dp),
-                        text = stringResource(R.string.feeds)
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 26.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = stringResource(R.string.feeds),
+                            color = MaterialTheme.colorScheme.primary,
+                            style = MaterialTheme.typography.labelLarge,
+                        )
+                        Row(
+                            modifier = Modifier
+                                .padding(end = 12.dp)
+                                .size(20.dp)
+                                .clip(CircleShape)
+                                .clickable { if (hasGroupVisible) collapseAllGroups() else expandAllGroups() },
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                imageVector = if (hasGroupVisible) Icons.Rounded.UnfoldLess else Icons.Rounded.UnfoldMore,
+                                contentDescription = stringResource(R.string.unfold_less),
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+                        }
+                    }
                     Spacer(modifier = Modifier.height(8.dp))
                 }
 
@@ -245,9 +301,7 @@ fun FeedsPage(
                 itemsIndexed(groupWithFeedList) { index, groupWithFeed ->
                     when (groupWithFeed) {
                         is GroupFeedsView.Group -> {
-                            if (index != 0) {
-                                Spacer(modifier = Modifier.height(16.dp))
-                            }
+                            Spacer(modifier = Modifier.height(16.dp))
 
                             if (groupWithFeed.group.id != defaultGroupId ||  groupWithFeed.group.feeds > 0) {
                                 GroupItem(
@@ -267,6 +321,11 @@ fun FeedsPage(
                                                 groupWithFeed.group.id,
                                                 groupListExpand::value
                                             ).not()
+                                        hasGroupVisible = if (groupsVisible[groupWithFeed.group.id] == true) {
+                                            true
+                                        } else {
+                                            groupsVisible.any { it.value }
+                                        }
                                     }
                                 ) {
                                     filterChange(
