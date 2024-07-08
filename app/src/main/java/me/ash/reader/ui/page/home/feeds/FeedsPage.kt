@@ -210,6 +210,8 @@ fun FeedsPage(
                 }
             }
         },
+        title = feedsUiState.account?.name ?: "",
+        onTitleClick = { accountTabVisible = true },
         actions = {
             FeedbackIconButton(
                 modifier = Modifier.rotate(if (isSyncing) angle else 0f),
@@ -234,12 +236,12 @@ fun FeedsPage(
             LazyColumn (
                 state = listState
             ) {
-                item {
-                    DisplayText(
-                        text = feedsUiState.account?.name ?: "",
-                        desc = if (isSyncing) stringResource(R.string.syncing) else "",
-                    ) { accountTabVisible = true }
-                }
+//                item {
+//                    DisplayText(
+//                        text = feedsUiState.account?.name ?: "",
+//                        desc = if (isSyncing) stringResource(R.string.syncing) else "",
+//                    ) { accountTabVisible = true }
+//                }
                 item {
                     Banner(
                         title = filterUiState.filter.toName(),

@@ -200,6 +200,11 @@ fun FlowPage(
                 }
             }
         },
+        title = when {
+            filterUiState.group != null -> filterUiState.group.name
+            filterUiState.feed != null -> filterUiState.feed.name
+            else -> filterUiState.filter.toName()
+        },
         actions = {
             RYExtensibleVisibility(visible = !filterUiState.filter.isStarred()) {
                 FeedbackIconButton(
@@ -257,15 +262,15 @@ fun FlowPage(
                     state = listState,
                 ) {
                     item {
-                        DisplayText(
-                            modifier = Modifier.padding(start = if (articleListFeedIcon.value) 30.dp else 0.dp),
-                            text = when {
-                                filterUiState.group != null -> filterUiState.group.name
-                                filterUiState.feed != null -> filterUiState.feed.name
-                                else -> filterUiState.filter.toName()
-                            },
-                            desc = if (isSyncing) stringResource(R.string.syncing) else "",
-                        )
+//                        DisplayText(
+//                            modifier = Modifier.padding(start = if (articleListFeedIcon.value) 30.dp else 0.dp),
+//                            text = when {
+//                                filterUiState.group != null -> filterUiState.group.name
+//                                filterUiState.feed != null -> filterUiState.feed.name
+//                                else -> filterUiState.filter.toName()
+//                            },
+//                            desc = if (isSyncing) stringResource(R.string.syncing) else "",
+//                        )
                         RYExtensibleVisibility(visible = markAsRead) {
                             Spacer(modifier = Modifier.height((56 + 24 + 10).dp))
                         }

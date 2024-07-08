@@ -5,12 +5,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import me.ash.reader.ui.ext.roundClick
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.theme.palette.onDark
 
@@ -21,6 +24,8 @@ fun RYScaffold(
     topBarTonalElevation: Dp = 0.dp,
     containerTonalElevation: Dp = 0.dp,
     navigationIcon: (@Composable () -> Unit)? = null,
+    title: String = "",
+    onTitleClick: (() -> Unit)? = null,
     actions: (@Composable RowScope.() -> Unit)? = null,
     bottomBar: (@Composable () -> Unit)? = null,
     floatingActionButton: (@Composable () -> Unit)? = null,
@@ -41,7 +46,16 @@ fun RYScaffold(
         topBar = {
             if (navigationIcon != null || actions != null) {
                 TopAppBar(
-                    title = {},
+                    title = {Text(
+                        modifier = Modifier
+                            .roundClick(enabled = onTitleClick != null) { onTitleClick?.invoke() }
+                            .padding(8.dp),
+                        text = title,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )},
                     navigationIcon = { navigationIcon?.invoke() },
                     actions = { actions?.invoke(this) },
                     colors = TopAppBarDefaults.topAppBarColors(
