@@ -23,7 +23,6 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.Segment
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Movie
-import androidx.compose.material.icons.rounded.Segment
 import androidx.compose.material.icons.rounded.Title
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -46,9 +45,11 @@ import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
 import me.ash.reader.infrastructure.preference.LocalReadingDarkTheme
 import me.ash.reader.infrastructure.preference.LocalReadingFonts
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
+import me.ash.reader.infrastructure.preference.LocalReadingRenderer
 import me.ash.reader.infrastructure.preference.LocalReadingTheme
 import me.ash.reader.infrastructure.preference.ReadingFontsPreference
 import me.ash.reader.infrastructure.preference.ReadingPageTonalElevationPreference
+import me.ash.reader.infrastructure.preference.ReadingRendererPreference
 import me.ash.reader.infrastructure.preference.ReadingThemePreference
 import me.ash.reader.infrastructure.preference.not
 import me.ash.reader.ui.component.ReadingThemePrev
@@ -80,9 +81,11 @@ fun ReadingStylePage(
     val fonts = LocalReadingFonts.current
     val autoHideToolbar = LocalReadingAutoHideToolbar.current
     val pullToSwitchArticle = LocalPullToSwitchArticle.current
+    val renderer = LocalReadingRenderer.current
 
 
     var tonalElevationDialogVisible by remember { mutableStateOf(false) }
+    var rendererDialogVisible by remember { mutableStateOf(false) }
     var fontsDialogVisible by remember { mutableStateOf(false) }
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -152,6 +155,11 @@ fun ReadingStylePage(
                         modifier = Modifier.padding(horizontal = 24.dp),
                         text = stringResource(R.string.general)
                     )
+                    SettingItem(
+                        title = stringResource(R.string.content_renderer),
+                        desc = renderer.toDesc(context),
+                        onClick = { rendererDialogVisible = true },
+                    ) {}
                     SettingItem(
                         title = stringResource(R.string.reading_fonts),
                         desc = fonts.toDesc(context),
@@ -289,6 +297,21 @@ fun ReadingStylePage(
         }
     ) {
         tonalElevationDialogVisible = false
+    }
+
+    RadioDialog(
+        visible = rendererDialogVisible,
+        title = stringResource(R.string.content_renderer),
+        options = ReadingRendererPreference.values.map {
+            RadioDialogOption(
+                text = it.toDesc(context),
+                selected = it == renderer,
+            ) {
+                it.put(context, scope)
+            }
+        }
+    ) {
+        rendererDialogVisible = false
     }
 
     RadioDialog(

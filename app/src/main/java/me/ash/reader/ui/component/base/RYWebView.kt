@@ -1,7 +1,9 @@
 package me.ash.reader.ui.component.base
 
 import android.content.Context
+import android.graphics.Color
 import android.net.http.SslError
+import android.os.Build
 import android.util.Log
 import android.webkit.SslErrorHandler
 import android.webkit.WebResourceError
@@ -25,7 +27,6 @@ import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.infrastructure.preference.LocalReadingImageHorizontalPadding
 import me.ash.reader.infrastructure.preference.LocalReadingImageRoundedCorners
-import me.ash.reader.infrastructure.preference.LocalReadingLetterSpacing
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.infrastructure.preference.LocalReadingSubheadAlign
 import me.ash.reader.infrastructure.preference.LocalReadingSubheadBold
@@ -33,6 +34,7 @@ import me.ash.reader.infrastructure.preference.LocalReadingTextAlign
 import me.ash.reader.infrastructure.preference.LocalReadingTextBold
 import me.ash.reader.infrastructure.preference.LocalReadingTextFontSize
 import me.ash.reader.infrastructure.preference.LocalReadingTextHorizontalPadding
+import me.ash.reader.infrastructure.preference.LocalReadingTextLetterSpacing
 import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import kotlin.math.absoluteValue
@@ -60,7 +62,7 @@ fun RYWebView(
     val textBold: Boolean = LocalReadingTextBold.current.value
     val textAlign: String = LocalReadingTextAlign.current.toTextAlignCSS()
     val textFontSize: Int = LocalReadingTextFontSize.current
-    val textLetterSpacing: Double = LocalReadingLetterSpacing.current
+    val textLetterSpacing: Float = LocalReadingTextLetterSpacing.current
     val imageHorizontalPadding: Int = LocalReadingImageHorizontalPadding.current
     val textHorizontalPadding: Int = LocalReadingTextHorizontalPadding.current
     val imageShape: Int = LocalReadingImageRoundedCorners.current
@@ -69,11 +71,11 @@ fun RYWebView(
         .surfaceColorAtElevation((tonalElevation.value + 6).dp).toArgb()
     val webViewClient by remember {
         mutableStateOf(object : WebViewClient() {
-
             override fun shouldInterceptRequest(
                 view: WebView?,
-                url: String?,
+                request: WebResourceRequest?,
             ): WebResourceResponse? {
+                val url = request?.url?.toString()
                 if (url != null && url.contains(INJECTION_TOKEN)) {
                     try {
                         val assetPath = url.substring(
@@ -89,7 +91,7 @@ fun RYWebView(
                         Log.e("RLog", "WebView shouldInterceptRequest: $e")
                     }
                 }
-                return super.shouldInterceptRequest(view, url);
+                return super.shouldInterceptRequest(view, request);
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
@@ -135,11 +137,22 @@ fun RYWebView(
     }
 
     val webView by remember(backgroundColor) {
-        mutableStateOf(WebView(context).apply {
+        mutableStateOf(WebView(context).run {
             this.webViewClient = webViewClient
-            setBackgroundColor(backgroundColor)
+            setBackgroundColor(Color.TRANSPARENT)
+            scrollBarSize = 0
             isHorizontalScrollBarEnabled = false
             isVerticalScrollBarEnabled = true
+            with(this.settings) {
+                domStorageEnabled = true
+                javaScriptEnabled = true // Do we need JS?
+                setSupportZoom(false)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    isAlgorithmicDarkeningAllowed = true
+                }
+            }
+            // this.loadUrl(url)
+            this
         })
     }
 
@@ -147,12 +160,18 @@ fun RYWebView(
         modifier = modifier,
         factory = { webView },
         update = {
+            // if (isRefreshing) {
+            //     it.reload()
+            //     setRefreshed()
+            // }
             it.apply {
                 Log.i("RLog", "maxWidth: ${maxWidth}")
                 Log.i("RLog", "readingFont: ${context.filesDir.absolutePath}")
                 Log.i("RLog", "CustomWebView: ${content}")
                 settings.javaScriptEnabled = true
                 settings.defaultFontSize = textFontSize
+                setBackgroundColor(Color.TRANSPARENT)
+                scrollBarSize = 0
                 loadDataWithBaseURL(
                     null,
                     getStyle(
@@ -196,7 +215,7 @@ fun getStyle(
     textBold: Boolean,
     textAlign: String,
     textFontSize: Int,
-    textLetterSpacing: Double,
+    textLetterSpacing: Float,
     imageHorizontalPadding: Int,
     textHorizontalPadding: Int,
     imageShape: Int,

@@ -445,4 +445,7 @@
     <string name="import_from_json">Import from JSON</string>
     <string name="export_as_json">Export as JSON</string>
     <string name="invalid_json_file_warning">This file may not be a valid JSON file. Importing it could potentially corrupt the app and result in the loss of current preferences. Are you sure you want to proceed?</string>
+    <string name="webview">Webview</string>
+    <string name="native_component">Native Component</string>
+    <string name="content_renderer">Content renderer</string>
 </resources>
