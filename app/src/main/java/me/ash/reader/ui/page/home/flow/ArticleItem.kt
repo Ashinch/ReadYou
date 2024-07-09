@@ -204,7 +204,7 @@ fun ArticleItem(
                     Text(
                         modifier = Modifier,
                         text = dateString ?: "",
-                        color = MaterialTheme.colorScheme.outlineVariant,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.labelMedium,
                     )
                 }
