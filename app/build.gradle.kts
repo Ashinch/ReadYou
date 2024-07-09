@@ -80,6 +80,9 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
         }
+        all {
+            signingConfig = signingConfigs.getByName("release")
+        }
     }
     applicationVariants.all {
         outputs.all {

@@ -28,6 +28,7 @@ work = "2.9.0"
 
 # Compose
 composeBom = "2024.05.00"
+composeBomAlpha = "2024.06.00-alpha01"
 composeCompiler = "1.5.8"
 composeHtml = "1.0.2"
 
@@ -61,7 +62,8 @@ aboutlibraries-compose = { group = "com.mikepenz", name = "aboutlibraries-compos
 
 # Compose
 compose-html = { group = "com.github.ireward", name = "compose-html", version.ref = "composeHtml" }
-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+#compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+compose-bom = { group = "dev.chrisbanes.compose", name = "compose-bom", version.ref = "composeBomAlpha" }
 compose-animation-graphics = { group = "androidx.compose.animation", name = "animation-graphics" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
 compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }

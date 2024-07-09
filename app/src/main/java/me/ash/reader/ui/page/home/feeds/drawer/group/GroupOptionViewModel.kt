@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -44,16 +45,15 @@ class GroupOptionViewModel @Inject constructor(
         }
     }
 
-    fun showDrawer(scope: CoroutineScope, groupId: String) {
-        scope.launch {
-            _groupOptionUiState.update { it.copy(group = rssService.get().findGroupById(groupId)) }
-            _groupOptionUiState.value.drawerState.show()
+    fun fetchGroup(groupId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val group = rssService.get().findGroupById(groupId)
+            withContext(Dispatchers.Main) {
+                _groupOptionUiState.update { it.copy(group = group) }
+            }
         }
     }
 
-    fun hideDrawer(scope: CoroutineScope) {
-        scope.launch { _groupOptionUiState.value.drawerState.hide() }
-    }
 
     fun allAllowNotification(isNotification: Boolean, callback: () -> Unit = {}) {
         _groupOptionUiState.value.group?.let {
@@ -196,7 +196,6 @@ class GroupOptionViewModel @Inject constructor(
 
 @OptIn(ExperimentalMaterialApi::class)
 data class GroupOptionUiState(
-    var drawerState: ModalBottomSheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden),
     val group: Group? = null,
     val targetGroup: Group? = null,
     val groups: List<Group> = emptyList(),

@@ -1,9 +1,12 @@
 package me.ash.reader.ui.page.home.flow
 
+import android.util.Log
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.exponentialDecay
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -90,6 +93,8 @@ import me.ash.reader.ui.page.settings.color.flow.generateArticleWithFeedPreview
 import me.ash.reader.ui.theme.Shape20
 import me.ash.reader.ui.theme.applyTextDirection
 import me.ash.reader.ui.theme.palette.onDark
+
+private const val TAG = "ArticleItem"
 
 @Composable
 fun ArticleItem(
@@ -273,10 +278,12 @@ fun ArticleItem(
     }
 }
 
-private const val PositionalThresholdFraction = 0.15f
+private const val PositionalThresholdFraction = 0.4f
 private const val SwipeActionDelay = 300L
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class,
+    ExperimentalFoundationApi::class
+)
 @Composable
 fun SwipeableArticleItem(
     articleWithFeed: ArticleWithFeed,
@@ -330,27 +337,33 @@ fun SwipeableArticleItem(
     val animationSpec: AnimationSpec<Float> = spring(stiffness = Spring.StiffnessMediumLow)
     val swipeState = rememberSaveable(
         articleWithFeed.article, saver = SwipeToDismissBoxState.Saver(
-            confirmValueChange = confirmValueChange,
             density = density,
-            animationSpec = animationSpec,
-            velocityThreshold = velocityThreshold,
-            positionalThreshold = positionalThreshold
+            snapAnimationSpec = animationSpec,
+            decayAnimationSpec = exponentialDecay(),
+            confirmValueChange = confirmValueChange,
+            positionalThreshold = positionalThreshold,
+            velocityThreshold = velocityThreshold
         )
     ) {
         SwipeToDismissBoxState(
             initialValue = SwipeToDismissBoxValue.Settled,
             density = density,
-            animationSpec = animationSpec,
+            snapAnimationSpec = animationSpec,
+            decayAnimationSpec = exponentialDecay(),
             confirmValueChange = confirmValueChange,
             positionalThreshold = positionalThreshold,
             velocityThreshold = velocityThreshold
         )
     }
+
     val view = LocalView.current
     var isThresholdPassed by remember(articleWithFeed) { mutableStateOf(false) }
 
-    LaunchedEffect(swipeState.progress > PositionalThresholdFraction) {
-        if (swipeState.progress > PositionalThresholdFraction && swipeState.targetValue != SwipeToDismissBoxValue.Settled) {
+    val progress =
+        swipeState.progress(from = swipeState.currentValue, to = swipeState.dismissDirection)
+
+    LaunchedEffect(progress > PositionalThresholdFraction) {
+        if (progress > PositionalThresholdFraction && swipeState.dismissDirection != SwipeToDismissBoxValue.Settled) {
             isThresholdPassed = true
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
         } else {
@@ -373,7 +386,7 @@ fun SwipeableArticleItem(
 
     SwipeToDismissBox(
         state = swipeState,
-        enabled = !isSwipeEnabled(),
+        gesturesEnabled = !isSwipeEnabled(),
         /***  create dismiss alert background box */
         backgroundContent = {
             SwipeToDismissBoxBackgroundContent(
