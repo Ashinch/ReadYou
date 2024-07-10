@@ -24,9 +24,10 @@ import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.infrastructure.preference.LocalReadingRenderer
 import me.ash.reader.infrastructure.preference.LocalReadingSubheadUpperCase
 import me.ash.reader.infrastructure.preference.ReadingRendererPreference
-import me.ash.reader.ui.component.base.RYWebView
 import me.ash.reader.ui.component.reader.Reader
+import me.ash.reader.ui.component.webview.RYWebView
 import me.ash.reader.ui.ext.drawVerticalScrollbar
+import me.ash.reader.ui.ext.extractDomain
 import me.ash.reader.ui.ext.openURL
 import java.util.Date
 
@@ -85,6 +86,7 @@ fun Content(
                             )
                         }
                     }
+                    Spacer(modifier = Modifier.height(22.dp))
                 }
 
                 when (renderer) {
@@ -92,9 +94,8 @@ fun Content(
                         item {
                             RYWebView(
                                 content = content,
-                                onReceivedError = {
-                                    // throw RuntimeException("errorCode: ${it?.errorCode}, description: ${it?.description}")
-                                }
+                                refererDomain = link.extractDomain(),
+                                onImageClick = onImageClick,
                             )
                         }
                     }
