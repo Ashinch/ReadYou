@@ -71,4 +71,13 @@ class RssHelperTest {
         Assert.assertEquals(enclosureUrlString1, rssHelper.findThumbnail(imageHtmlCase1))
         Assert.assertEquals(imageUrlString, rssHelper.findThumbnail(imageHtmlCase2))
     }
+
+    @Test
+    fun testEnclosureNoFilenameExtension() {
+        val result = "https://pic.clubic.com/v1/images/1882727/raw"
+        val case = """
+            <enclosure url="$result" type="image/jpeg" length="0"/>
+        """
+        Assert.assertEquals(result, rssHelper.findThumbnail(case))
+    }
 }

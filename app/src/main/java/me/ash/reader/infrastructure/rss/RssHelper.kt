@@ -120,10 +120,17 @@ class RssHelper @Inject constructor(
             rawDescription = (content ?: desc) ?: "",
             shortDescription = Readability.parseToText(desc ?: content, syndEntry.link).take(110),
             fullContent = content,
-            img = findThumbnail(content ?: desc),
+            img = findThumbnail(syndEntry) ?: findThumbnail(content ?: desc),
             link = syndEntry.link ?: "",
             updateAt = preDate,
         )
+    }
+
+    fun findThumbnail(syndEntry: SyndEntry): String? {
+        if (syndEntry.enclosures.isNullOrEmpty()) {
+            return null
+        }
+        return syndEntry.enclosures.first()?.url
     }
 
     fun findThumbnail(text: String?): String? {
