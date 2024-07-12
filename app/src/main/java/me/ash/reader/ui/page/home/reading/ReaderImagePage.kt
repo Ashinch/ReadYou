@@ -79,6 +79,8 @@ fun ReaderImageViewer(
                 ).data(data = imageData.imageUrl).build()
             )
 
+            var expanded by remember { mutableStateOf(false) }
+
             LaunchedEffect(painter.intrinsicSize) {
                 zoomableState.setContentLocation(
                     ZoomableContentLocation.scaledInsideAndCenterAligned(painter.intrinsicSize)
@@ -89,7 +91,13 @@ fun ReaderImageViewer(
                 painter = painter,
                 contentDescription = imageData.altText,
                 modifier = Modifier
-                    .zoomable(state = zoomableState, clipToBounds = true)
+                    .zoomable(state = zoomableState, clipToBounds = true,
+                        onClick = {
+                            onDismissRequest()
+                        },
+                        onLongClick = {
+                            expanded = true
+                        })
                     .fillMaxSize(),
                 alignment = Alignment.Center,
                 contentScale = ContentScale.Inside
@@ -110,7 +118,7 @@ fun ReaderImageViewer(
                     contentDescription = stringResource(id = R.string.close),
                 )
             }
-            var expanded by remember { mutableStateOf(false) }
+
             IconButton(
                 onClick = { expanded = true }, colors = IconButtonDefaults.iconButtonColors(
                     containerColor = Color.Black.copy(alpha = 0.5f), contentColor = Color.White
