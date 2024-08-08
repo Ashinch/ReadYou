@@ -310,4 +310,6 @@
     <string name="export_as_json">Exportar como JSON</string>
     <string name="import_from_json">Importar desde JSON</string>
     <string name="invalid_json_file_warning">Es posible que este archivo no sea un archivo JSON válido. Importarlo podría dañar la aplicación y provocar la pérdida de las preferencias actuales. ¿Estas seguro que deseas continuar?</string>
+    <string name="unfold_less">Contraer todo</string>
+    <string name="unfold_more">Expandir todo</string>
 </resources>

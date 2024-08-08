@@ -381,4 +381,14 @@
     <string name="grey_out_articles">Artikuluak grisez markatu</string>
     <string name="all_read">Irakurritako guztiak</string>
     <string name="read_excluding_starred">Irakurritakoak, izartutakoak izan ezik</string>
+    <string name="submit_bug_report">akats txosten bat ireki GitHub-en</string>
+    <string name="unexpected_error_msg">Aplikazioak ezusteko errore bat aurkitu du eta itxi behar izan da.
+\n
+\nArazo hau azkar identifikatzen eta konpontzen laguntzeko, %1$s egin dezakezu beheko pilaren arrastoarekin.</string>
+    <string name="next_article">Hurrengo artikulua</string>
+    <string name="none">Bat ere ez</string>
+    <string name="unexpected_error_title">Hara! Zeozer gaizki joan da…</string>
+    <string name="copy_error_report">Erroreen txostena kopiatu</string>
+    <string name="swipe_to_start">Arrastatu ezkerrera</string>
+    <string name="swipe_to_end">Arrastatu eskuinera</string>
 </resources>

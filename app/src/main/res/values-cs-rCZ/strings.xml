@@ -307,4 +307,6 @@
     <string name="import_from_json">Importovat ze souboru JSON</string>
     <string name="export_as_json">Exportovat jako JSON</string>
     <string name="invalid_json_file_warning">Tento soubor nejspíš není platný soubor JSON. Jeho importováním můžete poškodit aplikaci, což může mít za následek ztrátu aktuálních nastavení. Opravdu chcete pokračovat?</string>
+    <string name="unfold_more">Rozbalit vše</string>
+    <string name="unfold_less">Sbalit vše</string>
 </resources>

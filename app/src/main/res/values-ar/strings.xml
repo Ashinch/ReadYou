@@ -182,7 +182,7 @@
     <string name="letter_spacing">تباعد الحروف</string>
     <string name="bionic_reading">القراءة الحيويَّة</string>
     <string name="videos">الفيديوهات</string>
-    <string name="align_end">حاذِ يمينًا</string>
+    <string name="align_end">محاذاة معكوسة</string>
     <string name="subhead">عنوان فرعيٌّ</string>
     <string name="use_app_theme">استخدم سمة التطبيق</string>
     <string name="advanced">متقدِّم</string>
@@ -250,7 +250,7 @@
     <string name="tips_top_bar_tonal_elevation">يتوفَّر ارتفاع الطابَع للشريط العلويِّ عند التمرير فقط</string>
     <string name="rearrange_buttons">أعِد ترتيب الأزرار</string>
     <string name="for_1_day">يوم</string>
-    <string name="align_start">حاذِ يسارًا</string>
+    <string name="align_start">محاذاة تلقائية</string>
     <string name="title_desc">ثخين، حرف كبير، المحاذاة</string>
     <string name="text_desc">حجم الخطِّ، تباعد الحروف، المحاذاة</string>
     <string name="manually">يدويًّا</string>
@@ -316,4 +316,6 @@
     <string name="import_from_json">استيراد من JSON</string>
     <string name="export_as_json">تصدير كـ JSON</string>
     <string name="invalid_json_file_warning">قد لا يكون هذا الملف ملف JSON صالحًا. قد يؤدي استيراده إلى إتلاف التطبيق وفقدان التفضيلات الحالية. هل انت متأكد انك تريد المتابعة؟</string>
+    <string name="unfold_more">توسيع الكل</string>
+    <string name="unfold_less">طي الكل</string>
 </resources>

@@ -95,4 +95,9 @@
     <string name="get_new_updates">പുതിയ അപ്ഡേറ്റുകൾ നേടുക</string>
     <string name="coming_soon">ഉടൻ വരുന്നു</string>
     <string name="accounts_desc">ലോക്കൽ, ഫ്രെഷ്ആർഎസ്എസ്</string>
+    <string name="help_translate">വിവർത്തനം ചെയ്യാൻ സഹായിക്കുക</string>
+    <string name="languages">ഭാഷകൾ</string>
+    <string name="color_and_style">നിറവും ശൈലിയും</string>
+    <string name="interaction">ഇടപെടൽ</string>
+    <string name="interaction_desc">പ്രാരംഭ പേജ്, ഹാപ്‌റ്റിക് ഫീഡ്‌ബാക്ക്</string>
 </resources>
