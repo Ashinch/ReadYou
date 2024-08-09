@@ -393,4 +393,6 @@
     <string name="troubleshooting">Rozwiązywanie problemów</string>
     <string name="bug_report">Zgłoszenie błędu</string>
     <string name="app_preferences">Preferencje</string>
+    <string name="unfold_more">Rozwiń wszystkie</string>
+    <string name="unfold_less">Zwiń wszystkie</string>
 </resources>

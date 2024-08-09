@@ -307,4 +307,6 @@
     <string name="export_as_json">Извоз као JSON</string>
     <string name="import_from_json">Увоз из JSON</string>
     <string name="invalid_json_file_warning">Овај фајл можда није важећи JSON фајл. Увоз би потенцијално могао да оштети апликацију и резултира губитком тренутних преференција. Желите ли заиста да наставите?</string>
+    <string name="unfold_more">Прошири све</string>
+    <string name="unfold_less">Скупи све</string>
 </resources>

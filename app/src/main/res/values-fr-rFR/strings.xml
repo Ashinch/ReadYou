@@ -304,4 +304,7 @@
     <string name="mark_below_as_read">Marquer ci-dessous comme lu</string>
     <string name="image_saved">Image enregistrée</string>
     <string name="permission_denied">Permission refusée</string>
+    <string name="import_from_json">Importer depuis un fichier JSON</string>
+    <string name="export_as_json">Exporter en fichier JSON</string>
+    <string name="invalid_json_file_warning">Ce fichier n\'est peut-être pas un fichier JSON valide. L\'importer pourrait potentiellement corrompre l\'application et entraîner la perte des préférences actuelles. Êtes-vous sur de vouloir continuer ?</string>
 </resources>

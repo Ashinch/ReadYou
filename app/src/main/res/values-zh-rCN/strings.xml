@@ -301,4 +301,6 @@
     <string name="import_from_json">从 JSON 文件导入</string>
     <string name="export_as_json">导出为 JSON 文件</string>
     <string name="invalid_json_file_warning">该文件可能不是有效的 JSON 文件！导入该文件可能会损坏应用程序并导致当前偏好设置丢失，您确定要继续吗？</string>
+    <string name="unfold_more">全部展开</string>
+    <string name="unfold_less">全部折叠</string>
 </resources>

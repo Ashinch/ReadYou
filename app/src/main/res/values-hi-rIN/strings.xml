@@ -304,4 +304,6 @@
     <string name="import_from_json">JSON से आयात करें</string>
     <string name="export_as_json">JSON के रूप में निर्यात करें</string>
     <string name="invalid_json_file_warning">यह फाइल मान्य JSON फाइल नहीं हो सकती है। इसे आयात करने से संभावित रूप से ऐप दूषित हो सकता है और परिणामस्वरूप वर्तमान प्राथमिकताएं खो सकती हैं। क्या आप वाकई आगे बढ़ना चाहते हैं?</string>
+    <string name="unfold_more">सभी विस्तृत करें</string>
+    <string name="unfold_less">सभी संक्षिप्त करें</string>
 </resources>

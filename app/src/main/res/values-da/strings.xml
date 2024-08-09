@@ -301,4 +301,7 @@
     <string name="mark_below_as_read">Marker nedenfor som læst</string>
     <string name="save">Gem</string>
     <string name="image_saved">Billede gemt</string>
+    <string name="export_as_json">Eksporter som JSON</string>
+    <string name="import_from_json">Importer fra JSON</string>
+    <string name="invalid_json_file_warning">Denne fil er nok ikke en gyldig JSON-fil. Import af den kan potentielt ødelægge appen og resultere i tab af aktuelle præferencer. Er du sikker på, at du vil fortsætte?</string>
 </resources>

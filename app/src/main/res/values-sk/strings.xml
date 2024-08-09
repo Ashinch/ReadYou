@@ -307,4 +307,6 @@
     <string name="export_as_json">Exportovať ako JSON</string>
     <string name="import_from_json">Importovať z JSON</string>
     <string name="invalid_json_file_warning">Tento súbor nemusí byť platným súborom JSON. Jeho importovanie môže spôsobiť poškodenie aplikácie a stratu aktuálnych predvolieb. Ste si istí, že chcete pokračovať?</string>
+    <string name="unfold_more">Rozbaliť všetko</string>
+    <string name="unfold_less">Zbaliť všetko</string>
 </resources>
