@@ -1,44 +1,35 @@
 package me.ash.reader.ui.page.home.reading
 
-import android.util.Log
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
+import me.ash.reader.infrastructure.preference.LocalReadingRenderer
 import me.ash.reader.infrastructure.preference.LocalReadingSubheadUpperCase
+import me.ash.reader.infrastructure.preference.ReadingRendererPreference
 import me.ash.reader.ui.component.reader.Reader
+import me.ash.reader.ui.component.webview.RYWebView
 import me.ash.reader.ui.ext.drawVerticalScrollbar
+import me.ash.reader.ui.ext.extractDomain
 import me.ash.reader.ui.ext.openURL
-import me.ash.reader.ui.ext.pagerAnimate
-import java.util.*
-import kotlin.math.abs
+import java.util.Date
 
 @Composable
 fun Content(
@@ -57,6 +48,7 @@ fun Content(
     val subheadUpperCase = LocalReadingSubheadUpperCase.current
     val openLink = LocalOpenLink.current
     val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
+    val renderer = LocalReadingRenderer.current
 
     if (isLoading) {
         Column {
@@ -94,17 +86,33 @@ fun Content(
                             )
                         }
                     }
+                    Spacer(modifier = Modifier.height(22.dp))
                 }
-                Reader(
-                    context = context,
-                    subheadUpperCase = subheadUpperCase.value,
-                    link = link ?: "",
-                    content = content,
-                    onImageClick = onImageClick,
-                    onLinkClick = {
-                        context.openURL(it, openLink, openLinkSpecificBrowser)
+
+                when (renderer) {
+                    ReadingRendererPreference.WebView -> {
+                        item {
+                            RYWebView(
+                                content = content,
+                                refererDomain = link.extractDomain(),
+                                onImageClick = onImageClick,
+                            )
+                        }
                     }
-                )
+
+                    ReadingRendererPreference.NativeComponent -> {
+                        Reader(
+                            context = context,
+                            subheadUpperCase = subheadUpperCase.value,
+                            link = link ?: "",
+                            content = content,
+                            onImageClick = onImageClick,
+                            onLinkClick = {
+                                context.openURL(it, openLink, openLinkSpecificBrowser)
+                            }
+                        )
+                    }
+                }
 
                 item {
                     Spacer(modifier = Modifier.height(128.dp))

@@ -1,7 +1,6 @@
 package me.ash.reader.ui.page.common
 
 import android.util.Log
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -22,9 +21,9 @@ import kotlinx.coroutines.flow.collectLatest
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.infrastructure.preference.LocalDarkTheme
 import me.ash.reader.infrastructure.preference.LocalReadingDarkTheme
+import me.ash.reader.ui.ext.animatedComposable
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.findActivity
-import me.ash.reader.ui.ext.animatedComposable
 import me.ash.reader.ui.ext.initialFilter
 import me.ash.reader.ui.ext.initialPage
 import me.ash.reader.ui.ext.isFirstLaunch
@@ -41,6 +40,7 @@ import me.ash.reader.ui.page.settings.color.ColorAndStylePage
 import me.ash.reader.ui.page.settings.color.DarkThemePage
 import me.ash.reader.ui.page.settings.color.feeds.FeedsPageStylePage
 import me.ash.reader.ui.page.settings.color.flow.FlowPageStylePage
+import me.ash.reader.ui.page.settings.color.reading.BionicReadingPage
 import me.ash.reader.ui.page.settings.color.reading.ReadingDarkThemePage
 import me.ash.reader.ui.page.settings.color.reading.ReadingImagePage
 import me.ash.reader.ui.page.settings.color.reading.ReadingStylePage
@@ -206,6 +206,9 @@ fun HomeEntry(
             }
             animatedComposable(route = RouteName.READING_PAGE_STYLE) {
                 ReadingStylePage(navController)
+            }
+            animatedComposable(route = RouteName.READING_BIONIC_READING) {
+                BionicReadingPage(navController)
             }
             animatedComposable(route = RouteName.READING_DARK_THEME) {
                 ReadingDarkThemePage(navController)

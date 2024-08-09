@@ -317,8 +317,8 @@
     <string name="images">Images</string>
     <string name="rounded_corners">Rounded corners</string>
     <string name="videos">Videos</string>
-    <string name="align_start">Align left</string>
-    <string name="align_end">Align right</string>
+    <string name="align_start">Align start</string>
+    <string name="align_end">Align end</string>
     <string name="center_text">Center text</string>
     <string name="justify">Justify</string>
     <string name="external_fonts">External fonts</string>
@@ -445,4 +445,16 @@
     <string name="import_from_json">Import from JSON</string>
     <string name="export_as_json">Export as JSON</string>
     <string name="invalid_json_file_warning">This file may not be a valid JSON file. Importing it could potentially corrupt the app and result in the loss of current preferences. Are you sure you want to proceed?</string>
+    <string name="webview" translatable="false">WebView</string>
+    <string name="native_component">Native Component</string>
+    <string name="content_renderer">Content renderer</string>
+    <string name="read_aloud">Read Aloud</string>
+    <string name="only_available_on_webview">Only available on the WebView</string>
+    <string name="bionic_reading_preview" translatable="false"><![CDATA[<p>With Bionic Reading you read texts faster, better and more focused.<p>]]></string>
+    <string name="use_bionic_reading">Use Bionic Reading</string>
+    <string name="about">About</string>
+    <string name="bionic_reading_tips">What is Bionic Reading?</string>
+    <string name="browse_bionic_reading_tips">Learn more at &lt;i&gt;&lt;u&gt;bionic-reading.com&lt;/u&gt;&lt;/i&gt;.</string>
+    <string name="bionic_reading_domain" translatable="false">bionic-reading.com</string>
+    <string name="bionic_reading_link" translatable="false">https://bionic-reading.com</string>
 </resources>

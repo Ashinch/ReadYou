@@ -24,24 +24,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
 import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
-import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
+import me.ash.reader.infrastructure.preference.LocalReadingBionicReading
 import me.ash.reader.infrastructure.preference.LocalReadingTextLineHeight
+import me.ash.reader.infrastructure.preference.not
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.motion.materialSharedAxisY
 import me.ash.reader.ui.page.home.HomeViewModel
 import kotlin.math.abs
-
 
 private const val UPWARD = 1
 private const val DOWNWARD = -1
@@ -55,12 +55,12 @@ fun ReadingPage(
     homeViewModel: HomeViewModel,
     readingViewModel: ReadingViewModel = hiltViewModel(),
 ) {
-    val tonalElevation = LocalReadingPageTonalElevation.current
     val context = LocalContext.current
     val isPullToSwitchArticleEnabled = LocalPullToSwitchArticle.current.value
     val readingUiState = readingViewModel.readingUiState.collectAsStateValue()
     val readerState = readingViewModel.readerStateStateFlow.collectAsStateValue()
     val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
+    val bionicReading = LocalReadingBionicReading.current
 
     var isReaderScrollingDown by remember { mutableStateOf(false) }
     var showFullScreenImageViewer by remember { mutableStateOf(false) }
@@ -217,6 +217,7 @@ fun ReadingPage(
                         isStarred = readingUiState.isStarred,
                         isNextArticleAvailable = isNextArticleAvailable,
                         isFullContent = readerState.content is ReaderState.FullContent,
+                        isBionicReading = bionicReading.value,
                         onUnread = {
                             readingViewModel.updateReadStatus(it)
                         },
@@ -230,6 +231,12 @@ fun ReadingPage(
                             if (it) readingViewModel.renderFullContent()
                             else readingViewModel.renderDescriptionContent()
                         },
+                        onBionicReading = {
+                            (!bionicReading).put(context, homeViewModel.viewModelScope)
+                        },
+                        onReadAloud = {
+                            context.showToast(context.getString(R.string.coming_soon))
+                        }
                     )
                 }
             }

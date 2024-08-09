@@ -13,8 +13,8 @@ import me.ash.reader.ui.ext.put
 val LocalReadingTextLineHeight = compositionLocalOf { ReadingTextLineHeightPreference.default }
 
 data object ReadingTextLineHeightPreference {
-    const val default = 1f
-    private val range = 0.8f..2f
+    const val default = 1.5F
+    private val range = 0.8F..2F
 
     fun put(context: Context, scope: CoroutineScope, value: Float) {
         scope.launch {

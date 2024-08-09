@@ -134,6 +134,8 @@ data class DataStoreKey<T>(
         const val flowArticleListReadIndicator = "flowArticleListReadIndicator"
 
         // Reading page
+        const val readingRenderer = "readingRender"
+        const val readingBionicReading = "readingBionicReading"
         const val readingDarkTheme = "readingDarkTheme"
         const val readingPageTonalElevation = "readingPageTonalElevation"
         const val readingTextFontSize = "readingTextFontSize"
@@ -207,6 +209,8 @@ data class DataStoreKey<T>(
             flowArticleListTonalElevation to DataStoreKey(intPreferencesKey(flowArticleListTonalElevation), Int::class.java),
             flowArticleListReadIndicator to DataStoreKey(booleanPreferencesKey(flowArticleListReadIndicator), Boolean::class.java),
             // Reading page
+            readingRenderer to DataStoreKey(intPreferencesKey(readingRenderer), Int::class.java),
+            readingBionicReading to DataStoreKey(booleanPreferencesKey(readingBionicReading), Boolean::class.java),
             readingDarkTheme to DataStoreKey(intPreferencesKey(readingDarkTheme), Int::class.java),
             readingPageTonalElevation to DataStoreKey(intPreferencesKey(readingPageTonalElevation), Int::class.java),
             readingTextFontSize to DataStoreKey(intPreferencesKey(readingTextFontSize), Int::class.java),

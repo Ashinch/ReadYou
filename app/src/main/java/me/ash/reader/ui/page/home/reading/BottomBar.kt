@@ -1,15 +1,20 @@
 package me.ash.reader.ui.page.home.reading
 
 import android.view.HapticFeedbackConstants
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.automirrored.rounded.Article
 import androidx.compose.material.icons.filled.FiberManualRecord
-import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.FiberManualRecord
 import androidx.compose.material.icons.outlined.Headphones
-import androidx.compose.material.icons.rounded.Article
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.StarOutline
@@ -24,8 +29,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
+import me.ash.reader.infrastructure.preference.LocalReadingRenderer
+import me.ash.reader.infrastructure.preference.ReadingRendererPreference
 import me.ash.reader.ui.component.base.CanBeDisabledIconButton
 import me.ash.reader.ui.component.base.RYExtensibleVisibility
+import me.ash.reader.ui.component.webview.BionicReadingIcon
 
 @Composable
 fun BottomBar(
@@ -34,12 +42,16 @@ fun BottomBar(
     isStarred: Boolean,
     isNextArticleAvailable: Boolean,
     isFullContent: Boolean,
+    isBionicReading: Boolean,
     onUnread: (isUnread: Boolean) -> Unit = {},
     onStarred: (isStarred: Boolean) -> Unit = {},
     onNextArticle: () -> Unit = {},
     onFullContent: (isFullContent: Boolean) -> Unit = {},
+    onBionicReading: () -> Unit = {},
+    onReadAloud: () -> Unit = {},
 ) {
     val tonalElevation = LocalReadingPageTonalElevation.current
+    val renderer = LocalReadingRenderer.current
 
     Box(
         modifier = Modifier
@@ -110,12 +122,32 @@ fun BottomBar(
                     }
                     CanBeDisabledIconButton(
                         modifier = Modifier.size(36.dp),
-                        disabled = true,
-                        imageVector = Icons.Outlined.Headphones,
-                        contentDescription = "Add Tag",
+                        disabled = false,
+                        imageVector = if (renderer == ReadingRendererPreference.WebView) null else Icons.Outlined.Headphones,
+                        contentDescription = if (renderer == ReadingRendererPreference.WebView) {
+                            stringResource(R.string.bionic_reading)
+                        } else {
+                            stringResource(R.string.read_aloud)
+                        },
                         tint = MaterialTheme.colorScheme.outline,
+                        icon = {
+                            BionicReadingIcon(
+                                filled = isBionicReading,
+                                size = 24.dp,
+                                tint = if (renderer == ReadingRendererPreference.WebView) {
+                                    MaterialTheme.colorScheme.onSecondaryContainer
+                                } else {
+                                    MaterialTheme.colorScheme.outline
+                                }
+                            )
+                        },
                     ) {
                         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        if (renderer == ReadingRendererPreference.WebView) {
+                            onBionicReading()
+                        } else {
+                            onReadAloud()
+                        }
                     }
                     CanBeDisabledIconButton(
                         disabled = false,
