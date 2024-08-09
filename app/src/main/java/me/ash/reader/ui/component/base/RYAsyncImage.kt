@@ -35,16 +35,19 @@ fun RYAsyncImage(
 ) {
     Image(
         painter = rememberAsyncImagePainter(
-            ImageRequest.Builder(LocalContext.current).addHeader(
-                "Referer", (data as String).extractDomain() ?: ""
-            ).data(data = data).apply {
+            model = ImageRequest.Builder(LocalContext.current).apply {
+                val domain = data.toString().extractDomain()
+                if (data.toString().extractDomain() != null) {
+                    addHeader("Referer", domain!!)
+                }
+            }.data(data = data).apply {
                 if (placeholder != null) placeholder(placeholder)
                 if (error != null) error(error)
                 crossfade(true)
                 scale(scale)
                 precision(precision)
                 size(size)
-            }.build()
+            }.build(),
         ),
         contentDescription = contentDescription,
         contentScale = contentScale,
