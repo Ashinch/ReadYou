@@ -317,8 +317,8 @@
     <string name="images">Images</string>
     <string name="rounded_corners">Rounded corners</string>
     <string name="videos">Videos</string>
-    <string name="align_start">Align left</string>
-    <string name="align_end">Align right</string>
+    <string name="align_start">Align start</string>
+    <string name="align_end">Align end</string>
     <string name="center_text">Center text</string>
     <string name="justify">Justify</string>
     <string name="external_fonts">External fonts</string>
@@ -455,5 +455,6 @@
     <string name="about">About</string>
     <string name="bionic_reading_tips">What is Bionic Reading?</string>
     <string name="browse_bionic_reading_tips">Learn more at &lt;i&gt;&lt;u&gt;bionic-reading.com&lt;/u&gt;&lt;/i&gt;.</string>
+    <string name="bionic_reading_domain" translatable="false">bionic-reading.com</string>
     <string name="bionic_reading_link" translatable="false">https://bionic-reading.com</string>
 </resources>

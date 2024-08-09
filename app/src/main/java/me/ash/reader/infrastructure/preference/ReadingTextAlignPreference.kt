@@ -49,8 +49,8 @@ sealed class ReadingTextAlignPreference(val value: Int) : Preference() {
 
     fun toTextAlignCSS(): String =
         when (this) {
-            Start -> "left"
-            End -> "right"
+            Start -> "start"
+            End -> "end"
             Center -> "center"
             Justify -> "justify"
         }

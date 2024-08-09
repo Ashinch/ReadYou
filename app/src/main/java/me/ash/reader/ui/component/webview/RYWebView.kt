@@ -19,8 +19,8 @@ import me.ash.reader.infrastructure.preference.LocalReadingBionicReading
 import me.ash.reader.infrastructure.preference.LocalReadingImageHorizontalPadding
 import me.ash.reader.infrastructure.preference.LocalReadingImageRoundedCorners
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
-import me.ash.reader.infrastructure.preference.LocalReadingSubheadAlign
 import me.ash.reader.infrastructure.preference.LocalReadingSubheadBold
+import me.ash.reader.infrastructure.preference.LocalReadingSubheadUpperCase
 import me.ash.reader.infrastructure.preference.LocalReadingTextAlign
 import me.ash.reader.infrastructure.preference.LocalReadingTextBold
 import me.ash.reader.infrastructure.preference.LocalReadingTextFontSize
@@ -48,21 +48,18 @@ fun RYWebView(
     val selectionTextColor = Color.Black.toArgb()
     val selectionBgColor = (MaterialTheme.colorScheme.tertiaryContainer alwaysLight true).toArgb()
     val textColor: Int = MaterialTheme.colorScheme.onSurfaceVariant.toArgb()
-    val boldTextColor: Int = MaterialTheme.colorScheme.onSurface.toArgb()
-    val linkTextColor: Int = MaterialTheme.colorScheme.primary.toArgb()
-    val subheadColor: Int = MaterialTheme.colorScheme.onSurface.toArgb()
-    val subheadBold: Boolean = LocalReadingSubheadBold.current.value
-    val subheadAlign: String = LocalReadingSubheadAlign.current.toTextAlignCSS()
     val textBold: Boolean = LocalReadingTextBold.current.value
     val textAlign: String = LocalReadingTextAlign.current.toTextAlignCSS()
+    val textMargin: Int = LocalReadingTextHorizontalPadding.current
+    val boldTextColor: Int = MaterialTheme.colorScheme.onSurface.toArgb()
+    val linkTextColor: Int = MaterialTheme.colorScheme.primary.toArgb()
+    val subheadBold: Boolean = LocalReadingSubheadBold.current.value
+    val subheadUpperCase: Boolean = LocalReadingSubheadUpperCase.current.value
     val fontSize: Int = LocalReadingTextFontSize.current
-    val textLetterSpacing: Float = LocalReadingTextLetterSpacing.current
+    val letterSpacing: Float = LocalReadingTextLetterSpacing.current
     val lineHeight: Float = LocalReadingTextLineHeight.current
-    val textMargin: Int = 20
     val imgMargin: Int = LocalReadingImageHorizontalPadding.current
     val imgBorderRadius: Int = LocalReadingImageRoundedCorners.current
-    val textHorizontalPadding: Int = LocalReadingTextHorizontalPadding.current
-    val imageShape: Int = LocalReadingImageRoundedCorners.current
     val codeTextColor: Int = MaterialTheme.colorScheme.tertiary.toArgb()
     val codeBgColor: Int = MaterialTheme.colorScheme
         .surfaceColorAtElevation((tonalElevation.value + 6).dp).toArgb()
@@ -99,9 +96,14 @@ fun RYWebView(
                         WebViewStyle.get(
                             fontSize = fontSize,
                             lineHeight = lineHeight,
+                            letterSpacing = letterSpacing,
                             textMargin = textMargin,
                             textColor = textColor,
+                            textBold = textBold,
+                            textAlign = textAlign,
                             boldTextColor = boldTextColor,
+                            subheadBold = subheadBold,
+                            subheadUpperCase = subheadUpperCase,
                             imgMargin = imgMargin,
                             imgBorderRadius = imgBorderRadius,
                             linkTextColor = linkTextColor,

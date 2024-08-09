@@ -165,7 +165,7 @@ fun ReadingStylePage(
                         title = stringResource(R.string.bionic_reading),
                         separatedActions = renderer == ReadingRendererPreference.WebView,
                         enabled = renderer == ReadingRendererPreference.WebView,
-                        desc = if (renderer == ReadingRendererPreference.WebView) null
+                        desc = if (renderer == ReadingRendererPreference.WebView) stringResource(R.string.bionic_reading_domain)
                         else stringResource(R.string.only_available_on_webview),
                         onClick = {
                             navController.navigate(RouteName.READING_BIONIC_READING) {

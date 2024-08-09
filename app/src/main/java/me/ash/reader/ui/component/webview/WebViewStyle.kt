@@ -7,9 +7,14 @@ object WebViewStyle {
     fun get(
         fontSize: Int,
         lineHeight: Float,
+        letterSpacing: Float,
         textMargin: Int,
         textColor: Int,
+        textBold: Boolean,
+        textAlign: String,
         boldTextColor: Int,
+        subheadBold: Boolean,
+        subheadUpperCase: Boolean,
         imgMargin: Int,
         imgBorderRadius: Int,
         linkTextColor: Int,
@@ -23,12 +28,17 @@ object WebViewStyle {
     /* --font-family: Inter; */
     --font-size: ${fontSize}px;
     --line-height: ${lineHeight};
+    --letter-spacing: ${letterSpacing}px;
     --text-margin: ${textMargin}px;
     --text-color: ${argbToCssColor(textColor)};
+    --text-bold: ${if(textBold) "600" else "normal"};
+    --text-align: ${textAlign};
     --bold-text-color: ${argbToCssColor(boldTextColor)};
     --link-text-color: ${argbToCssColor(linkTextColor)};
     --selection-text-color: ${argbToCssColor(selectionTextColor)};
     --selection-bg-color: ${argbToCssColor(selectionBgColor)};
+    --subhead-bold: ${if(subheadBold) "600" else "normal"};
+    --subhead-upper-case: ${if(subheadUpperCase) "uppercase" else "none"};
     --img-margin: ${imgMargin}px;
     --img-border-radius: ${imgBorderRadius}px;
     --content-padding;
@@ -62,6 +72,7 @@ article {
     margin-right: var(--text-margin) !important;
     font-family: var(--font-family) !important;
     font-size: var(--font-size) !important;
+    font-weight: var(--text-bold) !important;
     color: var(--text-color) !important;
 }
 
@@ -83,9 +94,12 @@ h3,
 h4,
 h5,
 h6 {
+    font-weight: var(--subhead-bold) !important;
+    text-transform: var(--subhead-upper-case) !important;
     line-height: calc(min(1.2, var(--line-height))) !important;
-    font-weight: 600 !important;
+    letter-spacing: var(--letter-spacing) !important;
     color: var(--bold-text-color) !important;
+    text-align: var(--text-align) !important;
 }
 
 /* Paragraph */
@@ -94,10 +108,14 @@ p {
     word-wrap: break-word !important;
     overflow-wrap: break-word !important;
     line-height: var(--line-height) !important;
+    letter-spacing: var(--letter-spacing) !important;
+    text-align: var(--text-align) !important;
 }
 
 span {
     line-height: var(--line-height) !important;
+    letter-spacing: var(--letter-spacing) !important;
+    text-align: var(--text-align) !important;
 }
 
 /* Strong  */
@@ -120,16 +138,25 @@ div > a {
     font-weight: 600 !important;
     color: var(--link-text-color);
     line-height: var(--line-height);
+    letter-spacing: var(--letter-spacing) !important;
+    text-align: var(--text-align) !important;
 }
 
 /* Image  */
+iframe,
+video,
+embed,
+object,
 img {
     margin-top: 0.5em !important;
     margin-left: calc(0px - var(--text-margin) + var(--img-margin)) !important;
     margin-right: calc(0px - var(--text-margin) + var(--img-margin)) !important;
     max-width: calc(100% + 2 * var(--text-margin) - 2 * var(--img-margin)) !important;
-    height: auto !important;
     border-radius: var(--img-border-radius) !important;
+}
+
+img {
+     height: auto !important;
 }
 
 img::after {
@@ -161,7 +188,9 @@ p > img {
 img + small {
     display: inline-block;
     line-height: calc(min(1.5, var(--line-height))) !important;
+    letter-spacing: var(--letter-spacing) !important;
     margin-top: var(--image-caption-margin) !important;
+    text-align: var(--text-align) !important;
 }
 
 /* List */
@@ -169,11 +198,15 @@ ul,
 ol {
     padding-left: 0 !important;
     line-height: var(--line-height) !important;
+    letter-spacing: var(--letter-spacing) !important;
+    text-align: var(--text-align) !important;
 }
 
 li {
     line-height: var(--line-height) !important;
+    letter-spacing: var(--letter-spacing) !important;
     margin-left: 1.5em !important;
+    text-align: var(--text-align) !important;
 }
 
 /* Quote  */
@@ -183,6 +216,8 @@ blockquote {
     background-color: var(--blockquote-bg-color) !important;
     border-left: var(--blockquote-border-width) solid var(--blockquote-border-color) !important;
     line-height: var(--line-height) !important;
+    letter-spacing: var(--letter-spacing) !important;
+    text-align: var(--text-align) !important;
 }
 
 blockquote blockquote {
@@ -209,6 +244,8 @@ table td {
     border: var(--table-border-width) solid var(--table-border-color) !important;
     padding: var(--table-cell-padding) !important;
     line-height: var(--line-height) !important;
+    letter-spacing: var(--letter-spacing) !important;
+    text-align: var(--text-align) !important;
 }
 
 table tr {
@@ -271,6 +308,8 @@ pre::-webkit-scrollbar-thumb {
 /* MISC */
 figure {
     line-height: calc(min(1.5, var(--line-height))) !important;
+    letter-spacing: var(--letter-spacing) !important;
+    text-align: var(--text-align) !important;
     margin: 0 !important;
     opacity: 0.8 !important;
     font-size: 0.8em !important;
