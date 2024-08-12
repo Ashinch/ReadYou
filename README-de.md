@@ -52,8 +52,8 @@ Nachfolgend sind die bisher erzielten Fortschritte und die Ziele aufgeführt, an
 - [x] Optimierung der Lesbarkeit von Artikeln
 - [x] Gesamtinhalt abrufen für Originalartikel
 - [x] Mehrere Konten
-- [ ] Bionisches Lesen
-- [ ] Vorlesen
+- [x] Bionisches Lesen
+- [x] Vorlesen
 - [ ] Android Widget
 - [ ] ...
 
