@@ -16,10 +16,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.group.Group
+import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
+import me.ash.reader.infrastructure.rss.RssHelper
 import javax.inject.Inject
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -32,6 +34,8 @@ class FeedOptionViewModel @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher,
     @ApplicationScope
     private val applicationScope: CoroutineScope,
+    private val rssHelper: RssHelper,
+    private val feedDao: FeedDao,
 ) : ViewModel() {
 
     private val _feedOptionUiState = MutableStateFlow(FeedOptionUiState())
@@ -225,6 +229,16 @@ class FeedOptionViewModel @Inject constructor(
             applicationScope.launch {
                 rssService.get().changeFeedUrl(it.copy(url = _feedOptionUiState.value.newUrl))
                 _feedOptionUiState.update { it.copy(changeUrlDialogVisible = false) }
+            }
+        }
+    }
+
+    fun reloadIcon() {
+        _feedOptionUiState.value.feed?.let { feed ->
+            viewModelScope.launch(ioDispatcher) {
+                val icon = rssHelper.queryRssIconLink(feed.url) ?: return@launch
+                feedDao.update(feed.copy(icon = icon))
+                fetchFeed(feed.id)
             }
         }
     }

@@ -171,7 +171,10 @@ fun ArticleItem(
                 Text(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(start = if (articleListFeedIcon.value) 30.dp else 0.dp),
+                        .padding(
+                            start = if (articleListFeedIcon.value) 30.dp else 0.dp,
+                            end = 10.dp,
+                        ),
                     text = feedName,
                     color = MaterialTheme.colorScheme.tertiary,
                     style = MaterialTheme.typography.labelMedium,
@@ -219,7 +222,7 @@ fun ArticleItem(
         ) {
             // Feed icon
             if (articleListFeedIcon.value) {
-                FeedIcon(feedName, iconUrl = feedIconUrl)
+                FeedIcon(feedName = feedName, iconUrl = feedIconUrl)
                 Spacer(modifier = Modifier.width(10.dp))
             }
 

@@ -2,7 +2,13 @@ package me.ash.reader.ui.page.home.feeds.drawer.feed
 
 import android.view.HapticFeedbackConstants
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CreateNewFolder
@@ -63,13 +69,9 @@ fun FeedOptionDrawer(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    FeedIcon(feedName = feed?.name ?: "", iconUrl = feed?.icon, size = 24.dp)
-//                    Icon(
-//                        modifier = Modifier.roundClick { },
-//                        imageVector = Icons.Rounded.RssFeed,
-//                        contentDescription = feed?.name ?: stringResource(R.string.unknown),
-//                        tint = MaterialTheme.colorScheme.secondary,
-//                    )
+                    FeedIcon(modifier = Modifier.clickable {
+                        feedOptionViewModel.reloadIcon()
+                    }, feedName = feed?.name, iconUrl = feed?.icon, size = 24.dp)
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         modifier = Modifier.roundClick {
