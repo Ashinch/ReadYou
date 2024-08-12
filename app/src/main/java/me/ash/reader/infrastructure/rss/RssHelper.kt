@@ -2,7 +2,6 @@ package me.ash.reader.infrastructure.rss
 
 import android.content.Context
 import android.util.Log
-import com.google.gson.Gson
 import com.rometools.rome.feed.synd.SyndEntry
 import com.rometools.rome.feed.synd.SyndFeed
 import com.rometools.rome.feed.synd.SyndImageImpl
@@ -18,6 +17,7 @@ import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.html.Readability
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.decodeHTML
+import me.ash.reader.ui.ext.extractDomain
 import me.ash.reader.ui.ext.isFuture
 import me.ash.reader.ui.ext.spacerDollar
 import okhttp3.OkHttpClient
@@ -149,15 +149,12 @@ class RssHelper @Inject constructor(
         return imgRegex.find(text)?.groupValues?.get(2)?.takeIf { !it.startsWith("data:") }
     }
 
-    suspend fun queryRssIconLink(feedLink: String): String? {
-        return try {
-            val request = response(okHttpClient, "https://besticon-demo.herokuapp.com/allicons.json?url=${feedLink}")
-            val content = request.body.string()
-            val favicon = Gson().fromJson(content, Favicon::class.java)
-            favicon?.icons?.first { it.width != null && it.width >= 20 }?.url
-        } catch (e: Exception) {
-            Log.i("RLog", "queryRssIcon is failed: ${e.message}")
-            null
+    suspend fun queryRssIconLink(feedLink: String?): String? {
+        if (feedLink.isNullOrEmpty()) return null
+        val iconFinder = BestIconFinder(okHttpClient)
+        val domain = feedLink.extractDomain()
+        return iconFinder.findBestIcon(domain ?: feedLink).also {
+            Log.i("RLog", "queryRssIconByLink: get $it from $domain")
         }
     }
 
