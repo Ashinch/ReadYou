@@ -97,9 +97,9 @@ F-Droid 版本与其他版本不兼容，您无法通过覆盖安装包来升级
 
 [<img src="https://s1.ax1x.com/2023/01/12/pSnHqpQ.png"
      alt="donate"
-     height="80">](https://afdian.net/a/ashinch)
+     height="80">](https://ash7.io/sponsor)
 
-[感谢所有的爱与支持 ❤️](https://afdian.net/a/ashinch?tab=sponsor)
+[感谢所有的爱与支持 ❤️](https://afdian.com/a/ashinch?tab=sponsor)
 
 ## 本地化
 
