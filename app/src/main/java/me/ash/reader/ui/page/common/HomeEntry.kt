@@ -28,6 +28,7 @@ import me.ash.reader.ui.ext.initialFilter
 import me.ash.reader.ui.ext.initialPage
 import me.ash.reader.ui.ext.isFirstLaunch
 import me.ash.reader.ui.page.home.HomeViewModel
+import me.ash.reader.ui.page.home.adaptive.ArticleListReaderPage
 import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.page.home.flow.FlowPage
@@ -164,13 +165,37 @@ fun HomeEntry(
                 )
             }
             animatedComposable(route = RouteName.FLOW) {
-                FlowPage(
+
+                ArticleListReaderPage(
+                    modifier = Modifier,
                     navController = navController,
-                    homeViewModel = homeViewModel,
+                    homeViewModel = homeViewModel
                 )
+                /*                FlowPage(
+                                    homeViewModel = homeViewModel,
+                                    onNavigateToFeeds = {
+                                        if (navController.previousBackStackEntry == null) {
+                                            navController.navigate(RouteName.FEEDS) {
+                                                launchSingleTop = true
+                                            }
+                                        } else {
+                                            navController.popBackStack()
+                                        }
+                                    }, onOpenArticle = {
+                                        navController.navigate("${RouteName.READING}/${it}") {
+                                            launchSingleTop = true
+                                        }
+                                    }
+                                )*/
+
             }
             animatedComposable(route = "${RouteName.READING}/{articleId}") {
-                ReadingPage(navController = navController, homeViewModel = homeViewModel)
+                val articleId = it.arguments?.getString("articleId")
+                ReadingPage(
+                    navController = navController,
+                    articleId = articleId,
+                    homeViewModel = homeViewModel
+                )
             }
 
             // Settings

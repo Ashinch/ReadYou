@@ -16,11 +16,10 @@ import me.ash.reader.domain.model.article.ArticleWithFeed
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.ArticleList(
     pagingItems: LazyPagingItems<ArticleFlowItem>,
-    isFilterUnread: Boolean,
     isShowFeedIcon: Boolean,
     isShowStickyHeader: Boolean,
     articleListTonalElevation: Int,
-    isSwipeEnabled: () -> Boolean = { false },
+    readingArticleId: String?,
     isMenuEnabled: Boolean = true,
     onClick: (ArticleWithFeed) -> Unit = {},
     onToggleStarred: (ArticleWithFeed) -> Unit = { },
@@ -42,10 +41,9 @@ fun LazyListScope.ArticleList(
                 is ArticleFlowItem.Article -> {
                     SwipeableArticleItem(
                         articleWithFeed = item.articleWithFeed,
-                        isFilterUnread = isFilterUnread,
+                        isHighlighted = readingArticleId == item.articleWithFeed.article.id,
                         articleListTonalElevation = articleListTonalElevation,
                         onClick = onClick,
-                        isSwipeEnabled = isSwipeEnabled,
                         isMenuEnabled = isMenuEnabled,
                         onToggleStarred = onToggleStarred,
                         onToggleRead = onToggleRead,
@@ -72,10 +70,9 @@ fun LazyListScope.ArticleList(
                     item(key = key(item), contentType = contentType(item)) {
                         SwipeableArticleItem(
                             articleWithFeed = item.articleWithFeed,
-                            isFilterUnread = isFilterUnread,
+                            isHighlighted = readingArticleId == item.articleWithFeed.article.id,
                             articleListTonalElevation = articleListTonalElevation,
                             onClick = onClick,
-                            isSwipeEnabled = isSwipeEnabled,
                             isMenuEnabled = isMenuEnabled,
                             onToggleStarred = onToggleStarred,
                             onToggleRead = onToggleRead,

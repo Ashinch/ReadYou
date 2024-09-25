@@ -52,6 +52,7 @@ private const val DOWNWARD = -1
 @Composable
 fun ReadingPage(
     navController: NavHostController,
+    articleId: String?,
     homeViewModel: HomeViewModel,
     readingViewModel: ReadingViewModel = hiltViewModel(),
 ) {
@@ -75,13 +76,17 @@ fun ReadingPage(
 
     val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
 
-    LaunchedEffect(Unit) {
-        navController.currentBackStackEntryFlow.collect {
-            it.arguments?.getString("articleId")?.let { articleId ->
-                if (readerState.articleId != articleId) {
-                    readingViewModel.initData(articleId)
+    LaunchedEffect(articleId) {
+        if (articleId == null) {
+            navController.currentBackStackEntryFlow.collect {
+                it.arguments?.getString("articleId")?.let { articleId ->
+                    if (readerState.articleId != articleId) {
+                        readingViewModel.initData(articleId)
+                    }
                 }
             }
+        } else {
+            readingViewModel.initData(articleId)
         }
     }
 
