@@ -8,10 +8,12 @@ import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.parcelize.Parcelize
+import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.flow.FlowPage
@@ -35,7 +37,11 @@ fun ArticleListReaderPage(
     BackHandler(navigator.canNavigateBack()) {
         navigator.navigateBack()
     }
-    val currentArticle = navigator.currentDestination?.content
+    val readerState = readingViewModel.readerStateStateFlow.collectAsStateValue()
+
+    LaunchedEffect(navigator.currentDestination?.content) {
+        navigator.currentDestination?.content?.id?.let { readingViewModel.initData(it) }
+    }
 
     ListDetailPaneScaffold(
         modifier = modifier,
@@ -46,7 +52,7 @@ fun ArticleListReaderPage(
                 FlowPage(
                     homeViewModel = homeViewModel,
                     flowViewModel = flowViewModel,
-                    readingArticleId = currentArticle?.id,
+                    readingArticleId = readerState.articleId,
                     onNavigateToFeeds = {
                         if (navController.previousBackStackEntry == null) {
                             navController.navigate(RouteName.FEEDS) {
@@ -63,14 +69,11 @@ fun ArticleListReaderPage(
         },
         detailPane = {
             AnimatedPane {
-                navigator.currentDestination?.content?.let {
-                    ReadingPage(
-                        navController = navController,
-                        articleId = it.id,
-                        homeViewModel = homeViewModel,
-                        readingViewModel = readingViewModel
-                    )
-                }
+                ReadingPage(
+                    navController = navController,
+                    homeViewModel = homeViewModel,
+                    readingViewModel = readingViewModel
+                )
             }
         }
     )

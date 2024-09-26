@@ -38,6 +38,7 @@ import androidx.work.WorkInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.domain.model.general.MarkAsReadConditions
@@ -173,6 +174,20 @@ fun FlowPage(
         snapshotFlow { flowUiState.listState.firstVisibleItemIndex }.collect {
             if (it > 0) {
                 keyboardController?.hide()
+            }
+        }
+    }
+
+    LaunchedEffect(readingArticleId) {
+        if (readingArticleId != null) {
+            val item =
+                listState.layoutInfo.visibleItemsInfo.firstOrNull { it.key == readingArticleId }
+
+            val index = item?.index
+                ?: pagingItems.itemSnapshotList.indexOfFirst { it is ArticleFlowItem.Article && it.articleWithFeed.article.id == readingArticleId }
+
+            if (index != -1) {
+                listState.animateScrollToItem(index, scrollOffset = -100)
             }
         }
     }

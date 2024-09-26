@@ -190,10 +190,8 @@ fun HomeEntry(
 
             }
             animatedComposable(route = "${RouteName.READING}/{articleId}") {
-                val articleId = it.arguments?.getString("articleId")
                 ReadingPage(
                     navController = navController,
-                    articleId = articleId,
                     homeViewModel = homeViewModel
                 )
             }

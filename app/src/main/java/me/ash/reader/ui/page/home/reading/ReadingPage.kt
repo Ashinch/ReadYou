@@ -23,7 +23,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
@@ -52,7 +54,6 @@ private const val DOWNWARD = -1
 @Composable
 fun ReadingPage(
     navController: NavHostController,
-    articleId: String?,
     homeViewModel: HomeViewModel,
     readingViewModel: ReadingViewModel = hiltViewModel(),
 ) {
@@ -76,17 +77,13 @@ fun ReadingPage(
 
     val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
 
-    LaunchedEffect(articleId) {
-        if (articleId == null) {
-            navController.currentBackStackEntryFlow.collect {
-                it.arguments?.getString("articleId")?.let { articleId ->
-                    if (readerState.articleId != articleId) {
-                        readingViewModel.initData(articleId)
-                    }
+    LaunchedEffect(Unit) {
+        navController.currentBackStackEntryFlow.collect {
+            it.arguments?.getString("articleId")?.let { articleId ->
+                if (readerState.articleId != articleId) {
+                    readingViewModel.initData(articleId)
                 }
             }
-        } else {
-            readingViewModel.initData(articleId)
         }
     }
 
@@ -177,7 +174,9 @@ fun ReadingPage(
                                 }
                             ) {
                                 Box(
-                                    modifier = Modifier.fillMaxSize(),
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .nestedScroll(rememberNestedScrollInteropConnection()),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Content(

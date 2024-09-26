@@ -1,6 +1,7 @@
 package me.ash.reader.ui.component.webview
 
 import android.util.Log
+import android.view.View
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
