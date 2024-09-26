@@ -2,7 +2,6 @@ package me.ash.reader.ui.page.home.feeds.drawer.group
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Article
-import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -20,6 +19,7 @@ import me.ash.reader.ui.ext.showToast
 fun AllParseFullContentDialog(
     groupName: String,
     groupOptionViewModel: GroupOptionViewModel = hiltViewModel(),
+    onConfirm: () -> Unit,
 ) {
     val context = LocalContext.current
     val groupOptionUiState = groupOptionViewModel.groupOptionUiState.collectAsStateValue()
@@ -49,7 +49,7 @@ fun AllParseFullContentDialog(
                 onClick = {
                     groupOptionViewModel.allParseFullContent(true) {
                         groupOptionViewModel.hideAllParseFullContentDialog()
-                        groupOptionViewModel.hideDrawer(scope)
+                        onConfirm()
                         context.showToast(allowToastString)
                     }
                 }
@@ -64,7 +64,7 @@ fun AllParseFullContentDialog(
                 onClick = {
                     groupOptionViewModel.allParseFullContent(false) {
                         groupOptionViewModel.hideAllParseFullContentDialog()
-                        groupOptionViewModel.hideDrawer(scope)
+                        onConfirm()
                         context.showToast(denyToastString)
                     }
                 }

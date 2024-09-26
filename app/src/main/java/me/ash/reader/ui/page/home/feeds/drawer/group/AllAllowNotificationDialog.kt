@@ -19,6 +19,7 @@ import me.ash.reader.ui.ext.showToast
 fun AllAllowNotificationDialog(
     groupName: String,
     groupOptionViewModel: GroupOptionViewModel = hiltViewModel(),
+    onConfirm: () -> Unit,
 ) {
     val context = LocalContext.current
     val groupOptionUiState = groupOptionViewModel.groupOptionUiState.collectAsStateValue()
@@ -48,7 +49,7 @@ fun AllAllowNotificationDialog(
                 onClick = {
                     groupOptionViewModel.allAllowNotification(true) {
                         groupOptionViewModel.hideAllAllowNotificationDialog()
-                        groupOptionViewModel.hideDrawer(scope)
+                        onConfirm()
                         context.showToast(allowToastString)
                     }
                 }
@@ -63,7 +64,7 @@ fun AllAllowNotificationDialog(
                 onClick = {
                     groupOptionViewModel.allAllowNotification(false) {
                         groupOptionViewModel.hideAllAllowNotificationDialog()
-                        groupOptionViewModel.hideDrawer(scope)
+                        onConfirm()
                         context.showToast(denyToastString)
                     }
                 }

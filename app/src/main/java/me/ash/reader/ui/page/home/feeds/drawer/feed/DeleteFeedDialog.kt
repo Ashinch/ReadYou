@@ -19,6 +19,7 @@ import me.ash.reader.ui.ext.showToast
 fun DeleteFeedDialog(
     feedName: String,
     feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
+    onConfirm: () -> Unit,
 ) {
     val context = LocalContext.current
     val feedOptionUiState = feedOptionViewModel.feedOptionUiState.collectAsStateValue()
@@ -47,7 +48,7 @@ fun DeleteFeedDialog(
                 onClick = {
                     feedOptionViewModel.delete {
                         feedOptionViewModel.hideDeleteDialog()
-                        feedOptionViewModel.hideDrawer(scope)
+                        onConfirm()
                         context.showToast(toastString)
                     }
                 }
