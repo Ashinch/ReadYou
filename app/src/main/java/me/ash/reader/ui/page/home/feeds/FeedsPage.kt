@@ -166,6 +166,7 @@ fun FeedsPage(
                 is GroupFeedsView.Group -> {
                     groupsVisible[groupWithFeed.group.id] = true
                 }
+
                 else -> {}
             }
         }
@@ -178,12 +179,15 @@ fun FeedsPage(
                 is GroupFeedsView.Group -> {
                     groupsVisible[groupWithFeed.group.id] = false
                 }
+
                 else -> {}
             }
         }
         hasGroupVisible = false
     }
-    val groupDrawerState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+
+    val groupDrawerState =
+        rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val feedDrawerState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
     LaunchedEffect(Unit) {
@@ -327,10 +331,16 @@ fun FeedsPage(
                                                 groupWithFeed.group.id,
                                                 groupListExpand::value
                                             ).not()
-                                        hasGroupVisible = if (groupsVisible[groupWithFeed.group.id] == true) {
-                                            true
-                                        } else {
-                                            groupsVisible.any { it.value }
+                                        hasGroupVisible =
+                                            if (groupsVisible[groupWithFeed.group.id] == true) {
+                                                true
+                                            } else {
+                                                groupsVisible.any { it.value }
+                                            }
+                                    },
+                                    onLongClick = {
+                                        scope.launch {
+                                            groupDrawerState.show()
                                         }
                                     }
                                 ) {
@@ -400,7 +410,8 @@ fun FeedsPage(
     )
 
     SubscribeDialog(subscribeViewModel = subscribeViewModel)
-    GroupOptionDrawer()
+
+    GroupOptionDrawer(drawerState = groupDrawerState)
     FeedOptionDrawer(drawerState = feedDrawerState)
 
     AccountsTab(
