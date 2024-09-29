@@ -65,7 +65,7 @@ private class ReaderNestedScrollConnection(
             !enabled || available.y == 0f -> Offset.Zero
 
             // Scroll down to reduce the progress when the offset is currently pulled up, same for the opposite
-            source == Drag -> {
+            source == NestedScrollSource.UserInput -> {
                 Offset(0f, onPreScroll(available.y))
             }
 
@@ -78,7 +78,7 @@ private class ReaderNestedScrollConnection(
         consumed: Offset, available: Offset, source: NestedScrollSource
     ): Offset = when {
         !enabled -> Offset.Zero
-        source == Drag -> Offset(0f, onPostScroll(available.y)) // Pull to load
+        source == NestedScrollSource.UserInput -> Offset(0f, onPostScroll(available.y)) // Pull to load
         else -> Offset.Zero
     }
 
