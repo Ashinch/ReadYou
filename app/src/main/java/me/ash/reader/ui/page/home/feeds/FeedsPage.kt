@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Settings
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.UnfoldLess
 import androidx.compose.material.icons.rounded.UnfoldMore
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -53,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.work.WorkInfo
+import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarFilled
 import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarPadding
@@ -123,7 +126,8 @@ fun FeedsPage(
     val newVersion = LocalNewVersionNumber.current
     val skipVersion = LocalSkipVersionNumber.current
     val currentVersion = remember { context.getCurrentVersion() }
-    val listState = if (groupWithFeedList.isNotEmpty()) feedsUiState.listState else rememberLazyListState()
+    val listState =
+        if (groupWithFeedList.isNotEmpty()) feedsUiState.listState else rememberLazyListState()
 
     val owner = LocalLifecycleOwner.current
     var isSyncing by remember { mutableStateOf(false) }
@@ -162,6 +166,7 @@ fun FeedsPage(
                 is GroupFeedsView.Group -> {
                     groupsVisible[groupWithFeed.group.id] = true
                 }
+
                 else -> {}
             }
         }
@@ -174,11 +179,16 @@ fun FeedsPage(
                 is GroupFeedsView.Group -> {
                     groupsVisible[groupWithFeed.group.id] = false
                 }
+
                 else -> {}
             }
         }
         hasGroupVisible = false
     }
+
+    val groupDrawerState =
+        rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val feedDrawerState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
     LaunchedEffect(Unit) {
         feedsViewModel.fetchAccount()
@@ -231,7 +241,7 @@ fun FeedsPage(
             }
         },
         content = {
-            LazyColumn (
+            LazyColumn(
                 state = listState
             ) {
                 item {
@@ -303,7 +313,7 @@ fun FeedsPage(
                         is GroupFeedsView.Group -> {
                             Spacer(modifier = Modifier.height(16.dp))
 
-                            if (groupWithFeed.group.id != defaultGroupId ||  groupWithFeed.group.feeds > 0) {
+                            if (groupWithFeed.group.id != defaultGroupId || groupWithFeed.group.feeds > 0) {
                                 GroupItem(
                                     isExpanded = {
                                         groupsVisible.getOrPut(
@@ -321,10 +331,16 @@ fun FeedsPage(
                                                 groupWithFeed.group.id,
                                                 groupListExpand::value
                                             ).not()
-                                        hasGroupVisible = if (groupsVisible[groupWithFeed.group.id] == true) {
-                                            true
-                                        } else {
-                                            groupsVisible.any { it.value }
+                                        hasGroupVisible =
+                                            if (groupsVisible[groupWithFeed.group.id] == true) {
+                                                true
+                                            } else {
+                                                groupsVisible.any { it.value }
+                                            }
+                                    },
+                                    onLongClick = {
+                                        scope.launch {
+                                            groupDrawerState.show()
                                         }
                                     }
                                 ) {
@@ -351,17 +367,21 @@ fun FeedsPage(
                                         groupWithFeed.feed.groupId,
                                         groupListExpand::value
                                     )
-                                },
-                            ) {
-                                filterChange(
-                                    navController = navController,
-                                    homeViewModel = homeViewModel,
-                                    filterState = filterUiState.copy(
-                                        group = null,
-                                        feed = groupWithFeed.feed,
+                                }, onClick = {
+                                    filterChange(
+                                        navController = navController,
+                                        homeViewModel = homeViewModel,
+                                        filterState = filterUiState.copy(
+                                            group = null,
+                                            feed = groupWithFeed.feed,
+                                        )
                                     )
-                                )
-                            }
+                                }, onLongClick = {
+                                    scope.launch {
+                                        feedDrawerState.show()
+                                    }
+                                }
+                            )
                         }
                     }
                 }
@@ -390,8 +410,9 @@ fun FeedsPage(
     )
 
     SubscribeDialog(subscribeViewModel = subscribeViewModel)
-    GroupOptionDrawer()
-    FeedOptionDrawer()
+
+    GroupOptionDrawer(drawerState = groupDrawerState)
+    FeedOptionDrawer(drawerState = feedDrawerState)
 
     AccountsTab(
         visible = accountTabVisible,

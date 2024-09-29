@@ -105,25 +105,23 @@ fun FlowPage(
         onDispose { homeViewModel.syncWorkLiveData.removeObservers(owner) }
     }
 
-    val onToggleStarred: (ArticleWithFeed, Long) -> Unit = remember {
-        { article, delay ->
+    val onToggleStarred: (ArticleWithFeed) -> Unit = remember {
+        { article ->
             flowViewModel.updateStarredStatus(
                 articleId = article.article.id,
                 isStarred = !article.article.isStarred,
-                withDelay = delay
             )
         }
     }
 
-    val onToggleRead: (ArticleWithFeed, Long) -> Unit = remember {
-        { article, delay ->
+    val onToggleRead: (ArticleWithFeed) -> Unit = remember {
+        { article ->
             flowViewModel.updateReadStatus(
                 groupId = null,
                 feedId = null,
                 articleId = article.article.id,
                 conditions = MarkAsReadConditions.All,
                 isUnread = !article.article.isUnread,
-                withDelay = delay
             )
         }
     }

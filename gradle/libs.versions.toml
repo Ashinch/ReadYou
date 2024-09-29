@@ -27,7 +27,7 @@ room = "2.6.1"
 work = "2.9.0"
 
 # Compose
-composeBom = "2024.05.00"
+composeBom = "2024.09.02"
 composeCompiler = "1.5.8"
 composeHtml = "1.0.2"
 
@@ -53,6 +53,7 @@ readability4j = "1.0.8"
 retrofit2 = "2.9.0"
 rome = "1.18.0"
 telephoto = "0.7.1"
+swipe = "1.3.0"
 
 [libraries]
 # AboutLibraries
@@ -94,6 +95,7 @@ opml-parser = { group = "be.ceau", name = "opml-parser", version.ref = "opmlPars
 readability4j = { group = "net.dankito.readability4j", name = "readability4j", version.ref = "readability4j" }
 rome = { group = "com.rometools", name = "rome", version.ref = "rome" }
 telephoto = { group = "me.saket.telephoto", name = "zoomable", version.ref = "telephoto" }
+swipe = { group = "me.saket.swipe", name = "swipe", version.ref = "swipe" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-coroutines = { group = "com.squareup.okhttp3", name = "okhttp-coroutines-jvm", version.ref = "okhttp" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
