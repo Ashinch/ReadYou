@@ -177,7 +177,6 @@ fun ReadingPage(
                                 ) {
                                     Content(
                                         modifier = Modifier
-                                            .padding(paddings)
                                             .pullToLoad(
                                                 state = state,
                                                 onScroll = { f ->
@@ -186,6 +185,7 @@ fun ReadingPage(
                                                 },
                                                 enabled = isPullToSwitchArticleEnabled
                                             ),
+                                        contentPadding = paddings,
                                         content = content.text ?: "",
                                         feedName = feedName,
                                         title = title.toString(),

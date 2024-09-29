@@ -1,8 +1,11 @@
 package me.ash.reader.ui.page.home.reading
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,9 +23,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
@@ -47,6 +49,7 @@ fun Content(
     publishedDate: Date,
     listState: LazyListState,
     isLoading: Boolean,
+    contentPadding: PaddingValues = PaddingValues(),
     onImageClick: ((imgUrl: String, altText: String) -> Unit)? = null,
 ) {
     val context = LocalContext.current
@@ -67,38 +70,41 @@ fun Content(
 
         when (renderer) {
             ReadingRendererPreference.WebView -> {
-                Column(modifier = modifier) {
-                    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                        // Top bar height
-                        Spacer(modifier = Modifier.height(64.dp))
-                        // padding
-                        Spacer(modifier = Modifier.height(22.dp))
-                        Column(
-                            modifier = Modifier
-                                .padding(horizontal = 12.dp)
-                        ) {
-                            DisableSelection {
-                                Metadata(
-                                    feedName = feedName,
-                                    title = title,
-                                    author = author,
-                                    link = link,
-                                    publishedDate = publishedDate,
-                                )
-                            }
+                Column(
+                    modifier = modifier
+                        .padding(top = contentPadding.calculateTopPadding())
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+
+                ) {
+                    // Top bar height
+                    Spacer(modifier = Modifier.height(64.dp))
+                    // padding
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp)
+                    ) {
+                        DisableSelection {
+                            Metadata(
+                                feedName = feedName,
+                                title = title,
+                                author = author,
+                                link = link,
+                                publishedDate = publishedDate,
+                            )
                         }
-                        Spacer(modifier = Modifier.height(22.dp))
-
-                        RYWebView(
-                            modifier = Modifier.fillMaxWidth(),
-                            content = content,
-                            refererDomain = link.extractDomain(),
-                            onImageClick = onImageClick,
-                        )
-                        Spacer(modifier = Modifier.height(128.dp))
-                        Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
-
                     }
+
+                    RYWebView(
+                        modifier = Modifier.fillMaxSize(),
+                        content = content,
+                        refererDomain = link.extractDomain(),
+                        onImageClick = onImageClick,
+                    )
+                    Spacer(modifier = Modifier.height(128.dp))
+                    Spacer(modifier = Modifier.height(contentPadding.calculateBottomPadding()))
+
+
                 }
 
             }
@@ -115,7 +121,7 @@ fun Content(
                             // Top bar height
                             Spacer(modifier = Modifier.height(64.dp))
                             // padding
-                            Spacer(modifier = Modifier.height(22.dp))
+                            Spacer(modifier = Modifier.height(contentPadding.calculateTopPadding()))
                             Column(
                                 modifier = Modifier
                                     .padding(horizontal = 12.dp)
@@ -130,7 +136,6 @@ fun Content(
                                     )
                                 }
                             }
-                            Spacer(modifier = Modifier.height(22.dp))
                         }
 
                         Reader(
@@ -146,7 +151,7 @@ fun Content(
 
                         item {
                             Spacer(modifier = Modifier.height(128.dp))
-                            Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                            Spacer(modifier = Modifier.height(contentPadding.calculateBottomPadding()))
                         }
                     }
                 }
