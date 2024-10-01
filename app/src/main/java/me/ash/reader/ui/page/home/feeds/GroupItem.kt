@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
+import androidx.compose.material3.Badge
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,6 +35,7 @@ import me.ash.reader.ui.theme.ShapeTop32
 fun GroupItem(
     group: Group,
     alpha: Float = 1f,
+    badgeAlpha: Float = 1f,
     indicatorAlpha: Float = 1f,
     roundedBottomCorner: () -> Boolean,
     isExpanded: () -> Boolean,
@@ -79,6 +81,21 @@ fun GroupItem(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
+            if ((group.important ?: 0) != 0) {
+                Badge(
+                    containerColor = MaterialTheme.colorScheme.surfaceTint.copy(
+                        alpha = badgeAlpha
+                    ),
+                    contentColor = MaterialTheme.colorScheme.outline,
+                    content = {
+                        Text(
+                            text = group.important.toString(),
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                    },
+                )
+            }
+            Spacer(modifier = Modifier.width(12.dp))
             Row(
                 modifier = Modifier
                     .padding(end = 20.dp)
@@ -96,6 +113,7 @@ fun GroupItem(
                 )
             }
         }
+
         Spacer(modifier = Modifier.height(22.dp))
     }
 }
