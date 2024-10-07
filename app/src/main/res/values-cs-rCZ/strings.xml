@@ -186,8 +186,8 @@
     <string name="images">Obrázky</string>
     <string name="rounded_corners">Zaoblené rohy</string>
     <string name="videos">Videa</string>
-    <string name="align_start">Zarovnat vlevo</string>
-    <string name="align_end">Zarovnat vpravo</string>
+    <string name="align_start">Zarovnat poćátek</string>
+    <string name="align_end">Zarovnat konec</string>
     <string name="center_text">Vystředit text</string>
     <string name="justify">Zarovnat</string>
     <string name="external_fonts">Externí písma</string>
@@ -309,4 +309,12 @@
     <string name="invalid_json_file_warning">Tento soubor nejspíš není platný soubor JSON. Jeho importováním můžete poškodit aplikaci, což může mít za následek ztrátu aktuálních nastavení. Opravdu chcete pokračovat?</string>
     <string name="unfold_more">Rozbalit vše</string>
     <string name="unfold_less">Sbalit vše</string>
+    <string name="native_component">Nativní komponent</string>
+    <string name="content_renderer">Zobrazovač obsahu</string>
+    <string name="read_aloud">Číst nahlas</string>
+    <string name="only_available_on_webview">K dispozici pouze ve WebView</string>
+    <string name="use_bionic_reading">Použít bionické čtení</string>
+    <string name="about">Informace</string>
+    <string name="browse_bionic_reading_tips">Více informací najdete na <i><u>bionic-reading.com</u></i>.</string>
+    <string name="bionic_reading_tips">Co je bionické čtení?</string>
 </resources>

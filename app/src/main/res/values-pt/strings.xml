@@ -304,4 +304,17 @@
 \nPara nos ajudar a identificar e corrigir esse problema rapidamente, você pode %1$s com o pilha de rastreamento de erros abaixo.</string>
     <string name="image_saved">Imagem salva</string>
     <string name="permission_denied">Permissão negada</string>
+    <string name="invalid_json_file_warning">Esse arquivo pode não ser um JSON válido. Importá-lo poderá corromper o app e resultar na perda das preferências atuais. Tem certeza de que deseja prosseguir?</string>
+    <string name="unfold_more">Expandir tudo</string>
+    <string name="unfold_less">Recolher tudo</string>
+    <string name="import_from_json">Importar de JSON</string>
+    <string name="export_as_json">Exportar de JSON</string>
+    <string name="native_component">Componente nativo</string>
+    <string name="content_renderer">Renderizador de conteúdo</string>
+    <string name="read_aloud">Ler em voz alta</string>
+    <string name="only_available_on_webview">Disponível apenas em WebView</string>
+    <string name="use_bionic_reading">Usar Bionic Reading</string>
+    <string name="about">Sobre</string>
+    <string name="bionic_reading_tips">O que é Bionic Reading?</string>
+    <string name="browse_bionic_reading_tips">Saiba mais em <i><u>bionic-reading.com</u></i>.</string>
 </resources>

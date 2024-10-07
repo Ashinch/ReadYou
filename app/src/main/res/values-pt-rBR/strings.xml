@@ -179,7 +179,7 @@
     <string name="rearrange_buttons">Rearranjar os botões</string>
     <string name="bionic_reading">Leitura Biônica</string>
     <string name="images">Imagens</string>
-    <string name="align_start">Alinhar a Esquerda</string>
+    <string name="align_start">Alinhar o início</string>
     <string name="use_app_theme">Usar o tema do aplicativo</string>
     <string name="advanced">Avançado</string>
     <string name="dark_reading_theme">Tema escuro durante a leitura</string>
@@ -194,7 +194,7 @@
     <string name="title">Título</string>
     <string name="alignment">Alinhamento</string>
     <string name="general">Geral</string>
-    <string name="align_end">Alinhar a Direita</string>
+    <string name="align_end">Alinhar o final</string>
     <string name="center_text">Centralizar o Texto</string>
     <string name="justify">Justificar o Texto</string>
     <string name="auto_hide_toolbars">Esconder automaticamente a barra de ferramentas</string>
@@ -309,4 +309,12 @@
     <string name="invalid_json_file_warning">Esse arquivo pode não ser um arquivo JSON válido. Sua importação pode corromper o aplicativo e resultar na perda das preferências atuais. Tem certeza de que deseja continuar?</string>
     <string name="unfold_less">Recolher tudo</string>
     <string name="unfold_more">Expandir tudo</string>
+    <string name="native_component">Componente nativo</string>
+    <string name="content_renderer">Renderizador de conteúdo</string>
+    <string name="read_aloud">Ler em voz alta</string>
+    <string name="only_available_on_webview">Disponível apenas em WebView</string>
+    <string name="use_bionic_reading">Usar Bionic Reading</string>
+    <string name="about">Sobre</string>
+    <string name="bionic_reading_tips">O que é Bionic Reading?</string>
+    <string name="browse_bionic_reading_tips">Saiba mais em <i><u>bionic-reading.com</u></i>.</string>
 </resources>

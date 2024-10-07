@@ -138,8 +138,8 @@
     <string name="images">الصور</string>
     <string name="rounded_corners">الزوايا المبرومة</string>
     <string name="videos">ڤيديوات</string>
-    <string name="align_start">كتوب من الشمال</string>
-    <string name="align_end">كتوب من اليمين</string>
+    <string name="align_start">جهة الكتابة أوتوماتيكية</string>
+    <string name="align_end">جهة كتابة عكسية</string>
     <string name="center_text">كتوب من النُص</string>
     <string name="justify">مغط</string>
     <string name="external_fonts">فونتات مسيڤة ع جهازك</string>
@@ -306,4 +306,12 @@
     <string name="import_from_json">ستورد من فايل JSON</string>
     <string name="export_as_json">صدر ك فايل JSON</string>
     <string name="invalid_protobuf_file_warning">شكله هيدا فايل الـprotobuf مش صالح. استرادها يمكن يئدي ل كوراپشن و نزع معلومات الآپ وال تفضيلاتك اللي فيه. متأكد إنو بدك تكفي؟</string>
+    <string name="read_aloud">قرا عال عالي</string>
+    <string name="only_available_on_webview">بس موجود بال \"واب-ڤيو\"</string>
+    <string name="native_component">مكون محلي</string>
+    <string name="content_renderer">مقدم المحتوى</string>
+    <string name="about">عن</string>
+    <string name="browse_bionic_reading_tips">قرا عن القراية البايونيك ع <i><u>bionic-reading.com</u></i>.</string>
+    <string name="use_bionic_reading">ستعمل القراية البايونيك</string>
+    <string name="bionic_reading_tips">شو القراية البايونيك؟</string>
 </resources>
