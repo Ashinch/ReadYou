@@ -6,8 +6,10 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -21,6 +23,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
@@ -29,6 +32,9 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.UnfoldLess
 import androidx.compose.material.icons.rounded.UnfoldMore
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -90,7 +96,7 @@ import kotlin.collections.set
 import kotlin.math.ln
 
 @OptIn(
-    androidx.compose.foundation.ExperimentalFoundationApi::class
+    ExperimentalMaterialApi::class
 )
 @Composable
 fun FeedsPage(
@@ -130,7 +136,16 @@ fun FeedsPage(
         if (groupWithFeedList.isNotEmpty()) feedsUiState.listState else rememberLazyListState()
 
     val owner = LocalLifecycleOwner.current
+
+    val syncingScope = rememberCoroutineScope()
     var isSyncing by remember { mutableStateOf(false) }
+
+    fun doSync() = syncingScope.launch {
+        isSyncing = true
+        homeViewModel.sync()
+    }
+
+    val syncingPullRefreshState = rememberPullRefreshState(isSyncing, ::doSync)
 
     DisposableEffect(owner) {
         homeViewModel.syncWorkLiveData.observe(owner) { workInfoList ->
@@ -142,13 +157,6 @@ fun FeedsPage(
     }
 
     val infiniteTransition = rememberInfiniteTransition()
-    val angle by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = LinearEasing)
-        )
-    )
 
     val feedBadgeAlpha by remember { derivedStateOf { (ln(groupListTonalElevation.value + 1.4f) + 2f) / 100f } }
     val groupAlpha by remember { derivedStateOf { groupListTonalElevation.value.dp.alphaLN(weight = 1.2f) } }
@@ -221,15 +229,6 @@ fun FeedsPage(
             }
         },
         actions = {
-            FeedbackIconButton(
-                modifier = Modifier.rotate(if (isSyncing) angle else 0f),
-                imageVector = Icons.Rounded.Refresh,
-                contentDescription = stringResource(R.string.refresh),
-                tint = MaterialTheme.colorScheme.onSurface,
-                enabled = !isSyncing
-            ) {
-                if (!isSyncing) homeViewModel.sync()
-            }
             if (subscribeViewModel.rssService.get().addSubscription) {
                 FeedbackIconButton(
                     imageVector = Icons.Rounded.Add,
@@ -241,154 +240,158 @@ fun FeedsPage(
             }
         },
         content = {
-            LazyColumn(
-                state = listState
-            ) {
-                item {
-                    DisplayText(
-                        text = feedsUiState.account?.name ?: "",
-                        desc = if (isSyncing) stringResource(R.string.syncing) else "",
-                    ) { accountTabVisible = true }
-                }
-                item {
-                    Banner(
-                        title = filterUiState.filter.toName(),
-                        desc = importantSum,
-                        icon = filterUiState.filter.iconOutline,
-                        action = {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
-                                contentDescription = stringResource(R.string.go_to),
-                            )
-                        },
-                    ) {
-                        filterChange(
-                            navController = navController,
-                            homeViewModel = homeViewModel,
-                            filterState = filterUiState.copy(
-                                group = null,
-                                feed = null,
-                            )
-                        )
+            Box(Modifier.pullRefresh(syncingPullRefreshState)) {
+                LazyColumn(
+                    state = listState
+                ) {
+                    item {
+                        DisplayText(
+                            text = feedsUiState.account?.name ?: "",
+                            desc = "",
+                        ) { accountTabVisible = true }
                     }
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 26.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            text = stringResource(R.string.feeds),
-                            color = MaterialTheme.colorScheme.primary,
-                            style = MaterialTheme.typography.labelLarge,
-                        )
-                        Row(
-                            modifier = Modifier
-                                .padding(end = 12.dp)
-                                .size(20.dp)
-                                .clip(CircleShape)
-                                .clickable { if (hasGroupVisible) collapseAllGroups() else expandAllGroups() },
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically,
+                    item {
+                        Banner(
+                            title = filterUiState.filter.toName(),
+                            desc = importantSum,
+                            icon = filterUiState.filter.iconOutline,
+                            action = {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                                    contentDescription = stringResource(R.string.go_to),
+                                )
+                            },
                         ) {
-                            Icon(
-                                imageVector = if (hasGroupVisible) Icons.Rounded.UnfoldLess else Icons.Rounded.UnfoldMore,
-                                contentDescription = stringResource(R.string.unfold_less),
-                                tint = MaterialTheme.colorScheme.primary,
+                            filterChange(
+                                navController = navController,
+                                homeViewModel = homeViewModel,
+                                filterState = filterUiState.copy(
+                                    group = null,
+                                    feed = null,
+                                )
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
 
-                val defaultGroupId = context.currentAccountId.getDefaultGroupId()
+                    item {
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 26.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = stringResource(R.string.feeds),
+                                color = MaterialTheme.colorScheme.primary,
+                                style = MaterialTheme.typography.labelLarge,
+                            )
+                            Row(
+                                modifier = Modifier
+                                    .padding(end = 12.dp)
+                                    .size(20.dp)
+                                    .clip(CircleShape)
+                                    .clickable { if (hasGroupVisible) collapseAllGroups() else expandAllGroups() },
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Icon(
+                                    imageVector = if (hasGroupVisible) Icons.Rounded.UnfoldLess else Icons.Rounded.UnfoldMore,
+                                    contentDescription = stringResource(R.string.unfold_less),
+                                    tint = MaterialTheme.colorScheme.primary,
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
 
-                itemsIndexed(groupWithFeedList) { index, groupWithFeed ->
-                    when (groupWithFeed) {
-                        is GroupFeedsView.Group -> {
-                            Spacer(modifier = Modifier.height(16.dp))
+                    val defaultGroupId = context.currentAccountId.getDefaultGroupId()
 
-                            if (groupWithFeed.group.id != defaultGroupId || groupWithFeed.group.feeds > 0) {
-                                GroupItem(
-                                    isExpanded = {
-                                        groupsVisible.getOrPut(
-                                            groupWithFeed.group.id,
-                                            groupListExpand::value
-                                        )
-                                    },
-                                    group = groupWithFeed.group,
-                                    alpha = groupAlpha,
-                                    indicatorAlpha = groupIndicatorAlpha,
-                                    roundedBottomCorner = { index == groupWithFeedList.lastIndex || groupWithFeed.group.feeds == 0 },
-                                    onExpanded = {
-                                        groupsVisible[groupWithFeed.group.id] =
+                    itemsIndexed(groupWithFeedList) { index, groupWithFeed ->
+                        when (groupWithFeed) {
+                            is GroupFeedsView.Group -> {
+                                Spacer(modifier = Modifier.height(16.dp))
+
+                                if (groupWithFeed.group.id != defaultGroupId || groupWithFeed.group.feeds > 0) {
+                                    GroupItem(
+                                        isExpanded = {
                                             groupsVisible.getOrPut(
                                                 groupWithFeed.group.id,
                                                 groupListExpand::value
-                                            ).not()
-                                        hasGroupVisible =
-                                            if (groupsVisible[groupWithFeed.group.id] == true) {
-                                                true
-                                            } else {
-                                                groupsVisible.any { it.value }
+                                            )
+                                        },
+                                        group = groupWithFeed.group,
+                                        alpha = groupAlpha,
+                                        indicatorAlpha = groupIndicatorAlpha,
+                                        roundedBottomCorner = { index == groupWithFeedList.lastIndex || groupWithFeed.group.feeds == 0 },
+                                        onExpanded = {
+                                            groupsVisible[groupWithFeed.group.id] =
+                                                groupsVisible.getOrPut(
+                                                    groupWithFeed.group.id,
+                                                    groupListExpand::value
+                                                ).not()
+                                            hasGroupVisible =
+                                                if (groupsVisible[groupWithFeed.group.id] == true) {
+                                                    true
+                                                } else {
+                                                    groupsVisible.any { it.value }
+                                                }
+                                        },
+                                        onLongClick = {
+                                            scope.launch {
+                                                groupDrawerState.show()
                                             }
-                                    },
-                                    onLongClick = {
-                                        scope.launch {
-                                            groupDrawerState.show()
                                         }
-                                    }
-                                ) {
-                                    filterChange(
-                                        navController = navController,
-                                        homeViewModel = homeViewModel,
-                                        filterState = filterUiState.copy(
-                                            group = groupWithFeed.group,
-                                            feed = null,
+                                    ) {
+                                        filterChange(
+                                            navController = navController,
+                                            homeViewModel = homeViewModel,
+                                            filterState = filterUiState.copy(
+                                                group = groupWithFeed.group,
+                                                feed = null,
+                                            )
                                         )
-                                    )
+                                    }
                                 }
                             }
-                        }
 
-                        is GroupFeedsView.Feed -> {
-                            FeedItem(
-                                feed = groupWithFeed.feed,
-                                alpha = groupAlpha,
-                                badgeAlpha = feedBadgeAlpha,
-                                isEnded = { index == groupWithFeedList.lastIndex || groupWithFeedList[index + 1] is GroupFeedsView.Group },
-                                isExpanded = {
-                                    groupsVisible.getOrPut(
-                                        groupWithFeed.feed.groupId,
-                                        groupListExpand::value
-                                    )
-                                }, onClick = {
-                                    filterChange(
-                                        navController = navController,
-                                        homeViewModel = homeViewModel,
-                                        filterState = filterUiState.copy(
-                                            group = null,
-                                            feed = groupWithFeed.feed,
+                            is GroupFeedsView.Feed -> {
+                                FeedItem(
+                                    feed = groupWithFeed.feed,
+                                    alpha = groupAlpha,
+                                    badgeAlpha = feedBadgeAlpha,
+                                    isEnded = { index == groupWithFeedList.lastIndex || groupWithFeedList[index + 1] is GroupFeedsView.Group },
+                                    isExpanded = {
+                                        groupsVisible.getOrPut(
+                                            groupWithFeed.feed.groupId,
+                                            groupListExpand::value
                                         )
-                                    )
-                                }, onLongClick = {
-                                    scope.launch {
-                                        feedDrawerState.show()
+                                    }, onClick = {
+                                        filterChange(
+                                            navController = navController,
+                                            homeViewModel = homeViewModel,
+                                            filterState = filterUiState.copy(
+                                                group = null,
+                                                feed = groupWithFeed.feed,
+                                            )
+                                        )
+                                    }, onLongClick = {
+                                        scope.launch {
+                                            feedDrawerState.show()
+                                        }
                                     }
-                                }
-                            )
+                                )
+                            }
                         }
                     }
+                    item {
+                        Spacer(modifier = Modifier.height(128.dp))
+                        Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                    }
                 }
-                item {
-                    Spacer(modifier = Modifier.height(128.dp))
-                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
-                }
+
+                PullRefreshIndicator(isSyncing, syncingPullRefreshState, Modifier.align(Alignment.TopCenter))
             }
         },
         bottomBar = {
