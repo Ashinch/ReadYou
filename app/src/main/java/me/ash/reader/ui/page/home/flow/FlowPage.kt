@@ -1,6 +1,7 @@
 package me.ash.reader.ui.page.home.flow
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,10 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -24,6 +29,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
@@ -55,13 +62,12 @@ import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYExtensibleVisibility
 import me.ash.reader.ui.component.base.RYScaffold
-import me.ash.reader.ui.component.base.SwipeRefresh
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
 
 @OptIn(
-    androidx.compose.ui.ExperimentalComposeUiApi::class,
+    ExperimentalMaterialApi::class,
 )
 @Composable
 fun FlowPage(
@@ -94,7 +100,16 @@ fun FlowPage(
     var onSearch by remember { mutableStateOf(false) }
 
     val owner = LocalLifecycleOwner.current
+
+    val syncingScope = rememberCoroutineScope()
     var isSyncing by remember { mutableStateOf(false) }
+
+    fun doSync() = syncingScope.launch {
+        isSyncing = true
+        flowViewModel.sync()
+    }
+
+    val syncingPullRefreshState = rememberPullRefreshState(isSyncing, ::doSync)
 
     DisposableEffect(owner) {
         homeViewModel.syncWorkLiveData.observe(owner) { workInfoList ->
@@ -242,13 +257,7 @@ fun FlowPage(
             }
         },
         content = {
-            SwipeRefresh(
-                onRefresh = {
-                    if (!isSyncing) {
-                        flowViewModel.sync()
-                    }
-                }
-            ) {
+            Box(Modifier.pullRefresh(syncingPullRefreshState)) {
                 var showMenu by remember { mutableStateOf(false) }
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
@@ -262,7 +271,7 @@ fun FlowPage(
                                 filterUiState.feed != null -> filterUiState.feed.name
                                 else -> filterUiState.filter.toName()
                             },
-                            desc = if (isSyncing) stringResource(R.string.syncing) else "",
+                            desc = "",
                         )
                         RYExtensibleVisibility(visible = markAsRead) {
                             Spacer(modifier = Modifier.height((56 + 24 + 10).dp))
@@ -340,6 +349,8 @@ fun FlowPage(
                         Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                     }
                 }
+
+                PullRefreshIndicator(isSyncing, syncingPullRefreshState, Modifier.align(Alignment.TopCenter))
             }
         },
         bottomBar = {
