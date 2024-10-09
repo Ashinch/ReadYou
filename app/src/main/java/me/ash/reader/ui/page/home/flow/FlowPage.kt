@@ -1,7 +1,6 @@
 package me.ash.reader.ui.page.home.flow
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,15 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -29,8 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
@@ -67,7 +63,7 @@ import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
 
 @OptIn(
-    ExperimentalMaterialApi::class,
+    ExperimentalMaterial3Api::class,
 )
 @Composable
 fun FlowPage(
@@ -101,15 +97,15 @@ fun FlowPage(
 
     val owner = LocalLifecycleOwner.current
 
-    val syncingScope = rememberCoroutineScope()
     var isSyncing by remember { mutableStateOf(false) }
-
-    fun doSync() = syncingScope.launch {
+    val syncingState = rememberPullToRefreshState()
+    val syncingScope = rememberCoroutineScope()
+    val doSync: () -> Unit = {
         isSyncing = true
-        flowViewModel.sync()
+        syncingScope.launch {
+            flowViewModel.sync()
+        }
     }
-
-    val syncingPullRefreshState = rememberPullRefreshState(isSyncing, ::doSync)
 
     DisposableEffect(owner) {
         homeViewModel.syncWorkLiveData.observe(owner) { workInfoList ->
@@ -257,8 +253,11 @@ fun FlowPage(
             }
         },
         content = {
-            Box(Modifier.pullRefresh(syncingPullRefreshState)) {
-                var showMenu by remember { mutableStateOf(false) }
+            PullToRefreshBox(
+                state = syncingState,
+                isRefreshing = isSyncing,
+                onRefresh = doSync
+            ) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     state = listState,
@@ -349,8 +348,6 @@ fun FlowPage(
                         Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                     }
                 }
-
-                PullRefreshIndicator(isSyncing, syncingPullRefreshState, Modifier.align(Alignment.TopCenter))
             }
         },
         bottomBar = {
