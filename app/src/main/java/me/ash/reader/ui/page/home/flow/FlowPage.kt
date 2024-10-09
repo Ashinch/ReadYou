@@ -14,7 +14,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -55,13 +58,12 @@ import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYExtensibleVisibility
 import me.ash.reader.ui.component.base.RYScaffold
-import me.ash.reader.ui.component.base.SwipeRefresh
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
 
 @OptIn(
-    androidx.compose.ui.ExperimentalComposeUiApi::class,
+    ExperimentalMaterial3Api::class,
 )
 @Composable
 fun FlowPage(
@@ -94,7 +96,16 @@ fun FlowPage(
     var onSearch by remember { mutableStateOf(false) }
 
     val owner = LocalLifecycleOwner.current
+
     var isSyncing by remember { mutableStateOf(false) }
+    val syncingState = rememberPullToRefreshState()
+    val syncingScope = rememberCoroutineScope()
+    val doSync: () -> Unit = {
+        isSyncing = true
+        syncingScope.launch {
+            flowViewModel.sync()
+        }
+    }
 
     DisposableEffect(owner) {
         homeViewModel.syncWorkLiveData.observe(owner) { workInfoList ->
@@ -242,14 +253,11 @@ fun FlowPage(
             }
         },
         content = {
-            SwipeRefresh(
-                onRefresh = {
-                    if (!isSyncing) {
-                        flowViewModel.sync()
-                    }
-                }
+            PullToRefreshBox(
+                state = syncingState,
+                isRefreshing = isSyncing,
+                onRefresh = doSync
             ) {
-                var showMenu by remember { mutableStateOf(false) }
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     state = listState,
@@ -262,7 +270,7 @@ fun FlowPage(
                                 filterUiState.feed != null -> filterUiState.feed.name
                                 else -> filterUiState.filter.toName()
                             },
-                            desc = if (isSyncing) stringResource(R.string.syncing) else "",
+                            desc = "",
                         )
                         RYExtensibleVisibility(visible = markAsRead) {
                             Spacer(modifier = Modifier.height((56 + 24 + 10).dp))
