@@ -68,6 +68,7 @@ fun Content(
         }
     } else {
 
+
         when (renderer) {
             ReadingRendererPreference.WebView -> {
                 Column(
@@ -81,8 +82,7 @@ fun Content(
                     Spacer(modifier = Modifier.height(64.dp))
                     // padding
                     Column(
-                        modifier = Modifier
-                            .padding(horizontal = 12.dp)
+                        modifier = Modifier.padding(horizontal = 12.dp)
                     ) {
                         DisableSelection {
                             Metadata(
