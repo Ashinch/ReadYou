@@ -30,6 +30,7 @@ work = "2.9.0"
 composeBom = "2024.09.02"
 composeCompiler = "1.5.8"
 composeHtml = "1.0.2"
+material3Adaptive = "1.0.0"
 
 # Coil
 coil = "2.5.0"
@@ -72,6 +73,10 @@ compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-material3-adaptive = { group = "androidx.compose.material3.adaptive", name = "adaptive", version.ref = "material3Adaptive" }
+compose-material3-adaptive-layout = { group = "androidx.compose.material3.adaptive", name = "adaptive-layout", version.ref = "material3Adaptive" }
+compose-material3-adaptive-navigation = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation", version.ref = "material3Adaptive" }
+
 
 # Accompanist
 accompanist-swiperefresh = { group = "com.google.accompanist", name = "accompanist-swiperefresh", version.ref = "accompanist" }
@@ -134,3 +139,4 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 aboutlibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibsRelease" }
 room = { id = "androidx.room", version.ref = "room" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }

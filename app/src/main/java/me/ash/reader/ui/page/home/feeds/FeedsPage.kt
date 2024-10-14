@@ -25,6 +25,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.UnfoldLess
 import androidx.compose.material.icons.rounded.UnfoldMore
 import androidx.compose.material.rememberModalBottomSheetState
+
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -131,7 +132,7 @@ fun FeedsPage(
     var isSyncing by remember { mutableStateOf(false) }
     val syncingState = rememberPullToRefreshState()
     val syncingScope = rememberCoroutineScope()
-    val doSync:() -> Unit = {
+    val doSync: () -> Unit = {
         isSyncing = true
         syncingScope.launch {
 
@@ -230,13 +231,14 @@ fun FeedsPage(
             }
         },
         content = {
+
             PullToRefreshBox(
-                state=syncingState,
+                state = syncingState,
                 isRefreshing = isSyncing,
                 onRefresh = doSync
             ) {
                 LazyColumn(
-                    modifier=Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     state = listState
                 ) {
                     item {
@@ -350,6 +352,7 @@ fun FeedsPage(
                                     }
                                 }
                             }
+
 
                             is GroupFeedsView.Feed -> {
                                 FeedItem(

@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.aboutlibraries)
     alias(libs.plugins.room)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 fun fetchGitCommitHash(): String {
@@ -131,6 +132,9 @@ dependencies {
     implementation(libs.compose.ui.tooling.preview)
     androidTestImplementation(libs.compose.ui.test.junit4)
     implementation(libs.compose.material3)
+    implementation(libs.compose.material3.adaptive)
+    implementation(libs.compose.material3.adaptive.layout)
+    implementation(libs.compose.material3.adaptive.navigation)
 
     // Accompanist
     implementation(libs.accompanist.swiperefresh)
