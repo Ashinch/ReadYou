@@ -1,6 +1,14 @@
 package me.ash.reader.ui.page.home.flow
 
+import android.util.Log
 import android.view.HapticFeedbackConstants
+
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.exponentialDecay
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
