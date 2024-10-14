@@ -41,8 +41,9 @@ import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.HapticFeedbackConstantsCompat
 import coil.compose.rememberAsyncImagePainter
-
+import coil.request.ImageRequest
 import me.ash.reader.R
+import me.ash.reader.ui.ext.extractDomain
 import me.ash.reader.ui.ext.showToast
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.ZoomableContentLocation
@@ -72,7 +73,13 @@ fun ReaderImageViewer(
 
             val zoomableState = rememberZoomableState(zoomSpec = ZoomSpec(maxZoomFactor = 4f))
 
-            val painter = rememberAsyncImagePainter(model = imageData.imageUrl)
+            val painter = rememberAsyncImagePainter(
+                ImageRequest.Builder(LocalContext.current).addHeader(
+                    "Referer", imageData.imageUrl.extractDomain() ?: ""
+                ).data(data = imageData.imageUrl).build()
+            )
+
+            var expanded by remember { mutableStateOf(false) }
 
             LaunchedEffect(painter.intrinsicSize) {
                 zoomableState.setContentLocation(
@@ -84,7 +91,13 @@ fun ReaderImageViewer(
                 painter = painter,
                 contentDescription = imageData.altText,
                 modifier = Modifier
-                    .zoomable(state = zoomableState, clipToBounds = true)
+                    .zoomable(state = zoomableState, clipToBounds = true,
+                        onClick = {
+                            onDismissRequest()
+                        },
+                        onLongClick = {
+                            expanded = true
+                        })
                     .fillMaxSize(),
                 alignment = Alignment.Center,
                 contentScale = ContentScale.Inside
@@ -105,7 +118,7 @@ fun ReaderImageViewer(
                     contentDescription = stringResource(id = R.string.close),
                 )
             }
-            var expanded by remember { mutableStateOf(false) }
+
             IconButton(
                 onClick = { expanded = true }, colors = IconButtonDefaults.iconButtonColors(
                     containerColor = Color.Black.copy(alpha = 0.5f), contentColor = Color.White

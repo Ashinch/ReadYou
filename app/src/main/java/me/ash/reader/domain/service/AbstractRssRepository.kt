@@ -8,6 +8,7 @@ import androidx.work.ListenableWorker
 import androidx.work.WorkManager
 import com.rometools.rome.feed.synd.SyndFeed
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
@@ -176,7 +177,7 @@ abstract class AbstractRssRepository(
 
     private suspend fun syncFeed(feed: Feed, preDate: Date = Date()): FeedWithArticle {
         val latest = articleDao.queryLatestByFeedId(context.currentAccountId, feed.id)
-        val articles = rssHelper.queryRssXml(feed, latest?.link, preDate)
+        val articles = rssHelper.queryRssXml(feed, "", preDate)
         if (feed.icon == null) {
             val iconLink = rssHelper.queryRssIconLink(feed.url)
             if (iconLink != null) {
@@ -274,6 +275,7 @@ abstract class AbstractRssRepository(
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun pullImportant(
         isStarred: Boolean,
         isUnread: Boolean,

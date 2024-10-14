@@ -11,7 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Article
-import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
@@ -27,9 +26,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.flowlayout.MainAxisAlignment
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.domain.model.group.Group
@@ -39,9 +39,9 @@ import me.ash.reader.ui.component.base.RYSelectionChip
 import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.ext.*
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GroupOptionDrawer(
+    drawerState: ModalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
     viewModel: GroupOptionViewModel = hiltViewModel(),
     content: @Composable () -> Unit = {},
 ) {
@@ -51,14 +51,14 @@ fun GroupOptionDrawer(
     val group = groupOptionUiState.group
     val toastString = stringResource(R.string.rename_toast, groupOptionUiState.newName)
 
-    BackHandler(groupOptionUiState.drawerState.isVisible) {
+    BackHandler(drawerState.isVisible) {
         scope.launch {
-            groupOptionUiState.drawerState.hide()
+            drawerState.hide()
         }
     }
 
     BottomDrawer(
-        drawerState = groupOptionUiState.drawerState,
+        drawerState = drawerState,
         sheetContent = {
             Column(modifier = Modifier.navigationBarsPadding()) {
                 Column(
@@ -127,11 +127,21 @@ fun GroupOptionDrawer(
         content()
     }
 
-    ClearGroupDialog(groupName = group?.name ?: "")
-    DeleteGroupDialog(groupName = group?.name ?: "")
-    AllAllowNotificationDialog(groupName = group?.name ?: "")
-    AllParseFullContentDialog(groupName = group?.name ?: "")
-    AllMoveToGroupDialog(groupName = group?.name ?: "")
+    ClearGroupDialog(
+        groupName = group?.name ?: "",
+        onConfirm = { scope.launch { drawerState.hide() } })
+    DeleteGroupDialog(
+        groupName = group?.name ?: "",
+        onConfirm = { scope.launch { drawerState.hide() } })
+    AllAllowNotificationDialog(
+        groupName = group?.name ?: "",
+        onConfirm = { scope.launch { drawerState.hide() } })
+    AllParseFullContentDialog(
+        groupName = group?.name ?: "",
+        onConfirm = { scope.launch { drawerState.hide() } })
+    AllMoveToGroupDialog(
+        groupName = group?.name ?: "",
+        onConfirm = { scope.launch { drawerState.hide() } })
     RenameDialog(
         visible = groupOptionUiState.renameDialogVisible,
         value = groupOptionUiState.newName,
@@ -143,12 +153,13 @@ fun GroupOptionDrawer(
         },
         onConfirm = {
             viewModel.rename()
-            viewModel.hideDrawer(scope)
+            scope.launch { drawerState.hide() }
             context.showToast(toastString)
         }
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun Preset(
     viewModel: GroupOptionViewModel,
@@ -156,10 +167,8 @@ private fun Preset(
     context: Context,
 ) {
     FlowRow(
-        mainAxisAlignment = MainAxisAlignment.Start,
-        crossAxisAlignment = FlowCrossAxisAlignment.Center,
-        crossAxisSpacing = 10.dp,
-        mainAxisSpacing = 10.dp,
+        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
     ) {
         RYSelectionChip(
             modifier = Modifier.animateContentSize(),
@@ -212,6 +221,7 @@ private fun Preset(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun FlowRowGroups(
     groupOptionUiState: GroupOptionUiState,
@@ -219,10 +229,8 @@ private fun FlowRowGroups(
     groupOptionViewModel: GroupOptionViewModel,
 ) {
     FlowRow(
-        mainAxisAlignment = MainAxisAlignment.Start,
-        crossAxisAlignment = FlowCrossAxisAlignment.Center,
-        crossAxisSpacing = 10.dp,
-        mainAxisSpacing = 10.dp,
+        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
     ) {
         groupOptionUiState.groups.forEach {
             if (it.id != group?.id) {

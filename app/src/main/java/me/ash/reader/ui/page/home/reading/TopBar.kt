@@ -87,8 +87,7 @@ fun TopBar(
                         ) {
                             onClose()
                         }
-                    },
-                    actions = {
+                    }, actions = {
                         FeedbackIconButton(
                             modifier = Modifier.size(22.dp),
                             imageVector = Icons.Outlined.Palette,
@@ -107,7 +106,7 @@ fun TopBar(
                         ) {
                             sharedContent.share(context, title, link)
                         }
-                    }, colors = TopAppBarDefaults.smallTopAppBarColors(
+                    }, colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
                             tonalElevation.value.dp
                         ),

@@ -102,7 +102,6 @@
     <string name="interaction">Comportement</string>
     <string name="interaction_desc">Page de démarrage, retour haptique</string>
     <string name="languages">Langues</string>
-    <string name="languages_desc">Français, anglais et plus</string>
     <string name="help_translate">Aidez-nous à traduire</string>
     <string name="use_device_languages">Utiliser la langue système</string>
     <string name="tips_and_support">Aide et assistance</string>
@@ -305,4 +304,7 @@
     <string name="mark_below_as_read">Marquer ci-dessous comme lu</string>
     <string name="image_saved">Image enregistrée</string>
     <string name="permission_denied">Permission refusée</string>
+    <string name="import_from_json">Importer depuis un fichier JSON</string>
+    <string name="export_as_json">Exporter en fichier JSON</string>
+    <string name="invalid_json_file_warning">Ce fichier n\'est peut-être pas un fichier JSON valide. L\'importer pourrait potentiellement corrompre l\'application et entraîner la perte des préférences actuelles. Êtes-vous sur de vouloir continuer ?</string>
 </resources>

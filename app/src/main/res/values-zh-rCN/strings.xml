@@ -97,7 +97,6 @@
     <string name="interaction">交互</string>
     <string name="interaction_desc">初始页面、触感反馈</string>
     <string name="languages">语言</string>
-    <string name="languages_desc">英语、简体中文、更多</string>
     <string name="use_device_languages">跟随系统设置</string>
     <string name="help_translate">帮助我们翻译</string>
     <string name="tips_and_support">提示和支持</string>
@@ -302,4 +301,6 @@
     <string name="import_from_json">从 JSON 文件导入</string>
     <string name="export_as_json">导出为 JSON 文件</string>
     <string name="invalid_json_file_warning">该文件可能不是有效的 JSON 文件！导入该文件可能会损坏应用程序并导致当前偏好设置丢失，您确定要继续吗？</string>
+    <string name="unfold_more">全部展开</string>
+    <string name="unfold_less">全部折叠</string>
 </resources>

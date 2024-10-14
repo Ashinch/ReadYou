@@ -38,7 +38,6 @@
     <string name="interaction">אינטראקציה</string>
     <string name="interaction_desc">עמוד ראשוני, משוב ברטט</string>
     <string name="languages">שפות</string>
-    <string name="languages_desc">אנגלית, עברית ועוד</string>
     <string name="help_translate">עזרה בתרגום</string>
     <string name="use_device_languages">להשתמש בשפת המכשיר</string>
     <string name="tips_and_support">עצות ותמיכה</string>
@@ -207,4 +206,12 @@
     <string name="all_parse_full_content_tips">ניתוח תוכן מלא של כל המאמרים בקבוצה „%1$s”</string>
     <string name="all_allow_notification_toast">כל ההתראות מהקבוצה „%1$s” מורשות</string>
     <string name="open_link_something_wrong">ההגדרה „פתיחת קישור” לא תקפה כי משהו השתבש.</string>
+    <string name="auto_customtabs">אוטו׳ (העדפה בתוך היישומון)</string>
+    <string name="specific_browser">אילוץ דפדפן מסוים</string>
+    <string name="auto_default_browser">אוטו׳ (העדפת דפדפן ברירת המחדל)</string>
+    <string name="specific_browser_name">דפדפן: %1$s</string>
+    <string name="custom_tabs">אילוץ לשוניות מותאמות</string>
+    <string name="default_browser">אילוץ דפדפן ברירת המחדל</string>
+    <string name="open_link_specific_browser">דפדפן</string>
+    <string name="always_ask">תמיד לשאול</string>
 </resources>

@@ -1,14 +1,13 @@
 package me.ash.reader.ui.page.home.feeds
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
@@ -17,14 +16,21 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
-import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.UnfoldLess
+import androidx.compose.material.icons.rounded.UnfoldMore
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -36,8 +42,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -45,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.work.WorkInfo
+import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarFilled
 import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarPadding
@@ -60,12 +68,12 @@ import me.ash.reader.ui.component.base.Banner
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold
-import me.ash.reader.ui.component.base.Subtitle
 import me.ash.reader.ui.ext.alphaLN
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.findActivity
 import me.ash.reader.ui.ext.getCurrentVersion
+import me.ash.reader.ui.ext.getDefaultGroupId
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.HomeViewModel
@@ -79,7 +87,7 @@ import kotlin.collections.set
 import kotlin.math.ln
 
 @OptIn(
-    androidx.compose.foundation.ExperimentalFoundationApi::class
+    ExperimentalMaterial3Api::class
 )
 @Composable
 fun FeedsPage(
@@ -110,14 +118,26 @@ fun FeedsPage(
     val groupWithFeedList =
         feedsUiState.groupWithFeedList.collectAsStateValue(initial = emptyList())
     val groupsVisible: SnapshotStateMap<String, Boolean> = feedsUiState.groupsVisible
+    var hasGroupVisible by remember { mutableStateOf(groupListExpand.value) }
 
     val newVersion = LocalNewVersionNumber.current
     val skipVersion = LocalSkipVersionNumber.current
     val currentVersion = remember { context.getCurrentVersion() }
-    val listState = if (groupWithFeedList.isNotEmpty()) feedsUiState.listState else rememberLazyListState()
+    val listState =
+        if (groupWithFeedList.isNotEmpty()) feedsUiState.listState else rememberLazyListState()
 
     val owner = LocalLifecycleOwner.current
+
     var isSyncing by remember { mutableStateOf(false) }
+    val syncingState = rememberPullToRefreshState()
+    val syncingScope = rememberCoroutineScope()
+    val doSync:() -> Unit = {
+        isSyncing = true
+        syncingScope.launch {
+
+            homeViewModel.sync()
+        }
+    }
 
     DisposableEffect(owner) {
         homeViewModel.syncWorkLiveData.observe(owner) { workInfoList ->
@@ -128,15 +148,6 @@ fun FeedsPage(
         onDispose { homeViewModel.syncWorkLiveData.removeObservers(owner) }
     }
 
-    val infiniteTransition = rememberInfiniteTransition()
-    val angle by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = LinearEasing)
-        )
-    )
-
     val feedBadgeAlpha by remember { derivedStateOf { (ln(groupListTonalElevation.value + 1.4f) + 2f) / 100f } }
     val groupAlpha by remember { derivedStateOf { groupListTonalElevation.value.dp.alphaLN(weight = 1.2f) } }
     val groupIndicatorAlpha by remember {
@@ -146,6 +157,36 @@ fun FeedsPage(
             )
         }
     }
+
+    fun expandAllGroups() {
+        groupWithFeedList.forEach { groupWithFeed ->
+            when (groupWithFeed) {
+                is GroupFeedsView.Group -> {
+                    groupsVisible[groupWithFeed.group.id] = true
+                }
+
+                else -> {}
+            }
+        }
+        hasGroupVisible = true
+    }
+
+    fun collapseAllGroups() {
+        groupWithFeedList.forEach { groupWithFeed ->
+            when (groupWithFeed) {
+                is GroupFeedsView.Group -> {
+                    groupsVisible[groupWithFeed.group.id] = false
+                }
+
+                else -> {}
+            }
+        }
+        hasGroupVisible = false
+    }
+
+    val groupDrawerState =
+        rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val feedDrawerState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
     LaunchedEffect(Unit) {
         feedsViewModel.fetchAccount()
@@ -178,15 +219,6 @@ fun FeedsPage(
             }
         },
         actions = {
-            FeedbackIconButton(
-                modifier = Modifier.rotate(if (isSyncing) angle else 0f),
-                imageVector = Icons.Rounded.Refresh,
-                contentDescription = stringResource(R.string.refresh),
-                tint = MaterialTheme.colorScheme.onSurface,
-                enabled = !isSyncing
-            ) {
-                if (!isSyncing) homeViewModel.sync()
-            }
             if (subscribeViewModel.rssService.get().addSubscription) {
                 FeedbackIconButton(
                     imageVector = Icons.Rounded.Add,
@@ -198,111 +230,160 @@ fun FeedsPage(
             }
         },
         content = {
-            LazyColumn (
-                state = listState
+            PullToRefreshBox(
+                state=syncingState,
+                isRefreshing = isSyncing,
+                onRefresh = doSync
             ) {
-                item {
-                    DisplayText(
-                        modifier = Modifier.clickable {
-                            accountTabVisible = true
-                        },
-                        text = feedsUiState.account?.name ?: "",
-                        desc = if (isSyncing) stringResource(R.string.syncing) else "",
-                    )
-                }
-                item {
-                    Banner(
-                        title = filterUiState.filter.toName(),
-                        desc = importantSum,
-                        icon = filterUiState.filter.iconOutline,
-                        action = {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
-                                contentDescription = stringResource(R.string.go_to),
-                            )
-                        },
-                    ) {
-                        filterChange(
-                            navController = navController,
-                            homeViewModel = homeViewModel,
-                            filterState = filterUiState.copy(
-                                group = null,
-                                feed = null,
-                            )
-                        )
+                LazyColumn(
+                    modifier=Modifier.fillMaxSize(),
+                    state = listState
+                ) {
+                    item {
+                        DisplayText(
+                            text = feedsUiState.account?.name ?: "",
+                            desc = "",
+                        ) { accountTabVisible = true }
                     }
-                }
-                item {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Subtitle(
-                        modifier = Modifier.padding(start = 26.dp),
-                        text = stringResource(R.string.feeds)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-                itemsIndexed(groupWithFeedList) { index, groupWithFeed ->
-                    when (groupWithFeed) {
-                        is GroupFeedsView.Group -> {
-                            if (index != 0) {
-                                Spacer(modifier = Modifier.height(16.dp))
-                            }
-                            GroupItem(
-                                isExpanded = {
-                                    groupsVisible.getOrPut(
-                                        groupWithFeed.group.id,
-                                        groupListExpand::value
-                                    )
-                                },
-                                group = groupWithFeed.group,
-                                alpha = groupAlpha,
-                                indicatorAlpha = groupIndicatorAlpha,
-                                roundedBottomCorner = { index == groupWithFeedList.lastIndex || groupWithFeed.group.feeds == 0 },
-                                onExpanded = {
-                                    groupsVisible[groupWithFeed.group.id] = groupsVisible.getOrPut(
-                                        groupWithFeed.group.id,
-                                        groupListExpand::value
-                                    ).not()
-                                }
-                            ) {
-                                filterChange(
-                                    navController = navController,
-                                    homeViewModel = homeViewModel,
-                                    filterState = filterUiState.copy(
-                                        group = groupWithFeed.group,
-                                        feed = null,
-                                    )
+                    item {
+                        Banner(
+                            title = filterUiState.filter.toName(),
+                            desc = importantSum,
+                            icon = filterUiState.filter.iconOutline,
+                            action = {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                                    contentDescription = stringResource(R.string.go_to),
                                 )
-                            }
+                            },
+                        ) {
+                            filterChange(
+                                navController = navController,
+                                homeViewModel = homeViewModel,
+                                filterState = filterUiState.copy(
+                                    group = null,
+                                    feed = null,
+                                )
+                            )
                         }
+                    }
 
-                        is GroupFeedsView.Feed -> {
-                            FeedItem(
-                                feed = groupWithFeed.feed,
-                                alpha = groupAlpha,
-                                badgeAlpha = feedBadgeAlpha,
-                                isEnded = { index == groupWithFeedList.lastIndex || groupWithFeedList[index + 1] is GroupFeedsView.Group },
-                                isExpanded = {
-                                    groupsVisible.getOrPut(
-                                        groupWithFeed.feed.groupId,
-                                        groupListExpand::value
-                                    )
-                                },
+                    item {
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 26.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = stringResource(R.string.feeds),
+                                color = MaterialTheme.colorScheme.primary,
+                                style = MaterialTheme.typography.labelLarge,
+                            )
+                            Row(
+                                modifier = Modifier
+                                    .padding(end = 12.dp)
+                                    .size(20.dp)
+                                    .clip(CircleShape)
+                                    .clickable { if (hasGroupVisible) collapseAllGroups() else expandAllGroups() },
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
-                                filterChange(
-                                    navController = navController,
-                                    homeViewModel = homeViewModel,
-                                    filterState = filterUiState.copy(
-                                        group = null,
-                                        feed = groupWithFeed.feed,
-                                    )
+                                Icon(
+                                    imageVector = if (hasGroupVisible) Icons.Rounded.UnfoldLess else Icons.Rounded.UnfoldMore,
+                                    contentDescription = stringResource(R.string.unfold_less),
+                                    tint = MaterialTheme.colorScheme.primary,
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+
+                    val defaultGroupId = context.currentAccountId.getDefaultGroupId()
+
+                    itemsIndexed(groupWithFeedList) { index, groupWithFeed ->
+                        when (groupWithFeed) {
+                            is GroupFeedsView.Group -> {
+                                Spacer(modifier = Modifier.height(16.dp))
+
+                                if (groupWithFeed.group.id != defaultGroupId || groupWithFeed.group.feeds > 0) {
+                                    GroupItem(
+                                        isExpanded = {
+                                            groupsVisible.getOrPut(
+                                                groupWithFeed.group.id,
+                                                groupListExpand::value
+                                            )
+                                        },
+                                        group = groupWithFeed.group,
+                                        alpha = groupAlpha,
+                                        indicatorAlpha = groupIndicatorAlpha,
+                                        roundedBottomCorner = { index == groupWithFeedList.lastIndex || groupWithFeed.group.feeds == 0 },
+                                        onExpanded = {
+                                            groupsVisible[groupWithFeed.group.id] =
+                                                groupsVisible.getOrPut(
+                                                    groupWithFeed.group.id,
+                                                    groupListExpand::value
+                                                ).not()
+                                            hasGroupVisible =
+                                                if (groupsVisible[groupWithFeed.group.id] == true) {
+                                                    true
+                                                } else {
+                                                    groupsVisible.any { it.value }
+                                                }
+                                        },
+                                        onLongClick = {
+                                            scope.launch {
+                                                groupDrawerState.show()
+                                            }
+                                        }
+                                    ) {
+                                        filterChange(
+                                            navController = navController,
+                                            homeViewModel = homeViewModel,
+                                            filterState = filterUiState.copy(
+                                                group = groupWithFeed.group,
+                                                feed = null,
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+
+                            is GroupFeedsView.Feed -> {
+                                FeedItem(
+                                    feed = groupWithFeed.feed,
+                                    alpha = groupAlpha,
+                                    badgeAlpha = feedBadgeAlpha,
+                                    isEnded = { index == groupWithFeedList.lastIndex || groupWithFeedList[index + 1] is GroupFeedsView.Group },
+                                    isExpanded = {
+                                        groupsVisible.getOrPut(
+                                            groupWithFeed.feed.groupId,
+                                            groupListExpand::value
+                                        )
+                                    }, onClick = {
+                                        filterChange(
+                                            navController = navController,
+                                            homeViewModel = homeViewModel,
+                                            filterState = filterUiState.copy(
+                                                group = null,
+                                                feed = groupWithFeed.feed,
+                                            )
+                                        )
+                                    }, onLongClick = {
+                                        scope.launch {
+                                            feedDrawerState.show()
+                                        }
+                                    }
                                 )
                             }
                         }
                     }
-                }
-                item {
-                    Spacer(modifier = Modifier.height(128.dp))
-                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                    item {
+                        Spacer(modifier = Modifier.height(128.dp))
+                        Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                    }
                 }
             }
         },
@@ -325,8 +406,9 @@ fun FeedsPage(
     )
 
     SubscribeDialog(subscribeViewModel = subscribeViewModel)
-    GroupOptionDrawer()
-    FeedOptionDrawer()
+
+    GroupOptionDrawer(drawerState = groupDrawerState)
+    FeedOptionDrawer(drawerState = feedDrawerState)
 
     AccountsTab(
         visible = accountTabVisible,

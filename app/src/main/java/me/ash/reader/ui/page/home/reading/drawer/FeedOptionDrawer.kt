@@ -5,7 +5,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.material.BottomDrawerState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Tab
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -25,6 +29,7 @@ import me.ash.reader.ui.page.home.feeds.drawer.feed.FeedOptionViewModel
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun StyleOptionDrawer(
+    drawerState: ModalBottomSheetState,
     feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
     content: @Composable () -> Unit = {},
 ) {
@@ -35,14 +40,14 @@ fun StyleOptionDrawer(
     val feed = feedOptionUiState.feed
     val toastString = stringResource(R.string.rename_toast, feedOptionUiState.newName)
 
-    BackHandler(feedOptionUiState.drawerState.isVisible) {
+    BackHandler(drawerState.isVisible) {
         scope.launch {
-            feedOptionUiState.drawerState.hide()
+            drawerState.hide()
         }
     }
 
     BottomDrawer(
-        drawerState = feedOptionUiState.drawerState,
+        drawerState = drawerState,
         sheetContent = {
             Info()
         }

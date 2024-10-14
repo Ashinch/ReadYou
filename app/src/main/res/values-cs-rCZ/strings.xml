@@ -102,7 +102,6 @@
     <string name="interaction">Interakce</string>
     <string name="interaction_desc">Úvodní stránka, haptická odezva</string>
     <string name="languages">Jazyky</string>
-    <string name="languages_desc">Angličtina, Čeština, více</string>
     <string name="help_translate">Pomozte nám s překladem</string>
     <string name="use_device_languages">Použít jazyk zařízení</string>
     <string name="tips_and_support">Tipy a podpora</string>
@@ -308,4 +307,6 @@
     <string name="import_from_json">Importovat ze souboru JSON</string>
     <string name="export_as_json">Exportovat jako JSON</string>
     <string name="invalid_json_file_warning">Tento soubor nejspíš není platný soubor JSON. Jeho importováním můžete poškodit aplikaci, což může mít za následek ztrátu aktuálních nastavení. Opravdu chcete pokračovat?</string>
+    <string name="unfold_more">Rozbalit vše</string>
+    <string name="unfold_less">Sbalit vše</string>
 </resources>

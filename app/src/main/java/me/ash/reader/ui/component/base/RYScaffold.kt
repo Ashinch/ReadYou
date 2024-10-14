@@ -44,7 +44,7 @@ fun RYScaffold(
                     title = {},
                     navigationIcon = { navigationIcon?.invoke() },
                     actions = { actions?.invoke(this) },
-                    colors = TopAppBarDefaults.smallTopAppBarColors(
+                    colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
                             topBarTonalElevation
                         ),

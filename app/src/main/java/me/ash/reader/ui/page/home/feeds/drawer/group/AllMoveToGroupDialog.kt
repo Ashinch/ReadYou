@@ -2,7 +2,6 @@ package me.ash.reader.ui.page.home.feeds.drawer.group
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.DriveFileMove
-import androidx.compose.material.icons.outlined.DriveFileMove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -20,6 +19,7 @@ import me.ash.reader.ui.ext.showToast
 fun AllMoveToGroupDialog(
     groupName: String,
     groupOptionViewModel: GroupOptionViewModel = hiltViewModel(),
+    onConfirm: () -> Unit,
 ) {
     val context = LocalContext.current
     val groupOptionUiState = groupOptionViewModel.groupOptionUiState.collectAsStateValue()
@@ -57,7 +57,7 @@ fun AllMoveToGroupDialog(
                 onClick = {
                     groupOptionViewModel.allMoveToGroup {
                         groupOptionViewModel.hideAllMoveToGroupDialog()
-                        groupOptionViewModel.hideDrawer(scope)
+                        onConfirm()
                         context.showToast(toastString)
                     }
                 }

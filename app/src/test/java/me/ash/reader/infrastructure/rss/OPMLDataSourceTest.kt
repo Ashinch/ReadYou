@@ -5,26 +5,21 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import me.ash.reader.domain.model.group.Group
 import me.ash.reader.domain.model.group.GroupWithFeed
-import me.ash.reader.ui.ext.currentAccountId
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.mock
 
 internal const val OPML_TEMPLATE: String = """
-<?xml version="1.0" encoding="UTF-8"?>
 <opml version="1.0">
     <head>
         <title>Import OPML Unit Test👿</title>
     </head>
      <body>
-        <outline text="Blogs" title="Blogs">
-            {{var}}
-        </outline>
+        {{var}}
     </body>
 </opml>
 """
@@ -48,24 +43,33 @@ class OPMLDataSourceTest {
     fun setUp() {
         mockContext = mock<Context> { }
         mockIODispatcher = mock<CoroutineDispatcher> {}
-        `when`(mockContext.currentAccountId).thenReturn(1)
         opmlDataSource = OPMLDataSource(mockContext, mockIODispatcher)
+    }
+
+    private fun fill(value: String): String = OPML_TEMPLATE.replace("{{var}}", value)
+
+    private fun parse(opml: String): List<GroupWithFeed> = runBlocking {
+        opmlDataSource.parseFileInputStream(
+            inputStream = opml.byteInputStream(Charsets.UTF_8),
+            defaultGroup = defaultGroup,
+            targetAccountId = 1
+        )
     }
 
     @Test
     fun testEmptyTitle() {
         val opml = fill("""
-            <outline type="rss" xmlUrl="https://ash7.io/index.xml" htmlUrl="https://ash7.io"/>
+            <outline text="Blogs" title="Blogs">
+                <outline type="rss" xmlUrl="https://ash7.io/index.xml" htmlUrl="https://ash7.io"/>
+            </outline>
         """)
-
-        runBlocking {
-            val result: List<GroupWithFeed> = opmlDataSource.parseFileInputStream(
-                inputStream = opml.byteInputStream(Charsets.UTF_8),
-                defaultGroup = defaultGroup
-            )
-            Assert.assertTrue("", result.size == 1)
-        }
+        val result = parse(opml)
+        Assert.assertEquals(2, result.size)
+        Assert.assertEquals("Default", result[0].group.name)
+        Assert.assertEquals(0, result[0].feeds.size)
+        Assert.assertEquals("Blogs", result[1].group.name)
+        Assert.assertEquals(1, result[1].feeds.size)
+        Assert.assertEquals("ash7.io", result[1].feeds[0].name)
+        Assert.assertEquals("https://ash7.io/index.xml", result[1].feeds[0].url)
     }
 }
-
-private fun fill(str: String): String = OPML_TEMPLATE.replace("{{var}}", str)

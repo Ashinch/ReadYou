@@ -74,7 +74,6 @@
     <string name="mark_as_starred">Позначити як Обране</string>
     <string name="mark_as_read_one_day">Позначити як прочитане більше 1 дня</string>
     <string name="mark_as_read_seven_days">Позначити як прочитане більше 7 днів тому</string>
-    <string name="languages_desc">Англійська, Китайська, інші</string>
     <string name="welcome">Ласкаво Просимо</string>
     <string name="tips_and_support_desc">Про застосунок, ліцензії з відкритим кодом</string>
     <string name="tos_tips">Будь ласка, прочитайте та прийміть Умови надання послуг та Політику конфіденційності, щоб продовжити.</string>
@@ -106,7 +105,7 @@
     <string name="delete_group">Видалити групу</string>
     <string name="delete_group_tips">Видаліть групу \"%1$s\" і всі стрічки та архівні статті, які вона містить</string>
     <string name="today">Сьогодні</string>
-    <string name="yesterday">Завтра</string>
+    <string name="yesterday">Вчора</string>
     <string name="date_at_time">%1$s в %2$s</string>
     <string name="search_for_in">Пошук %1$s елементів в \"%2$s\"</string>
     <string name="search_for">Пошук %1$s елементів</string>
@@ -311,4 +310,6 @@
     <string name="import_from_json">Імпортувати з JSON</string>
     <string name="export_as_json">Експортувати як JSON</string>
     <string name="invalid_json_file_warning">Цей файл може бути недійсним файлом JSON. Імпорт може потенційно пошкодити застосунок і призвести до втрати поточних налаштувань. Ви впевнені, що хочете продовжити?</string>
+    <string name="unfold_more">Розгорнути все</string>
+    <string name="unfold_less">Згорнути все</string>
 </resources>

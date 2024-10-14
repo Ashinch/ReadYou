@@ -97,11 +97,11 @@ Choose the latest workflow from the GitHub Actions page and download the artifac
 
 ## Sponsorship
 
-**Read You** is a free open source software that benefits from the open source community and every user can enjoy it's full functionality for free, so if you appreciate my current work, you can buy me a cup of coffee ☕️.
+**Read You** is a free open source software that benefits from the open source community and every user can enjoy it's full functionality for free, so if you appreciate my current work, you can buy me a cup of coffee.☕️
 
-[<img src="https://s1.ax1x.com/2023/01/12/pSnHqpQ.png" alt="donate" height="80">](https://afdian.net/a/ashinch)
+[<img src="https://s1.ax1x.com/2023/01/12/pSnHqpQ.png" alt="donate" height="80">](https://ash7.io/sponsor)
 
-Thanks for all the love and support ❤️
+Thanks for all the love and support.❤️
 
 ## Localization
 

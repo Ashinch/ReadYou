@@ -15,7 +15,7 @@ val LocalReadingImageRoundedCorners =
 
 object ReadingImageRoundedCornersPreference {
 
-    const val default = 32
+    const val default = 24
 
     fun put(context: Context, scope: CoroutineScope, value: Int) {
         scope.launch {

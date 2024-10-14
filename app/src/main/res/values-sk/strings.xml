@@ -70,7 +70,6 @@
     <string name="accounts_desc">Miestne, FreshRSS</string>
     <string name="color_and_style">Farba a štýl</string>
     <string name="color_and_style_desc">Téma, farebný štýl, veľkosť písma</string>
-    <string name="languages_desc">Angličtina, čínština a ďalšie</string>
     <string name="languages">Jazyky</string>
     <string name="help_translate">Pomôžte s prekladom</string>
     <string name="use_device_languages">Použiť jazyk zariadenia</string>
@@ -308,4 +307,6 @@
     <string name="export_as_json">Exportovať ako JSON</string>
     <string name="import_from_json">Importovať z JSON</string>
     <string name="invalid_json_file_warning">Tento súbor nemusí byť platným súborom JSON. Jeho importovanie môže spôsobiť poškodenie aplikácie a stratu aktuálnych predvolieb. Ste si istí, že chcete pokračovať?</string>
+    <string name="unfold_more">Rozbaliť všetko</string>
+    <string name="unfold_less">Zbaliť všetko</string>
 </resources>

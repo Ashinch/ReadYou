@@ -24,33 +24,34 @@ import me.ash.reader.ui.component.base.RYAsyncImage
 
 @Composable
 fun FeedIcon(
-    feedName: String,
+    modifier: Modifier = Modifier,
+    feedName: String? = "",
     iconUrl: String?,
     size: Dp = 20.dp,
     placeholderIcon: ImageVector? = null,
 ) {
     if (iconUrl.isNullOrEmpty()) {
         if (placeholderIcon == null) {
-            FontIcon(size, feedName)
+            FontIcon(modifier, size, feedName ?: "")
         } else {
-            ImageIcon(placeholderIcon, feedName)
+            ImageIcon(modifier, placeholderIcon, feedName ?: "")
         }
     }
     // e.g. image/gif;base64,R0lGODlh...
     else if ("^image/.*;base64,.*".toRegex().matches(iconUrl)) {
         Base64Image(
-            modifier = Modifier
+            modifier = modifier
                 .size(size)
                 .clip(CircleShape),
             base64Uri = iconUrl,
-            onEmpty = { FontIcon(size, feedName) },
+            onEmpty = { FontIcon(modifier, size, feedName ?: "") },
         )
     } else {
         RYAsyncImage(
-            modifier = Modifier
+            modifier = modifier
                 .size(size)
                 .clip(CircleShape),
-            contentDescription = feedName,
+            contentDescription = feedName ?: "",
             data = iconUrl,
             placeholder = null,
         )
@@ -58,17 +59,18 @@ fun FeedIcon(
 }
 
 @Composable
-private fun ImageIcon(placeholderIcon: ImageVector, feedName: String) {
+private fun ImageIcon(modifier: Modifier, placeholderIcon: ImageVector, feedName: String) {
     Icon(
+        modifier = modifier,
         imageVector = placeholderIcon,
         contentDescription = feedName,
     )
 }
 
 @Composable
-private fun FontIcon(size: Dp, feedName: String) {
+private fun FontIcon(modifier: Modifier, size: Dp, feedName: String) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(size)
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.primary),
@@ -88,5 +90,5 @@ private fun FontIcon(size: Dp, feedName: String) {
 @Preview
 @Composable
 fun FeedIconPrev() {
-    FeedIcon(stringResource(R.string.preview_feed_name), null)
+    FeedIcon(feedName = stringResource(R.string.preview_feed_name), iconUrl = null)
 }

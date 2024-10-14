@@ -47,6 +47,14 @@ sealed class ReadingTextAlignPreference(val value: Int) : Preference() {
             Justify -> TextAlign.Justify
         }
 
+    fun toTextAlignCSS(): String =
+        when (this) {
+            Start -> "start"
+            End -> "end"
+            Center -> "center"
+            Justify -> "justify"
+        }
+
     fun toAlignment(): Alignment.Horizontal =
         when (this) {
             Start -> Alignment.Start

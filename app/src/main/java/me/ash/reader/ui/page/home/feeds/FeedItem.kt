@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.base.RYExtensibleVisibility
@@ -40,6 +41,7 @@ fun FeedItem(
     isExpanded: () -> Boolean,
     feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
     onClick: () -> Unit = {},
+    onLongClick: () -> Unit = {}
 ) {
     val view = LocalView.current
     val scope = rememberCoroutineScope()
@@ -56,8 +58,11 @@ fun FeedItem(
                         onClick()
                     },
                     onLongClick = {
+                        onLongClick()
                         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                        feedOptionViewModel.showDrawer(scope, feed.id)
+                        scope.launch {
+                            feedOptionViewModel.fetchFeed(feedId = feed.id)
+                        }
                     }
                 )
                 .padding(horizontal = 14.dp)
@@ -71,7 +76,7 @@ fun FeedItem(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(modifier = Modifier.weight(1f)) {
-                    FeedIcon(feed.name, feed.icon)
+                    FeedIcon(feedName = feed.name, iconUrl = feed.icon)
                     Text(
                         modifier = Modifier.padding(start = 12.dp, end = 6.dp),
                         text = feed.name,

@@ -23,7 +23,6 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.Segment
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Movie
-import androidx.compose.material.icons.rounded.Segment
 import androidx.compose.material.icons.rounded.Title
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -43,12 +42,15 @@ import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
 import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
+import me.ash.reader.infrastructure.preference.LocalReadingBionicReading
 import me.ash.reader.infrastructure.preference.LocalReadingDarkTheme
 import me.ash.reader.infrastructure.preference.LocalReadingFonts
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
+import me.ash.reader.infrastructure.preference.LocalReadingRenderer
 import me.ash.reader.infrastructure.preference.LocalReadingTheme
 import me.ash.reader.infrastructure.preference.ReadingFontsPreference
 import me.ash.reader.infrastructure.preference.ReadingPageTonalElevationPreference
+import me.ash.reader.infrastructure.preference.ReadingRendererPreference
 import me.ash.reader.infrastructure.preference.ReadingThemePreference
 import me.ash.reader.infrastructure.preference.not
 import me.ash.reader.ui.component.ReadingThemePrev
@@ -80,9 +82,11 @@ fun ReadingStylePage(
     val fonts = LocalReadingFonts.current
     val autoHideToolbar = LocalReadingAutoHideToolbar.current
     val pullToSwitchArticle = LocalPullToSwitchArticle.current
-
+    val renderer = LocalReadingRenderer.current
+    val bionicReading = LocalReadingBionicReading.current
 
     var tonalElevationDialogVisible by remember { mutableStateOf(false) }
+    var rendererDialogVisible by remember { mutableStateOf(false) }
     var fontsDialogVisible by remember { mutableStateOf(false) }
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -153,6 +157,32 @@ fun ReadingStylePage(
                         text = stringResource(R.string.general)
                     )
                     SettingItem(
+                        title = stringResource(R.string.content_renderer),
+                        desc = renderer.toDesc(context),
+                        onClick = { rendererDialogVisible = true },
+                    ) {}
+                    SettingItem(
+                        title = stringResource(R.string.bionic_reading),
+                        separatedActions = renderer == ReadingRendererPreference.WebView,
+                        enabled = renderer == ReadingRendererPreference.WebView,
+                        desc = if (renderer == ReadingRendererPreference.WebView) stringResource(R.string.bionic_reading_domain)
+                        else stringResource(R.string.only_available_on_webview),
+                        onClick = {
+                            navController.navigate(RouteName.READING_BIONIC_READING) {
+                                launchSingleTop = true
+                            }
+                        },
+                    ) {
+                        if (renderer == ReadingRendererPreference.WebView) {
+                            RYSwitch(
+                                enable = renderer == ReadingRendererPreference.WebView,
+                                activated = bionicReading.value,
+                            ) {
+                                (!bionicReading).put(context, scope)
+                            }
+                        }
+                    }
+                    SettingItem(
                         title = stringResource(R.string.reading_fonts),
                         desc = fonts.toDesc(context),
                         onClick = { fontsDialogVisible = true },
@@ -171,21 +201,6 @@ fun ReadingStylePage(
                             activated = darkTheme.isDarkTheme()
                         ) {
                             darkThemeNot.put(context, scope)
-                        }
-                    }
-                    SettingItem(
-                        title = stringResource(R.string.bionic_reading),
-                        separatedActions = true,
-                        enabled = false,
-                        onClick = {
-//                            (!articleListDesc).put(context, scope)
-                        },
-                    ) {
-                        RYSwitch(
-                            activated = false,
-                            enable = false,
-                        ) {
-//                            (!articleListDesc).put(context, scope)
                         }
                     }
                     SettingItem(
@@ -289,6 +304,21 @@ fun ReadingStylePage(
         }
     ) {
         tonalElevationDialogVisible = false
+    }
+
+    RadioDialog(
+        visible = rendererDialogVisible,
+        title = stringResource(R.string.content_renderer),
+        options = ReadingRendererPreference.values.map {
+            RadioDialogOption(
+                text = it.toDesc(context),
+                selected = it == renderer,
+            ) {
+                it.put(context, scope)
+            }
+        }
+    ) {
+        rendererDialogVisible = false
     }
 
     RadioDialog(

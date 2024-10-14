@@ -62,7 +62,6 @@
     <string name="interaction">Pag-interact</string>
     <string name="interaction_desc">Nangungunang pahina, haptic feedback</string>
     <string name="languages">Mga Wika</string>
-    <string name="languages_desc">Ingles, Chinese, marami pa</string>
     <string name="help_translate">Tumulong magsalin</string>
     <string name="use_device_languages">Gamitin ang wika ng device</string>
     <string name="tips_and_support">Mga tip at support</string>

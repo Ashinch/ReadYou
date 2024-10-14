@@ -17,7 +17,8 @@ import androidx.compose.ui.unit.dp
 fun CanBeDisabledIconButton(
     modifier: Modifier = Modifier,
     disabled: Boolean,
-    imageVector: ImageVector,
+    imageVector: ImageVector? = null,
+    icon: @Composable () -> Unit = {},
     size: Dp = 24.dp,
     contentDescription: String?,
     tint: Color = LocalContentColor.current,
@@ -34,11 +35,15 @@ fun CanBeDisabledIconButton(
         enabled = !disabled,
         onClick = onClick,
     ) {
-        Icon(
-            modifier = Modifier.size(size),
-            imageVector = imageVector,
-            contentDescription = contentDescription,
-            tint = if (disabled) MaterialTheme.colorScheme.outline else tint,
-        )
+        if (imageVector != null) {
+            Icon(
+                modifier = Modifier.size(size),
+                imageVector = imageVector,
+                contentDescription = contentDescription,
+                tint = if (disabled) MaterialTheme.colorScheme.outline else tint,
+            )
+        } else {
+            icon()
+        }
     }
 }

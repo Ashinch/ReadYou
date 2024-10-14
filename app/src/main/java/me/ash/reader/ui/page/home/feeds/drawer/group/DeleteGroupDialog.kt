@@ -19,6 +19,7 @@ import me.ash.reader.ui.ext.showToast
 fun DeleteGroupDialog(
     groupName: String,
     groupOptionViewModel: GroupOptionViewModel = hiltViewModel(),
+    onConfirm: () -> Unit,
 ) {
     val context = LocalContext.current
     val groupOptionUiState = groupOptionViewModel.groupOptionUiState.collectAsStateValue()
@@ -47,7 +48,7 @@ fun DeleteGroupDialog(
                 onClick = {
                     groupOptionViewModel.delete {
                         groupOptionViewModel.hideDeleteDialog()
-                        groupOptionViewModel.hideDrawer(scope)
+                        onConfirm()
                         context.showToast(toastString)
                     }
                 }

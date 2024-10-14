@@ -10,6 +10,8 @@ class StringExtTest {
 
     @Test
     fun testExtractDomain() {
+        Assert.assertEquals(null, "".extractDomain())
+        Assert.assertEquals(null, null.extractDomain())
         var case = "https://ash7.io"
         Assert.assertEquals("ash7.io", case.extractDomain())
         case = "ash7.io"

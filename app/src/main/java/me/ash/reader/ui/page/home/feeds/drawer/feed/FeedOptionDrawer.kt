@@ -2,10 +2,19 @@ package me.ash.reader.ui.page.home.feeds.drawer.feed
 
 import android.view.HapticFeedbackConstants
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CreateNewFolder
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,9 +42,9 @@ import me.ash.reader.ui.ext.roundClick
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.page.home.feeds.FeedOptionView
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FeedOptionDrawer(
+    drawerState: ModalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
     feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
     content: @Composable () -> Unit = {},
 ) {
@@ -48,14 +57,15 @@ fun FeedOptionDrawer(
     val feed = feedOptionUiState.feed
     val toastString = stringResource(R.string.rename_toast, feedOptionUiState.newName)
 
-    BackHandler(feedOptionUiState.drawerState.isVisible) {
+
+    BackHandler(drawerState.isVisible) {
         scope.launch {
-            feedOptionUiState.drawerState.hide()
+            drawerState.hide()
         }
     }
 
     BottomDrawer(
-        drawerState = feedOptionUiState.drawerState,
+        drawerState = drawerState,
         sheetContent = {
             Column(modifier = Modifier.navigationBarsPadding()) {
                 Column(
@@ -63,13 +73,9 @@ fun FeedOptionDrawer(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    FeedIcon(feedName = feed?.name ?: "", iconUrl = feed?.icon, size = 24.dp)
-//                    Icon(
-//                        modifier = Modifier.roundClick { },
-//                        imageVector = Icons.Rounded.RssFeed,
-//                        contentDescription = feed?.name ?: stringResource(R.string.unknown),
-//                        tint = MaterialTheme.colorScheme.secondary,
-//                    )
+                    FeedIcon(modifier = Modifier.clickable {
+                        feedOptionViewModel.reloadIcon()
+                    }, feedName = feed?.name, iconUrl = feed?.icon, size = 24.dp)
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         modifier = Modifier.roundClick {
@@ -130,9 +136,13 @@ fun FeedOptionDrawer(
         content()
     }
 
-    DeleteFeedDialog(feedName = feed?.name ?: "")
+    DeleteFeedDialog(
+        feedName = feed?.name ?: "",
+        onConfirm = { scope.launch { drawerState.hide() } })
 
-    ClearFeedDialog(feedName = feed?.name ?: "")
+    ClearFeedDialog(
+        feedName = feed?.name ?: "",
+        onConfirm = { scope.launch { drawerState.hide() } })
 
     TextFieldDialog(
         visible = feedOptionUiState.newGroupDialogVisible,
@@ -162,7 +172,7 @@ fun FeedOptionDrawer(
         },
         onConfirm = {
             feedOptionViewModel.renameFeed()
-            feedOptionViewModel.hideDrawer(scope)
+            scope.launch { drawerState.hide() }
             context.showToast(toastString)
         }
     )
@@ -178,7 +188,7 @@ fun FeedOptionDrawer(
         },
         onConfirm = {
             feedOptionViewModel.changeFeedUrl()
-            feedOptionViewModel.hideDrawer(scope)
+            scope.launch { drawerState.hide() }
         }
     )
 }

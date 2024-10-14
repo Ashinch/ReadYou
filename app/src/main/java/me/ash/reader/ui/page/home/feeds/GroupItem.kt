@@ -39,6 +39,7 @@ fun GroupItem(
     isExpanded: () -> Boolean,
     groupOptionViewModel: GroupOptionViewModel = hiltViewModel(),
     onExpanded: () -> Unit = {},
+    onLongClick: () -> Unit = {},
     groupOnClick: () -> Unit = {},
 ) {
     val view = LocalView.current
@@ -57,7 +58,8 @@ fun GroupItem(
                 },
                 onLongClick = {
                     view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                    groupOptionViewModel.showDrawer(scope, group.id)
+                    groupOptionViewModel.fetchGroup(groupId = group.id)
+                    onLongClick()
                 }
             )
             .padding(top = 22.dp)

@@ -1,9 +1,12 @@
 package me.ash.reader.ui.page.home.flow
 
+import android.util.Log
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.exponentialDecay
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -53,6 +56,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
@@ -90,6 +95,10 @@ import me.ash.reader.ui.page.settings.color.flow.generateArticleWithFeedPreview
 import me.ash.reader.ui.theme.Shape20
 import me.ash.reader.ui.theme.applyTextDirection
 import me.ash.reader.ui.theme.palette.onDark
+import me.saket.swipe.SwipeAction
+import me.saket.swipe.SwipeableActionsBox
+
+private const val TAG = "ArticleItem"
 
 @Composable
 fun ArticleItem(
@@ -171,7 +180,10 @@ fun ArticleItem(
                 Text(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(start = if (articleListFeedIcon.value) 30.dp else 0.dp),
+                        .padding(
+                            start = if (articleListFeedIcon.value) 30.dp else 0.dp,
+                            end = 10.dp,
+                        ),
                     text = feedName,
                     color = MaterialTheme.colorScheme.tertiary,
                     style = MaterialTheme.typography.labelMedium,
@@ -204,7 +216,7 @@ fun ArticleItem(
                     Text(
                         modifier = Modifier,
                         text = dateString ?: "",
-                        color = MaterialTheme.colorScheme.outlineVariant,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.labelMedium,
                     )
                 }
@@ -219,7 +231,7 @@ fun ArticleItem(
         ) {
             // Feed icon
             if (articleListFeedIcon.value) {
-                FeedIcon(feedName, iconUrl = feedIconUrl)
+                FeedIcon(feedName = feedName, iconUrl = feedIconUrl)
                 Spacer(modifier = Modifier.width(10.dp))
             }
 
@@ -270,10 +282,13 @@ fun ArticleItem(
     }
 }
 
-private const val PositionalThresholdFraction = 0.15f
+private const val PositionalThresholdFraction = 0.4f
 private const val SwipeActionDelay = 300L
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class,
+    ExperimentalFoundationApi::class
+)
 @Composable
 fun SwipeableArticleItem(
     articleWithFeed: ArticleWithFeed,
@@ -282,78 +297,16 @@ fun SwipeableArticleItem(
     onClick: (ArticleWithFeed) -> Unit = {},
     isSwipeEnabled: () -> Boolean = { false },
     isMenuEnabled: Boolean = true,
-    onToggleStarred: (ArticleWithFeed, Long) -> Unit = { _, _ -> },
-    onToggleRead: (ArticleWithFeed, Long) -> Unit = { _, _ -> },
+    onToggleStarred: (ArticleWithFeed) -> Unit = { },
+    onToggleRead: (ArticleWithFeed) -> Unit = { },
     onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? = null,
     onMarkBelowAsRead: ((ArticleWithFeed) -> Unit)? = null,
     onShare: ((ArticleWithFeed) -> Unit)? = null,
 ) {
-    val swipeToStartAction = LocalArticleListSwipeStartAction.current
-    val swipeToEndAction = LocalArticleListSwipeEndAction.current
 
-    val onSwipeEndToStart = when (swipeToStartAction) {
-        SwipeStartActionPreference.None -> null
-        SwipeStartActionPreference.ToggleRead -> onToggleRead
-        SwipeStartActionPreference.ToggleStarred -> onToggleStarred
-    }
 
-    val onSwipeStartToEnd = when (swipeToEndAction) {
-        SwipeEndActionPreference.None -> null
-        SwipeEndActionPreference.ToggleRead -> onToggleRead
-        SwipeEndActionPreference.ToggleStarred -> onToggleStarred
-    }
-    val density = LocalDensity.current
-    val confirmValueChange: (SwipeToDismissBoxValue) -> Boolean = {
-        when (it) {
-            SwipeToDismissBoxValue.StartToEnd -> {
-                onSwipeStartToEnd?.invoke(articleWithFeed, SwipeActionDelay)
-                swipeToEndAction == SwipeEndActionPreference.ToggleRead && isFilterUnread
-            }
-
-            SwipeToDismissBoxValue.EndToStart -> {
-                onSwipeEndToStart?.invoke(articleWithFeed, SwipeActionDelay)
-                swipeToStartAction == SwipeStartActionPreference.ToggleRead && isFilterUnread
-            }
-
-            SwipeToDismissBoxValue.Settled -> {
-                true
-            }
-        }
-    }
-    val positionalThreshold: (totalDistance: Float) -> Float = {
-        it * PositionalThresholdFraction
-    }
-    val velocityThreshold: () -> Float = { Float.POSITIVE_INFINITY }
-    val animationSpec: AnimationSpec<Float> = spring(stiffness = Spring.StiffnessMediumLow)
-    val swipeState = rememberSaveable(
-        articleWithFeed.article, saver = SwipeToDismissBoxState.Saver(
-            confirmValueChange = confirmValueChange,
-            density = density,
-            animationSpec = animationSpec,
-            velocityThreshold = velocityThreshold,
-            positionalThreshold = positionalThreshold
-        )
-    ) {
-        SwipeToDismissBoxState(
-            initialValue = SwipeToDismissBoxValue.Settled,
-            density = density,
-            animationSpec = animationSpec,
-            confirmValueChange = confirmValueChange,
-            positionalThreshold = positionalThreshold,
-            velocityThreshold = velocityThreshold
-        )
-    }
     val view = LocalView.current
-    var isThresholdPassed by remember(articleWithFeed) { mutableStateOf(false) }
-
-    LaunchedEffect(swipeState.progress > PositionalThresholdFraction) {
-        if (swipeState.progress > PositionalThresholdFraction && swipeState.targetValue != SwipeToDismissBoxValue.Settled) {
-            isThresholdPassed = true
-            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-        } else {
-            isThresholdPassed = false
-        }
-    }
+    val density = LocalDensity.current
 
     var expanded by remember { mutableStateOf(false) }
 
@@ -368,104 +321,158 @@ fun SwipeableArticleItem(
     }
     var menuOffset by remember { mutableStateOf(Offset(0f, 0f)) }
 
-    SwipeToDismissBox(
-        state = swipeState,
-        enabled = !isSwipeEnabled(),
-        /***  create dismiss alert background box */
-        backgroundContent = {
-            SwipeToDismissBoxBackgroundContent(
-                direction = swipeState.dismissDirection,
-                isActive = isThresholdPassed,
-                isStarred = articleWithFeed.article.isStarred,
-                isRead = !articleWithFeed.article.isUnread
-            )
-        },
-        /**** Dismiss Content */
-        content = {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .pointerInput(expanded) {
-                        awaitEachGesture {
-                            while (true) {
-                                awaitFirstDown(requireUnconsumed = false).let {
-                                    menuOffset = it.position
-                                }
+    SwipeActionBox(
+        articleWithFeed = articleWithFeed,
+        isRead = !articleWithFeed.article.isUnread,
+        isStarred = articleWithFeed.article.isStarred,
+        onToggleStarred = onToggleStarred,
+        onToggleRead = onToggleRead
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInput(expanded) {
+                    awaitEachGesture {
+                        while (true) {
+                            awaitFirstDown(requireUnconsumed = false).let {
+                                menuOffset = it.position
                             }
                         }
                     }
-                    .background(
-                        MaterialTheme.colorScheme.surfaceColorAtElevation(
-                            articleListTonalElevation.dp
-                        ) onDark MaterialTheme.colorScheme.surface
-                    )
-                    .wrapContentSize()
-            ) {
-                ArticleItem(
-                    articleWithFeed = articleWithFeed,
-                    onClick = onClick,
-                    onLongClick = onLongClick
+                }
+                .background(
+                    MaterialTheme.colorScheme.surfaceColorAtElevation(
+                        articleListTonalElevation.dp
+                    ) onDark MaterialTheme.colorScheme.surface
                 )
-                with(articleWithFeed.article) {
-                    if (isMenuEnabled) {
-                        AnimatedDropdownMenu(
-                            modifier = Modifier.padding(12.dp),
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false },
-                            offset = density.run {
-                                DpOffset(menuOffset.x.toDp(), 0.dp)
-                            },
-                        ) {
-                            ArticleItemMenuContent(
-                                articleWithFeed = articleWithFeed,
-                                isStarred = isStarred,
-                                isRead = !isUnread,
-                                onToggleStarred = onToggleStarred,
-                                onToggleRead = onToggleRead,
-                                onMarkAboveAsRead = onMarkAboveAsRead,
-                                onMarkBelowAsRead = onMarkBelowAsRead,
-                                onShare = onShare
-                            ) { expanded = false }
-                        }
+                .wrapContentSize()
+        ) {
+            ArticleItem(
+                articleWithFeed = articleWithFeed,
+                onClick = onClick,
+                onLongClick = onLongClick
+            )
+            with(articleWithFeed.article) {
+                if (isMenuEnabled) {
+                    AnimatedDropdownMenu(
+                        modifier = Modifier.padding(12.dp),
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        offset = density.run {
+                            DpOffset(menuOffset.x.toDp(), 0.dp)
+                        },
+                    ) {
+                        ArticleItemMenuContent(
+                            articleWithFeed = articleWithFeed,
+                            isStarred = isStarred,
+                            isRead = !isUnread,
+                            onToggleStarred = onToggleStarred,
+                            onToggleRead = onToggleRead,
+                            onMarkAboveAsRead = onMarkAboveAsRead,
+                            onMarkBelowAsRead = onMarkBelowAsRead,
+                            onShare = onShare
+                        ) { expanded = false }
                     }
                 }
             }
-        },
-        /*** Set Direction to dismiss */
-        enableDismissFromEndToStart = onSwipeEndToStart != null,
-        enableDismissFromStartToEnd = onSwipeStartToEnd != null
-    )
+        }
+    }
+
+
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+private enum class SwipeDirection {
+    StartToEnd, EndToStart
+}
+
 @Composable
-private fun RowScope.SwipeToDismissBoxBackgroundContent(
-    direction: SwipeToDismissBoxValue,
-    isActive: Boolean,
+private fun SwipeActionBox(
+    modifier: Modifier = Modifier,
+    articleWithFeed: ArticleWithFeed,
     isStarred: Boolean,
     isRead: Boolean,
+    onToggleStarred: (ArticleWithFeed) -> Unit,
+    onToggleRead: (ArticleWithFeed) -> Unit,
+    content: @Composable () -> Unit
 ) {
-    val containerColor = MaterialTheme.colorScheme.surface
-    val containerColorElevated = MaterialTheme.colorScheme.tertiaryContainer
-    val backgroundColor = remember { Animatable(containerColor) }
+    val containerColor = MaterialTheme.colorScheme.tertiaryContainer
 
-    LaunchedEffect(isActive) {
-        backgroundColor.animateTo(
-            if (isActive) {
-                containerColorElevated
-            } else {
-                containerColor
-            }
+    val swipeToStartAction = LocalArticleListSwipeStartAction.current
+    val swipeToEndAction = LocalArticleListSwipeEndAction.current
+
+    val onSwipeEndToStart = when (swipeToStartAction) {
+        SwipeStartActionPreference.None -> null
+        SwipeStartActionPreference.ToggleRead -> onToggleRead
+        SwipeStartActionPreference.ToggleStarred -> onToggleStarred
+    }
+
+    val onSwipeStartToEnd = when (swipeToEndAction) {
+        SwipeEndActionPreference.None -> null
+        SwipeEndActionPreference.ToggleRead -> onToggleRead
+        SwipeEndActionPreference.ToggleStarred -> onToggleStarred
+    }
+
+    if (onSwipeStartToEnd == null && onSwipeEndToStart == null) {
+        content()
+        return
+    }
+
+    val startAction =
+        SwipeAction(
+            icon = {
+                swipeActionIcon(
+                    direction = SwipeDirection.StartToEnd,
+                    isStarred = isStarred,
+                    isRead = isRead
+                )?.let {
+                    Icon(
+                        imageVector = it,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.tertiary,
+                        modifier = Modifier.padding(horizontal = 24.dp)
+                    )
+                }
+            },
+            background = containerColor,
+            isUndo = false,
+            onSwipe = { onSwipeStartToEnd?.invoke(articleWithFeed) }
         )
-    }
-    // FIXME: Remove this once SwipeToDismissBox has proper RTL support
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
-    val alignment = when (direction) {
-        SwipeToDismissBoxValue.StartToEnd -> if (isRtl) Alignment.CenterEnd else Alignment.CenterStart
-        SwipeToDismissBoxValue.EndToStart -> if (isRtl) Alignment.CenterStart else Alignment.CenterEnd
-        SwipeToDismissBoxValue.Settled -> Alignment.Center
+    val endAction = SwipeAction(
+        icon = {
+            swipeActionIcon(
+                direction = SwipeDirection.EndToStart,
+                isStarred = isStarred,
+                isRead = isRead
+            )?.let {
+                Icon(
+                    imageVector = it,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                )
+            }
+        },
+        background = containerColor,
+        isUndo = false,
+        onSwipe = { onSwipeEndToStart?.invoke(articleWithFeed) }
+    )
+
+    SwipeableActionsBox(
+        modifier = modifier,
+        startActions = listOf(startAction),
+        endActions = listOf(endAction),
+        backgroundUntilSwipeThreshold = MaterialTheme.colorScheme.surface,
+    ) {
+        content.invoke()
     }
+}
+
+@Composable
+private fun swipeActionIcon(
+    direction: SwipeDirection, isStarred: Boolean,
+    isRead: Boolean,
+): ImageVector? {
     val swipeToStartAction = LocalArticleListSwipeStartAction.current
     val swipeToEndAction = LocalArticleListSwipeEndAction.current
 
@@ -475,15 +482,9 @@ private fun RowScope.SwipeToDismissBoxBackgroundContent(
     val readImageVector =
         remember(isRead) { if (isRead) Icons.Outlined.Circle else Icons.Rounded.CheckCircleOutline }
 
-    val starText =
-        stringResource(if (isStarred) R.string.mark_as_unstar else R.string.mark_as_starred)
-
-    val readText =
-        stringResource(if (isRead) R.string.mark_as_unread else R.string.mark_as_read)
-
-    val imageVector = remember(direction) {
+    return remember(direction) {
         when (direction) {
-            SwipeToDismissBoxValue.StartToEnd -> {
+            SwipeDirection.StartToEnd -> {
 
                 when (swipeToEndAction) {
                     SwipeEndActionPreference.None -> null
@@ -492,56 +493,47 @@ private fun RowScope.SwipeToDismissBoxBackgroundContent(
                 }
             }
 
-            SwipeToDismissBoxValue.EndToStart -> {
+            SwipeDirection.EndToStart -> {
                 when (swipeToStartAction) {
                     SwipeStartActionPreference.None -> null
                     SwipeStartActionPreference.ToggleRead -> readImageVector
                     SwipeStartActionPreference.ToggleStarred -> starImageVector
                 }
             }
-
-            SwipeToDismissBoxValue.Settled -> null
         }
     }
+}
 
-    val text = remember(direction) {
+@Composable
+private fun swipeActionText(
+    direction: SwipeDirection, isStarred: Boolean,
+    isRead: Boolean,
+): String {
+    val swipeToStartAction = LocalArticleListSwipeStartAction.current
+    val swipeToEndAction = LocalArticleListSwipeEndAction.current
+
+    val starText =
+        stringResource(if (isStarred) R.string.mark_as_unstar else R.string.mark_as_starred)
+
+    val readText =
+        stringResource(if (isRead) R.string.mark_as_unread else R.string.mark_as_read)
+
+    return remember(direction) {
         when (direction) {
-            SwipeToDismissBoxValue.StartToEnd -> {
+            SwipeDirection.StartToEnd -> {
                 when (swipeToEndAction) {
-                    SwipeEndActionPreference.None -> null
+                    SwipeEndActionPreference.None -> "null"
                     SwipeEndActionPreference.ToggleRead -> readText
                     SwipeEndActionPreference.ToggleStarred -> starText
                 }
             }
 
-            SwipeToDismissBoxValue.EndToStart -> {
+            SwipeDirection.EndToStart -> {
                 when (swipeToStartAction) {
-                    SwipeStartActionPreference.None -> null
+                    SwipeStartActionPreference.None -> "null"
                     SwipeStartActionPreference.ToggleRead -> readText
                     SwipeStartActionPreference.ToggleStarred -> starText
                 }
-            }
-
-            SwipeToDismissBoxValue.Settled -> null
-        }
-    }
-
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .drawBehind { drawRect(backgroundColor.value) },
-    ) {
-        Column(modifier = Modifier.align(alignment = alignment)) {
-            imageVector?.let {
-                Icon(
-                    imageVector = it,
-                    contentDescription = text,
-                    tint = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(horizontal = 24.dp)
-                )
             }
         }
     }
@@ -554,8 +546,8 @@ fun ArticleItemMenuContent(
     iconSize: DpSize = DpSize(width = 20.dp, height = 20.dp),
     isStarred: Boolean = false,
     isRead: Boolean = false,
-    onToggleStarred: (ArticleWithFeed, Long) -> Unit = { _, _ -> },
-    onToggleRead: (ArticleWithFeed, Long) -> Unit = { _, _ -> },
+    onToggleStarred: (ArticleWithFeed) -> Unit = { },
+    onToggleRead: (ArticleWithFeed) -> Unit = { },
     onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? = null,
     onMarkBelowAsRead: ((ArticleWithFeed) -> Unit)? = null,
     onShare: ((ArticleWithFeed) -> Unit)? = null,
@@ -574,7 +566,7 @@ fun ArticleItemMenuContent(
         stringResource(if (isRead) R.string.mark_as_unread else R.string.mark_as_read)
 
     DropdownMenuItem(text = { Text(text = readText) }, onClick = {
-        onToggleRead(articleWithFeed, 0)
+        onToggleRead(articleWithFeed)
         onItemClick?.invoke()
     }, leadingIcon = {
         Icon(
@@ -586,7 +578,7 @@ fun ArticleItemMenuContent(
     DropdownMenuItem(
         text = { Text(text = starText) },
         onClick = {
-            onToggleStarred(articleWithFeed, 0)
+            onToggleStarred(articleWithFeed)
             onItemClick?.invoke()
         },
         leadingIcon = {

@@ -11,15 +11,13 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import coil.size.Precision
 import coil.size.Scale
 import coil.size.Size
 import me.ash.reader.R
+import me.ash.reader.ui.ext.extractDomain
 
 val SIZE_1000 = Size(1000, 1000)
 
@@ -37,14 +35,19 @@ fun RYAsyncImage(
 ) {
     Image(
         painter = rememberAsyncImagePainter(
-            ImageRequest.Builder(LocalContext.current).data(data = data).apply {
+            model = ImageRequest.Builder(LocalContext.current).apply {
+                val domain = data.toString().extractDomain()
+                if (data.toString().extractDomain() != null) {
+                    addHeader("Referer", domain!!)
+                }
+            }.data(data = data).apply {
                 if (placeholder != null) placeholder(placeholder)
                 if (error != null) error(error)
                 crossfade(true)
                 scale(scale)
                 precision(precision)
                 size(size)
-            }.build()
+            }.build(),
         ),
         contentDescription = contentDescription,
         contentScale = contentScale,

@@ -3,6 +3,7 @@ package me.ash.reader.ui.page.home.feeds.drawer.feed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.ui.unit.Density
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,10 +17,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.group.Group
+import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
+import me.ash.reader.infrastructure.rss.RssHelper
 import javax.inject.Inject
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -32,6 +35,8 @@ class FeedOptionViewModel @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher,
     @ApplicationScope
     private val applicationScope: CoroutineScope,
+    private val rssHelper: RssHelper,
+    private val feedDao: FeedDao,
 ) : ViewModel() {
 
     private val _feedOptionUiState = MutableStateFlow(FeedOptionUiState())
@@ -45,7 +50,7 @@ class FeedOptionViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchFeed(feedId: String) {
+    suspend fun fetchFeed(feedId: String) {
         val feed = rssService.get().findFeedById(feedId)
         _feedOptionUiState.update {
             it.copy(
@@ -53,17 +58,6 @@ class FeedOptionViewModel @Inject constructor(
                 selectedGroupId = feed?.groupId ?: "",
             )
         }
-    }
-
-    fun showDrawer(scope: CoroutineScope, feedId: String) {
-        scope.launch {
-            fetchFeed(feedId)
-            _feedOptionUiState.value.drawerState.show()
-        }
-    }
-
-    fun hideDrawer(scope: CoroutineScope) {
-        scope.launch { _feedOptionUiState.value.drawerState.hide() }
     }
 
     fun showNewGroupDialog() {
@@ -91,9 +85,12 @@ class FeedOptionViewModel @Inject constructor(
     fun addNewGroup() {
         if (_feedOptionUiState.value.newGroupContent.isNotBlank()) {
             applicationScope.launch {
-                selectedGroup(rssService.get().addGroup(
-                    destFeed = _feedOptionUiState.value.feed,
-                    newGroupName = _feedOptionUiState.value.newGroupContent))
+                selectedGroup(
+                    rssService.get().addGroup(
+                        destFeed = _feedOptionUiState.value.feed,
+                        newGroupName = _feedOptionUiState.value.newGroupContent
+                    )
+                )
                 hideNewGroupDialog()
             }
         }
@@ -228,11 +225,19 @@ class FeedOptionViewModel @Inject constructor(
             }
         }
     }
+
+    fun reloadIcon() {
+        _feedOptionUiState.value.feed?.let { feed ->
+            viewModelScope.launch(ioDispatcher) {
+                val icon = rssHelper.queryRssIconLink(feed.url) ?: return@launch
+                feedDao.update(feed.copy(icon = icon))
+                fetchFeed(feed.id)
+            }
+        }
+    }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 data class FeedOptionUiState(
-    var drawerState: ModalBottomSheetState = ModalBottomSheetState(ModalBottomSheetValue.Hidden),
     val feed: Feed? = null,
     val selectedGroupId: String = "",
     val newGroupContent: String = "",
