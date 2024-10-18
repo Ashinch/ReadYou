@@ -179,8 +179,8 @@
     <string name="font_size">גודל גופן</string>
     <string name="letter_spacing">ריווח אותיות</string>
     <string name="alignment">יישור</string>
-    <string name="align_end">יישור לימין</string>
-    <string name="align_start">יישור לשמאל</string>
+    <string name="align_end">יישור לסוף</string>
+    <string name="align_start">יישור להתחלה</string>
     <string name="every_2_hours">כל שעתיים</string>
     <string name="for_2_days">יומיים</string>
     <string name="local">מקומי</string>
@@ -214,4 +214,6 @@
     <string name="default_browser">אילוץ דפדפן ברירת המחדל</string>
     <string name="open_link_specific_browser">דפדפן</string>
     <string name="always_ask">תמיד לשאול</string>
+    <string name="unfold_more">הרחבה של הכול</string>
+    <string name="unfold_less">צמצום של הכול</string>
 </resources>

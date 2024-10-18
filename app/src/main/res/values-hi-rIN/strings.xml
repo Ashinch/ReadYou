@@ -183,8 +183,8 @@
     <string name="images">छवियां</string>
     <string name="rounded_corners">गोल कोने </string>
     <string name="videos">वीडियो</string>
-    <string name="align_start">बाएं संरेखित करें</string>
-    <string name="align_end">दाएं संरेखित करें</string>
+    <string name="align_start">शुरुआत संरेखित करें</string>
+    <string name="align_end">अंत संरेखित करें</string>
     <string name="center_text">केंद्र पाठ</string>
     <string name="justify">संरेखित करें</string>
     <string name="external_fonts">बाहरी फॉन्ट</string>
@@ -306,4 +306,12 @@
     <string name="invalid_json_file_warning">यह फाइल मान्य JSON फाइल नहीं हो सकती है। इसे आयात करने से संभावित रूप से ऐप दूषित हो सकता है और परिणामस्वरूप वर्तमान प्राथमिकताएं खो सकती हैं। क्या आप वाकई आगे बढ़ना चाहते हैं?</string>
     <string name="unfold_more">सभी विस्तृत करें</string>
     <string name="unfold_less">सभी संक्षिप्त करें</string>
+    <string name="native_component">मूल घटक</string>
+    <string name="content_renderer">सामग्री रेंडरर</string>
+    <string name="read_aloud">जोर से पढ़ें</string>
+    <string name="only_available_on_webview">केवल वेबव्यू पर उपलब्ध</string>
+    <string name="use_bionic_reading">बायोनिक रीडिंग का उपयोग करें</string>
+    <string name="about">परिचय</string>
+    <string name="bionic_reading_tips">बायोनिक रीडिंग क्या है?</string>
+    <string name="browse_bionic_reading_tips">अधिक जानकारी के लिए <i><u>bionic-reading.com</u></i> पर जाएं।</string>
 </resources>
