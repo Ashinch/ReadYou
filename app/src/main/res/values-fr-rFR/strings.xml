@@ -186,8 +186,8 @@
     <string name="images">Images</string>
     <string name="rounded_corners">Coins arrondis</string>
     <string name="videos">Vidéos</string>
-    <string name="align_start">Aligner à gauche</string>
-    <string name="align_end">Aligner à droite</string>
+    <string name="align_start">Aligner au départ</string>
+    <string name="align_end">Aligner à la fin</string>
     <string name="center_text">Centrer le texte</string>
     <string name="justify">Justifier</string>
     <string name="external_fonts">Polices externes</string>
@@ -307,4 +307,14 @@
     <string name="import_from_json">Importer depuis un fichier JSON</string>
     <string name="export_as_json">Exporter en fichier JSON</string>
     <string name="invalid_json_file_warning">Ce fichier n\'est peut-être pas un fichier JSON valide. L\'importer pourrait potentiellement corrompre l\'application et entraîner la perte des préférences actuelles. Êtes-vous sur de vouloir continuer ?</string>
+    <string name="browse_bionic_reading_tips">Apprenez-en plus sur <i><u>bionic-reading.com</u></i>.</string>
+    <string name="unfold_less">Réduire Tout</string>
+    <string name="unfold_more">Développer Tout</string>
+    <string name="native_component">Composant Natif</string>
+    <string name="content_renderer">Rendement de contenu</string>
+    <string name="read_aloud">Lecture à Voix Haute</string>
+    <string name="only_available_on_webview">Uniquement disponible sur le WebView</string>
+    <string name="about">À Propos</string>
+    <string name="use_bionic_reading">Utiliser Bionic Reading</string>
+    <string name="bionic_reading_tips">Qu\'est-ce que Bionic Reading ?</string>
 </resources>

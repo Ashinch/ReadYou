@@ -159,8 +159,8 @@
     <string name="maximize">Увеличить до предела</string>
     <string name="justify">Выровнять</string>
     <string name="center_text">По центру</string>
-    <string name="align_end">Справа</string>
-    <string name="align_start">Слева</string>
+    <string name="align_end">Выровнять конец</string>
+    <string name="align_start">Выровнять начало</string>
     <string name="letter_spacing">Межбуквенное расстояние</string>
     <string name="line_spacing">Расстояние между строк</string>
     <string name="icons_and_labels">Иконки и заголовки</string>
@@ -312,4 +312,12 @@
     <string name="line_height_multiple">Межстрочный интервал</string>
     <string name="import_from_json">Импортировать из JSON</string>
     <string name="invalid_protobuf_file_warning">Этот файл не похож на правильный файл protobuf. Его импорт может сломать приложение и сбросить текущие настройки. Вы уверены, что хотите продолжить?</string>
+    <string name="content_renderer">Обработчик содержимого</string>
+    <string name="bionic_reading_tips">Что такое бионическое чтение?</string>
+    <string name="about">Об</string>
+    <string name="use_bionic_reading">Использовать бионическое чтение</string>
+    <string name="only_available_on_webview">Только доступно в WebView</string>
+    <string name="read_aloud">Читать вслух</string>
+    <string name="native_component">Нативный компонент</string>
+    <string name="browse_bionic_reading_tips">Узнайте больше на <i><u>bionic-reading.com</u></i>.</string>
 </resources>

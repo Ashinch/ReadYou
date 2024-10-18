@@ -85,7 +85,7 @@
     <string name="every_6_hours">Сваких 6 сати</string>
     <string name="initial_page">Иницијална страница</string>
     <string name="name">Име</string>
-    <string name="top_bar">Горњи панел</string>
+    <string name="top_bar">Горња трака</string>
     <string name="only_when_charging">Само приликом пуњења</string>
     <string name="initial_filter">Иницијални филтер</string>
     <string name="coming_soon">Стиже ускоро</string>
@@ -111,7 +111,7 @@
     <string name="every_15_minutes">Сваких 15 минута</string>
     <string name="interaction">Интеракција</string>
     <string name="check_failure">Провера ажурирања није успела</string>
-    <string name="align_start">Поравнај лево</string>
+    <string name="align_start">Поравнајте почетак</string>
     <string name="keep_archived_articles">Чување архивираних чланака</string>
     <string name="selected">Изабрано</string>
     <string name="icons">Иконице</string>
@@ -144,7 +144,7 @@
     <string name="open_source_licenses">Лиценце отвореног кода</string>
     <string name="paste">Налепи</string>
     <string name="group_list">Листа група</string>
-    <string name="tips_top_bar_tonal_elevation">Тонско узвишење за листу горњих панела доступно је само када скролујете</string>
+    <string name="tips_top_bar_tonal_elevation">Тонско узвишење за листу горњих трака доступно је само када превлачите</string>
     <string name="use_device_theme">Користи тему уређаја</string>
     <string name="primary_color_hint">Као #666666 или 666666</string>
     <string name="open_with">Отвори %1$s</string>
@@ -160,7 +160,7 @@
     <string name="sponsor">Спонзор</string>
     <string name="for_3_days">3 дана</string>
     <string name="deny">Одбиј</string>
-    <string name="align_end">Поравнај десно</string>
+    <string name="align_end">Поравнајте крај</string>
     <string name="block_list">Блок листа</string>
     <string name="specific_browser_name">Претраживач: %1$s</string>
     <string name="specific_browser">Присили одређени претраживач</string>
@@ -216,7 +216,7 @@
     <string name="accounts_tips">Можете да додирнете име налога на страници за фид да бисте га укључили</string>
     <string name="already_subscribed">Већ сте претплаћени</string>
     <string name="empty">Празно</string>
-    <string name="filter_bar">Панел филтера</string>
+    <string name="filter_bar">Трака филтера</string>
     <string name="expand_more">Прошири</string>
     <string name="allow">Дозволи</string>
     <string name="auto_customtabs">Аутоматски (преферирање прилагођене картице)</string>
@@ -234,7 +234,7 @@
     </plurals>
     <string name="all_allow_notification_toast">Сва обавештења из групе „%1$s“ су дозвољена</string>
     <string name="searching">Претраживање…</string>
-    <string name="auto_hide_toolbars">Аутоматски сакриј панел са алаткама</string>
+    <string name="auto_hide_toolbars">Аутоматски сакриј траку са алаткама</string>
     <string name="clear_articles_feed_tips">Очистите све архивиране чланке у фиду „%1$s“</string>
     <string name="dark_reading_theme">Тамна тема за читање</string>
     <string name="subhead">Поднаслов</string>
@@ -309,4 +309,12 @@
     <string name="invalid_json_file_warning">Овај фајл можда није важећи JSON фајл. Увоз би потенцијално могао да оштети апликацију и резултира губитком тренутних преференција. Желите ли заиста да наставите?</string>
     <string name="unfold_more">Прошири све</string>
     <string name="unfold_less">Скупи све</string>
+    <string name="only_available_on_webview">Доступно само на ВебВиев-у</string>
+    <string name="bionic_reading_tips">Шта је бионичко читање?</string>
+    <string name="native_component">Изворна компонента</string>
+    <string name="content_renderer">Рендерер садржаја</string>
+    <string name="read_aloud">Прочитајте наглас</string>
+    <string name="use_bionic_reading">Користите бионичко читање</string>
+    <string name="about">О нама</string>
+    <string name="browse_bionic_reading_tips">Сазнајте више на <i><u>bionic-reading.com</u></i>.</string>
 </resources>
