@@ -154,7 +154,6 @@ dependencies {
     implementation(libs.readability4j)
     implementation(libs.rome)
     implementation(libs.telephoto)
-    implementation(libs.swipe)
     implementation(libs.okhttp)
     implementation(libs.okhttp.coroutines)
     implementation(libs.retrofit)
