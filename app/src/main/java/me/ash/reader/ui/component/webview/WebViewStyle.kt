@@ -27,7 +27,7 @@ object WebViewStyle {
 :root {
     /* --font-family: Inter; */
     --font-size: ${fontSize}px;
-    --line-height: ${lineHeight};
+    --line-height: ${lineHeight * 1.5f};
     --letter-spacing: ${letterSpacing}px;
     --text-margin: ${textMargin}px;
     --text-color: ${argbToCssColor(textColor)};
