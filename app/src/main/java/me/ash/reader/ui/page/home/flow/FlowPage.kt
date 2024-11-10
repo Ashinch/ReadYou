@@ -32,6 +32,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,7 +44,6 @@ import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.general.Filter
-import me.ash.reader.domain.model.general.MarkAsReadConditions
 import me.ash.reader.infrastructure.preference.LocalFlowArticleListDateStickyHeader
 import me.ash.reader.infrastructure.preference.LocalFlowArticleListFeedIcon
 import me.ash.reader.infrastructure.preference.LocalFlowArticleListTonalElevation
@@ -107,6 +107,12 @@ fun FlowPage(
         }
     }
 
+    DisposableEffect(pagingItems) {
+        onDispose {
+            flowViewModel.commitDiff()
+        }
+    }
+
     DisposableEffect(owner) {
         homeViewModel.syncWorkLiveData.observe(owner) { workInfoList ->
             workInfoList.let {
@@ -127,15 +133,16 @@ fun FlowPage(
 
     val onToggleRead: (ArticleWithFeed) -> Unit = remember {
         { article ->
-            flowViewModel.updateReadStatus(
-                groupId = null,
-                feedId = null,
-                articleId = article.article.id,
-                conditions = MarkAsReadConditions.All,
-                isUnread = !article.article.isUnread,
-            )
+            val id = article.article.id
+            val isUnread = article.article.isUnread
+
+            with(flowViewModel.diffMap) {
+                if (contains(id)) remove(id)
+                else put(id, Diff(isUnread = !isUnread))
+            }
         }
     }
+
     val onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? = remember {
         {
             flowViewModel.markAsReadFromListByDate(
@@ -326,7 +333,7 @@ fun FlowPage(
                     }
                     ArticleList(
                         pagingItems = pagingItems,
-                        isFilterUnread = filterUiState.filter == Filter.Unread,
+                        diffMap = flowViewModel.diffMap,
                         isShowFeedIcon = articleListFeedIcon.value,
                         isShowStickyHeader = articleListDateStickyHeader.value,
                         articleListTonalElevation = articleListTonalElevation.value,

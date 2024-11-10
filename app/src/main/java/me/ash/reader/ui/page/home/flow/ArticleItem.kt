@@ -90,6 +90,7 @@ private const val TAG = "ArticleItem"
 fun ArticleItem(
     modifier: Modifier = Modifier,
     articleWithFeed: ArticleWithFeed,
+    isUnread: Boolean = articleWithFeed.article.isUnread,
     onClick: (ArticleWithFeed) -> Unit = {},
     onLongClick: (() -> Unit)? = null
 ) {
@@ -105,7 +106,7 @@ fun ArticleItem(
         dateString = article.dateString,
         imgData = article.img,
         isStarred = article.isStarred,
-        isUnread = article.isUnread,
+        isUnread = isUnread,
         onClick = { onClick(articleWithFeed) },
         onLongClick = onLongClick
     )
@@ -280,7 +281,7 @@ private const val SwipeActionDelay = 300L
 @Composable
 fun SwipeableArticleItem(
     articleWithFeed: ArticleWithFeed,
-    isFilterUnread: Boolean = false,
+    isUnread: Boolean = articleWithFeed.article.isUnread,
     articleListTonalElevation: Int = 0,
     onClick: (ArticleWithFeed) -> Unit = {},
     isSwipeEnabled: () -> Boolean = { false },
@@ -311,7 +312,7 @@ fun SwipeableArticleItem(
 
     SwipeActionBox(
         articleWithFeed = articleWithFeed,
-        isRead = !articleWithFeed.article.isUnread,
+        isRead = !isUnread,
         isStarred = articleWithFeed.article.isStarred,
         onToggleStarred = onToggleStarred,
         onToggleRead = onToggleRead
@@ -337,6 +338,7 @@ fun SwipeableArticleItem(
         ) {
             ArticleItem(
                 articleWithFeed = articleWithFeed,
+                isUnread = isUnread,
                 onClick = onClick,
                 onLongClick = onLongClick
             )
