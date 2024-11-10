@@ -1,14 +1,6 @@
 package me.ash.reader.ui.page.home.flow
 
-import android.util.Log
 import android.view.HapticFeedbackConstants
-
-import androidx.compose.animation.Animatable
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.exponentialDecay
-import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -90,8 +82,8 @@ import me.ash.reader.ui.page.settings.color.flow.generateArticleWithFeedPreview
 import me.ash.reader.ui.theme.Shape20
 import me.ash.reader.ui.theme.applyTextDirection
 import me.ash.reader.ui.theme.palette.onDark
-import me.saket.swipe.SwipeAction
-import me.saket.swipe.SwipeableActionsBox
+import me.ash.reader.ui.component.swipe.SwipeAction
+import me.ash.reader.ui.component.swipe.SwipeableActionsBox
 
 private const val TAG = "ArticleItem"
 
@@ -100,6 +92,7 @@ fun ArticleItem(
     modifier: Modifier = Modifier,
     articleWithFeed: ArticleWithFeed,
     isHighlighted: Boolean = false,
+    isUnread: Boolean = articleWithFeed.article.isUnread,
     onClick: (ArticleWithFeed) -> Unit = {},
     onLongClick: (() -> Unit)? = null
 ) {
@@ -115,8 +108,8 @@ fun ArticleItem(
         dateString = article.dateString,
         imgData = article.img,
         isStarred = article.isStarred,
-        isUnread = article.isUnread,
         isHighlighted = isHighlighted,
+        isUnread = isUnread,
         onClick = { onClick(articleWithFeed) },
         onLongClick = onLongClick
     )
@@ -159,6 +152,9 @@ fun ArticleItem(
             .alpha(
                 if (isHighlighted) 1f else {
                     when (articleListReadIndicator) {
+
+                        FlowArticleReadIndicatorPreference.None -> 1f
+
                         FlowArticleReadIndicatorPreference.AllRead -> {
                             if (isUnread) 1f else 0.5f
                         }
@@ -294,11 +290,12 @@ private const val SwipeActionDelay = 300L
 fun SwipeableArticleItem(
     articleWithFeed: ArticleWithFeed,
     isHighlighted: Boolean = false,
+    isUnread: Boolean = articleWithFeed.article.isUnread,
     articleListTonalElevation: Int = 0,
     onClick: (ArticleWithFeed) -> Unit = {},
     isMenuEnabled: Boolean = true,
-    onToggleStarred: (ArticleWithFeed) -> Unit = { },
-    onToggleRead: (ArticleWithFeed) -> Unit = { },
+    onToggleStarred: (ArticleWithFeed) -> Unit = {},
+    onToggleRead: (ArticleWithFeed) -> Unit = {},
     onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? = null,
     onMarkBelowAsRead: ((ArticleWithFeed) -> Unit)? = null,
     onShare: ((ArticleWithFeed) -> Unit)? = null,
@@ -323,7 +320,7 @@ fun SwipeableArticleItem(
 
     SwipeActionBox(
         articleWithFeed = articleWithFeed,
-        isRead = !articleWithFeed.article.isUnread,
+        isRead = !isUnread,
         isStarred = articleWithFeed.article.isStarred,
         onToggleStarred = onToggleStarred,
         onToggleRead = onToggleRead
@@ -350,6 +347,7 @@ fun SwipeableArticleItem(
             ArticleItem(
                 articleWithFeed = articleWithFeed,
                 isHighlighted = isHighlighted,
+                isUnread = isUnread,
                 onClick = onClick,
                 onLongClick = onLongClick,
             )

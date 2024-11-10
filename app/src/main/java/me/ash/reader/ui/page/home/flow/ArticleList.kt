@@ -16,6 +16,7 @@ import me.ash.reader.domain.model.article.ArticleWithFeed
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.ArticleList(
     pagingItems: LazyPagingItems<ArticleFlowItem>,
+    diffMap: Map<String, Diff>,
     isShowFeedIcon: Boolean,
     isShowStickyHeader: Boolean,
     articleListTonalElevation: Int,
@@ -39,9 +40,11 @@ fun LazyListScope.ArticleList(
         ) { index ->
             when (val item = pagingItems[index]) {
                 is ArticleFlowItem.Article -> {
+                    val article = item.articleWithFeed.article
                     SwipeableArticleItem(
                         articleWithFeed = item.articleWithFeed,
                         isHighlighted = readingArticleId == item.articleWithFeed.article.id,
+                        isUnread = diffMap[article.id]?.isUnread ?: article.isUnread,
                         articleListTonalElevation = articleListTonalElevation,
                         onClick = onClick,
                         isMenuEnabled = isMenuEnabled,
@@ -68,9 +71,11 @@ fun LazyListScope.ArticleList(
             when (val item = pagingItems.peek(index)) {
                 is ArticleFlowItem.Article -> {
                     item(key = key(item), contentType = contentType(item)) {
+                        val article = item.articleWithFeed.article
                         SwipeableArticleItem(
                             articleWithFeed = item.articleWithFeed,
                             isHighlighted = readingArticleId == item.articleWithFeed.article.id,
+                            isUnread = diffMap[article.id]?.isUnread ?: article.isUnread,
                             articleListTonalElevation = articleListTonalElevation,
                             onClick = onClick,
                             isMenuEnabled = isMenuEnabled,

@@ -5,10 +5,9 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -19,12 +18,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.isSpecified
@@ -33,6 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
 import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
@@ -58,6 +61,7 @@ fun ReadingPage(
     readingViewModel: ReadingViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val hapticFeedback = LocalHapticFeedback.current
     val isPullToSwitchArticleEnabled = LocalPullToSwitchArticle.current.value
     val readingUiState = readingViewModel.readingUiState.collectAsStateValue()
     val readerState = readingViewModel.readerStateStateFlow.collectAsStateValue()
@@ -74,6 +78,12 @@ fun ReadingPage(
     } else {
         true
     }
+
+    var showTopDivider by remember {
+        mutableStateOf(false)
+    }
+
+    var bringToTop by remember { mutableStateOf(false) }
 
     val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
 
@@ -99,23 +109,23 @@ fun ReadingPage(
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
-//        topBarTonalElevation = tonalElevation.value.dp,
-//        containerTonalElevation = tonalElevation.value.dp,
         content = { paddings ->
             Log.i("RLog", "TopBar: recomposition")
 
             Box(modifier = Modifier.fillMaxSize()) {
-                // Top Bar
-                TopBar(
-                    navController = navController,
-                    isShow = isShowToolBar,
-                    windowInsets = WindowInsets(top = paddings.calculateTopPadding()),
-                    title = readerState.title,
-                    link = readerState.link,
-                    onClose = {
-                        navController.popBackStack()
-                    },
-                )
+                if (readerState.articleId != null) {
+                    TopBar(
+                        navController = navController,
+                        isShow = isShowToolBar,
+                        showDivider = showTopDivider,
+                        title = readerState.title,
+                        link = readerState.link,
+                        onClick = { bringToTop = true },
+                        onClose = {
+                            navController.popBackStack()
+                        },
+                    )
+                }
 
                 val isNextArticleAvailable = !readerState.nextArticleId.isNullOrEmpty()
                 val isPreviousArticleAvailable = !readerState.previousArticleId.isNullOrEmpty()
@@ -159,12 +169,31 @@ fun ReadingPage(
                                     }
                                 )
 
-
                             val listState = rememberSaveable(
                                 inputs = arrayOf(content),
                                 saver = LazyListState.Saver
                             ) { LazyListState() }
 
+                            val scrollState = rememberScrollState()
+
+                            val scope = rememberCoroutineScope()
+
+                            LaunchedEffect(bringToTop) {
+                                if (bringToTop) {
+                                    scope.launch {
+                                        if (scrollState.value != 0) {
+                                            scrollState.animateScrollTo(0)
+                                        } else if (listState.firstVisibleItemIndex != 0) {
+                                            listState.animateScrollToItem(0)
+                                        }
+                                    }.invokeOnCompletion { bringToTop = false }
+                                }
+                            }
+
+
+                            showTopDivider = snapshotFlow {
+                                scrollState.value != 0 || listState.firstVisibleItemIndex != 0
+                            }.collectAsStateValue(initial = false)
 
                             CompositionLocalProvider(
                                 LocalOverscrollConfiguration provides
@@ -197,6 +226,7 @@ fun ReadingPage(
                                         link = link,
                                         publishedDate = publishedDate,
                                         isLoading = content is ReaderState.Loading,
+                                        scrollState = scrollState,
                                         listState = listState,
                                         onImageClick = { imgUrl, altText ->
                                             currentImageData = ImageData(imgUrl, altText)
