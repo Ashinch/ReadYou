@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import kotlinx.coroutines.flow.collect
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
 import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
@@ -167,8 +170,10 @@ fun ReadingPage(
                                 saver = LazyListState.Saver
                             ) { LazyListState() }
 
+                            val scrollState = rememberScrollState()
+
                             showTopDivider = snapshotFlow {
-                                listState.firstVisibleItemIndex != 0
+                                scrollState.value != 0 || listState.firstVisibleItemIndex != 0
                             }.collectAsStateValue(initial = false)
 
                             CompositionLocalProvider(
@@ -200,6 +205,7 @@ fun ReadingPage(
                                         link = link,
                                         publishedDate = publishedDate,
                                         isLoading = content is ReaderState.Loading,
+                                        scrollState = scrollState,
                                         listState = listState,
                                         onImageClick = { imgUrl, altText ->
                                             currentImageData = ImageData(imgUrl, altText)

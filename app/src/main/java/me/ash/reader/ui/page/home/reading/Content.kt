@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.reading
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -47,6 +48,7 @@ fun Content(
     author: String? = null,
     link: String? = null,
     publishedDate: Date,
+    scrollState: ScrollState,
     listState: LazyListState,
     isLoading: Boolean,
     contentPadding: PaddingValues = PaddingValues(),
@@ -75,7 +77,7 @@ fun Content(
                     modifier = modifier
                         .padding(top = contentPadding.calculateTopPadding())
                         .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
+                        .verticalScroll(scrollState)
 
                 ) {
                     // Top bar height
