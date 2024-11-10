@@ -3,6 +3,8 @@ package me.ash.reader.ui.page.home.reading
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +27,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -48,6 +51,7 @@ fun TopBar(
     showDivider: Boolean = false,
     title: String? = "",
     link: String? = "",
+    onClick: (() -> Unit)? = null,
     onClose: () -> Unit = {},
 ) {
     val context = LocalContext.current
@@ -60,7 +64,12 @@ fun TopBar(
             .zIndex(1f),
         contentAlignment = Alignment.TopCenter
     ) {
-        Column {
+        Column(modifier = if (onClick == null) Modifier else Modifier.clickable(
+            onClick = onClick,
+            indication = null,
+            interactionSource = remember { MutableInteractionSource() }
+        )
+        ) {
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()

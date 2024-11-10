@@ -16,17 +16,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
@@ -35,6 +40,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
 import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
@@ -60,6 +66,7 @@ fun ReadingPage(
     readingViewModel: ReadingViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val hapticFeedback = LocalHapticFeedback.current
     val isPullToSwitchArticleEnabled = LocalPullToSwitchArticle.current.value
     val readingUiState = readingViewModel.readingUiState.collectAsStateValue()
     val readerState = readingViewModel.readerStateStateFlow.collectAsStateValue()
@@ -80,6 +87,8 @@ fun ReadingPage(
     var showTopDivider by remember {
         mutableStateOf(false)
     }
+
+    var bringToTop by remember { mutableStateOf(false) }
 
     val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
 
@@ -116,6 +125,7 @@ fun ReadingPage(
                         showDivider = showTopDivider,
                         title = readerState.title,
                         link = readerState.link,
+                        onClick = { bringToTop = true },
                         onClose = {
                             navController.popBackStack()
                         },
@@ -164,13 +174,27 @@ fun ReadingPage(
                                     }
                                 )
 
-
                             val listState = rememberSaveable(
                                 inputs = arrayOf(content),
                                 saver = LazyListState.Saver
                             ) { LazyListState() }
 
                             val scrollState = rememberScrollState()
+
+                            val scope = rememberCoroutineScope()
+
+                            LaunchedEffect(bringToTop) {
+                                if (bringToTop) {
+                                    scope.launch {
+                                        if (scrollState.value != 0) {
+                                            scrollState.animateScrollTo(0)
+                                        } else if (listState.firstVisibleItemIndex != 0) {
+                                            listState.animateScrollToItem(0)
+                                        }
+                                    }.invokeOnCompletion { bringToTop = false }
+                                }
+                            }
+
 
                             showTopDivider = snapshotFlow {
                                 scrollState.value != 0 || listState.firstVisibleItemIndex != 0
