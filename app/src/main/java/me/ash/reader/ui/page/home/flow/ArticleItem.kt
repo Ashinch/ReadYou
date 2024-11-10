@@ -145,6 +145,8 @@ fun ArticleItem(
             .padding(horizontal = 12.dp, vertical = 12.dp)
             .alpha(
                 when (articleListReadIndicator) {
+                    FlowArticleReadIndicatorPreference.None -> 1f
+
                     FlowArticleReadIndicatorPreference.AllRead -> {
                         if (isUnread) 1f else 0.5f
                     }

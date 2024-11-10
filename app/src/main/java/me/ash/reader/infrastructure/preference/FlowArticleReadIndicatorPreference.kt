@@ -16,14 +16,15 @@ import me.ash.reader.ui.ext.put
 val LocalFlowArticleListReadIndicator =
     compositionLocalOf<FlowArticleReadIndicatorPreference> { FlowArticleReadIndicatorPreference.default }
 
-sealed class FlowArticleReadIndicatorPreference(val value: Boolean) : Preference() {
-    object ExcludingStarred : FlowArticleReadIndicatorPreference(true)
-    object AllRead : FlowArticleReadIndicatorPreference(false)
+sealed class FlowArticleReadIndicatorPreference(val value: Int) : Preference() {
+    data object ExcludingStarred : FlowArticleReadIndicatorPreference(0)
+    data object AllRead : FlowArticleReadIndicatorPreference(1)
+    data object None : FlowArticleReadIndicatorPreference(2)
 
     override fun put(context: Context, scope: CoroutineScope) {
         scope.launch {
             context.dataStore.put(
-                DataStoreKey.flowArticleListReadIndicator,
+                flowArticleListReadIndicator,
                 value
             )
         }
@@ -34,26 +35,22 @@ sealed class FlowArticleReadIndicatorPreference(val value: Boolean) : Preference
             return when (this) {
                 AllRead -> stringResource(id = R.string.all_read)
                 ExcludingStarred -> stringResource(id = R.string.read_excluding_starred)
+                None -> stringResource(id = R.string.none)
             }
         }
 
     companion object {
 
         val default = ExcludingStarred
-        val values = listOf(ExcludingStarred, AllRead)
+        val values = listOf(ExcludingStarred, AllRead, None)
 
         fun fromPreferences(preferences: Preferences) =
-            when (preferences[DataStoreKey.keys[flowArticleListReadIndicator]?.key as Preferences.Key<Boolean>]) {
-                true -> ExcludingStarred
-                false -> AllRead
+            when (preferences[DataStoreKey.keys[flowArticleListReadIndicator]?.key as Preferences.Key<Int>]) {
+                0 -> ExcludingStarred
+                1 -> AllRead
+                2 -> None
                 else -> default
             }
 
     }
 }
-
-operator fun FlowArticleReadIndicatorPreference.not(): FlowArticleReadIndicatorPreference =
-    when (value) {
-        true -> FlowArticleReadIndicatorPreference.AllRead
-        false -> FlowArticleReadIndicatorPreference.ExcludingStarred
-    }
