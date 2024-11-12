@@ -17,17 +17,19 @@ import me.ash.reader.ui.theme.palette.onDark
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RYScaffold(
+    modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surface,
     topBarTonalElevation: Dp = 0.dp,
     containerTonalElevation: Dp = 0.dp,
     navigationIcon: (@Composable () -> Unit)? = null,
     actions: (@Composable RowScope.() -> Unit)? = null,
+    topBar: (@Composable () -> Unit)? = null,
     bottomBar: (@Composable () -> Unit)? = null,
     floatingActionButton: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit = {},
 ) {
     Scaffold(
-        modifier = Modifier
+        modifier = modifier
             .background(
                 MaterialTheme.colorScheme.surfaceColorAtElevation(
                     topBarTonalElevation,
@@ -39,7 +41,7 @@ fun RYScaffold(
             color = containerColor
         ) onDark MaterialTheme.colorScheme.surface,
         topBar = {
-            if (navigationIcon != null || actions != null) {
+            if (topBar != null) topBar() else if (navigationIcon != null || actions != null) {
                 TopAppBar(
                     title = {},
                     navigationIcon = { navigationIcon?.invoke() },

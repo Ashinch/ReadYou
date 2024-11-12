@@ -2,6 +2,7 @@ package me.ash.reader.ui.page.home.feeds
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +32,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
@@ -76,6 +79,7 @@ import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.findActivity
 import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.ext.getDefaultGroupId
+import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.HomeViewModel
@@ -207,29 +211,50 @@ fun FeedsPage(
     RYScaffold(
         topBarTonalElevation = topBarTonalElevation.value.dp,
         containerTonalElevation = groupListTonalElevation.value.dp,
-        navigationIcon = {
-            FeedbackIconButton(
-                modifier = Modifier.size(20.dp),
-                imageVector = Icons.Outlined.Settings,
-                contentDescription = stringResource(R.string.settings),
-                tint = MaterialTheme.colorScheme.onSurface,
-                showBadge = newVersion.whetherNeedUpdate(currentVersion, skipVersion),
-            ) {
-                navController.navigate(RouteName.SETTINGS) {
-                    launchSingleTop = true
-                }
-            }
-        },
-        actions = {
-            if (subscribeViewModel.rssService.get().addSubscription) {
-                FeedbackIconButton(
-                    imageVector = Icons.Rounded.Add,
-                    contentDescription = stringResource(R.string.subscribe),
-                    tint = MaterialTheme.colorScheme.onSurface,
-                ) {
-                    subscribeViewModel.showDrawer()
-                }
-            }
+        topBar = {
+            TopAppBar(
+                modifier = Modifier.clickable(
+                    onClick = {
+                        scope.launch {
+                            if (listState.firstVisibleItemIndex != 0) {
+                                listState.animateScrollToItem(0)
+                            }
+                        }
+                    },
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ),
+                title = {},
+                navigationIcon = {
+                    FeedbackIconButton(
+                        modifier = Modifier.size(20.dp),
+                        imageVector = Icons.Outlined.Settings,
+                        contentDescription = stringResource(R.string.settings),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        showBadge = newVersion.whetherNeedUpdate(currentVersion, skipVersion),
+                    ) {
+                        navController.navigate(RouteName.SETTINGS) {
+                            launchSingleTop = true
+                        }
+                    }
+                },
+                actions = {
+                    if (subscribeViewModel.rssService.get().addSubscription) {
+                        FeedbackIconButton(
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription = stringResource(R.string.subscribe),
+                            tint = MaterialTheme.colorScheme.onSurface,
+                        ) {
+                            subscribeViewModel.showDrawer()
+                        }
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+                        topBarTonalElevation.value.dp
+                    ),
+                )
+            )
         },
         content = {
             PullToRefreshBox(

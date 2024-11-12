@@ -1,6 +1,8 @@
 package me.ash.reader.ui.page.home.flow
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +17,10 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
@@ -61,6 +66,7 @@ import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYExtensibleVisibility
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
 
@@ -228,64 +234,78 @@ fun FlowPage(
     RYScaffold(
         topBarTonalElevation = topBarTonalElevation.value.dp,
         containerTonalElevation = articleListTonalElevation.value.dp,
-        navigationIcon = {
-            FeedbackIconButton(
-                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                contentDescription = stringResource(R.string.back),
-                tint = MaterialTheme.colorScheme.onSurface
-            ) {
-                onSearch = false
-                if (navController.previousBackStackEntry == null) {
-                    navController.navigate(RouteName.FEEDS) {
-                        launchSingleTop = true
-                    }
-                } else {
-                    navController.popBackStack()
-                }
-            }
-        },
-        actions = {
-            RYExtensibleVisibility(visible = !filterUiState.filter.isStarred()) {
-                FeedbackIconButton(
-                    imageVector = Icons.Rounded.DoneAll,
-                    contentDescription = stringResource(R.string.mark_all_as_read),
-                    tint = if (markAsRead) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.onSurface
-                    },
-                ) {
-                    scope.launch {
-                        // java.lang.NullPointerException: Attempt to invoke virtual method
-                        // 'boolean androidx.compose.ui.node.LayoutNode.getNeedsOnPositionedDispatch$ui_release()'
-                        // on a null object reference
-                        if (flowUiState.listState.firstVisibleItemIndex != 0) {
-                            flowUiState.listState.scrollToItem(0)
+        topBar = {
+            TopAppBar(
+                modifier = Modifier.clickable(
+                    onClick = {
+                        scope.launch {
+                            if (listState.firstVisibleItemIndex != 0) {
+                                listState.animateScrollToItem(0)
+                            }
                         }
-                        markAsRead = !markAsRead
+                    },
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ),
+                title = {},
+                navigationIcon = {
+                    FeedbackIconButton(
+                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                        contentDescription = stringResource(R.string.back),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    ) {
                         onSearch = false
+                        if (navController.previousBackStackEntry == null) {
+                            navController.navigate(RouteName.FEEDS) {
+                                launchSingleTop = true
+                            }
+                        } else {
+                            navController.popBackStack()
+                        }
                     }
-                }
-            }
-            FeedbackIconButton(
-                imageVector = Icons.Rounded.Search,
-                contentDescription = stringResource(R.string.search),
-                tint = if (onSearch) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.onSurface
                 },
-            ) {
-                scope.launch {
-                    // java.lang.NullPointerException: Attempt to invoke virtual method
-                    // 'boolean androidx.compose.ui.node.LayoutNode.getNeedsOnPositionedDispatch$ui_release()'
-                    // on a null object reference
-                    if (flowUiState.listState.firstVisibleItemIndex != 0) {
-                        flowUiState.listState.scrollToItem(0)
+                actions = {
+                    RYExtensibleVisibility(visible = !filterUiState.filter.isStarred()) {
+                        FeedbackIconButton(
+                            imageVector = Icons.Rounded.DoneAll,
+                            contentDescription = stringResource(R.string.mark_all_as_read),
+                            tint = if (markAsRead) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onSurface
+                            },
+                        ) {
+                            scope.launch {
+                                if (flowUiState.listState.firstVisibleItemIndex != 0) {
+                                    flowUiState.listState.animateScrollToItem(0)
+                                }
+                                markAsRead = !markAsRead
+                                onSearch = false
+                            }
+                        }
                     }
-                    onSearch = !onSearch
-                }
-            }
+                    FeedbackIconButton(
+                        imageVector = Icons.Rounded.Search,
+                        contentDescription = stringResource(R.string.search),
+                        tint = if (onSearch) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        },
+                    ) {
+                        scope.launch {
+                            if (flowUiState.listState.firstVisibleItemIndex != 0) {
+                                flowUiState.listState.animateScrollToItem(0)
+                            }
+                            onSearch = !onSearch
+                        }
+                    }
+                }, colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+                        topBarTonalElevation.value.dp
+                    ),
+                )
+            )
         },
         content = {
             PullToRefreshBox(
@@ -394,9 +414,6 @@ fun FlowPage(
                 filterBarTonalElevation = filterBarTonalElevation.value.dp,
             ) {
                 scope.launch {
-                    // java.lang.NullPointerException: Attempt to invoke virtual method
-                    // 'boolean androidx.compose.ui.node.LayoutNode.getNeedsOnPositionedDispatch$ui_release()'
-                    // on a null object reference
                     if (flowUiState.listState.firstVisibleItemIndex != 0) {
                         flowUiState.listState.animateScrollToItem(0)
                     }
