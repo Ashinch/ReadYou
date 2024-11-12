@@ -31,7 +31,7 @@ android {
     defaultConfig {
         applicationId = "me.ash.reader"
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 26
         versionName = "0.11.0"
 
