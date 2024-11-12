@@ -1,0 +1,8 @@
+## 0.11.0
+
+Notable changes:
+1. Introduce a new article reader based on WebView, with Bionic Reading support
+2. Auto-mark items as read on scroll
+3. Click the top app bar to go back to the top of the page
+4. Add dividers to the toolbars in the reading page
+5. Add a button to collapse/expand feed groups
