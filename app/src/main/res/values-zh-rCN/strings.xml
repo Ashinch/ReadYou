@@ -311,4 +311,5 @@
     <string name="about">关于</string>
     <string name="bionic_reading_tips">什么是 Bionic Reading？</string>
     <string name="browse_bionic_reading_tips">在 <i><u>bionic-reading.com</u></i>.了解更多信息。</string>
+    <string name="mark_as_read_on_scroll">滚动时标记为已读</string>
 </resources>
