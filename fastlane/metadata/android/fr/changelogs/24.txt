@@ -1,0 +1,35 @@
+## 0.10.0
+
+1. Mise à jour des dépendances Material Design 3, du compile sdk, et de la version de gradle (#502, @JunkFood02)
+2. Support du sélecteur de language dans l'application pour Android 13 (#541, #571, @JunkFood02)
+3. Support de l'ajout de flux via le menu de partage système (#618, @JunkFood02)
+4. Support de la spécification de la composition du contenu partagé (#660, @Ashinch)
+5. Amélioration du glissement pour favoriter/défavoriter, glisser pour marquer non-lu, et ajouter la configuration (#594, @JunkFood02)
+6. Utilisation des préférences système pour formatter l'affichage par défault du temps. (#617, @JunkFood02)
+7. Passage à l'implémentation edge to edge d'androidx (#690, @Moderpach)
+8. Ajout d'une visionneuse d'image à la page de lecture (#578, #545, @JunkFood02, @nvllz)
+9. Ajout des gestes tactiles to glisser vers en haut et en bas sur la page de lecture pour changer d'article (#589, @JunkFood02)
+10. Ajout d'une activité de rapport de plantage pour gérer les exceptions non-interceptées (#576, @JunkFood02)
+11. Ajout d'un menu contextuel sur presse longue pour les éléments dans la page de flux (#613, @JunkFood02)
+12. Ajout d'une préférence de hauteur de ligne multiple pour la page de lecture (#620, @JunkFood02)
+13. Ajout d'une page de liste de licences et améliorer la page " À propos " (#664, @Ashinch)
+14. Ajout d'une page de dépannage et d'outils d'import/export des préférences de l'application (#672, #710, @Ashinch)
+15. Correction de la requête de permission de notification au démarrage sur Android 13 (@JunkFood02)
+16. Correction d'un conflit lorsque la date de publication et de mise à jour sont vides (@JunkFood02)
+17. La date de publication d'un article sera maintenant remplacée par l'horaire actuel s'il s'agit d'une date future (#638, @Ashinch)
+18. Lorsqu'un flux ou un groupe sont vidés, les articles favoris seront maitenant ignorés (#652, @Ashinch)
+19. L'application sera maintenant redémarrée automatiquement après le chargement des polices de caractère externes (#667, @Ashinch)
+20. L'étiquette `<enclosure>` sera maintenant priorisée comme miniature de l'article (#681, @Ashinch)
+21. Les catégories seront maintenant triées alphabétiquement pendant la synchronisation sur Google Reader (#700, @mbestavros)
+22. Nouvelle image par défault (#712, @JunkFood02)
+23. Davantage d'améliorations de l'interface et de corrections de bogues (@Ashinch, @JunkFood02)
+24. Mises à jour des traductions (merci à tous ceux qui ont aidé)
+
+### Notes
+
+1. Afin de supporter l'export des paramètres, certains d'entre eux ont été réinitialisés et il faudra les redéfinir.
+2. Le moyen de parrainage buymeacoffee.com est actuellement indisponible, et les dons précédemment effectués ont été remboursés aux comptes des parrains.
+3. Nous sommes à la recherches d'autres moyens de parrainage, le seul actuellement dispponible est AFDIAN. Si vous souhaitez supporter le développement de ReadYou, vous pouvez le parrainer via [AFDIAN](https://afdian.net/a/ashinch).
+4. Merci à nos parrains : @User_3072e, @User_223be, @User_3c5c7(Simon), @User_97ebe, @Lowae, @User_28b9f, @User_yuHC, @nullqwertyuiop, @openisgood, @User_vWca, @qgmzmy, @User_97ee1
+
+**Changelog complet :** [0.9.12...0.10.0](https://github.com/Ashinch/ReadYou/compare/0.9.12...0.10.0)
