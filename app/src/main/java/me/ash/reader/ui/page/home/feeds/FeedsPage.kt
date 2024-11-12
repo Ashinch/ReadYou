@@ -204,9 +204,6 @@ fun FeedsPage(
         }
     }
 
-    BackHandler(true) {
-        context.findActivity()?.moveTaskToBack(false)
-    }
 
     RYScaffold(
         topBarTonalElevation = topBarTonalElevation.value.dp,
