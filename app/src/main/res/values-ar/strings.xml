@@ -326,4 +326,5 @@
     <string name="use_bionic_reading">استخدام القراءة الإلكترونية</string>
     <string name="bionic_reading_tips">ما هي القراءة الحيوية؟?</string>
     <string name="browse_bionic_reading_tips">تعرف على المزيد على <i><u>bionic-reading.com</u></i>.</string>
+    <string name="mark_as_read_on_scroll">وضع علامة مقروء على التمرير</string>
 </resources>

@@ -317,4 +317,5 @@
     <string name="about">Informazioni su</string>
     <string name="native_component">Componente nativo</string>
     <string name="only_available_on_webview">Disponibile esclusivamente in WebView</string>
+    <string name="mark_as_read_on_scroll">Contrassegna come letto allo scroll</string>
 </resources>

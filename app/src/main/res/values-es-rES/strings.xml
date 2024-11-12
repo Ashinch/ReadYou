@@ -320,4 +320,5 @@
     <string name="only_available_on_webview">Solo disponible en WebView</string>
     <string name="use_bionic_reading">Utiliza la lectura biónica</string>
     <string name="about">Acerca de</string>
+    <string name="mark_as_read_on_scroll">Marcar como leído al desplazarse</string>
 </resources>
