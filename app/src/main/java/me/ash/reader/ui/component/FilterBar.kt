@@ -46,6 +46,11 @@ fun FilterBar(
         MaterialTheme.colorScheme.primaryContainer
     } onDark MaterialTheme.colorScheme.secondaryContainer
 
+    val containerHeight = when (filterBarStyle) {
+        FlowFilterBarStylePreference.Icon.value -> 64.dp
+        else -> 80.dp
+    }
+
     Surface(
         color = MaterialTheme.colorScheme.surfaceColorAtElevation(filterBarTonalElevation),
         modifier = modifier
@@ -55,7 +60,7 @@ fun FilterBar(
             Modifier
                 .fillMaxWidth()
                 .windowInsetsPadding(NavigationBarDefaults.windowInsets)
-                .defaultMinSize(minHeight = 64.dp)
+                .defaultMinSize(minHeight = containerHeight)
                 .selectableGroup(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -64,7 +69,7 @@ fun FilterBar(
             Spacer(modifier = Modifier.width(filterBarPadding))
             Filter.values.forEach { item ->
                 NavigationBarItem(
-                    modifier = Modifier.height(64.dp),
+                    modifier = Modifier.height(containerHeight),
                     alwaysShowLabel = when (filterBarStyle) {
                         FlowFilterBarStylePreference.Icon.value -> false
                         FlowFilterBarStylePreference.IconLabel.value -> true
