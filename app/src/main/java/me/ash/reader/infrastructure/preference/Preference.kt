@@ -81,6 +81,7 @@ fun Preferences.toSettings(): Settings {
         initialFilter = InitialFilterPreference.fromPreferences(this),
         swipeStartAction = SwipeStartActionPreference.fromPreferences(this),
         swipeEndAction = SwipeEndActionPreference.fromPreferences(this),
+        markAsReadOnScroll = MarkAsReadOnScrollPreference.fromPreferences(this),
         pullToSwitchArticle = PullToSwitchArticlePreference.fromPreference(this),
         openLink = OpenLinkPreference.fromPreferences(this),
         openLinkSpecificBrowser = OpenLinkSpecificBrowserPreference.fromPreferences(this),

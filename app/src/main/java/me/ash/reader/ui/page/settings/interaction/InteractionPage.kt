@@ -28,6 +28,7 @@ import me.ash.reader.infrastructure.preference.LocalArticleListSwipeEndAction
 import me.ash.reader.infrastructure.preference.LocalArticleListSwipeStartAction
 import me.ash.reader.infrastructure.preference.LocalInitialFilter
 import me.ash.reader.infrastructure.preference.LocalInitialPage
+import me.ash.reader.infrastructure.preference.LocalMarkAsReadOnScroll
 import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
@@ -56,6 +57,7 @@ fun InteractionPage(
     val initialFilter = LocalInitialFilter.current
     val swipeToStartAction = LocalArticleListSwipeStartAction.current
     val swipeToEndAction = LocalArticleListSwipeEndAction.current
+    val markAsReadOnScroll = LocalMarkAsReadOnScroll.current
     val pullToSwitchArticle = LocalPullToSwitchArticle.current
     val openLink = LocalOpenLink.current
     val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
@@ -128,6 +130,18 @@ fun InteractionPage(
                             swipeEndDialogVisible = true
                         },
                     ) {}
+
+                    SettingItem(
+                        title = stringResource(R.string.mark_as_read_on_scroll),
+                        onClick = {
+                            markAsReadOnScroll.toggle(context, scope)
+                        },
+                    ) {
+                        RYSwitch(activated = markAsReadOnScroll.value) {
+                            markAsReadOnScroll.toggle(context, scope)
+                        }
+                    }
+
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Subtitle(

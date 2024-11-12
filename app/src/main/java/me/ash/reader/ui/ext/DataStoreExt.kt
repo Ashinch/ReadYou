@@ -162,6 +162,7 @@ data class DataStoreKey<T>(
         const val initialFilter = "initialFilter"
         const val swipeStartAction = "swipeStartAction"
         const val swipeEndAction = "swipeEndAction"
+        const val markAsReadOnScroll = "markAsReadOnScroll"
         const val pullToSwitchArticle = "pullToSwitchArticle"
         const val openLink = "openLink"
         const val openLinkAppSpecificBrowser = "openLinkAppSpecificBrowser"
@@ -236,6 +237,10 @@ data class DataStoreKey<T>(
             initialFilter to DataStoreKey(intPreferencesKey(initialFilter), Int::class.java),
             swipeStartAction to DataStoreKey(intPreferencesKey(swipeStartAction), Int::class.java),
             swipeEndAction to DataStoreKey(intPreferencesKey(swipeEndAction), Int::class.java),
+            markAsReadOnScroll to DataStoreKey(
+                booleanPreferencesKey(markAsReadOnScroll),
+                Boolean::class.java
+            ),
             pullToSwitchArticle to DataStoreKey(booleanPreferencesKey(pullToSwitchArticle), Boolean::class.java),
             openLink to DataStoreKey(intPreferencesKey(openLink), Int::class.java),
             openLinkAppSpecificBrowser to DataStoreKey(stringPreferencesKey(openLinkAppSpecificBrowser), String::class.java),

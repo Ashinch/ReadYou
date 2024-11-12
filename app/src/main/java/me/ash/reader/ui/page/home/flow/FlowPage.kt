@@ -42,6 +42,7 @@ import androidx.work.WorkInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.infrastructure.preference.LocalFlowArticleListDateStickyHeader
@@ -52,6 +53,7 @@ import me.ash.reader.infrastructure.preference.LocalFlowFilterBarPadding
 import me.ash.reader.infrastructure.preference.LocalFlowFilterBarStyle
 import me.ash.reader.infrastructure.preference.LocalFlowFilterBarTonalElevation
 import me.ash.reader.infrastructure.preference.LocalFlowTopBarTonalElevation
+import me.ash.reader.infrastructure.preference.LocalMarkAsReadOnScroll
 import me.ash.reader.infrastructure.preference.LocalSharedContent
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.DisplayText
@@ -81,6 +83,7 @@ fun FlowPage(
     val filterBarPadding = LocalFlowFilterBarPadding.current
     val filterBarTonalElevation = LocalFlowFilterBarTonalElevation.current
     val sharedContent = LocalSharedContent.current
+    val markAsReadOnScroll = LocalMarkAsReadOnScroll.current.value
     val context = LocalContext.current
 
     val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
@@ -89,6 +92,31 @@ fun FlowPage(
     val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems()
     val listState =
         if (pagingItems.itemCount > 0) flowUiState.listState else rememberLazyListState()
+
+    if (markAsReadOnScroll) {
+        LaunchedEffect(listState.isScrollInProgress) {
+            if (!listState.isScrollInProgress) {
+                val firstItemIndex = listState.firstVisibleItemIndex
+                val diffMap = flowViewModel.diffMap
+                if (firstItemIndex < pagingItems.itemCount)
+                    for (index in 0 until firstItemIndex) {
+                        val item = pagingItems.peek(index)
+                        with(item) {
+                            when (this) {
+                                is ArticleFlowItem.Article -> {
+                                    val id = articleWithFeed.article.id
+                                    if (!diffMap.containsKey(id)) {
+                                        diffMap[id] = Diff(isUnread = false)
+                                    }
+                                }
+
+                                else -> {}
+                            }
+                        }
+                    }
+            }
+        }
+    }
 
     val scope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
@@ -370,7 +398,7 @@ fun FlowPage(
                     // 'boolean androidx.compose.ui.node.LayoutNode.getNeedsOnPositionedDispatch$ui_release()'
                     // on a null object reference
                     if (flowUiState.listState.firstVisibleItemIndex != 0) {
-                        flowUiState.listState.scrollToItem(0)
+                        flowUiState.listState.animateScrollToItem(0)
                     }
                 }
                 if (filterUiState.filter != it) {

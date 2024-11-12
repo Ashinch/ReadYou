@@ -457,4 +457,5 @@
     <string name="browse_bionic_reading_tips">Learn more at &lt;i&gt;&lt;u&gt;bionic-reading.com&lt;/u&gt;&lt;/i&gt;.</string>
     <string name="bionic_reading_domain" translatable="false">bionic-reading.com</string>
     <string name="bionic_reading_link" translatable="false">https://bionic-reading.com</string>
+    <string name="mark_as_read_on_scroll">Mark as read on scroll</string>
 </resources>
