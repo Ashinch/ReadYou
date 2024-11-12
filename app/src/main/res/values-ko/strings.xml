@@ -206,4 +206,7 @@
     <string name="tos_tips">계속하려면 Read You의 서비스 약관 및 개인 정보 보호 정책에 동의하셔야 합니다.</string>
     <string name="skip_this_version">이 버전 건너뛰기</string>
     <string name="update">업데이트</string>
+    <string name="delete_toast">\"%1$s\" 그룹을 삭제했습니다.</string>
+    <string name="permission_denied">권한 거부됨</string>
+    <string name="image_saved">이미지 저장됨</string>
 </resources>

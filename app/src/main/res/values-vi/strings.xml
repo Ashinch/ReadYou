@@ -303,4 +303,12 @@
     <string name="invalid_json_file_warning">Đây không phải là một tập tin JSON hợp lệ. Nhập nó có thể làm hỏng ứng dụng và dẫn đến việc mất các cài đặt hiện tại. Bạn có chắc muốn tiếp tục?</string>
     <string name="unfold_less">Thu gọn</string>
     <string name="unfold_more">Mở rộng toàn bộ</string>
+    <string name="content_renderer">Content renderer</string>
+    <string name="read_aloud">Đọc</string>
+    <string name="only_available_on_webview">Chỉ có trên WebView</string>
+    <string name="use_bionic_reading">Dùng Đọc Sinh Trắc</string>
+    <string name="about">Giới thiệu</string>
+    <string name="native_component">Native Component</string>
+    <string name="bionic_reading_tips">Đọc Sinh Trắc là gì?</string>
+    <string name="browse_bionic_reading_tips">Tìm hiểu thêm tại <i><u>bionic-reading.com</u></i>.</string>
 </resources>

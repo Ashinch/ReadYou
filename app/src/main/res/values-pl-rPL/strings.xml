@@ -44,21 +44,21 @@
     <string name="preset">Ustawienia grupy</string>
     <string name="selected">Zaznaczone</string>
     <string name="allow_notification">Powiadomienia</string>
-    <string name="all_allow_notification_tips">Zezwól wszystkim kanałom w grupie \"%1$s\" na wysyłanie powiadomień.</string>
+    <string name="all_allow_notification_tips">Zezwól wszystkim kanałom w grupie \"%1$s\" na wysyłanie powiadomień</string>
     <string name="all_allow_notification_toast">Zezwolono na wszystkie powiadomienia z grupy \"%1$s\"</string>
     <string name="all_deny_notification_toast">Cofnięto zezwolenie na powiadomienia z grupy \"%1$s\"</string>
     <string name="parse_full_content">Pobierz artykuły</string>
-    <string name="all_parse_full_content_tips">Pobieranie pełnej treści artykułów z grupy \"%1$s\".</string>
+    <string name="all_parse_full_content_tips">Pobieranie pełnej treści artykułów z grupy \"%1$s\"</string>
     <string name="all_parse_full_content_toast">Zezwolono na pobieranie pełnej treści artykułów z grupy \"%1$s\"</string>
     <string name="all_deny_parse_full_content_toast">Cofnięto zezwolenie na pobieranie pełnej treści artykułów z grupy \"%1$s\"</string>
     <string name="clear_articles">Usuń artykuły</string>
     <string name="clear_articles_in_feed_toast">Usunięto wszystkie pobrane artykuły z kanału \"%1$s\"</string>
     <string name="clear_articles_in_group_toast">Usunięto wszystkie artykuły z grupy \"%1$s\"</string>
     <string name="clear_articles_feed_tips">Usuń wszystkie pobrane artykułu z kanału \"%1$s\"</string>
-    <string name="clear_articles_group_tips">Usuń wszystkie pobrane artykułu z grupy \"%1$s\".</string>
+    <string name="clear_articles_group_tips">Usuń wszystkie zarchiwizowane artykuły z grupy \"%1$s\"</string>
     <string name="add_to_group">Dodaj do grupy</string>
     <string name="move_to_group">Przenieś do grupy</string>
-    <string name="all_move_to_group_tips">Przenieś wszystkie kanały z grupy \"%1$s\" do grupy \"%2$s\".</string>
+    <string name="all_move_to_group_tips">Przenieś wszystkie kanały z grupy \"%1$s\" do \"%2$s\"</string>
     <string name="all_move_to_group_toast">Przeniesiono wszystkie kanały do grupy \"%1$s\"</string>
     <string name="rename">Zmień nazwę</string>
     <string name="change_url">Zmień adres URL</string>
@@ -70,10 +70,10 @@
     <string name="delete">Usuń</string>
     <string name="delete_toast">Usunięto \"%1$s\"</string>
     <string name="unsubscribe">Odsubskrybuj</string>
-    <string name="unsubscribe_tips">Odsubskrybuj kanał \"%1$s\" i usuń wszystkie zawarte w nim artykuły.</string>
+    <string name="unsubscribe_tips">Anuluj subskrypcję kanału \"%1$s\" i usuń wszystkie zawarte w nim artykuły</string>
     <string name="delete_group">Usuń grupę</string>
     <string name="delete_group_tips">Usuń grupę \"%1$s\" i wszystkie zawarte w niej artykuły.</string>
-    <string name="group_option_tips">Poniższe zmiany zostaną zastosowane dla wszystkich kanałów w tej grupie.</string>
+    <string name="group_option_tips">Poniższe zmiany zostaną zastosowane dla wszystkich kanałów w tej grupie</string>
     <string name="today">Dziś</string>
     <string name="yesterday">Wczoraj</string>
     <string name="date_at_time">%1$s o %2$s</string>
@@ -395,4 +395,5 @@
     <string name="app_preferences">Preferencje</string>
     <string name="unfold_more">Rozwiń wszystkie</string>
     <string name="unfold_less">Zwiń wszystkie</string>
+    <string name="about">O aplikacji</string>
 </resources>

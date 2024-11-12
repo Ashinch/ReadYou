@@ -306,4 +306,12 @@
     <string name="invalid_json_file_warning">Diese Datei ist eventuell keine gültige JSON-Datei. Der Import kann die App möglicherweise beschädigen und zum Verlust der aktuellen Einstellungen führen. Sind Sie sicher, dass Sie fortfahren möchten?</string>
     <string name="unfold_more">Alle erweitern</string>
     <string name="unfold_less">Alle einklappen</string>
+    <string name="native_component">Native Komponente</string>
+    <string name="content_renderer">Inhalts Renderer</string>
+    <string name="read_aloud">Vorlesen</string>
+    <string name="only_available_on_webview">Nur im WebView verfügbar</string>
+    <string name="use_bionic_reading">Bionisches Lesen verwenden</string>
+    <string name="about">Über</string>
+    <string name="bionic_reading_tips">Was ist bionisches Lesen?</string>
+    <string name="browse_bionic_reading_tips">Erfahren Sie mehr unter <i><u>bionic-reading.com</u></i>.</string>
 </resources>

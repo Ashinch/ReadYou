@@ -186,8 +186,8 @@
     <string name="images">Immagini</string>
     <string name="rounded_corners">Angoli arrotondati</string>
     <string name="videos">Video</string>
-    <string name="align_start">Allinea a sinistra</string>
-    <string name="align_end">Allinea a destra</string>
+    <string name="align_start">Allinea all\'inizio</string>
+    <string name="align_end">Allinea alla fine</string>
     <string name="center_text">Testo Centrato</string>
     <string name="justify">Giustifica</string>
     <string name="external_fonts">Font esterni</string>
@@ -309,4 +309,12 @@
     <string name="invalid_json_file_warning">Questo file potrebbe non essere un file JSON valido. La sua importazione potrebbe danneggiare l\'applicazione e causare la perdita delle preferenze correnti. Sei sicuro di voler procedere?</string>
     <string name="unfold_more">Espandi tutti</string>
     <string name="unfold_less">Collassa tutti</string>
+    <string name="content_renderer">Rendering del contenuto</string>
+    <string name="read_aloud">Lettura ad alta voce</string>
+    <string name="use_bionic_reading">Utilizza Bionic Reading</string>
+    <string name="bionic_reading_tips">Cos\'è Bionic Reading?</string>
+    <string name="browse_bionic_reading_tips">Scopri di più su <i><u>bionic-reading.com</u></i></string>
+    <string name="about">Informazioni su</string>
+    <string name="native_component">Componente nativo</string>
+    <string name="only_available_on_webview">Disponibile esclusivamente in WebView</string>
 </resources>
