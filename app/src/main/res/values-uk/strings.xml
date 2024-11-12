@@ -200,8 +200,8 @@
     <string name="rearrange_buttons">Змінити порядок кнопок</string>
     <string name="bionic_reading">Біонічне читання</string>
     <string name="videos">Відео</string>
-    <string name="align_start">Вирівняти ліворуч</string>
-    <string name="align_end">Вирівняти праворуч</string>
+    <string name="align_start">Вирівняти початок</string>
+    <string name="align_end">Вирівняти кінець</string>
     <string name="center_text">Центрувати текст</string>
     <string name="justify">Вирівняти</string>
     <string name="external_fonts">Зовнішні шрифти</string>
@@ -312,4 +312,12 @@
     <string name="invalid_json_file_warning">Цей файл може бути недійсним файлом JSON. Імпорт може потенційно пошкодити застосунок і призвести до втрати поточних налаштувань. Ви впевнені, що хочете продовжити?</string>
     <string name="unfold_more">Розгорнути все</string>
     <string name="unfold_less">Згорнути все</string>
+    <string name="native_component">Рідний компонент</string>
+    <string name="content_renderer">Обробник вмісту</string>
+    <string name="read_aloud">Читання голосом</string>
+    <string name="use_bionic_reading">Використовувати біонічне зчитування</string>
+    <string name="browse_bionic_reading_tips">Дізнайтеся більше на <i><u>bionic-reading.com</u></i>.</string>
+    <string name="only_available_on_webview">Доступно тільки у WebView</string>
+    <string name="about">Про застосунок</string>
+    <string name="bionic_reading_tips">Що таке біонічне зчитування?</string>
 </resources>

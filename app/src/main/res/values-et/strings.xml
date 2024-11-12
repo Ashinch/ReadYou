@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="all">Kõik</string>
+    <string name="feeds">Uudisvood</string>
+    <string name="syncing">Sünkroniseerime…</string>
+    <string name="loading">Laadime…</string>
+    <string name="expand_less">Ahenda</string>
+    <string name="unfold_more">Laienda kõik</string>
+    <string name="unfold_less">Ahenda kõik</string>
+    <string name="unread">Lugemata</string>
+    <plurals name="all_desc">
+        <item quantity="one">%1$d arhiveeritud kirje</item>
+        <item quantity="other">%1$d arhiveeritud kirjet</item>
+    </plurals>
+    <plurals name="unread_desc">
+        <item quantity="one">%1$d lugemata kirje</item>
+        <item quantity="other">%1$d lugemata kirjet</item>
+    </plurals>
+    <string name="starred">Tähekesega märgitud</string>
+    <plurals name="starred_desc">
+        <item quantity="one">%1$d tähekesega märgitud kirje</item>
+        <item quantity="other">%1$d tähekesega märgitud kirjet</item>
+    </plurals>
+    <string name="deny">Keela</string>
+    <string name="expand_more">Laienda</string>
+    <string name="confirm">Kinnita</string>
+    <string name="cancel">Katkesta</string>
+    <string name="allow">Luba</string>
+</resources>

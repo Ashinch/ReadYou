@@ -100,4 +100,20 @@
     <string name="color_and_style">നിറവും ശൈലിയും</string>
     <string name="interaction">ഇടപെടൽ</string>
     <string name="interaction_desc">പ്രാരംഭ പേജ്, ഹാപ്‌റ്റിക് ഫീഡ്‌ബാക്ക്</string>
+    <string name="tonal_elevation">നാദസ്വര ഉയർച്ച</string>
+    <string name="reading_fonts">വായനയ്ക്കുള്ള ഫോണ്ടുകൾ</string>
+    <string name="basic_fonts">അടിസ്ഥാന ഫോണ്ടുകൾ</string>
+    <string name="feeds_page">ഫീഡുകൾ പേജ്</string>
+    <string name="unfold_more">എല്ലാം വിപുലീകരിക്കുക</string>
+    <string name="unfold_less">എല്ലാം ചുരുക്കുക</string>
+    <string name="color_and_style_desc">തീം, നിറ ശൈലി, ഫോണ്ട് വലിപ്പം</string>
+    <string name="other">മറ്റുള്ളവ</string>
+    <string name="checking_updates">പുതുക്കലുകൾക്കായി പരിശോധിക്കുന്നു…</string>
+    <string name="is_latest_version">ഇത് അപ്ലിക്കേഷന്റെ ഏറ്റവും പുതിയ പതിപ്പാണ്</string>
+    <string name="check_failure">പുതുക്കലുകൾ പരിശോധിക്കാൻ പരാജയപ്പെട്ടു</string>
+    <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
+    <string name="change_log">മാറ്റങ്ങൾ</string>
+    <string name="dark_theme">ഡാർക്ക് തീം</string>
+    <string name="use_device_theme">ഉപകരണത്തിന്റെ തീം ഉപയോഗിക്കുക</string>
+    <string name="skip_this_version">ഈ പതിപ്പ് ഒഴിവാക്കുക</string>
 </resources>
