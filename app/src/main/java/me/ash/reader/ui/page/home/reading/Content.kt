@@ -72,7 +72,9 @@ fun Content(
                         .fillMaxSize()
 
                 ) {
-                    Column(modifier = Modifier.verticalScroll(scrollState)) {
+                    Column(modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)) {
                         // Top bar height
                         Spacer(modifier = Modifier.height(64.dp))
                         // padding

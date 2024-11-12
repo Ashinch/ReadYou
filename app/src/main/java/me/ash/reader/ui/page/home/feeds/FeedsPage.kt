@@ -26,7 +26,9 @@ import androidx.compose.material.icons.rounded.UnfoldLess
 import androidx.compose.material.icons.rounded.UnfoldMore
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -131,7 +133,7 @@ fun FeedsPage(
     var isSyncing by remember { mutableStateOf(false) }
     val syncingState = rememberPullToRefreshState()
     val syncingScope = rememberCoroutineScope()
-    val doSync:() -> Unit = {
+    val doSync: () -> Unit = {
         isSyncing = true
         syncingScope.launch {
 
@@ -231,12 +233,12 @@ fun FeedsPage(
         },
         content = {
             PullToRefreshBox(
-                state=syncingState,
+                state = syncingState,
                 isRefreshing = isSyncing,
                 onRefresh = doSync
             ) {
                 LazyColumn(
-                    modifier=Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     state = listState
                 ) {
                     item {
@@ -282,14 +284,12 @@ fun FeedsPage(
                                 color = MaterialTheme.colorScheme.primary,
                                 style = MaterialTheme.typography.labelLarge,
                             )
-                            Row(
-                                modifier = Modifier
-                                    .padding(end = 12.dp)
-                                    .size(20.dp)
-                                    .clip(CircleShape)
-                                    .clickable { if (hasGroupVisible) collapseAllGroups() else expandAllGroups() },
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically,
+                            IconButton(
+                                onClick = {
+                                    if (hasGroupVisible) collapseAllGroups() else expandAllGroups()
+                                }, modifier = Modifier
+                                    .padding(end = 8.dp)
+                                    .size(28.dp)
                             ) {
                                 Icon(
                                     imageVector = if (hasGroupVisible) Icons.Rounded.UnfoldLess else Icons.Rounded.UnfoldMore,
