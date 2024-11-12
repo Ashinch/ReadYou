@@ -180,8 +180,8 @@
     <string name="images">圖片</string>
     <string name="rounded_corners">圓角</string>
     <string name="videos">影片</string>
-    <string name="align_start">靠左</string>
-    <string name="align_end">靠右</string>
+    <string name="align_start">對齊開端</string>
+    <string name="align_end">對齊末端</string>
     <string name="center_text">置中</string>
     <string name="justify">左右</string>
     <string name="external_fonts">外部字型</string>
@@ -301,4 +301,14 @@
     <string name="import_from_json">從 JSON 匯入</string>
     <string name="export_as_json">匯出為 JSON</string>
     <string name="invalid_json_file_warning">此檔案可能不是有效的 JSON 檔案。匯入它可能會損壞應用程式並導致目前的偏好設定遺失。你確定要繼續嗎？</string>
+    <string name="unfold_more">全部展開</string>
+    <string name="unfold_less">全部收合</string>
+    <string name="native_component">原生元件</string>
+    <string name="content_renderer">內容繪製器</string>
+    <string name="read_aloud">朗讀</string>
+    <string name="only_available_on_webview">僅限於 WebView</string>
+    <string name="use_bionic_reading">使用仿生閱讀</string>
+    <string name="about">關於</string>
+    <string name="bionic_reading_tips">什麼是仿生閱讀？</string>
+    <string name="browse_bionic_reading_tips">了解更多資訊，請造訪 <i><u>bionic-reading.com</u></i>。</string>
 </resources>

@@ -102,7 +102,7 @@
     <string name="accounts">Accounts</string>
     <string name="interaction_desc">Startpagina, haptische feedback</string>
     <string name="use_device_theme">Gebruik apparaatthema</string>
-    <string name="on">Op</string>
+    <string name="on">Aan</string>
     <string name="delete_group_tips">De groep \"%1$s\" en alle feeds en gearchiveerde artikelen die erin staan verwijderen</string>
     <string name="group_option_tips">De volgende opties zijn van toepassing op alle feeds in deze groep</string>
     <string name="today">Vandaag</string>
@@ -147,7 +147,7 @@
     <string name="auto_hide_toolbars">Werkbalken automatisch verbergen</string>
     <string name="alignment">Uitlijning</string>
     <string name="images">Afbeeldingen</string>
-    <string name="align_end">Rechts uitlijnen</string>
+    <string name="align_end">Aan het eind uitlijnen</string>
     <string name="subhead">Subkop</string>
     <string name="dark_reading_theme">Thema donker lezen</string>
     <string name="images_desc">Afgeronde hoeken, horizontale vulling</string>
@@ -241,7 +241,7 @@
     <string name="preview_feed_name">Reddit</string>
     <string name="value">waarde</string>
     <string name="horizontal_padding">Horizontale opvulling</string>
-    <string name="align_start">Links uitlijnen</string>
+    <string name="align_start">Aan het begin uitlijnen</string>
     <string name="add">Toevoegen</string>
     <string name="server_url">Server URL</string>
     <string name="username">Gebruikersnaam</string>
@@ -256,7 +256,7 @@
     <string name="grey_out_articles">Artiekelen grijs maken</string>
     <string name="all_read">Alles gelezen</string>
     <string name="read_excluding_starred">Gelezen, exclusief ster</string>
-    <string name="external_links">Externe links</string>
+    <string name="external_links">Externe Links</string>
     <string name="unexpected_error_title">Oeps! Er ging iets mis…</string>
     <string name="copy_error_report">Foutrapport kopiëren</string>
     <string name="submit_bug_report">een bugrapport indienen op GitHub</string>
@@ -277,4 +277,30 @@
 \n
 \nOm ons te helpen dit probleem snel te identificeren en op te lossen, kunt u %1$s met de fout stack trace hieronder.</string>
     <string name="empty">Leeg</string>
+    <string name="unfold_more">Alles uitvouwen</string>
+    <string name="unfold_less">Alles opvouwen</string>
+    <string name="none">Geen</string>
+    <string name="export">Exporteren</string>
+    <string name="pull_to_switch_article">Trek om van artikel te switchen</string>
+    <string name="save">Opslaan</string>
+    <string name="image_saved">Afbeelding opgeslagen</string>
+    <string name="permission_denied">Toegang geweigerd</string>
+    <string name="title_and_link">Titel en link</string>
+    <string name="troubleshooting">Probleemoplossen</string>
+    <string name="troubleshooting_desc">Bugrapporten, debug hulpmiddelen</string>
+    <string name="bug_report">Bugrapport</string>
+    <string name="export_as_protobuf_file">Exporteer als protobuf bestand</string>
+    <string name="app_preferences">Appvoorkeuren</string>
+    <string name="import_from_protobuf_file">Importeer uit protobuf bestand</string>
+    <string name="import_from_json">Importeer uit JSON</string>
+    <string name="export_as_json">Exporteer als JSON</string>
+    <string name="read_aloud">Hardop Voorlezen</string>
+    <string name="only_available_on_webview">Alleen beschikbaar in de web-weergave</string>
+    <string name="about">Over</string>
+    <string name="shared_content">Gedeelde inhoud</string>
+    <string name="swipe_to_end">Veeg naar rechts</string>
+    <string name="mark_below_as_read">Markeer onderstaande als gelezen</string>
+    <string name="swipe_to_start">Veeg naar links</string>
+    <string name="only_link">Alleen link</string>
+    <string name="mark_above_as_read">Markeer bovenstaande als gelezen</string>
 </resources>

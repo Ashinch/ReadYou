@@ -194,8 +194,8 @@
     <string name="touch_to_play_video">Klepnutím prehráte video</string>
     <string name="font_size">Veľkosť písma</string>
     <string name="alignment">Zarovnanie</string>
-    <string name="align_start">Zarovnať vľavo</string>
-    <string name="align_end">Zarovnať vpravo</string>
+    <string name="align_start">Zarovnať začiatok</string>
+    <string name="align_end">Zarovnať koniec</string>
     <string name="center_text">Zarovnať text na stred</string>
     <string name="external_fonts">Externé písma</string>
     <string name="bold">Tučné</string>
@@ -309,4 +309,12 @@
     <string name="invalid_json_file_warning">Tento súbor nemusí byť platným súborom JSON. Jeho importovanie môže spôsobiť poškodenie aplikácie a stratu aktuálnych predvolieb. Ste si istí, že chcete pokračovať?</string>
     <string name="unfold_more">Rozbaliť všetko</string>
     <string name="unfold_less">Zbaliť všetko</string>
+    <string name="use_bionic_reading">Použiť bionické čítanie</string>
+    <string name="bionic_reading_tips">Čo je bionické čítanie?</string>
+    <string name="browse_bionic_reading_tips">Ďalšie informácie nájdete na <i><u>bionic-reading.com</u></i>.</string>
+    <string name="native_component">Natívny komponent</string>
+    <string name="read_aloud">Čítať nahlas</string>
+    <string name="about">Informácie</string>
+    <string name="content_renderer">Zobrazovač obsahu</string>
+    <string name="only_available_on_webview">Dostupné len vo WebView</string>
 </resources>

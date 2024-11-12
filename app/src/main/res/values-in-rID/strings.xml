@@ -184,8 +184,8 @@
     <string name="images">Gambar</string>
     <string name="rounded_corners">Sudut membulat</string>
     <string name="videos">Video</string>
-    <string name="align_start">Sejajar ke kiri</string>
-    <string name="align_end">Sejajar ke kanan</string>
+    <string name="align_start">Sejajar ke awal</string>
+    <string name="align_end">Sejajar ke akhir</string>
     <string name="center_text">Teks di tengah</string>
     <string name="justify">Diperbenar</string>
     <string name="external_fonts">Fon eksternal</string>
@@ -270,7 +270,7 @@
     <string name="grey_out_articles">Tandai artikel</string>
     <string name="all_read">Semua terbaca</string>
     <string name="read_excluding_starred">Dibaca, kecuali terbintang</string>
-    <string name="external_links">Tautan eksternal</string>
+    <string name="external_links">Tautan Eksternal</string>
     <string name="unexpected_error_title">Aduh! Ada yang salah…</string>
     <string name="copy_error_report">Salin laporan kesalahan</string>
     <string name="submit_bug_report">mengirimkan laporan kutu di GitHub</string>
@@ -295,4 +295,24 @@
     <string name="only_link">Hanya tautan</string>
     <string name="shared_content">Konten terbagi</string>
     <string name="title_and_link">Judul dan tautan</string>
+    <string name="unfold_more">Buka Semua</string>
+    <string name="unfold_less">Tutup semua</string>
+    <string name="invalid_protobuf_file_warning">Berkas ini mungkin bukan berkas protobuf yang valid. Mengimpornya berpotensi merusak aplikasi dan mengakibatkan hilangnya preferensi saat ini. Apakah Anda yakin ingin melanjutkan?</string>
+    <string name="content_renderer">Perender konten</string>
+    <string name="read_aloud">Bacakan</string>
+    <string name="browse_bionic_reading_tips">Pelajar lebih lanjut di <i><u>bionic-reading.com</u></i>.</string>
+    <string name="about">Tentang</string>
+    <string name="troubleshooting">Pemecahan Masalah</string>
+    <string name="troubleshooting_desc">Laporan kutu, alat pengawakutuan</string>
+    <string name="bug_report">Laporan kutu</string>
+    <string name="app_preferences">Preferensi aplikasi</string>
+    <string name="import_from_protobuf_file">Impor dari berkas protobuf</string>
+    <string name="export_as_protobuf_file">Ekspor sebagai berkas protobuf</string>
+    <string name="import_from_json">Impor dari JSON</string>
+    <string name="export_as_json">Ekspor sebagai JSON</string>
+    <string name="invalid_json_file_warning">Berkas ini mungkin bukan berkas JSON yang valid. Mengimpornya berpotensi merusak aplikasi dan mengakibatkan hilangnya preferensi saat ini. Apakah Anda yakin ingin melanjutkan?</string>
+    <string name="native_component">Komponen Asli</string>
+    <string name="only_available_on_webview">Hanya tersedia di WebView</string>
+    <string name="use_bionic_reading">Gunakan Bionic Reading</string>
+    <string name="bionic_reading_tips">Apa itu Bionic Reading?</string>
 </resources>

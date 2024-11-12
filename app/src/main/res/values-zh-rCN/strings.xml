@@ -303,4 +303,12 @@
     <string name="invalid_json_file_warning">该文件可能不是有效的 JSON 文件！导入该文件可能会损坏应用程序并导致当前偏好设置丢失，您确定要继续吗？</string>
     <string name="unfold_more">全部展开</string>
     <string name="unfold_less">全部折叠</string>
+    <string name="read_aloud">Read Aloud</string>
+    <string name="only_available_on_webview">仅在 WebView 上可用</string>
+    <string name="content_renderer">内容渲染器</string>
+    <string name="native_component">原生组件</string>
+    <string name="use_bionic_reading">使用 Bionic Reading</string>
+    <string name="about">关于</string>
+    <string name="bionic_reading_tips">什么是 Bionic Reading？</string>
+    <string name="browse_bionic_reading_tips">在 <i><u>bionic-reading.com</u></i>.了解更多信息。</string>
 </resources>
