@@ -291,7 +291,7 @@ fun ReadingStylePage(
         }
     )
 
-    RadioDialog(
+/*    RadioDialog(
         visible = tonalElevationDialogVisible,
         title = stringResource(R.string.tonal_elevation),
         options = ReadingPageTonalElevationPreference.values.map {
@@ -304,7 +304,7 @@ fun ReadingStylePage(
         }
     ) {
         tonalElevationDialogVisible = false
-    }
+    }*/
 
     RadioDialog(
         visible = rendererDialogVisible,

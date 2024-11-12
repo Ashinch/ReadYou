@@ -55,7 +55,6 @@ fun TopBar(
     onClose: () -> Unit = {},
 ) {
     val context = LocalContext.current
-    val tonalElevation = LocalReadingPageTonalElevation.current
     val sharedContent = LocalSharedContent.current
 
     Box(
@@ -115,11 +114,7 @@ fun TopBar(
                         ) {
                             sharedContent.share(context, title, link)
                         }
-                    }, colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                            tonalElevation.value.dp
-                        ),
-                    )
+                    }, colors = TopAppBarDefaults.topAppBarColors()
                 )
             }
             if (showDivider) {
