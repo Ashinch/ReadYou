@@ -25,7 +25,9 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource.Companion.Drag
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
@@ -78,7 +80,10 @@ private class ReaderNestedScrollConnection(
         consumed: Offset, available: Offset, source: NestedScrollSource
     ): Offset = when {
         !enabled -> Offset.Zero
-        source == NestedScrollSource.UserInput -> Offset(0f, onPostScroll(available.y)) // Pull to load
+        source == NestedScrollSource.UserInput -> Offset(
+            0f,
+            onPostScroll(available.y)
+        ) // Pull to load
         else -> Offset.Zero
     }
 
@@ -312,6 +317,7 @@ object PullToLoadDefaults {
 
 fun Modifier.pullToLoad(
     state: PullToLoadState,
+    density: Density,
     contentOffsetMultiple: Int = ContentOffsetMultiple,
     onScroll: ((Float) -> Unit)? = null,
     enabled: Boolean = true,
@@ -324,7 +330,11 @@ fun Modifier.pullToLoad(
             onRelease = state::onRelease,
             onScroll = onScroll
         )
-    ).run {
-        if (enabled) offset(x = 0.dp, y = (state.offsetFraction * contentOffsetMultiple).dp)
+    ).then(
+        if (enabled) offset {
+            with(density) {
+                IntOffset(x = 0, y = (state.offsetFraction * contentOffsetMultiple).dp.roundToPx())
+            }
+        }
         else this
-    }
+    )

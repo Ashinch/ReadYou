@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.TextUnit
@@ -166,12 +167,8 @@ fun ReadingPage(
                             val state =
                                 rememberPullToLoadState(
                                     key = content,
-                                    onLoadNext = {
-                                        readingViewModel.loadNext()
-                                    },
-                                    onLoadPrevious = {
-                                        readingViewModel.loadPrevious()
-                                    }
+                                    onLoadNext = readingViewModel::loadNext,
+                                    onLoadPrevious = readingViewModel::loadPrevious
                                 )
 
                             val listState = rememberSaveable(
@@ -215,6 +212,7 @@ fun ReadingPage(
                                         modifier = Modifier
                                             .pullToLoad(
                                                 state = state,
+                                                density = LocalDensity.current,
                                                 onScroll = { f ->
                                                     if (abs(f) > 2f)
                                                         isReaderScrollingDown = f < 0f
