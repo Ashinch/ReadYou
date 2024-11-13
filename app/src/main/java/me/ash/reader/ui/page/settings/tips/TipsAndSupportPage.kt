@@ -91,6 +91,7 @@ fun TipsAndSupportPage(
     }
 
     RYScaffold(
+        title = { stringResource(R.string.tips_and_support) },
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(

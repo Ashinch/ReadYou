@@ -61,6 +61,7 @@ fun ReadingImagePage(
     var horizontalPaddingValue: Int? by remember { mutableStateOf(horizontalPadding) }
 
     RYScaffold(
+        title = { stringResource(R.string.images) },
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -73,9 +74,6 @@ fun ReadingImagePage(
         },
         content = {
             LazyColumn {
-                item {
-                    DisplayText(text = stringResource(R.string.images), desc = "")
-                }
 
                 // Preview
                 item {

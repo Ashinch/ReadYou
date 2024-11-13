@@ -110,6 +110,7 @@ fun ColorAndStylePage(
     }
 
     RYScaffold(
+        title = { stringResource(R.string.color_and_style) },
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -122,9 +123,6 @@ fun ColorAndStylePage(
         },
         content = {
             LazyColumn {
-                item {
-                    DisplayText(text = stringResource(R.string.color_and_style), desc = "")
-                }
                 item {
                     Row(
                         modifier = Modifier

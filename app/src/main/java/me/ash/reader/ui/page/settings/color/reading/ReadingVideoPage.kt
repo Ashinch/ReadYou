@@ -35,6 +35,7 @@ fun ReadingVideoPage(
     val scope = rememberCoroutineScope()
 
     RYScaffold(
+        title = { stringResource(R.string.videos) },
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -47,9 +48,6 @@ fun ReadingVideoPage(
         },
         content = {
             LazyColumn {
-                item {
-                    DisplayText(text = stringResource(R.string.videos), desc = "")
-                }
 
                 // Preview
                 item {

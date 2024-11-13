@@ -63,11 +63,9 @@ fun FlowPageStylePage(
                 navController.popBackStack()
             }
         },
+        title = { stringResource(R.string.flow_page) },
         content = {
             LazyColumn {
-                item {
-                    DisplayText(text = stringResource(R.string.flow_page), desc = "")
-                }
 
                 // Preview
                 item {

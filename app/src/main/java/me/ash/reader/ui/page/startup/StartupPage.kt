@@ -51,13 +51,11 @@ fun StartupPage(
     var tosVisible by remember { mutableStateOf(false) }
 
     RYScaffold(
+        title = { stringResource(R.string.welcome) },
         content = {
-            LazyColumn(
-                modifier = Modifier.navigationBarsPadding(),
-            ) {
+            LazyColumn {
                 item {
                     Spacer(modifier = Modifier.height(64.dp))
-                    DisplayText(text = stringResource(R.string.welcome), desc = "")
                 }
                 item {
                     Spacer(modifier = Modifier.height(16.dp))
@@ -85,7 +83,6 @@ fun StartupPage(
                             ),
                         )
                     }
-                    Spacer(modifier = Modifier.height(100.dp))
                 }
             }
         },

@@ -35,6 +35,7 @@ fun AddAccountsPage(
     val context = LocalContext.current
 
     RYScaffold(
+        title = { stringResource(R.string.add_accounts) },
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -48,7 +49,6 @@ fun AddAccountsPage(
         content = {
             LazyColumn {
                 item {
-                    DisplayText(text = stringResource(R.string.add_accounts), desc = "")
                     Spacer(modifier = Modifier.height(16.dp))
                 }
                 item {

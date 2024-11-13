@@ -116,6 +116,7 @@ fun AccountDetailsPage(
     }
 
     RYScaffold(
+        title = { selectedAccount?.type?.toDesc(context) ?: "" },
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -140,7 +141,6 @@ fun AccountDetailsPage(
         content = {
             LazyColumn {
                 item {
-                    DisplayText(text = selectedAccount?.type?.toDesc(context) ?: "", desc = "")
                     Spacer(modifier = Modifier.height(16.dp))
                 }
                 item {

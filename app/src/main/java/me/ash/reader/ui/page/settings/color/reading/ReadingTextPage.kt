@@ -83,6 +83,7 @@ fun ReadingTextPage(
     var horizontalPaddingValue: Int? by remember { mutableStateOf(horizontalPadding) }
 
     RYScaffold(
+        title = { stringResource(R.string.text) },
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -95,9 +96,6 @@ fun ReadingTextPage(
         },
         content = {
             LazyColumn {
-                item {
-                    DisplayText(text = stringResource(R.string.text), desc = "")
-                }
 
                 // Preview
                 item {
