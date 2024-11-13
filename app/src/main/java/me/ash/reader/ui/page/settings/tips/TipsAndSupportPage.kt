@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -115,12 +116,10 @@ fun TipsAndSupportPage(
             }
         },
         content = {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceAround,
-            ) {
-                item {
+            Column ( modifier = Modifier.fillMaxWidth(),
+                     horizontalAlignment = Alignment.CenterHorizontally,
+                     verticalArrangement = Arrangement.spacedBy(48.dp) ) {
+                Row {
                     Column(
                         modifier = Modifier.pointerInput(Unit) {
                             detectTapGestures(
@@ -155,7 +154,7 @@ fun TipsAndSupportPage(
                             )
                         },
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
+                        verticalArrangement = Arrangement.spacedBy(48.dp),
                     ) {
                         Box(
                             modifier = Modifier
@@ -179,7 +178,6 @@ fun TipsAndSupportPage(
                                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface alwaysLight true),
                             )
                         }
-                        Spacer(modifier = Modifier.height(48.dp))
                         BadgedBox(
                             badge = {
                                 Badge(
@@ -198,53 +196,44 @@ fun TipsAndSupportPage(
                         }
                     }
                 }
-                item {
-                    Spacer(modifier = Modifier.height(48.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
+                Row ( modifier = Modifier.fillMaxWidth(),
+                      horizontalArrangement = Arrangement.spacedBy(16.dp, alignment = Alignment.CenterHorizontally),) {
+
+                    // Sponsor
+                    RoundIconButton(RoundIconButtonType.Sponsor(
+                        backgroundColor = MaterialTheme.colorScheme.tertiaryContainer alwaysLight true,
                     ) {
-                        // Sponsor
-                        RoundIconButton(RoundIconButtonType.Sponsor(
-                            backgroundColor = MaterialTheme.colorScheme.tertiaryContainer alwaysLight true,
-                        ) {
-                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                            view.playSoundEffect(SoundEffectConstants.CLICK)
-                            context.showToast(context.getString(R.string.coming_soon))
-                        })
-                        Spacer(modifier = Modifier.width(16.dp))
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                        context.showToast(context.getString(R.string.coming_soon))
+                    })
 
-                        // GitHub
-                        RoundIconButton(RoundIconButtonType.GitHub(
-                            backgroundColor = MaterialTheme.colorScheme.primaryContainer alwaysLight true,
-                        ) {
-                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                            view.playSoundEffect(SoundEffectConstants.CLICK)
-                            context.openURL(context.getString(R.string.github_link), OpenLinkPreference.AutoPreferCustomTabs)
-                        })
-                        Spacer(modifier = Modifier.width(16.dp))
+                    // GitHub
+                    RoundIconButton(RoundIconButtonType.GitHub(
+                        backgroundColor = MaterialTheme.colorScheme.primaryContainer alwaysLight true,
+                    ) {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                        context.openURL(context.getString(R.string.github_link), OpenLinkPreference.AutoPreferCustomTabs)
+                    })
 
-                        // Telegram
-                        RoundIconButton(RoundIconButtonType.Telegram(
-                            backgroundColor = MaterialTheme.colorScheme.primaryContainer alwaysLight true,
-                        ) {
-                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                            view.playSoundEffect(SoundEffectConstants.CLICK)
-                            context.openURL(context.getString(R.string.telegram_link), OpenLinkPreference.AutoPreferCustomTabs)
-                        })
-                        Spacer(modifier = Modifier.width(16.dp))
+                    // Telegram
+                    RoundIconButton(RoundIconButtonType.Telegram(
+                        backgroundColor = MaterialTheme.colorScheme.primaryContainer alwaysLight true,
+                    ) {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                        context.openURL(context.getString(R.string.telegram_link), OpenLinkPreference.AutoPreferCustomTabs)
+                    })
 
-                        // Help
-                        RoundIconButton(RoundIconButtonType.Help(
-                            backgroundColor = MaterialTheme.colorScheme.secondaryContainer alwaysLight true,
-                        ) {
-                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                            view.playSoundEffect(SoundEffectConstants.CLICK)
-                            context.openURL(context.getString(R.string.wiki_link), OpenLinkPreference.AutoPreferCustomTabs)
-                        })
-                    }
-                    Spacer(modifier = Modifier.height(48.dp))
+                    // Help
+                    RoundIconButton(RoundIconButtonType.Help(
+                        backgroundColor = MaterialTheme.colorScheme.secondaryContainer alwaysLight true,
+                    ) {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        view.playSoundEffect(SoundEffectConstants.CLICK)
+                        context.openURL(context.getString(R.string.wiki_link), OpenLinkPreference.AutoPreferCustomTabs)
+                    })
                 }
             }
         }
