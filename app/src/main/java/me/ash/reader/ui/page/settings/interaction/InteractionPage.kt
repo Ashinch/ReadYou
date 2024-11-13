@@ -75,6 +75,7 @@ fun InteractionPage(
     var sharedContentDialogVisible by remember { mutableStateOf(false) }
 
     RYScaffold(
+        title = { stringResource(R.string.interaction) },
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -88,7 +89,6 @@ fun InteractionPage(
         content = {
             LazyColumn {
                 item {
-                    DisplayText(text = stringResource(R.string.interaction), desc = "")
                     Spacer(modifier = Modifier.height(16.dp))
                 }
                 item {

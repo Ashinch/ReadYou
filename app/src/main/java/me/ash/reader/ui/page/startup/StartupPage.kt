@@ -1,5 +1,7 @@
 package me.ash.reader.ui.page.startup
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -51,42 +53,30 @@ fun StartupPage(
     var tosVisible by remember { mutableStateOf(false) }
 
     RYScaffold(
+        title = { stringResource(R.string.welcome) },
         content = {
-            LazyColumn(
-                modifier = Modifier.navigationBarsPadding(),
-            ) {
-                item {
-                    Spacer(modifier = Modifier.height(64.dp))
-                    DisplayText(text = stringResource(R.string.welcome), desc = "")
-                }
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    DynamicSVGImage(
-                        modifier = Modifier.padding(horizontal = 60.dp),
-                        svgImageString = SVGString.WELCOME,
-                        contentDescription = stringResource(R.string.color_and_style),
+            Column (verticalArrangement = Arrangement.Center) {
+                DynamicSVGImage(
+                    svgImageString = SVGString.WELCOME,
+                    contentDescription = stringResource(R.string.color_and_style),
+                )
+
+                Tips(
+                    text = stringResource(R.string.tos_tips),
+                )
+
+                TextButton(
+                    modifier = Modifier.padding(start = 12.dp),
+                    onClick = { tosVisible = true }
+                ) {
+                    HtmlText(
+                        text = stringResource(R.string.browse_tos_tips),
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            color = MaterialTheme.colorScheme.outline,
+                        ),
                     )
                 }
-                item {
-                    Tips(
-                        modifier = Modifier.padding(top = 40.dp),
-                        text = stringResource(R.string.tos_tips),
-                    )
-                }
-                item {
-                    TextButton(
-                        modifier = Modifier.padding(horizontal = 12.dp),
-                        onClick = { tosVisible = true }
-                    ) {
-                        HtmlText(
-                            text = stringResource(R.string.browse_tos_tips),
-                            style = MaterialTheme.typography.bodySmall.copy(
-                                color = MaterialTheme.colorScheme.outline,
-                            ),
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(100.dp))
-                }
+
             }
         },
         bottomBar = null,

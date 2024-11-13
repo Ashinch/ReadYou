@@ -34,6 +34,7 @@ fun DarkThemePage(
     val scope = rememberCoroutineScope()
 
     RYScaffold(
+        title = { stringResource(R.string.dark_theme) },
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -46,9 +47,6 @@ fun DarkThemePage(
         },
         content = {
             LazyColumn {
-                item {
-                    DisplayText(text = stringResource(R.string.dark_theme), desc = "")
-                }
                 item {
                     DarkThemePreference.values.map {
                         SettingItem(

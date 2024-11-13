@@ -32,6 +32,7 @@ fun LicenseListPage(
     val context = LocalContext.current
 
     RYScaffold(
+        title = { stringResource(R.string.open_source_licenses) },
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(

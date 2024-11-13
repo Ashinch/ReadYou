@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.SwitchAccount
 import androidx.compose.material.icons.rounded.UnfoldLess
 import androidx.compose.material.icons.rounded.UnfoldMore
 import androidx.compose.material.rememberModalBottomSheetState
@@ -53,6 +54,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -211,50 +213,42 @@ fun FeedsPage(
     RYScaffold(
         topBarTonalElevation = topBarTonalElevation.value.dp,
         containerTonalElevation = groupListTonalElevation.value.dp,
-        topBar = {
-            TopAppBar(
-                modifier = Modifier.clickable(
-                    onClick = {
-                        scope.launch {
-                            if (listState.firstVisibleItemIndex != 0) {
-                                listState.animateScrollToItem(0)
-                            }
-                        }
-                    },
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ),
-                title = {},
-                navigationIcon = {
-                    FeedbackIconButton(
-                        modifier = Modifier.size(20.dp),
-                        imageVector = Icons.Outlined.Settings,
-                        contentDescription = stringResource(R.string.settings),
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        showBadge = newVersion.whetherNeedUpdate(currentVersion, skipVersion),
-                    ) {
-                        navController.navigate(RouteName.SETTINGS) {
-                            launchSingleTop = true
-                        }
-                    }
-                },
-                actions = {
-                    if (subscribeViewModel.rssService.get().addSubscription) {
-                        FeedbackIconButton(
-                            imageVector = Icons.Rounded.Add,
-                            contentDescription = stringResource(R.string.subscribe),
-                            tint = MaterialTheme.colorScheme.onSurface,
-                        ) {
-                            subscribeViewModel.showDrawer()
-                        }
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                        topBarTonalElevation.value.dp
-                    ),
-                )
-            )
+        title = { feedsUiState.account?.name ?: "Foobar" },
+        appBarOnClick = { scope.launch {
+            if (listState.firstVisibleItemIndex != 0) {
+                listState.animateScrollToItem(0)
+            }
+        } },
+        navigationIcon = {
+            FeedbackIconButton(
+                modifier = Modifier.size(20.dp),
+                imageVector = Icons.Outlined.Settings,
+                contentDescription = stringResource(R.string.settings),
+                tint = MaterialTheme.colorScheme.onSurface,
+                showBadge = newVersion.whetherNeedUpdate(currentVersion, skipVersion),
+            ) {
+                navController.navigate(RouteName.SETTINGS) {
+                    launchSingleTop = true
+                }
+            }
+        },
+        actions = {
+            FeedbackIconButton(
+                imageVector = Icons.Rounded.SwitchAccount,
+                contentDescription = stringResource(R.string.switch_account),
+                tint = MaterialTheme.colorScheme.onSurface,
+            ) {
+                accountTabVisible = true
+            }
+            if (subscribeViewModel.rssService.get().addSubscription) {
+                FeedbackIconButton(
+                    imageVector = Icons.Rounded.Add,
+                    contentDescription = stringResource(R.string.subscribe),
+                    tint = MaterialTheme.colorScheme.onSurface,
+                ) {
+                    subscribeViewModel.showDrawer()
+                }
+            }
         },
         content = {
             PullToRefreshBox(
@@ -266,12 +260,6 @@ fun FeedsPage(
                     modifier = Modifier.fillMaxSize(),
                     state = listState
                 ) {
-                    item {
-                        DisplayText(
-                            text = feedsUiState.account?.name ?: "",
-                            desc = "",
-                        ) { accountTabVisible = true }
-                    }
                     item {
                         Banner(
                             title = filterUiState.filter.toName(),

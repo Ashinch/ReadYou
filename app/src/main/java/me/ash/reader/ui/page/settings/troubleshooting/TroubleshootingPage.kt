@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -95,10 +96,10 @@ fun TroubleshootingPage(
                 navController.popBackStack()
             }
         },
+        title={ stringResource(R.string.troubleshooting) },
         content = {
             LazyColumn {
                 item {
-                    DisplayText(text = stringResource(R.string.troubleshooting), desc = "")
                     Spacer(modifier = Modifier.height(16.dp))
                     Banner(
                         title = stringResource(R.string.bug_report),

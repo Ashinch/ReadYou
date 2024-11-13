@@ -55,6 +55,7 @@ fun BionicReadingPage(
     val bionicReading = LocalReadingBionicReading.current
 
     RYScaffold(
+        title = { stringResource(R.string.bionic_reading) },
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -67,9 +68,6 @@ fun BionicReadingPage(
         },
         content = {
             LazyColumn {
-                item {
-                    DisplayText(text = stringResource(R.string.bionic_reading), desc = "")
-                }
 
                 // Preview
                 item {

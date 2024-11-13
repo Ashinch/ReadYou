@@ -19,6 +19,7 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -39,6 +40,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -234,79 +236,67 @@ fun FlowPage(
     RYScaffold(
         topBarTonalElevation = topBarTonalElevation.value.dp,
         containerTonalElevation = articleListTonalElevation.value.dp,
-        topBar = {
-            TopAppBar(
-                modifier = Modifier.clickable(
-                    onClick = {
-                        scope.launch {
-                            if (listState.firstVisibleItemIndex != 0) {
-                                listState.animateScrollToItem(0)
-                            }
-                        }
+        title = { when {
+                filterUiState.group != null -> filterUiState.group.name
+                filterUiState.feed != null -> filterUiState.feed.name
+                else -> filterUiState.filter.toName()
+            } },
+        appBarOnClick = {  scope.launch {
+                if (listState.firstVisibleItemIndex != 0) {
+                    listState.animateScrollToItem(0)
+                }
+            } },
+        navigationIcon = {
+            FeedbackIconButton(
+                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                contentDescription = stringResource(R.string.back),
+                tint = MaterialTheme.colorScheme.onSurface
+            ) {
+                onSearch = false
+                if (navController.previousBackStackEntry == null) {
+                    navController.navigate(RouteName.FEEDS) {
+                        launchSingleTop = true
+                    }
+                } else {
+                    navController.popBackStack()
+                }
+            } },
+        actions = {
+            RYExtensibleVisibility(visible = !filterUiState.filter.isStarred()) {
+                FeedbackIconButton(
+                    imageVector = Icons.Rounded.DoneAll,
+                    contentDescription = stringResource(R.string.mark_all_as_read),
+                    tint = if (markAsRead) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
                     },
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ),
-                title = {},
-                navigationIcon = {
-                    FeedbackIconButton(
-                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                        contentDescription = stringResource(R.string.back),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    ) {
+                ) {
+                    scope.launch {
+                        if (flowUiState.listState.firstVisibleItemIndex != 0) {
+                            flowUiState.listState.animateScrollToItem(0)
+                        }
+                        markAsRead = !markAsRead
                         onSearch = false
-                        if (navController.previousBackStackEntry == null) {
-                            navController.navigate(RouteName.FEEDS) {
-                                launchSingleTop = true
-                            }
-                        } else {
-                            navController.popBackStack()
-                        }
                     }
+                }
+            }
+            FeedbackIconButton(
+                imageVector = Icons.Rounded.Search,
+                contentDescription = stringResource(R.string.search),
+                tint = if (onSearch) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurface
                 },
-                actions = {
-                    RYExtensibleVisibility(visible = !filterUiState.filter.isStarred()) {
-                        FeedbackIconButton(
-                            imageVector = Icons.Rounded.DoneAll,
-                            contentDescription = stringResource(R.string.mark_all_as_read),
-                            tint = if (markAsRead) {
-                                MaterialTheme.colorScheme.primary
-                            } else {
-                                MaterialTheme.colorScheme.onSurface
-                            },
-                        ) {
-                            scope.launch {
-                                if (flowUiState.listState.firstVisibleItemIndex != 0) {
-                                    flowUiState.listState.animateScrollToItem(0)
-                                }
-                                markAsRead = !markAsRead
-                                onSearch = false
-                            }
-                        }
+            ) {
+                scope.launch {
+                    if (flowUiState.listState.firstVisibleItemIndex != 0) {
+                        flowUiState.listState.animateScrollToItem(0)
                     }
-                    FeedbackIconButton(
-                        imageVector = Icons.Rounded.Search,
-                        contentDescription = stringResource(R.string.search),
-                        tint = if (onSearch) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.onSurface
-                        },
-                    ) {
-                        scope.launch {
-                            if (flowUiState.listState.firstVisibleItemIndex != 0) {
-                                flowUiState.listState.animateScrollToItem(0)
-                            }
-                            onSearch = !onSearch
-                        }
-                    }
-                }, colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                        topBarTonalElevation.value.dp
-                    ),
-                )
-            )
-        },
+                    onSearch = !onSearch
+                }
+            } },
         content = {
             PullToRefreshBox(
                 state = syncingState,
@@ -318,15 +308,6 @@ fun FlowPage(
                     state = listState,
                 ) {
                     item {
-                        DisplayText(
-                            modifier = Modifier.padding(start = if (articleListFeedIcon.value) 30.dp else 0.dp),
-                            text = when {
-                                filterUiState.group != null -> filterUiState.group.name
-                                filterUiState.feed != null -> filterUiState.feed.name
-                                else -> filterUiState.filter.toName()
-                            },
-                            desc = "",
-                        )
                         RYExtensibleVisibility(visible = markAsRead) {
                             Spacer(modifier = Modifier.height((56 + 24 + 10).dp))
                         }

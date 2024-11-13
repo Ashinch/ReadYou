@@ -97,6 +97,7 @@ fun ReadingStylePage(
     }
 
     RYScaffold(
+        title = { stringResource(R.string.reading_page) },
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -109,9 +110,6 @@ fun ReadingStylePage(
         },
         content = {
             LazyColumn {
-                item {
-                    DisplayText(text = stringResource(R.string.reading_page), desc = "")
-                }
 
                 // Preview
                 item {

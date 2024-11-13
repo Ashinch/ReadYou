@@ -46,6 +46,7 @@ fun FeedsPageStylePage(
     var filterBarPaddingValue: Int? by remember { mutableStateOf(filterBarPadding) }
 
     RYScaffold(
+        title = { stringResource(R.string.feeds_page) },
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -58,9 +59,6 @@ fun FeedsPageStylePage(
         },
         content = {
             LazyColumn {
-                item {
-                    DisplayText(text = stringResource(R.string.feeds_page), desc = "")
-                }
 
                 // Preview
                 item {

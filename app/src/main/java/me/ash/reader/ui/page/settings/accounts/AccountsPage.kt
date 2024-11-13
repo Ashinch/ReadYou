@@ -35,6 +35,7 @@ fun AccountsPage(
     val accounts = viewModel.accounts.collectAsStateValue(initial = emptyList())
 
     RYScaffold(
+        title = { stringResource(R.string.accounts) },
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -48,7 +49,6 @@ fun AccountsPage(
         content = {
             LazyColumn {
                 item {
-                    DisplayText(text = stringResource(R.string.accounts), desc = "")
                     Spacer(modifier = Modifier.height(16.dp))
                     Subtitle(
                         modifier = Modifier.padding(horizontal = 24.dp),

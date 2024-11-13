@@ -47,6 +47,7 @@ fun LanguagesPage(
     val scope = rememberCoroutineScope()
 
     RYScaffold(
+        title = { stringResource(R.string.languages) },
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
@@ -60,7 +61,6 @@ fun LanguagesPage(
         content = {
             LazyColumn {
                 item(key = languages.value) {
-                    DisplayText(text = stringResource(R.string.languages), desc = "")
                     Spacer(modifier = Modifier.height(16.dp))
                     Banner(
                         title = stringResource(R.string.help_translate),
