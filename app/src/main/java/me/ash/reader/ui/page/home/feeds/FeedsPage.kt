@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.SwitchAccount
 import androidx.compose.material.icons.rounded.UnfoldLess
 import androidx.compose.material.icons.rounded.UnfoldMore
 import androidx.compose.material.rememberModalBottomSheetState
@@ -239,6 +240,13 @@ fun FeedsPage(
                     }
                 },
                 actions = {
+                    FeedbackIconButton(
+                        imageVector = Icons.Rounded.SwitchAccount,
+                        contentDescription = stringResource(R.string.switch_account),
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    ) {
+                        accountTabVisible = true
+                    }
                     if (subscribeViewModel.rssService.get().addSubscription) {
                         FeedbackIconButton(
                             imageVector = Icons.Rounded.Add,
