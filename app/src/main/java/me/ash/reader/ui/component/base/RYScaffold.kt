@@ -6,6 +6,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -38,6 +39,7 @@ fun RYScaffold(
 
     Scaffold(
         modifier = modifier
+            .fillMaxSize()
             .background(
                 MaterialTheme.colorScheme.surfaceColorAtElevation(
                     topBarTonalElevation,
