@@ -85,6 +85,8 @@ fun TipsAndSupportPage(
         targetValue = pressAMP,
         animationSpec = tween()
     )
+    
+    var showSponsorDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         currentVersion = context.getCurrentVersion().toString()
@@ -210,7 +212,7 @@ fun TipsAndSupportPage(
                         ) {
                             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             view.playSoundEffect(SoundEffectConstants.CLICK)
-                            context.showToast(context.getString(R.string.coming_soon))
+                            showSponsorDialog = true
                         })
                         Spacer(modifier = Modifier.width(16.dp))
 
@@ -250,6 +252,9 @@ fun TipsAndSupportPage(
     )
 
     UpdateDialog()
+    if (showSponsorDialog) {
+        SponsorDialog { showSponsorDialog = false }
+    }
 }
 
 @Immutable
