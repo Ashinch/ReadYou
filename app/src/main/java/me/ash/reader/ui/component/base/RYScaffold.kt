@@ -1,12 +1,14 @@
 package me.ash.reader.ui.component.base
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
@@ -24,11 +26,15 @@ fun RYScaffold(
     navigationIcon: (@Composable () -> Unit)? = null,
     actions: (@Composable RowScope.() -> Unit)? = null,
     topBar: (@Composable () -> Unit)? = null,
-    bottomBar: (@Composable () -> Unit)? = null,
     floatingActionButton: (@Composable () -> Unit)? = null,
+    navigationSuiteItems: (NavigationSuiteScope.() -> Unit)? = null,
     content: @Composable () -> Unit = {},
 ) {
-    Scaffold(
+    val layoutType = NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(
+        currentWindowAdaptiveInfo()
+    )
+
+    NavigationSuiteScaffold(
         modifier = modifier
             .background(
                 MaterialTheme.colorScheme.surfaceColorAtElevation(
@@ -36,31 +42,39 @@ fun RYScaffold(
                     color = containerColor
                 )
             ),
+        layoutType = layoutType,
         containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
             containerTonalElevation,
             color = containerColor
         ) onDark MaterialTheme.colorScheme.surface,
-        topBar = {
-            if (topBar != null) topBar() else if (navigationIcon != null || actions != null) {
-                TopAppBar(
-                    title = {},
-                    navigationIcon = { navigationIcon?.invoke() },
-                    actions = { actions?.invoke(this) },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                            topBarTonalElevation
-                        ),
-                    )
-                )
-            }
-        },
+        navigationSuiteItems = navigationSuiteItems ?: {},
         content = {
             Column {
-                Spacer(modifier = Modifier.height(it.calculateTopPadding()))
+                if (topBar != null) {
+                    topBar()
+                } else if (navigationIcon != null || actions != null) {
+                    TopAppBar(
+                        title = {},
+                        navigationIcon = { navigationIcon?.invoke() },
+                        actions = { actions?.invoke(this) },
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+                                topBarTonalElevation
+                            ),
+                        )
+                    )
+                }
                 content()
+                if (floatingActionButton != null) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.BottomEnd
+                    ) {
+                        floatingActionButton()
+                    }
+                }
             }
-        },
-        bottomBar = { bottomBar?.invoke() },
-        floatingActionButton = { floatingActionButton?.invoke() },
+        }
     )
 }
+

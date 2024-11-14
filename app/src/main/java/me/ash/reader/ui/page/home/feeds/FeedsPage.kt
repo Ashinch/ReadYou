@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
@@ -27,13 +26,13 @@ import androidx.compose.material.icons.rounded.UnfoldLess
 import androidx.compose.material.icons.rounded.UnfoldMore
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
@@ -49,26 +48,19 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.window.core.layout.WindowWidthSizeClass
 import androidx.work.WorkInfo
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarFilled
-import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarPadding
-import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarStyle
-import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarTonalElevation
-import me.ash.reader.infrastructure.preference.LocalFeedsGroupListExpand
-import me.ash.reader.infrastructure.preference.LocalFeedsGroupListTonalElevation
-import me.ash.reader.infrastructure.preference.LocalFeedsTopBarTonalElevation
-import me.ash.reader.infrastructure.preference.LocalNewVersionNumber
-import me.ash.reader.infrastructure.preference.LocalSkipVersionNumber
-import me.ash.reader.ui.component.FilterBar
+import me.ash.reader.domain.model.general.Filter
+import me.ash.reader.infrastructure.preference.*
 import me.ash.reader.ui.component.base.Banner
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
@@ -103,6 +95,7 @@ fun FeedsPage(
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel,
 ) {
+
     var accountTabVisible by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
@@ -412,22 +405,42 @@ fun FeedsPage(
                 }
             }
         },
-        bottomBar = {
-            FilterBar(
-                filter = filterUiState.filter,
-                filterBarStyle = filterBarStyle.value,
-                filterBarFilled = filterBarFilled.value,
-                filterBarPadding = filterBarPadding.dp,
-                filterBarTonalElevation = filterBarTonalElevation.value.dp,
-            ) {
-                filterChange(
-                    navController = navController,
-                    homeViewModel = homeViewModel,
-                    filterState = filterUiState.copy(filter = it),
-                    isNavigate = false,
+        navigationSuiteItems = {
+            Filter.values.forEach { item ->
+                item(
+                    selected = filterUiState.filter == item,
+                    onClick = {
+                        filterChange(
+                            navController = navController,
+                            homeViewModel = homeViewModel,
+                            filterState = filterUiState.copy(filter = item),
+                            isNavigate = false,
+                        )
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = if (filterUiState.filter == item && filterBarFilled.value) {
+                                item.iconFilled
+                            } else {
+                                item.iconOutline
+                            },
+                            contentDescription = item.toName()
+                        )
+                    },
+                    label = if (filterBarStyle.value == FlowFilterBarStylePreference.Icon.value) {
+                        null
+                    } else {
+                        {
+                            Text(
+                                text = item.toName(),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                    }
                 )
             }
-        }
+        },
     )
 
     SubscribeDialog(subscribeViewModel = subscribeViewModel)

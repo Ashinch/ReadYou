@@ -49,7 +49,6 @@ import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.infrastructure.preference.LocalReadingRenderer
 import me.ash.reader.infrastructure.preference.LocalReadingTheme
 import me.ash.reader.infrastructure.preference.ReadingFontsPreference
-import me.ash.reader.infrastructure.preference.ReadingPageTonalElevationPreference
 import me.ash.reader.infrastructure.preference.ReadingRendererPreference
 import me.ash.reader.infrastructure.preference.ReadingThemePreference
 import me.ash.reader.infrastructure.preference.not

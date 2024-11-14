@@ -89,7 +89,6 @@ fun StartupPage(
                 }
             }
         },
-        bottomBar = null,
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = Modifier.navigationBarsPadding(),

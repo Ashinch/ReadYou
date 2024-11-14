@@ -176,6 +176,10 @@ dependencies {
     implementation(libs.activity.compose)
     implementation(libs.appcompat)
 
+    // Adaptive Navigation Suite
+    implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
+    implementation(libs.androidx.compose.material3.adaptive.navigation)
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit.ext)

@@ -16,11 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LargeTopAppBar
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.*
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
@@ -37,8 +33,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -50,17 +46,7 @@ import me.ash.reader.R
 import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.general.Filter
-import me.ash.reader.infrastructure.preference.LocalFlowArticleListDateStickyHeader
-import me.ash.reader.infrastructure.preference.LocalFlowArticleListFeedIcon
-import me.ash.reader.infrastructure.preference.LocalFlowArticleListTonalElevation
-import me.ash.reader.infrastructure.preference.LocalFlowFilterBarFilled
-import me.ash.reader.infrastructure.preference.LocalFlowFilterBarPadding
-import me.ash.reader.infrastructure.preference.LocalFlowFilterBarStyle
-import me.ash.reader.infrastructure.preference.LocalFlowFilterBarTonalElevation
-import me.ash.reader.infrastructure.preference.LocalFlowTopBarTonalElevation
-import me.ash.reader.infrastructure.preference.LocalMarkAsReadOnScroll
-import me.ash.reader.infrastructure.preference.LocalSharedContent
-import me.ash.reader.ui.component.FilterBar
+import me.ash.reader.infrastructure.preference.*
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYExtensibleVisibility
@@ -405,23 +391,43 @@ fun FlowPage(
                 }
             }
         },
-        bottomBar = {
-            FilterBar(
-                filter = filterUiState.filter,
-                filterBarStyle = filterBarStyle.value,
-                filterBarFilled = filterBarFilled.value,
-                filterBarPadding = filterBarPadding.dp,
-                filterBarTonalElevation = filterBarTonalElevation.value.dp,
-            ) {
-                scope.launch {
-                    if (flowUiState.listState.firstVisibleItemIndex != 0) {
-                        flowUiState.listState.animateScrollToItem(0)
+        navigationSuiteItems = {
+            Filter.values.forEach { item ->
+                item(
+                    selected = filterUiState.filter == item,
+                    onClick = {
+                        scope.launch {
+                            if (flowUiState.listState.firstVisibleItemIndex != 0) {
+                                flowUiState.listState.animateScrollToItem(0)
+                            }
+                        }
+                        if (filterUiState.filter != item) {
+                            homeViewModel.changeFilter(filterUiState.copy(filter = item))
+                        }
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = if (filterUiState.filter == item && filterBarFilled.value) {
+                                item.iconFilled
+                            } else {
+                                item.iconOutline
+                            },
+                            contentDescription = item.toName()
+                        )
+                    },
+                    label = if (filterBarStyle.value == FlowFilterBarStylePreference.Icon.value) {
+                        null
+                    } else {
+                        {
+                            Text(
+                                text = item.toName(),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
                     }
-                }
-                if (filterUiState.filter != it) {
-                    homeViewModel.changeFilter(filterUiState.copy(filter = it))
-                }
+                )
             }
-        }
-    )
+        },
+        )
 }
