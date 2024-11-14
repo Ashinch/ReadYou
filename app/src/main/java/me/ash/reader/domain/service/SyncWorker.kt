@@ -53,7 +53,7 @@ class SyncWorker @AssistedInject constructor(
         ) {
             workManager.enqueueUniquePeriodicWork(
                 WORK_NAME,
-                ExistingPeriodicWorkPolicy.REPLACE,
+                ExistingPeriodicWorkPolicy.UPDATE,
                 PeriodicWorkRequestBuilder<SyncWorker>(syncInterval.value, TimeUnit.MINUTES)
                     .setConstraints(Constraints.Builder()
                         .setRequiresCharging(syncOnlyWhenCharging.value)
