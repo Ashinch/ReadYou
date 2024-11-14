@@ -65,7 +65,8 @@ class WebViewClient(
                 var imgs = document.getElementsByTagName("img");
                 for(var i = 0; i < imgs.length; i++){
                     imgs[i].pos = i;
-                    imgs[i].onclick = function() {
+                    imgs[i].onclick = function(event) {
+                        event.preventDefault();
                         window.${JavaScriptInterface.NAME}.onImgTagClick(this.src, this.alt);
                     }
                 }
