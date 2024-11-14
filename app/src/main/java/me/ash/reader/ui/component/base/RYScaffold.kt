@@ -34,22 +34,59 @@ fun RYScaffold(
         currentWindowAdaptiveInfo()
     )
 
-    NavigationSuiteScaffold(
-        modifier = modifier
-            .background(
-                MaterialTheme.colorScheme.surfaceColorAtElevation(
-                    topBarTonalElevation,
-                    color = containerColor
-                )
-            ),
-        layoutType = layoutType,
-        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-            containerTonalElevation,
-            color = containerColor
-        ) onDark MaterialTheme.colorScheme.surface,
-        navigationSuiteItems = navigationSuiteItems ?: {},
-        content = {
-            Column {
+    if (navigationSuiteItems != null) {
+        NavigationSuiteScaffold(
+            modifier = modifier
+                .background(
+                    MaterialTheme.colorScheme.surfaceColorAtElevation(
+                        topBarTonalElevation,
+                        color = containerColor
+                    )
+                ),
+            layoutType = layoutType,
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+                containerTonalElevation,
+                color = containerColor
+            ) onDark MaterialTheme.colorScheme.surface,
+            navigationSuiteItems = navigationSuiteItems,
+            content = {
+                Column {
+                    if (topBar != null) {
+                        topBar()
+                    } else if (navigationIcon != null || actions != null) {
+                        TopAppBar(
+                            title = {},
+                            navigationIcon = { navigationIcon?.invoke() },
+                            actions = { actions?.invoke(this) },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+                                    topBarTonalElevation
+                                ),
+                            )
+                        )
+                    }
+                    content()
+                    if (floatingActionButton != null) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.BottomEnd
+                        ) {
+                            floatingActionButton()
+                        }
+                    }
+                }
+            }
+        )
+    } else {
+        Scaffold(
+            modifier = modifier
+                .background(
+                    MaterialTheme.colorScheme.surfaceColorAtElevation(
+                        topBarTonalElevation,
+                        color = containerColor
+                    )
+                ),
+            topBar = {
                 if (topBar != null) {
                     topBar()
                 } else if (navigationIcon != null || actions != null) {
@@ -64,17 +101,23 @@ fun RYScaffold(
                         )
                     )
                 }
-                content()
+            },
+            floatingActionButton = {
                 if (floatingActionButton != null) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.BottomEnd
-                    ) {
-                        floatingActionButton()
-                    }
+                    floatingActionButton()
                 }
-            }
-        }
-    )
+            },
+            content = {
+                Column {
+                    Spacer(modifier = Modifier.height(it.calculateTopPadding()))
+                    content()
+                }
+            },
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+                containerTonalElevation,
+                color = containerColor
+            ) onDark MaterialTheme.colorScheme.surface
+        )
+    }
 }
 
