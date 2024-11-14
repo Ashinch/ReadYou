@@ -224,14 +224,14 @@ fun ReadingStylePage(
                         onClick = { pullToSwitchArticle.toggle(context, scope) }) {
                         RYSwitch(activated = pullToSwitchArticle.value)
                     }
-                    SettingItem(
+/*                    SettingItem(
                         title = stringResource(R.string.tonal_elevation),
                         desc = "${tonalElevation.value}dp",
                         onClick = {
                             tonalElevationDialogVisible = true
                         },
                     ) {}
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(24.dp))*/
                 }
 
                 // Advanced
