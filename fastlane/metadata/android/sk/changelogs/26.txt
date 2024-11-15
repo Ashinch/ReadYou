@@ -1,0 +1,8 @@
+## 0.11.0
+
+Významné zmeny:
+1. Uvedenie novej čítačky článkov založenej na WebView s podporou Bionic Reading
+2. Automatické označovanie položiek ako prečítaných pri posúvaní
+3. Kliknutím na hornú lištu aplikácie sa vrátite na začiatok stránky
+4. Pridané rozdeľovače na panely nástrojov na stránke na čítanie
+5. Pridané tlačidlo na zbalenie/rozbalenie skupín kanálov
