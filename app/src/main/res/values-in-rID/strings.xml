@@ -315,4 +315,5 @@
     <string name="only_available_on_webview">Hanya tersedia di WebView</string>
     <string name="use_bionic_reading">Gunakan Bionic Reading</string>
     <string name="bionic_reading_tips">Apa itu Bionic Reading?</string>
+    <string name="mark_as_read_on_scroll">Baca sebagai dibaca saat digulir</string>
 </resources>

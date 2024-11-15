@@ -312,4 +312,6 @@
     <string name="bionic_reading_tips">什么是 Bionic Reading？</string>
     <string name="browse_bionic_reading_tips">在 <i><u>bionic-reading.com</u></i>.了解更多信息。</string>
     <string name="mark_as_read_on_scroll">滚动时标记为已读</string>
+    <string name="become_a_sponsor">成为赞助者</string>
+    <string name="sponsor_desc">我们在休息时间构建并维护这个自由开源应用。如果你觉得应用还不错，请考虑用小额捐赠支持哦我们！☕️</string>
 </resources>

@@ -318,4 +318,6 @@
     <string name="native_component">Componente nativo</string>
     <string name="only_available_on_webview">Disponibile esclusivamente in WebView</string>
     <string name="mark_as_read_on_scroll">Contrassegna come letto allo scroll</string>
+    <string name="become_a_sponsor">Diventa uno sponsor</string>
+    <string name="sponsor_desc">Sviluppiamo e miglioriamo questa applicazione, gratuita ed open source, nel nostro tempo libero. Se ti piace, considera la possibilità di sostenerci con una piccola donazione! ☕</string>
 </resources>

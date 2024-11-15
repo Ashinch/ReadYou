@@ -317,4 +317,5 @@
     <string name="about">Informácie</string>
     <string name="content_renderer">Zobrazovač obsahu</string>
     <string name="only_available_on_webview">Dostupné len vo WebView</string>
+    <string name="mark_as_read_on_scroll">Označiť ako prečítané pri posúvaní</string>
 </resources>

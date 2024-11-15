@@ -312,4 +312,7 @@
     <string name="only_available_on_webview">Предлага се само в WebView</string>
     <string name="native_component">Собствен компонент</string>
     <string name="use_bionic_reading">Използвай на бионично четене</string>
+    <string name="mark_as_read_on_scroll">Маркирай като прочетено при превъртане</string>
+    <string name="become_a_sponsor">Станете спонсор</string>
+    <string name="sponsor_desc">Ние създаваме и поддържаме това безплатно приложение с отворен код в извънработно време. Ако ви харесва, моля, помислете дали да ни подкрепите с малко дарение! ☕️</string>
 </resources>

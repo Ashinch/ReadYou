@@ -317,4 +317,7 @@
     <string name="about">Informace</string>
     <string name="browse_bionic_reading_tips">Více informací najdete na <i><u>bionic-reading.com</u></i>.</string>
     <string name="bionic_reading_tips">Co je bionické čtení?</string>
+    <string name="mark_as_read_on_scroll">Označit jako přečtené při posouvání</string>
+    <string name="become_a_sponsor">Staňte se sponzorem</string>
+    <string name="sponsor_desc">Tuto bezplatnou aplikaci s otevřeným zdrojovým kódem vytváříme a udržujeme v našem volném čase. Pokud se vám líbí, zvažte prosím, zda nás podpoříte malým darem! ☕️</string>
 </resources>

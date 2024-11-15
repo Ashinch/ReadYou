@@ -317,4 +317,5 @@
     <string name="about">Sobre</string>
     <string name="bionic_reading_tips">O que é Bionic Reading?</string>
     <string name="browse_bionic_reading_tips">Saiba mais em <i><u>bionic-reading.com</u></i>.</string>
+    <string name="mark_as_read_on_scroll">Marcar como lido na rolagem</string>
 </resources>
