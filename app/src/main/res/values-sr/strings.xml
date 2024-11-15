@@ -317,4 +317,7 @@
     <string name="use_bionic_reading">Користите бионичко читање</string>
     <string name="about">О нама</string>
     <string name="browse_bionic_reading_tips">Сазнајте више на <i><u>bionic-reading.com</u></i>.</string>
+    <string name="mark_as_read_on_scroll">Означи као прочитано при превлачењу</string>
+    <string name="become_a_sponsor">Постани спонзор</string>
+    <string name="sponsor_desc">Ми правимо и одржавамо ову бесплатну апликацију отвореног кода ван радног времена. Ако уживате, размислите о томе да нас подржите малом донацијом! ☕</string>
 </resources>

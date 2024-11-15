@@ -320,4 +320,5 @@
     <string name="only_available_on_webview">Доступно тільки у WebView</string>
     <string name="about">Про застосунок</string>
     <string name="bionic_reading_tips">Що таке біонічне зчитування?</string>
+    <string name="mark_as_read_on_scroll">Позначити як прочитане при прокручуванні</string>
 </resources>
