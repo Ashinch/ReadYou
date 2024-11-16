@@ -16,6 +16,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.infrastructure.preference.LocalReadingBionicReading
+import me.ash.reader.infrastructure.preference.LocalReadingFonts
 import me.ash.reader.infrastructure.preference.LocalReadingImageHorizontalPadding
 import me.ash.reader.infrastructure.preference.LocalReadingImageRoundedCorners
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
@@ -55,6 +56,7 @@ fun RYWebView(
     val linkTextColor: Int = MaterialTheme.colorScheme.primary.toArgb()
     val subheadBold: Boolean = LocalReadingSubheadBold.current.value
     val subheadUpperCase: Boolean = LocalReadingSubheadUpperCase.current.value
+    val readingFonts = LocalReadingFonts.current
     val fontSize: Int = LocalReadingTextFontSize.current
     val letterSpacing: Float = LocalReadingTextLetterSpacing.current
     val lineHeight: Float = LocalReadingTextLineHeight.current
@@ -69,6 +71,7 @@ fun RYWebView(
         mutableStateOf(
             WebViewLayout.get(
                 context = context,
+                readingFontsPreference = readingFonts,
                 webViewClient = WebViewClient(
                     context = context,
                     refererDomain = refererDomain,

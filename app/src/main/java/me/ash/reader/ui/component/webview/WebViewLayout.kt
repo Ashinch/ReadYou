@@ -5,12 +5,15 @@ import android.content.Context
 import android.graphics.Color
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
+import me.ash.reader.infrastructure.preference.BasicFontsPreference
+import me.ash.reader.infrastructure.preference.ReadingFontsPreference
 
 object WebViewLayout {
 
     @SuppressLint("SetJavaScriptEnabled")
     fun get(
         context: Context,
+        readingFontsPreference: ReadingFontsPreference,
         webViewClient: WebViewClient,
         onImageClick: ((imgUrl: String, altText: String) -> Unit)? = null,
     ) = WebView(context).apply {
@@ -20,6 +23,13 @@ object WebViewLayout {
         isVerticalScrollBarEnabled = true
         setBackgroundColor(Color.TRANSPARENT)
         with(this.settings) {
+            standardFontFamily = when (readingFontsPreference) {
+                ReadingFontsPreference.Cursive -> "cursive"
+                ReadingFontsPreference.Monospace -> "monospace"
+                ReadingFontsPreference.SansSerif -> "sans-serif"
+                ReadingFontsPreference.Serif -> "serif"
+                else -> "sans-serif"
+            }
             domStorageEnabled = true
             javaScriptEnabled = true
             addJavascriptInterface(object : JavaScriptInterface {
