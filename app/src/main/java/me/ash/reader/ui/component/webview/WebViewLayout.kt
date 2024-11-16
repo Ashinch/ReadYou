@@ -23,11 +23,18 @@ object WebViewLayout {
         isVerticalScrollBarEnabled = true
         setBackgroundColor(Color.TRANSPARENT)
         with(this.settings) {
+
             standardFontFamily = when (readingFontsPreference) {
                 ReadingFontsPreference.Cursive -> "cursive"
                 ReadingFontsPreference.Monospace -> "monospace"
                 ReadingFontsPreference.SansSerif -> "sans-serif"
                 ReadingFontsPreference.Serif -> "serif"
+                ReadingFontsPreference.External -> {
+                    allowFileAccess = true
+                    allowFileAccessFromFileURLs = true
+                    "sans-serif"
+                }
+
                 else -> "sans-serif"
             }
             domStorageEnabled = true

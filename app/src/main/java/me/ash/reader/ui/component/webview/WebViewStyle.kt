@@ -4,8 +4,24 @@ object WebViewStyle {
 
     private fun argbToCssColor(argb: Int): String = String.format("#%06X", 0xFFFFFF and argb)
 
+    private fun applyFontFace(
+        fontPath: String? = null
+    ): String = if (fontPath != null) """
+        @font-face {
+            font-family: external;
+            src: url("file://$fontPath")
+        }
+    """.trimIndent() else ""
+
+    private fun applyFontFamily(
+        fontPath: String? = null
+    ): String = if (fontPath != null) """
+        --font-family: external;
+    """.trimIndent() else ""
+
     fun get(
         fontSize: Int,
+        fontPath: String? = null,
         lineHeight: Float,
         letterSpacing: Float,
         textMargin: Int,
@@ -24,21 +40,22 @@ object WebViewStyle {
         selectionTextColor: Int,
         selectionBgColor: Int,
     ): String = """
+${applyFontFace(fontPath)}
 :root {
-    /* --font-family: Inter; */
+    ${applyFontFamily(fontPath)}
     --font-size: ${fontSize}px;
     --line-height: ${lineHeight * 1.5f};
     --letter-spacing: ${letterSpacing}px;
     --text-margin: ${textMargin}px;
     --text-color: ${argbToCssColor(textColor)};
-    --text-bold: ${if(textBold) "600" else "normal"};
+    --text-bold: ${if (textBold) "600" else "normal"};
     --text-align: ${textAlign};
     --bold-text-color: ${argbToCssColor(boldTextColor)};
     --link-text-color: ${argbToCssColor(linkTextColor)};
     --selection-text-color: ${argbToCssColor(selectionTextColor)};
     --selection-bg-color: ${argbToCssColor(selectionBgColor)};
-    --subhead-bold: ${if(subheadBold) "600" else "normal"};
-    --subhead-upper-case: ${if(subheadUpperCase) "uppercase" else "none"};
+    --subhead-bold: ${if (subheadBold) "600" else "normal"};
+    --subhead-upper-case: ${if (subheadUpperCase) "uppercase" else "none"};
     --img-margin: ${imgMargin}px;
     --img-border-radius: ${imgBorderRadius}px;
     --content-padding;

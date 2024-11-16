@@ -28,6 +28,8 @@ import me.ash.reader.infrastructure.preference.LocalReadingTextFontSize
 import me.ash.reader.infrastructure.preference.LocalReadingTextHorizontalPadding
 import me.ash.reader.infrastructure.preference.LocalReadingTextLetterSpacing
 import me.ash.reader.infrastructure.preference.LocalReadingTextLineHeight
+import me.ash.reader.infrastructure.preference.ReadingFontsPreference
+import me.ash.reader.ui.ext.ExternalFonts
 import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.theme.palette.alwaysLight
@@ -84,6 +86,11 @@ fun RYWebView(
         )
     }
 
+    val fontPath =
+        if (readingFonts is ReadingFontsPreference.External) ExternalFonts.FontType.ReadingFont.toPath(
+            context
+        ) else null
+
     AndroidView(
         modifier = modifier,
         factory = { webView },
@@ -98,6 +105,7 @@ fun RYWebView(
                     WebViewHtml.HTML.format(
                         WebViewStyle.get(
                             fontSize = fontSize,
+                            fontPath = fontPath,
                             lineHeight = lineHeight,
                             letterSpacing = letterSpacing,
                             textMargin = textMargin,
