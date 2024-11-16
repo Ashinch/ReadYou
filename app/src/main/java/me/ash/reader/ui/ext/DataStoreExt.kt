@@ -136,7 +136,6 @@ data class DataStoreKey<T>(
         // Reading page
         const val readingRenderer = "readingRender"
         const val readingBionicReading = "readingBionicReading"
-        const val readingDarkTheme = "readingDarkTheme"
         const val readingPageTonalElevation = "readingPageTonalElevation"
         const val readingTextFontSize = "readingTextFontSize"
         const val readingTextLineHeight = "readingTextLineHeight"
@@ -212,7 +211,6 @@ data class DataStoreKey<T>(
             // Reading page
             readingRenderer to DataStoreKey(intPreferencesKey(readingRenderer), Int::class.java),
             readingBionicReading to DataStoreKey(booleanPreferencesKey(readingBionicReading), Boolean::class.java),
-            readingDarkTheme to DataStoreKey(intPreferencesKey(readingDarkTheme), Int::class.java),
             readingPageTonalElevation to DataStoreKey(intPreferencesKey(readingPageTonalElevation), Int::class.java),
             readingTextFontSize to DataStoreKey(intPreferencesKey(readingTextFontSize), Int::class.java),
             readingTextLineHeight to DataStoreKey(floatPreferencesKey(readingTextLineHeight), Float::class.java),
