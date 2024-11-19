@@ -80,8 +80,8 @@ fun TopBar(
             ) {}
             AnimatedVisibility(
                 visible = isShow,
-                enter = expandVertically(expandFrom = Alignment.Top),
-                exit = shrinkVertically(shrinkTowards = Alignment.Top)
+                enter = expandVertically(expandFrom = Alignment.Bottom),
+                exit = shrinkVertically(shrinkTowards = Alignment.Bottom)
             ) {
                 TopAppBar(
                     title = {},
