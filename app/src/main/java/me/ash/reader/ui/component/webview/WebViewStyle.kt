@@ -312,7 +312,7 @@ figure {
     text-align: var(--text-align) !important;
     margin: 0 !important;
     opacity: 0.8 !important;
-    font-size: 0.8em !important;
+    font-size: 12px !important;
 }
 
 figure * {
@@ -323,7 +323,7 @@ figure p,
 caption,
 figcaption {
     opacity: 0.8 !important;
-    font-size: 0.8em !important;
+    font-size: 12px !important;
 }
 
 hr {
