@@ -1,6 +1,9 @@
 package me.ash.reader.ui.page.home.reading
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
@@ -15,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Share
@@ -27,20 +29,22 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.infrastructure.preference.LocalSharedContent
+import me.ash.reader.infrastructure.preference.ReadingPageTonalElevationPreference
 import me.ash.reader.ui.component.base.FeedbackIconButton
-import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.common.RouteName
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +52,7 @@ import me.ash.reader.ui.page.common.RouteName
 fun TopBar(
     navController: NavHostController,
     isShow: Boolean,
-    showDivider: Boolean = false,
+    isScrolled: Boolean = false,
     title: String? = "",
     link: String? = "",
     onClick: (() -> Unit)? = null,
@@ -56,6 +60,13 @@ fun TopBar(
 ) {
     val context = LocalContext.current
     val sharedContent = LocalSharedContent.current
+    val isOutlined =
+        LocalReadingPageTonalElevation.current == ReadingPageTonalElevationPreference.Outlined
+
+    val containerColor by animateColorAsState(with(MaterialTheme.colorScheme) {
+        if (isOutlined || !isScrolled) surface else surfaceContainer
+    }, label = "", animationSpec = spring(stiffness = Spring.StiffnessMediumLow))
+
 
     Box(
         modifier = Modifier
@@ -63,21 +74,18 @@ fun TopBar(
             .zIndex(1f),
         contentAlignment = Alignment.TopCenter
     ) {
-        Column(modifier = if (onClick == null) Modifier else Modifier.clickable(
-            onClick = onClick,
-            indication = null,
-            interactionSource = remember { MutableInteractionSource() }
-        )
+        Column(
+            modifier = Modifier.drawBehind { drawRect(containerColor) }
         ) {
-            Surface(
+            Spacer(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(
                         WindowInsets.statusBars
                             .asPaddingValues()
                             .calculateTopPadding()
-                    )
-            ) {}
+                    ),
+            )
             AnimatedVisibility(
                 visible = isShow,
                 enter = expandVertically(expandFrom = Alignment.Bottom),
@@ -85,7 +93,11 @@ fun TopBar(
             ) {
                 TopAppBar(
                     title = {},
-                    modifier = Modifier,
+                    modifier = if (onClick == null) Modifier else Modifier.clickable(
+                        onClick = onClick,
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ),
                     windowInsets = WindowInsets(0.dp),
                     navigationIcon = {
                         FeedbackIconButton(
@@ -95,7 +107,8 @@ fun TopBar(
                         ) {
                             onClose()
                         }
-                    }, actions = {
+                    },
+                    actions = {
                         FeedbackIconButton(
                             modifier = Modifier.size(22.dp),
                             imageVector = Icons.Outlined.Palette,
@@ -114,10 +127,11 @@ fun TopBar(
                         ) {
                             sharedContent.share(context, title, link)
                         }
-                    }, colors = TopAppBarDefaults.topAppBarColors()
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
                 )
             }
-            if (showDivider) {
+            if (isOutlined && isScrolled) {
                 HorizontalDivider(
                     color = MaterialTheme.colorScheme.surfaceContainerHighest,
                     thickness = 0.5f.dp
