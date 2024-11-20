@@ -16,6 +16,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.infrastructure.preference.LocalReadingBionicReading
+import me.ash.reader.infrastructure.preference.LocalReadingFonts
 import me.ash.reader.infrastructure.preference.LocalReadingImageHorizontalPadding
 import me.ash.reader.infrastructure.preference.LocalReadingImageRoundedCorners
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
@@ -27,6 +28,8 @@ import me.ash.reader.infrastructure.preference.LocalReadingTextFontSize
 import me.ash.reader.infrastructure.preference.LocalReadingTextHorizontalPadding
 import me.ash.reader.infrastructure.preference.LocalReadingTextLetterSpacing
 import me.ash.reader.infrastructure.preference.LocalReadingTextLineHeight
+import me.ash.reader.infrastructure.preference.ReadingFontsPreference
+import me.ash.reader.ui.ext.ExternalFonts
 import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.theme.palette.alwaysLight
@@ -55,6 +58,7 @@ fun RYWebView(
     val linkTextColor: Int = MaterialTheme.colorScheme.primary.toArgb()
     val subheadBold: Boolean = LocalReadingSubheadBold.current.value
     val subheadUpperCase: Boolean = LocalReadingSubheadUpperCase.current.value
+    val readingFonts = LocalReadingFonts.current
     val fontSize: Int = LocalReadingTextFontSize.current
     val letterSpacing: Float = LocalReadingTextLetterSpacing.current
     val lineHeight: Float = LocalReadingTextLineHeight.current
@@ -69,6 +73,7 @@ fun RYWebView(
         mutableStateOf(
             WebViewLayout.get(
                 context = context,
+                readingFontsPreference = readingFonts,
                 webViewClient = WebViewClient(
                     context = context,
                     refererDomain = refererDomain,
@@ -80,6 +85,11 @@ fun RYWebView(
             )
         )
     }
+
+    val fontPath =
+        if (readingFonts is ReadingFontsPreference.External) ExternalFonts.FontType.ReadingFont.toPath(
+            context
+        ) else null
 
     AndroidView(
         modifier = modifier,
@@ -95,6 +105,7 @@ fun RYWebView(
                     WebViewHtml.HTML.format(
                         WebViewStyle.get(
                             fontSize = fontSize,
+                            fontPath = fontPath,
                             lineHeight = lineHeight,
                             letterSpacing = letterSpacing,
                             textMargin = textMargin,
