@@ -92,6 +92,7 @@ fun FlowPage(
     val articleListTonalElevation = LocalFlowArticleListTonalElevation.current
     val articleListFeedIcon = LocalFlowArticleListFeedIcon.current
     val articleListDateStickyHeader = LocalFlowArticleListDateStickyHeader.current
+    val topBarTonalElevation = LocalFlowTopBarTonalElevation.current
     val filterBarStyle = LocalFlowFilterBarStyle.current
     val filterBarFilled = LocalFlowFilterBarFilled.current
     val filterBarPadding = LocalFlowFilterBarPadding.current
@@ -107,9 +108,10 @@ fun FlowPage(
     val listState =
         if (pagingItems.itemCount > 0) flowUiState.listState else rememberLazyListState()
 
+    val isTopBarElevated = topBarTonalElevation.value > 0
     val isScrolled by remember(listState) { derivedStateOf { listState.firstVisibleItemIndex != 0 } }
     val topBarContainerColor by animateColorAsState(with(MaterialTheme.colorScheme) {
-        if (isScrolled) surfaceContainer else surface
+        if (isScrolled && isTopBarElevated) surfaceContainer else surface
     }, label = "")
 
     val titleText = when {
