@@ -20,7 +20,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.infrastructure.preference.LocalDarkTheme
-import me.ash.reader.infrastructure.preference.LocalReadingDarkTheme
 import me.ash.reader.ui.ext.animatedComposable
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.findActivity
@@ -41,7 +40,6 @@ import me.ash.reader.ui.page.settings.color.DarkThemePage
 import me.ash.reader.ui.page.settings.color.feeds.FeedsPageStylePage
 import me.ash.reader.ui.page.settings.color.flow.FlowPageStylePage
 import me.ash.reader.ui.page.settings.color.reading.BionicReadingPage
-import me.ash.reader.ui.page.settings.color.reading.ReadingDarkThemePage
 import me.ash.reader.ui.page.settings.color.reading.ReadingImagePage
 import me.ash.reader.ui.page.settings.color.reading.ReadingStylePage
 import me.ash.reader.ui.page.settings.color.reading.ReadingTextPage
@@ -132,15 +130,8 @@ fun HomeEntry(
         }
     }
 
-    val useDarkTheme = if (isReadingPage) {
-        LocalReadingDarkTheme.current.isDarkTheme()
-    } else {
-        LocalDarkTheme.current.isDarkTheme()
-    }
-
     AppTheme(
-        useDarkTheme = if (isReadingPage) LocalReadingDarkTheme.current.isDarkTheme()
-        else LocalDarkTheme.current.isDarkTheme()
+        useDarkTheme = LocalDarkTheme.current.isDarkTheme()
     ) {
 
         NavHost(
@@ -209,9 +200,6 @@ fun HomeEntry(
             }
             animatedComposable(route = RouteName.READING_BIONIC_READING) {
                 BionicReadingPage(navController)
-            }
-            animatedComposable(route = RouteName.READING_DARK_THEME) {
-                ReadingDarkThemePage(navController)
             }
             animatedComposable(route = RouteName.READING_PAGE_TITLE) {
                 ReadingTitlePage(navController)

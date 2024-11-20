@@ -43,13 +43,11 @@ import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
 import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
 import me.ash.reader.infrastructure.preference.LocalReadingBionicReading
-import me.ash.reader.infrastructure.preference.LocalReadingDarkTheme
 import me.ash.reader.infrastructure.preference.LocalReadingFonts
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.infrastructure.preference.LocalReadingRenderer
 import me.ash.reader.infrastructure.preference.LocalReadingTheme
 import me.ash.reader.infrastructure.preference.ReadingFontsPreference
-import me.ash.reader.infrastructure.preference.ReadingPageTonalElevationPreference
 import me.ash.reader.infrastructure.preference.ReadingRendererPreference
 import me.ash.reader.infrastructure.preference.ReadingThemePreference
 import me.ash.reader.infrastructure.preference.not
@@ -76,8 +74,6 @@ fun ReadingStylePage(
     val scope = rememberCoroutineScope()
 
     val readingTheme = LocalReadingTheme.current
-    val darkTheme = LocalReadingDarkTheme.current
-    val darkThemeNot = !darkTheme
     val tonalElevation = LocalReadingPageTonalElevation.current
     val fonts = LocalReadingFonts.current
     val autoHideToolbar = LocalReadingAutoHideToolbar.current
@@ -187,22 +183,6 @@ fun ReadingStylePage(
                         desc = fonts.toDesc(context),
                         onClick = { fontsDialogVisible = true },
                     ) {}
-                    SettingItem(
-                        title = stringResource(R.string.dark_reading_theme),
-                        desc = darkTheme.toDesc(context),
-                        separatedActions = true,
-                        onClick = {
-                            navController.navigate(RouteName.READING_DARK_THEME) {
-                                launchSingleTop = true
-                            }
-                        },
-                    ) {
-                        RYSwitch(
-                            activated = darkTheme.isDarkTheme()
-                        ) {
-                            darkThemeNot.put(context, scope)
-                        }
-                    }
                     SettingItem(
                         title = stringResource(R.string.auto_hide_toolbars),
                         onClick = {
