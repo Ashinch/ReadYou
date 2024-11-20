@@ -52,7 +52,7 @@ fun dynamicLightColorScheme(): ColorScheme {
 @Composable
 fun dynamicDarkColorScheme(): ColorScheme {
     val palettes = LocalTonalPalettes.current
-    val amoledDarkTheme = LocalAmoledDarkTheme.current
+    val useAmoledDarkTheme = LocalAmoledDarkTheme.current.value
 
     return darkColorScheme(
         primary = palettes primary 80,
@@ -70,7 +70,7 @@ fun dynamicDarkColorScheme(): ColorScheme {
         onTertiaryContainer = palettes tertiary 90,
         background = palettes neutral 10,
         onBackground = palettes neutral 90,
-        surface = palettes neutral if (amoledDarkTheme.value) 0 else 10,
+        surface = palettes neutral 6,
         onSurface = palettes neutral 90,
         surfaceVariant = palettes neutralVariant 30,
         onSurfaceVariant = palettes neutralVariant 80,
@@ -86,7 +86,16 @@ fun dynamicDarkColorScheme(): ColorScheme {
         surfaceContainer = palettes neutral 12,
         surfaceContainerHigh = palettes neutral 17,
         surfaceContainerHighest = palettes neutral 22,
-    )
+    ).run {
+        if (useAmoledDarkTheme) copy(
+            surface = Color.Black,
+            surfaceContainerHighest = surfaceContainerLowest,
+            surfaceContainerHigh = palettes neutral 3,
+            surfaceContainer = palettes neutral 2,
+            surfaceContainerLow = palettes neutral 1,
+            surfaceContainerLowest = Color.Black,
+        ) else this
+    }
 }
 
 @Composable
@@ -111,7 +120,6 @@ infix fun Color.alwaysLight(isAlways: Boolean): Color {
             colorScheme.error -> colorScheme.onError
             colorScheme.surface -> colorScheme.onSurface
             colorScheme.surfaceVariant -> colorScheme.onSurfaceVariant
-            colorScheme.error -> colorScheme.onError
             colorScheme.primaryContainer -> colorScheme.onPrimaryContainer
             colorScheme.secondaryContainer -> colorScheme.onSecondaryContainer
             colorScheme.tertiaryContainer -> colorScheme.onTertiaryContainer
@@ -125,7 +133,6 @@ infix fun Color.alwaysLight(isAlways: Boolean): Color {
             colorScheme.onError -> colorScheme.error
             colorScheme.onSurface -> colorScheme.surface
             colorScheme.onSurfaceVariant -> colorScheme.surfaceVariant
-            colorScheme.onError -> colorScheme.error
             colorScheme.onPrimaryContainer -> colorScheme.primaryContainer
             colorScheme.onSecondaryContainer -> colorScheme.secondaryContainer
             colorScheme.onTertiaryContainer -> colorScheme.tertiaryContainer
@@ -153,7 +160,6 @@ infix fun Color.alwaysDark(isAlways: Boolean): Color {
             colorScheme.error -> colorScheme.onError
             colorScheme.surface -> colorScheme.onSurface
             colorScheme.surfaceVariant -> colorScheme.onSurfaceVariant
-            colorScheme.error -> colorScheme.onError
             colorScheme.primaryContainer -> colorScheme.onPrimaryContainer
             colorScheme.secondaryContainer -> colorScheme.onSecondaryContainer
             colorScheme.tertiaryContainer -> colorScheme.onTertiaryContainer
@@ -167,7 +173,6 @@ infix fun Color.alwaysDark(isAlways: Boolean): Color {
             colorScheme.onError -> colorScheme.error
             colorScheme.onSurface -> colorScheme.surface
             colorScheme.onSurfaceVariant -> colorScheme.surfaceVariant
-            colorScheme.onError -> colorScheme.error
             colorScheme.onPrimaryContainer -> colorScheme.primaryContainer
             colorScheme.onSecondaryContainer -> colorScheme.secondaryContainer
             colorScheme.onTertiaryContainer -> colorScheme.tertiaryContainer
