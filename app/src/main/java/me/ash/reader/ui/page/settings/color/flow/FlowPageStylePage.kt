@@ -46,7 +46,7 @@ fun FlowPageStylePage(
     var filterBarStyleDialogVisible by remember { mutableStateOf(false) }
     var filterBarPaddingDialogVisible by remember { mutableStateOf(false) }
     var filterBarTonalElevationDialogVisible by remember { mutableStateOf(false) }
-    var topBarTonalElevationDialogVisible by remember { mutableStateOf(false) }
+//    var topBarTonalElevationDialogVisible by remember { mutableStateOf(false) }
     var articleListTonalElevationDialogVisible by remember { mutableStateOf(false) }
     var articleListReadIndicatorDialogVisible by remember { mutableStateOf(false) }
 
@@ -108,13 +108,13 @@ fun FlowPageStylePage(
                         enabled = false,
                         onClick = {},
                     ) {}
-                    SettingItem(
+/*                    SettingItem(
                         title = stringResource(R.string.tonal_elevation),
                         desc = "${topBarTonalElevation.value}dp",
                         onClick = {
                             topBarTonalElevationDialogVisible = true
                         },
-                    ) {}
+                    ) {}*/
 //                    Tips(text = stringResource(R.string.tips_top_bar_tonal_elevation))
                     Spacer(modifier = Modifier.height(24.dp))
                 }
@@ -297,7 +297,7 @@ fun FlowPageStylePage(
         filterBarTonalElevationDialogVisible = false
     }
 
-    RadioDialog(
+/*    RadioDialog(
         visible = topBarTonalElevationDialogVisible,
         title = stringResource(R.string.tonal_elevation),
         options = FlowTopBarTonalElevationPreference.values.map {
@@ -310,7 +310,7 @@ fun FlowPageStylePage(
         }
     ) {
         topBarTonalElevationDialogVisible = false
-    }
+    }*/
 
     RadioDialog(
         visible = articleListTonalElevationDialogVisible,
