@@ -52,7 +52,7 @@ fun FeedItem(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .clip(if (isEnded()) ShapeBottom32 else RectangleShape)
-                .background(MaterialTheme.colorScheme.secondary.copy(alpha = alpha))
+                .background(MaterialTheme.colorScheme.surfaceContainerLow)
                 .combinedClickable(
                     onClick = {
                         onClick()
@@ -88,9 +88,7 @@ fun FeedItem(
                 }
                 if ((feed.important ?: 0) != 0) {
                     Badge(
-                        containerColor = MaterialTheme.colorScheme.surfaceTint.copy(
-                            alpha = badgeAlpha
-                        ),
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                         contentColor = MaterialTheme.colorScheme.outline,
                         content = {
                             Text(
