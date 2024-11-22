@@ -1,6 +1,8 @@
 package me.ash.reader.ui.page.home.flow
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +21,7 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -26,6 +29,7 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,12 +38,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -67,6 +74,8 @@ import me.ash.reader.ui.component.base.RYExtensibleVisibility
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.surfaceColorAtElevation
+import me.ash.reader.ui.motion.materialSharedAxisYIn
+import me.ash.reader.ui.motion.materialSharedAxisYOut
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
 
@@ -80,10 +89,10 @@ fun FlowPage(
     homeViewModel: HomeViewModel,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    val topBarTonalElevation = LocalFlowTopBarTonalElevation.current
     val articleListTonalElevation = LocalFlowArticleListTonalElevation.current
     val articleListFeedIcon = LocalFlowArticleListFeedIcon.current
     val articleListDateStickyHeader = LocalFlowArticleListDateStickyHeader.current
+    val topBarTonalElevation = LocalFlowTopBarTonalElevation.current
     val filterBarStyle = LocalFlowFilterBarStyle.current
     val filterBarFilled = LocalFlowFilterBarFilled.current
     val filterBarPadding = LocalFlowFilterBarPadding.current
@@ -98,6 +107,18 @@ fun FlowPage(
     val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems()
     val listState =
         if (pagingItems.itemCount > 0) flowUiState.listState else rememberLazyListState()
+
+    val isTopBarElevated = topBarTonalElevation.value > 0
+    val isScrolled by remember(listState) { derivedStateOf { listState.firstVisibleItemIndex != 0 } }
+    val topBarContainerColor by animateColorAsState(with(MaterialTheme.colorScheme) {
+        if (isScrolled && isTopBarElevated) surfaceContainer else surface
+    }, label = "")
+
+    val titleText = when {
+        filterUiState.group != null -> filterUiState.group.name
+        filterUiState.feed != null -> filterUiState.feed.name
+        else -> filterUiState.filter.toName()
+    }
 
     if (markAsReadOnScroll) {
         LaunchedEffect(listState.isScrollInProgress) {
@@ -232,7 +253,6 @@ fun FlowPage(
     }
 
     RYScaffold(
-        topBarTonalElevation = topBarTonalElevation.value.dp,
         containerTonalElevation = articleListTonalElevation.value.dp,
         topBar = {
             TopAppBar(
@@ -247,7 +267,20 @@ fun FlowPage(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
                 ),
-                title = {},
+                title = {
+                    AnimatedVisibility(
+                        isScrolled,
+                        enter = materialSharedAxisYIn(initialOffsetY = { it / 4 }),
+                        exit = materialSharedAxisYOut(targetOffsetY = { it / 4 })
+                    ) {
+                        Text(
+                            text = titleText,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.titleMedium.copy(fontSize = 18.sp),
+                        )
+                    }
+                },
                 navigationIcon = {
                     FeedbackIconButton(
                         imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
@@ -301,9 +334,7 @@ fun FlowPage(
                         }
                     }
                 }, colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                        topBarTonalElevation.value.dp
-                    ),
+                    containerColor = topBarContainerColor
                 )
             )
         },
@@ -320,11 +351,7 @@ fun FlowPage(
                     item {
                         DisplayText(
                             modifier = Modifier.padding(start = if (articleListFeedIcon.value) 30.dp else 0.dp),
-                            text = when {
-                                filterUiState.group != null -> filterUiState.group.name
-                                filterUiState.feed != null -> filterUiState.feed.name
-                                else -> filterUiState.filter.toName()
-                            },
+                            text = titleText,
                             desc = "",
                         )
                         RYExtensibleVisibility(visible = markAsRead) {

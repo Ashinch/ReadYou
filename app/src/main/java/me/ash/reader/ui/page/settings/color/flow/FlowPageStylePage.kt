@@ -115,7 +115,7 @@ fun FlowPageStylePage(
                             topBarTonalElevationDialogVisible = true
                         },
                     ) {}
-//                    Tips(text = stringResource(R.string.tips_top_bar_tonal_elevation))
+                    Tips(text = stringResource(R.string.tips_top_bar_tonal_elevation))
                     Spacer(modifier = Modifier.height(24.dp))
                 }
 

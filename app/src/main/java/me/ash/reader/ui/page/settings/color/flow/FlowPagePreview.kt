@@ -12,13 +12,16 @@ import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import me.ash.reader.R
 import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.article.ArticleWithFeed
@@ -55,8 +58,19 @@ fun FlowPagePreview(
                 shape = RoundedCornerShape(24.dp)
             )
     ) {
+        val preview = generateArticleWithFeedPreview()
+        val feed = preview.feed
+        val article = preview.article
+
         TopAppBar(
-            title = {},
+            title = {
+                Text(
+                    text = feed.name,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleMedium.copy(fontSize = 18.sp),
+                )
+            },
             navigationIcon = {
                 FeedbackIconButton(
                     imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
@@ -82,10 +96,6 @@ fun FlowPagePreview(
             )
         )
         Spacer(modifier = Modifier.height(12.dp))
-
-        val preview = generateArticleWithFeedPreview()
-        val feed = preview.feed
-        val article = preview.article
 
         ArticleItem(
             modifier = Modifier,
