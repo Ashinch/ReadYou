@@ -62,9 +62,7 @@ fun FeedsPagePreview(
         modifier = Modifier
             .animateContentSize()
             .background(
-                color = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                    groupListTonalElevation.value.dp
-                ) onDark MaterialTheme.colorScheme.surface,
+                color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(24.dp)
             )
     ) {

@@ -210,7 +210,7 @@ fun FeedsPage(
 
     RYScaffold(
         topBarTonalElevation = topBarTonalElevation.value.dp,
-        containerTonalElevation = groupListTonalElevation.value.dp,
+//        containerTonalElevation = groupListTonalElevation.value.dp,
         topBar = {
             TopAppBar(
                 modifier = Modifier.clickable(
