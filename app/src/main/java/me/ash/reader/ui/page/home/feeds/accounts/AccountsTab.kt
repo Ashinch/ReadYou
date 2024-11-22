@@ -33,6 +33,8 @@ import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.ui.component.base.RYDialog
 import me.ash.reader.ui.ext.currentAccountId
+import me.ash.reader.ui.theme.palette.FixedColorRoles
+import me.ash.reader.ui.theme.palette.LocalFixedColorRoles
 import me.ash.reader.ui.theme.palette.alwaysLight
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -75,20 +77,21 @@ fun AccountsTab(
                             }
                             .padding(8.dp),
                     ) {
+                        val selected = account.id == context.currentAccountId
                         Box(
                             modifier = Modifier
                                 .size(52.dp)
                                 .clip(CircleShape)
                                 .background(
-                                    if (account.id == context.currentAccountId) {
-                                        MaterialTheme.colorScheme.primaryContainer alwaysLight true
+                                    if (selected) {
+                                        LocalFixedColorRoles.current.primaryFixed
                                     } else {
-                                        MaterialTheme.colorScheme.surfaceDim alwaysLight true
+                                        MaterialTheme.colorScheme.surfaceContainerHighest
                                     }
                                 ),
                             contentAlignment = Alignment.Center,
                         ) {
-                            AccountTypeIcon(account = account)
+                            AccountTypeIcon(account = account, selected = selected)
                         }
                         Text(
                             modifier = Modifier
@@ -125,15 +128,19 @@ fun AccountsTab(
 @Composable
 fun AccountTypeIcon(
     account: Account,
+    selected: Boolean
 ) {
     val icon = account.type.toIcon().takeIf { it is ImageVector }?.let { it as ImageVector }
     val iconPainter = account.type.toIcon().takeIf { it is Painter }?.let { it as Painter }
+    val contentColor =
+        if (selected) LocalFixedColorRoles.current.onPrimaryFixed else MaterialTheme.colorScheme.onSurfaceVariant
+
     if (icon != null) {
         Icon(
             modifier = Modifier.size(24.dp),
             imageVector = icon,
             contentDescription = account.name,
-            tint = MaterialTheme.colorScheme.onSurface alwaysLight true
+            tint = contentColor
         )
     } else {
         iconPainter?.let {
@@ -141,7 +148,7 @@ fun AccountTypeIcon(
                 modifier = Modifier.size(24.dp),
                 painter = it,
                 contentDescription = account.name,
-                tint = MaterialTheme.colorScheme.onSurface alwaysLight true
+                tint = contentColor
             )
         }
     }
