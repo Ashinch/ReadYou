@@ -48,6 +48,7 @@ import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.infrastructure.preference.LocalReadingRenderer
 import me.ash.reader.infrastructure.preference.LocalReadingTheme
 import me.ash.reader.infrastructure.preference.ReadingFontsPreference
+import me.ash.reader.infrastructure.preference.ReadingPageTonalElevationPreference
 import me.ash.reader.infrastructure.preference.ReadingRendererPreference
 import me.ash.reader.infrastructure.preference.ReadingThemePreference
 import me.ash.reader.infrastructure.preference.not
@@ -85,12 +86,17 @@ fun ReadingStylePage(
     var rendererDialogVisible by remember { mutableStateOf(false) }
     var fontsDialogVisible by remember { mutableStateOf(false) }
 
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        uri?.let {
-            ExternalFonts(context, it, ExternalFonts.FontType.ReadingFont).copyToInternalStorage()
-            ReadingFontsPreference.External.put(context, scope)
-        } ?: context.showToast("Cannot get activity result with launcher")
-    }
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            uri?.let {
+                ExternalFonts(
+                    context,
+                    it,
+                    ExternalFonts.FontType.ReadingFont
+                ).copyToInternalStorage()
+                ReadingFontsPreference.External.put(context, scope)
+            } ?: context.showToast("Cannot get activity result with launcher")
+        }
 
     RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
@@ -111,7 +117,8 @@ fun ReadingStylePage(
 
                 // Preview
                 item {
-                    Row(modifier = Modifier.horizontalScroll(rememberScrollState())
+                    Row(
+                        modifier = Modifier.horizontalScroll(rememberScrollState())
                     ) {
                         Spacer(modifier = Modifier.width(24.dp))
                         ReadingThemePreference.values.map {
