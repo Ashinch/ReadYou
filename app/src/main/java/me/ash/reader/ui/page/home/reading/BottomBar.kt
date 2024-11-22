@@ -2,10 +2,7 @@ package me.ash.reader.ui.page.home.reading
 
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -33,15 +30,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.infrastructure.preference.LocalReadingRenderer
+import me.ash.reader.infrastructure.preference.ReadingPageTonalElevationPreference
 import me.ash.reader.infrastructure.preference.ReadingRendererPreference
 import me.ash.reader.ui.component.base.CanBeDisabledIconButton
-import me.ash.reader.ui.component.base.RYExtensibleVisibility
 import me.ash.reader.ui.component.webview.BionicReadingIcon
 
 @Composable
@@ -60,6 +56,7 @@ fun BottomBar(
     onReadAloud: () -> Unit = {},
 ) {
     val tonalElevation = LocalReadingPageTonalElevation.current
+    val isOutlined = tonalElevation == ReadingPageTonalElevationPreference.Outlined
     val renderer = LocalReadingRenderer.current
 
     Box(
@@ -70,16 +67,20 @@ fun BottomBar(
     ) {
         AnimatedVisibility(
             visible = isShow,
-            enter = expandVertically(),
-            exit = shrinkVertically()
+            enter = expandVertically(expandFrom = Alignment.Top),
+            exit = shrinkVertically(shrinkTowards = Alignment.Top)
         ) {
             val view = LocalView.current
             Column {
-                HorizontalDivider(
-                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
-                    thickness = 0.5f.dp
-                )
-                Surface() {
+                if (isOutlined) {
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                        thickness = 0.5f.dp
+                    )
+                }
+                Surface(
+                    color = MaterialTheme.colorScheme.run { if (isOutlined) surface else surfaceContainer }
+                ) {
                     // TODO: Component styles await refactoring
                     Row(
                         modifier = Modifier

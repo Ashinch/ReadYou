@@ -204,14 +204,19 @@ fun ReadingStylePage(
                         onClick = { pullToSwitchArticle.toggle(context, scope) }) {
                         RYSwitch(activated = pullToSwitchArticle.value)
                     }
-/*                    SettingItem(
+                    Subtitle(
+                        modifier = Modifier.padding(horizontal = 24.dp),
+                        text = stringResource(R.string.toolbars)
+                    )
+                    SettingItem(
                         title = stringResource(R.string.tonal_elevation),
                         desc = "${tonalElevation.value}dp",
                         onClick = {
                             tonalElevationDialogVisible = true
                         },
                     ) {}
-                    Spacer(modifier = Modifier.height(24.dp))*/
+
+                    Spacer(modifier = Modifier.height(24.dp))
                 }
 
                 // Advanced
@@ -271,7 +276,7 @@ fun ReadingStylePage(
         }
     )
 
-/*    RadioDialog(
+    RadioDialog(
         visible = tonalElevationDialogVisible,
         title = stringResource(R.string.tonal_elevation),
         options = ReadingPageTonalElevationPreference.values.map {
@@ -284,7 +289,7 @@ fun ReadingStylePage(
         }
     ) {
         tonalElevationDialogVisible = false
-    }*/
+    }
 
     RadioDialog(
         visible = rendererDialogVisible,
