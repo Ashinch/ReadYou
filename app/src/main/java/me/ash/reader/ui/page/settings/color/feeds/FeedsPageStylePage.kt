@@ -123,7 +123,7 @@ fun FeedsPageStylePage(
                             (!groupListExpand).put(context, scope)
                         }
                     }
-                    SettingItem(
+/*                    SettingItem(
                         title = stringResource(R.string.tonal_elevation),
                         desc = "${groupListTonalElevation.value}dp",
                         onClick = {
@@ -131,7 +131,7 @@ fun FeedsPageStylePage(
                         },
                     ) {}
                     Tips(text = stringResource(R.string.tips_group_list_tonal_elevation))
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(24.dp))*/
                 }
 
                 // Filter Bar
@@ -242,7 +242,7 @@ fun FeedsPageStylePage(
         topBarTonalElevationDialogVisible = false
     }
 
-    RadioDialog(
+/*    RadioDialog(
         visible = groupListTonalElevationDialogVisible,
         title = stringResource(R.string.tonal_elevation),
         options = FeedsGroupListTonalElevationPreference.values.map {
@@ -255,5 +255,5 @@ fun FeedsPageStylePage(
         }
     ) {
         groupListTonalElevationDialogVisible = false
-    }
+    }*/
 }

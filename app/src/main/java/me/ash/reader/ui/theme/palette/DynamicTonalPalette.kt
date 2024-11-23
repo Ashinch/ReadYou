@@ -89,10 +89,10 @@ fun dynamicDarkColorScheme(): ColorScheme {
     ).run {
         if (useAmoledDarkTheme) copy(
             surface = Color.Black,
-            surfaceContainerHighest = surfaceContainerLowest,
-            surfaceContainerHigh = palettes neutral 3,
-            surfaceContainer = palettes neutral 2,
-            surfaceContainerLow = palettes neutral 1,
+            surfaceContainerHighest = palettes neutral 8,
+            surfaceContainerHigh = palettes neutral 6,
+            surfaceContainer = palettes neutral 4,
+            surfaceContainerLow = palettes neutral 4,
             surfaceContainerLowest = Color.Black,
         ) else this
     }

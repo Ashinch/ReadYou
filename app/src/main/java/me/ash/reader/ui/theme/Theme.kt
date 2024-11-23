@@ -11,6 +11,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import me.ash.reader.infrastructure.preference.LocalBasicFonts
 import me.ash.reader.infrastructure.preference.LocalThemeIndex
+import me.ash.reader.ui.theme.palette.FixedColorRoles
+import me.ash.reader.ui.theme.palette.LocalFixedColorRoles
 import me.ash.reader.ui.theme.palette.LocalTonalPalettes
 import me.ash.reader.ui.theme.palette.TonalPalettes
 import me.ash.reader.ui.theme.palette.core.ProvideZcamViewingConditions
@@ -59,15 +61,21 @@ fun AppTheme(
             LocalTonalPalettes provides tonalPalettes.apply { Preparing() },
             LocalTextStyle provides LocalTextStyle.current.applyTextDirection()
         ) {
-            MaterialTheme(
-                colorScheme =
-                if (useDarkTheme) dynamicDarkColorScheme()
-                else dynamicLightColorScheme(),
-                typography = LocalBasicFonts.current.asTypography(LocalContext.current)
-                    .applyTextDirection(),
-                shapes = Shapes,
-                content = content,
-            )
+            val lightColors = dynamicLightColorScheme()
+            val darkColors = dynamicDarkColorScheme()
+            CompositionLocalProvider(
+                LocalFixedColorRoles provides FixedColorRoles.fromColorSchemes(
+                    lightColors, darkColors
+                )
+            ) {
+                MaterialTheme(
+                    colorScheme = if (useDarkTheme) darkColors else lightColors,
+                    typography = LocalBasicFonts.current.asTypography(LocalContext.current)
+                        .applyTextDirection(),
+                    shapes = Shapes,
+                    content = content,
+                )
+            }
         }
     }
 }
