@@ -48,6 +48,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.eventFlow
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.work.WorkInfo
@@ -169,6 +172,13 @@ fun FlowPage(
     }
 
     DisposableEffect(owner) {
+        scope.launch {
+            owner.lifecycle.eventFlow.collect {
+                if (it == Lifecycle.Event.ON_PAUSE) {
+                    flowViewModel.commitDiff()
+                }
+            }
+        }
         homeViewModel.syncWorkLiveData.observe(owner) { workInfoList ->
             workInfoList.let {
                 isSyncing = it.any { workInfo -> workInfo.state == WorkInfo.State.RUNNING }
