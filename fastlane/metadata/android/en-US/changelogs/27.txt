@@ -1,0 +1,6 @@
+## 0.11.1
+
+Notable changes:
+1. Custom font support for WebView reader
+2. Add new visual styles to toolbars in flow page and reading page
+3. UI improvements & fixes
