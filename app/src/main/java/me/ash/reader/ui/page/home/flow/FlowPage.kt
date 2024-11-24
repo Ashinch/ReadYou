@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -151,7 +152,7 @@ fun FlowPage(
     val scope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
     var markAsRead by remember { mutableStateOf(false) }
-    var onSearch by remember { mutableStateOf(false) }
+    var onSearch by rememberSaveable { mutableStateOf(false) }
 
     val owner = LocalLifecycleOwner.current
 
@@ -237,15 +238,10 @@ fun FlowPage(
     }
 
     LaunchedEffect(onSearch) {
-        snapshotFlow { onSearch }.collect {
-            if (it) {
-                delay(100)  // ???
-                focusRequester.requestFocus()
-            } else {
-                keyboardController?.hide()
-                if (homeUiState.searchContent.isNotBlank()) {
-                    homeViewModel.inputSearchContent("")
-                }
+        if (!onSearch) {
+            keyboardController?.hide()
+            if (homeUiState.searchContent.isNotBlank()) {
+                homeViewModel.inputSearchContent("")
             }
         }
     }
@@ -341,6 +337,10 @@ fun FlowPage(
                                 flowUiState.listState.animateScrollToItem(0)
                             }
                             onSearch = !onSearch
+                            if (onSearch) {
+                                delay(100)
+                                focusRequester.requestFocus()
+                            }
                         }
                     }
                 }, colors = TopAppBarDefaults.topAppBarColors(
@@ -424,7 +424,6 @@ fun FlowPage(
                         articleListTonalElevation = articleListTonalElevation.value,
                         isSwipeEnabled = { listState.isScrollInProgress },
                         onClick = {
-                            onSearch = false
                             navController.navigate("${RouteName.READING}/${it.article.id}") {
                                 launchSingleTop = true
                             }
