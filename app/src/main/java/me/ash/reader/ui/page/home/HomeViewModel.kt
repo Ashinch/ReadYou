@@ -46,11 +46,11 @@ class HomeViewModel @Inject constructor(
     private val _filterUiState = MutableStateFlow(FilterState())
     val filterUiState = _filterUiState.asStateFlow()
 
-    val syncWorkLiveData = workManager.getWorkInfosByTagLiveData(SyncWorker.WORK_NAME)
+    val syncWorkLiveData = workManager.getWorkInfosByTagLiveData(SyncWorker.WORK_TAG)
 
     fun sync() {
         applicationScope.launch(ioDispatcher) {
-            rssService.get().doSync()
+            rssService.get().doSyncOneTime()
         }
     }
 

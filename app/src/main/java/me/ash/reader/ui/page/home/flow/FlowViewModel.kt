@@ -34,7 +34,7 @@ class FlowViewModel @Inject constructor(
 
     fun sync() {
         applicationScope.launch(ioDispatcher) {
-            rssService.get().doSync()
+            rssService.get().doSyncOneTime()
         }
     }
 

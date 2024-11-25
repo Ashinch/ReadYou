@@ -201,39 +201,29 @@ abstract class AbstractRssRepository(
     }
 
     fun cancelSync() {
-        workManager.cancelAllWork()
+        SyncWorker.cancelPeriodicWork(workManager)
+        SyncWorker.cancelOneTimeWork(workManager)
     }
 
     fun doSyncOneTime() {
-        workManager.cancelAllWork()
         SyncWorker.enqueueOneTimeWork(workManager)
     }
 
-    suspend fun doSync(isOnStart: Boolean = false) {
-        workManager.cancelAllWork()
+    suspend fun initSync() {
         accountDao.queryById(context.currentAccountId)?.let {
-            if (isOnStart) {
-                if (it.syncOnStart.value) {
-                    SyncWorker.enqueueOneTimeWork(workManager)
-                }
-                if (it.syncInterval.value != SyncIntervalPreference.Manually.value) {
-                    SyncWorker.enqueuePeriodicWork(
-                        workManager = workManager,
-                        syncInterval = it.syncInterval,
-                        syncOnlyWhenCharging = it.syncOnlyWhenCharging,
-                        syncOnlyOnWiFi = it.syncOnlyOnWiFi,
-                    )
-                }
+            val syncOnStart = it.syncOnStart.value
+            if (syncOnStart) {
+                doSyncOneTime()
+            }
+            if (it.syncInterval.value != SyncIntervalPreference.Manually.value) {
+                SyncWorker.enqueuePeriodicWork(
+                    workManager = workManager,
+                    syncInterval = it.syncInterval,
+                    syncOnlyWhenCharging = it.syncOnlyWhenCharging,
+                    syncOnlyOnWiFi = it.syncOnlyOnWiFi,
+                )
             } else {
-                SyncWorker.enqueueOneTimeWork(workManager)
-                if (it.syncInterval.value != SyncIntervalPreference.Manually.value) {
-                    SyncWorker.enqueuePeriodicWork(
-                        workManager = workManager,
-                        syncInterval = it.syncInterval,
-                        syncOnlyWhenCharging = it.syncOnlyWhenCharging,
-                        syncOnlyOnWiFi = it.syncOnlyOnWiFi,
-                    )
-                }
+                SyncWorker.cancelPeriodicWork(workManager)
             }
         }
     }

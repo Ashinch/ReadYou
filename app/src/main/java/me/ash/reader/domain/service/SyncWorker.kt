@@ -33,15 +33,25 @@ class SyncWorker @AssistedInject constructor(
     companion object {
 
         private const val IS_SYNCING = "isSyncing"
-        const val WORK_NAME = "ReadYou"
-        lateinit var uuid: UUID
+        private const val WORK_NAME_PERIODIC = "ReadYou"
+        private const val WORK_NAME_ONETIME = "SYNC_ONETIME"
+        const val WORK_TAG = "SYNC_TAG"
+
+        fun cancelOneTimeWork(workManager: WorkManager) {
+            workManager.cancelUniqueWork(WORK_NAME_ONETIME)
+        }
+
+        fun cancelPeriodicWork(workManager: WorkManager) {
+            workManager.cancelUniqueWork(WORK_NAME_PERIODIC)
+        }
 
         fun enqueueOneTimeWork(
             workManager: WorkManager,
         ) {
-            workManager.enqueue(OneTimeWorkRequestBuilder<SyncWorker>()
-                .addTag(WORK_NAME)
-                .build()
+            workManager.enqueueUniqueWork(
+                WORK_NAME_ONETIME,
+                ExistingWorkPolicy.KEEP,
+                OneTimeWorkRequestBuilder<SyncWorker>().addTag(WORK_TAG).build()
             )
         }
 
@@ -52,15 +62,16 @@ class SyncWorker @AssistedInject constructor(
             syncOnlyOnWiFi: SyncOnlyOnWiFiPreference,
         ) {
             workManager.enqueueUniquePeriodicWork(
-                WORK_NAME,
+                WORK_NAME_PERIODIC,
                 ExistingPeriodicWorkPolicy.UPDATE,
                 PeriodicWorkRequestBuilder<SyncWorker>(syncInterval.value, TimeUnit.MINUTES)
-                    .setConstraints(Constraints.Builder()
-                        .setRequiresCharging(syncOnlyWhenCharging.value)
-                        .setRequiredNetworkType(if (syncOnlyOnWiFi.value) NetworkType.UNMETERED else NetworkType.CONNECTED)
-                        .build()
+                    .setConstraints(
+                        Constraints.Builder()
+                            .setRequiresCharging(syncOnlyWhenCharging.value)
+                            .setRequiredNetworkType(if (syncOnlyOnWiFi.value) NetworkType.UNMETERED else NetworkType.CONNECTED)
+                            .build()
                     )
-                    .addTag(WORK_NAME)
+                    .addTag(WORK_TAG)
                     .setInitialDelay(syncInterval.value, TimeUnit.MINUTES)
                     .build()
             )

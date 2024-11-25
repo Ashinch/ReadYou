@@ -133,7 +133,7 @@ class AndroidApp : Application(), Configuration.Provider {
     }
 
     private suspend fun workerInit() {
-        rssService.get().doSync(isOnStart = true)
+        rssService.get().initSync()
     }
 
     private suspend fun checkUpdate() {
