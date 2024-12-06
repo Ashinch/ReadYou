@@ -64,7 +64,7 @@ abstract class AbstractRssRepository(
 
     open suspend fun subscribe(
         feedLink: String, searchedFeed: SyndFeed, groupId: String,
-        isNotification: Boolean, isFullContent: Boolean
+        isNotification: Boolean, isFullContent: Boolean, isBrowser: Boolean,
     ) {
         val accountId = context.currentAccountId
         val feed = Feed(
@@ -355,6 +355,10 @@ abstract class AbstractRssRepository(
 
     suspend fun groupParseFullContent(group: Group, isFullContent: Boolean) {
         feedDao.updateIsFullContentByGroupId(context.currentAccountId, group.id, isFullContent)
+    }
+
+    suspend fun groupOpenInBrowser(group: Group, isBrowser: Boolean) {
+        feedDao.updateIsBrowserByGroupId(context.currentAccountId, group.id, isBrowser)
     }
 
     suspend fun groupAllowNotification(group: Group, isNotification: Boolean) {
