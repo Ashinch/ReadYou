@@ -1,7 +1,7 @@
 package me.ash.reader.ui.page.home.feeds.drawer.group
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Article
+import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -34,7 +34,7 @@ fun AllOpenInBrowserDialog(
         },
         icon = {
             Icon(
-                imageVector = Icons.AutoMirrored.Outlined.Article,
+                imageVector = Icons.Outlined.OpenInBrowser,
                 contentDescription = stringResource(R.string.open_in_browser),
             )
         },
