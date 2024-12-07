@@ -1,0 +1,49 @@
+## 0.10.1
+
+1. Memperbaiki gaya ikon teks untuk umpan (#726, @Ashinch)
+2. Memperbaiki masalah di mana pengguna awal tidak dapat meluncurkan aplikasi setelah mengimpor preferensi aplikasi (#718, @Ashinch)
+3. Memperbaiki beberapa kasus yang menyebabkan kegagalan impor OPML (#735, @Ashinch)
+4. Memperbaiki beberapa animasi navigasi jendela (#717, @JunkFood02)
+5. Memperbaiki beberapa masalah gaya untuk bahasa RTL (#732, #733, @JunkFood02)
+6. Pembaruan terjemahan (Terima kasih kepada semua kontributor)
+
+### Catatan
+
+**Log perubahan lengkap:** [0.10.0...0.10.1](https://github.com/Ashinch/ReadYou/compare/0.10.0...0.10.1)
+
+Ini adalah patch perbaikan bug. Jika Anda melewatkannya, berikut adalah changelog untuk versi 0.10.0:
+
+## 0.10.0
+
+1. Meningkatkan dependensi Material Design 3, mengkompilasi SDK, dan versi gradle (#502, @JunkFood02)
+2. Mendukung pemilih bahasa dalam aplikasi untuk Android 13 (#541, #571, @JunkFood02)
+3. Mendukung penambahan umpan melalui lembar berbagi sistem (#618, @JunkFood02)
+4. Mendukung penentuan komposisi konten yang dibagikan (#660, @Ashinch)
+5. Meningkatkan fitur geser untuk memberi bintang/menghapus bintang, geser untuk tidak membaca, dan menambahkan konfigurasi (#594, @JunkFood02)
+6. Menggunakan lokal sistem untuk memformat tampilan waktu secara default. (#617, @JunkFood02)
+7. Beralih ke implementasi edge to edge androidx (#690, @Moderpach)
+8. Tambahkan penampil gambar ke halaman bacaan (#578, #545, @JunkFood02, @nvllz)
+9. Tambahkan gerakan untuk menggeser ke atas dan ke bawah pada halaman bacaan untuk beralih artikel (#589, @JunkFood02)
+10. Tambahkan aktivitas laporan kerusakan untuk menangani pengecualian yang tidak tertangkap (#576, @JunkFood02)
+11. Tambahkan menu konteks pada penekanan lama untuk item di halaman alur (#613, @JunkFood02)
+12. Tambahkan preferensi kelipatan tinggi baris untuk halaman bacaan (#620, @JunkFood02)
+13. Tambahkan halaman daftar lisensi dan tingkatkan halaman tentang (#664, @Ashinch)
+14. Tambahkan halaman pemecahan masalah dan alat impor/ekspor preferensi aplikasi (#672, #710, @Ashinch)
+15. Memperbaiki permintaan izin notifikasi saat memulai di Android 13 (@JunkFood02)
+16. Memperbaiki bentrokan saat tanggal terbit dan tanggal diperbarui keduanya kosong (@JunkFood02)
+17. Sekarang ganti tanggal terbit artikel dengan waktu saat ini jika tanggal tersebut adalah tanggal mendatang (#638, @Ashinch)
+18. Sekarang saat membersihkan umpan atau grup, artikel yang diberi bintang akan diabaikan (#652, @Ashinch)
+19. Sekarang mulai ulang aplikasi secara otomatis setelah memuat font eksternal (#667, @Ashinch)
+20. Sekarang pertama-tama temukan tag `<enclosure>` sebagai gambar mini artikel (#681, @Ashinch)
+21. Sekarang secara default, urutkan kategori berdasarkan abjad selama sinkronisasi di Google Reader (#700, @mbestavros)
+22. Placeholder gambar baru (#712, @JunkFood02)
+23. Lebih banyak peningkatan UI dan perbaikan bug (@Ashinch, @JunkFood02)
+24. Pembaruan terjemahan (terima kasih kepada semua orang yang membantu)
+
+### Catatan
+
+1. Untuk mendukung ekspor item pengaturan, beberapa item pengaturan telah disetel ulang ke default dan Anda mungkin harus menyetel ulang.
+2. Saluran sponsor buymeacoffee.com saat ini tidak tersedia, dan uang yang sebelumnya disumbangkan telah dikembalikan ke rekening donatur.
+3. Kami mencari saluran sponsor lainnya, yang saat ini tersedia adalah AFDIAN. Jika Anda ingin mendukung pengembangan ReadYou, Anda dapat mensponsorinya melalui [AFDIAN](https://afdian.net/a/ashinch). 4. Terima kasih kepada sponsor kami: @User_3072e, @User_223be, @User_3c5c7(Simon), @User_97ebe, @Lowae, @User_28b9f, @User_yuHC, @nullqwertyuiop, @openisgood, @User_vWca, @qgmzmy, @User_97ee1
+
+**Catatan perubahan lengkap:** [0.9.12...0.10.0](https://github.com/Ashinch/ReadYou/compare/0.9.12...0.10.0)

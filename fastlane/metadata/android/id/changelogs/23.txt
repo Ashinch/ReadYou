@@ -1,0 +1,24 @@
+## 0.9.12
+
+1. Mendukung Google Reader API dan FreshRSS API (#536, @Ashinch)
+2. Menggunakan animasi transisi maju dan mundur (#540, @JunkFood02)
+3. Menyediakan opsi untuk mengecualikan informasi tambahan saat mengekspor ke berkas OPML (#567, @Ashinch)
+4. Menyediakan opsi untuk membuat item artikel berbintang berwarna abu-abu (#547, @MauroGuida)
+5. Memperbaiki "geser untuk menandai artikel sebagai telah dibaca" (#520, @aeghn)
+6. Memperbaiki masalah grup kosong bukan sudut bawah membulat (#529, @kid1412621)
+7. Memperbaiki tampilan penyegaran setelah sinkronisasi (#531, @kid1412621)
+8. Memperbaiki kesalahan yang disebabkan oleh judul artikel yang hilang (#532, @kid1412621)
+9. Memperbaiki artikel yatim piatu selama sinkronisasi di Fever API (#534, @Ashinch)
+10. Banyak peningkatan UI dan perbaikan bug (@Ashinch, @JunkFood02)
+11. Pembaruan terjemahan (terima kasih kepada semua orang yang telah membantu)
+
+### Catatan
+
+1. Terima kasih kepada komunitas FreshRSS, khususnya @Alkarex, atas bantuan mereka dalam proyek ini.
+2. ReadYou saat ini tidak sepenuhnya kompatibel dengan Inoreader melalui Google Reader API.
+3. ReadYou saat ini tidak dapat menentukan grup baru saat menambahkan langganan melalui Google Reader API.
+4. Saat melakukan sinkronisasi dengan Google Reader API, ReadYou dapat mengambil hingga 10 ribu artikel per sinkronisasi. Untuk artikel yang telah dibaca, hanya artikel dalam bulan terakhir yang akan disinkronkan, sementara artikel yang belum dibaca dan yang berbintang akan disinkronkan sepenuhnya. Kecepatan sinkronisasi terutama bergantung pada jumlah artikel ini. Sinkronisasi awal mungkin memerlukan waktu, bergantung pada jumlah perbedaan data antara lokal dan server. Jika Anda memiliki banyak umpan, mungkin masih terasa lambat, saya dapat mencoba mengoptimalkannya jika diperlukan.
+5. Kami menyarankan agar pengguna yang telah berpartisipasi dalam pengujian melakukan sinkronisasi ulang atau menambahkan kembali akun Google Reader API mereka setelah menginstal versi `0.9.12`.
+6. Mari kita nantikan penyempurnaan lebih lanjut secara mendetail di versi berikutnya.
+
+**Catatan perubahan lengkap:** [0.9.11...0.9.12](https://github.com/Ashinch/ReadYou/compare/0.9.11...0.9.12)
