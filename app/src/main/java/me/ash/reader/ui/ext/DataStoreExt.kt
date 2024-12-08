@@ -162,6 +162,7 @@ data class DataStoreKey<T>(
         const val swipeStartAction = "swipeStartAction"
         const val swipeEndAction = "swipeEndAction"
         const val markAsReadOnScroll = "markAsReadOnScroll"
+        const val hideEmptyGroups = "hideEmptyGroups"
         const val pullToSwitchArticle = "pullToSwitchArticle"
         const val openLink = "openLink"
         const val openLinkAppSpecificBrowser = "openLinkAppSpecificBrowser"
@@ -239,6 +240,7 @@ data class DataStoreKey<T>(
                 booleanPreferencesKey(markAsReadOnScroll),
                 Boolean::class.java
             ),
+            hideEmptyGroups to DataStoreKey(booleanPreferencesKey(hideEmptyGroups), Boolean::class.java),
             pullToSwitchArticle to DataStoreKey(booleanPreferencesKey(pullToSwitchArticle), Boolean::class.java),
             openLink to DataStoreKey(intPreferencesKey(openLink), Int::class.java),
             openLinkAppSpecificBrowser to DataStoreKey(stringPreferencesKey(openLinkAppSpecificBrowser), String::class.java),

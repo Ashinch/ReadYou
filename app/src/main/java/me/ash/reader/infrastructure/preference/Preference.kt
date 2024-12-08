@@ -81,6 +81,7 @@ fun Preferences.toSettings(): Settings {
         swipeStartAction = SwipeStartActionPreference.fromPreferences(this),
         swipeEndAction = SwipeEndActionPreference.fromPreferences(this),
         markAsReadOnScroll = MarkAsReadOnScrollPreference.fromPreferences(this),
+        hideEmptyGroups = HideEmptyGroupsPreference.fromPreferences(this),
         pullToSwitchArticle = PullToSwitchArticlePreference.fromPreference(this),
         openLink = OpenLinkPreference.fromPreferences(this),
         openLinkSpecificBrowser = OpenLinkSpecificBrowserPreference.fromPreferences(this),

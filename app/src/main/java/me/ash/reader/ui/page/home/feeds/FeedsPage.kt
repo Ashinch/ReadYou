@@ -66,6 +66,7 @@ import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarTonalElevation
 import me.ash.reader.infrastructure.preference.LocalFeedsGroupListExpand
 import me.ash.reader.infrastructure.preference.LocalFeedsGroupListTonalElevation
 import me.ash.reader.infrastructure.preference.LocalFeedsTopBarTonalElevation
+import me.ash.reader.infrastructure.preference.LocalHideEmptyGroups
 import me.ash.reader.infrastructure.preference.LocalNewVersionNumber
 import me.ash.reader.infrastructure.preference.LocalSkipVersionNumber
 import me.ash.reader.ui.component.FilterBar
@@ -198,9 +199,11 @@ fun FeedsPage(
         feedsViewModel.fetchAccount()
     }
 
+    val hideEmptyGroups = LocalHideEmptyGroups.current.value
+
     LaunchedEffect(filterUiState, isSyncing) {
         snapshotFlow { filterUiState }.collect {
-            feedsViewModel.pullFeeds(it)
+            feedsViewModel.pullFeeds(it, hideEmptyGroups)
         }
     }
 
