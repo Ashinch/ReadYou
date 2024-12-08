@@ -1,0 +1,6 @@
+## 0.11.1
+
+Značajne promene:
+1. Podrška prilagođenih fontova za VebViev čitač
+2. Dodajte nove vizuelne stilove na trake sa alatkama na stranici toka i stranici za čitanje
+3. Poboljšanja i popravke korisničkog interfejsa
