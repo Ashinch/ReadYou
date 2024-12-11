@@ -316,4 +316,7 @@
     <string name="use_bionic_reading">Gunakan Bionic Reading</string>
     <string name="bionic_reading_tips">Apa itu Bionic Reading?</string>
     <string name="mark_as_read_on_scroll">Baca sebagai dibaca saat digulir</string>
+    <string name="become_a_sponsor">Jadilah sponsor</string>
+    <string name="toolbars">Bilah alat</string>
+    <string name="sponsor_desc">Kami membangun dan memelihara aplikasi sumber terbuka gratis ini di luar jam kerja. Jika Anda menikmatinya, mohon pertimbangkan untuk mendukung kami dengan donasi kecil! ☕️</string>
 </resources>
