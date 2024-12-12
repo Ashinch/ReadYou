@@ -1,0 +1,6 @@
+## 0.11.1
+
+Cambios notables:
+1. Compatibilidad con fuentes personalizadas para el lector WebView
+2. Agregue nuevos estilos visuales a las barras de herramientas en la página de flujo y la página de lectura
+3. Mejoras y correcciones de la interfaz de usuario
