@@ -111,7 +111,7 @@
     <string name="every_15_minutes">Сваких 15 минута</string>
     <string name="interaction">Интеракција</string>
     <string name="check_failure">Провера ажурирања није успела</string>
-    <string name="align_start">Поравнајте почетак</string>
+    <string name="align_start">Поравнај почетак</string>
     <string name="keep_archived_articles">Чување архивираних чланака</string>
     <string name="selected">Изабрано</string>
     <string name="icons">Иконице</string>
@@ -160,7 +160,7 @@
     <string name="sponsor">Спонзор</string>
     <string name="for_3_days">3 дана</string>
     <string name="deny">Одбиј</string>
-    <string name="align_end">Поравнајте крај</string>
+    <string name="align_end">Поравнај крај</string>
     <string name="block_list">Блок листа</string>
     <string name="specific_browser_name">Претраживач: %1$s</string>
     <string name="specific_browser">Присили одређени претраживач</string>
@@ -320,4 +320,5 @@
     <string name="mark_as_read_on_scroll">Означи као прочитано при превлачењу</string>
     <string name="become_a_sponsor">Постани спонзор</string>
     <string name="sponsor_desc">Ми правимо и одржавамо ову бесплатну апликацију отвореног кода ван радног времена. Ако уживате, размислите о томе да нас подржите малом донацијом! ☕</string>
+    <string name="toolbars">Траке са алаткама</string>
 </resources>
