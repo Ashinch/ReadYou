@@ -116,4 +116,10 @@
     <string name="dark_theme">ഡാർക്ക് തീം</string>
     <string name="use_device_theme">ഉപകരണത്തിന്റെ തീം ഉപയോഗിക്കുക</string>
     <string name="skip_this_version">ഈ പതിപ്പ് ഒഴിവാക്കുക</string>
+    <string name="appearance">സ്വരൂപം</string>
+    <string name="style">ശൈലി</string>
+    <string name="primary_color">പ്രാഥമിക നിറം</string>
+    <string name="primary_color_hint">#666666 അല്ലെങ്കിൽ 666666 പോലെ</string>
+    <string name="initial_filter">ആദ്യഘടകം</string>
+    <string name="preview_feed_name">റെഡ്ഡിറ്റ്</string>
 </resources>

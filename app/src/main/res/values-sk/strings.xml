@@ -318,4 +318,7 @@
     <string name="content_renderer">Zobrazovač obsahu</string>
     <string name="only_available_on_webview">Dostupné len vo WebView</string>
     <string name="mark_as_read_on_scroll">Označiť ako prečítané pri posúvaní</string>
+    <string name="toolbars">Panely nástrojov</string>
+    <string name="sponsor_desc">Túto bezplatnú aplikáciu s otvoreným zdrojovým kódom vytvárame a udržiavame v mimopracovnom čase. Ak sa vám páči, zvážte, či nás podporíte malým darom! ☕️</string>
+    <string name="become_a_sponsor">Staňte sa sponzorom</string>
 </resources>
