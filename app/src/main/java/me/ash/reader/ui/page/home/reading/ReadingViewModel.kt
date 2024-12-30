@@ -47,6 +47,9 @@ class ReadingViewModel @Inject constructor(
     private val currentFeed: Feed?
         get() = readingUiState.value.articleWithFeed?.feed
 
+    // 添加一个新的属性来保存初始的文章列表状态
+    private var initialArticleItems: List<ArticleFlowItem> = emptyList()
+
     fun initData(articleId: String) {
         setLoading()
         viewModelScope.launch(ioDispatcher) {
@@ -146,7 +149,12 @@ class ReadingViewModel @Inject constructor(
     }
 
     fun prefetchArticleId(pagingItems: ItemSnapshotList<ArticleFlowItem>) {
-        val items = pagingItems.items
+        // 首次加载时保存初始列表
+        if (initialArticleItems.isEmpty()) {
+            initialArticleItems = pagingItems.items
+        }
+        
+        val items = initialArticleItems
         val currentId = currentArticle?.id
         val index = items.indexOfFirst { item ->
             item is ArticleFlowItem.Article && item.articleWithFeed.article.id == currentId
