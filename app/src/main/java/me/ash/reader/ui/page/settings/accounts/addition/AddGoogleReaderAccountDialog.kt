@@ -1,5 +1,7 @@
 package me.ash.reader.ui.page.settings.accounts.addition
 
+import android.app.Activity
+import android.security.KeyChain
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -56,6 +58,7 @@ fun AddGoogleReaderAccountDialog(
     var googleReaderServerUrl by rememberSaveable { mutableStateOf("") }
     var googleReaderUsername by rememberSaveable { mutableStateOf("") }
     var googleReaderPassword by rememberSaveable { mutableStateOf("") }
+    var googleReaderClientCertificateAlias by rememberSaveable { mutableStateOf("") }
 
     RYDialog(
         modifier = Modifier.padding(horizontal = 44.dp),
@@ -123,6 +126,19 @@ fun AddGoogleReaderAccountDialog(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 )
                 Spacer(modifier = Modifier.height(10.dp))
+                RYOutlineTextField(
+                    requestFocus = false,
+                    readOnly = accountUiState.isLoading,
+                    value = googleReaderClientCertificateAlias,
+                    onValueChange = { googleReaderClientCertificateAlias = it },
+                    label = stringResource(R.string.client_certificate),
+                    onClick = {
+                        KeyChain.choosePrivateKeyAlias(context as Activity, { alias ->
+                            googleReaderClientCertificateAlias = alias ?: ""
+                        }, null, null, null, null)
+                    }
+                )
+                Spacer(modifier = Modifier.height(10.dp))
             }
         },
         confirmButton = {
@@ -143,6 +159,7 @@ fun AddGoogleReaderAccountDialog(
                             serverUrl = googleReaderServerUrl,
                             username = googleReaderUsername,
                             password = googleReaderPassword,
+                            clientCertificateAlias = googleReaderClientCertificateAlias.takeIf { it.isNotEmpty() },
                         ).toString(),
                     )) { account, exception ->
                         if (account == null) {

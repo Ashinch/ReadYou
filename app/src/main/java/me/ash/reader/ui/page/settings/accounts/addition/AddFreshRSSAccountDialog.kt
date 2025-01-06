@@ -1,5 +1,7 @@
 package me.ash.reader.ui.page.settings.accounts.addition
 
+import android.app.Activity
+import android.security.KeyChain
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -55,6 +57,7 @@ fun AddFreshRSSAccountDialog(
     var freshRSSServerUrl by rememberSaveable { mutableStateOf("") }
     var freshRSSUsername by rememberSaveable { mutableStateOf("") }
     var freshRSSPassword by rememberSaveable { mutableStateOf("") }
+    var freshRSSClientCertificateAlias by rememberSaveable { mutableStateOf("") }
 
     RYDialog(
         modifier = Modifier.padding(horizontal = 44.dp),
@@ -122,6 +125,19 @@ fun AddFreshRSSAccountDialog(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 )
                 Spacer(modifier = Modifier.height(10.dp))
+                RYOutlineTextField(
+                    requestFocus = false,
+                    readOnly = accountUiState.isLoading,
+                    value = freshRSSClientCertificateAlias,
+                    onValueChange = { freshRSSClientCertificateAlias = it },
+                    label = stringResource(R.string.client_certificate),
+                    onClick = {
+                        KeyChain.choosePrivateKeyAlias(context as Activity, { alias ->
+                            freshRSSClientCertificateAlias = alias ?: ""
+                        }, null, null, null, null)
+                    }
+                )
+                Spacer(modifier = Modifier.height(10.dp))
             }
         },
         confirmButton = {
@@ -142,6 +158,7 @@ fun AddFreshRSSAccountDialog(
                             serverUrl = freshRSSServerUrl,
                             username = freshRSSUsername,
                             password = freshRSSPassword,
+                            clientCertificateAlias = freshRSSClientCertificateAlias,
                         ).toString(),
                     )) { account, exception ->
                         if (account == null) {
