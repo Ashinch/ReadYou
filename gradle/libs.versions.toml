@@ -40,6 +40,9 @@ hiltCompiler = "1.1.0"
 hiltNavigationCompose = "1.1.0"
 hiltWork = "1.1.0"
 
+# Nostr
+rustnostr = "0.37.0"
+
 # Miscellaneous Libraries
 androidSVG = "1.4"
 junit = "4.13.2"
@@ -117,6 +120,9 @@ lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtim
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+
+# Nostr
+rust-nostr = { group = "org.rust-nostr", name = "nostr-sdk", version.ref = "rustnostr" }
 
 # Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }

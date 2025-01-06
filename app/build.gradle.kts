@@ -176,6 +176,9 @@ dependencies {
     implementation(libs.activity.compose)
     implementation(libs.appcompat)
 
+    // Nostr
+    implementation(libs.rust.nostr)
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit.ext)
