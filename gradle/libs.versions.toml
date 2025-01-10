@@ -41,7 +41,7 @@ hiltNavigationCompose = "1.1.0"
 hiltWork = "1.1.0"
 
 # Nostr
-rustnostr = "0.37.0"
+rustnostr = "0.38.3"
 
 # Miscellaneous Libraries
 androidSVG = "1.4"
