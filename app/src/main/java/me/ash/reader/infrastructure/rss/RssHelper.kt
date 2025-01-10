@@ -3,7 +3,6 @@ package me.ash.reader.infrastructure.rss
 import android.content.Context
 import android.util.Log
 import com.rometools.rome.feed.synd.SyndEntry
-import com.rometools.rome.feed.synd.SyndFeed
 import com.rometools.rome.feed.synd.SyndImageImpl
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
@@ -23,7 +22,15 @@ import me.ash.reader.ui.ext.spacerDollar
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.executeAsync
+import rust.nostr.sdk.Alphabet
+import rust.nostr.sdk.Coordinate
+import rust.nostr.sdk.Event
+import rust.nostr.sdk.Kind
+import rust.nostr.sdk.KindEnum
+import rust.nostr.sdk.SingleLetterTag
+import rust.nostr.sdk.TagKind
 import java.io.InputStream
+import java.time.Instant
 import java.util.*
 import javax.inject.Inject
 
@@ -42,13 +49,16 @@ class RssHelper @Inject constructor(
 ) {
 
     @Throws(Exception::class)
-    suspend fun searchFeed(feedLink: String): SyndFeed {
+    suspend fun searchFeed(feedLink: String): FetchedFeed? {
         return withContext(ioDispatcher) {
-            SyndFeedInput().build(XmlReader(inputStream(okHttpClient, feedLink))).also {
+            val parsedSyndFeed = SyndFeedInput()
+                .build(XmlReader(inputStream(okHttpClient, feedLink)))
+                .also {
                 it.icon = SyndImageImpl()
                 it.icon.link = queryRssIconLink(feedLink)
                 it.icon.url = it.icon.link
             }
+            SyndFeedDelegate(parsedSyndFeed, feedLink)
         }
     }
 
@@ -123,6 +133,53 @@ class RssHelper @Inject constructor(
             img = findThumbnail(syndEntry) ?: findThumbnail(content ?: desc),
             link = syndEntry.link ?: "",
             updateAt = preDate,
+        )
+    }
+
+    fun buildArticleFromNostrEvent(
+        feed: Feed,
+        accountId: Int,
+        articleEvent: Event,
+        authorName: String,
+//        imageUrl: String,
+        preDate: Date = Date()
+    ): Article {
+        val articleTitle = articleEvent.tags().find(TagKind.Title)?.content()
+        val articleImage = articleEvent.tags().find(TagKind.Image)?.content()
+        val articleSummary = articleEvent.tags().find(TagKind.Summary)?.content()
+        val timeStamp = articleEvent.tags().find(TagKind.PublishedAt)?.content()?.toLong()
+            ?: Instant.EPOCH.epochSecond
+        val articleDate = Date.from(Instant.ofEpochSecond(timeStamp)).takeIf { !it.isFuture(preDate) } ?: preDate
+        val articleNostrAddress =
+            Coordinate(
+                Kind.fromEnum(KindEnum.LongFormTextNote),
+                articleEvent.author(),
+                articleEvent.tags().find(
+                    TagKind.SingleLetter(
+                        SingleLetterTag.lowercase(Alphabet.D),
+                    ),
+                )?.content().toString(),
+            ).toBech32()
+        // Highlighter is a service for reading Nostr articles on the web.
+        val externalLink = "https://highlighter.com/a/$articleNostrAddress"
+        val actualContent = Readability.parseToText(
+            articleEvent.content(),
+            uri = "nostr:$articleNostrAddress"
+        )
+
+        return Article(
+            id = accountId.spacerDollar(articleEvent.id().toString()),
+            accountId = accountId,
+            feedId = feed.id,
+            date = articleDate,
+            title = articleTitle ?: feed.name,
+            author = authorName,
+            rawDescription = actualContent,
+            shortDescription = articleSummary ?: "",
+            fullContent = actualContent,
+            img = articleImage ?: "",
+            link = "nostr:$articleNostrAddress",
+            updateAt = articleDate
         )
     }
 
