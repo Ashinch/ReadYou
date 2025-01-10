@@ -61,3 +61,6 @@ fun String?.extractDomain(): String? {
     val domainMatchResult = domainRegex.find(this)
     return domainMatchResult?.value
 }
+
+const val NOSTR_URI_PREFIX = "nostr:"
+fun String.isNostrUri(): Boolean = startsWith(NOSTR_URI_PREFIX) && length > NOSTR_URI_PREFIX.length
