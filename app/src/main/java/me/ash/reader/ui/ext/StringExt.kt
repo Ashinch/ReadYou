@@ -18,7 +18,7 @@ fun String.formatUrl(): String {
     if (this.startsWith("//")) {
         return "https:$this"
     }
-    val regex = Regex("^(https?|ftp|file).*")
+    val regex = Regex("^(https?|ftp|file|nostr).*")
     return if (!regex.matches(this)) {
         "https://$this"
     } else {
