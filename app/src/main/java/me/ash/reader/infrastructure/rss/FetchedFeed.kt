@@ -69,10 +69,7 @@ class NostrFeed(
     private lateinit var feedFetchResult: NostrFeedResult
 
 
-    suspend fun fetchFeedFrom(uri: String): NostrFeed {
-        feedFetchResult = nreq(nostrUri)
-        return this
-    }
+
 
     // The default relays to get info from, separated by purpose.
     private val defaultFetchRelays = listOf("wss://relay.nostr.band", "wss://relay.damus.io")
@@ -244,6 +241,14 @@ class NostrFeed(
         val articleEvents = articleEventSet.distinctBy { it.tags().find(TagKind.Title) }
         nostrClient.removeAllRelays() // This is necessary to avoid piling relays to fetch from(on each fetch).
         return articleEvents
+    }
+
+    companion object {
+        suspend fun fetchFeedFrom(uri: String, nostrClient: Client): NostrFeed {
+            val feed = NostrFeed(uri, nostrClient)
+            feed.feedFetchResult = feed.nreq(uri)
+            return feed
+        }
     }
 
 }
