@@ -18,11 +18,13 @@ import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.extractDomain
 import me.ash.reader.ui.ext.isFuture
+import me.ash.reader.ui.ext.isNostrUri
 import me.ash.reader.ui.ext.spacerDollar
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.executeAsync
 import rust.nostr.sdk.Alphabet
+import rust.nostr.sdk.Client
 import rust.nostr.sdk.Coordinate
 import rust.nostr.sdk.Event
 import rust.nostr.sdk.Kind
@@ -51,14 +53,19 @@ class RssHelper @Inject constructor(
     @Throws(Exception::class)
     suspend fun searchFeed(feedLink: String): FetchedFeed? {
         return withContext(ioDispatcher) {
-            val parsedSyndFeed = SyndFeedInput()
-                .build(XmlReader(inputStream(okHttpClient, feedLink)))
-                .also {
-                it.icon = SyndImageImpl()
-                it.icon.link = queryRssIconLink(feedLink)
-                it.icon.url = it.icon.link
+            if(feedLink.isNostrUri()) {
+                NostrFeed.fetchFeedFrom(feedLink, Client())
             }
-            SyndFeedDelegate(parsedSyndFeed, feedLink)
+            else {
+                val parsedSyndFeed = SyndFeedInput()
+                    .build(XmlReader(inputStream(okHttpClient, feedLink)))
+                    .also {
+                        it.icon = SyndImageImpl()
+                        it.icon.link = queryRssIconLink(feedLink)
+                        it.icon.url = it.icon.link
+                    }
+                SyndFeedDelegate(parsedSyndFeed, feedLink)
+            }
         }
     }
 
