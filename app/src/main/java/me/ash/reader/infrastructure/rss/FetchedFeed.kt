@@ -30,8 +30,7 @@ sealed interface FetchedFeed {
 }
 
 class SyndFeedDelegate(
-    private val syndFeed: SyndFeed,
-    private val feedLink: String
+    private val syndFeed: SyndFeed
 ): FetchedFeed {
 
     override fun getIconLink(): String {
@@ -62,14 +61,10 @@ class SyndFeedDelegate(
 }
 
 class NostrFeed(
-    private val nostrUri: String,
     private val nostrClient: Client
 ): FetchedFeed {
     private val LOG_TAG = "ReadYou"
     private lateinit var feedFetchResult: NostrFeedResult
-
-
-
 
     // The default relays to get info from, separated by purpose.
     private val defaultFetchRelays = listOf("wss://relay.nostr.band", "wss://relay.damus.io")
@@ -114,7 +109,7 @@ class NostrFeed(
         return NostrFeedResult(
             nostrUri = nostrUri,
             authorName = profile.name,
-            feedTitle = "${profile.name}'s Nostr articles",
+            feedTitle = "${profile.name.trim()}'s Nostr feed",
             authorPictureLink = profile.imageUrl,
             articles = articles
         )
@@ -137,7 +132,7 @@ class NostrFeed(
     }
 
     private suspend fun getProfileMetadata(nostrUri: String): AuthorNostrData {
-        val possibleNostrProfile = parseNostrUri(nostrUri.toString())
+        val possibleNostrProfile = parseNostrUri(nostrUri)
         val publicKey = possibleNostrProfile.publicKey()
         val relayList =
             possibleNostrProfile.relays()
@@ -239,15 +234,19 @@ class NostrFeed(
                 timeout = Duration.ofSeconds(10L),
             ).toVec()
         val articleEvents = articleEventSet.distinctBy { it.tags().find(TagKind.Title) }
+        Log.d(LOG_TAG, "fetchArticlesForAuthor: Article Set Size: ${articleEvents.size}")
         nostrClient.removeAllRelays() // This is necessary to avoid piling relays to fetch from(on each fetch).
         return articleEvents
     }
 
     companion object {
-        suspend fun fetchFeedFrom(uri: String, nostrClient: Client): NostrFeed {
-            val feed = NostrFeed(uri, nostrClient)
-            feed.feedFetchResult = feed.nreq(uri)
-            return feed
+        suspend fun fetchFeedFrom(uri: String, nostrClient: Client): NostrFeed? {
+            val feedInstance = NostrFeed(nostrClient)
+            val feedResult = feedInstance.nreq(uri)
+            feedInstance.feedFetchResult = feedResult
+            return if (feedInstance.getArticles().isNotEmpty()){
+                feedInstance
+            } else null
         }
     }
 

@@ -48,13 +48,14 @@ class RssHelper @Inject constructor(
     @IODispatcher
     private val ioDispatcher: CoroutineDispatcher,
     private val okHttpClient: OkHttpClient,
+    private val nostrClient: Client
 ) {
 
     @Throws(Exception::class)
     suspend fun searchFeed(feedLink: String): FetchedFeed? {
         return withContext(ioDispatcher) {
             if(feedLink.isNostrUri()) {
-                NostrFeed.fetchFeedFrom(feedLink, Client())
+                NostrFeed.fetchFeedFrom(feedLink, nostrClient)
             }
             else {
                 val parsedSyndFeed = SyndFeedInput()
@@ -64,7 +65,7 @@ class RssHelper @Inject constructor(
                         it.icon.link = queryRssIconLink(feedLink)
                         it.icon.url = it.icon.link
                     }
-                SyndFeedDelegate(parsedSyndFeed, feedLink)
+                SyndFeedDelegate(parsedSyndFeed)
             }
         }
     }
@@ -168,6 +169,7 @@ class RssHelper @Inject constructor(
                 )?.content().toString(),
             ).toBech32()
         // Highlighter is a service for reading Nostr articles on the web.
+        //For the external link, we can still give it a value of nostr:<articleAddress>
         val externalLink = "https://highlighter.com/a/$articleNostrAddress"
         val actualContent = Readability.parseToText(
             articleEvent.content(),
@@ -175,17 +177,17 @@ class RssHelper @Inject constructor(
         )
 
         return Article(
-            id = accountId.spacerDollar(articleEvent.id().toString()),
+            id = accountId.spacerDollar(articleEvent.id().toBech32()),
             accountId = accountId,
             feedId = feed.id,
             date = articleDate,
             title = articleTitle ?: feed.name,
             author = authorName,
             rawDescription = actualContent,
-            shortDescription = articleSummary ?: "",
+            shortDescription = articleSummary ?: actualContent.take(110),
             fullContent = actualContent,
-            img = articleImage ?: "",
-            link = "nostr:$articleNostrAddress",
+            img = articleImage,
+            link = externalLink,
             updateAt = articleDate
         )
     }
