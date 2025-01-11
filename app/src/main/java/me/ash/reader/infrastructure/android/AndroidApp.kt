@@ -22,6 +22,7 @@ import me.ash.reader.ui.ext.del
 import me.ash.reader.ui.ext.getLatestApk
 import me.ash.reader.ui.ext.isGitHub
 import okhttp3.OkHttpClient
+import rust.nostr.sdk.Client
 import javax.inject.Inject
 
 /**
@@ -57,6 +58,9 @@ class AndroidApp : Application(), Configuration.Provider {
 
     @Inject
     lateinit var rssHelper: RssHelper
+
+    @Inject
+    lateinit var nostrClient: Client
 
     @Inject
     lateinit var notificationHelper: NotificationHelper
