@@ -17,6 +17,7 @@ import me.ash.reader.infrastructure.html.Readability
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.extractDomain
+import me.ash.reader.ui.ext.htmlFromMarkdown
 import me.ash.reader.ui.ext.isFuture
 import me.ash.reader.ui.ext.isNostrUri
 import me.ash.reader.ui.ext.spacerDollar
@@ -171,9 +172,22 @@ class RssHelper @Inject constructor(
         // Highlighter is a service for reading Nostr articles on the web.
         //For the external link, we can still give it a value of nostr:<articleAddress>
         val externalLink = "https://highlighter.com/a/$articleNostrAddress"
+        val articleContent = articleEvent.content()
+        val parsedContent = htmlFromMarkdown(articleContent)
         val actualContent = Readability.parseToText(
-            articleEvent.content(),
-            uri = "nostr:$articleNostrAddress"
+            parsedContent,
+            uri = null//"nostr:$articleNostrAddress"
+        )
+
+        Log.i(
+            "RLog",
+            "Nostr Feed:\n" +
+                    "name: ${feed.name}\n" +
+                    "feedUrl: ${feed.url}\n" +
+                    "url: ${externalLink}\n" +
+                    "title: ${articleTitle}\n" +
+                    "desc: ${articleSummary}\n" +
+                    "content: ${articleContent}\n"
         )
 
         return Article(
@@ -183,9 +197,9 @@ class RssHelper @Inject constructor(
             date = articleDate,
             title = articleTitle ?: feed.name,
             author = authorName,
-            rawDescription = actualContent,
+            rawDescription = parsedContent,
             shortDescription = articleSummary ?: actualContent.take(110),
-            fullContent = actualContent,
+            fullContent = parsedContent,
             img = articleImage,
             link = externalLink,
             updateAt = articleDate

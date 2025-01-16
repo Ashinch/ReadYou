@@ -2,6 +2,9 @@ package me.ash.reader.ui.ext
 
 import android.text.Html
 import android.util.Base64
+import org.intellij.markdown.flavours.commonmark.CommonMarkFlavourDescriptor
+import org.intellij.markdown.html.HtmlGenerator
+import org.intellij.markdown.parser.MarkdownParser
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.text.Bidi
@@ -60,6 +63,16 @@ fun String?.extractDomain(): String? {
     val domainRegex = Regex("[\\w\\d.-]+\\.[\\w\\d.-]+")
     val domainMatchResult = domainRegex.find(this)
     return domainMatchResult?.value
+}
+
+private val markDownParser = MarkdownParser(CommonMarkFlavourDescriptor())
+
+fun htmlFromMarkdown(markdown: String): String {
+    val parsedMarkdown = markDownParser.buildMarkdownTreeFromString(markdown)
+    val htmlContent = HtmlGenerator(markdown, parsedMarkdown, CommonMarkFlavourDescriptor())
+        .generateHtml()
+
+    return htmlContent
 }
 
 const val NOSTR_URI_PREFIX = "nostr:"
