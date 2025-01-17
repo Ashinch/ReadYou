@@ -171,12 +171,12 @@ class RssHelper @Inject constructor(
             ).toBech32()
         // Highlighter is a service for reading Nostr articles on the web.
         //For the external link, we can still give it a value of nostr:<articleAddress>
-        val externalLink = "https://highlighter.com/a/$articleNostrAddress"
+        val externalLink = "nostr:$articleNostrAddress"//""https://highlighter.com/a/$articleNostrAddress"
         val articleContent = articleEvent.content()
         val parsedContent = htmlFromMarkdown(articleContent)
         val actualContent = Readability.parseToText(
             parsedContent,
-            uri = null//"nostr:$articleNostrAddress"
+            uri = null
         )
 
         Log.i(
