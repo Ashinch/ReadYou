@@ -187,7 +187,11 @@ abstract class AbstractRssRepository(
 
     private suspend fun syncFeed(feed: Feed, preDate: Date = Date()): FeedWithArticle {
         val latest = articleDao.queryLatestByFeedId(context.currentAccountId, feed.id)
-        val articles = rssHelper.queryRssXml(feed, "", preDate)
+        val articles = if (feed.url.isNostrUri()) {
+            rssHelper.syncNostrFeed(feed, "", preDate)
+        } else {
+            rssHelper.queryRssXml(feed, "", preDate)
+        }
         if (feed.icon == null) {
             val iconLink = rssHelper.queryRssIconLink(feed.url)
             if (iconLink != null) {

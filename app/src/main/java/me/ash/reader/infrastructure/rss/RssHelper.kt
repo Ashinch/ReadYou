@@ -145,6 +145,24 @@ class RssHelper @Inject constructor(
         )
     }
 
+    suspend fun syncNostrFeed(
+        feed: Feed,
+        latestLink: String?,
+        preDate: Date = Date()
+    ): List<Article> =
+        try {
+            val accountId = context.currentAccountId
+            nostrClient.run {
+                val updatedFeed = NostrFeed.fetchFeedFrom(feed.url, this)
+                updatedFeed.getArticles()
+                    .map { buildArticleFromNostrEvent(feed, accountId, it, updatedFeed.getFeedAuthor(), preDate) }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("RLog", "queryRssXml[${feed.name}]: ${e.message}")
+            listOf()
+        }
+
     fun buildArticleFromNostrEvent(
         feed: Feed,
         accountId: Int,
