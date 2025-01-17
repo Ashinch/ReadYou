@@ -32,6 +32,7 @@ import rust.nostr.sdk.Kind
 import rust.nostr.sdk.KindEnum
 import rust.nostr.sdk.SingleLetterTag
 import rust.nostr.sdk.TagKind
+import rust.nostr.sdk.use
 import java.io.InputStream
 import java.time.Instant
 import java.util.*
@@ -152,14 +153,14 @@ class RssHelper @Inject constructor(
     ): List<Article> =
         try {
             val accountId = context.currentAccountId
-            nostrClient.run {
-                val updatedFeed = NostrFeed.fetchFeedFrom(feed.url, this)
+            Client().use {
+                val updatedFeed = NostrFeed.fetchFeedFrom(feed.url, it)
                 updatedFeed.getArticles()
                     .map { buildArticleFromNostrEvent(feed, accountId, it, updatedFeed.getFeedAuthor(), preDate) }
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e("RLog", "queryRssXml[${feed.name}]: ${e.message}")
+            Log.e("RLog", "syncNostrFeedNew[${feed.name}]: ${e.message}")
             listOf()
         }
 
