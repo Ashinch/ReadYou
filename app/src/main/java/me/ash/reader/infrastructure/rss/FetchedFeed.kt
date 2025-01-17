@@ -240,13 +240,13 @@ class NostrFeed(
     }
 
     companion object {
-        suspend fun fetchFeedFrom(uri: String, nostrClient: Client): NostrFeed? {
+        suspend fun fetchFeedFrom(uri: String, nostrClient: Client): NostrFeed {
             val feedInstance = NostrFeed(nostrClient)
             val feedResult = feedInstance.nreq(uri)
             feedInstance.feedFetchResult = feedResult
             return if (feedInstance.getArticles().isNotEmpty()){
                 feedInstance
-            } else null
+            } else throw EmptyNostrDataException("No feed found for $uri")
         }
     }
 
@@ -259,6 +259,8 @@ class AuthorNostrData(
     val imageUrl: String,
     val relayList: List<String>
 )
+
+class EmptyNostrDataException(override val message: String?): Exception(message)
 
 class NostrFeedResult(
     val nostrUri: String,
