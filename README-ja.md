@@ -23,7 +23,7 @@
 
 <div align="center">
     <h1>Read You</h1>
-    <p>An Android RSS reader presented in <a target="_blank" href="https://m3.material.io/">Material You</a> style.</p>
+    <p> <a target="_blank" href="https://m3.material.io/">Material You</a> スタイルのAndroid RSS reader.</p>
     <p>English&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-de.md">Deutsch</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-CN.md">简体中文</a>&nbsp;&nbsp;|&nbsp;&nbsp;
@@ -41,11 +41,11 @@
     <br/>
 </div>
 
-## Features
+## 特徴
 
-**Read You** is an Android RSS reader presented in [Material You](https://m3.material.io/) style.
+**Read You** は [Material You](https://m3.material.io/) スタイルのAndroid RSS reader.
 
-The following are the progress made so far and the goals to be worked on in the near future:
+以下は、これまでの進捗状況と、近い将来に取り組むべき目標である:
 
 - [x] Subscribe to RSS links
 - [x] Import or export OPML files
@@ -58,7 +58,7 @@ The following are the progress made so far and the goals to be worked on in the 
 - [ ] Android widget
 - [ ] ...
 
-## Integration
+## インテグレーション
 
 **Read You** integrates with some of third-party service APIs to support you in using your existing cloud accounts as data sources.
 
@@ -96,7 +96,7 @@ Choose the latest workflow from the GitHub Actions page and download the artifac
 
 **Remember to back up your data before trying the Nightly version in case of any issues.**
 
-## Sponsorship
+## スポンサーシップ
 
 **Read You** is a free open source software that benefits from the open source community and every user can enjoy it's full functionality for free, so if you appreciate my current work, you can buy me a cup of coffee.☕️
 
