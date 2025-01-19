@@ -94,9 +94,9 @@ Nightlyバージョンは以下のリンクからダウンロードできます:
 
 <a target="_blank" href="https://github.com/Ashinch/ReadYou/actions/workflows/build_commit.yaml">Check Nightly Builds</a>
 
-Choose the latest workflow from the GitHub Actions page and download the artifacts from the workflow's summary page (You may require logging in to GitHub).
+GitHub Actionsページから最新のworkflowを選択し、workflowのsummaryページから成果物をダウンロードします(GitHubへのログインが必要な場合があります).
 
-**Remember to back up your data before trying the Nightly version in case of any issues.**
+**何か問題が発生した場合に備えて、Nightlyバージョンを試す前にデータをバックアップしておくことをお忘れなく.**
 
 ## スポンサーシップ
 
