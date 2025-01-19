@@ -23,7 +23,7 @@
 
 <div align="center">
     <h1>Read You</h1>
-    <p> <a target="_blank" href="https://m3.material.io/">Material You</a> スタイルのAndroid RSS reader.</p>
+    <p> <a target="_blank" href="https://m3.material.io/">Material You</a> スタイルのAndroid RSS reader</p>
     <p>English&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-de.md">Deutsch</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a target="_blank" href="https://github.com/Ashinch/ReadYou/blob/main/README-zh-CN.md">简体中文</a>&nbsp;&nbsp;|&nbsp;&nbsp;
@@ -43,7 +43,7 @@
 
 ## 特徴
 
-**Read You** は [Material You](https://m3.material.io/) スタイルのAndroid RSS reader.
+**Read You** は [Material You](https://m3.material.io/) スタイルのAndroid RSS reader
 
 以下は、これまでの進捗状況と、近い将来に取り組むべき目標である:
 
@@ -60,7 +60,7 @@
 
 ## インテグレーション
 
-**Read You** は、既存のクラウドアカウントをデータソースとして使用できるよう、いくつかのサードパーティ・サービスAPIを統合しています.
+**Read You** は、既存のクラウドアカウントをデータソースとして使用できるよう、いくつかのサードパーティ・サービスAPIを統合しています
 
 - [x] Fever
 - [x] Google Reader
@@ -82,29 +82,30 @@
      alt="Get it on F-Droid"
      height="80">](https://f-droid.org/packages/me.ash.reader/)
 
-F-Droid のリリースは、[F-Droid](https://f-droid.org/docs/FAQ_-_General/) により、他のリリースにアップグレードすることはできません.
+F-Droid のリリースは、[F-Droid](https://f-droid.org/docs/FAQ_-_General/) により、他のリリースにアップグレードすることはできません
 
 ## Nightly
 
 テスト用にNightlyバージョンを提供しています<br/>
 これらのバージョンには最新の機能と改善が含まれていますが、通常のリリースほど安定していない可能性があります<br/>
-Nightlyビルドにはバグがある可能性があり、日常的な使用にはお勧めできませんのでご注意ください.
+Nightlyビルドにはバグがある可能性があり、日常的な使用にはお勧めできませんのでご注意ください
 
 Nightlyバージョンは以下のリンクからダウンロードできます:
 
 <a target="_blank" href="https://github.com/Ashinch/ReadYou/actions/workflows/build_commit.yaml">Check Nightly Builds</a>
 
-GitHub Actionsページから最新のworkflowを選択し、workflowのsummaryページから成果物をダウンロードします(GitHubへのログインが必要な場合があります).
+GitHub Actionsページから最新のworkflowを選択し、workflowのsummaryページから成果物をダウンロードします(GitHubへのログインが必要な場合があります)
 
-**何か問題が発生した場合に備えて、Nightlyバージョンを試す前にデータをバックアップしておくことをお忘れなく.**
+**何か問題が発生した場合に備えて、Nightlyバージョンを試す前にデータをバックアップしておくことをお忘れなく**
 
 ## スポンサーシップ
 
-**Read You** is a free open source software that benefits from the open source community and every user can enjoy it's full functionality for free, so if you appreciate my current work, you can buy me a cup of coffee.☕️
+**Read You** は、オープンソースコミュニティの恩恵を受けているオープンソースソフトウェアであり、すべてのユーザーが無料でその全機能を楽しむことができます<br/>
+もし僕の今の仕事を評価してくれるなら、コーヒーを一杯おごってくれてもいいですよ☕️
 
 [<img src="https://s1.ax1x.com/2023/01/12/pSnHqpQ.png" alt="donate" height="80">](https://ash7.io/sponsor)
 
-Thanks for all the love and support.❤️
+皆さまからの愛とサポートに感謝します❤️
 
 ## ローカライズ・翻訳
 
