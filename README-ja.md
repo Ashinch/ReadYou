@@ -109,7 +109,7 @@ GitHub Actionsページから最新のworkflowを選択し、workflowのsummary�
 
 ## ローカライズ・翻訳
 
-Thank you to each of the **Read You** translators, and if you would like to contribute, please submit a translation via [Weblate](https://hosted.weblate.org/engage/readyou/).
+**Read You** 翻訳者の皆様、ありがとうございました。また、翻訳をご希望される方は、[Weblate](https://hosted.weblate.org/engage/readyou/) からご投稿ください
 
 [<img src="https://hosted.weblate.org/widgets/readyou/-/horizontal-auto.svg" alt="" />](https://hosted.weblate.org/engage/readyou/)
 
