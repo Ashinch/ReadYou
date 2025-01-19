@@ -60,7 +60,7 @@
 
 ## インテグレーション
 
-**Read You** integrates with some of third-party service APIs to support you in using your existing cloud accounts as data sources.
+**Read You** は、既存のクラウドアカウントをデータソースとして使用できるよう、いくつかのサードパーティ・サービスAPIを統合しています.
 
 - [x] Fever
 - [x] Google Reader
@@ -72,7 +72,7 @@
 - [ ] Feedbin
 - [ ] ...
 
-## Download
+## ダウンロード
 
 [<img src="https://s1.ax1x.com/2023/01/12/pSu1a36.png" alt="Get it on GitHub" height="80">](https://github.com/Ashinch/ReadYou/releases)
 [<img src="https://s1.ax1x.com/2023/01/12/pSnTZ0f.png"
@@ -82,13 +82,15 @@
      alt="Get it on F-Droid"
      height="80">](https://f-droid.org/packages/me.ash.reader/)
 
-F-Droid releases can not upgrade to other releases and it is compiled, signed and distributed uniformly by [F-Droid](https://f-droid.org/docs/FAQ_-_General/).
+F-Droid のリリースは、[F-Droid](https://f-droid.org/docs/FAQ_-_General/) により、他のリリースにアップグレードすることはできません.
 
 ## Nightly
 
-We offer Nightly versions for testing purposes. These versions include the latest features and improvements but may not be as stable as our regular releases. Please note that Nightly builds might have bugs and are not recommended for everyday use.
+テスト用にNightlyバージョンを提供しています<br/>
+これらのバージョンには最新の機能と改善が含まれていますが、通常のリリースほど安定していない可能性があります<br/>
+Nightlyビルドにはバグがある可能性があり、日常的な使用にはお勧めできませんのでご注意ください.
 
-You can download the Nightly version from the following link:
+Nightlyバージョンは以下のリンクからダウンロードできます:
 
 <a target="_blank" href="https://github.com/Ashinch/ReadYou/actions/workflows/build_commit.yaml">Check Nightly Builds</a>
 
@@ -104,13 +106,13 @@ Choose the latest workflow from the GitHub Actions page and download the artifac
 
 Thanks for all the love and support.❤️
 
-## Localization
+## ローカライズ・翻訳
 
 Thank you to each of the **Read You** translators, and if you would like to contribute, please submit a translation via [Weblate](https://hosted.weblate.org/engage/readyou/).
 
 [<img src="https://hosted.weblate.org/widgets/readyou/-/horizontal-auto.svg" alt="" />](https://hosted.weblate.org/engage/readyou/)
 
-## Build
+## ビルド
 
 > Welcome to open a [pull request](https://github.com/Ashinch/ReadYou/pulls). [GitHub Actions](https://github.com/Ashinch/ReadYou/actions) automatically packages all flavors of apk files for each commit.
 
@@ -128,9 +130,9 @@ Thank you to each of the **Read You** translators, and if you would like to cont
 
     > In case of lag, please select Release version build.
 
-## Credits
+## クレジット
 
-### Open Source Projects
+### オープンソースプロジェクト
 
 - [MusicYou](https://github.com/Kyant0/MusicYou)
 - [ParseRSS](https://github.com/muhrifqii/ParseRSS)
@@ -144,7 +146,7 @@ Thank you to each of the **Read You** translators, and if you would like to cont
 - [besticon](https://github.com/mat/besticon)
 - ...
 
-### Special Thanks
+### スペシャルサンクス
 
 [<img src="https://avatars.githubusercontent.com/u/76829190?v=4" width="180" height="180" style="display: block; border: 1px solid #f5f5f5; border-radius: 9999px;"/>](https://github.com/Kyant0)
 
@@ -158,6 +160,6 @@ Thanks to **JetBrains** for allocating free open-source licences for IDEs for **
 
 Thanks to **Weblate** for providing free hosting of open source projects for **Read You**.
 
-## License
+## ライセンス
 
 GNU GPL v3.0 © [Read You](https://github.com/Ashinch/ReadYou/blob/main/LICENSE)
