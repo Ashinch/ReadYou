@@ -96,24 +96,24 @@ class OPMLDataSource @Inject constructor(
                             val feedMetadata = NostrFeed.fetchFeedMetadata(feedUrl, Client())
                             Feed(
                                 id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
-                                name = outline.extractName(),
-                                url = outline.extractUrl() ?: continue,
+                                name = subOutline.extractName(),
+                                url = subOutline.extractUrl() ?: continue,
                                 icon = feedMetadata.imageUrl,
                                 groupId = groupId,
                                 accountId = targetAccountId,
-                                isNotification = outline.extractPresetNotification(),
-                                isFullContent = outline.extractPresetFullContent(),
+                                isNotification = subOutline.extractPresetNotification(),
+                                isFullContent = subOutline.extractPresetFullContent(),
                             )
                         }
                         else {
                             Feed(
                                 id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
-                                name = outline.extractName(),
-                                url = outline.extractUrl() ?: continue,
+                                name = subOutline.extractName(),
+                                url = subOutline.extractUrl() ?: continue,
                                 groupId = groupId,
                                 accountId = targetAccountId,
-                                isNotification = outline.extractPresetNotification(),
-                                isFullContent = outline.extractPresetFullContent(),
+                                isNotification = subOutline.extractPresetNotification(),
+                                isFullContent = subOutline.extractPresetFullContent(),
                             )
                         }
                         groupWithFeedList.addFeed(feedToAdd)
