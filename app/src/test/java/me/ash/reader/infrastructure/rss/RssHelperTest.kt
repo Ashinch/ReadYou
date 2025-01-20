@@ -10,6 +10,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.mock
+import rust.nostr.sdk.Client
 
 internal const val enclosureUrlString1: String = "https://example.com/enclosure.jpg"
 internal const val enclosureUrlString2: String = "https://github.blog/wp-content/uploads/2024/03/github_copilot_header.png"
@@ -50,6 +51,9 @@ class RssHelperTest {
     @Mock
     private lateinit var mockOkHttpClient: OkHttpClient
 
+    @Mock
+    private lateinit var mockNostrClient: Client
+
     private lateinit var rssHelper: RssHelper
 
     @Before
@@ -57,7 +61,8 @@ class RssHelperTest {
         mockContext = mock<Context> { }
         mockIODispatcher = mock<CoroutineDispatcher> {}
         mockOkHttpClient = mock<OkHttpClient> {}
-        rssHelper = RssHelper(mockContext, mockIODispatcher, mockOkHttpClient)
+        mockNostrClient = mock<Client> {  }
+        rssHelper = RssHelper(mockContext, mockIODispatcher, mockOkHttpClient, mockNostrClient)
     }
 
     @Test
