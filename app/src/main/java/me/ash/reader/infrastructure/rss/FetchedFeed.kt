@@ -109,7 +109,7 @@ class NostrFeed(
         return NostrFeedResult(
             nostrUri = nostrUri,
             authorName = profile.name,
-            feedTitle = "${profile.name.trim()}'s Nostr feed",
+            feedTitle = profile.name,
             authorPictureLink = profile.imageUrl,
             articles = articles
         )
