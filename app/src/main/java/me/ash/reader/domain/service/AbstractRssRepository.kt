@@ -187,21 +187,29 @@ abstract class AbstractRssRepository(
 
     private suspend fun syncFeed(feed: Feed, preDate: Date = Date()): FeedWithArticle {
         val latest = articleDao.queryLatestByFeedId(context.currentAccountId, feed.id)
-        val articles = if (feed.url.isNostrUri()) {
-            rssHelper.syncNostrFeed(feed, "", preDate)
-        } else {
-            rssHelper.queryRssXml(feed, "", preDate)
+        if (feed.url.isNostrUri()) {
+            val syncedFeed = rssHelper.syncNostrFeed(feed, "", preDate)
+            return FeedWithArticle(
+                feed = syncedFeed.feed
+                    .apply { isNotification = feed.isNotification && syncedFeed.articles.isNotEmpty() },
+                articles = syncedFeed.articles
+            )
         }
-        if (feed.icon == null) {
-            val iconLink = rssHelper.queryRssIconLink(feed.url)
-            if (iconLink != null) {
-                rssHelper.saveRssIcon(feedDao, feed, iconLink)
+        else {
+            val articles = rssHelper.queryRssXml(feed, "", preDate)
+            if (feed.icon == null) {
+                val iconLink = rssHelper.queryRssIconLink(feed.url)
+                if (iconLink != null) {
+                    rssHelper.saveRssIcon(feedDao, feed, iconLink)
+                }
             }
+
+            return FeedWithArticle(
+                feed = feed.apply { isNotification = feed.isNotification && articles.isNotEmpty() },
+                articles = articles
+            )
         }
-        return FeedWithArticle(
-            feed = feed.apply { isNotification = feed.isNotification && articles.isNotEmpty() },
-            articles = articles
-        )
+
     }
 
     suspend fun clearKeepArchivedArticles() {

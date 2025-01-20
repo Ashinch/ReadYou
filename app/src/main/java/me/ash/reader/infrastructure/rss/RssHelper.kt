@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.feed.Feed
+import me.ash.reader.domain.model.feed.FeedWithArticle
 import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.html.Readability
@@ -32,7 +33,6 @@ import rust.nostr.sdk.Kind
 import rust.nostr.sdk.KindEnum
 import rust.nostr.sdk.SingleLetterTag
 import rust.nostr.sdk.TagKind
-import rust.nostr.sdk.use
 import java.io.InputStream
 import java.time.Instant
 import java.util.*
@@ -146,22 +146,28 @@ class RssHelper @Inject constructor(
         )
     }
 
+    @Throws(Exception::class)
     suspend fun syncNostrFeed(
         feed: Feed,
         latestLink: String?,
         preDate: Date = Date()
-    ): List<Article> =
+    ): FeedWithArticle =
         try {
             val accountId = context.currentAccountId
             Client().use {
-                val updatedFeed = NostrFeed.fetchFeedFrom(feed.url, it)
-                updatedFeed.getArticles()
-                    .map { buildArticleFromNostrEvent(feed, accountId, it, updatedFeed.getFeedAuthor(), preDate) }
+                val nostrFeed = NostrFeed.fetchFeedFrom(feed.url, it)
+                val updatedArticles = nostrFeed.getArticles()
+                    .map { buildArticleFromNostrEvent(feed, accountId, it, nostrFeed.getFeedAuthor(), preDate) }
+                val updatedFeed = feed.copy(
+                    icon = nostrFeed.getIconUrl()
+                )
+                return FeedWithArticle(updatedFeed, updatedArticles)
             }
         } catch (e: Exception) {
             e.printStackTrace()
             Log.e("RLog", "syncNostrFeedNew[${feed.name}]: ${e.message}")
-            listOf()
+//            FeedWithArticle(feed, emptyList())
+            throw e
         }
 
     fun buildArticleFromNostrEvent(
@@ -210,7 +216,7 @@ class RssHelper @Inject constructor(
         )
 
         return Article(
-            id = accountId.spacerDollar(articleEvent.id().toBech32()),
+            id = accountId.spacerDollar(UUID.randomUUID().toString()),
             accountId = accountId,
             feedId = feed.id,
             date = articleDate,
