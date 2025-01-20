@@ -241,12 +241,20 @@ class NostrFeed(
 
     companion object {
         suspend fun fetchFeedFrom(uri: String, nostrClient: Client): NostrFeed {
-            val feedInstance = NostrFeed(nostrClient)
-            val feedResult = feedInstance.nreq(uri)
-            feedInstance.feedFetchResult = feedResult
-            return if (feedInstance.getArticles().isNotEmpty()){
-                feedInstance
-            } else throw EmptyNostrDataException("No feed found for $uri")
+            nostrClient.use {
+                val feedInstance = NostrFeed(nostrClient)
+                val feedResult = feedInstance.nreq(uri)
+                feedInstance.feedFetchResult = feedResult
+                return if (feedInstance.getArticles().isNotEmpty()){
+                    feedInstance
+                } else throw EmptyNostrDataException("No feed found for $uri")
+            }
+
+        }
+
+        suspend fun fetchFeedMetadata(uri: String, nostrClient: Client): AuthorNostrData {
+            val feedFetcher = NostrFeed(nostrClient)
+            return feedFetcher.getProfileMetadata(uri)
         }
     }
 
