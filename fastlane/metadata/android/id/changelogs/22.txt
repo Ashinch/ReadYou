@@ -1,0 +1,35 @@
+## 0.9.11
+
+1. Ingat posisi gulir pada halaman umpan (#519) (@aeghn)
+
+2. Perbaikan pengambilan dan penanganan favicon (#511) (@Ashinch, @kid1412621)
+
+3. Perbaikan gerakan “Geser untuk Menandai Telah Dibaca” yang menandai beberapa item sebagai telah dibaca (#515) (@kid1412621, @mbestavros)
+
+4. Tambahkan solusi untuk bug “Baris terlalu besar untuk masuk ke dalam CursorWindow” (#312) (@mbestavros)
+
+5. Pembaruan terjemahan (terima kasih kepada semua orang yang telah membantu!)
+
+### Catatan
+
+Sudah cukup lama untuk Read You! Rilis ini memperbaiki sebagian besar bug utama dari rilis 0.9.9, ditambah dengan bug yang sudah ada sejak lama.
+
+Harapan saya, ini akan menjadi versi yang solid untuk jangka panjang, dan kita bisa beristirahat sejenak dari rilis sambil menunggu perbaikan-perbaikan baru dari komunitas kita yang luar biasa ini. Seperti biasa, jika Anda menemukan bug, laporkan di GitHub!
+
+Karena beberapa dari Anda mungkin melewatkan perubahan besar di 0.9.9, saya akan memasukkannya lagi di bawah ini.
+
+## 0.9.9
+
+1. API Demam sekarang menyinkronkan metadata yang sudah dibaca/dibintangi dengan benar di seluruh perangkat (#401) (#406) (@mbestavros)
+
+2. Menambahkan perintah untuk izin pemberitahuan jika relevan (#422) (@RafhaanShah)
+
+3. Fitur baru: Gesek untuk menandai sudah dibaca (#455) (@boun, @nvllz)
+
+4. Opsi baru: Penanganan tautan eksternal (#428) (@S-H-Y-A)
+
+5. Ambil favicon untuk item umpan (#471) (@Ashinch, @kid1412621)
+
+6. Berbagai perbaikan dan peningkatan internal (@Ashinch)
+
+7. Pembaruan terjemahan: Bahasa Hongaria, Turki, Serbia, Jerman, Indonesia, Persia, dan banyak lainnya (terima kasih kepada semua orang yang telah membantu!)

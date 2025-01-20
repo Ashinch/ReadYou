@@ -1,0 +1,27 @@
+## 0.9.9
+
+1. API Fever sekarang menyinkronkan metadata yang dibaca/dibintangi dengan benar di seluruh perangkat (#401) (#406) (@mbestavros)
+
+2. Menambahkan perintah untuk izin pemberitahuan jika relevan (#422) (@RafhaanShah)
+
+3. Fitur baru: Gesek untuk menandai sudah dibaca (#455) (@boun, @nvllz)
+
+4. Opsi baru: Penanganan tautan eksternal (#428) (@S-H-Y-A)
+
+5. Ambil favicon untuk item umpan (#471) (@Ashinch, @kid1412621)
+
+6. Berbagai perbaikan dan peningkatan internal (@Ashinch)
+
+7. Pembaruan terjemahan: Bahasa Hongaria, Turki, Serbia, Jerman, Indonesia, Persia, dan banyak lainnya (terima kasih kepada semua orang yang telah membantu!)
+
+### Catatan
+
+1. @Ashinch telah menunjuk @mbestavros dan @JunkFood02 sebagai Kolaborator tambahan di GitHub:
+
+“Ketika saya tidak memiliki waktu luang yang cukup, saya sangat menghargai semua orang yang ikut berkontribusi dalam proyek ini. @mbestavros dan @JunkFood02 akan ditambahkan ke dalam daftar kolaborator untuk proyek ini, yang akan memberi Anda beberapa izin untuk mengelola rencana rilis proyek.”
+
+(Sumber: https://github.com/Ashinch/ReadYou/issues/495#issuecomment-1880344011)
+
+Untuk memperjelas: ini bukan berarti @Ashinch mengundurkan diri dari proyek ini! Ini hanya berarti ada lebih banyak orang yang tersedia untuk membantu membuat rilis baru. Ini akan sangat membantu ketika @Ashinch sedang sibuk, dan akan mengurangi waktu untuk mengirimkan kode setelah digabungkan di Github.
+
+2. Sebagai catatan: rilis 0.9.9 dikelola oleh @mbestavros! Saya menyukai pekerjaan @Ashinch dengan ReadYou, dan saya berterima kasih atas kesempatan untuk membantu dalam manajemen rilis.

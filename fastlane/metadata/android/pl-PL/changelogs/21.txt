@@ -1,0 +1,31 @@
+## 0.9.10
+
+1. Ta wersja rozwiązuje problemy z uwierzytelnianiem w integracji Fever API. Poniżej znajduje się dziennik zmian dla wersji 0.9.9
+
+## 0.9.9
+
+1. Fever API teraz prawidłowo synchronizuje metadane odczytane/oznaczone gwiazdką między urządzeniami (#401) (#406) (@mbestavros)
+
+2. Dodaie monitu o pozwolenie na powiadomienie, gdy jest to konieczne (#422) (@RafhaanShah)
+
+3. Nowa funkcja: przesuń, aby oznaczyć jako przeczytane (#455) (@boun, @nvllz)
+
+4. Nowa opcja: obsługa linków zewnętrznych (#428) (@S-H-Y-A)
+
+5. Pobieranie ikon dla elementów kanału (#471) (@Ashinch, @kid1412621)
+
+6. Różne wewnętrzne refaktoryzacje i ulepszenia (@Ashinch)
+
+7. Aktualizacje tłumaczeń: węgierski, turecki, serbski, niemiecki, indonezyjski, perski i wiele innych (dziękuję wszystkim, którzy pomogli!)
+
+### Notatki
+
+1. @Ashinch wyznaczył @mbestavrosa i @JunkFood02 jako dodatkowych współpracowników na Github:
+
+„Kiedy nie mam wystarczająco dużo wolnego czasu, bardzo doceniam, że wszyscy zbierają się, aby przyczynić się do tego projektu. @mbestavros i @JunkFood02 zostaną dodani do listy współpracowników projektu, przyznając Ci pewne uprawnienia do zarządzania planami wydań projektu”.
+
+(Źródło: https://github.com/Ashinch/ReadYou/issues/495#issuecomment-1880344011)
+
+Aby było jasne: nie oznacza to, że @Ashinch rezygnuje z projektu! Oznacza to po prostu, że jest więcej osób dostępnych do pomocy w tworzeniu nowych wydań. To bardzo pomoże, gdy @Ashinch jest zajęty i powinno skrócić czas dostarczania kodu po jego scaleniu na Github.
+
+2. W związku z tym: wydaniem 0.9.9 zarządza @mbestavros! Uwielbiam współpracę @Ashinch z ReadYou i jestem wdzięczny za możliwość pomocy w zarządzaniu wersjami.
