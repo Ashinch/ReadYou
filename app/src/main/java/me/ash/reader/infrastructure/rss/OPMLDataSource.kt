@@ -50,35 +50,21 @@ class OPMLDataSource @Inject constructor(
                         )
                     }
                 } else {
-//                    val feedUrl = outline.extractUrl()
-//                    val feedToAdd = if (feedUrl?.isNostrUri() == true) {
-//                        val feedMetadata = NostrFeed.fetchFeedMetadata(feedUrl, Client())
-//                        Feed(
-//                            id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
-//                            name = outline.extractName(),
-//                            url = outline.extractUrl() ?: continue,
-//                            icon = feedMetadata.imageUrl,
-//                            groupId = defaultGroup.id,
-//                            accountId = targetAccountId,
-//                            isNotification = outline.extractPresetNotification(),
-//                            isFullContent = outline.extractPresetFullContent(),
-//                        )
-//                    }
-//                    else {
-//                        Feed(
-//                            id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
-//                            name = outline.extractName(),
-//                            url = outline.extractUrl() ?: continue,
-//                            groupId = defaultGroup.id,
-//                            accountId = targetAccountId,
-//                            isNotification = outline.extractPresetNotification(),
-//                            isFullContent = outline.extractPresetFullContent(),
-//                        )
-//                    }
-
-
-                    groupWithFeedList.addFeedToDefault(
-//                        feedToAdd
+                    val feedUrl = outline.extractUrl()
+                    val feedToAdd = if (feedUrl?.isNostrUri() == true) {
+                        val feedMetadata = NostrFeed.fetchFeedMetadata(feedUrl, Client())
+                        Feed(
+                            id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
+                            name = outline.extractName(),
+                            url = outline.extractUrl() ?: continue,
+                            icon = feedMetadata.imageUrl,
+                            groupId = defaultGroup.id,
+                            accountId = targetAccountId,
+                            isNotification = outline.extractPresetNotification(),
+                            isFullContent = outline.extractPresetFullContent(),
+                        )
+                    }
+                    else {
                         Feed(
                             id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
                             name = outline.extractName(),
@@ -88,7 +74,8 @@ class OPMLDataSource @Inject constructor(
                             isNotification = outline.extractPresetNotification(),
                             isFullContent = outline.extractPresetFullContent(),
                         )
-                    )
+                    }
+                    groupWithFeedList.addFeedToDefault(feedToAdd)
                 }
             } else {
                 var groupId = defaultGroup.id
@@ -104,33 +91,21 @@ class OPMLDataSource @Inject constructor(
                 }
                 for (subOutline in outline.subElements) {
                     if (subOutline != null && subOutline.attributes != null) {
-//                        val feedUrl = outline.extractUrl()
-//                        val feedToAdd = if (feedUrl?.isNostrUri() == true) {
-//                            val feedMetadata = NostrFeed.fetchFeedMetadata(feedUrl, Client())
-//                            Feed(
-//                                id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
-//                                name = subOutline.extractName(),
-//                                url = subOutline.extractUrl() ?: continue,
-//                                icon = feedMetadata.imageUrl,
-//                                groupId = groupId,
-//                                accountId = targetAccountId,
-//                                isNotification = subOutline.extractPresetNotification(),
-//                                isFullContent = subOutline.extractPresetFullContent(),
-//                            )
-//                        }
-//                        else {
-//                            Feed(
-//                                id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
-//                                name = subOutline.extractName(),
-//                                url = subOutline.extractUrl() ?: continue,
-//                                groupId = groupId,
-//                                accountId = targetAccountId,
-//                                isNotification = subOutline.extractPresetNotification(),
-//                                isFullContent = subOutline.extractPresetFullContent(),
-//                            )
-//                        }
-                        groupWithFeedList.addFeed(
-//                            feedToAdd
+                        val feedUrl = outline.extractUrl()
+                        val feedToAdd = if (feedUrl?.isNostrUri() == true) {
+                            val feedMetadata = NostrFeed.fetchFeedMetadata(feedUrl, Client())
+                            Feed(
+                                id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
+                                name = subOutline.extractName(),
+                                url = subOutline.extractUrl() ?: continue,
+                                icon = feedMetadata.imageUrl,
+                                groupId = groupId,
+                                accountId = targetAccountId,
+                                isNotification = subOutline.extractPresetNotification(),
+                                isFullContent = subOutline.extractPresetFullContent(),
+                            )
+                        }
+                        else {
                             Feed(
                                 id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
                                 name = subOutline.extractName(),
@@ -140,7 +115,8 @@ class OPMLDataSource @Inject constructor(
                                 isNotification = subOutline.extractPresetNotification(),
                                 isFullContent = subOutline.extractPresetFullContent(),
                             )
-                        )
+                        }
+                        groupWithFeedList.addFeed(feedToAdd)
                     }
                 }
             }
