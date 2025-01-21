@@ -166,8 +166,7 @@ class RssHelper @Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             Log.e("RLog", "syncNostrFeedNew[${feed.name}]: ${e.message}")
-//            FeedWithArticle(feed, emptyList())
-            throw e
+            FeedWithArticle(feed, emptyList())
         }
 
     fun buildArticleFromNostrEvent(
