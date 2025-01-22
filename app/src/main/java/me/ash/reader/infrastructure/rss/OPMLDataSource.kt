@@ -52,23 +52,17 @@ class OPMLDataSource @Inject constructor(
                 } else {
                     val feedUrl = outline.extractUrl()
                     val feedToAdd = if (feedUrl?.isNostrUri() == true) {
-                        val nostrClient = Client()
-                        try {
-                            val feedMetadata = NostrFeed.fetchFeedMetadata(feedUrl, nostrClient)
-                            Feed(
-                                id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
-                                name = outline.extractName(),
-                                url = outline.extractUrl() ?: "",
-                                icon = feedMetadata.imageUrl,
-                                groupId = defaultGroup.id,
-                                accountId = targetAccountId,
-                                isNotification = outline.extractPresetNotification(),
-                                isFullContent = outline.extractPresetFullContent(),
-                            )
-                        } finally {
-                            nostrClient.destroy()
-                        }
-
+                        val feedMetadata = NostrFeed.fetchFeedMetadata(feedUrl, Client())
+                        Feed(
+                            id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
+                            name = outline.extractName(),
+                            url = outline.extractUrl() ?: continue,
+                            icon = feedMetadata.imageUrl,
+                            groupId = defaultGroup.id,
+                            accountId = targetAccountId,
+                            isNotification = outline.extractPresetNotification(),
+                            isFullContent = outline.extractPresetFullContent(),
+                        )
                     }
                     else {
                         Feed(
@@ -99,23 +93,17 @@ class OPMLDataSource @Inject constructor(
                     if (subOutline != null && subOutline.attributes != null) {
                         val feedUrl = outline.extractUrl()
                         val feedToAdd = if (feedUrl?.isNostrUri() == true) {
-                            val nostrClient = Client()
-                            try {
-                                val feedMetadata = NostrFeed.fetchFeedMetadata(feedUrl, nostrClient)
-                                Feed(
-                                    id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
-                                    name = subOutline.extractName(),
-                                    url = subOutline.extractUrl() ?: continue,
-                                    icon = feedMetadata.imageUrl,
-                                    groupId = groupId,
-                                    accountId = targetAccountId,
-                                    isNotification = subOutline.extractPresetNotification(),
-                                    isFullContent = subOutline.extractPresetFullContent(),
-                                )
-                            } finally {
-                                nostrClient.destroy()
-                            }
-
+                            val feedMetadata = NostrFeed.fetchFeedMetadata(feedUrl, Client())
+                            Feed(
+                                id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
+                                name = subOutline.extractName(),
+                                url = subOutline.extractUrl() ?: continue,
+                                icon = feedMetadata.imageUrl,
+                                groupId = groupId,
+                                accountId = targetAccountId,
+                                isNotification = subOutline.extractPresetNotification(),
+                                isFullContent = subOutline.extractPresetFullContent(),
+                            )
                         }
                         else {
                             Feed(
