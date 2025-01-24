@@ -1,5 +1,6 @@
 package me.ash.reader.infrastructure.rss.provider.fever
 
+import android.content.Context
 import me.ash.reader.infrastructure.exception.FeverAPIException
 import me.ash.reader.infrastructure.rss.provider.ProviderAPI
 import me.ash.reader.ui.ext.encodeBase64
@@ -10,11 +11,13 @@ import okhttp3.executeAsync
 import java.util.concurrent.ConcurrentHashMap
 
 class FeverAPI private constructor(
+    context: Context,
     private val serverUrl: String,
     private val apiKey: String,
     private val httpUsername: String? = null,
     private val httpPassword: String? = null,
-) : ProviderAPI() {
+    clientCertificateAlias: String? = null,
+) : ProviderAPI(context, clientCertificateAlias) {
 
     private suspend inline fun <reified T> postRequest(query: String?): T {
         val response = client.newCall(
@@ -104,14 +107,16 @@ class FeverAPI private constructor(
         private val instances: ConcurrentHashMap<String, FeverAPI> = ConcurrentHashMap()
 
         fun getInstance(
+            context: Context,
             serverUrl: String,
             username: String,
             password: String,
             httpUsername: String? = null,
             httpPassword: String? = null,
+            clientCertificateAlias: String? = null,
         ): FeverAPI = "$username:$password".md5().run {
-            instances.getOrPut("$serverUrl$this$httpUsername$httpPassword") {
-                FeverAPI(serverUrl, this, httpUsername, httpPassword)
+            instances.getOrPut("$serverUrl$this$httpUsername$httpPassword$clientCertificateAlias") {
+                FeverAPI(context, serverUrl, this, httpUsername, httpPassword, clientCertificateAlias)
             }
         }
 

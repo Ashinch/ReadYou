@@ -70,11 +70,13 @@ class FeverRssService @Inject constructor(
     private suspend fun getFeverAPI() =
         FeverSecurityKey(accountDao.queryById(context.currentAccountId)!!.securityKey).run {
             FeverAPI.getInstance(
+                context = context,
                 serverUrl = serverUrl!!,
                 username = username!!,
                 password = password!!,
                 httpUsername = null,
                 httpPassword = null,
+                clientCertificateAlias = clientCertificateAlias,
             )
         }
 

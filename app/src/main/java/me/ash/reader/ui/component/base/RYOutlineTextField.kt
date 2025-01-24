@@ -1,5 +1,7 @@
 package me.ash.reader.ui.component.base
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -22,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -46,6 +49,7 @@ fun RYOutlineTextField(
     errorMessage: String = "",
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
+    onClick: (() -> Unit)? = null,
 ) {
     val clipboardManager = LocalClipboardManager.current
     val focusRequester = remember { FocusRequester() }
@@ -59,7 +63,11 @@ fun RYOutlineTextField(
     }
 
     OutlinedTextField(
-        modifier = Modifier.focusRequester(focusRequester),
+        modifier = if (onClick != null) {
+            Modifier.focusProperties { canFocus = false }
+        } else {
+            Modifier.focusRequester(focusRequester)
+        },
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = Color.Transparent,
             focusedContainerColor = Color.Transparent
@@ -115,5 +123,18 @@ fun RYOutlineTextField(
         },
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
+        readOnly = onClick != null,
+        interactionSource = onClick?.let {
+            remember { MutableInteractionSource() }
+                .also { interactionSource ->
+                    LaunchedEffect(interactionSource) {
+                        interactionSource.interactions.collect {
+                            if (it is PressInteraction.Release) {
+                                onClick.invoke()
+                            }
+                        }
+                    }
+                }
+        }
     )
 }

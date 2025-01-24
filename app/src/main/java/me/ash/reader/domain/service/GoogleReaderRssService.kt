@@ -72,11 +72,13 @@ class GoogleReaderRssService @Inject constructor(
     private suspend fun getGoogleReaderAPI() =
         GoogleReaderSecurityKey(accountDao.queryById(context.currentAccountId)!!.securityKey).run {
             GoogleReaderAPI.getInstance(
+                context = context,
                 serverUrl = serverUrl!!,
                 username = username!!,
                 password = password!!,
                 httpUsername = null,
                 httpPassword = null,
+                clientCertificateAlias = clientCertificateAlias,
             )
         }
 

@@ -1,5 +1,7 @@
 package me.ash.reader.ui.page.settings.accounts.addition
 
+import android.app.Activity
+import android.security.KeyChain
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -55,6 +57,7 @@ fun AddFeverAccountDialog(
     var feverServerUrl by rememberSaveable { mutableStateOf("") }
     var feverUsername by rememberSaveable { mutableStateOf("") }
     var feverPassword by rememberSaveable { mutableStateOf("") }
+    var feverClientCertificateAlias by rememberSaveable { mutableStateOf("") }
 
     RYDialog(
         modifier = Modifier.padding(horizontal = 44.dp),
@@ -121,6 +124,19 @@ fun AddFeverAccountDialog(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 )
                 Spacer(modifier = Modifier.height(10.dp))
+                RYOutlineTextField(
+                    requestFocus = false,
+                    readOnly = accountUiState.isLoading,
+                    value = feverClientCertificateAlias,
+                    onValueChange = { feverClientCertificateAlias = it },
+                    label = stringResource(R.string.client_certificate),
+                    onClick = {
+                        KeyChain.choosePrivateKeyAlias(context as Activity, { alias ->
+                            feverClientCertificateAlias = alias ?: ""
+                        }, null, null, null, null)
+                    }
+                )
+                Spacer(modifier = Modifier.height(10.dp))
             }
         },
         confirmButton = {
@@ -138,6 +154,7 @@ fun AddFeverAccountDialog(
                             serverUrl = feverServerUrl,
                             username = feverUsername,
                             password = feverPassword,
+                            clientCertificateAlias = feverClientCertificateAlias,
                         ).toString(),
                     )) { account, exception ->
                         if (account == null) {
