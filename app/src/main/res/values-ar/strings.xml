@@ -329,4 +329,5 @@
     <string name="mark_as_read_on_scroll">وضع علامة مقروء على التمرير</string>
     <string name="become_a_sponsor">كن داعما</string>
     <string name="sponsor_desc">نحن نبني ونحافظ على هذا التطبيق المجاني والمفتوح المصدر في غير ساعات العمل لدينا. إذا كنت تستمتع به، فيرجى التفكير في دعمنا بتبرع صغير! ☕️</string>
+    <string name="toolbars">شريط الأدوات</string>
 </resources>

@@ -314,4 +314,8 @@
     <string name="about">Über</string>
     <string name="bionic_reading_tips">Was ist bionisches Lesen?</string>
     <string name="browse_bionic_reading_tips">Erfahren Sie mehr unter <i><u>bionic-reading.com</u></i>.</string>
+    <string name="toolbars">Werkzeugleisten</string>
+    <string name="mark_as_read_on_scroll">Beim Scrollen als gelesen markieren</string>
+    <string name="become_a_sponsor">Sponsor werden</string>
+    <string name="sponsor_desc">Wir entwickeln und pflegen diese kostenlose Open-Source-Anwendung in unserer Freizeit. Wenn sie Ihnen gefällt, unterstützen Sie uns bitte mit einer kleinen Spende! ☕️</string>
 </resources>

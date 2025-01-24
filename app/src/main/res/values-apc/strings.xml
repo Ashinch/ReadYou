@@ -314,4 +314,8 @@
     <string name="browse_bionic_reading_tips">قرا عن القراية البايونيك ع <i><u>bionic-reading.com</u></i>.</string>
     <string name="use_bionic_reading">ستعمل القراية البايونيك</string>
     <string name="bionic_reading_tips">شو القراية البايونيك؟</string>
+    <string name="toolbars">شريط الأدوات</string>
+    <string name="mark_as_read_on_scroll">علّم إنه منرقرا عال تمرير</string>
+    <string name="become_a_sponsor">صير سپانسر</string>
+    <string name="sponsor_desc">نحن منعمل و من جدد هيدا الآپ المجاني و مفتوح المصدر برات سعات العمل تبعنا.إذا بيعجبك الآپ، پليز فكر ب دعمنا ب تبرع زغير! ☕️</string>
 </resources>
