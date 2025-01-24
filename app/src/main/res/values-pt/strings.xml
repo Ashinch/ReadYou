@@ -318,4 +318,7 @@
     <string name="bionic_reading_tips">O que é Bionic Reading?</string>
     <string name="browse_bionic_reading_tips">Saiba mais em <i><u>bionic-reading.com</u></i>.</string>
     <string name="mark_as_read_on_scroll">Marcar como lido na rolagem</string>
+    <string name="toolbars">Barras de ferramentas</string>
+    <string name="become_a_sponsor">Torne-se um patrocinador</string>
+    <string name="sponsor_desc">Construímos e mantemos este aplicativo gratuito e de código aberto fora do horário comercial. Se você gostou, considere nos apoiar com uma pequena doação! ☕️</string>
 </resources>

@@ -315,4 +315,5 @@
     <string name="mark_as_read_on_scroll">Маркирай като прочетено при превъртане</string>
     <string name="become_a_sponsor">Станете спонсор</string>
     <string name="sponsor_desc">Ние създаваме и поддържаме това безплатно приложение с отворен код в извънработно време. Ако ви харесва, моля, помислете дали да ни подкрепите с малко дарение! ☕️</string>
+    <string name="toolbars">Ленти с инструменти</string>
 </resources>
