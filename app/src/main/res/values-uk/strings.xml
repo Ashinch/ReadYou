@@ -323,4 +323,5 @@
     <string name="mark_as_read_on_scroll">Позначити як прочитане при прокручуванні</string>
     <string name="become_a_sponsor">Стати спонсором</string>
     <string name="sponsor_desc">Ми створюємо і підтримуємо цей безплатний застосунок з відкритим вихідним кодом у вільний від роботи час. Якщо він вам подобається, будь ласка, підтримайте нас невеликою пожертвою! ☕️</string>
+    <string name="toolbars">Панелі інструментів</string>
 </resources>
