@@ -1,0 +1,6 @@
+## 0.11.1
+
+Perubahan penting:
+1. Dukungan font khusus untuk pembaca WebView
+2. Menambahkan gaya visual baru ke bilah alat di halaman alur dan halaman bacaan
+3. Peningkatan & perbaikan UI

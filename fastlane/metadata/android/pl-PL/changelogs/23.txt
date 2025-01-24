@@ -1,0 +1,24 @@
+## 0.9.12
+
+1. Obsługa API Google Reader i API FreshRSS (#536, @Ashinch)
+2. Korzystanie z animacji przejścia do przodu i do tyłu (#540, @JunkFood02)
+3. Zapewnienie opcji wykluczenia dodatkowych informacji podczas eksportowania do pliku OPML (#567, @Ashinch)
+4. Zapewnienie opcji wyszarzania oznaczonych gwiazdką elementów artykułu (#547, @MauroGuida)
+5. Naprawa „Przesuń, aby oznaczyć jako przeczytany artykuł” (#520, @aeghn)
+6. Naprawa problemu z dolnym rogiem pustej grupy (#529, @kid1412621)
+7. Naprawa odświeżania widoku po synchronizacji (#531, @kid1412621)
+8. Naprawa błędu spowodowanego brakiem tytułu artykułu (#532, @kid1412621)
+9. Naprawa porzuconych artykułów podczas synchronizacji w Fever API (#534, @Ashinch)
+10. Wiele ulepszeń interfejsu użytkownika i poprawek błędów (@Ashinch, @JunkFood02)
+11. Aktualizacje tłumaczeń (dziękuję wszystkim, którzy pomogli)
+
+### Notatki
+
+1. Podziękowania dla społeczności FreshRSS, szczególnie @Alkarex, za pomoc w tym projekcie.
+2. ReadYou nie jest obecnie w pełni kompatybilny z Inoreader za pośrednictwem interfejsu API Google Reader.
+3. ReadYou nie może obecnie określić nowej grupy podczas dodawania subskrypcji za pośrednictwem interfejsu API Google Reader.
+4. Podczas synchronizacji z interfejsem API Google Reader, ReadYou może pobrać do 10 tys. artykułów na synchronizację. W przypadku artykułów przeczytanych, synchronizowane będą tylko te z ostatniego miesiąca, podczas gdy nieprzeczytane i oznaczone gwiazdką artykuły będą w pełni synchronizowane. Prędkość synchronizacji zależy przede wszystkim od liczby tych artykułów. Początkowa synchronizacja może zająć trochę czasu, w zależności od różnicy danych między lokalną a serwerem. Jeśli masz dużą liczbę kanałów, nadal może się wydawać, że jest wolny, mogę spróbować to zoptymalizować, jeśli to konieczne.
+5. Zalecamy użytkownikom, którzy uczestniczyli w testach, ponowną synchronizację lub ponowne dodanie konta Google Reader API po zainstalowaniu wersji `0.9.12`.
+6. Spodziewajmy się bardziej szczegółowych ulepszeń w następnej wersji.
+
+**Pełny dziennik zmian:** [0.9.11...0.9.12](https://github.com/Ashinch/ReadYou/compare/0.9.11...0.9.12)

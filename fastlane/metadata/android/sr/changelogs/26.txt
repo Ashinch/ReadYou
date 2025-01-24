@@ -1,0 +1,8 @@
+## 0.11.0
+
+Značajne promene:
+1. Predstavite novi čitač članaka zasnovan na VebViev-u, sa podrškom za Bionic Reading
+2. Automatski označi stavke kao pročitane pri pomeranju
+3. Kliknite na gornju traku aplikacije da biste se vratili na vrh stranice
+4. Dodajte razdelnike na trake sa alatkama na stranici za čitanje
+5. Dodajte dugme za sažimanje/proširivanje grupa feedova

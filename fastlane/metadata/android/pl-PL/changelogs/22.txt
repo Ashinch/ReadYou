@@ -1,0 +1,17 @@
+## 0.9.11
+
+1. Zapamiętywanie pozycji przewijania na stronach kanału (#519) (@aeghn)
+
+2. Poprawki pobierania i obsługi ikon (#511) (@Ashinch, @kid1412621)
+
+3. Naprawa gestu „Przesuń, aby oznaczyć przeczytane” oznaczającego wiele elementów jako przeczytane (#515) (@kid1412621, @mbestavros)
+
+4. Dodaj obejście błędu „Row too big to fit into CursorWindow” (#312) (@mbestavros)
+
+5. Aktualizacje tłumaczeń (dziękuję wszystkim, którzy pomogli!)
+
+### Notatki
+
+To był niezły tydzień dla Read You! Ta wersja naprawia większość pozostałych głównych błędów z wersji 0.9.9, a także jeden, który występował od dłuższego czasu.
+
+Mam nadzieję, że będzie to solidna, długoterminowa wersja i że będziemy mogli zrobić sobie przerwę od wydań, czekając na nowe ulepszenia od naszej wspaniałej społeczności. Jak zawsze, jeśli natrafisz na błąd, zgłoś go na Github!
