@@ -22,6 +22,7 @@ import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.storage.AndroidImageDownloader
+import me.ash.reader.ui.ext.isNostrUri
 import java.util.Date
 import javax.inject.Inject
 
@@ -46,6 +47,8 @@ class ReadingViewModel @Inject constructor(
         get() = readingUiState.value.articleWithFeed?.article
     private val currentFeed: Feed?
         get() = readingUiState.value.articleWithFeed?.feed
+
+    private var initialArticleItems: List<ArticleFlowItem> = emptyList()
 
     fun initData(articleId: String) {
         setLoading()
@@ -96,10 +99,14 @@ class ReadingViewModel @Inject constructor(
     private suspend fun internalRenderFullContent() {
         setLoading()
         runCatching {
-            rssHelper.parseFullContent(
-                currentArticle?.link ?: "",
-                currentArticle?.title ?: ""
-            )
+            if (currentArticle?.link?.isNostrUri() == true) {
+                currentArticle?.fullContent.toString()
+            } else {
+                rssHelper.parseFullContent(
+                    currentArticle?.link ?: "",
+                    currentArticle?.title ?: ""
+                )
+            }
         }.onSuccess { content ->
             _readerState.update { it.copy(content = ReaderState.FullContent(content = content)) }
         }.onFailure { th ->
@@ -146,7 +153,11 @@ class ReadingViewModel @Inject constructor(
     }
 
     fun prefetchArticleId(pagingItems: ItemSnapshotList<ArticleFlowItem>) {
-        val items = pagingItems.items
+        if (initialArticleItems.isEmpty()) {
+            initialArticleItems = pagingItems.items
+        }
+        
+        val items = initialArticleItems
         val currentId = currentArticle?.id
         val index = items.indexOfFirst { item ->
             item is ArticleFlowItem.Article && item.articleWithFeed.article.id == currentId

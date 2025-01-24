@@ -6,7 +6,6 @@ import androidx.paging.PagingSource
 import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
-import com.rometools.rome.feed.synd.SyndFeed
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,7 +14,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
@@ -32,9 +30,13 @@ import me.ash.reader.domain.repository.GroupDao
 import me.ash.reader.infrastructure.android.NotificationHelper
 import me.ash.reader.infrastructure.preference.KeepArchivedPreference
 import me.ash.reader.infrastructure.preference.SyncIntervalPreference
+import me.ash.reader.infrastructure.rss.FetchedFeed
+import me.ash.reader.infrastructure.rss.NostrFeed
 import me.ash.reader.infrastructure.rss.RssHelper
+import me.ash.reader.infrastructure.rss.SyndFeedDelegate
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.decodeHTML
+import me.ash.reader.ui.ext.isNostrUri
 import me.ash.reader.ui.ext.spacerDollar
 import java.util.Date
 import java.util.UUID
@@ -63,19 +65,26 @@ abstract class AbstractRssRepository(
     open suspend fun clearAuthorization() {}
 
     open suspend fun subscribe(
-        feedLink: String, searchedFeed: SyndFeed, groupId: String,
+        feedLink: String, searchedFeed: FetchedFeed, groupId: String,
         isNotification: Boolean, isFullContent: Boolean, isBrowser: Boolean,
     ) {
         val accountId = context.currentAccountId
         val feed = Feed(
             id = accountId.spacerDollar(UUID.randomUUID().toString()),
-            name = searchedFeed.title.decodeHTML()!!,
+            name = with(searchedFeed.title){ if (this.isNostrUri()) this else this.decodeHTML()!!},
             url = feedLink,
             groupId = groupId,
             accountId = accountId,
-            icon = searchedFeed.icon?.link
+            icon = searchedFeed.getIconLink()
         )
-        val articles = searchedFeed.entries.map { rssHelper.buildArticleFromSyndEntry(feed, accountId, it) }
+        val articles = when(searchedFeed) {
+            is NostrFeed -> searchedFeed.getArticles().map {
+                rssHelper.buildArticleFromNostrEvent(feed, accountId, it, searchedFeed.getFeedAuthor())
+            }
+            is SyndFeedDelegate -> searchedFeed.getArticles().map {
+                rssHelper.buildArticleFromSyndEntry(feed, accountId, it)
+            }
+        }
         feedDao.insert(feed)
         articleDao.insertList(articles.map {
             it.copy(feedId = feed.id)
@@ -178,17 +187,29 @@ abstract class AbstractRssRepository(
 
     private suspend fun syncFeed(feed: Feed, preDate: Date = Date()): FeedWithArticle {
         val latest = articleDao.queryLatestByFeedId(context.currentAccountId, feed.id)
-        val articles = rssHelper.queryRssXml(feed, "", preDate)
-        if (feed.icon == null) {
-            val iconLink = rssHelper.queryRssIconLink(feed.url)
-            if (iconLink != null) {
-                rssHelper.saveRssIcon(feedDao, feed, iconLink)
-            }
+        if (feed.url.isNostrUri()) {
+            val syncedFeed = rssHelper.syncNostrFeed(feed, "", preDate)
+            return FeedWithArticle(
+                feed = syncedFeed.feed
+                    .apply { isNotification = feed.isNotification && syncedFeed.articles.isNotEmpty() },
+                articles = syncedFeed.articles
+            )
         }
-        return FeedWithArticle(
-            feed = feed.apply { isNotification = feed.isNotification && articles.isNotEmpty() },
-            articles = articles
-        )
+        else {
+            val articles = rssHelper.queryRssXml(feed, "", preDate)
+            if (feed.icon == null) {
+                val iconLink = rssHelper.queryRssIconLink(feed.url)
+                if (iconLink != null) {
+                    rssHelper.saveRssIcon(feedDao, feed, iconLink)
+                }
+            }
+
+            return FeedWithArticle(
+                feed = feed.apply { isNotification = feed.isNotification && articles.isNotEmpty() },
+                articles = articles
+            )
+        }
+
     }
 
     suspend fun clearKeepArchivedArticles() {

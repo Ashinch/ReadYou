@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
-import com.rometools.rome.feed.synd.SyndFeed
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.supervisorScope
@@ -25,6 +24,7 @@ import me.ash.reader.infrastructure.di.DefaultDispatcher
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
 import me.ash.reader.infrastructure.html.Readability
+import me.ash.reader.infrastructure.rss.FetchedFeed
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofCategoryIdToStreamId
@@ -72,11 +72,13 @@ class GoogleReaderRssService @Inject constructor(
     private suspend fun getGoogleReaderAPI() =
         GoogleReaderSecurityKey(accountDao.queryById(context.currentAccountId)!!.securityKey).run {
             GoogleReaderAPI.getInstance(
+                context = context,
                 serverUrl = serverUrl!!,
                 username = username!!,
                 password = password!!,
                 httpUsername = null,
                 httpPassword = null,
+                clientCertificateAlias = clientCertificateAlias,
             )
         }
 
@@ -97,7 +99,7 @@ class GoogleReaderRssService @Inject constructor(
     }
 
     override suspend fun subscribe(
-        feedLink: String, searchedFeed: SyndFeed, groupId: String,
+        feedLink: String, searchedFeed: FetchedFeed, groupId: String,
         isNotification: Boolean, isFullContent: Boolean, isBrowser: Boolean,
     ) {
         val accountId = context.currentAccountId

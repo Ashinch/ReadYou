@@ -49,7 +49,7 @@ class FeedsViewModel @Inject constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun pullFeeds(filterState: FilterState) {
+    fun pullFeeds(filterState: FilterState, hideEmptyGroups: Boolean) {
         val isStarred = filterState.filter.isStarred()
         val isUnread = filterState.filter.isUnread()
         _feedsUiState.update {
@@ -77,7 +77,7 @@ class FeedsViewModel @Inject constructor(
                     while (groupIterator.hasNext()) {
                         val groupWithFeed = groupIterator.next()
                         val groupImportant = importantMap[groupWithFeed.group.id] ?: 0
-                        if ((isStarred || isUnread) && groupImportant == 0) {
+                        if (hideEmptyGroups && (isStarred || isUnread) && groupImportant == 0) {
                             groupIterator.remove()
                             continue
                         }
@@ -87,7 +87,7 @@ class FeedsViewModel @Inject constructor(
                             val feed = feedIterator.next()
                             val feedImportant = importantMap[feed.id] ?: 0
                             groupWithFeed.group.feeds++
-                            if ((isStarred || isUnread) && feedImportant == 0) {
+                            if (hideEmptyGroups && (isStarred || isUnread) && feedImportant == 0) {
                                 feedIterator.remove()
                                 continue
                             }

@@ -1,5 +1,6 @@
 package me.ash.reader.infrastructure.rss.provider.greader
 
+import android.content.Context
 import me.ash.reader.infrastructure.di.USER_AGENT_STRING
 import me.ash.reader.infrastructure.exception.GoogleReaderAPIException
 import me.ash.reader.infrastructure.exception.RetryException
@@ -10,12 +11,14 @@ import okhttp3.executeAsync
 import java.util.concurrent.ConcurrentHashMap
 
 class GoogleReaderAPI private constructor(
+    context: Context,
     private val serverUrl: String,
     private val username: String,
     private val password: String,
     private val httpUsername: String? = null,
     private val httpPassword: String? = null,
-) : ProviderAPI() {
+    clientCertificateAlias: String? = null,
+) : ProviderAPI(context, clientCertificateAlias) {
 
     enum class Stream(val tag: String) {
         ALL_ITEMS("user/-/state/com.google/reading-list"),
@@ -350,13 +353,15 @@ class GoogleReaderAPI private constructor(
         private val instances: ConcurrentHashMap<String, GoogleReaderAPI> = ConcurrentHashMap()
 
         fun getInstance(
+            context: Context,
             serverUrl: String,
             username: String,
             password: String,
             httpUsername: String? = null,
             httpPassword: String? = null,
-        ): GoogleReaderAPI = instances.getOrPut("$serverUrl$username$password$httpUsername$httpPassword") {
-            GoogleReaderAPI(serverUrl, username, password, httpUsername, httpPassword)
+            clientCertificateAlias: String? = null
+        ): GoogleReaderAPI = instances.getOrPut("$serverUrl$username$password$httpUsername$httpPassword$clientCertificateAlias") {
+            GoogleReaderAPI(context, serverUrl, username, password, httpUsername, httpPassword, clientCertificateAlias)
         }
 
         fun clearInstance() {

@@ -1,0 +1,6 @@
+## 0.11.1
+
+Významné zmeny:
+1. Podpora vlastného písma pre čítačku WebView
+2. Pridanie nových vizuálnych štýlov do panelov nástrojov na stránke toku a stránke čítania
+3. Vylepšenia a opravy používateľského rozhrania

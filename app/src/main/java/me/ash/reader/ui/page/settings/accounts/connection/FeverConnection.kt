@@ -1,7 +1,16 @@
 package me.ash.reader.ui.page.settings.accounts.connection
 
+import android.app.Activity
+import android.security.KeyChain
 import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.R
@@ -17,6 +26,8 @@ fun LazyItemScope.FeverConnection(
     account: Account,
     viewModel: AccountViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
+
     val securityKey by remember {
         derivedStateOf { FeverSecurityKey(account.securityKey) }
     }
@@ -54,6 +65,16 @@ fun LazyItemScope.FeverConnection(
         desc = passwordMask,
         onClick = {
             passwordDialogVisible = true
+        },
+    ) {}
+    SettingItem(
+        title = stringResource(R.string.client_certificate),
+        desc = securityKey.clientCertificateAlias,
+        onClick = {
+            KeyChain.choosePrivateKeyAlias(context as Activity, { alias ->
+                securityKey.clientCertificateAlias = alias
+                save(account, viewModel, securityKey)
+            }, null, null, null, null)
         },
     ) {}
 

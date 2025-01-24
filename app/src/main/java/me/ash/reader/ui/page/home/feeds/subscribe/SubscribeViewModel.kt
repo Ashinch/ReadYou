@@ -2,7 +2,6 @@ package me.ash.reader.ui.page.home.feeds.subscribe
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rometools.rome.feed.synd.SyndFeed
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -20,6 +19,7 @@ import me.ash.reader.domain.service.OpmlService
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.android.AndroidStringsHelper
 import me.ash.reader.infrastructure.di.ApplicationScope
+import me.ash.reader.infrastructure.rss.FetchedFeed
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.ui.ext.formatUrl
 import java.io.InputStream
@@ -252,7 +252,7 @@ data class SubscribeUiState(
     val errorMessage: String = "",
     val linkContent: String = "",
     val lockLinkInput: Boolean = false,
-    val searchedFeed: SyndFeed? = null,
+    val searchedFeed: FetchedFeed? = null,
     val allowNotificationPreset: Boolean = false,
     val parseFullContentPreset: Boolean = false,
     val openInBrowserPreset: Boolean = false,

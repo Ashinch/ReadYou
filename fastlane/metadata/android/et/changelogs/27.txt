@@ -1,0 +1,6 @@
+## 0.11.1
+
+Olulised muudatused:
+1. Sinu valitud kirjatüüpide tugi lugemsivaates
+2. Uuendasime tööriistaribade kujundust kerimisvaates ja lugemisvaates
+3. Kasutusliidese täiendused ja parandused

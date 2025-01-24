@@ -26,6 +26,7 @@ import me.ash.reader.infrastructure.preference.InitialFilterPreference
 import me.ash.reader.infrastructure.preference.InitialPagePreference
 import me.ash.reader.infrastructure.preference.LocalArticleListSwipeEndAction
 import me.ash.reader.infrastructure.preference.LocalArticleListSwipeStartAction
+import me.ash.reader.infrastructure.preference.LocalHideEmptyGroups
 import me.ash.reader.infrastructure.preference.LocalInitialFilter
 import me.ash.reader.infrastructure.preference.LocalInitialPage
 import me.ash.reader.infrastructure.preference.LocalMarkAsReadOnScroll
@@ -58,6 +59,7 @@ fun InteractionPage(
     val swipeToStartAction = LocalArticleListSwipeStartAction.current
     val swipeToEndAction = LocalArticleListSwipeEndAction.current
     val markAsReadOnScroll = LocalMarkAsReadOnScroll.current
+    val hideEmptyGroups = LocalHideEmptyGroups.current
     val pullToSwitchArticle = LocalPullToSwitchArticle.current
     val openLink = LocalOpenLink.current
     val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
@@ -110,6 +112,22 @@ fun InteractionPage(
                             initialFilterDialogVisible = true
                         },
                     ) {}
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    Subtitle(
+                        modifier = Modifier.padding(horizontal = 24.dp),
+                        text = stringResource(R.string.feeds_page),
+                    )
+                    SettingItem(
+                        title = stringResource(R.string.hide_empty_groups),
+                        onClick = {
+                            hideEmptyGroups.toggle(context, scope)
+                        },
+                    ) {
+                        RYSwitch(activated = hideEmptyGroups.value) {
+                            hideEmptyGroups.toggle(context, scope)
+                        }
+                    }
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Subtitle(

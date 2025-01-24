@@ -1,0 +1,57 @@
+## 0.9.8
+
+
+
+1. Poprawa tłumaczenia (@nvllz, dzięki wszystkim)
+
+
+
+2. Usunięci wbudowanej czcionki GoogleSans z aplikacji (zostanie użyta domyślna czcionka systemowa)
+
+
+
+3. Obsługa korzystania z zewnętrznych plików czcionek jako podstawowych aplikacji i odczytu czcionek
+
+
+
+4. Naprawa funkcji importu z pliku OPML
+
+
+
+5. Optymalizacja integracji Fever API (#363)
+
+
+
+6. Poprawki interfejsu użytkownika (#382, @JunkFood02)
+
+
+
+7. Napraw przyciski „Oznacz jako przeczytane” dla Fever API (#399, @mbestavros)
+
+
+
+8. Obsługa układu tekstu RTL na stronie czytania (#378, @JunkFood02)
+
+
+
+9. Podniesienie wersji Material do 1.0.1 i naprawa podglądu „Zawsze rozwiń” (#374, @Scholar-Jr)
+
+
+
+### Notatki
+
+
+
+1. Udostępnianie czcionki GoogleSans wiąże się z ryzykiem prawnym
+
+
+
+2. Czcionki zewnętrzne nie obsługują jeszcze wielu grubości czcionek
+
+
+
+3. Integracja API Google Reader (GReader)
+
+
+
+4. Dziękuję wszystkim osobom, które przeczytały mój kiepski kod. Mam kilka pomysłów na refaktoryzację

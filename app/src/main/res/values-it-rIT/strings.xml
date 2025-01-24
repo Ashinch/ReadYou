@@ -320,4 +320,5 @@
     <string name="mark_as_read_on_scroll">Contrassegna come letto allo scroll</string>
     <string name="become_a_sponsor">Diventa uno sponsor</string>
     <string name="sponsor_desc">Sviluppiamo e miglioriamo questa applicazione, gratuita ed open source, nel nostro tempo libero. Se ti piace, considera la possibilità di sostenerci con una piccola donazione! ☕</string>
+    <string name="toolbars">Barre degli strumenti</string>
 </resources>

@@ -320,4 +320,8 @@
     <string name="read_aloud">Читать вслух</string>
     <string name="native_component">Нативный компонент</string>
     <string name="browse_bionic_reading_tips">Узнайте больше на <i><u>bionic-reading.com</u></i>.</string>
+    <string name="toolbars">Панели инструментов</string>
+    <string name="mark_as_read_on_scroll">Отметить как прочитанное при прокрутке</string>
+    <string name="become_a_sponsor">Стать спонсором</string>
+    <string name="sponsor_desc">Мы создаем и поддерживаем это бесплатное приложение с открытым исходным кодом в свободное время. Если оно вам нравится, пожалуйста, поддержите нас небольшим пожертвованием! ☕️</string>
 </resources>
