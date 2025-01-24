@@ -37,6 +37,14 @@
 # Provider API
 -keep class me.ash.reader.** { *; }
 
+# Nostr
+-keep class com.sun.jna.** { *; }
+-keep class * implements com.sun.jna.** { *; }
+-dontwarn java.awt.Component
+-dontwarn java.awt.GraphicsEnvironment
+-dontwarn java.awt.HeadlessException
+-dontwarn java.awt.Window
+
 # https://github.com/flutter/flutter/issues/127388
 -dontwarn org.kxml2.io.KXml**
 

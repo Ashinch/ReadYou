@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
-import com.rometools.rome.feed.synd.SyndFeed
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.supervisorScope
@@ -27,6 +26,7 @@ import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
 import me.ash.reader.infrastructure.exception.FeverAPIException
 import me.ash.reader.infrastructure.html.Readability
+import me.ash.reader.infrastructure.rss.FetchedFeed
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.rss.provider.fever.FeverAPI
 import me.ash.reader.infrastructure.rss.provider.fever.FeverDTO
@@ -86,7 +86,7 @@ class FeverRssService @Inject constructor(
     }
 
     override suspend fun subscribe(
-        feedLink: String, searchedFeed: SyndFeed, groupId: String,
+        feedLink: String, searchedFeed: FetchedFeed, groupId: String,
         isNotification: Boolean, isFullContent: Boolean,
     ) {
         throw FeverAPIException("Unsupported")

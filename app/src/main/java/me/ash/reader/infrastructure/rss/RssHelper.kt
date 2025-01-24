@@ -3,7 +3,6 @@ package me.ash.reader.infrastructure.rss
 import android.content.Context
 import android.util.Log
 import com.rometools.rome.feed.synd.SyndEntry
-import com.rometools.rome.feed.synd.SyndFeed
 import com.rometools.rome.feed.synd.SyndImageImpl
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
@@ -12,18 +11,30 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.feed.Feed
+import me.ash.reader.domain.model.feed.FeedWithArticle
 import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.html.Readability
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.extractDomain
+import me.ash.reader.ui.ext.htmlFromMarkdown
 import me.ash.reader.ui.ext.isFuture
+import me.ash.reader.ui.ext.isNostrUri
 import me.ash.reader.ui.ext.spacerDollar
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.executeAsync
+import rust.nostr.sdk.Alphabet
+import rust.nostr.sdk.Client
+import rust.nostr.sdk.Coordinate
+import rust.nostr.sdk.Event
+import rust.nostr.sdk.Kind
+import rust.nostr.sdk.KindEnum
+import rust.nostr.sdk.SingleLetterTag
+import rust.nostr.sdk.TagKind
 import java.io.InputStream
+import java.time.Instant
 import java.util.*
 import javax.inject.Inject
 
@@ -39,15 +50,24 @@ class RssHelper @Inject constructor(
     @IODispatcher
     private val ioDispatcher: CoroutineDispatcher,
     private val okHttpClient: OkHttpClient,
+    private val nostrClient: Client
 ) {
 
     @Throws(Exception::class)
-    suspend fun searchFeed(feedLink: String): SyndFeed {
+    suspend fun searchFeed(feedLink: String): FetchedFeed? {
         return withContext(ioDispatcher) {
-            SyndFeedInput().build(XmlReader(inputStream(okHttpClient, feedLink))).also {
-                it.icon = SyndImageImpl()
-                it.icon.link = queryRssIconLink(feedLink)
-                it.icon.url = it.icon.link
+            if(feedLink.isNostrUri()) {
+                NostrFeed.fetchFeedFrom(feedLink, nostrClient)
+            }
+            else {
+                val parsedSyndFeed = SyndFeedInput()
+                    .build(XmlReader(inputStream(okHttpClient, feedLink)))
+                    .also {
+                        it.icon = SyndImageImpl()
+                        it.icon.link = queryRssIconLink(feedLink)
+                        it.icon.url = it.icon.link
+                    }
+                SyndFeedDelegate(parsedSyndFeed)
             }
         }
     }
@@ -123,6 +143,90 @@ class RssHelper @Inject constructor(
             img = findThumbnail(syndEntry) ?: findThumbnail(content ?: desc),
             link = syndEntry.link ?: "",
             updateAt = preDate,
+        )
+    }
+
+    @Throws(Exception::class)
+    suspend fun syncNostrFeed(
+        feed: Feed,
+        latestLink: String?,
+        preDate: Date = Date()
+    ): FeedWithArticle =
+        try {
+            val accountId = context.currentAccountId
+            Client().use {
+                val nostrFeed = NostrFeed.fetchFeedFrom(feed.url, it)
+                val updatedArticles = nostrFeed.getArticles()
+                    .map { buildArticleFromNostrEvent(feed, accountId, it, nostrFeed.getFeedAuthor(), preDate) }
+                val updatedFeed = feed.copy(
+                    icon = nostrFeed.getIconUrl()
+                )
+                return FeedWithArticle(updatedFeed, updatedArticles)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("RLog", "syncNostrFeedNew[${feed.name}]: ${e.message}")
+            FeedWithArticle(feed, emptyList())
+        }
+
+    fun buildArticleFromNostrEvent(
+        feed: Feed,
+        accountId: Int,
+        articleEvent: Event,
+        authorName: String,
+//        imageUrl: String,
+        preDate: Date = Date()
+    ): Article {
+        val articleTitle = articleEvent.tags().find(TagKind.Title)?.content()
+        val articleImage = articleEvent.tags().find(TagKind.Image)?.content()
+        val articleSummary = articleEvent.tags().find(TagKind.Summary)?.content()
+        val timeStamp = articleEvent.tags().find(TagKind.PublishedAt)?.content()?.toLong()
+            ?: Instant.EPOCH.epochSecond
+        val articleDate = Date.from(Instant.ofEpochSecond(timeStamp)).takeIf { !it.isFuture(preDate) } ?: preDate
+        val articleNostrAddress =
+            Coordinate(
+                Kind.fromEnum(KindEnum.LongFormTextNote),
+                articleEvent.author(),
+                articleEvent.tags().find(
+                    TagKind.SingleLetter(
+                        SingleLetterTag.lowercase(Alphabet.D),
+                    ),
+                )?.content().toString(),
+            ).toBech32()
+        // Highlighter is a service for reading Nostr articles on the web.
+        //For the external link, we can still give it a value of nostr:<articleAddress>
+        val externalLink = "nostr:$articleNostrAddress"//""https://highlighter.com/a/$articleNostrAddress"
+        val articleContent = articleEvent.content()
+        val parsedContent = htmlFromMarkdown(articleContent)
+        val actualContent = Readability.parseToText(
+            parsedContent,
+            uri = null
+        )
+
+        Log.i(
+            "RLog",
+            "Nostr Feed:\n" +
+                    "name: ${feed.name}\n" +
+                    "feedUrl: ${feed.url}\n" +
+                    "url: ${externalLink}\n" +
+                    "title: ${articleTitle}\n" +
+                    "desc: ${articleSummary}\n" +
+                    "content: ${articleContent}\n"
+        )
+
+        return Article(
+            id = accountId.spacerDollar(UUID.randomUUID().toString()),
+            accountId = accountId,
+            feedId = feed.id,
+            date = articleDate,
+            title = articleTitle ?: feed.name,
+            author = authorName,
+            rawDescription = parsedContent,
+            shortDescription = articleSummary ?: actualContent.take(110),
+            fullContent = parsedContent,
+            img = articleImage,
+            link = externalLink,
+            updateAt = articleDate
         )
     }
 
