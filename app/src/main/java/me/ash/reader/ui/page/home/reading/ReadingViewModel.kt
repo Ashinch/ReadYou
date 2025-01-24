@@ -48,6 +48,8 @@ class ReadingViewModel @Inject constructor(
     private val currentFeed: Feed?
         get() = readingUiState.value.articleWithFeed?.feed
 
+    private var initialArticleItems: List<ArticleFlowItem> = emptyList()
+
     fun initData(articleId: String) {
         setLoading()
         viewModelScope.launch(ioDispatcher) {
@@ -151,7 +153,11 @@ class ReadingViewModel @Inject constructor(
     }
 
     fun prefetchArticleId(pagingItems: ItemSnapshotList<ArticleFlowItem>) {
-        val items = pagingItems.items
+        if (initialArticleItems.isEmpty()) {
+            initialArticleItems = pagingItems.items
+        }
+        
+        val items = initialArticleItems
         val currentId = currentArticle?.id
         val index = items.indexOfFirst { item ->
             item is ArticleFlowItem.Article && item.articleWithFeed.article.id == currentId
