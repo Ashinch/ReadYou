@@ -459,6 +459,7 @@
     <string name="bionic_reading_domain" translatable="false">bionic-reading.com</string>
     <string name="bionic_reading_link" translatable="false">https://bionic-reading.com</string>
     <string name="mark_as_read_on_scroll">Mark as read on scroll</string>
+    <string name="hide_empty_groups">Hide empty groups</string>
     <string name="become_a_sponsor">Become a sponsor</string>
     <string name="sponsor_desc">We build and upkeep this free, open-source app in our off-hours. If you enjoy it, please consider supporting us with a small donation! ☕️</string>
     <string name="toolbars">Toolbars</string>
