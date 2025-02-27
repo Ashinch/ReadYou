@@ -350,5 +350,81 @@ hr {
     opacity: 0.08 !important;
     border-radius: 2px;
 }
+
+/* Bionic Reading */
+body {
+    --br-boldness: 600;
+}
+
+[br-mode=on] br-bold *,
+                         [br-mode=on] br-edge  {
+    opacity: var(--fixation-edge-opacity,  100%);
+}
+
+[br-mode=on] br-bold:nth-of-type(n+1) [fixation-strength="1"] {
+    display: inline;
+    font-weight: var(--br-boldness);
+    line-height: var(--br-line-height,  initial);
+    text-decoration: var(--br-line-style) underline 2px;
+    color: var(--bold-text-color) !important;
+    text-underline-offset: 3px;
+}
+
+[br-mode=on] br-bold:nth-of-type(n+1) [fixation-strength="2"] {
+    display: inline;
+    font-weight: var(--br-boldness);
+    line-height: var(--br-line-height, initial);
+    text-decoration: var(--br-line-style) underline 2px;
+    color: var(--bold-text-color) !important;
+    text-underline-offset: 3px;
+}
+
+[br-mode=on].br-exclusions-nav nav br-bold :is(*, [fixation-strength]),
+[br-mode=on].br-exclusions-nav nav br-edge {
+    --fixation-edge-opacity: initial !important;
+    --br-line-height: initial !important;
+    --br-boldness: initial !important;
+    opacity: initial;
+}
+
+[br-mode=on].br-exclusions-footer footer br-bold :is(*, [fixation-strength]),
+[br-mode=on].br-exclusions-footer footer br-edge {
+    --fixation-edge-opacity: initial !important;
+    --br-line-height: initial !important;
+    --br-boldness: initial !important;
+    opacity: initial;
+}
+
+[br-mode=on].br-exclusions-p p br-bold :is(*, [fixation-strength]),
+[br-mode=on].br-exclusions-p p br-edge {
+    --fixation-edge-opacity: initial !important;
+    --br-line-height: initial !important;
+    --br-boldness: initial !important;
+    opacity: initial;
+}
+
+[br-mode=on].br-exclusions-a a br-bold :is(*, [fixation-strength]),
+[br-mode=on].br-exclusions-a a br-edge {
+    --fixation-edge-opacity: initial !important;
+    --br-line-height: initial !important;
+    --br-boldness: initial !important;
+    opacity: initial;
+}
+
+[br-mode=on].br-exclusions-button button br-bold :is(*, [fixation-strength]),
+[br-mode=on].br-exclusions-button button br-edge {
+    --fixation-edge-opacity: initial !important;
+    --br-line-height: initial !important;
+    --br-boldness: initial !important;
+    opacity: initial;
+}
+
+[br-mode=on].br-exclusions-aside aside br-bold :is(*, [fixation-strength]),
+[br-mode=on].br-exclusions-aside aside br-edge {
+    --fixation-edge-opacity: initial !important;
+    --br-line-height: initial !important;
+    --br-boldness: initial !important;
+    opacity: initial;
+}
 """
 }
