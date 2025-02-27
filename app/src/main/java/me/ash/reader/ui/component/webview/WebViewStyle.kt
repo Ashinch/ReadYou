@@ -379,52 +379,5 @@ body {
     text-underline-offset: 3px;
 }
 
-[br-mode=on].br-exclusions-nav nav br-bold :is(*, [fixation-strength]),
-[br-mode=on].br-exclusions-nav nav br-edge {
-    --fixation-edge-opacity: initial !important;
-    --br-line-height: initial !important;
-    --br-boldness: initial !important;
-    opacity: initial;
-}
-
-[br-mode=on].br-exclusions-footer footer br-bold :is(*, [fixation-strength]),
-[br-mode=on].br-exclusions-footer footer br-edge {
-    --fixation-edge-opacity: initial !important;
-    --br-line-height: initial !important;
-    --br-boldness: initial !important;
-    opacity: initial;
-}
-
-[br-mode=on].br-exclusions-p p br-bold :is(*, [fixation-strength]),
-[br-mode=on].br-exclusions-p p br-edge {
-    --fixation-edge-opacity: initial !important;
-    --br-line-height: initial !important;
-    --br-boldness: initial !important;
-    opacity: initial;
-}
-
-[br-mode=on].br-exclusions-a a br-bold :is(*, [fixation-strength]),
-[br-mode=on].br-exclusions-a a br-edge {
-    --fixation-edge-opacity: initial !important;
-    --br-line-height: initial !important;
-    --br-boldness: initial !important;
-    opacity: initial;
-}
-
-[br-mode=on].br-exclusions-button button br-bold :is(*, [fixation-strength]),
-[br-mode=on].br-exclusions-button button br-edge {
-    --fixation-edge-opacity: initial !important;
-    --br-line-height: initial !important;
-    --br-boldness: initial !important;
-    opacity: initial;
-}
-
-[br-mode=on].br-exclusions-aside aside br-bold :is(*, [fixation-strength]),
-[br-mode=on].br-exclusions-aside aside br-edge {
-    --fixation-edge-opacity: initial !important;
-    --br-line-height: initial !important;
-    --br-boldness: initial !important;
-    opacity: initial;
-}
 """
 }

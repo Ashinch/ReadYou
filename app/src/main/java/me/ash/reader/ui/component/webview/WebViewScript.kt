@@ -56,12 +56,7 @@ function parseNode(node) {
             const brSpan = document.createElement('br-span');
             brSpan.innerHTML = highlightText(node.nodeValue);
             if (brSpan.childElementCount === 0) return;
-            //if (node.previousSibling?.tagName === 'BR-SPAN') {
-			//	  node.parentElement.removeChild(node.previousSibling);
-            //}
-            node.parentElement.replaceChild(brSpan, node);
-			//node.parentElement.insertBefore(brSpan, node);
-            //node.textContent = '';
+            node.parentElement.replaceChild(brSpan, node); // JiffyReader keeps the old element around, but we don't need it
         } catch (e) {
             console.error('Error parsing text node:', e);
         }
