@@ -4,11 +4,14 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
+
     <queries>
         <intent>
             <action android:name="android.intent.action.MAIN" />
+
             <category android:name="android.intent.category.APP_BROWSER" />
         </intent>
         <intent>
@@ -25,6 +28,34 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Reader"
         android:usesCleartextTraffic="true">
+        <service
+            android:name=".ui.widget.LatestArticlesWidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" >
+            <intent-filter>
+                <action android:name="android.widget.RemoveViewsService" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".ui.widget.LatestArticlesWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/latest_articles_widget_info" />
+        </receiver>
+
+        <activity
+            android:name=".ui.widget.LatestArticlesWidgetConfigureActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".infrastructure.android.MainActivity"
             android:exported="true"
@@ -43,9 +74,7 @@
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-
                 <data android:host="*" />
-
                 <data android:mimeType="text/xml" />
                 <data android:mimeType="application/rss+xml" />
                 <data android:mimeType="application/atom+xml" />
@@ -64,6 +93,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="text/plain" />
@@ -72,15 +102,12 @@
         <activity
             android:name=".infrastructure.android.CrashReportActivity"
             android:exported="false"
-            android:theme="@style/Theme.Reader">
-
-        </activity>
+            android:theme="@style/Theme.Reader"></activity>
 
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
             tools:node="remove" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

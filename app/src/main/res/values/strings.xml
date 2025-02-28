@@ -463,4 +463,9 @@
     <string name="become_a_sponsor">Become a sponsor</string>
     <string name="sponsor_desc">We build and upkeep this free, open-source app in our off-hours. If you enjoy it, please consider supporting us with a small donation! ☕️</string>
     <string name="toolbars">Toolbars</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="latest">Latest</string>
 </resources>
