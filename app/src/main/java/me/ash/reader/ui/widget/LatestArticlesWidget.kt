@@ -1,11 +1,14 @@
 package me.ash.reader.ui.widget
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import me.ash.reader.R
+import me.ash.reader.infrastructure.android.MainActivity
+import me.ash.reader.ui.page.common.ExtraName
 
 /**
  * Implementation of App Widget functionality.
@@ -38,9 +41,17 @@ override fun onDeleted(context: Context, appWidgetIds: IntArray) {
 
 internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
 
-    val intent = Intent(context, LatestArticlesWidgetService::class.java)
+    val serviceIntent = Intent(context, LatestArticlesWidgetService::class.java)
     val views = RemoteViews(context.packageName, R.layout.latest_articles_widget).apply {
-        setRemoteAdapter(R.id.article_container, intent)
+        setRemoteAdapter(R.id.article_container, serviceIntent)
+
+        val viewArticleIntent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        setPendingIntentTemplate(
+            R.id.article_container,
+            PendingIntent.getActivity(context, 0, viewArticleIntent, PendingIntent.FLAG_MUTABLE)
+        )
     }
     appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.article_container)
 

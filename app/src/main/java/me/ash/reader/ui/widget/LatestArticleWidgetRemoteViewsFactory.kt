@@ -1,6 +1,8 @@
 package me.ash.reader.ui.widget
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.text.SpannableString
@@ -16,7 +18,10 @@ import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.repository.ArticleDao
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.R
+import me.ash.reader.infrastructure.android.MainActivity
 import me.ash.reader.infrastructure.db.AndroidDatabase
+import me.ash.reader.ui.page.common.ExtraName
+import me.ash.reader.ui.page.common.RouteName
 
 class LatestArticleWidgetRemoteViewsFactory(
     private val context: Context,
@@ -35,7 +40,6 @@ class LatestArticleWidgetRemoteViewsFactory(
     override fun onDestroy() {}
 
     override fun onDataSetChanged() {
-        Log.d("LatestArticles", "onDataSetChanged called")
         runBlocking {
             articles = loadArticles(articleDao.queryArticleWithFeedWhenIsAll(context.currentAccountId), 20)
             for (awf in articles) {
@@ -54,6 +58,14 @@ class LatestArticleWidgetRemoteViewsFactory(
         val remoteViews = RemoteViews(context.packageName, R.layout.article).apply {
             setTextViewText(R.id.article_summary, styledArticleSummary(awf))
             setImageViewBitmap(R.id.article_feed_icon, feedIconCache[awf.feed.icon])
+            val fillInIntent = Intent().apply {
+                putExtra(
+                    ExtraName.ARTICLE_ID,
+                    awf.article.id
+                )
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
+            setOnClickFillInIntent(R.id.article, fillInIntent)
         }
 
         return remoteViews

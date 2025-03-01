@@ -18,6 +18,8 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Consumer
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import androidx.profileinstaller.ProfileInstallerInitializer
 import coil.ImageLoader
 import coil.compose.LocalImageLoader
@@ -27,7 +29,9 @@ import me.ash.reader.infrastructure.preference.AccountSettingsProvider
 import me.ash.reader.infrastructure.preference.LanguagesPreference
 import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.ui.ext.languages
+import me.ash.reader.ui.page.common.ExtraName
 import me.ash.reader.ui.page.common.HomeEntry
+import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import java.lang.reflect.Field
 import javax.inject.Inject
@@ -43,6 +47,8 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var accountDao: AccountDao
+
+    lateinit var navController: NavHostController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +88,8 @@ class MainActivity : AppCompatActivity() {
 
 
         setContent {
+            navController = rememberNavController()
+
             CompositionLocalProvider(
                 LocalImageLoader provides imageLoader,
             ) {
@@ -99,9 +107,25 @@ class MainActivity : AppCompatActivity() {
                                 removeOnNewIntentListener(listener)
                             }
                         }
-                        HomeEntry(subscribeViewModel = subscribeViewModel)
+                        HomeEntry(
+                            subscribeViewModel = subscribeViewModel,
+                            navController = navController
+                        )
                     }
                 }
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        val openArticleId = intent.extras?.getString(ExtraName.ARTICLE_ID) ?: ""
+        if (openArticleId.isNotEmpty()) {
+            navController.navigate(RouteName.FLOW) {
+                launchSingleTop = true
+            }
+            navController.navigate("${RouteName.READING}/${openArticleId}") {
+                launchSingleTop = true
             }
         }
     }

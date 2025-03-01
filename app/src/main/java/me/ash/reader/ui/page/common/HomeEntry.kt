@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
@@ -58,12 +59,12 @@ import me.ash.reader.ui.theme.AppTheme
 fun HomeEntry(
     homeViewModel: HomeViewModel = hiltViewModel(),
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
+    navController: NavHostController = rememberNavController()
 ) {
     val context = LocalContext.current
     var isReadingPage by rememberSaveable { mutableStateOf(false) }
     val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
     val subscribeUiState = subscribeViewModel.subscribeUiState.collectAsStateValue()
-    val navController = rememberNavController()
 
     val intent by rememberSaveable { mutableStateOf(context.findActivity()?.intent) }
     var openArticleId by rememberSaveable {
