@@ -1,5 +1,7 @@
 package me.ash.reader.domain.service
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.util.Log
 import androidx.paging.PagingSource
@@ -38,8 +40,10 @@ import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.isNostrUri
 import me.ash.reader.ui.ext.spacerDollar
+import me.ash.reader.ui.widget.LatestArticlesWidget
 import java.util.Date
 import java.util.UUID
+import me.ash.reader.R
 
 abstract class AbstractRssRepository(
     private val context: Context,
@@ -115,11 +119,13 @@ abstract class AbstractRssRepository(
             val preDate = Date(preTime)
             val accountId = context.currentAccountId
             val semaphore = Semaphore(16)
+            var newArticlesAvailable = false
             feedDao.queryAll(accountId).mapIndexed { _, feed ->
                 async(Dispatchers.IO) {
                     semaphore.withPermit {
                         val feedWithArticle = syncFeed(feed, preDate)
                         val newArticles = articleDao.insertListIfNotExist(feedWithArticle.articles)
+                        if (newArticles.isNotEmpty()) newArticlesAvailable = true
                         if (feedWithArticle.feed.isNotification) {
                             notificationHelper.notify(feedWithArticle.copy(articles = newArticles))
                         }
@@ -131,6 +137,15 @@ abstract class AbstractRssRepository(
             accountDao.queryById(accountId)?.let { account ->
                 accountDao.update(account.apply { updateAt = Date() })
             }
+
+            if (newArticlesAvailable) {
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val appWidgetIds = appWidgetManager.getAppWidgetIds(
+                    ComponentName(context, LatestArticlesWidget::class.java)
+                )
+                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.article_container)
+            }
+
             coroutineWorker.setProgress(SyncWorker.setIsSyncing(false))
             ListenableWorker.Result.success()
         }
