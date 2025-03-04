@@ -5,14 +5,16 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.RemoteViews
+import kotlinx.coroutines.runBlocking
 import me.ash.reader.R
 import me.ash.reader.infrastructure.android.MainActivity
-import me.ash.reader.ui.page.common.ExtraName
+import me.ash.reader.infrastructure.preference.widget.latestArticleWidgetSettings
 
 /**
  * Implementation of App Widget functionality.
-* App Widget Configuration implemented in [LatestArticlesWidgetConfigureActivity]
+* App Widget Configuration implemented in [LatestArticlesWidgetConfigActivity]
  */
 class LatestArticlesWidget : AppWidgetProvider() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
@@ -22,10 +24,10 @@ class LatestArticlesWidget : AppWidgetProvider() {
         }
     }
 
-override fun onDeleted(context: Context, appWidgetIds: IntArray) {
+    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
-            deleteTitlePref(context, appWidgetId)
+            deleteWidgetSettings(context, appWidgetId)
         }
     }
     override fun onEnabled(context: Context) {
@@ -57,4 +59,31 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
 
     // Instruct the widget manager to update the widget
     appWidgetManager.updateAppWidget(appWidgetId, views)
+}
+
+
+
+private const val PREFS_NAME = "me.ash.reader.ui.widget.LatestArticlesWidget"
+private const val PREF_PREFIX_KEY = "appwidget_"
+
+// Write the prefix to the SharedPreferences object for this widget
+internal fun saveTitlePref(context: Context, appWidgetId: Int, text: String) {
+    val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
+    prefs.putString(PREF_PREFIX_KEY + appWidgetId, text)
+    prefs.apply()
+}
+
+// Read the prefix from the SharedPreferences object for this widget.
+// If there is no preference saved, get the default from a resource
+internal fun loadTitlePref(context: Context, appWidgetId: Int): String {
+    val prefs = context.getSharedPreferences(PREFS_NAME, 0)
+    val titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null)
+    return titleValue ?: context.getString(R.string.appwidget_text)
+}
+
+internal fun deleteWidgetSettings(context: Context, appWidgetId: Int) {
+    runBlocking {
+        Log.d("deleteWidgetSettings", "Deleting widget settings")
+        context.latestArticleWidgetSettings.clear(context, this)
+    }
 }

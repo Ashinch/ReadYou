@@ -1,6 +1,5 @@
 package me.ash.reader.ui.widget
 
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -8,25 +7,25 @@ import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.StyleSpan
-import android.util.Log
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.paging.PagingSource
 import androidx.paging.PagingSource.LoadParams
 import kotlinx.coroutines.runBlocking
+import me.ash.reader.R
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.repository.ArticleDao
-import me.ash.reader.ui.ext.currentAccountId
-import me.ash.reader.R
-import me.ash.reader.infrastructure.android.MainActivity
 import me.ash.reader.infrastructure.db.AndroidDatabase
+import me.ash.reader.infrastructure.preference.widget.LatestArticleWidgetSettings
+import me.ash.reader.infrastructure.preference.widget.latestArticleWidgetSettings
+import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.page.common.ExtraName
-import me.ash.reader.ui.page.common.RouteName
 
 class LatestArticleWidgetRemoteViewsFactory(
     private val context: Context,
 ): RemoteViewsService.RemoteViewsFactory {
 
+    private val settings = context.latestArticleWidgetSettings
     private val articleDao: ArticleDao = AndroidDatabase.getInstance(context).articleDao()
     private var articles: List<ArticleWithFeed> = emptyList()
     private val feedIconLoader = FeedIconLoader(context)
@@ -72,6 +71,19 @@ class LatestArticleWidgetRemoteViewsFactory(
     }
 
     override fun getLoadingView(): RemoteViews? = null
+
+    private fun styledArticleSummary(awf: ArticleWithFeed): SpannableString {
+        var unstyled = "${awf.article.title} ${awf.article.shortDescription}"
+        var boldLen = awf.article.title.length
+        if (settings.showFeedName.value) {
+            unstyled = "(${awf.feed.name}) $unstyled"
+            boldLen += awf.feed.name.length + 3
+        }
+        val summary = SpannableString(unstyled)
+        val boldSpan = StyleSpan(Typeface.BOLD)
+        summary.setSpan(boldSpan, 0, boldLen, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        return summary
+    }
 }
 
 private suspend fun loadArticles(
@@ -106,11 +118,4 @@ private suspend fun loadArticles(
     }
 
     return result
-}
-
-private fun styledArticleSummary(awf: ArticleWithFeed): SpannableString {
-    val summary = SpannableString("${awf.article.title} ${awf.article.shortDescription}")
-    val boldSpan = StyleSpan(Typeface.BOLD)
-    summary.setSpan(boldSpan, 0, awf.article.title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-    return summary
 }

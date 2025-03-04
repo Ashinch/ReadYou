@@ -28,10 +28,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Reader"
         android:usesCleartextTraffic="true">
+
         <service
             android:name=".ui.widget.LatestArticlesWidgetService"
             android:exported="false"
-            android:permission="android.permission.BIND_REMOTEVIEWS" >
+            android:permission="android.permission.BIND_REMOTEVIEWS">
             <intent-filter>
                 <action android:name="android.widget.RemoveViewsService" />
             </intent-filter>
@@ -50,7 +51,7 @@
         </receiver>
 
         <activity
-            android:name=".ui.widget.LatestArticlesWidgetConfigureActivity"
+            android:name=".ui.widget.LatestArticlesWidgetConfigActivity"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -102,7 +103,7 @@
         <activity
             android:name=".infrastructure.android.CrashReportActivity"
             android:exported="false"
-            android:theme="@style/Theme.Reader"></activity>
+            android:theme="@style/Theme.Reader" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"

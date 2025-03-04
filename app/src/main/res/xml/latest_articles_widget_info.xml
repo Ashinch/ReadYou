@@ -6,11 +6,11 @@
     android:previewImage="@drawable/example_appwidget_preview"
     android:initialLayout="@layout/latest_articles_widget"
     android:description="@string/app_widget_description"
-android:configure="me.ash.reader.ui.widget.LatestArticlesWidgetConfigureActivity"
+    android:configure="me.ash.reader.ui.widget.LatestArticlesWidgetConfigActivity"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
     android:previewLayout="@layout/latest_articles_widget"
     android:targetCellHeight="2"
-       android:targetCellWidth="3"
+    android:targetCellWidth="3"
     android:initialKeyguardLayout="@layout/latest_articles_widget"
 />

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Theme.Reader" parent="android:Theme.Material.Light.NoActionBar">
         <item name="windowActionModeOverlay">true</item>
         <item name="windowActionBar">false</item>
@@ -9,6 +10,7 @@
         <item name="android:windowContentOverlay">@color/windowBackground</item>
         <item name="android:windowBackground">@color/windowBackground</item>
     </style>
+
     <style name="Theme.Reader.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
         <!-- Radius of the outer bound of widgets to make the rounded corners -->
         <item name="appWidgetRadius">16dp</item>
