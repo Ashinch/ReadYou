@@ -61,22 +61,30 @@ class LatestArticleWidgetRemoteViewsFactory(
         }
     }
 
+    private fun getArticleRemoteViews(awf: ArticleWithFeed): RemoteViews {
+        val fillInIntent = Intent().apply {
+            putExtra(
+                ExtraName.ARTICLE_ID,
+                awf.article.id
+            )
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        val showIcon = preferencesManager.showFeedIcon.getCachedOrDefault(appWidgetId)
+        val layout = if (showIcon) R.layout.article_with_icon else R.layout.article_without_icon
+        val remoteViews = RemoteViews(context.packageName, layout).apply {
+                setTextViewText(R.id.article_summary, styledArticleSummary(awf))
+                setOnClickFillInIntent(R.id.article, fillInIntent)
+        }
+        if (showIcon) {
+            remoteViews.setImageViewBitmap(R.id.article_feed_icon, feedIconCache[awf.feed.icon])
+            remoteViews.setContentDescription(R.id.article_feed_icon, awf.feed.name)
+        }
+        return remoteViews
+    }
+
     override fun getViewAt(position: Int): RemoteViews {
         val awf = articles[position]
-        val remoteViews = RemoteViews(context.packageName, R.layout.article).apply {
-            setTextViewText(R.id.article_summary, styledArticleSummary(awf))
-            setImageViewBitmap(R.id.article_feed_icon, feedIconCache[awf.feed.icon])
-            val fillInIntent = Intent().apply {
-                putExtra(
-                    ExtraName.ARTICLE_ID,
-                    awf.article.id
-                )
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-            }
-            setOnClickFillInIntent(R.id.article, fillInIntent)
-        }
-
-        return remoteViews
+        return getArticleRemoteViews(awf)
     }
 
     override fun getLoadingView(): RemoteViews? = null

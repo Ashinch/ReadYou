@@ -8,23 +8,15 @@
 
     <ImageView
         android:id="@+id/article_feed_icon"
-        android:layout_width="66dp"
+        android:layout_width="40dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:scaleType="centerInside" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/article_summary"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:ellipsize="end"
+        android:maxLines="3" />
 
-        <TextView
-            android:id="@+id/article_summary"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:ellipsize="end"
-            android:maxLines="3" />
-
-    </LinearLayout>
 </LinearLayout>
