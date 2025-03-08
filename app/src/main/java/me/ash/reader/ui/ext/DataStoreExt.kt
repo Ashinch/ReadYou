@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.IOException
+import kotlin.jvm.java
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 val Context.widgetDataStore: DataStore<Preferences> by preferencesDataStore(name = "widget_settings")
@@ -172,9 +173,6 @@ data class DataStoreKey<T>(
         // Languages
         const val languages = "languages"
 
-        // Widget
-        const val showFeedIcon = "showFeedIcon"
-        const val showFeedName = "showFeedName"
 
         val keys: MutableMap<String, DataStoreKey<*>> = mutableMapOf(
             // Version
@@ -252,9 +250,6 @@ data class DataStoreKey<T>(
             sharedContent to DataStoreKey(intPreferencesKey(sharedContent), Int::class.java),
             // Languages
             languages to DataStoreKey(intPreferencesKey(languages), Int::class.java),
-            // Widget
-            showFeedIcon to DataStoreKey(booleanPreferencesKey(showFeedIcon), Boolean::class.java),
-            showFeedName to DataStoreKey(booleanPreferencesKey(showFeedName), Boolean::class.java)
         )
     }
 }

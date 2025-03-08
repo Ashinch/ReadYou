@@ -1,5 +1,6 @@
 package me.ash.reader.ui.widget
 
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -7,6 +8,7 @@ import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.StyleSpan
+import android.util.Log
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.paging.PagingSource
@@ -16,22 +18,24 @@ import me.ash.reader.R
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.repository.ArticleDao
 import me.ash.reader.infrastructure.db.AndroidDatabase
-import me.ash.reader.infrastructure.preference.widget.LatestArticleWidgetSettings
-import me.ash.reader.infrastructure.preference.widget.latestArticleWidgetSettings
+import me.ash.reader.infrastructure.preference.widget.WidgetPreferencesManager
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.page.common.ExtraName
 
 class LatestArticleWidgetRemoteViewsFactory(
     private val context: Context,
+    private val intent: Intent
 ): RemoteViewsService.RemoteViewsFactory {
-
-    private val settings = context.latestArticleWidgetSettings
+    private var appWidgetId: Int = AppWidgetManager.INVALID_APPWIDGET_ID
+    private val preferencesManager = WidgetPreferencesManager.getInstance(context)
     private val articleDao: ArticleDao = AndroidDatabase.getInstance(context).articleDao()
     private var articles: List<ArticleWithFeed> = emptyList()
     private val feedIconLoader = FeedIconLoader(context)
     private val feedIconCache: MutableMap<String?, Bitmap?> = mutableMapOf()
 
-    override fun onCreate() {}
+    override fun onCreate() {
+        appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+    }
     override fun getCount() = articles.size
     override fun getItemId(position: Int) = position.toLong()
     override fun hasStableIds() = true
@@ -39,8 +43,13 @@ class LatestArticleWidgetRemoteViewsFactory(
     override fun onDestroy() {}
 
     override fun onDataSetChanged() {
+        //appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+        appWidgetId = intent.data?.schemeSpecificPart?.toInt() ?: AppWidgetManager.INVALID_APPWIDGET_ID
         runBlocking {
+            // Fetch latest articles from database
             articles = loadArticles(articleDao.queryArticleWithFeedWhenIsAll(context.currentAccountId), 20)
+
+            // Load icons
             for (awf in articles) {
                 if (!feedIconCache.contains(awf.feed.icon)) {
                     feedIconCache[awf.feed.icon] = feedIconLoader.asyncLoadFeedIcon(
@@ -75,7 +84,8 @@ class LatestArticleWidgetRemoteViewsFactory(
     private fun styledArticleSummary(awf: ArticleWithFeed): SpannableString {
         var unstyled = "${awf.article.title} ${awf.article.shortDescription}"
         var boldLen = awf.article.title.length
-        if (settings.showFeedName.value) {
+        if (preferencesManager.showFeedName.getCachedOrDefault(appWidgetId)) {
+            Log.d("LatestArticlesRemoteViewsFactory", "Showing name for widget $appWidgetId")
             unstyled = "(${awf.feed.name}) $unstyled"
             boldLen += awf.feed.name.length + 3
         }

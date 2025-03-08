@@ -1,6 +1,5 @@
 package me.ash.reader.ui.widget
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -10,38 +9,34 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.datastore.preferences.core.Preferences
+import kotlinx.coroutines.launch
 import me.ash.reader.R
-import me.ash.reader.infrastructure.preference.widget.LocalShowFeedIcon
-import me.ash.reader.infrastructure.preference.widget.LocalShowFeedName
-import me.ash.reader.infrastructure.preference.widget.ShowFeedNamePreference
-import me.ash.reader.infrastructure.preference.widget.latestArticleWidgetSettings
+import me.ash.reader.infrastructure.preference.widget.WidgetPreferencesManager
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.component.base.RYSwitch
-import me.ash.reader.ui.ext.dataStore
-import me.ash.reader.ui.ext.get
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
 
 
 @Composable
-fun LatestArticlesWidgetConfigScreen(onSave: () -> Unit) {
+fun LatestArticlesWidgetConfigScreen(
+    appWidgetId: Int,
+    widgetPreferencesManager: WidgetPreferencesManager,
+    onSave: () -> Unit
+) {
 
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val settings = context.latestArticleWidgetSettings
-    val showFeedIcon = LocalShowFeedIcon.current
-    val showFeedName = LocalShowFeedName.current
+    val showFeedIcon = widgetPreferencesManager.showFeedIcon
+    val showFeedIconState by showFeedIcon.asFlow(appWidgetId).collectAsState(initial = showFeedIcon.default)
+    val showFeedName = widgetPreferencesManager.showFeedName
+    val showFeedNameState by showFeedName.asFlow(appWidgetId).collectAsState(initial = showFeedName.default)
 
     RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
@@ -54,34 +49,44 @@ fun LatestArticlesWidgetConfigScreen(onSave: () -> Unit) {
                 item {
                     SettingItem(
                         title = stringResource(R.string.show_feed_icon),
-                        onClick = { showFeedIcon.toggle(context, scope) }
+                        onClick = {
+                            scope.launch {
+                                showFeedIcon.toggle(appWidgetId)
+                            }
+                        }
                     ) {
-                        RYSwitch(activated = showFeedIcon.value) {
-                            showFeedIcon.toggle(context, scope)
-                            Log.d("ConfigScreen", "New value: ${showFeedIcon.value}")
+                        RYSwitch(activated = showFeedIconState) {
+                            scope.launch {
+                                showFeedIcon.toggle(appWidgetId)
+                            }
+
                         }
                     }
                     SettingItem(
                         title = stringResource(R.string.show_feed_name),
-                        onClick = { showFeedName.toggle(context, scope) }
+                        onClick = {
+                            scope.launch {
+                                showFeedName.toggle(appWidgetId)
+                            }
+                        }
                     ) {
-                        RYSwitch(activated = showFeedName.value) {
-                            showFeedName.toggle(context, scope)
-                            Log.d("ConfigScreen", "dataStore: ${context.dataStore.get<Boolean>("showFeedName")}")
+                        RYSwitch(activated = showFeedNameState) {
+                            scope.launch {
+                                showFeedName.toggle(appWidgetId)
+                            }
+
                         }
                     }
                 }
 
             }
+            Column(modifier = Modifier.padding(16.dp)) {
+                Button(onClick = onSave) {
+                    Text("Save")
+                }
+            }
         }
     )
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        Button(onClick = {
-            settings.load(context)
-            onSave()
-        }) {
-            Text("Save")
-        }
-    }
+
 }

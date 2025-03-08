@@ -5,12 +5,13 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.widget.RemoteViews
 import kotlinx.coroutines.runBlocking
 import me.ash.reader.R
 import me.ash.reader.infrastructure.android.MainActivity
-import me.ash.reader.infrastructure.preference.widget.latestArticleWidgetSettings
+import me.ash.reader.infrastructure.preference.widget.WidgetPreferencesManager
 
 /**
  * Implementation of App Widget functionality.
@@ -43,7 +44,11 @@ class LatestArticlesWidget : AppWidgetProvider() {
 
 internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
 
-    val serviceIntent = Intent(context, LatestArticlesWidgetService::class.java)
+    val serviceIntent = Intent(context, LatestArticlesWidgetService::class.java).apply {
+        //putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        // https://stackoverflow.com/questions/11350287/ongetviewfactory-only-called-once-for-multiple-widgets
+        setData(Uri.fromParts("content", appWidgetId.toString(), null))
+    }
     val views = RemoteViews(context.packageName, R.layout.latest_articles_widget).apply {
         setRemoteAdapter(R.id.article_container, serviceIntent)
 
@@ -61,29 +66,12 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
     appWidgetManager.updateAppWidget(appWidgetId, views)
 }
 
-
-
-private const val PREFS_NAME = "me.ash.reader.ui.widget.LatestArticlesWidget"
-private const val PREF_PREFIX_KEY = "appwidget_"
-
-// Write the prefix to the SharedPreferences object for this widget
-internal fun saveTitlePref(context: Context, appWidgetId: Int, text: String) {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
-    prefs.putString(PREF_PREFIX_KEY + appWidgetId, text)
-    prefs.apply()
-}
-
-// Read the prefix from the SharedPreferences object for this widget.
-// If there is no preference saved, get the default from a resource
-internal fun loadTitlePref(context: Context, appWidgetId: Int): String {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0)
-    val titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null)
-    return titleValue ?: context.getString(R.string.appwidget_text)
-}
-
 internal fun deleteWidgetSettings(context: Context, appWidgetId: Int) {
     runBlocking {
         Log.d("deleteWidgetSettings", "Deleting widget settings")
-        context.latestArticleWidgetSettings.clear(context, this)
+        WidgetPreferencesManager.getInstance(context).deleteAll(appWidgetId, this)
+        //context.widgetDataStore.edit {
+        //    it.clear()
+        //}
     }
 }
