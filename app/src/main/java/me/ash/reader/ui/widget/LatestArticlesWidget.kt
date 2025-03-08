@@ -40,8 +40,6 @@ class LatestArticlesWidget : AppWidgetProvider() {
     }
 }
 
-
-
 internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
 
     val serviceIntent = Intent(context, LatestArticlesWidgetService::class.java).apply {

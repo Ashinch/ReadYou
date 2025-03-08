@@ -474,4 +474,5 @@
     </string>
     <string name="widget_settings">Widget Settings</string>
     <string name="show_feed_name">Show feed name</string>
+    <string name="max_latest_article_count">Maximum articles to display</string>
 </resources>

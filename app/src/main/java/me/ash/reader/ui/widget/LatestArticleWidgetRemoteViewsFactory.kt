@@ -29,14 +29,14 @@ class LatestArticleWidgetRemoteViewsFactory(
     private var appWidgetId: Int = AppWidgetManager.INVALID_APPWIDGET_ID
     private val preferencesManager = WidgetPreferencesManager.getInstance(context)
     private val articleDao: ArticleDao = AndroidDatabase.getInstance(context).articleDao()
-    private var articles: List<ArticleWithFeed> = emptyList()
+    private var articles: MutableMap<Int, List<ArticleWithFeed>> = mutableMapOf()
     private val feedIconLoader = FeedIconLoader(context)
     private val feedIconCache: MutableMap<String?, Bitmap?> = mutableMapOf()
 
     override fun onCreate() {
         appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
     }
-    override fun getCount() = articles.size
+    override fun getCount() = articles[appWidgetId]?.size ?: 0
     override fun getItemId(position: Int) = position.toLong()
     override fun hasStableIds() = true
     override fun getViewTypeCount() = 1
@@ -47,10 +47,13 @@ class LatestArticleWidgetRemoteViewsFactory(
         appWidgetId = intent.data?.schemeSpecificPart?.toInt() ?: AppWidgetManager.INVALID_APPWIDGET_ID
         runBlocking {
             // Fetch latest articles from database
-            articles = loadArticles(articleDao.queryArticleWithFeedWhenIsAll(context.currentAccountId), 20)
+            articles[appWidgetId] = loadArticles(
+                articleDao.queryArticleWithFeedWhenIsAll(context.currentAccountId),
+                preferencesManager.maxLatestArticleCount.getCachedOrDefault(appWidgetId)
+            )
 
             // Load icons
-            for (awf in articles) {
+            for (awf in articles.getOrPut(appWidgetId) { emptyList() }) {
                 if (!feedIconCache.contains(awf.feed.icon)) {
                     feedIconCache[awf.feed.icon] = feedIconLoader.asyncLoadFeedIcon(
                         feedName = awf.feed.name,
@@ -82,9 +85,14 @@ class LatestArticleWidgetRemoteViewsFactory(
         return remoteViews
     }
 
-    override fun getViewAt(position: Int): RemoteViews {
-        val awf = articles[position]
-        return getArticleRemoteViews(awf)
+    override fun getViewAt(position: Int): RemoteViews? {
+        Log.d("getViewAt", "position: $position, appWidgetId: $appWidgetId")
+        articles[appWidgetId]?.let {
+            Log.d("getViewAt", "Found ${it.size} articles")
+            return getArticleRemoteViews(it[position])
+        }
+        Log.d("getViewAt", "No articles found.")
+        return null
     }
 
     override fun getLoadingView(): RemoteViews? = null

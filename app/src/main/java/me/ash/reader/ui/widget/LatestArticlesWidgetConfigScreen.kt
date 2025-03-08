@@ -11,7 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -21,6 +24,7 @@ import me.ash.reader.infrastructure.preference.widget.WidgetPreferencesManager
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.component.base.RYSwitch
+import me.ash.reader.ui.component.base.TextFieldDialog
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
 
@@ -33,10 +37,20 @@ fun LatestArticlesWidgetConfigScreen(
 ) {
 
     val scope = rememberCoroutineScope()
+    val maxLatestArticleCount = widgetPreferencesManager.maxLatestArticleCount
+    val maxLatestArticleCountState = maxLatestArticleCount.asFlow(appWidgetId)
+        .collectAsState(initial = maxLatestArticleCount.default)
     val showFeedIcon = widgetPreferencesManager.showFeedIcon
-    val showFeedIconState by showFeedIcon.asFlow(appWidgetId).collectAsState(initial = showFeedIcon.default)
+    val showFeedIconState by showFeedIcon.asFlow(appWidgetId)
+        .collectAsState(initial = showFeedIcon.default)
     val showFeedName = widgetPreferencesManager.showFeedName
-    val showFeedNameState by showFeedName.asFlow(appWidgetId).collectAsState(initial = showFeedName.default)
+    val showFeedNameState by showFeedName.asFlow(appWidgetId)
+        .collectAsState(initial = showFeedName.default)
+
+    var maxLatestArticleCountDialogVisible by remember { mutableStateOf(false) }
+    var maxLatestArticleCountValue: Int? by remember {
+        mutableStateOf(maxLatestArticleCount.getCachedOrDefault(appWidgetId))
+    }
 
     RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
@@ -47,6 +61,13 @@ fun LatestArticlesWidgetConfigScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                 }
                 item {
+                    SettingItem(
+                        title = stringResource(R.string.max_latest_article_count),
+                        desc = "${maxLatestArticleCountState.value}",
+                        onClick = { maxLatestArticleCountDialogVisible = true }
+                    ) {
+
+                    }
                     SettingItem(
                         title = stringResource(R.string.show_feed_icon),
                         onClick = {
@@ -85,6 +106,29 @@ fun LatestArticlesWidgetConfigScreen(
                     Text("Save")
                 }
             }
+        }
+    )
+
+    TextFieldDialog(
+        visible = maxLatestArticleCountDialogVisible,
+        title = stringResource(R.string.max_latest_article_count),
+        value = (maxLatestArticleCountValue ?: "").toString(),
+        placeholder = stringResource(R.string.value),
+        onValueChange = {
+            maxLatestArticleCountValue = it.filter { it.isDigit() }.toIntOrNull()
+        },
+        onDismissRequest = {
+            maxLatestArticleCountValue = maxLatestArticleCount.getCached(appWidgetId)
+            maxLatestArticleCountDialogVisible = false
+        },
+        onConfirm = {
+            scope.launch {
+                maxLatestArticleCountValue?.let {
+                    maxLatestArticleCount.put(appWidgetId, it)
+                }
+                maxLatestArticleCountDialogVisible = false
+            }
+
         }
     )
 
