@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import android.widget.RemoteViews
 import kotlinx.coroutines.runBlocking
 import me.ash.reader.R
@@ -66,7 +65,6 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
 
 internal fun deleteWidgetSettings(context: Context, appWidgetId: Int) {
     runBlocking {
-        Log.d("deleteWidgetSettings", "Deleting widget settings")
         WidgetPreferencesManager.getInstance(context).deleteAll(appWidgetId, this)
         //context.widgetDataStore.edit {
         //    it.clear()

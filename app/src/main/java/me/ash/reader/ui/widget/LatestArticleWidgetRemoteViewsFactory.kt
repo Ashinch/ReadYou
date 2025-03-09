@@ -8,7 +8,6 @@ import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.StyleSpan
-import android.util.Log
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.paging.PagingSource
@@ -43,7 +42,6 @@ class LatestArticleWidgetRemoteViewsFactory(
     override fun onDestroy() {}
 
     override fun onDataSetChanged() {
-        //appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
         appWidgetId = intent.data?.schemeSpecificPart?.toInt() ?: AppWidgetManager.INVALID_APPWIDGET_ID
 
         runBlocking {
@@ -94,12 +92,9 @@ class LatestArticleWidgetRemoteViewsFactory(
     }
 
     override fun getViewAt(position: Int): RemoteViews? {
-        Log.d("getViewAt", "position: $position, appWidgetId: $appWidgetId")
         articles[appWidgetId]?.let {
-            Log.d("getViewAt", "Found ${it.size} articles")
             return getArticleRemoteViews(it[position])
         }
-        Log.d("getViewAt", "No articles found.")
         return null
     }
 
@@ -109,7 +104,6 @@ class LatestArticleWidgetRemoteViewsFactory(
         var unstyled = "${awf.article.title} ${awf.article.shortDescription}"
         var boldLen = awf.article.title.length
         if (preferencesManager.showFeedName.getCachedOrDefault(appWidgetId)) {
-            Log.d("LatestArticlesRemoteViewsFactory", "Showing name for widget $appWidgetId")
             unstyled = "(${awf.feed.name}) $unstyled"
             boldLen += awf.feed.name.length + 3
         }

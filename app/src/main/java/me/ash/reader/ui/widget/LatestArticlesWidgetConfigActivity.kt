@@ -3,7 +3,6 @@ package me.ash.reader.ui.widget
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -19,7 +18,6 @@ class LatestArticlesWidgetConfigActivity : ComponentActivity() {
     private lateinit var widgetPreferencesManager: WidgetPreferencesManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("LatestArticlesWidgetConfigActivity", "onCreate called")
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
