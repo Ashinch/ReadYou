@@ -1,7 +1,6 @@
 package me.ash.reader.infrastructure.preference.widget
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -31,18 +30,13 @@ open class WidgetPreference<T: Any>(
      */
     fun asFlow(widgetId: Int): Flow<T> {
         val key = preferencesKey(widgetId)
-        Log.d("WidgetPreference", "asFlow key: $key")
-        //Log.d("WidgetPreference", "widgetDataStore: ${context.widgetDataStore.data}")
         return context.widgetDataStore.data.map {
-            Log.d("WidgetPreferences", "data: $it")
             val value = it[key]
-            Log.d("WidgetPreference", "asFlow value: $value")
             value ?: default
         }
     }
 
     suspend fun put(widgetId: Int, value: T) {
-        Log.d("WidgetPreference", "put key: ${preferencesKey(widgetId)}, value: $value")
         context.widgetDataStore.edit {
             it[preferencesKey(widgetId)] = value
         }
@@ -58,7 +52,6 @@ open class WidgetPreference<T: Any>(
      * Get the cached value immediately.
      */
     fun getCached(widgetId: Int): T? {
-        Log.d("WidgetPreferencesManager", "Getting cached value for widget $widgetId. Stored value is ${cachedValues[widgetId]}")
         return cachedValues.getOrPut(widgetId) {
             AtomicReference<T?>(default)
         }.get()
@@ -83,7 +76,6 @@ open class WidgetPreference<T: Any>(
      */
     suspend fun refresh(widgetId: Int) {
         val fromFlow = asFlow(widgetId).first()
-        Log.d("WidgetPreference", "Obtained value $fromFlow for widget $widgetId")
         setCached(widgetId, fromFlow)
     }
 
@@ -100,7 +92,6 @@ class BooleanWidgetPreference(context: Context, keyName: String, default: Boolea
     WidgetPreference<Boolean>(context, keyName, default, {n -> booleanPreferencesKey(n) }) {
     suspend fun toggle(widgetId: Int) {
         val current = getCachedOrDefault(widgetId)
-        Log.d("BooleanWidgetPreference", "Current value is $current, so putting ${!current}")
         put(widgetId, !current)
     }
 }
