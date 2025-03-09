@@ -10,12 +10,14 @@ import kotlinx.coroutines.launch
 fun widgetDataKey(keyName: String, appWidgetId: Int): String = "${keyName}_${appWidgetId}"
 
 class WidgetPreferencesManager(context: Context) {
+    internal val groupToDisplay = StringWidgetPreference(context, "groupToDisplay", "")
     internal val maxLatestArticleCount = IntWidgetPreference(context, "maxLatestArticleCount", 20)
     internal val showFeedIcon = BooleanWidgetPreference(context, "showFeedIcon", true)
     internal val showFeedName = BooleanWidgetPreference(context, "showFeedName", false)
 
     fun deleteAll(widgetId: Int, scope: CoroutineScope) {
         scope.launch {
+            groupToDisplay.delete(widgetId, this)
             maxLatestArticleCount.delete(widgetId, this)
             showFeedIcon.delete(widgetId, this)
             showFeedName.delete(widgetId, this)

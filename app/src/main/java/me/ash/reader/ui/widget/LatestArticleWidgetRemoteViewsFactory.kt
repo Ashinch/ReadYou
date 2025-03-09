@@ -45,11 +45,19 @@ class LatestArticleWidgetRemoteViewsFactory(
     override fun onDataSetChanged() {
         //appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
         appWidgetId = intent.data?.schemeSpecificPart?.toInt() ?: AppWidgetManager.INVALID_APPWIDGET_ID
+
         runBlocking {
+            // Get appropriate database query (ie, are we querying all articles or just a particular
+            // group, etc)
+            val query = preferencesManager.groupToDisplay.get(appWidgetId).let { id ->
+                if (id.isEmpty()) articleDao.queryArticleWithFeedWhenIsAll(context.currentAccountId)
+                else articleDao.queryArticleWithFeedByGroupIdWhenIsAll(context.currentAccountId, id)
+            }
+
             // Fetch latest articles from database
             articles[appWidgetId] = loadArticles(
-                articleDao.queryArticleWithFeedWhenIsAll(context.currentAccountId),
-                preferencesManager.maxLatestArticleCount.getCachedOrDefault(appWidgetId)
+                query,
+                preferencesManager.maxLatestArticleCount.get(appWidgetId)
             )
 
             // Load icons

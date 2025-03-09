@@ -16,18 +16,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import me.ash.reader.R
+import me.ash.reader.domain.model.group.Group
+import me.ash.reader.infrastructure.db.AndroidDatabase
 import me.ash.reader.infrastructure.preference.widget.WidgetPreferencesManager
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.component.base.RYSwitch
+import me.ash.reader.ui.component.base.RadioDialog
+import me.ash.reader.ui.component.base.RadioDialogOption
 import me.ash.reader.ui.component.base.TextFieldDialog
+import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
-
 
 @Composable
 fun LatestArticlesWidgetConfigScreen(
@@ -36,7 +42,12 @@ fun LatestArticlesWidgetConfigScreen(
     onSave: () -> Unit
 ) {
 
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
+
+    val groupToDisplay = widgetPreferencesManager.groupToDisplay
+    val groupToDisplayState = groupToDisplay.asFlow(appWidgetId)
+        .collectAsState(initial = groupToDisplay.default)
     val maxLatestArticleCount = widgetPreferencesManager.maxLatestArticleCount
     val maxLatestArticleCountState = maxLatestArticleCount.asFlow(appWidgetId)
         .collectAsState(initial = maxLatestArticleCount.default)
@@ -47,9 +58,19 @@ fun LatestArticlesWidgetConfigScreen(
     val showFeedNameState by showFeedName.asFlow(appWidgetId)
         .collectAsState(initial = showFeedName.default)
 
+
+    var groupToDisplayDialogVisible by remember { mutableStateOf(false) }
     var maxLatestArticleCountDialogVisible by remember { mutableStateOf(false) }
     var maxLatestArticleCountValue: Int? by remember {
         mutableStateOf(maxLatestArticleCount.getCachedOrDefault(appWidgetId))
+    }
+
+    val groupDao = AndroidDatabase.getInstance(context).groupDao()
+    val groups = runBlocking {
+        groupDao.queryAll(context.currentAccountId)
+    } + Group("", stringResource(R.string.none), context.currentAccountId)
+    val groupIdToName = groups.associate {
+        it.id to it.name
     }
 
     RYScaffold(
@@ -62,12 +83,15 @@ fun LatestArticlesWidgetConfigScreen(
                 }
                 item {
                     SettingItem(
+                        title = stringResource(R.string.group_to_display),
+                        desc = groupIdToName[groupToDisplayState.value],
+                        onClick = { groupToDisplayDialogVisible = true }
+                    )
+                    SettingItem(
                         title = stringResource(R.string.max_latest_article_count),
                         desc = "${maxLatestArticleCountState.value}",
                         onClick = { maxLatestArticleCountDialogVisible = true }
-                    ) {
-
-                    }
+                    )
                     SettingItem(
                         title = stringResource(R.string.show_feed_icon),
                         onClick = {
@@ -108,6 +132,23 @@ fun LatestArticlesWidgetConfigScreen(
             }
         }
     )
+
+    RadioDialog(
+        visible = groupToDisplayDialogVisible,
+        title = stringResource(R.string.group_to_display),
+        options = groups.map {
+            RadioDialogOption(
+                text = it.name,
+                selected = it.id == groupToDisplayState.value
+            ) {
+                runBlocking {
+                    groupToDisplay.put(appWidgetId, it.id)
+                }
+            }
+        }
+    ) {
+        groupToDisplayDialogVisible = false
+    }
 
     TextFieldDialog(
         visible = maxLatestArticleCountDialogVisible,
