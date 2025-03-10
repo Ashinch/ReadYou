@@ -121,7 +121,10 @@ class LatestArticleWidgetRemoteViewsFactory(
     private fun styledArticleSummary(awf: ArticleWithFeed): SpannableString {
         var unstyled = "${awf.article.title} ${awf.article.shortDescription}"
         var boldLen = awf.article.title.length
-        if (preferencesManager.showFeedName.getCachedOrDefault(appWidgetId)) {
+        val showFeedName = runBlocking {
+            preferencesManager.showFeedName.get(appWidgetId)
+        }
+        if (showFeedName) {
             unstyled = "(${awf.feed.name}) $unstyled"
             boldLen += awf.feed.name.length + 3
         }
@@ -132,10 +135,12 @@ class LatestArticleWidgetRemoteViewsFactory(
             boldLen,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        if (preferencesManager.readArticleDisplay.getCachedOption(appWidgetId) == ReadArticleDisplayOption.SOFT_HIDE
-            && !awf.article.isUnread) {
+        val readArticleDisplay = runBlocking {
+            preferencesManager.readArticleDisplay.getOption(appWidgetId)
+        }
+        if (readArticleDisplay == ReadArticleDisplayOption.SOFT_HIDE && !awf.article.isUnread) {
             summary.setSpan(
-                ForegroundColorSpan(Color.GRAY),
+                ForegroundColorSpan(Color.DKGRAY),
                 0,
                 unstyled.length,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE

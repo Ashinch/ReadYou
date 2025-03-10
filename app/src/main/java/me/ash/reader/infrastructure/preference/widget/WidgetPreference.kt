@@ -60,9 +60,7 @@ open class WidgetPreference<T: Any>(
      * Get the cached value immediately.
      */
     fun getCached(widgetId: Int): T? {
-        return cachedValues.getOrPut(widgetId) {
-            AtomicReference<T?>(default)
-        }.get()
+        return cachedValues[widgetId]?.get()
     }
 
     /**
