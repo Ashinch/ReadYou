@@ -475,4 +475,7 @@
     <string name="widget_settings">Widget Settings</string>
     <string name="show_feed_name">Show feed name</string>
     <string name="max_latest_article_count">Maximum articles to display</string>
+    <string name="show_articles">Show articles</string>
+    <string name="hide_articles">Hide articles</string>
+    <string name="what_to_do_with_read_articles">What to do with read articles</string>
 </resources>

@@ -24,6 +24,7 @@ import kotlinx.coroutines.runBlocking
 import me.ash.reader.R
 import me.ash.reader.domain.model.group.Group
 import me.ash.reader.infrastructure.db.AndroidDatabase
+import me.ash.reader.infrastructure.preference.widget.ReadArticleDisplayOption
 import me.ash.reader.infrastructure.preference.widget.WidgetPreferencesManager
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.RYScaffold
@@ -35,6 +36,15 @@ import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
 
+private val ReadArticleDisplayOption.descString @Composable get() =
+    stringResource(
+        when (this) {
+            ReadArticleDisplayOption.SHOW -> R.string.show_articles
+            ReadArticleDisplayOption.SOFT_HIDE -> R.string.grey_out_articles
+            ReadArticleDisplayOption.HARD_HIDE -> R.string.hide_articles
+        }
+    )
+
 @Composable
 fun LatestArticlesWidgetConfigScreen(
     appWidgetId: Int,
@@ -45,6 +55,7 @@ fun LatestArticlesWidgetConfigScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
+    // Preference state
     val groupToDisplay = widgetPreferencesManager.groupToDisplay
     val groupToDisplayState = groupToDisplay.asFlow(appWidgetId)
         .collectAsState(initial = groupToDisplay.default)
@@ -57,14 +68,12 @@ fun LatestArticlesWidgetConfigScreen(
     val showFeedName = widgetPreferencesManager.showFeedName
     val showFeedNameState by showFeedName.asFlow(appWidgetId)
         .collectAsState(initial = showFeedName.default)
+    val readArticleDisplay = widgetPreferencesManager.readArticleDisplay
+    val readArticleDisplayState = readArticleDisplay.asFlow(appWidgetId)
+        .collectAsState(initial = readArticleDisplay.default)
 
-
+    // Data for dialogs
     var groupToDisplayDialogVisible by remember { mutableStateOf(false) }
-    var maxLatestArticleCountDialogVisible by remember { mutableStateOf(false) }
-    var maxLatestArticleCountValue: Int? by remember {
-        mutableStateOf(maxLatestArticleCount.getCachedOrDefault(appWidgetId))
-    }
-
     val groupDao = AndroidDatabase.getInstance(context).groupDao()
     val groups = runBlocking {
         groupDao.queryAll(context.currentAccountId)
@@ -72,6 +81,13 @@ fun LatestArticlesWidgetConfigScreen(
     val groupIdToName = groups.associate {
         it.id to it.name
     }
+
+    var maxLatestArticleCountDialogVisible by remember { mutableStateOf(false) }
+    var maxLatestArticleCountValue: Int? by remember {
+        mutableStateOf(maxLatestArticleCount.getCachedOrDefault(appWidgetId))
+    }
+
+    var readArticleDisplayDialogVisible by remember { mutableStateOf(false) }
 
     RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
@@ -122,6 +138,11 @@ fun LatestArticlesWidgetConfigScreen(
 
                         }
                     }
+                    SettingItem(
+                        title = stringResource(R.string.what_to_do_with_read_articles),
+                        desc = ReadArticleDisplayOption.valueOf(readArticleDisplayState.value).descString,
+                        onClick = { readArticleDisplayDialogVisible = true }
+                    )
                 }
 
             }
@@ -172,6 +193,23 @@ fun LatestArticlesWidgetConfigScreen(
 
         }
     )
+
+    RadioDialog(
+        visible = readArticleDisplayDialogVisible,
+        title = stringResource(R.string.what_to_do_with_read_articles),
+        options = ReadArticleDisplayOption.entries.map {
+            RadioDialogOption(
+                text = it.descString,
+                selected = readArticleDisplayState.value == it.name
+            ) {
+                runBlocking {
+                    readArticleDisplay.putOption(appWidgetId, it)
+                }
+            }
+        }
+    ) {
+        readArticleDisplayDialogVisible = false
+    }
 
 
 }

@@ -4,9 +4,11 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
@@ -17,6 +19,7 @@ import me.ash.reader.R
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.repository.ArticleDao
 import me.ash.reader.infrastructure.db.AndroidDatabase
+import me.ash.reader.infrastructure.preference.widget.ReadArticleDisplayOption
 import me.ash.reader.infrastructure.preference.widget.WidgetPreferencesManager
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.page.common.ExtraName
@@ -47,9 +50,24 @@ class LatestArticleWidgetRemoteViewsFactory(
         runBlocking {
             // Get appropriate database query (ie, are we querying all articles or just a particular
             // group, etc)
-            val query = preferencesManager.groupToDisplay.get(appWidgetId).let { id ->
-                if (id.isEmpty()) articleDao.queryArticleWithFeedWhenIsAll(context.currentAccountId)
-                else articleDao.queryArticleWithFeedByGroupIdWhenIsAll(context.currentAccountId, id)
+            val groupToDisplayPref = preferencesManager.groupToDisplay.get(appWidgetId)
+            val readArticleDisplayPref = preferencesManager.readArticleDisplay.getOption(appWidgetId)
+            val query = if (groupToDisplayPref.isEmpty()) {
+                // Display all articles (not just a group)
+                if (readArticleDisplayPref == ReadArticleDisplayOption.HARD_HIDE) {
+                    // Don't show read articles
+                    articleDao.queryArticleWithFeedWhenIsUnread(context.currentAccountId, true)
+                } else {
+                    articleDao.queryArticleWithFeedWhenIsAll(context.currentAccountId)
+                }
+            } else {
+                // Display only articles from group
+                if (readArticleDisplayPref == ReadArticleDisplayOption.HARD_HIDE) {
+                    articleDao.queryArticleWithFeedByGroupIdWhenIsUnread(context.currentAccountId, groupToDisplayPref, true)
+                } else {
+                    articleDao.queryArticleWithFeedByGroupIdWhenIsAll(context.currentAccountId, groupToDisplayPref)
+
+                }
             }
 
             // Fetch latest articles from database
@@ -108,8 +126,22 @@ class LatestArticleWidgetRemoteViewsFactory(
             boldLen += awf.feed.name.length + 3
         }
         val summary = SpannableString(unstyled)
-        val boldSpan = StyleSpan(Typeface.BOLD)
-        summary.setSpan(boldSpan, 0, boldLen, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        summary.setSpan(
+            StyleSpan(Typeface.BOLD),
+            0,
+            boldLen,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        if (preferencesManager.readArticleDisplay.getCachedOption(appWidgetId) == ReadArticleDisplayOption.SOFT_HIDE
+            && !awf.article.isUnread) {
+            summary.setSpan(
+                ForegroundColorSpan(Color.GRAY),
+                0,
+                unstyled.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+        }
         return summary
     }
 }

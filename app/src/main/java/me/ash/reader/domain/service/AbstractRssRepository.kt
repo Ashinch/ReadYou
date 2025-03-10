@@ -1,7 +1,5 @@
 package me.ash.reader.domain.service
 
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Context
 import android.util.Log
 import androidx.paging.PagingSource
@@ -43,7 +41,6 @@ import me.ash.reader.ui.ext.spacerDollar
 import me.ash.reader.ui.widget.LatestArticlesWidget
 import java.util.Date
 import java.util.UUID
-import me.ash.reader.R
 
 abstract class AbstractRssRepository(
     private val context: Context,
@@ -93,6 +90,7 @@ abstract class AbstractRssRepository(
         articleDao.insertList(articles.map {
             it.copy(feedId = feed.id)
         })
+        LatestArticlesWidget.notifyAllViewDataChanged(context)
     }
 
     open suspend fun addGroup(
@@ -139,11 +137,7 @@ abstract class AbstractRssRepository(
             }
 
             if (newArticlesAvailable) {
-                val appWidgetManager = AppWidgetManager.getInstance(context)
-                val appWidgetIds = appWidgetManager.getAppWidgetIds(
-                    ComponentName(context, LatestArticlesWidget::class.java)
-                )
-                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.article_container)
+                LatestArticlesWidget.notifyAllViewDataChanged(context)
             }
 
             coroutineWorker.setProgress(SyncWorker.setIsSyncing(false))

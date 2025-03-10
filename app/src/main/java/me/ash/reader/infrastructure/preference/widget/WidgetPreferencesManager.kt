@@ -14,6 +14,7 @@ class WidgetPreferencesManager(context: Context) {
     internal val maxLatestArticleCount = IntWidgetPreference(context, "maxLatestArticleCount", 20)
     internal val showFeedIcon = BooleanWidgetPreference(context, "showFeedIcon", true)
     internal val showFeedName = BooleanWidgetPreference(context, "showFeedName", false)
+    internal val readArticleDisplay = ReadArticleDisplayPreference(context)
 
     fun deleteAll(widgetId: Int, scope: CoroutineScope) {
         scope.launch {

@@ -26,7 +26,8 @@ open class WidgetPreference<T: Any>(
     protected fun preferencesKey(widgetId: Int) = keyFactory(widgetDataKey(keyName, widgetId))
 
     /**
-     * Return a `Flow` that observes the `DataStore`.
+     * Return a `Flow` that observes the relevant data in the `DataStore`. The value can be obtained
+     * from within a `Composable` by calling `collectAsStateValue` on the `Flow`.
      */
     fun asFlow(widgetId: Int): Flow<T> {
         val key = preferencesKey(widgetId)
@@ -36,6 +37,9 @@ open class WidgetPreference<T: Any>(
         }
     }
 
+    /**
+     * Store `value` in the `DataStore`.
+     */
     suspend fun put(widgetId: Int, value: T) {
         context.widgetDataStore.edit {
             it[preferencesKey(widgetId)] = value
@@ -43,6 +47,10 @@ open class WidgetPreference<T: Any>(
         refresh(widgetId)
     }
 
+    /**
+     * Get the current value of the preference, looking for a cached value first and then retrieving
+     * the value from the `DataStore` if this is not present.
+     */
     suspend fun get(widgetId: Int): T =
         getCached(widgetId) ?: asFlow(widgetId).first().also {
             setCached(widgetId, it)
@@ -58,9 +66,8 @@ open class WidgetPreference<T: Any>(
     }
 
     /**
-     *
+     * Get the cached value, or return the preference's default value if no cached value is present.
      */
-
     fun getCachedOrDefault(widgetId: Int) =
         getCached(widgetId) ?: default
 
@@ -79,6 +86,9 @@ open class WidgetPreference<T: Any>(
         setCached(widgetId, fromFlow)
     }
 
+    /**
+     * Delete this key-value pair from the `DataStore`.
+     */
     fun delete(widgetId: Int, scope: CoroutineScope) {
         scope.launch {
             context.widgetDataStore.edit {
@@ -96,7 +106,7 @@ class BooleanWidgetPreference(context: Context, keyName: String, default: Boolea
     }
 }
 
-class StringWidgetPreference(context: Context, keyName: String, default: String):
+open class StringWidgetPreference(context: Context, keyName: String, default: String):
     WidgetPreference<String>(context, keyName, default, {n -> stringPreferencesKey(n) })
 
 class IntWidgetPreference(context: Context, keyName: String, default: Int):

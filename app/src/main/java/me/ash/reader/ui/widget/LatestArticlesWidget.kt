@@ -3,9 +3,11 @@ package me.ash.reader.ui.widget
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.widget.RemoteViews
 import kotlinx.coroutines.runBlocking
 import me.ash.reader.R
@@ -36,6 +38,17 @@ class LatestArticlesWidget : AppWidgetProvider() {
 
     override fun onDisabled(context: Context) {
         // Enter relevant functionality for when the last widget is disabled
+    }
+
+    companion object {
+        fun notifyAllViewDataChanged(context: Context) {
+            Log.d("LatestArticlesWidget", "notifyAllViewDataChanged called")
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            val appWidgetIds = appWidgetManager.getAppWidgetIds(
+                ComponentName(context, LatestArticlesWidget::class.java)
+            )
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.article_container)
+        }
     }
 }
 

@@ -45,6 +45,7 @@ import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.motion.materialSharedAxisY
 import me.ash.reader.ui.page.home.HomeViewModel
+import me.ash.reader.ui.widget.LatestArticlesWidget
 import kotlin.math.abs
 
 private const val UPWARD = 1
@@ -102,6 +103,7 @@ fun ReadingPage(
             readingViewModel.prefetchArticleId(pagingItems)
             if (readingUiState.isUnread) {
                 readingViewModel.markAsRead()
+                LatestArticlesWidget.notifyAllViewDataChanged(context)
             }
         }
     }
@@ -248,6 +250,7 @@ fun ReadingPage(
                         isBionicReading = bionicReading.value,
                         onUnread = {
                             readingViewModel.updateReadStatus(it)
+                            LatestArticlesWidget.notifyAllViewDataChanged(context)
                         },
                         onStarred = {
                             readingViewModel.updateStarredStatus(it)
