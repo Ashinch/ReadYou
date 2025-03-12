@@ -23,7 +23,6 @@ import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.infrastructure.preference.LocalDarkTheme
 import me.ash.reader.ui.ext.animatedComposable
 import me.ash.reader.ui.ext.collectAsStateValue
-import me.ash.reader.ui.ext.findActivity
 import me.ash.reader.ui.ext.initialFilter
 import me.ash.reader.ui.ext.initialPage
 import me.ash.reader.ui.ext.isFirstLaunch
@@ -65,13 +64,6 @@ fun HomeEntry(
     var isReadingPage by rememberSaveable { mutableStateOf(false) }
     val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
     val subscribeUiState = subscribeViewModel.subscribeUiState.collectAsStateValue()
-
-    val intent by rememberSaveable { mutableStateOf(context.findActivity()?.intent) }
-    var openArticleId by rememberSaveable {
-        mutableStateOf(intent?.extras?.getString(ExtraName.ARTICLE_ID) ?: "")
-    }.also {
-        intent?.replaceExtras(null)
-    }
 
     LaunchedEffect(Unit) {
         when (context.initialPage) {
@@ -116,18 +108,6 @@ fun HomeEntry(
         }
         onDispose {
             subscribeViewModel.onIntentConsumed()
-        }
-    }
-
-    LaunchedEffect(openArticleId) {
-        if (openArticleId.isNotEmpty()) {
-            navController.navigate(RouteName.FLOW) {
-                launchSingleTop = true
-            }
-            navController.navigate("${RouteName.READING}/${openArticleId}") {
-                launchSingleTop = true
-            }
-            openArticleId = ""
         }
     }
 

@@ -6,17 +6,15 @@ import android.database.CursorWindow
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
-import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Consumer
-import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -24,6 +22,8 @@ import androidx.profileinstaller.ProfileInstallerInitializer
 import coil.ImageLoader
 import coil.compose.LocalImageLoader
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import me.ash.reader.domain.repository.AccountDao
 import me.ash.reader.infrastructure.preference.AccountSettingsProvider
 import me.ash.reader.infrastructure.preference.LanguagesPreference
@@ -50,9 +50,13 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var navController: NavHostController
 
+    private val intentFlow = MutableStateFlow<Intent?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i("RLog", "onCreate: ${ProfileInstallerInitializer().create(this)}")
+
+        intentFlow.value = intent
 
         enableEdgeToEdge()
 
@@ -86,9 +90,14 @@ class MainActivity : AppCompatActivity() {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
 
-
         setContent {
             navController = rememberNavController()
+
+            LaunchedEffect(Unit) {
+                intentFlow.collectLatest { newIntent ->
+                    newIntent?.let { handleIntent(it, navController) }
+                }
+            }
 
             CompositionLocalProvider(
                 LocalImageLoader provides imageLoader,
@@ -101,6 +110,7 @@ class MainActivity : AppCompatActivity() {
                                 intent.getTextOrNull()?.let {
                                     subscribeViewModel.handleSharedUrlFromIntent(it)
                                 }
+                                handleIntent(intent, navController)
                             }
                             addOnNewIntentListener(listener)
                             onDispose {
@@ -115,10 +125,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        addOnNewIntentListener (Consumer<Intent> { newIntent ->
+            intentFlow.value = newIntent
+        })
     }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
+    private fun handleIntent(intent: Intent, navController: NavHostController) {
         val openArticleId = intent.extras?.getString(ExtraName.ARTICLE_ID) ?: ""
         if (openArticleId.isNotEmpty()) {
             navController.navigate(RouteName.FLOW) {
