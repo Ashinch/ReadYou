@@ -2,10 +2,12 @@ package me.ash.reader.ui.widget
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.util.Base64
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
@@ -13,6 +15,7 @@ import androidx.core.graphics.drawable.toBitmap
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
+import com.caverock.androidsvg.SVG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import me.ash.reader.infrastructure.preference.widget.WidgetPreferencesManager
@@ -84,8 +87,28 @@ class FeedIconLoader(private val context: Context) {
         return bitmap
     }
 
-    private fun base64Image(base64Uri: String, sizeX: Int, sizeY: Int): Bitmap? {
-        TODO()
+    private fun base64ToBytes(b64: String): ByteArray {
+        val base64Data = b64.substringAfter("base64,")
+        return Base64.decode(base64Data, Base64.DEFAULT)
+    }
+
+    private fun svgBase64ToBitmap(base64String: String, xPx: Int, yPx: Int): Bitmap {
+        val svg = SVG.getFromString(String(base64ToBytes(base64String)))
+        val bitmap = createBitmap(xPx, yPx)
+        val canvas = Canvas(bitmap)
+        svg.renderToCanvas(canvas)
+        return bitmap
+    }
+
+    private fun base64Image(base64Uri: String, xPx: Int, yPx: Int): Bitmap? {
+        val isSvg = base64Uri.startsWith("image/svg")
+
+        return if (isSvg) {
+            svgBase64ToBitmap(base64Uri, xPx, yPx)
+        } else {
+            val bytes = base64ToBytes(base64Uri)
+            BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        }
     }
 
     private suspend fun requestImage(url: String): Drawable? {
