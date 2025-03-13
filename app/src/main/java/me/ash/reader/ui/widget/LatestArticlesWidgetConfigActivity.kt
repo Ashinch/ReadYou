@@ -6,9 +6,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import me.ash.reader.infrastructure.preference.widget.WidgetPreferencesManager
 import me.ash.reader.ui.widget.ui.theme.ReadYouTheme
@@ -34,6 +37,15 @@ class LatestArticlesWidgetConfigActivity : ComponentActivity() {
         widgetPreferencesManager = WidgetPreferencesManager.getInstance(this)
 
         setContent {
+            // Extract MaterialTheme colors for use in (non-Compose) widget
+            val primaryColor = MaterialTheme.colorScheme.primary.toArgb()
+            val onPrimaryColor = MaterialTheme.colorScheme.onPrimary.toArgb()
+
+            LaunchedEffect(Unit) {
+                widgetPreferencesManager.primaryColor.put(appWidgetId, primaryColor)
+                widgetPreferencesManager.onPrimaryColor.put(appWidgetId, onPrimaryColor)
+            }
+
             LatestArticlesWidgetConfigScreen(
                 appWidgetId = appWidgetId,
                 widgetPreferencesManager = widgetPreferencesManager
@@ -42,7 +54,6 @@ class LatestArticlesWidgetConfigActivity : ComponentActivity() {
                 setResult(RESULT_OK, resultValue)
                 finish()
             }
-
         }
     }
 }

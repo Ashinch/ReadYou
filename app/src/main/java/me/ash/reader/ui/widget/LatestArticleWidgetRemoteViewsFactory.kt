@@ -81,7 +81,8 @@ class LatestArticleWidgetRemoteViewsFactory(
                 if (!feedIconCache.contains(awf.feed.icon)) {
                     feedIconCache[awf.feed.icon] = feedIconLoader.asyncLoadFeedIcon(
                         feedName = awf.feed.name,
-                        iconUrl = awf.feed.icon
+                        iconUrl = awf.feed.icon,
+                        widgetId = appWidgetId
                     )
                 }
             }

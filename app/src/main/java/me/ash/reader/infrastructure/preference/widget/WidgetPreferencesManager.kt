@@ -1,8 +1,10 @@
 package me.ash.reader.infrastructure.preference.widget
 
 import android.content.Context
+import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import me.ash.reader.ui.ext.widgetDataStore
 
 /**
  * Get the widget-specific key (as a string) for the given key name.
@@ -15,13 +17,23 @@ class WidgetPreferencesManager(context: Context) {
     internal val showFeedIcon = BooleanWidgetPreference(context, "showFeedIcon", true)
     internal val showFeedName = BooleanWidgetPreference(context, "showFeedName", false)
     internal val readArticleDisplay = ReadArticleDisplayPreference(context)
+    internal val primaryColor = IntWidgetPreference(context, "primaryColor", 0x6200EE)
+    internal val onPrimaryColor = IntWidgetPreference(context, "onPrimaryColor", 0xFFFFFF)
 
-    fun deleteAll(widgetId: Int, scope: CoroutineScope) {
+    fun deleteAllForId(widgetId: Int, scope: CoroutineScope) {
         scope.launch {
             groupToDisplay.delete(widgetId, this)
             maxLatestArticleCount.delete(widgetId, this)
             showFeedIcon.delete(widgetId, this)
             showFeedName.delete(widgetId, this)
+        }
+    }
+
+    fun deleteAll(context: Context, scope: CoroutineScope) {
+        scope.launch {
+            context.widgetDataStore.edit {
+                it.clear()
+            }
         }
     }
 

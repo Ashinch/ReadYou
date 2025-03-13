@@ -78,7 +78,7 @@ internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManage
 
 internal fun deleteWidgetSettings(context: Context, appWidgetId: Int) {
     runBlocking {
-        WidgetPreferencesManager.getInstance(context).deleteAll(appWidgetId, this)
+        WidgetPreferencesManager.getInstance(context).deleteAllForId(appWidgetId, this)
         //context.widgetDataStore.edit {
         //    it.clear()
         //}
