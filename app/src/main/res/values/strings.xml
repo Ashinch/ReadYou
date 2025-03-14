@@ -478,4 +478,5 @@
     <string name="show_articles">Show articles</string>
     <string name="hide_articles">Hide articles</string>
     <string name="what_to_do_with_read_articles">What to do with read articles</string>
+    <string name="heading_text">Heading text</string>
 </resources>

@@ -9,6 +9,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.toArgb
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import me.ash.reader.infrastructure.preference.LocalDarkTheme
 import me.ash.reader.infrastructure.preference.widget.WidgetPreferencesManager
 import me.ash.reader.ui.theme.AppTheme
@@ -47,6 +50,13 @@ class LatestArticlesWidgetConfigActivity : ComponentActivity() {
                     appWidgetId = appWidgetId,
                     widgetPreferencesManager = widgetPreferencesManager
                 ) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        LatestArticlesWidget.updateAppWidget(
+                            applicationContext,
+                            AppWidgetManager.getInstance(applicationContext),
+                            appWidgetId
+                        )
+                    }
                     val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                     setResult(RESULT_OK, resultValue)
                     finish()

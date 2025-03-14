@@ -56,12 +56,21 @@ fun LatestArticlesWidgetConfigScreen(
     val scope = rememberCoroutineScope()
 
     // Preference state
+    val headingText = widgetPreferencesManager.headingText
+    val headingTextState = headingText.asFlow(appWidgetId)
+        .collectAsState(initial = headingText.default)
+    var headingTextValue: String? by remember {
+        mutableStateOf(headingText.getCachedOrDefault(appWidgetId))
+    }
     val groupToDisplay = widgetPreferencesManager.groupToDisplay
     val groupToDisplayState = groupToDisplay.asFlow(appWidgetId)
         .collectAsState(initial = groupToDisplay.default)
     val maxLatestArticleCount = widgetPreferencesManager.maxLatestArticleCount
     val maxLatestArticleCountState = maxLatestArticleCount.asFlow(appWidgetId)
         .collectAsState(initial = maxLatestArticleCount.default)
+    var maxLatestArticleCountValue: Int? by remember {
+        mutableStateOf(maxLatestArticleCount.getCachedOrDefault(appWidgetId))
+    }
     val showFeedIcon = widgetPreferencesManager.showFeedIcon
     val showFeedIconState by showFeedIcon.asFlow(appWidgetId)
         .collectAsState(initial = showFeedIcon.default)
@@ -73,6 +82,8 @@ fun LatestArticlesWidgetConfigScreen(
         .collectAsState(initial = readArticleDisplay.default)
 
     // Data for dialogs
+    var headingTextDialogVisible by remember { mutableStateOf(false) }
+
     var groupToDisplayDialogVisible by remember { mutableStateOf(false) }
     val groupDao = AndroidDatabase.getInstance(context).groupDao()
     val groups = runBlocking {
@@ -83,10 +94,6 @@ fun LatestArticlesWidgetConfigScreen(
     }
 
     var maxLatestArticleCountDialogVisible by remember { mutableStateOf(false) }
-    var maxLatestArticleCountValue: Int? by remember {
-        mutableStateOf(maxLatestArticleCount.getCachedOrDefault(appWidgetId))
-    }
-
     var readArticleDisplayDialogVisible by remember { mutableStateOf(false) }
 
     RYScaffold(
@@ -98,6 +105,11 @@ fun LatestArticlesWidgetConfigScreen(
                     Spacer(modifier = Modifier.height(16.dp))
                 }
                 item {
+                    SettingItem(
+                        title = stringResource(R.string.heading_text),
+                        desc = headingTextState.value,
+                        onClick = { headingTextDialogVisible = true }
+                    )
                     SettingItem(
                         title = stringResource(R.string.group_to_display),
                         desc = groupIdToName[groupToDisplayState.value],
@@ -150,6 +162,25 @@ fun LatestArticlesWidgetConfigScreen(
                 Button(onClick = onSave) {
                     Text("Save")
                 }
+            }
+        }
+    )
+
+    TextFieldDialog(
+        visible = headingTextDialogVisible,
+        title = stringResource(R.string.heading_text),
+        value = headingTextValue ?: "",
+        placeholder = stringResource(R.string.value),
+        onDismissRequest = { headingTextDialogVisible = false },
+        onValueChange = {
+            headingTextValue = it
+        },
+        onConfirm = {
+            scope.launch {
+                headingTextValue?.let {
+                    headingText.put(appWidgetId, it)
+                }
+                headingTextDialogVisible = false
             }
         }
     )
