@@ -12,7 +12,6 @@ import android.widget.RemoteViews
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import me.ash.reader.R
 import me.ash.reader.infrastructure.android.MainActivity
 import me.ash.reader.infrastructure.preference.widget.WidgetPreferencesManager
@@ -46,11 +45,19 @@ class LatestArticlesWidget : AppWidgetProvider() {
 
     override fun onDisabled(context: Context) {
         // Enter relevant functionality for when the last widget is disabled
+        val widgetPreferencesManager = WidgetPreferencesManager.getInstance(context)
+        widgetPreferencesManager.deleteAll(context, scope)
     }
+
+    private fun deleteWidgetSettings(context: Context, appWidgetId: Int) {
+        scope.launch {
+            WidgetPreferencesManager.getInstance(context).deleteAllForId(appWidgetId, this)
+        }
+    }
+
 
     companion object {
         fun notifyAllViewDataChanged(context: Context) {
-            Log.d("LatestArticlesWidget", "notifyAllViewDataChanged called")
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val appWidgetIds = appWidgetManager.getAppWidgetIds(
                 ComponentName(context, LatestArticlesWidget::class.java)
@@ -85,15 +92,6 @@ class LatestArticlesWidget : AppWidgetProvider() {
             }
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.article_container)
             appWidgetManager.updateAppWidget(appWidgetId, articleViews)
-        }
-
-        private fun deleteWidgetSettings(context: Context, appWidgetId: Int) {
-            runBlocking {
-                WidgetPreferencesManager.getInstance(context).deleteAllForId(appWidgetId, this)
-                //context.widgetDataStore.edit {
-                //    it.clear()
-                //}
-            }
         }
     }
 }
