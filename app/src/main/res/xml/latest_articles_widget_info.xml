@@ -8,6 +8,7 @@
     android:configure="me.ash.reader.ui.widget.LatestArticlesWidgetConfigActivity"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
+    android:widgetFeatures="reconfigurable"
     android:previewLayout="@layout/latest_articles_widget"
     android:targetCellHeight="3"
     android:targetCellWidth="2"

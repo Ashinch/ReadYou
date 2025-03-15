@@ -56,6 +56,7 @@ class LatestArticlesWidgetConfigActivity : ComponentActivity() {
                             AppWidgetManager.getInstance(applicationContext),
                             appWidgetId
                         )
+                        widgetPreferencesManager.firstRun.put(appWidgetId, false)
                     }
                     val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                     setResult(RESULT_OK, resultValue)

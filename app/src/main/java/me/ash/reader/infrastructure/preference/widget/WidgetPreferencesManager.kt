@@ -21,6 +21,9 @@ class WidgetPreferencesManager(context: Context) {
     internal val readArticleDisplay = ReadArticleDisplayPreference(context)
     internal val primaryColor = IntWidgetPreference(context, "primaryColor", 0x6200EE)
     internal val onPrimaryColor = IntWidgetPreference(context, "onPrimaryColor", 0xFFFFFF)
+    // firstRun is not configured by the user but is a flag indicating whether the user has already
+    // configured the widget or is configuring it for the first time.
+    internal val firstRun = BooleanWidgetPreference(context, "firstRun", true)
 
     val allPreferences = arrayOf(
         headingText,
@@ -30,7 +33,8 @@ class WidgetPreferencesManager(context: Context) {
         showFeedName,
         readArticleDisplay,
         primaryColor,
-        onPrimaryColor
+        onPrimaryColor,
+        firstRun
     )
 
     fun deleteAllForId(widgetId: Int, scope: CoroutineScope) {

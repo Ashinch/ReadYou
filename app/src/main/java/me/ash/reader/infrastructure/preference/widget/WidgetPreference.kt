@@ -72,7 +72,7 @@ open class WidgetPreference<T: Any>(
     /**
      * Set the cached value.
      */
-    fun setCached(widgetId: Int, value: T) {
+    private fun setCached(widgetId: Int, value: T) {
         cachedValues.getOrPut(widgetId) { AtomicReference(value) }.set(value)
     }
 
@@ -94,6 +94,7 @@ open class WidgetPreference<T: Any>(
             }
         }
     }
+
 }
 
 class BooleanWidgetPreference(context: Context, keyName: String, default: Boolean):

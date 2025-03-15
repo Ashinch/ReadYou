@@ -51,7 +51,6 @@ fun LatestArticlesWidgetConfigScreen(
     widgetPreferencesManager: WidgetPreferencesManager,
     onSave: () -> Unit
 ) {
-
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -80,6 +79,10 @@ fun LatestArticlesWidgetConfigScreen(
     val readArticleDisplay = widgetPreferencesManager.readArticleDisplay
     val readArticleDisplayState = readArticleDisplay.asFlow(appWidgetId)
         .collectAsState(initial = readArticleDisplay.default)
+
+    val firstRun = widgetPreferencesManager.firstRun
+    val firstRunState = firstRun.asFlow(appWidgetId)
+        .collectAsState(initial = firstRun.default)
 
     // Data for dialogs
     var headingTextDialogVisible by remember { mutableStateOf(false) }
@@ -122,13 +125,20 @@ fun LatestArticlesWidgetConfigScreen(
                     )
                     SettingItem(
                         title = stringResource(R.string.show_feed_icon),
+                        // Changing showFeedIcon (which causes the widget to use a different layout
+                        // to display articles) doesn't seem to work properly so just disable
+                        // changing it after first run
+                        enabled = firstRunState.value,
                         onClick = {
                             scope.launch {
                                 showFeedIcon.toggle(appWidgetId)
                             }
                         }
                     ) {
-                        RYSwitch(activated = showFeedIconState) {
+                        RYSwitch(
+                            activated = showFeedIconState,
+                            enable = firstRunState.value
+                        ) {
                             scope.launch {
                                 showFeedIcon.toggle(appWidgetId)
                             }

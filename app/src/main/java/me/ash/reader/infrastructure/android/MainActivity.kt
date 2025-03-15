@@ -132,14 +132,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleIntent(intent: Intent, navController: NavHostController) {
+        Log.d("MainActivity", "Handing intent $intent")
+        Log.d("MainActivity", "Extras: ${intent.extras}")
         val openArticleId = intent.extras?.getString(ExtraName.ARTICLE_ID) ?: ""
         if (openArticleId.isNotEmpty()) {
+            // Navigate to specific article
             navController.navigate(RouteName.FLOW) {
                 launchSingleTop = true
             }
             navController.navigate("${RouteName.READING}/${openArticleId}") {
                 launchSingleTop = true
             }
+        } else {
+            // Navigate to specific page
+            val route = intent.extras?.getString(ExtraName.ROUTE_NAME) ?: ""
+            if (route.isNotEmpty()) {
+                Log.d("MainActivity", "Got intent, ROUTE_NAME value: $route")
+                navController.navigate(route)
+            }
+
         }
     }
 }

@@ -15,6 +15,8 @@ import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.infrastructure.android.MainActivity
 import me.ash.reader.infrastructure.preference.widget.WidgetPreferencesManager
+import me.ash.reader.ui.page.common.ExtraName
+import me.ash.reader.ui.page.common.RouteName
 
 /**
  * Implementation of App Widget functionality.
@@ -79,8 +81,19 @@ class LatestArticlesWidget : AppWidgetProvider() {
                 setRemoteAdapter(R.id.article_container, serviceIntent)
 
                 val headerText = widgetPreferencesManager.headingText.get(appWidgetId)
-                Log.d("LatestArticlesWidget", "headerText: $headerText")
                 setTextViewText(R.id.header, headerText)
+
+                val homePendingIntent = PendingIntent.getActivity(
+                    context,
+                    0,
+                    Intent(context, MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        putExtra(ExtraName.ROUTE_NAME, RouteName.FEEDS)
+                    },
+                    (PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+                )
+                Log.d("LatestArticlesWidget", "Setting PendingIntent $homePendingIntent")
+                setOnClickPendingIntent(R.id.home_button, homePendingIntent)
 
                 val viewArticleIntent = Intent(context, MainActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
