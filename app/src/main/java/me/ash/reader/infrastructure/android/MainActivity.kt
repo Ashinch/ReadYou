@@ -6,28 +6,32 @@ import android.database.CursorWindow
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
-import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Consumer
-import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import androidx.profileinstaller.ProfileInstallerInitializer
 import coil.ImageLoader
 import coil.compose.LocalImageLoader
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import me.ash.reader.domain.repository.AccountDao
 import me.ash.reader.infrastructure.preference.AccountSettingsProvider
 import me.ash.reader.infrastructure.preference.LanguagesPreference
 import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.ui.ext.languages
+import me.ash.reader.ui.page.common.ExtraName
 import me.ash.reader.ui.page.common.HomeEntry
+import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import java.lang.reflect.Field
 import javax.inject.Inject
@@ -44,9 +48,15 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var accountDao: AccountDao
 
+    lateinit var navController: NavHostController
+
+    private val intentFlow = MutableStateFlow<Intent?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i("RLog", "onCreate: ${ProfileInstallerInitializer().create(this)}")
+
+        intentFlow.value = intent
 
         enableEdgeToEdge()
 
@@ -80,8 +90,15 @@ class MainActivity : AppCompatActivity() {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
 
-
         setContent {
+            navController = rememberNavController()
+
+            LaunchedEffect(Unit) {
+                intentFlow.collectLatest { newIntent ->
+                    newIntent?.let { handleIntent(it, navController) }
+                }
+            }
+
             CompositionLocalProvider(
                 LocalImageLoader provides imageLoader,
             ) {
@@ -93,16 +110,47 @@ class MainActivity : AppCompatActivity() {
                                 intent.getTextOrNull()?.let {
                                     subscribeViewModel.handleSharedUrlFromIntent(it)
                                 }
+                                handleIntent(intent, navController)
                             }
                             addOnNewIntentListener(listener)
                             onDispose {
                                 removeOnNewIntentListener(listener)
                             }
                         }
-                        HomeEntry(subscribeViewModel = subscribeViewModel)
+                        HomeEntry(
+                            subscribeViewModel = subscribeViewModel,
+                            navController = navController
+                        )
                     }
                 }
             }
+        }
+
+        addOnNewIntentListener (Consumer<Intent> { newIntent ->
+            intentFlow.value = newIntent
+        })
+    }
+
+    private fun handleIntent(intent: Intent, navController: NavHostController) {
+        Log.d("MainActivity", "Handing intent $intent")
+        Log.d("MainActivity", "Extras: ${intent.extras}")
+        val openArticleId = intent.extras?.getString(ExtraName.ARTICLE_ID) ?: ""
+        if (openArticleId.isNotEmpty()) {
+            // Navigate to specific article
+            navController.navigate(RouteName.FLOW) {
+                launchSingleTop = true
+            }
+            navController.navigate("${RouteName.READING}/${openArticleId}") {
+                launchSingleTop = true
+            }
+        } else {
+            // Navigate to specific page
+            val route = intent.extras?.getString(ExtraName.ROUTE_NAME) ?: ""
+            if (route.isNotEmpty()) {
+                Log.d("MainActivity", "Got intent, ROUTE_NAME value: $route")
+                navController.navigate(route)
+            }
+
         }
     }
 }

@@ -20,8 +20,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.IOException
+import kotlin.jvm.java
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+val Context.widgetDataStore: DataStore<Preferences> by preferencesDataStore(name = "widget_settings")
 
 val Context.skipVersionNumber: String
     get() = this.dataStore.get(DataStoreKey.skipVersionNumber) ?: ""
@@ -171,6 +173,7 @@ data class DataStoreKey<T>(
         // Languages
         const val languages = "languages"
 
+
         val keys: MutableMap<String, DataStoreKey<*>> = mutableMapOf(
             // Version
             isFirstLaunch to DataStoreKey(booleanPreferencesKey(isFirstLaunch), Boolean::class.java),
@@ -246,7 +249,7 @@ data class DataStoreKey<T>(
             openLinkAppSpecificBrowser to DataStoreKey(stringPreferencesKey(openLinkAppSpecificBrowser), String::class.java),
             sharedContent to DataStoreKey(intPreferencesKey(sharedContent), Int::class.java),
             // Languages
-            languages to DataStoreKey(intPreferencesKey(languages), Int::class.java)
+            languages to DataStoreKey(intPreferencesKey(languages), Int::class.java),
         )
     }
 }

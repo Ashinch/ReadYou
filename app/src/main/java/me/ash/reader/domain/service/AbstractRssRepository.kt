@@ -38,6 +38,7 @@ import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.isNostrUri
 import me.ash.reader.ui.ext.spacerDollar
+import me.ash.reader.ui.widget.LatestArticlesWidget
 import java.util.Date
 import java.util.UUID
 
@@ -89,6 +90,7 @@ abstract class AbstractRssRepository(
         articleDao.insertList(articles.map {
             it.copy(feedId = feed.id)
         })
+        LatestArticlesWidget.notifyAllViewDataChanged(context)
     }
 
     open suspend fun addGroup(
@@ -115,11 +117,13 @@ abstract class AbstractRssRepository(
             val preDate = Date(preTime)
             val accountId = context.currentAccountId
             val semaphore = Semaphore(16)
+            var newArticlesAvailable = false
             feedDao.queryAll(accountId).mapIndexed { _, feed ->
                 async(Dispatchers.IO) {
                     semaphore.withPermit {
                         val feedWithArticle = syncFeed(feed, preDate)
                         val newArticles = articleDao.insertListIfNotExist(feedWithArticle.articles)
+                        if (newArticles.isNotEmpty()) newArticlesAvailable = true
                         if (feedWithArticle.feed.isNotification) {
                             notificationHelper.notify(feedWithArticle.copy(articles = newArticles))
                         }
@@ -131,6 +135,11 @@ abstract class AbstractRssRepository(
             accountDao.queryById(accountId)?.let { account ->
                 accountDao.update(account.apply { updateAt = Date() })
             }
+
+            if (newArticlesAvailable) {
+                LatestArticlesWidget.notifyAllViewDataChanged(context)
+            }
+
             coroutineWorker.setProgress(SyncWorker.setIsSyncing(false))
             ListenableWorker.Result.success()
         }
