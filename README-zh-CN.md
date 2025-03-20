@@ -139,6 +139,7 @@ F-Droid 版本与其他版本不兼容，您无法通过覆盖安装包来升级
 - [Seal](https://github.com/JunkFood02/Seal)
 - [news-flash](https://gitlab.com/news-flash)
 - [besticon](https://github.com/mat/besticon)
+- [Jiffy Reader](https://github.com/ansh/jiffyreader.com)
 - ...
 
 ### 特别鸣谢
