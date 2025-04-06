@@ -140,6 +140,8 @@ Vielen Dank an alle **Read You** Übersetzer, und wenn Sie einen Beitrag leisten
 - [Feeder](https://gitlab.com/spacecowboy/Feeder)
 - [Seal](https://github.com/JunkFood02/Seal)
 - [news-flash](https://gitlab.com/news-flash)
+- [besticon](https://github.com/mat/besticon)
+- [Jiffy Reader](https://github.com/ansh/jiffyreader.com)
 - ...
 
 ### Special Thanks

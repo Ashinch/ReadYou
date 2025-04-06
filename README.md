@@ -141,6 +141,7 @@ Thank you to each of the **Read You** translators, and if you would like to cont
 - [Seal](https://github.com/JunkFood02/Seal)
 - [news-flash](https://gitlab.com/news-flash)
 - [besticon](https://github.com/mat/besticon)
+- [Jiffy Reader](https://github.com/ansh/jiffyreader.com)
 - ...
 
 ### Special Thanks
