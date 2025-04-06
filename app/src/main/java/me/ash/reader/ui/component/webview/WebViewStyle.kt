@@ -328,7 +328,6 @@ figure {
     letter-spacing: var(--letter-spacing) !important;
     text-align: var(--text-align) !important;
     margin: 0 !important;
-    opacity: 0.8 !important;
     font-size: 12px !important;
 }
 
@@ -339,7 +338,6 @@ figure * {
 figure p,
 caption,
 figcaption {
-    opacity: 0.8 !important;
     font-size: 12px !important;
 }
 
