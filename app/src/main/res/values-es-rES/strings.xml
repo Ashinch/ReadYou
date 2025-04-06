@@ -324,4 +324,5 @@
     <string name="become_a_sponsor">Conviértete en patrocinador</string>
     <string name="sponsor_desc">Construimos y mantenemos esta aplicación gratuita y de código abierto en nuestro tiempo libre. Si la disfrutas, ¡considera apoyarnos con una pequeña donación! ☕️</string>
     <string name="toolbars">Barras de herramientas</string>
+    <string name="latest">Últimas</string>
 </resources>
