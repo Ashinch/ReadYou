@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home
 
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.ViewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -27,6 +28,7 @@ import me.ash.reader.domain.service.SyncWorker
 import me.ash.reader.infrastructure.android.AndroidStringsHelper
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
+import me.ash.reader.ui.page.home.flow.Diff
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,6 +49,8 @@ class HomeViewModel @Inject constructor(
     val filterUiState = _filterUiState.asStateFlow()
 
     val syncWorkLiveData = workManager.getWorkInfosByTagLiveData(SyncWorker.WORK_TAG)
+
+    val diffMap = mutableStateMapOf<String, Diff>()
 
     fun sync() {
         applicationScope.launch(ioDispatcher) {
@@ -100,6 +104,22 @@ class HomeViewModel @Inject constructor(
     fun inputSearchContent(content: String) {
         _homeUiState.update { it.copy(searchContent = content) }
         fetchArticles()
+    }
+
+
+    fun commitDiff() {
+        applicationScope.launch(ioDispatcher) {
+            val markAsReadArticles =
+                diffMap.filter { !it.value.isUnread }.map { it.key }.toSet()
+            val markAsUnreadArticles =
+                diffMap.filter { it.value.isUnread }.map { it.key }.toSet()
+
+            rssService.get()
+                .batchMarkAsRead(articleIds = markAsReadArticles, isUnread = false)
+            rssService.get()
+                .batchMarkAsRead(articleIds = markAsUnreadArticles, isUnread = true)
+
+        }.invokeOnCompletion { diffMap.clear() }
     }
 }
 
