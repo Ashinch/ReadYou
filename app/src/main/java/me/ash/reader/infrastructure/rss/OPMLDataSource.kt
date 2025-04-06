@@ -10,9 +10,7 @@ import me.ash.reader.domain.model.group.Group
 import me.ash.reader.domain.model.group.GroupWithFeed
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.ui.ext.extractDomain
-import me.ash.reader.ui.ext.isNostrUri
 import me.ash.reader.ui.ext.spacerDollar
-import rust.nostr.sdk.Client
 import java.io.InputStream
 import java.util.*
 import javax.inject.Inject
@@ -50,21 +48,7 @@ class OPMLDataSource @Inject constructor(
                         )
                     }
                 } else {
-                    val feedUrl = outline.extractUrl()
-                    val feedToAdd = if (feedUrl?.isNostrUri() == true) {
-                        val feedMetadata = NostrFeed.fetchFeedMetadata(feedUrl, Client())
-                        Feed(
-                            id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
-                            name = outline.extractName(),
-                            url = outline.extractUrl() ?: continue,
-                            icon = feedMetadata.imageUrl,
-                            groupId = defaultGroup.id,
-                            accountId = targetAccountId,
-                            isNotification = outline.extractPresetNotification(),
-                            isFullContent = outline.extractPresetFullContent(),
-                        )
-                    }
-                    else {
+                    groupWithFeedList.addFeedToDefault(
                         Feed(
                             id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
                             name = outline.extractName(),
@@ -75,8 +59,7 @@ class OPMLDataSource @Inject constructor(
                             isFullContent = outline.extractPresetFullContent(),
                             isBrowser = outline.extractPresetBrowser(),
                         )
-                    }
-                    groupWithFeedList.addFeedToDefault(feedToAdd)
+                    )
                 }
             } else {
                 var groupId = defaultGroup.id
@@ -92,21 +75,7 @@ class OPMLDataSource @Inject constructor(
                 }
                 for (subOutline in outline.subElements) {
                     if (subOutline != null && subOutline.attributes != null) {
-                        val feedUrl = outline.extractUrl()
-                        val feedToAdd = if (feedUrl?.isNostrUri() == true) {
-                            val feedMetadata = NostrFeed.fetchFeedMetadata(feedUrl, Client())
-                            Feed(
-                                id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
-                                name = subOutline.extractName(),
-                                url = subOutline.extractUrl() ?: continue,
-                                icon = feedMetadata.imageUrl,
-                                groupId = groupId,
-                                accountId = targetAccountId,
-                                isNotification = subOutline.extractPresetNotification(),
-                                isFullContent = subOutline.extractPresetFullContent(),
-                            )
-                        }
-                        else {
+                        groupWithFeedList.addFeed(
                             Feed(
                                 id = targetAccountId.spacerDollar(UUID.randomUUID().toString()),
                                 name = subOutline.extractName(),
@@ -117,8 +86,7 @@ class OPMLDataSource @Inject constructor(
                                 isFullContent = subOutline.extractPresetFullContent(),
                                 isBrowser = subOutline.extractPresetBrowser(),
                             )
-                        }
-                        groupWithFeedList.addFeed(feedToAdd)
+                        )
                     }
                 }
             }

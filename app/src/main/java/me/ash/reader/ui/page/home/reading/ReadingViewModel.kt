@@ -22,7 +22,6 @@ import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.storage.AndroidImageDownloader
-import me.ash.reader.ui.ext.isNostrUri
 import java.util.Date
 import javax.inject.Inject
 
@@ -99,14 +98,10 @@ class ReadingViewModel @Inject constructor(
     private suspend fun internalRenderFullContent() {
         setLoading()
         runCatching {
-            if (currentArticle?.link?.isNostrUri() == true) {
-                currentArticle?.fullContent.toString()
-            } else {
-                rssHelper.parseFullContent(
-                    currentArticle?.link ?: "",
-                    currentArticle?.title ?: ""
-                )
-            }
+            rssHelper.parseFullContent(
+                currentArticle?.link ?: "",
+                currentArticle?.title ?: ""
+            )
         }.onSuccess { content ->
             _readerState.update { it.copy(content = ReaderState.FullContent(content = content)) }
         }.onFailure { th ->
