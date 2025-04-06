@@ -176,12 +176,6 @@ dependencies {
     implementation(libs.activity.compose)
     implementation(libs.appcompat)
 
-    // Markdown
-    implementation(libs.jetbrains.markdown)
-
-    // Nostr
-    implementation(libs.rust.nostr)
-
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit.ext)
