@@ -55,6 +55,8 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.eventFlow
 import androidx.navigation.NavHostController
 import androidx.work.WorkInfo
 import kotlinx.coroutines.launch
@@ -147,6 +149,13 @@ fun FeedsPage(
     }
 
     DisposableEffect(owner) {
+        scope.launch {
+            owner.lifecycle.eventFlow.collect {
+                if (it == Lifecycle.Event.ON_PAUSE) {
+                    homeViewModel.commitDiff()
+                }
+            }
+        }
         homeViewModel.syncWorkLiveData.observe(owner) { workInfoList ->
             workInfoList.let {
                 isSyncing = it.any { workInfo -> workInfo.state == WorkInfo.State.RUNNING }

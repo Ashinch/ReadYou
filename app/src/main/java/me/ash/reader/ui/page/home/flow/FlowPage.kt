@@ -166,20 +166,13 @@ fun FlowPage(
         }
     }
 
-    DisposableEffect(pagingItems) {
-        onDispose {
+    LaunchedEffect(isSyncing) {
+        if (isSyncing) {
             homeViewModel.commitDiff()
         }
     }
 
     DisposableEffect(owner) {
-        scope.launch {
-            owner.lifecycle.eventFlow.collect {
-                if (it == Lifecycle.Event.ON_PAUSE) {
-                    homeViewModel.commitDiff()
-                }
-            }
-        }
         homeViewModel.syncWorkLiveData.observe(owner) { workInfoList ->
             workInfoList.let {
                 isSyncing = it.any { workInfo -> workInfo.state == WorkInfo.State.RUNNING }
