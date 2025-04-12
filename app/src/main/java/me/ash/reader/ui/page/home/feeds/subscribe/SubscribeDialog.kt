@@ -9,6 +9,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.animation.with
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CreateNewFolder
@@ -80,7 +81,7 @@ fun SubscribeDialog(
         icon = {
             FeedIcon(
                 feedName = subscribeUiState.searchedFeed?.title ?: stringResource(R.string.subscribe),
-                iconUrl = subscribeUiState.searchedFeed?.getIconUrl(),
+                iconUrl = subscribeUiState.searchedFeed?.icon?.url,
                 placeholderIcon = Icons.Rounded.RssFeed,
             )
         },
