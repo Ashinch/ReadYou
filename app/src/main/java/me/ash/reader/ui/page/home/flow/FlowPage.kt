@@ -128,7 +128,7 @@ fun FlowPage(
         LaunchedEffect(listState.isScrollInProgress) {
             if (!listState.isScrollInProgress) {
                 val firstItemIndex = listState.firstVisibleItemIndex
-                val diffMap = flowViewModel.diffMap
+                val diffMap = homeViewModel.diffMap
                 if (firstItemIndex < pagingItems.itemCount)
                     for (index in 0 until firstItemIndex) {
                         val item = pagingItems.peek(index)
@@ -166,20 +166,13 @@ fun FlowPage(
         }
     }
 
-    DisposableEffect(pagingItems) {
-        onDispose {
-            flowViewModel.commitDiff()
+    LaunchedEffect(isSyncing) {
+        if (isSyncing) {
+            homeViewModel.commitDiff()
         }
     }
 
     DisposableEffect(owner) {
-        scope.launch {
-            owner.lifecycle.eventFlow.collect {
-                if (it == Lifecycle.Event.ON_PAUSE) {
-                    flowViewModel.commitDiff()
-                }
-            }
-        }
         homeViewModel.syncWorkLiveData.observe(owner) { workInfoList ->
             workInfoList.let {
                 isSyncing = it.any { workInfo -> workInfo.state == WorkInfo.State.RUNNING }
@@ -202,7 +195,7 @@ fun FlowPage(
             val id = article.article.id
             val isUnread = article.article.isUnread
 
-            with(flowViewModel.diffMap) {
+            with(homeViewModel.diffMap) {
                 if (contains(id)) remove(id)
                 else put(id, Diff(isUnread = !isUnread))
             }
@@ -418,7 +411,7 @@ fun FlowPage(
                     }
                     ArticleList(
                         pagingItems = pagingItems,
-                        diffMap = flowViewModel.diffMap,
+                        diffMap = homeViewModel.diffMap,
                         isShowFeedIcon = articleListFeedIcon.value,
                         isShowStickyHeader = articleListDateStickyHeader.value,
                         articleListTonalElevation = articleListTonalElevation.value,

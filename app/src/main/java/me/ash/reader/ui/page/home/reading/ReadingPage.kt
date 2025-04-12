@@ -45,6 +45,7 @@ import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.motion.materialSharedAxisY
 import me.ash.reader.ui.page.home.HomeViewModel
+import me.ash.reader.ui.page.home.flow.Diff
 import kotlin.math.abs
 
 private const val UPWARD = 1
@@ -100,8 +101,9 @@ fun ReadingPage(
         if (pagingItems.isNotEmpty() && readerState.articleId != null) {
 //            Log.i("RLog", "ReadPage: ${readingUiState.articleWithFeed}")
             readingViewModel.prefetchArticleId(pagingItems)
-            if (readingUiState.isUnread) {
-                readingViewModel.markAsRead()
+            val article = readingUiState.articleWithFeed?.article
+            if (article?.isUnread == true) {
+                homeViewModel.diffMap[article.id] = Diff(false)
             }
         }
     }
@@ -241,13 +243,19 @@ fun ReadingPage(
                 if (readerState.articleId != null) {
                     BottomBar(
                         isShow = isShowToolBar,
-                        isUnread = readingUiState.isUnread,
+                        isUnread = homeViewModel.diffMap[readerState.articleId]?.isUnread
+                            ?: readingUiState.isUnread, // fixme
                         isStarred = readingUiState.isStarred,
                         isNextArticleAvailable = isNextArticleAvailable,
                         isFullContent = readerState.content is ReaderState.FullContent,
                         isBionicReading = bionicReading.value,
-                        onUnread = {
-                            readingViewModel.updateReadStatus(it)
+                        onUnread = { isUnread ->
+                            val id = readerState.articleId
+
+                            with(homeViewModel.diffMap) {
+                                if (contains(id)) remove(id)
+                                else put(id, Diff(isUnread = isUnread))
+                            }
                         },
                         onStarred = {
                             readingViewModel.updateStarredStatus(it)

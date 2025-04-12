@@ -110,24 +110,24 @@ class ReadingViewModel @Inject constructor(
         }
     }
 
-    fun updateReadStatus(isUnread: Boolean) {
-        currentArticle?.run {
-            applicationScope.launch(ioDispatcher) {
-                _readingUiState.update { it.copy(isUnread = isUnread) }
-                rssService.get().markAsRead(
-                    groupId = null,
-                    feedId = null,
-                    articleId = id,
-                    before = null,
-                    isUnread = isUnread,
-                )
+    /*    fun updateReadStatus(isUnread: Boolean) {
+            currentArticle?.run {
+                applicationScope.launch(ioDispatcher) {
+                    _readingUiState.update { it.copy(isUnread = isUnread) }
+                    rssService.get().markAsRead(
+                        groupId = null,
+                        feedId = null,
+                        articleId = id,
+                        before = null,
+                        isUnread = isUnread,
+                    )
+                }
             }
         }
-    }
 
-    fun markAsRead() = updateReadStatus(isUnread = false)
+        fun markAsRead() = updateReadStatus(isUnread = false)
 
-    fun markAsUnread() = updateReadStatus(isUnread = true)
+        fun markAsUnread() = updateReadStatus(isUnread = true)*/
 
     fun updateStarredStatus(isStarred: Boolean) {
         applicationScope.launch(ioDispatcher) {
@@ -151,7 +151,7 @@ class ReadingViewModel @Inject constructor(
         if (initialArticleItems.isEmpty()) {
             initialArticleItems = pagingItems.items
         }
-        
+
         val items = initialArticleItems
         val currentId = currentArticle?.id
         val index = items.indexOfFirst { item ->
@@ -218,7 +218,7 @@ class ReadingViewModel @Inject constructor(
 
 data class ReadingUiState(
     val articleWithFeed: ArticleWithFeed? = null,
-    val isUnread: Boolean = false,
+    val isUnread: Boolean = false, // fixme: to be removed in favor of lazy read marking
     val isStarred: Boolean = false,
 )
 

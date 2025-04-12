@@ -30,7 +30,6 @@ class FlowViewModel @Inject constructor(
 
     private val _flowUiState = MutableStateFlow(FlowUiState())
     val flowUiState: StateFlow<FlowUiState> = _flowUiState.asStateFlow()
-    val diffMap = mutableStateMapOf<String, Diff>()
 
     fun sync() {
         applicationScope.launch(ioDispatcher) {
@@ -90,21 +89,6 @@ class FlowViewModel @Inject constructor(
                 .toSet()
             rssService.get().batchMarkAsRead(articleIds = articleIdSet, isUnread = false)
         }
-    }
-
-    fun commitDiff() {
-        applicationScope.launch(ioDispatcher) {
-            val markAsReadArticles =
-                diffMap.filter { !it.value.isUnread }.map { it.key }.toSet()
-            val markAsUnreadArticles =
-                diffMap.filter { it.value.isUnread }.map { it.key }.toSet()
-
-            rssService.get()
-                .batchMarkAsRead(articleIds = markAsReadArticles, isUnread = false)
-            rssService.get()
-                .batchMarkAsRead(articleIds = markAsUnreadArticles, isUnread = true)
-
-        }.invokeOnCompletion { diffMap.clear() }
     }
 }
 
