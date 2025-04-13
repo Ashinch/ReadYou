@@ -33,7 +33,7 @@ data class Feed(
     var isNotification: Boolean = false,
     @ColumnInfo
     var isFullContent: Boolean = false,
-    @ColumnInfo
+    @ColumnInfo(defaultValue = "0")
     var isBrowser: Boolean = false,
 ) {
 
