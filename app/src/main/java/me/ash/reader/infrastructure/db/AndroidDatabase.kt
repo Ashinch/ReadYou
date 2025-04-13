@@ -19,7 +19,10 @@ import java.util.*
 
 @Database(
     entities = [Account::class, Feed::class, Article::class, Group::class],
-    version = 5
+    version = 6,
+    autoMigrations = [
+        AutoMigration(from = 5, to = 6)
+    ]
 )
 @TypeConverters(
     AndroidDatabase.DateConverters::class,
