@@ -467,4 +467,7 @@
     <string name="become_a_sponsor">Become a sponsor</string>
     <string name="sponsor_desc">We build and upkeep this free, open-source app in our off-hours. If you enjoy it, please consider supporting us with a small donation! ☕️</string>
     <string name="toolbars">Toolbars</string>
+    <string name="sort_unread_articles">Sort unread articles</string>
+    <string name="latest">Latest</string>
+    <string name="earliest">Earliest</string>
 </resources>

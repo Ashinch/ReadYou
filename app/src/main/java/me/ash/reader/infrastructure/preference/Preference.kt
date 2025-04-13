@@ -51,6 +51,7 @@ fun Preferences.toSettings(): Settings {
         ),
         flowArticleListReadIndicator = FlowArticleReadIndicatorPreference.fromPreferences(this),
         flowArticleListTonalElevation = FlowArticleListTonalElevationPreference.fromPreferences(this),
+        flowSortUnreadArticles = SortUnreadArticlesPreference.fromPreferences(this),
 
         // Reading page
         readingRenderer = ReadingRendererPreference.fromPreferences(this),

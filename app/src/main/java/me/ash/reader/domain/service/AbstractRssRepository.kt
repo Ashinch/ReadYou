@@ -239,6 +239,7 @@ abstract class AbstractRssRepository(
         feedId: String?,
         isStarred: Boolean,
         isUnread: Boolean,
+        sortAscending: Boolean = false,
     ): PagingSource<Int, ArticleWithFeed> {
         val accountId = context.currentAccountId
         Log.i(
@@ -248,19 +249,19 @@ abstract class AbstractRssRepository(
         return when {
             groupId != null -> when {
                 isStarred -> articleDao.queryArticleWithFeedByGroupIdWhenIsStarred(accountId, groupId, true)
-                isUnread -> articleDao.queryArticleWithFeedByGroupIdWhenIsUnread(accountId, groupId, true)
+                isUnread -> articleDao.queryArticleWithFeedByGroupIdWhenIsUnread(accountId, groupId, true, sortAscending = sortAscending)
                 else -> articleDao.queryArticleWithFeedByGroupIdWhenIsAll(accountId, groupId)
             }
 
             feedId != null -> when {
                 isStarred -> articleDao.queryArticleWithFeedByFeedIdWhenIsStarred(accountId, feedId, true)
-                isUnread -> articleDao.queryArticleWithFeedByFeedIdWhenIsUnread(accountId, feedId, true)
+                isUnread -> articleDao.queryArticleWithFeedByFeedIdWhenIsUnread(accountId, feedId, true, sortAscending = sortAscending)
                 else -> articleDao.queryArticleWithFeedByFeedIdWhenIsAll(accountId, feedId)
             }
 
             else -> when {
                 isStarred -> articleDao.queryArticleWithFeedWhenIsStarred(accountId, true)
-                isUnread -> articleDao.queryArticleWithFeedWhenIsUnread(accountId, true)
+                isUnread -> articleDao.queryArticleWithFeedWhenIsUnread(accountId, true, sortAscending = sortAscending)
                 else -> articleDao.queryArticleWithFeedWhenIsAll(accountId)
             }
         }
@@ -375,6 +376,7 @@ abstract class AbstractRssRepository(
         feedId: String?,
         isStarred: Boolean,
         isUnread: Boolean,
+        sortAscending: Boolean = false
     ): PagingSource<Int, ArticleWithFeed> {
         val accountId = context.currentAccountId
         Log.i(
@@ -384,19 +386,19 @@ abstract class AbstractRssRepository(
         return when {
             groupId != null -> when {
                 isStarred -> articleDao.searchArticleByGroupIdWhenIsStarred(accountId, content, groupId, true)
-                isUnread -> articleDao.searchArticleByGroupIdWhenIsUnread(accountId, content, groupId, true)
+                isUnread -> articleDao.searchArticleByGroupIdWhenIsUnread(accountId, content, groupId, true, sortAscending)
                 else -> articleDao.searchArticleByGroupIdWhenAll(accountId, content, groupId)
             }
 
             feedId != null -> when {
                 isStarred -> articleDao.searchArticleByFeedIdWhenIsStarred(accountId, content, feedId, true)
-                isUnread -> articleDao.searchArticleByFeedIdWhenIsUnread(accountId, content, feedId, true)
+                isUnread -> articleDao.searchArticleByFeedIdWhenIsUnread(accountId, content, feedId, true, sortAscending)
                 else -> articleDao.searchArticleByFeedIdWhenAll(accountId, content, feedId)
             }
 
             else -> when {
                 isStarred -> articleDao.searchArticleWhenIsStarred(accountId, content, true)
-                isUnread -> articleDao.searchArticleWhenIsUnread(accountId, content, true)
+                isUnread -> articleDao.searchArticleWhenIsUnread(accountId, content, true, sortAscending)
                 else -> articleDao.searchArticleWhenAll(accountId, content)
             }
         }

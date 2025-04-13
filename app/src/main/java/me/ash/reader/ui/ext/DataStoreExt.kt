@@ -132,6 +132,7 @@ data class DataStoreKey<T>(
         const val flowArticleListDateStickyHeader = "flowArticleListDateStickyHeader"
         const val flowArticleListTonalElevation = "flowArticleListTonalElevation"
         const val flowArticleListReadIndicator = "flowArticleListReadStatusIndicator"
+        const val flowSortUnreadArticles = "flowArticleListSortUnreadArticles"
 
         // Reading page
         const val readingRenderer = "readingRender"
@@ -209,6 +210,7 @@ data class DataStoreKey<T>(
             flowArticleListDateStickyHeader to DataStoreKey(booleanPreferencesKey(flowArticleListDateStickyHeader), Boolean::class.java),
             flowArticleListTonalElevation to DataStoreKey(intPreferencesKey(flowArticleListTonalElevation), Int::class.java),
             flowArticleListReadIndicator to DataStoreKey(intPreferencesKey(flowArticleListReadIndicator), Int::class.java),
+            flowSortUnreadArticles to DataStoreKey(booleanPreferencesKey(flowSortUnreadArticles), Boolean::class.java),
             // Reading page
             readingRenderer to DataStoreKey(intPreferencesKey(readingRenderer), Int::class.java),
             readingBionicReading to DataStoreKey(booleanPreferencesKey(readingBionicReading), Boolean::class.java),
