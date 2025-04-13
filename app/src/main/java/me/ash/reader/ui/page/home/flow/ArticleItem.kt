@@ -100,9 +100,6 @@ fun ArticleItem(
 ) {
     val feed = articleWithFeed.feed
     val article = articleWithFeed.article
-    val context = LocalContext.current
-    val openLink = LocalOpenLink.current
-    val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
 
     ArticleItem(
         modifier = modifier,
@@ -115,11 +112,7 @@ fun ArticleItem(
         isStarred = article.isStarred,
         isUnread = isUnread,
         onClick = {
-            if (feed.isBrowser) {
-                context.openURL(article.link, openLink, openLinkSpecificBrowser)
-            } else {
-                onClick(articleWithFeed)
-            }
+            onClick(articleWithFeed)
         },
         onLongClick = onLongClick
     )

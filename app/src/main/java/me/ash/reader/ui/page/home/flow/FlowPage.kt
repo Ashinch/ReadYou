@@ -70,6 +70,8 @@ import me.ash.reader.infrastructure.preference.LocalFlowFilterBarStyle
 import me.ash.reader.infrastructure.preference.LocalFlowFilterBarTonalElevation
 import me.ash.reader.infrastructure.preference.LocalFlowTopBarTonalElevation
 import me.ash.reader.infrastructure.preference.LocalMarkAsReadOnScroll
+import me.ash.reader.infrastructure.preference.LocalOpenLink
+import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.infrastructure.preference.LocalSharedContent
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.DisplayText
@@ -77,6 +79,7 @@ import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYExtensibleVisibility
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.collectAsStateValue
+import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.motion.materialSharedAxisYIn
 import me.ash.reader.ui.motion.materialSharedAxisYOut
@@ -104,6 +107,9 @@ fun FlowPage(
     val sharedContent = LocalSharedContent.current
     val markAsReadOnScroll = LocalMarkAsReadOnScroll.current.value
     val context = LocalContext.current
+
+    val openLink = LocalOpenLink.current
+    val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
 
     val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
     val flowUiState = flowViewModel.flowUiState.collectAsStateValue()
@@ -416,9 +422,20 @@ fun FlowPage(
                         isShowStickyHeader = articleListDateStickyHeader.value,
                         articleListTonalElevation = articleListTonalElevation.value,
                         isSwipeEnabled = { listState.isScrollInProgress },
-                        onClick = {
-                            navController.navigate("${RouteName.READING}/${it.article.id}") {
-                                launchSingleTop = true
+                        onClick = { articleWithFeed ->
+                            if (articleWithFeed.feed.isBrowser) {
+                                if (articleWithFeed.article.isUnread) {
+                                    onToggleRead(articleWithFeed)
+                                }
+                                context.openURL(
+                                    articleWithFeed.article.link,
+                                    openLink,
+                                    openLinkSpecificBrowser
+                                )
+                            } else {
+                                navController.navigate("${RouteName.READING}/${articleWithFeed.article.id}") {
+                                    launchSingleTop = true
+                                }
                             }
                         },
                         onToggleStarred = onToggleStarred,
