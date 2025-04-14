@@ -15,6 +15,7 @@ import me.ash.reader.infrastructure.db.AndroidDatabase
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.net.NetworkDataSource
+import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.infrastructure.rss.OPMLDataSource
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.storage.AndroidImageDownloader
@@ -95,6 +96,9 @@ class AndroidApp : Application(), Configuration.Provider {
 
     @Inject
     lateinit var imageDownloader: AndroidImageDownloader
+
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
 
     /**
      * When the application startup.

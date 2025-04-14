@@ -28,6 +28,7 @@ import me.ash.reader.domain.service.SyncWorker
 import me.ash.reader.infrastructure.android.AndroidStringsHelper
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
+import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.ui.page.home.flow.Diff
 import javax.inject.Inject
 
@@ -40,6 +41,7 @@ class HomeViewModel @Inject constructor(
     private val workManager: WorkManager,
     @IODispatcher
     private val ioDispatcher: CoroutineDispatcher,
+    private val settingsProvider: SettingsProvider
 ) : ViewModel() {
 
     private val _homeUiState = MutableStateFlow(HomeUiState())
@@ -85,6 +87,7 @@ class HomeViewModel @Inject constructor(
                             feedId = _filterUiState.value.feed?.id,
                             isStarred = _filterUiState.value.filter.isStarred(),
                             isUnread = _filterUiState.value.filter.isUnread(),
+                            sortAscending = settingsProvider.settings.flowSortUnreadArticles.value
                         )
                     } else {
                         rssService.get().pullArticles(
@@ -92,6 +95,7 @@ class HomeViewModel @Inject constructor(
                             feedId = _filterUiState.value.feed?.id,
                             isStarred = _filterUiState.value.filter.isStarred(),
                             isUnread = _filterUiState.value.filter.isUnread(),
+                            sortAscending = settingsProvider.settings.flowSortUnreadArticles.value
                         )
                     }
                 }.flow.map {

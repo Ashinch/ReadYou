@@ -49,6 +49,7 @@ data class Settings(
     val flowArticleListDateStickyHeader: FlowArticleListDateStickyHeaderPreference = FlowArticleListDateStickyHeaderPreference.default,
     val flowArticleListTonalElevation: FlowArticleListTonalElevationPreference = FlowArticleListTonalElevationPreference.default,
     val flowArticleListReadIndicator: FlowArticleReadIndicatorPreference = FlowArticleReadIndicatorPreference.default,
+    val flowSortUnreadArticles: SortUnreadArticlesPreference = SortUnreadArticlesPreference.default,
 
     // Reading page
     val readingRenderer: ReadingRendererPreference = ReadingRendererPreference.default,
@@ -141,6 +142,7 @@ fun SettingsProvider(
         LocalFlowFilterBarPadding provides settings.flowFilterBarPadding,
         LocalFlowFilterBarTonalElevation provides settings.flowFilterBarTonalElevation,
         LocalFlowArticleListReadIndicator provides settings.flowArticleListReadIndicator,
+        LocalSortUnreadArticles provides settings.flowSortUnreadArticles,
 
         // Reading page
         LocalReadingRenderer provides settings.readingRenderer,
