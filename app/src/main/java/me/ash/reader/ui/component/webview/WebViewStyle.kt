@@ -348,5 +348,34 @@ hr {
     opacity: 0.08 !important;
     border-radius: 2px;
 }
+
+/* Bionic Reading */
+body {
+    --br-boldness: 600;
+}
+
+[br-mode=on] br-bold *,
+                         [br-mode=on] br-edge  {
+    opacity: var(--fixation-edge-opacity,  100%);
+}
+
+[br-mode=on] br-bold:nth-of-type(n+1) [fixation-strength="1"] {
+    display: inline;
+    font-weight: var(--br-boldness);
+    line-height: var(--br-line-height,  initial);
+    text-decoration: var(--br-line-style) underline 2px;
+    color: var(--bold-text-color) !important;
+    text-underline-offset: 3px;
+}
+
+[br-mode=on] br-bold:nth-of-type(n+1) [fixation-strength="2"] {
+    display: inline;
+    font-weight: var(--br-boldness);
+    line-height: var(--br-line-height, initial);
+    text-decoration: var(--br-line-style) underline 2px;
+    color: var(--bold-text-color) !important;
+    text-underline-offset: 3px;
+}
+
 """
 }
