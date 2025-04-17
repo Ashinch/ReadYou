@@ -15,7 +15,7 @@ class GoogleReaderSecurityKey private constructor() : SecurityKey() {
     }
 
     constructor(value: String? = DESUtils.empty) : this() {
-        decode(value, GoogleReaderSecurityKey::class.java).let {
+        decode<GoogleReaderSecurityKey>(value).let {
             serverUrl = it.serverUrl
             username = it.username
             password = it.password

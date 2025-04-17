@@ -15,7 +15,7 @@ class FreshRSSSecurityKey private constructor() : SecurityKey() {
     }
 
     constructor(value: String? = DESUtils.empty) : this() {
-        decode(value, FreshRSSSecurityKey::class.java).let {
+        decode<FreshRSSSecurityKey>(value).let {
             serverUrl = it.serverUrl
             username = it.username
             password = it.password

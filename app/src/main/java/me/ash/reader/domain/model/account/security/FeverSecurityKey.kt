@@ -15,7 +15,7 @@ class FeverSecurityKey private constructor() : SecurityKey() {
     }
 
     constructor(value: String? = DESUtils.empty) : this() {
-        decode(value, FeverSecurityKey::class.java).let {
+        decode<FeverSecurityKey>(value).let {
             serverUrl = it.serverUrl
             username = it.username
             password = it.password
