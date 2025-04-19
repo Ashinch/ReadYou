@@ -5,7 +5,7 @@ import kotlinx.serialization.json.*
 
 
 @Serializable
-abstract class SecurityKey {
+sealed class SecurityKey {
 
     inline fun <reified T> decode(value: String?): T {
         val decrypted = DESUtils.decrypt(value?.ifEmpty { DESUtils.empty } ?: DESUtils.empty)
