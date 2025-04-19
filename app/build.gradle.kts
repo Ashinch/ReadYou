@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.aboutlibraries)
     alias(libs.plugins.room)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 fun fetchGitCommitHash(): String {
@@ -157,7 +158,8 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttp.coroutines)
     implementation(libs.retrofit)
-    implementation(libs.retrofit.gson)
+    implementation(libs.converter.kotlinx.serialization)
+    implementation(libs.kotlin.serialization)
     implementation(libs.profileinstaller)
     implementation(libs.work.runtime.ktx)
     implementation(libs.datastore.preferences)

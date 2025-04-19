@@ -1,11 +1,13 @@
 package me.ash.reader.infrastructure.rss.provider.greader
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 object GoogleReaderDTO {
 
+    @Serializable
     data class GReaderError(
-        @SerializedName("errors") val errors: List<String>,
+        @SerialName("errors") val errors: List<String>,
     )
 
     /**
@@ -16,6 +18,7 @@ object GoogleReaderDTO {
      *     "Auth": "demo/718*********************************7fa"
      * }
      */
+    @Serializable
     data class MinifluxAuthData(
         val SID: String?,
         val LSID: String?,
@@ -32,6 +35,7 @@ object GoogleReaderDTO {
      *     "userEmail": ""
      * }
      */
+    @Serializable
     data class User(
         val userId: String?,
         val userName: String?,
@@ -60,10 +64,12 @@ object GoogleReaderDTO {
      *     ]
      * }
      */
+    @Serializable
     data class SubscriptionList(
         val subscriptions: List<Feed>,
     )
 
+    @Serializable
     data class Feed(
         val id: String?,
         val title: String?,
@@ -74,6 +80,7 @@ object GoogleReaderDTO {
         val sortid: String?,
     )
 
+    @Serializable
     data class Category(
         val id: String?,
         val label: String?,
@@ -90,6 +97,7 @@ object GoogleReaderDTO {
      * }
      *
      */
+    @Serializable
     data class QuickAddFeed(
         val numResults: Long?,
         val query: String?,
@@ -108,6 +116,7 @@ object GoogleReaderDTO {
      *     ]
      * }
      */
+    @Serializable
     data class ItemIds(
         val itemRefs: List<Item>?,
         val continuation: String?,
@@ -159,12 +168,14 @@ object GoogleReaderDTO {
      *     ]
      * }
      */
+    @Serializable
     data class ItemsContents(
         val id: String? = null,
         val updated: Long? = null,
         val items: List<Item>? = null,
     )
 
+    @Serializable
     data class Item(
         val id: String? = null,
         val crawlTimeMsec: String? = null,
@@ -179,14 +190,17 @@ object GoogleReaderDTO {
         val alternate: List<CanonicalItem>? = null,
     )
 
+    @Serializable
     data class Summary(
         val content: String? = null,
     )
 
+    @Serializable
     data class CanonicalItem(
         val href: String? = null,
     )
 
+    @Serializable
     data class OriginItem(
         val streamId: String? = null,
         val htmlUrl: String? = null,
