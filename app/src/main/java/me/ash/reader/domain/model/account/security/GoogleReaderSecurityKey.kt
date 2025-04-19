@@ -1,5 +1,10 @@
 package me.ash.reader.domain.model.account.security
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+@SerialName("google-reader-security-key")
 class GoogleReaderSecurityKey private constructor() : SecurityKey() {
 
     var serverUrl: String? = null
