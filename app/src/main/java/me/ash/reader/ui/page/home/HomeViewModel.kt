@@ -1,19 +1,27 @@
 package me.ash.reader.ui.page.home
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.work.WorkManager
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -29,9 +37,9 @@ import me.ash.reader.infrastructure.android.AndroidStringsHelper
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.preference.SettingsProvider
-import me.ash.reader.ui.page.home.flow.Diff
 import javax.inject.Inject
 
+@OptIn(FlowPreview::class)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val rssService: RssService,
@@ -41,7 +49,9 @@ class HomeViewModel @Inject constructor(
     private val workManager: WorkManager,
     @IODispatcher
     private val ioDispatcher: CoroutineDispatcher,
-    private val settingsProvider: SettingsProvider
+    private val settingsProvider: SettingsProvider,
+    @ApplicationContext
+    private val context: Context
 ) : ViewModel() {
 
     private val _homeUiState = MutableStateFlow(HomeUiState())
@@ -53,6 +63,24 @@ class HomeViewModel @Inject constructor(
     val syncWorkLiveData = workManager.getWorkInfosByTagLiveData(SyncWorker.WORK_TAG)
 
     val diffMap = mutableStateMapOf<String, Diff>()
+
+    private val diffMapSnapshotFlow = snapshotFlow { diffMap.toMap() }
+
+    private val gson = Gson()
+
+    private val cacheFile =
+        context.cacheDir.resolve("diff_map.json")
+
+    init {
+        commitDiffFromCache()
+        viewModelScope.launch(ioDispatcher) {
+            diffMapSnapshotFlow.debounce(2_000).collect {
+                if (it.isNotEmpty()) {
+                    writeDiffToCache()
+                }
+            }
+        }
+    }
 
     fun sync() {
         applicationScope.launch(ioDispatcher) {
@@ -112,7 +140,7 @@ class HomeViewModel @Inject constructor(
 
 
     fun commitDiff() {
-        applicationScope.launch(ioDispatcher) {
+        viewModelScope.launch(ioDispatcher) {
             val markAsReadArticles =
                 diffMap.filter { !it.value.isUnread }.map { it.key }.toSet()
             val markAsUnreadArticles =
@@ -123,7 +151,48 @@ class HomeViewModel @Inject constructor(
             rssService.get()
                 .batchMarkAsRead(articleIds = markAsUnreadArticles, isUnread = true)
 
-        }.invokeOnCompletion { diffMap.clear() }
+        }.invokeOnCompletion {
+            clearDiffMap()
+        }
+    }
+
+    private fun writeDiffToCache() {
+        viewModelScope.launch(ioDispatcher) {
+            val tmpJson = gson.toJson(diffMap)
+            cacheFile.createNewFile()
+            if (cacheFile.exists() && cacheFile.canWrite()) {
+                cacheFile.writeText(tmpJson)
+            }
+        }
+    }
+
+    private fun commitDiffFromCache() {
+        viewModelScope.launch(ioDispatcher) {
+            if (cacheFile.exists() && cacheFile.canRead()) {
+                val tmpJson = cacheFile.readText()
+                val mapType = object :
+                    TypeToken<Map<String, Diff>>() {}.type
+                val diffMapFromCache = gson.fromJson<Map<String, Diff>>(
+                    tmpJson,
+                    mapType
+                )
+                diffMapFromCache?.let {
+                    diffMap.clear()
+                    diffMap.putAll(it)
+                }
+            }
+        }.invokeOnCompletion {
+            commitDiff()
+        }
+    }
+
+    private fun clearDiffMap() {
+        viewModelScope.launch(ioDispatcher) {
+            if (cacheFile.exists() && cacheFile.canWrite()) {
+                cacheFile.delete()
+            }
+            diffMap.clear()
+        }
     }
 }
 
@@ -137,3 +206,5 @@ data class HomeUiState(
     val pagingData: Flow<PagingData<ArticleFlowItem>> = emptyFlow(),
     val searchContent: String = "",
 )
+
+data class Diff(val isUnread: Boolean)

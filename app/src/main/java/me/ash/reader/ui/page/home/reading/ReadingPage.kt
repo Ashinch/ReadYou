@@ -45,7 +45,7 @@ import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.motion.materialSharedAxisY
 import me.ash.reader.ui.page.home.HomeViewModel
-import me.ash.reader.ui.page.home.flow.Diff
+import me.ash.reader.ui.page.home.Diff
 import kotlin.math.abs
 
 private const val UPWARD = 1

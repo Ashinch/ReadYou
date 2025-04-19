@@ -98,5 +98,3 @@ data class FlowUiState(
     val isBack: Boolean = false,
     val syncWorkInfo: String = "",
 )
-
-data class Diff(val isUnread: Boolean)
