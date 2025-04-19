@@ -2,6 +2,7 @@ package me.ash.reader.ui.page.settings.accounts.addition
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -91,6 +92,7 @@ fun AddLocalAccountDialog(
             ) {
                 Spacer(modifier = Modifier.height(10.dp))
                 RYOutlineTextField(
+                    modifier = Modifier.fillMaxWidth(),
                     readOnly = accountUiState.isLoading,
                     value = name,
                     onValueChange = { name = it },

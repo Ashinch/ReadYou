@@ -37,6 +37,7 @@ import me.ash.reader.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RYOutlineTextField(
+    modifier: Modifier = Modifier,
     requestFocus: Boolean = true,
     readOnly: Boolean = false,
     value: String,
@@ -64,9 +65,9 @@ fun RYOutlineTextField(
 
     OutlinedTextField(
         modifier = if (onClick != null) {
-            Modifier.focusProperties { canFocus = false }
+            modifier.focusProperties { canFocus = false }
         } else {
-            Modifier.focusRequester(focusRequester)
+            modifier.focusRequester(focusRequester)
         },
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = Color.Transparent,

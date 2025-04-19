@@ -1,9 +1,8 @@
 package me.ash.reader.ui.page.settings.accounts.addition
 
-import android.app.Activity
-import android.security.KeyChain
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -91,10 +90,12 @@ fun AddFeverAccountDialog(
         },
         text = {
             Column(
-                modifier = Modifier.verticalScroll(rememberScrollState())
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
             ) {
                 Spacer(modifier = Modifier.height(10.dp))
                 RYOutlineTextField(
+                    modifier = Modifier.fillMaxWidth(),
                     readOnly = accountUiState.isLoading,
                     value = feverServerUrl,
                     onValueChange = { feverServerUrl = it },
@@ -104,6 +105,7 @@ fun AddFeverAccountDialog(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 RYOutlineTextField(
+                    modifier = Modifier.fillMaxWidth(),
                     requestFocus = false,
                     readOnly = accountUiState.isLoading,
                     value = feverUsername,
@@ -114,6 +116,7 @@ fun AddFeverAccountDialog(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 RYOutlineTextField(
+                    modifier = Modifier.fillMaxWidth(),
                     requestFocus = false,
                     readOnly = accountUiState.isLoading,
                     value = feverPassword,
@@ -124,18 +127,12 @@ fun AddFeverAccountDialog(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                RYOutlineTextField(
-                    requestFocus = false,
-                    readOnly = accountUiState.isLoading,
+                CertificateSelector(
                     value = feverClientCertificateAlias,
-                    onValueChange = { feverClientCertificateAlias = it },
-                    label = stringResource(R.string.client_certificate),
-                    onClick = {
-                        KeyChain.choosePrivateKeyAlias(context as Activity, { alias ->
-                            feverClientCertificateAlias = alias ?: ""
-                        }, null, null, null, null)
-                    }
-                )
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    feverClientCertificateAlias = it
+                }
                 Spacer(modifier = Modifier.height(10.dp))
             }
         },
@@ -147,16 +144,18 @@ fun AddFeverAccountDialog(
                         && feverPassword.isNotEmpty(),
                 onClick = {
                     focusManager.clearFocus()
-                    accountViewModel.addAccount(Account(
-                        type = AccountType.Fever,
-                        name = context.getString(R.string.fever),
-                        securityKey = FeverSecurityKey(
-                            serverUrl = feverServerUrl,
-                            username = feverUsername,
-                            password = feverPassword,
-                            clientCertificateAlias = feverClientCertificateAlias,
-                        ).toString(),
-                    )) { account, exception ->
+                    accountViewModel.addAccount(
+                        Account(
+                            type = AccountType.Fever,
+                            name = context.getString(R.string.fever),
+                            securityKey = FeverSecurityKey(
+                                serverUrl = feverServerUrl,
+                                username = feverUsername,
+                                password = feverPassword,
+                                clientCertificateAlias = feverClientCertificateAlias,
+                            ).toString(),
+                        )
+                    ) { account, exception ->
                         if (account == null) {
                             context.showToast(exception?.message ?: "Not valid credentials")
                         } else {

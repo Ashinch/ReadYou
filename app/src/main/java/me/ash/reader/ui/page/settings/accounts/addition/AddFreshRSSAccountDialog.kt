@@ -2,8 +2,10 @@ package me.ash.reader.ui.page.settings.accounts.addition
 
 import android.app.Activity
 import android.security.KeyChain
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,11 +15,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -31,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.account.AccountType
@@ -39,6 +44,7 @@ import me.ash.reader.ui.component.base.RYDialog
 import me.ash.reader.ui.component.base.RYOutlineTextField
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
+import me.ash.reader.ui.ext.showToastSuspend
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.accounts.AccountViewModel
 
@@ -53,6 +59,7 @@ fun AddFreshRSSAccountDialog(
     val focusManager = LocalFocusManager.current
     val uiState = viewModel.additionUiState.collectAsStateValue()
     val accountUiState = accountViewModel.accountUiState.collectAsStateValue()
+    val scope = rememberCoroutineScope()
 
     var freshRSSServerUrl by rememberSaveable { mutableStateOf("") }
     var freshRSSUsername by rememberSaveable { mutableStateOf("") }
@@ -96,6 +103,7 @@ fun AddFreshRSSAccountDialog(
             ) {
                 Spacer(modifier = Modifier.height(10.dp))
                 RYOutlineTextField(
+                    modifier = Modifier.fillMaxWidth(),
                     readOnly = accountUiState.isLoading,
                     value = freshRSSServerUrl,
                     onValueChange = { freshRSSServerUrl = it },
@@ -105,6 +113,7 @@ fun AddFreshRSSAccountDialog(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 RYOutlineTextField(
+                    modifier = Modifier.fillMaxWidth(),
                     requestFocus = false,
                     readOnly = accountUiState.isLoading,
                     value = freshRSSUsername,
@@ -115,6 +124,7 @@ fun AddFreshRSSAccountDialog(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 RYOutlineTextField(
+                    modifier = Modifier.fillMaxWidth(),
                     requestFocus = false,
                     readOnly = accountUiState.isLoading,
                     value = freshRSSPassword,
@@ -125,18 +135,12 @@ fun AddFreshRSSAccountDialog(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                RYOutlineTextField(
-                    requestFocus = false,
-                    readOnly = accountUiState.isLoading,
+                CertificateSelector(
                     value = freshRSSClientCertificateAlias,
-                    onValueChange = { freshRSSClientCertificateAlias = it },
-                    label = stringResource(R.string.client_certificate),
-                    onClick = {
-                        KeyChain.choosePrivateKeyAlias(context as Activity, { alias ->
-                            freshRSSClientCertificateAlias = alias ?: ""
-                        }, null, null, null, null)
-                    }
-                )
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    freshRSSClientCertificateAlias = it
+                }
                 Spacer(modifier = Modifier.height(10.dp))
             }
         },
@@ -151,16 +155,18 @@ fun AddFreshRSSAccountDialog(
                     if (!freshRSSServerUrl.endsWith("/")) {
                         freshRSSServerUrl += "/"
                     }
-                    accountViewModel.addAccount(Account(
-                        type = AccountType.FreshRSS,
-                        name = context.getString(R.string.fresh_rss),
-                        securityKey = FreshRSSSecurityKey(
-                            serverUrl = freshRSSServerUrl,
-                            username = freshRSSUsername,
-                            password = freshRSSPassword,
-                            clientCertificateAlias = freshRSSClientCertificateAlias,
-                        ).toString(),
-                    )) { account, exception ->
+                    accountViewModel.addAccount(
+                        Account(
+                            type = AccountType.FreshRSS,
+                            name = context.getString(R.string.fresh_rss),
+                            securityKey = FreshRSSSecurityKey(
+                                serverUrl = freshRSSServerUrl,
+                                username = freshRSSUsername,
+                                password = freshRSSPassword,
+                                clientCertificateAlias = freshRSSClientCertificateAlias,
+                            ).toString(),
+                        )
+                    ) { account, exception ->
                         if (account == null) {
                             context.showToast(exception?.message ?: "Not valid credentials")
                         } else {
