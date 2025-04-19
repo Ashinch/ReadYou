@@ -150,11 +150,7 @@ fun BottomBar(
                                 BionicReadingIcon(
                                     filled = isBionicReading,
                                     size = 24.dp,
-                                    tint = if (renderer == ReadingRendererPreference.WebView) {
-                                        MaterialTheme.colorScheme.onSecondaryContainer
-                                    } else {
-                                        MaterialTheme.colorScheme.outline
-                                    }
+                                    tint = MaterialTheme.colorScheme.outline
                                 )
                             },
                         ) {
