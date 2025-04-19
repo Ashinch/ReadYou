@@ -32,8 +32,8 @@ android {
         applicationId = "me.ash.reader"
         minSdk = 26
         targetSdk = 34
-        versionCode = 27
-        versionName = "0.11.1"
+        versionCode = 28
+        versionName = "0.12.0"
 
         buildConfigField("String", "USER_AGENT_STRING", "\"ReadYou/${versionName}(${versionCode})\"")
 
