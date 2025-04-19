@@ -178,7 +178,7 @@ private fun CharSequence.secondToLast(): Char {
 private fun <T> MutableList<T>.pushMaxTwo(item: T) {
     this.add(0, item)
     if (count() > 2) {
-        this.removeLast()
+        this.removeAt(lastIndex)
     }
 }
 

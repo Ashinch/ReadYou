@@ -135,7 +135,7 @@ inline fun <R : Any> TextComposer.withStyle(
         block()
     } finally {
         pop(index)
-        spanStack.removeLast()
+        spanStack.removeAt(spanStack.lastIndex)
     }
 }
 
@@ -149,7 +149,7 @@ inline fun <R : Any> TextComposer.withComposableStyle(
         block()
     } finally {
         popComposableStyle(index)
-        spanStack.removeLast()
+        spanStack.removeAt(spanStack.lastIndex)
     }
 }
 
@@ -164,7 +164,7 @@ inline fun <R : Any> TextComposer.withAnnotation(
         block()
     } finally {
         pop(index)
-        spanStack.removeLast()
+        spanStack.removeAt(spanStack.lastIndex)
     }
 }
 

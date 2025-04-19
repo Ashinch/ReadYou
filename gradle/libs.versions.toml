@@ -1,6 +1,6 @@
 [versions]
 # Android Gradle Plugin
-androidGradlePlugin = "8.2.1"
+androidGradlePlugin = "8.9.1"
 
 # Kotlin
 kotlin = "1.9.22"

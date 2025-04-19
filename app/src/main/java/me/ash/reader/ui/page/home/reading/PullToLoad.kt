@@ -331,7 +331,7 @@ fun Modifier.pullToLoad(
             onScroll = onScroll
         )
     ).then(
-        if (enabled) offset {
+        if (enabled) Modifier.offset {
             with(density) {
                 IntOffset(x = 0, y = (state.offsetFraction * contentOffsetMultiple).dp.roundToPx())
             }
