@@ -66,7 +66,7 @@ fun AddAccountsPage(
                     ) {}
                     Spacer(modifier = Modifier.height(24.dp))
                 }
-                item {
+/*                item {
                     Subtitle(
                         modifier = Modifier.padding(horizontal = 24.dp),
                         text = stringResource(R.string.services),
@@ -86,7 +86,7 @@ fun AddAccountsPage(
                         onClick = {},
                     ) {}
                     Spacer(modifier = Modifier.height(24.dp))
-                }
+                }*/
                 item {
                     Subtitle(
                         modifier = Modifier.padding(horizontal = 24.dp),
