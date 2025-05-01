@@ -66,6 +66,8 @@ import me.ash.reader.infrastructure.preference.LocalMarkAsReadOnScroll
 import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.infrastructure.preference.LocalSharedContent
+import me.ash.reader.infrastructure.preference.LocalSortUnreadArticles
+import me.ash.reader.infrastructure.preference.SortUnreadArticlesPreference
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
@@ -201,25 +203,30 @@ fun FlowPage(
         }
     }
 
-    val onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? = remember {
-        {
-            flowViewModel.markAsReadFromListByDate(
-                date = it.article.date,
-                isBefore = false,
-                lazyPagingItems = pagingItems
-            )
-        }
-    }
+    val sortByEarliest =
+        filterUiState.filter.isUnread() && LocalSortUnreadArticles.current == SortUnreadArticlesPreference.Earliest
 
-    val onMarkBelowAsRead: ((ArticleWithFeed) -> Unit)? = remember {
-        {
-            flowViewModel.markAsReadFromListByDate(
-                date = it.article.date,
-                isBefore = true,
-                lazyPagingItems = pagingItems
-            )
+    val onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? =
+        remember(sortByEarliest) {
+            {
+                flowViewModel.markAsReadFromListByDate(
+                    date = it.article.date,
+                    isBefore = sortByEarliest,
+                    lazyPagingItems = pagingItems
+                )
+            }
         }
-    }
+
+    val onMarkBelowAsRead: ((ArticleWithFeed) -> Unit)? =
+        remember(sortByEarliest) {
+            {
+                flowViewModel.markAsReadFromListByDate(
+                    date = it.article.date,
+                    isBefore = !sortByEarliest,
+                    lazyPagingItems = pagingItems
+                )
+            }
+        }
 
     val onShare: ((ArticleWithFeed) -> Unit)? = remember {
         { articleWithFeed ->
