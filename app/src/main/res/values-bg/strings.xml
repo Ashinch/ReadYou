@@ -316,4 +316,13 @@
     <string name="become_a_sponsor">Станете спонсор</string>
     <string name="sponsor_desc">Ние създаваме и поддържаме това безплатно приложение с отворен код в извънработно време. Ако ви харесва, моля, помислете дали да ни подкрепите с малко дарение! ☕️</string>
     <string name="toolbars">Ленти с инструменти</string>
+    <string name="client_certificate">Клиентски сертификат (по избор)</string>
+    <string name="open_in_browser">Отворете в браузъра</string>
+    <string name="all_open_in_browser_tips">Отворете всички статии в групата \"%1$s\" с помощта на браузъра</string>
+    <string name="all_deny_open_in_browser_toast">Край на отварянето на всички статии в групата \"%1$s\" с помощта на браузъра</string>
+    <string name="hide_empty_groups">Скриване на празни групи</string>
+    <string name="sort_unread_articles">Сортирайте непрочетените статии</string>
+    <string name="latest">Последни</string>
+    <string name="earliest">Най-рано</string>
+    <string name="all_open_in_browser_toast">Отворете всички статии в групата \"%1$s\" с помощта на браузъра</string>
 </resources>

@@ -322,4 +322,13 @@
     <string name="sponsor_desc">Tworzymy i utrzymujemy tę darmową aplikację typu open source poza godzinami pracy. Jeśli Ci się podoba, rozważ wsparcie nas małą darowizną! ☕️</string>
     <string name="troubleshooting_desc">Raport o błędach, narzędzia debugowania</string>
     <string name="toggle_starred">Przełącz wyróżnione</string>
+    <string name="hide_empty_groups">Ukryj puste grupy</string>
+    <string name="client_certificate">Certyfikat klienta (opcjonalnie)</string>
+    <string name="sort_unread_articles">Sortuj nieprzeczytane artykuły</string>
+    <string name="open_in_browser">Otwórz w przeglądarce</string>
+    <string name="all_open_in_browser_tips">Otwórz wszystkie artykuły w grupie „%1$s” za pomocą przeglądarki</string>
+    <string name="all_open_in_browser_toast">Otwórz wszystkie artykuły w grupie „%1$s” za pomocą przeglądarki</string>
+    <string name="all_deny_open_in_browser_toast">Nie można już otwierać wszystkich artykułów z grupy „%1$s” za pomocą przeglądarki</string>
+    <string name="latest">Najnowsze</string>
+    <string name="earliest">Najwcześniejsze</string>
 </resources>

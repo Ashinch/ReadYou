@@ -67,7 +67,7 @@
     <string name="checking_updates">Поиск обновлений…</string>
     <string name="is_latest_version">Это последняя версия приложения</string>
     <string name="help">Помощь</string>
-    <string name="preview_feed_name">Habr</string>
+    <string name="preview_feed_name">Reddit</string>
     <string name="on">Вкл</string>
     <string name="off">Выкл</string>
     <string name="other">Прочее</string>
@@ -324,4 +324,13 @@
     <string name="mark_as_read_on_scroll">Отметить как прочитанное при прокрутке</string>
     <string name="become_a_sponsor">Стать спонсором</string>
     <string name="sponsor_desc">Мы создаем и поддерживаем это бесплатное приложение с открытым исходным кодом в свободное время. Если оно вам нравится, пожалуйста, поддержите нас небольшим пожертвованием! ☕️</string>
+    <string name="hide_empty_groups">Скрыть пустые группы</string>
+    <string name="open_in_browser">Открыть в браузере</string>
+    <string name="all_open_in_browser_tips">Открыть все статьи в группе \"%1$s\" через браузер</string>
+    <string name="all_open_in_browser_toast">Открыть все статьи в группе \"%1$s\" с помощью браузера</string>
+    <string name="sort_unread_articles">Сортировать не прочитанные статьи</string>
+    <string name="latest">Последний</string>
+    <string name="all_deny_open_in_browser_toast">Больше нельзя открывать все статьи в группе \"%1$s\" используя браузер</string>
+    <string name="earliest">Ранний</string>
+    <string name="client_certificate">Клиентский сертификат (не обязательно)</string>
 </resources>

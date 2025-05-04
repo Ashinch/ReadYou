@@ -210,7 +210,7 @@
     <string name="for_2_weeks">2 settimane</string>
     <string name="local">Locale</string>
     <string name="synchronous">Sincronizzazione</string>
-    <string name="sync_interval">Sincronizzazione</string>
+    <string name="sync_interval">Sincronizza</string>
     <string name="clear_all_articles">Cancella tutti gli articoli</string>
     <string name="every_12_hours">Ogni 12 ore</string>
     <string name="every_15_minutes">Ogni 15 minuti</string>
@@ -313,7 +313,7 @@
     <string name="read_aloud">Lettura ad alta voce</string>
     <string name="use_bionic_reading">Utilizza Bionic Reading</string>
     <string name="bionic_reading_tips">Cos\'è Bionic Reading?</string>
-    <string name="browse_bionic_reading_tips">Scopri di più su <i><u>bionic-reading.com</u></i></string>
+    <string name="browse_bionic_reading_tips">Scopri di più su <i><u>bionic-reading.com</u></i>.</string>
     <string name="about">Informazioni su</string>
     <string name="native_component">Componente nativo</string>
     <string name="only_available_on_webview">Disponibile esclusivamente in WebView</string>
@@ -321,4 +321,13 @@
     <string name="become_a_sponsor">Diventa uno sponsor</string>
     <string name="sponsor_desc">Sviluppiamo e miglioriamo questa applicazione, gratuita ed open source, nel nostro tempo libero. Se ti piace, considera la possibilità di sostenerci con una piccola donazione! ☕</string>
     <string name="toolbars">Barre degli strumenti</string>
+    <string name="hide_empty_groups">Nascondi i gruppi vuoti</string>
+    <string name="open_in_browser">Apri nel browser</string>
+    <string name="all_open_in_browser_tips">Apri tutti gli articoli del gruppo \"%1$s\" usando il browser</string>
+    <string name="all_open_in_browser_toast">Apri tutti gli articoli del gruppo \"%1$s\" usando il browser</string>
+    <string name="all_deny_open_in_browser_toast">Non aprire più tutti gli articoli nel gruppo \"%1$s\" utilizzando il browser</string>
+    <string name="client_certificate">Certificato del client (opzionale)</string>
+    <string name="sort_unread_articles">Ordina gli articoli non letti</string>
+    <string name="latest">Ultimi</string>
+    <string name="earliest">Vecchi</string>
 </resources>

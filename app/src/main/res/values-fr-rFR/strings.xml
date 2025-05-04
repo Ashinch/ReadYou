@@ -62,13 +62,13 @@
     <string name="all_move_to_group_toast">Déplacé vers le groupe « %1$s »</string>
     <string name="rename">Renommer</string>
     <string name="change_url">Modifier l’URL</string>
-    <string name="rename_toast">Renommé en « %1$s »</string>
+    <string name="rename_toast">Renommé en « %1$s »</string>
     <string name="create_new_group">Créer un nouveau groupe</string>
     <string name="name">Nom</string>
     <string name="open_with">Ouvrir %1$s</string>
     <string name="options">Options</string>
     <string name="delete">Supprimer</string>
-    <string name="delete_toast">« %1$s » a été supprimé</string>
+    <string name="delete_toast">« %1$s » a été supprimé</string>
     <string name="unsubscribe">Se désabonner</string>
     <string name="unsubscribe_tips">Se désabonner de « %1$s » et supprimer tous les articles archivés de ce flux</string>
     <string name="delete_group">Supprimer le groupe</string>
@@ -77,7 +77,7 @@
     <string name="today">Aujourd’hui</string>
     <string name="yesterday">Hier</string>
     <string name="date_at_time">%1$s à %2$s</string>
-    <string name="search_for_in">Rechercher dans %1$s de « %2$s »</string>
+    <string name="search_for_in">Rechercher dans %1$s de « %2$s »</string>
     <string name="search_for">Rechercher dans %1$s</string>
     <string name="mark_as_read">Marquer comme lu</string>
     <string name="mark_all_as_read">Tout marquer comme lu</string>
@@ -317,4 +317,17 @@
     <string name="about">À Propos</string>
     <string name="use_bionic_reading">Utiliser Bionic Reading</string>
     <string name="bionic_reading_tips">Qu\'est-ce que Bionic Reading ?</string>
+    <string name="hide_empty_groups">Masquer les groupes vides</string>
+    <string name="all_open_in_browser_tips">Ouvrir tous les articles du groupe « %1$s » à l\'aide du navigateur</string>
+    <string name="all_deny_open_in_browser_toast">Plus d\'ouverture de tous les articles du groupe « %1$s » à l\'aide du navigateur</string>
+    <string name="mark_as_read_on_scroll">Marquer comme lu lors du défilement</string>
+    <string name="become_a_sponsor">Devenir un sponsor</string>
+    <string name="toolbars">Barres d\'outil</string>
+    <string name="latest">Plus ancien</string>
+    <string name="earliest">Plus récent</string>
+    <string name="sponsor_desc">Nous construisons et maintenons cette application gratuite et open-source pendant notre temps libre. Si vous l\'appréciez, n\'hésitez pas à nous soutenir en faisant un petit don ! ☕️</string>
+    <string name="sort_unread_articles">Tri des articles non lus</string>
+    <string name="open_in_browser">Ouvrir dans le navigateur</string>
+    <string name="client_certificate">Certificat client (optionnel)</string>
+    <string name="all_open_in_browser_toast">Ouvrir tous les articles du groupe « %1$s » à l\'aide du navigateur</string>
 </resources>

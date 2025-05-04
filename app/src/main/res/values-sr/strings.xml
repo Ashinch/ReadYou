@@ -321,4 +321,13 @@
     <string name="become_a_sponsor">Постани спонзор</string>
     <string name="sponsor_desc">Ми правимо и одржавамо ову бесплатну апликацију отвореног кода ван радног времена. Ако уживате, размислите о томе да нас подржите малом донацијом! ☕</string>
     <string name="toolbars">Траке са алаткама</string>
+    <string name="open_in_browser">Отвори у прегледачу</string>
+    <string name="all_open_in_browser_tips">Отворите све чланке у групи „%1$s“ помоћу прегледача</string>
+    <string name="all_open_in_browser_toast">Отворите све чланке у групи „%1$s“ помоћу прегледача</string>
+    <string name="all_deny_open_in_browser_toast">Више нема отварања свих чланака у групи „%1$s“ помоћу прегледача</string>
+    <string name="client_certificate">Сертификат клијента (опционално)</string>
+    <string name="hide_empty_groups">Сакриј празне групе</string>
+    <string name="sort_unread_articles">Сортирање непрочитаних чланака</string>
+    <string name="latest">Најновије</string>
+    <string name="earliest">Најраније</string>
 </resources>

@@ -314,4 +314,17 @@
     <string name="about">परिचय</string>
     <string name="bionic_reading_tips">बायोनिक रीडिंग क्या है?</string>
     <string name="browse_bionic_reading_tips">अधिक जानकारी के लिए <i><u>bionic-reading.com</u></i> पर जाएं।</string>
+    <string name="client_certificate">क्लाइंट प्रमाणपत्र (वैकल्पिक)</string>
+    <string name="hide_empty_groups">रिक्त समूह छिपाएँ</string>
+    <string name="open_in_browser">ब्राउज़र में खोलें</string>
+    <string name="all_open_in_browser_tips">ब्राउज़र का उपयोग करके \"%1$s\" समूह के सभी लेख खोलें</string>
+    <string name="all_open_in_browser_toast">ब्राउज़र का उपयोग करके \"%1$s\" समूह के सभी लेख खोलें</string>
+    <string name="all_deny_open_in_browser_toast">अब ब्राउज़र का उपयोग करके \"%1$s\" समूह के सभी लेख नहीं खोले जा सकेंगे</string>
+    <string name="mark_as_read_on_scroll">स्क्रॉल पर पढ़ा हुआ चिह्नित करें</string>
+    <string name="become_a_sponsor">प्रायोजक बनें</string>
+    <string name="toolbars">उपकरण पट्टियाँ</string>
+    <string name="sort_unread_articles">अपठित लेखों को छाँटें</string>
+    <string name="latest">नवीनतम</string>
+    <string name="earliest">सबसे पुराना</string>
+    <string name="sponsor_desc">हम अपने ऑफ-ऑवर्स में इस मुफ़्त, ओपन-सोर्स ऐप का निर्माण और रखरखाव करते हैं। अगर आपको यह पसंद है, तो कृपया एक छोटे से दान के साथ हमारा समर्थन करने पर विचार करें! ☕️</string>
 </resources>

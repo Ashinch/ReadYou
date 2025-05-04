@@ -227,7 +227,7 @@
     <string name="clear_articles_group_tips">נקה את כל המאמרים המאוחסנים בארכיון בקבוצת \"%1$s\"</string>
     <string name="rename_toast">השם שונה ל-\"%1$s\"</string>
     <string name="open_with">פתח את %1$s</string>
-    <string name="delete_toast">\"%1$s\" נמחק</string>
+    <string name="delete_toast">„%1$s” נמחק</string>
     <string name="unsubscribe_tips">בטל את הרישום ל-\"%1$s\" ומחק את כל המאמרים שהועברו לארכיון בו</string>
     <string name="delete_group_tips">מחק את הקבוצה \"%1$s\" ואת כל העדכונים והמאמרים המאוחסנים בארכיון שלה</string>
     <string name="search_for_in">חפש %1$s פריטים ב-\"%2$s\"</string>

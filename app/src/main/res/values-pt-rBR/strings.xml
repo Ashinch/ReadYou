@@ -321,4 +321,13 @@
     <string name="mark_as_read_on_scroll">Marcar como lido ao rolar a página</string>
     <string name="become_a_sponsor">Torne-se um patrocinador</string>
     <string name="sponsor_desc">Nós contruímos e mantemos este aplicativo gratuito e de código aberto em nossas horas vagas. Se você gosta, considere nos apoiar com uma pequena doação! ☕️</string>
+    <string name="open_in_browser">Abrir no Navegador</string>
+    <string name="all_open_in_browser_tips">Abrir todos os artigos do grupo \"%1$s\" no navegador</string>
+    <string name="all_open_in_browser_toast">Abrir todos os artigos do grupo \"%1$s\" no navegador</string>
+    <string name="all_deny_open_in_browser_toast">Não é mais possível abrir todos os artigos do grupo \"%1$s\" no navegador</string>
+    <string name="hide_empty_groups">Esconder grupos vazios</string>
+    <string name="sort_unread_articles">Ordenar artigos não lidos</string>
+    <string name="latest">Últimos</string>
+    <string name="earliest">Mais recentes</string>
+    <string name="client_certificate">Certificado do Cliente (Opcional )</string>
 </resources>

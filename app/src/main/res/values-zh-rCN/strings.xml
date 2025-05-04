@@ -315,4 +315,13 @@
     <string name="become_a_sponsor">成为赞助者</string>
     <string name="sponsor_desc">我们在休息时间构建并维护这个自由开源应用。如果你觉得应用还不错，请考虑用小额捐赠支持哦我们！☕️</string>
     <string name="toolbars">工具栏</string>
+    <string name="hide_empty_groups">隐藏空的分组</string>
+    <string name="open_in_browser">在浏览器中打开</string>
+    <string name="all_open_in_browser_tips">使用浏览器打开 “%1$s”分组中的全部文章</string>
+    <string name="all_open_in_browser_toast">使用浏览器打开“%1$s”分组中的所有文章</string>
+    <string name="all_deny_open_in_browser_toast">不再用浏览器打开“%1$s”分组中的所有文章</string>
+    <string name="client_certificate">客户端证书（可选）</string>
+    <string name="latest">最新</string>
+    <string name="earliest">最早</string>
+    <string name="sort_unread_articles">排列未读文章顺序</string>
 </resources>
