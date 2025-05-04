@@ -3,6 +3,7 @@ package me.ash.reader.ui.page.home.flow
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.compose.LazyPagingItems
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,16 +17,15 @@ import me.ash.reader.domain.model.general.MarkAsReadConditions
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
+import me.ash.reader.ui.page.home.Diff
 import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class FlowViewModel @Inject constructor(
     private val rssService: RssService,
-    @IODispatcher
-    private val ioDispatcher: CoroutineDispatcher,
-    @ApplicationScope
-    private val applicationScope: CoroutineScope,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    @ApplicationScope private val applicationScope: CoroutineScope,
 ) : ViewModel() {
 
     private val _flowUiState = MutableStateFlow(FlowUiState())
@@ -70,24 +70,23 @@ class FlowViewModel @Inject constructor(
     }
 
     fun markAsReadFromListByDate(
+        mutableDiffMap: MutableMap<String, Diff>,
         date: Date,
         isBefore: Boolean,
         lazyPagingItems: LazyPagingItems<ArticleFlowItem>,
     ) {
-        applicationScope.launch(ioDispatcher) {
-            val articleIdSet = lazyPagingItems.itemSnapshotList.asSequence()
-                .filterIsInstance<ArticleFlowItem.Article>()
-                .map { it.articleWithFeed.article }
+        viewModelScope.launch(ioDispatcher) {
+            lazyPagingItems.itemSnapshotList.asSequence()
+                .filterIsInstance<ArticleFlowItem.Article>().map { it.articleWithFeed.article }
                 .filter {
                     if (isBefore) {
                         date > it.date
                     } else {
                         date < it.date
                     }
+                }.map { it.id }.distinct().forEach {
+                    mutableDiffMap[it] = Diff(isUnread = false)
                 }
-                .map { it.id }
-                .toSet()
-            rssService.get().batchMarkAsRead(articleIds = articleIdSet, isUnread = false)
         }
     }
 }

@@ -210,6 +210,7 @@ fun FlowPage(
         remember(sortByEarliest) {
             {
                 flowViewModel.markAsReadFromListByDate(
+                    mutableDiffMap = homeViewModel.diffMap,
                     date = it.article.date,
                     isBefore = sortByEarliest,
                     lazyPagingItems = pagingItems
@@ -221,6 +222,7 @@ fun FlowPage(
         remember(sortByEarliest) {
             {
                 flowViewModel.markAsReadFromListByDate(
+                    mutableDiffMap = homeViewModel.diffMap,
                     date = it.article.date,
                     isBefore = !sortByEarliest,
                     lazyPagingItems = pagingItems

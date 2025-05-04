@@ -151,8 +151,14 @@ fun FeedsPage(
     DisposableEffect(owner) {
         scope.launch {
             owner.lifecycle.eventFlow.collect {
-                if (it == Lifecycle.Event.ON_PAUSE) {
-                    homeViewModel.commitDiff()
+                when (it) {
+                    Lifecycle.Event.ON_RESUME,
+                    Lifecycle.Event.ON_PAUSE -> {
+                        homeViewModel.commitDiff()
+                    }
+
+                    else -> {/* no-op */
+                    }
                 }
             }
         }
