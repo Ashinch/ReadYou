@@ -324,4 +324,13 @@
     <string name="become_a_sponsor">Стати спонсором</string>
     <string name="sponsor_desc">Ми створюємо і підтримуємо цей безплатний застосунок з відкритим вихідним кодом у вільний від роботи час. Якщо він вам подобається, будь ласка, підтримайте нас невеликою пожертвою! ☕️</string>
     <string name="toolbars">Панелі інструментів</string>
+    <string name="latest">Останній</string>
+    <string name="sort_unread_articles">Сортувати непрочитані статті</string>
+    <string name="earliest">Найраніший</string>
+    <string name="open_in_browser">Відкрити в браузері</string>
+    <string name="hide_empty_groups">Приховати порожні групи</string>
+    <string name="all_open_in_browser_toast">Відкрийте всі статті в групі \"%1$s\" за допомогою браузера</string>
+    <string name="all_deny_open_in_browser_toast">Більше не можна відкривати всі статті в групі \"%1$s\" за допомогою браузера</string>
+    <string name="all_open_in_browser_tips">Відкрийте всі статті в групі \"%1$s\" за допомогою браузера</string>
+    <string name="client_certificate">Сертифікат клієнта (необов\'язково)</string>
 </resources>

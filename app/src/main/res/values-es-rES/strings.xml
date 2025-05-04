@@ -324,4 +324,13 @@
     <string name="become_a_sponsor">Conviértete en patrocinador</string>
     <string name="sponsor_desc">Construimos y mantenemos esta aplicación gratuita y de código abierto en nuestro tiempo libre. Si la disfrutas, ¡considera apoyarnos con una pequeña donación! ☕️</string>
     <string name="toolbars">Barras de herramientas</string>
+    <string name="client_certificate">Certificado de cliente (opcional)</string>
+    <string name="hide_empty_groups">Ocultar grupos vacíos</string>
+    <string name="open_in_browser">Abrir en el Navegador</string>
+    <string name="all_open_in_browser_tips">Abrir todos los artículos en el grupo \"%1$s\" usando el navegador</string>
+    <string name="all_open_in_browser_toast">Abrir todos los artículos en el grupo \"%1$s\" usando el navegador</string>
+    <string name="all_deny_open_in_browser_toast">Ya no se abrirán todos los artículos en el grupo \"%1$s\" usando el navegador</string>
+    <string name="sort_unread_articles">Ordenar artículos sin leer</string>
+    <string name="latest">Más reciente</string>
+    <string name="earliest">Más antiguo</string>
 </resources>
