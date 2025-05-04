@@ -2,13 +2,15 @@ package me.ash.reader.ui.component.webview
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -22,30 +24,41 @@ fun BionicReadingIcon(
     modifier: Modifier = Modifier,
     size: Dp = 24.dp,
     tint: Color = Color.Black,
-    filled: Boolean = false,
+    activated: Boolean = false,
 ) {
+
+    val baseStyle = LocalTextStyle.current.merge(
+        fontFamily = FontFamily.SansSerif,
+        fontSize = (size.value * 0.65F).sp,
+        color = tint,
+        textDecoration = if (activated) TextDecoration.Underline else TextDecoration.None
+    ).toSpanStyle()
+
+    val string = remember(baseStyle, activated) {
+        buildAnnotatedString {
+            pushStyle(
+                baseStyle.copy(
+                    fontWeight = if (activated) FontWeight.W900 else FontWeight.W700,
+                    textDecoration = if (activated) TextDecoration.Underline else TextDecoration.None
+                )
+            )
+            append("B")
+            pop()
+            pushStyle(
+                baseStyle.copy(
+                    fontWeight = FontWeight.W300,
+                    textDecoration = if (activated) TextDecoration.Underline else TextDecoration.None
+                )
+            )
+            append("R")
+        }
+    }
+
     Box(
         modifier = modifier.size(size),
         contentAlignment = Alignment.Center,
     ) {
-        Row {
-            Text(
-                text = "B",
-                fontFamily = FontFamily.SansSerif,
-                fontSize = (size.value * 0.65F).sp,
-                fontWeight = if (filled) FontWeight.W900 else FontWeight.W700,
-                color = if (filled) tint else tint.copy(alpha = 0.6F),
-                textDecoration = if (filled) TextDecoration.Underline else TextDecoration.None
-            )
-            Text(
-                text = "R",
-                fontFamily = FontFamily.SansSerif,
-                fontSize = (size.value * 0.65F).sp,
-                fontWeight = FontWeight.W300,
-                color = if (filled) tint else tint.copy(alpha = 0.6F),
-                textDecoration = if (filled) TextDecoration.Underline else TextDecoration.None
-            )
-        }
+        Text(string)
     }
 }
 
@@ -54,6 +67,6 @@ fun BionicReadingIcon(
 private fun BionicReadingIconPreview() {
     Column {
         BionicReadingIcon()
-        BionicReadingIcon(filled = true)
+        BionicReadingIcon(activated = true)
     }
 }

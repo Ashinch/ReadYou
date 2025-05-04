@@ -148,7 +148,7 @@ fun BottomBar(
                             tint = MaterialTheme.colorScheme.outline,
                             icon = {
                                 BionicReadingIcon(
-                                    filled = isBionicReading,
+                                    activated = isBionicReading,
                                     size = 24.dp,
                                     tint = MaterialTheme.colorScheme.outline
                                 )
