@@ -266,16 +266,9 @@ fun FeedsPage(
                         ) { accountTabVisible = true }
                     }
                     item {
-                        Banner(
-                            title = filterUiState.filter.toName(),
+                        FeedsBanner(
+                            filter = filterUiState.filter,
                             desc = importantSum,
-                            icon = filterUiState.filter.iconOutline,
-                            action = {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
-                                    contentDescription = stringResource(R.string.go_to),
-                                )
-                            },
                         ) {
                             filterChange(
                                 navController = navController,

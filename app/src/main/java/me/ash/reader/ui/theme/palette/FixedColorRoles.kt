@@ -1,9 +1,13 @@
 package me.ash.reader.ui.theme.palette
 
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
@@ -14,6 +18,11 @@ val LocalFixedColorRoles = staticCompositionLocalOf {
         darkColors = darkColorScheme(),
     )
 }
+
+val MaterialTheme.fixedColorRoles: FixedColorRoles
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalFixedColorRoles.current
 
 @Immutable
 data class FixedColorRoles(
@@ -66,6 +75,19 @@ data class FixedColorRoles(
                 secondaryFixedDim = darkColors.secondary,
                 tertiaryFixedDim = darkColors.tertiary,
             )
+        }
+    }
+
+    @Stable
+    fun contentColorFor(color: Color): Color {
+        return when (color) {
+            primaryFixed -> onPrimaryFixed
+            primaryFixedDim -> onPrimaryFixedVariant
+            secondaryFixed -> onSecondaryFixed
+            secondaryFixedDim -> onSecondaryFixedVariant
+            tertiaryFixed -> onTertiaryFixed
+            tertiaryFixedDim -> onTertiaryFixedVariant
+            else -> Color.Unspecified
         }
     }
 }
