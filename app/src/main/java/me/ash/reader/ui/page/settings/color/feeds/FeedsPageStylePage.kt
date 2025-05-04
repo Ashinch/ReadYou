@@ -80,7 +80,6 @@ fun FeedsPageStylePage(
                         FeedsPagePreview(
                             topBarTonalElevation = topBarTonalElevation,
                             groupListExpand = groupListExpand,
-                            groupListTonalElevation = groupListTonalElevation,
                             filterBarStyle = filterBarStyle.value,
                             filterBarFilled = filterBarFilled.value,
                             filterBarPadding = filterBarPadding.dp,

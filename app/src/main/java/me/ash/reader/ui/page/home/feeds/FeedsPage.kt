@@ -1,9 +1,11 @@
 package me.ash.reader.ui.page.home.feeds
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -17,7 +19,6 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
@@ -27,7 +28,6 @@ import androidx.compose.material.icons.rounded.UnfoldLess
 import androidx.compose.material.icons.rounded.UnfoldMore
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -54,6 +54,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastAny
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.eventFlow
@@ -76,12 +77,10 @@ import me.ash.reader.ui.component.base.Banner
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold
-import me.ash.reader.ui.ext.alphaLN
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.findActivity
 import me.ash.reader.ui.ext.getCurrentVersion
-import me.ash.reader.ui.ext.getDefaultGroupId
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.FilterState
@@ -92,8 +91,8 @@ import me.ash.reader.ui.page.home.feeds.drawer.group.GroupOptionDrawer
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.page.settings.accounts.AccountViewModel
+import me.ash.reader.ui.theme.Shape32
 import kotlin.collections.set
-import kotlin.math.ln
 
 @OptIn(
     ExperimentalMaterial3Api::class
@@ -127,7 +126,7 @@ fun FeedsPage(
     val groupWithFeedList =
         feedsUiState.groupWithFeedList.collectAsStateValue(initial = emptyList())
     val groupsVisible: SnapshotStateMap<String, Boolean> = feedsUiState.groupsVisible
-    var hasGroupVisible by remember { mutableStateOf(groupListExpand.value) }
+    val hasGroupVisible by remember(groupWithFeedList) { derivedStateOf { groupWithFeedList.fastAny { groupsVisible[it.group.id] == true } } }
 
     val newVersion = LocalNewVersionNumber.current
     val skipVersion = LocalSkipVersionNumber.current
@@ -170,40 +169,16 @@ fun FeedsPage(
         onDispose { homeViewModel.syncWorkLiveData.removeObservers(owner) }
     }
 
-    val feedBadgeAlpha by remember { derivedStateOf { (ln(groupListTonalElevation.value + 1.4f) + 2f) / 100f } }
-    val groupAlpha by remember { derivedStateOf { groupListTonalElevation.value.dp.alphaLN(weight = 1.2f) } }
-    val groupIndicatorAlpha by remember {
-        derivedStateOf {
-            groupListTonalElevation.value.dp.alphaLN(
-                weight = 1.4f
-            )
-        }
-    }
-
     fun expandAllGroups() {
         groupWithFeedList.forEach { groupWithFeed ->
-            when (groupWithFeed) {
-                is GroupFeedsView.Group -> {
-                    groupsVisible[groupWithFeed.group.id] = true
-                }
-
-                else -> {}
-            }
+            groupsVisible[groupWithFeed.group.id] = true
         }
-        hasGroupVisible = true
     }
 
     fun collapseAllGroups() {
         groupWithFeedList.forEach { groupWithFeed ->
-            when (groupWithFeed) {
-                is GroupFeedsView.Group -> {
-                    groupsVisible[groupWithFeed.group.id] = false
-                }
-
-                else -> {}
-            }
+            groupsVisible[groupWithFeed.group.id] = false
         }
-        hasGroupVisible = false
     }
 
     val groupDrawerState =
@@ -344,64 +319,47 @@ fun FeedsPage(
                         Spacer(modifier = Modifier.height(8.dp))
                     }
 
-                    val defaultGroupId = context.currentAccountId.getDefaultGroupId()
+                    itemsIndexed(groupWithFeedList) { _, (group, feeds) ->
 
-                    itemsIndexed(groupWithFeedList) { index, groupWithFeed ->
-                        when (groupWithFeed) {
-                            is GroupFeedsView.Group -> {
-                                if (groupWithFeed.group.id != defaultGroupId || groupWithFeed.group.feeds > 0) {
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    GroupItem(
-                                        isExpanded = {
-                                            groupsVisible.getOrPut(
-                                                groupWithFeed.group.id,
-                                                groupListExpand::value
-                                            )
-                                        },
-                                        group = groupWithFeed.group,
-                                        alpha = groupAlpha,
-                                        indicatorAlpha = groupIndicatorAlpha,
-                                        roundedBottomCorner = { index == groupWithFeedList.lastIndex || groupWithFeed.group.feeds == 0 },
-                                        onExpanded = {
-                                            groupsVisible[groupWithFeed.group.id] =
-                                                groupsVisible.getOrPut(
-                                                    groupWithFeed.group.id,
-                                                    groupListExpand::value
-                                                ).not()
-                                            hasGroupVisible =
-                                                if (groupsVisible[groupWithFeed.group.id] == true) {
-                                                    true
-                                                } else {
-                                                    groupsVisible.any { it.value }
-                                                }
-                                        },
-                                        onLongClick = {
-                                            scope.launch {
-                                                groupDrawerState.show()
-                                            }
-                                        }
-                                    ) {
-                                        filterChange(
-                                            navController = navController,
-                                            homeViewModel = homeViewModel,
-                                            filterState = filterUiState.copy(
-                                                group = groupWithFeed.group,
-                                                feed = null,
-                                            )
-                                        )
+                        GroupWithFeedsContainer {
+                            GroupItem(
+                                isExpanded = {
+                                    groupsVisible.getOrPut(
+                                        group.id,
+                                        groupListExpand::value
+                                    )
+                                },
+                                group = group,
+                                onExpanded = {
+                                    groupsVisible[group.id] =
+                                        groupsVisible.getOrPut(
+                                            group.id,
+                                            groupListExpand::value
+                                        ).not()
+                                },
+                                onLongClick = {
+                                    scope.launch {
+                                        groupDrawerState.show()
                                     }
                                 }
+                            ) {
+                                filterChange(
+                                    navController = navController,
+                                    homeViewModel = homeViewModel,
+                                    filterState = filterUiState.copy(
+                                        group = group,
+                                        feed = null,
+                                    )
+                                )
                             }
 
-                            is GroupFeedsView.Feed -> {
+                            feeds.forEachIndexed { index, feed ->
                                 FeedItem(
-                                    feed = groupWithFeed.feed,
-                                    alpha = groupAlpha,
-                                    badgeAlpha = feedBadgeAlpha,
-                                    isEnded = { index == groupWithFeedList.lastIndex || groupWithFeedList[index + 1] is GroupFeedsView.Group },
+                                    feed = feed,
+                                    isLastItem = { index == feeds.lastIndex },
                                     isExpanded = {
                                         groupsVisible.getOrPut(
-                                            groupWithFeed.feed.groupId,
+                                            feed.groupId,
                                             groupListExpand::value
                                         )
                                     }, onClick = {
@@ -410,7 +368,7 @@ fun FeedsPage(
                                             homeViewModel = homeViewModel,
                                             filterState = filterUiState.copy(
                                                 group = null,
-                                                feed = groupWithFeed.feed,
+                                                feed = feed,
                                             )
                                         )
                                     }, onLongClick = {
@@ -422,6 +380,7 @@ fun FeedsPage(
                             }
                         }
                     }
+
                     item {
                         Spacer(modifier = Modifier.height(128.dp))
                         Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))

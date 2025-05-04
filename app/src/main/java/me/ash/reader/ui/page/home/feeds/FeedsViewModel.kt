@@ -14,17 +14,22 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
+import me.ash.reader.domain.model.group.GroupWithFeed
 import me.ash.reader.domain.service.AccountService
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.android.AndroidStringsHelper
 import me.ash.reader.infrastructure.di.DefaultDispatcher
 import me.ash.reader.infrastructure.di.IODispatcher
+import me.ash.reader.ui.ext.currentAccountId
+import me.ash.reader.ui.ext.getDefaultGroupId
 import me.ash.reader.ui.page.home.FilterState
 import javax.inject.Inject
 
@@ -95,16 +100,10 @@ class FeedsViewModel @Inject constructor(
                         }
                     }
                     groupWithFeedList
-                }.mapLatest { groupWithFeedList ->
-                    groupWithFeedList.map {
-                        mutableListOf<GroupFeedsView>(GroupFeedsView.Group(it.group)).apply {
-                            addAll(
-                                it.feeds.map {
-                                    GroupFeedsView.Feed(it)
-                                }
-                            )
-                        }
-                    }.flatten()
+                }.mapLatest { list ->
+                    list.filter { (group, feeds) ->
+                        group.id != feedsUiState.value.account?.id?.getDefaultGroupId() || feeds.size > 0
+                    }
                 }.flowOn(defaultDispatcher),
             )
         }
@@ -114,12 +113,7 @@ class FeedsViewModel @Inject constructor(
 data class FeedsUiState(
     val account: Account? = null,
     val importantSum: Flow<String> = emptyFlow(),
-    val groupWithFeedList: Flow<List<GroupFeedsView>> = emptyFlow(),
+    val groupWithFeedList: Flow<List<GroupWithFeed>> = emptyFlow(),
     val listState: LazyListState = LazyListState(),
     val groupsVisible: SnapshotStateMap<String, Boolean> = mutableStateMapOf(),
 )
-
-sealed class GroupFeedsView {
-    class Group(val group: me.ash.reader.domain.model.group.Group) : GroupFeedsView()
-    class Feed(val feed: me.ash.reader.domain.model.feed.Feed) : GroupFeedsView()
-}

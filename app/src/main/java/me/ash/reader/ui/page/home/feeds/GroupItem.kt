@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.ash.reader.R
 import me.ash.reader.domain.model.group.Group
+import me.ash.reader.domain.model.group.GroupWithFeed
 import me.ash.reader.ui.page.home.feeds.drawer.group.GroupOptionViewModel
 import me.ash.reader.ui.theme.Shape32
 import me.ash.reader.ui.theme.ShapeTop32
@@ -33,9 +34,6 @@ import me.ash.reader.ui.theme.ShapeTop32
 @Composable
 fun GroupItem(
     group: Group,
-    alpha: Float = 1f,
-    indicatorAlpha: Float = 1f,
-    roundedBottomCorner: () -> Boolean,
     isExpanded: () -> Boolean,
     groupOptionViewModel: GroupOptionViewModel = hiltViewModel(),
     onExpanded: () -> Unit = {},
@@ -43,15 +41,10 @@ fun GroupItem(
     groupOnClick: () -> Unit = {},
 ) {
     val view = LocalView.current
-    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
-            .animateContentSize()
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clip(if (isExpanded() && !roundedBottomCorner()) ShapeTop32 else Shape32)
-            .background(MaterialTheme.colorScheme.surfaceContainerLow)
             .combinedClickable(
                 onClick = {
                     groupOnClick()
@@ -98,4 +91,16 @@ fun GroupItem(
         }
         Spacer(modifier = Modifier.height(22.dp))
     }
+}
+
+@Composable
+inline fun GroupWithFeedsContainer(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    Column(
+        modifier = modifier
+            .padding(top = 16.dp)
+            .padding(horizontal = 16.dp)
+            .clip(Shape32)
+            .background(MaterialTheme.colorScheme.surfaceContainerLow),
+        content = { content() }
+    )
 }

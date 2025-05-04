@@ -5,19 +5,17 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Badge
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -27,17 +25,23 @@ import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.base.RYExtensibleVisibility
 import me.ash.reader.ui.page.home.feeds.drawer.feed.FeedOptionViewModel
-import me.ash.reader.ui.theme.ShapeBottom32
+
+@Composable
+private fun contentPadding(isLastItem: Boolean): PaddingValues =
+    if (isLastItem) PaddingValues(
+        bottom = 22.dp,
+        start = 14.dp,
+        end = 14.dp,
+        top = 14.dp
+    ) else PaddingValues(14.dp)
 
 @OptIn(
-    ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalFoundationApi::class,
 )
 @Composable
 fun FeedItem(
     feed: Feed,
-    alpha: Float = 1f,
-    badgeAlpha: Float = 1f,
-    isEnded: () -> Boolean,
+    isLastItem: () -> Boolean = { false },
     isExpanded: () -> Boolean,
     feedOptionViewModel: FeedOptionViewModel = hiltViewModel(),
     onClick: () -> Unit = {},
@@ -50,9 +54,6 @@ fun FeedItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .clip(if (isEnded()) ShapeBottom32 else RectangleShape)
-                .background(MaterialTheme.colorScheme.surfaceContainerLow)
                 .combinedClickable(
                     onClick = {
                         onClick()
@@ -65,8 +66,7 @@ fun FeedItem(
                         }
                     }
                 )
-                .padding(horizontal = 14.dp)
-                .padding(top = 14.dp, bottom = if (isEnded()) 22.dp else 14.dp),
+                .padding(contentPadding(isLastItem())),
         ) {
             Row(
                 modifier = Modifier
