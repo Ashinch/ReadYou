@@ -29,10 +29,8 @@ import javax.inject.Inject
 class ReadingViewModel @Inject constructor(
     private val rssService: RssService,
     private val rssHelper: RssHelper,
-    @IODispatcher
-    private val ioDispatcher: CoroutineDispatcher,
-    @ApplicationScope
-    private val applicationScope: CoroutineScope,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    @ApplicationScope private val applicationScope: CoroutineScope,
     private val imageDownloader: AndroidImageDownloader
 ) : ViewModel() {
 
@@ -47,10 +45,13 @@ class ReadingViewModel @Inject constructor(
     private val currentFeed: Feed?
         get() = readingUiState.value.articleWithFeed?.feed
 
-    private var initialArticleItems: List<ArticleFlowItem> = emptyList()
+    private var pagingItems: ItemSnapshotList<ArticleFlowItem> = ItemSnapshotList(0, 0, emptyList())
+
+    fun injectPagingData(pagingItems: ItemSnapshotList<ArticleFlowItem>) {
+        this.pagingItems = pagingItems
+    }
 
     fun initData(articleId: String) {
-        setLoading()
         viewModelScope.launch(ioDispatcher) {
             rssService.get().findArticleById(articleId)?.run {
                 _readingUiState.update {
@@ -68,22 +69,28 @@ class ReadingViewModel @Inject constructor(
                         author = article.author,
                         link = article.link,
                         publishedDate = article.date,
-                    )
+                    ).prefetchArticleId().renderContent(this)
                 }
             }
-            currentFeed?.let {
-                if (it.isFullContent) internalRenderFullContent()
-                else renderDescriptionContent()
-            }
         }
+    }
+
+    fun ReaderState.renderContent(articleWithFeed: ArticleWithFeed): ReaderState {
+        if (articleWithFeed.feed.isFullContent) {
+            renderFullContent()
+            return this.copy(content = ReaderState.Loading)
+        } else return this.copy(
+            content = ReaderState.Description(articleWithFeed.article.let {
+                it.fullContent ?: it.rawDescription
+            })
+        )
     }
 
     fun renderDescriptionContent() {
         _readerState.update {
             it.copy(
                 content = ReaderState.Description(
-                    content = currentArticle?.fullContent
-                        ?: currentArticle?.rawDescription ?: ""
+                    content = currentArticle?.fullContent ?: currentArticle?.rawDescription ?: ""
                 )
             )
         }
@@ -95,12 +102,11 @@ class ReadingViewModel @Inject constructor(
         }
     }
 
-    private suspend fun internalRenderFullContent() {
+    suspend fun internalRenderFullContent() {
         setLoading()
         runCatching {
             rssHelper.parseFullContent(
-                currentArticle?.link ?: "",
-                currentArticle?.title ?: ""
+                currentArticle?.link ?: "", currentArticle?.title ?: ""
             )
         }.onSuccess { content ->
             _readerState.update { it.copy(content = ReaderState.FullContent(content = content)) }
@@ -147,12 +153,8 @@ class ReadingViewModel @Inject constructor(
         }
     }
 
-    fun prefetchArticleId(pagingItems: ItemSnapshotList<ArticleFlowItem>) {
-        if (initialArticleItems.isEmpty()) {
-            initialArticleItems = pagingItems.items
-        }
-
-        val items = initialArticleItems
+    fun ReaderState.prefetchArticleId(): ReaderState {
+        val items = pagingItems
         val currentId = currentArticle?.id
         val index = items.indexOfFirst { item ->
             item is ArticleFlowItem.Article && item.articleWithFeed.article.id == currentId
@@ -181,14 +183,9 @@ class ReadingViewModel @Inject constructor(
             }
         }
 
-        _readerState.update {
-            it.copy(
-                nextArticleId = nextId,
-                previousArticleId = previousId
-            )
-        }
-
-
+        return copy(
+            nextArticleId = nextId, previousArticleId = previousId
+        )
     }
 
     fun loadPrevious(): Boolean {
@@ -206,9 +203,7 @@ class ReadingViewModel @Inject constructor(
     }
 
     fun downloadImage(
-        url: String,
-        onSuccess: (Uri) -> Unit = {},
-        onFailure: (Throwable) -> Unit = {}
+        url: String, onSuccess: (Uri) -> Unit = {}, onFailure: (Throwable) -> Unit = {}
     ) {
         viewModelScope.launch {
             imageDownloader.downloadImage(url).onSuccess(onSuccess).onFailure(onFailure)

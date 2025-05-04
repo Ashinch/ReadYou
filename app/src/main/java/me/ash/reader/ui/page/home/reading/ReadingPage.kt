@@ -87,6 +87,10 @@ fun ReadingPage(
 
     val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
 
+    LaunchedEffect(pagingItems) {
+        readingViewModel.injectPagingData(pagingItems)
+    }
+
     LaunchedEffect(Unit) {
         navController.currentBackStackEntryFlow.collect {
             it.arguments?.getString("articleId")?.let { articleId ->
@@ -99,8 +103,6 @@ fun ReadingPage(
 
     LaunchedEffect(readerState.articleId, pagingItems.isNotEmpty()) {
         if (pagingItems.isNotEmpty() && readerState.articleId != null) {
-//            Log.i("RLog", "ReadPage: ${readingUiState.articleWithFeed}")
-            readingViewModel.prefetchArticleId(pagingItems)
             val article = readingUiState.articleWithFeed?.article
             if (article?.isUnread == true) {
                 homeViewModel.diffMap[article.id] = Diff(false)
@@ -136,7 +138,6 @@ fun ReadingPage(
                     // Content
                     AnimatedContent(
                         targetState = readerState,
-                        contentKey = { it.articleId + it.content.text },
                         transitionSpec = {
                             val direction = when {
                                 initialState.nextArticleId == targetState.articleId -> UPWARD
@@ -162,8 +163,12 @@ fun ReadingPage(
                             val state =
                                 rememberPullToLoadState(
                                     key = content,
-                                    onLoadNext = readingViewModel::loadNext,
-                                    onLoadPrevious = readingViewModel::loadPrevious
+                                    onLoadNext = if (isNextArticleAvailable) {
+                                        { readingViewModel.loadNext() }
+                                    } else null,
+                                    onLoadPrevious = if (isPreviousArticleAvailable) {
+                                        { readingViewModel.loadPrevious() }
+                                    } else null
                                 )
 
                             val listState = rememberSaveable(

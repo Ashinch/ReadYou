@@ -35,6 +35,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import me.ash.reader.ui.page.home.reading.PullToLoadDefaults.ContentOffsetMultiple
 import kotlin.math.abs
+import kotlin.math.sign
 import kotlin.math.sqrt
 
 private const val TAG = "PullToLoad"
@@ -110,8 +111,8 @@ private class ReaderNestedScrollConnection(
 @ExperimentalMaterialApi
 fun rememberPullToLoadState(
     key: Any?,
-    onLoadPrevious: () -> Unit,
-    onLoadNext: () -> Unit,
+    onLoadPrevious: (() -> Unit)?,
+    onLoadNext: (() -> Unit)?,
     loadThreshold: Dp = PullToLoadDefaults.LoadThreshold,
 ): PullToLoadState {
     require(loadThreshold > 0.dp) { "The load trigger must be greater than zero!" }
@@ -154,8 +155,8 @@ fun rememberPullToLoadState(
  */
 class PullToLoadState internal constructor(
     private val animationScope: CoroutineScope,
-    private val onLoadPrevious: State<() -> Unit>,
-    private val onLoadNext: State<() -> Unit>,
+    private val onLoadPrevious: State<(() -> Unit)?>,
+    private val onLoadNext: State<(() -> Unit)?>,
     threshold: Float
 ) {
     /**
@@ -225,21 +226,20 @@ class PullToLoadState internal constructor(
     }
 
     internal fun onRelease(): Float {
-        // Snap to 0f and hide the indicator
-        animateDistanceTo(0f)
 
         when (status) {
             Status.PulledDown -> {
-                onLoadPrevious.value()
+                onLoadPrevious.value?.let { it() } ?: animateDistanceTo(0f)
+
             }
 
             Status.PulledUp -> {
-                animateDistanceTo(0f)
-                onLoadNext.value()
+                onLoadNext.value?.let { it() } ?: animateDistanceTo(0f)
             }
 
             else -> {
-
+                // Snap to 0f and hide the indicator
+                animateDistanceTo(0f)
             }
         }
         return 0f
@@ -299,8 +299,7 @@ class PullToLoadState internal constructor(
 
 }
 
-private fun Float.signOpposites(f: Float): Boolean =
-    (this > 0f && f < 0f) || (this < 0f && f > 0f)
+private fun Float.signOpposites(f: Float): Boolean = this.sign != f.sign
 
 /**
  * Default parameter values for [rememberPullToLoadState].
