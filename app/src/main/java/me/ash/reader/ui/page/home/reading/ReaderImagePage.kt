@@ -91,7 +91,8 @@ fun ReaderImageViewer(
                 painter = painter,
                 contentDescription = imageData.altText,
                 modifier = Modifier
-                    .zoomable(state = zoomableState, clipToBounds = true,
+                    .zoomable(
+                        state = zoomableState, clipToBounds = true,
                         onClick = {
                             onDismissRequest()
                         },
@@ -133,7 +134,8 @@ fun ReaderImageViewer(
             }
 
             val launcher =
-                rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission(),
+                rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.RequestPermission(),
                     onResult = { result ->
                         if (result) {
                             onDownloadImage(imageData.imageUrl)
@@ -148,7 +150,8 @@ fun ReaderImageViewer(
                     .padding(12.dp)
             ) {
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                    DropdownMenuItem(text = { Text(text = stringResource(id = R.string.save)) },
+                    DropdownMenuItem(
+                        text = { Text(text = stringResource(id = R.string.save)) },
                         onClick = {
                             val isStoragePermissionGranted = ContextCompat.checkSelfPermission(
                                 context, Manifest.permission.WRITE_EXTERNAL_STORAGE
