@@ -44,19 +44,17 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.round
 import coil.size.Precision
 import coil.size.Scale
 import me.ash.reader.R
@@ -70,23 +68,20 @@ import me.ash.reader.infrastructure.preference.LocalFlowArticleListFeedName
 import me.ash.reader.infrastructure.preference.LocalFlowArticleListImage
 import me.ash.reader.infrastructure.preference.LocalFlowArticleListReadIndicator
 import me.ash.reader.infrastructure.preference.LocalFlowArticleListTime
-import me.ash.reader.infrastructure.preference.LocalOpenLink
-import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.infrastructure.preference.SwipeEndActionPreference
 import me.ash.reader.infrastructure.preference.SwipeStartActionPreference
 import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.base.RYAsyncImage
 import me.ash.reader.ui.component.base.SIZE_1000
 import me.ash.reader.ui.component.menu.AnimatedDropdownMenu
-import me.ash.reader.ui.ext.openURL
+import me.ash.reader.ui.component.swipe.SwipeAction
+import me.ash.reader.ui.component.swipe.SwipeableActionsBox
 import me.ash.reader.ui.ext.requiresBidi
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.settings.color.flow.generateArticleWithFeedPreview
 import me.ash.reader.ui.theme.Shape20
 import me.ash.reader.ui.theme.applyTextDirection
 import me.ash.reader.ui.theme.palette.onDark
-import me.ash.reader.ui.component.swipe.SwipeAction
-import me.ash.reader.ui.component.swipe.SwipeableActionsBox
 
 private const val TAG = "ArticleItem"
 
@@ -280,10 +275,6 @@ fun ArticleItem(
 private const val PositionalThresholdFraction = 0.4f
 private const val SwipeActionDelay = 300L
 
-@OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class,
-    ExperimentalFoundationApi::class
-)
 @Composable
 fun SwipeableArticleItem(
     articleWithFeed: ArticleWithFeed,
@@ -301,20 +292,19 @@ fun SwipeableArticleItem(
 
 
     val view = LocalView.current
-    val density = LocalDensity.current
 
-    var expanded by remember { mutableStateOf(false) }
+    var isMenuExpanded by remember { mutableStateOf(false) }
 
 
     val onLongClick = if (isMenuEnabled) {
         {
             view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            expanded = true
+            isMenuExpanded = true
         }
     } else {
         null
     }
-    var menuOffset by remember { mutableStateOf(Offset(0f, 0f)) }
+    var menuOffset by remember { mutableStateOf(IntOffset.Zero) }
 
     SwipeActionBox(
         articleWithFeed = articleWithFeed,
@@ -326,11 +316,11 @@ fun SwipeableArticleItem(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .pointerInput(expanded) {
+                .pointerInput(isMenuExpanded) {
                     awaitEachGesture {
                         while (true) {
                             awaitFirstDown(requireUnconsumed = false).let {
-                                menuOffset = it.position
+                                menuOffset = it.position.round()
                             }
                         }
                     }
@@ -351,12 +341,10 @@ fun SwipeableArticleItem(
             with(articleWithFeed.article) {
                 if (isMenuEnabled) {
                     AnimatedDropdownMenu(
-                        modifier = Modifier.padding(12.dp),
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false },
-                        offset = density.run {
-                            DpOffset(menuOffset.x.toDp(), 0.dp)
-                        },
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        expanded = isMenuExpanded,
+                        onDismissRequest = { isMenuExpanded = false },
+                        offset = menuOffset,
                     ) {
                         ArticleItemMenuContent(
                             articleWithFeed = articleWithFeed,
@@ -367,7 +355,7 @@ fun SwipeableArticleItem(
                             onMarkAboveAsRead = onMarkAboveAsRead,
                             onMarkBelowAsRead = onMarkBelowAsRead,
                             onShare = onShare
-                        ) { expanded = false }
+                        ) { isMenuExpanded = false }
                     }
                 }
             }
