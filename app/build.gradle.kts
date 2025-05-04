@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.aboutlibraries)
     alias(libs.plugins.room)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.compose.compiler)
 }
 
 fun fetchGitCommitHash(): String {
@@ -98,11 +99,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
-        compose = true
         buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
     packaging {
         resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
