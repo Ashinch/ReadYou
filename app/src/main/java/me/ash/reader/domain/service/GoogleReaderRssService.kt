@@ -9,7 +9,6 @@ import com.rometools.rome.feed.synd.SyndFeed
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.supervisorScope
-import kotlinx.coroutines.withContext
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.account.security.GoogleReaderSecurityKey
@@ -36,7 +35,6 @@ import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.dollarLast
 import me.ash.reader.ui.ext.isFuture
-import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.ext.spacerDollar
 import java.util.Calendar
 import java.util.Date
@@ -403,9 +401,9 @@ class GoogleReaderRssService @Inject constructor(
                 ListenableWorker.Result.success(SyncWorker.setIsSyncing(false))
             } catch (e: Exception) {
                 Log.e("RLog", "On sync exception: ${e.message}", e)
-                withContext(mainDispatcher) {
-                    context.showToast(e.message)
-                }
+//                withContext(mainDispatcher) {
+//                    context.showToast(e.message) todo: find a good way to notice user the error
+//                }
                 ListenableWorker.Result.failure(SyncWorker.setIsSyncing(false))
             }
         }
