@@ -4,6 +4,8 @@ androidGradlePlugin = "8.9.1"
 
 # Kotlin
 kotlin = "1.9.22"
+kotlinSerialization = "1.4.1"
+converterKotlinxSerialization = "2.11.0"
 ksp = "1.9.22-1.0.17"
 
 # AboutLibraries
@@ -91,6 +93,9 @@ hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-com
 
 # AndroidX
 android-svg = { group = "com.caverock", name = "androidsvg-aar", version.ref = "androidSVG" }
+kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
+converter-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "converterKotlinxSerialization" }
+
 opml-parser = { group = "be.ceau", name = "opml-parser", version.ref = "opmlParser" }
 readability4j = { group = "net.dankito.readability4j", name = "readability4j", version.ref = "readability4j" }
 rome = { group = "com.rometools", name = "rome", version.ref = "rome" }
@@ -99,7 +104,6 @@ swipe = { group = "me.saket.swipe", name = "swipe", version.ref = "swipe" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-coroutines = { group = "com.squareup.okhttp3", name = "okhttp-coroutines-jvm", version.ref = "okhttp" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
-retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit2" }
 profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
 work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
 datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
@@ -134,3 +138,4 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 aboutlibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibsRelease" }
 room = { id = "androidx.room", version.ref = "room" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

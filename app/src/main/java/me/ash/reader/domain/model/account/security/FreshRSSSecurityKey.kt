@@ -1,5 +1,10 @@
 package me.ash.reader.domain.model.account.security
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+@SerialName("fresh-rss-security-key")
 class FreshRSSSecurityKey private constructor() : SecurityKey() {
 
     var serverUrl: String? = null
@@ -15,7 +20,7 @@ class FreshRSSSecurityKey private constructor() : SecurityKey() {
     }
 
     constructor(value: String? = DESUtils.empty) : this() {
-        decode(value, FreshRSSSecurityKey::class.java).let {
+        decode<FreshRSSSecurityKey>(value).let {
             serverUrl = it.serverUrl
             username = it.username
             password = it.password

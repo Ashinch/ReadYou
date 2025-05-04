@@ -11,14 +11,16 @@ import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonObject
 import java.io.IOException
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -261,26 +263,32 @@ val ignorePreferencesOnExportAndImport = listOf(
 
 suspend fun Context.fromDataStoreToJSONString(): String {
     val preferences = dataStore.data.first()
-    val map: Map<String, Any?> =
-        preferences.asMap().mapKeys { it.key.name }.filterKeys { it !in ignorePreferencesOnExportAndImport }
-    return Gson().toJson(map)
+    val map: Map<String, Any?> = preferences.asMap().mapKeys { it.key.name }.filterKeys { it !in ignorePreferencesOnExportAndImport }
+
+    val jsonObject = buildJsonObject {
+        map.forEach { (key, value) ->
+            put(key, JsonPrimitive(value.toString()))
+        }
+    }
+
+    return Json.encodeToString(JsonObject.serializer(), jsonObject)
 }
 
 suspend fun String.fromJSONStringToDataStore(context: Context) {
-    val gson = Gson()
-    val type = object : TypeToken<Map<String, *>>() {}.type
-    val map: Map<String, Any> = gson.fromJson(this, type)
+    val json = Json { ignoreUnknownKeys = true }
+    val jsonObject = json.decodeFromString(JsonObject.serializer(), this)
+
     context.dataStore.edit { preferences ->
-        map.filterKeys { it !in ignorePreferencesOnExportAndImport }.forEach { (keyString, value) ->
+        jsonObject.filterKeys { it !in ignorePreferencesOnExportAndImport }.forEach { (keyString, value) ->
             val item = DataStoreKey.keys[keyString]
             Log.d("RLog", "fromJSONStringToDataStore: ${item?.key?.name}, ${item?.type}")
-            if (item != null) {
+            if (item != null && value is JsonPrimitive) {
                 when (item.type) {
-                    String::class.java -> preferences[item.key as Preferences.Key<String>] = value as String
-                    Int::class.java -> preferences[item.key as Preferences.Key<Int>] = (value as Double).toInt()
-                    Boolean::class.java -> preferences[item.key as Preferences.Key<Boolean>] = value as Boolean
-                    Float::class.java -> preferences[item.key as Preferences.Key<Float>] = (value as Double).toFloat()
-                    Long::class.java -> preferences[item.key as Preferences.Key<Long>] = (value as Double).toLong()
+                    String::class.java -> preferences[item.key as Preferences.Key<String>] = value.content
+                    Int::class.java -> preferences[item.key as Preferences.Key<Int>] = value.content.toInt()
+                    Boolean::class.java -> preferences[item.key as Preferences.Key<Boolean>] = value.content.toBoolean()
+                    Float::class.java -> preferences[item.key as Preferences.Key<Float>] = value.content.toFloat()
+                    Long::class.java -> preferences[item.key as Preferences.Key<Long>] = value.content.toLong()
                     else -> throw IllegalArgumentException("Unsupported type")
                 }
             }
