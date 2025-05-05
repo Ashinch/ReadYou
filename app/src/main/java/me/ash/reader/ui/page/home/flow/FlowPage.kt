@@ -162,8 +162,10 @@ fun FlowPage(
     val syncingScope = rememberCoroutineScope()
     val doSync: () -> Unit = {
         isSyncing = true
+        val group = filterUiState.group?.id
+        val feed = filterUiState.feed?.id
         syncingScope.launch {
-            flowViewModel.sync()
+            flowViewModel.sync(group, feed)
         }
     }
 
@@ -237,7 +239,6 @@ fun FlowPage(
             }
         }
     }
-
     LaunchedEffect(onSearch) {
         if (!onSearch) {
             keyboardController?.hide()
