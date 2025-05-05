@@ -50,6 +50,7 @@ fun FlowPageStylePage(
     var topBarTonalElevationDialogVisible by remember { mutableStateOf(false) }
     var articleListTonalElevationDialogVisible by remember { mutableStateOf(false) }
     var articleListReadIndicatorDialogVisible by remember { mutableStateOf(false) }
+    var showArticleListDescDialog by remember { mutableStateOf(false) }
 
     var showSortUnreadArticlesDialog by remember { mutableStateOf(false) }
 
@@ -160,14 +161,11 @@ fun FlowPageStylePage(
                     }
                     SettingItem(
                         title = stringResource(R.string.article_desc),
+                        desc = articleListDesc.description(),
                         onClick = {
-                            (!articleListDesc).put(context, scope)
+                            showArticleListDescDialog = true
                         },
-                    ) {
-                        RYSwitch(activated = articleListDesc.value) {
-                            (!articleListDesc).put(context, scope)
-                        }
-                    }
+                    )
                     SettingItem(
                         title = stringResource(R.string.article_date),
                         onClick = {
@@ -337,6 +335,22 @@ fun FlowPageStylePage(
     ) {
         articleListTonalElevationDialogVisible = false
     }
+
+    RadioDialog(
+        visible = showArticleListDescDialog,
+        title = stringResource(R.string.article_desc),
+        options = FlowArticleListDescPreference.values.map {
+            RadioDialogOption(
+                text = it.description(),
+                selected = it == articleListDesc,
+            ) {
+                it.put(context, scope)
+            }
+        },
+        onDismissRequest = {
+            showArticleListDescDialog = false
+        }
+    )
 
     RadioDialog(
         visible = articleListReadIndicatorDialogVisible,

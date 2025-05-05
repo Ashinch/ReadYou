@@ -127,7 +127,7 @@ data class DataStoreKey<T>(
         const val flowArticleListFeedIcon = "flowArticleListFeedIcon"
         const val flowArticleListFeedName = "flowArticleListFeedName"
         const val flowArticleListImage = "flowArticleListImage"
-        const val flowArticleListDesc = "flowArticleListDesc"
+        const val flowArticleListDesc = "flowArticleListDescription"
         const val flowArticleListTime = "flowArticleListTime"
         const val flowArticleListDateStickyHeader = "flowArticleListDateStickyHeader"
         const val flowArticleListTonalElevation = "flowArticleListTonalElevation"

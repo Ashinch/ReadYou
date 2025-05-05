@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -60,6 +58,7 @@ import coil.size.Precision
 import coil.size.Scale
 import me.ash.reader.R
 import me.ash.reader.domain.model.article.ArticleWithFeed
+import me.ash.reader.infrastructure.preference.FlowArticleListDescPreference
 import me.ash.reader.infrastructure.preference.FlowArticleReadIndicatorPreference
 import me.ash.reader.infrastructure.preference.LocalArticleListSwipeEndAction
 import me.ash.reader.infrastructure.preference.LocalArticleListSwipeStartAction
@@ -252,7 +251,7 @@ fun ArticleItem(
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.titleMedium.applyTextDirection(title.requiresBidi())
                             .merge(lineHeight = 22.sp),
-                        maxLines = if (articleListDesc.value) 2 else 4,
+                        maxLines = if (articleListDesc != FlowArticleListDescPreference.NONE) 2 else 4,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f)
                     )
@@ -266,7 +265,7 @@ fun ArticleItem(
                 }
 
                 // Description
-                if (articleListDesc.value && shortDescription.isNotBlank()) {
+                if (articleListDesc != FlowArticleListDescPreference.NONE && shortDescription.isNotBlank()) {
                     Text(
                         modifier = Modifier.padding(top = 4.dp),
                         text = shortDescription,
@@ -274,7 +273,11 @@ fun ArticleItem(
                         style = MaterialTheme.typography.bodySmall.applyTextDirection(
                             shortDescription.requiresBidi()
                         ),
-                        maxLines = 2,
+                        maxLines = when (articleListDesc) {
+                            FlowArticleListDescPreference.LONG -> 4
+                            FlowArticleListDescPreference.SHORT -> 2
+                            else -> throw IllegalStateException()
+                        },
                         overflow = TextOverflow.Ellipsis,
                     )
                 }

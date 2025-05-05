@@ -470,4 +470,7 @@
     <string name="sort_unread_articles">Sort unread articles</string>
     <string name="latest">Latest</string>
     <string name="earliest">Earliest</string>
+    <string name="short_desc">Short</string>
+    <string name="long_desc">Long</string>
+    <string name="none_desc">None</string>
 </resources>
