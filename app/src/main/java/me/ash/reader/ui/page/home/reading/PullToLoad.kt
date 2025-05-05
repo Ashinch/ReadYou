@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource.Companion.Drag
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
@@ -256,7 +255,7 @@ class PullToLoadState internal constructor(
                     initialValue = offsetPulled,
                     targetValue = float,
                     initialVelocity = velocity,
-                    animationSpec = spring(dampingRatio = Spring.DampingRatioNoBouncy)
+                    animationSpec = spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = 1_000f)
                 ) { value, _ ->
                     offsetPulled = value
                 }
@@ -305,19 +304,20 @@ private fun Float.signOpposites(f: Float): Boolean = this.sign * f.sign < 0f
  * Default parameter values for [rememberPullToLoadState].
  */
 object PullToLoadDefaults {
+    const val ContentOffsetMultiple = 48
+
     /**
      * If the indicator is below this threshold offset when it is released, the load action
      * will be triggered.
      */
     val LoadThreshold = 120.dp
 
-    const val ContentOffsetMultiple = 80
 }
 
 fun Modifier.pullToLoad(
     state: PullToLoadState,
     density: Density,
-    contentOffsetMultiple: Int = ContentOffsetMultiple,
+    contentOffsetMultiple: Dp = ContentOffsetMultiple.dp,
     onScroll: ((Float) -> Unit)? = null,
     enabled: Boolean = true,
 ): Modifier =
@@ -332,7 +332,7 @@ fun Modifier.pullToLoad(
     ).then(
         if (enabled) Modifier.offset {
             with(density) {
-                IntOffset(x = 0, y = (state.offsetFraction * contentOffsetMultiple).dp.roundToPx())
+                IntOffset(x = 0, y = (contentOffsetMultiple * state.offsetFraction).roundToPx())
             }
         }
         else this

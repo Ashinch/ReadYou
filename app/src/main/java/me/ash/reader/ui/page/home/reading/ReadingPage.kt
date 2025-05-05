@@ -152,8 +152,8 @@ fun ReadingPage(
                                 else -> UPWARD
                             }
                             materialSharedAxisY(
-                                initialOffsetY = { (it * 0.25f * direction).toInt() },
-                                targetOffsetY = { (it * -0.25f * direction).toInt() },
+                                initialOffsetY = { (it * 0.15f * direction).toInt() },
+                                targetOffsetY = { (it * -0.15f * direction).toInt() },
                                 durationMillis = 400
                             )
                         }, label = ""
