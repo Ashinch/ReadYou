@@ -17,6 +17,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -31,6 +32,7 @@ import me.ash.reader.infrastructure.preference.FlowArticleListTonalElevationPref
 import me.ash.reader.infrastructure.preference.FlowTopBarTonalElevationPreference
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.FeedbackIconButton
+import me.ash.reader.ui.ext.formatAsString
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.home.flow.ArticleItem
 import me.ash.reader.ui.theme.palette.onDark
@@ -103,7 +105,7 @@ fun FlowPagePreview(
             feedIconUrl = feed.icon,
             title = article.title,
             shortDescription = article.shortDescription,
-            dateString = article.dateString,
+            timeString = article.dateString,
             imgData = R.drawable.animation,
             isStarred = article.isStarred,
             isUnread = article.isUnread,
@@ -138,8 +140,13 @@ fun generateArticleWithFeedPreview(): ArticleWithFeed =
             accountId = 0,
             date = Date(1654053729L),
             isStarred = true,
-            img = null
-        ),
+            img = null,
+        ).apply {
+            dateString = date.formatAsString(
+                context = LocalContext.current,
+                onlyHourMinute = true
+            )
+        },
         feed = Feed(
             id = "",
             name = stringResource(R.string.preview_feed_name),

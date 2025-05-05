@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,7 +30,6 @@ import androidx.compose.material.icons.rounded.FiberManualRecord
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -40,7 +41,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
+import androidx.compose.ui.unit.sp
 import coil.size.Precision
 import coil.size.Scale
 import me.ash.reader.R
@@ -102,7 +103,7 @@ fun ArticleItem(
         feedIconUrl = feed.icon,
         title = article.title,
         shortDescription = article.shortDescription,
-        dateString = article.dateString,
+        timeString = article.dateString,
         imgData = article.img,
         isStarred = article.isStarred,
         isUnread = isUnread,
@@ -122,7 +123,7 @@ fun ArticleItem(
     feedIconUrl: String? = null,
     title: String = "",
     shortDescription: String = "",
-    dateString: String? = null,
+    timeString: String? = null,
     imgData: Any? = null,
     isStarred: Boolean = false,
     isUnread: Boolean = false,
@@ -180,37 +181,51 @@ fun ArticleItem(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-            }
 
-            // Right
-            if (articleListDate.value) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                ) {
+                    // Starred
+                    if (isStarred) {
+                        StarredIcon()
+                    }
+
+                    if (articleListDate.value) {
+                        // Time
+                        Text(
+                            modifier = Modifier,
+                            text = timeString ?: "",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.labelMedium,
+                        )
+                    }
+                }
+
+            } else {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    if (!articleListFeedName.value) {
-                        Spacer(Modifier.width(if (articleListFeedIcon.value) 30.dp else 0.dp))
-                    }
-                    // Starred
-                    if (isStarred) {
-                        Icon(
-                            modifier = Modifier
-                                .size(14.dp)
-                                .padding(end = 2.dp),
-                            imageVector = Icons.Rounded.Star,
-                            contentDescription = stringResource(R.string.starred),
-                            tint = MaterialTheme.colorScheme.outlineVariant,
-                        )
-                    }
+                    Spacer(Modifier.width(if (articleListFeedIcon.value) 30.dp else 0.dp))
 
-                    // Date
-                    Text(
-                        modifier = Modifier,
-                        text = dateString ?: "",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.labelMedium,
-                    )
+                    if (articleListDate.value) {
+                        // Time
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = timeString ?: "",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.labelMedium,
+                        )
+                        // Starred
+                        if (isStarred) {
+                            StarredIcon()
+                        }
+                    }
                 }
             }
+
+            // Right
+
         }
 
         // Bottom
@@ -231,13 +246,24 @@ fun ArticleItem(
             ) {
 
                 // Title
-                Text(
-                    text = title,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.titleMedium.applyTextDirection(title.requiresBidi()),
-                    maxLines = if (articleListDesc.value) 2 else 4,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                Row {
+                    Text(
+                        text = title,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.titleMedium.applyTextDirection(title.requiresBidi())
+                            .merge(lineHeight = 22.sp),
+                        maxLines = if (articleListDesc.value) 2 else 4,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f)
+                    )
+                    if (!articleListFeedName.value && !articleListDate.value) {
+                        if (isStarred) {
+                            StarredIcon()
+                        } else {
+                            Spacer(modifier = Modifier.width(16.dp))
+                        }
+                    }
+                }
 
                 // Description
                 if (articleListDesc.value && shortDescription.isNotBlank()) {
@@ -270,6 +296,18 @@ fun ArticleItem(
             }
         }
     }
+}
+
+@Composable
+fun StarredIcon(modifier: Modifier = Modifier) {
+    Icon(
+        modifier = modifier
+            .size(14.dp)
+            .padding(end = 2.dp),
+        imageVector = Icons.Rounded.Star,
+        contentDescription = stringResource(R.string.starred),
+        tint = MaterialTheme.colorScheme.outlineVariant,
+    )
 }
 
 private const val PositionalThresholdFraction = 0.4f
@@ -361,8 +399,6 @@ fun SwipeableArticleItem(
             }
         }
     }
-
-
 }
 
 private enum class SwipeDirection {
