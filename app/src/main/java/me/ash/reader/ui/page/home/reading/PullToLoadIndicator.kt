@@ -111,7 +111,8 @@ fun BoxScope.PullToLoadIndicator(
                     ), transitionSpec = {
                         (fadeIn(animationSpec = tween(220, delayMillis = 0)))
                             .togetherWith(fadeOut(animationSpec = tween(90)))
-                    }, label = ""
+                    }, label = "",
+                    contentAlignment = Alignment.Center
                 ) {
                     if (it != null) {
                         Icon(

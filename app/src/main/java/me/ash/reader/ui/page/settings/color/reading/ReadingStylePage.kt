@@ -209,7 +209,9 @@ fun ReadingStylePage(
                     SettingItem(
                         title = stringResource(id = R.string.pull_to_switch_article),
                         onClick = { pullToSwitchArticle.toggle(context, scope) }) {
-                        RYSwitch(activated = pullToSwitchArticle.value)
+                        RYSwitch(activated = pullToSwitchArticle.value, onClick = {
+                            pullToSwitchArticle.toggle(context, scope)
+                        })
                     }
                     Subtitle(
                         modifier = Modifier.padding(horizontal = 24.dp),

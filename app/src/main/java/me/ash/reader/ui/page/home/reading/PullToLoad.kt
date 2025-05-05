@@ -299,7 +299,7 @@ class PullToLoadState internal constructor(
 
 }
 
-private fun Float.signOpposites(f: Float): Boolean = this.sign != f.sign
+private fun Float.signOpposites(f: Float): Boolean = this.sign * f.sign < 0f
 
 /**
  * Default parameter values for [rememberPullToLoadState].
