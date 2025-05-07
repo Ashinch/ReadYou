@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.ash.reader.domain.service.*
+import me.ash.reader.infrastructure.cache.DiffMapHolder
 import me.ash.reader.infrastructure.db.AndroidDatabase
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
@@ -99,6 +100,9 @@ class AndroidApp : Application(), Configuration.Provider {
 
     @Inject
     lateinit var settingsProvider: SettingsProvider
+
+    @Inject
+    lateinit var diffMapHolder: DiffMapHolder
 
     /**
      * When the application startup.

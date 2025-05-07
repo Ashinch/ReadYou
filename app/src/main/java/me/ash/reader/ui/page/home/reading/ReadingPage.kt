@@ -45,7 +45,7 @@ import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.motion.materialSharedAxisY
 import me.ash.reader.ui.page.home.HomeViewModel
-import me.ash.reader.ui.page.home.Diff
+import me.ash.reader.infrastructure.cache.Diff
 import kotlin.math.abs
 
 private const val UPWARD = 1
@@ -103,10 +103,7 @@ fun ReadingPage(
 
     LaunchedEffect(readerState.articleId, pagingItems.isNotEmpty()) {
         if (pagingItems.isNotEmpty() && readerState.articleId != null) {
-            val article = readingUiState.articleWithFeed?.article
-            if (article?.isUnread == true) {
-                homeViewModel.diffMap[article.id] = Diff(false)
-            }
+            readingUiState.articleWithFeed?.let { homeViewModel.diffMapHolder.updateDiff(it) }
         }
     }
 
@@ -248,18 +245,18 @@ fun ReadingPage(
                 if (readerState.articleId != null) {
                     BottomBar(
                         isShow = isShowToolBar,
-                        isUnread = homeViewModel.diffMap[readerState.articleId]?.isUnread
+                        isUnread = homeViewModel.diffMapHolder.diffMap[readerState.articleId]?.isUnread
                             ?: readingUiState.isUnread, // fixme
                         isStarred = readingUiState.isStarred,
                         isNextArticleAvailable = isNextArticleAvailable,
                         isFullContent = readerState.content is ReaderState.FullContent,
                         isBionicReading = bionicReading.value,
                         onUnread = { isUnread ->
-                            val id = readerState.articleId
-
-                            with(homeViewModel.diffMap) {
-                                if (contains(id)) remove(id)
-                                else put(id, Diff(isUnread = isUnread))
+                            readingUiState.articleWithFeed?.let {
+                                homeViewModel.diffMapHolder.updateDiff(
+                                    articleWithFeed = it,
+                                    isUnread = isUnread
+                                )
                             }
                         },
                         onStarred = {

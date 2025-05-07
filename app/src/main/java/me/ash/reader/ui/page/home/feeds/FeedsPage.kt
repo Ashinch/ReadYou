@@ -1,11 +1,9 @@
 package me.ash.reader.ui.page.home.feeds
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -21,7 +19,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.UnfoldLess
@@ -49,7 +46,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -73,7 +69,6 @@ import me.ash.reader.infrastructure.preference.LocalHideEmptyGroups
 import me.ash.reader.infrastructure.preference.LocalNewVersionNumber
 import me.ash.reader.infrastructure.preference.LocalSkipVersionNumber
 import me.ash.reader.ui.component.FilterBar
-import me.ash.reader.ui.component.base.Banner
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold
@@ -91,7 +86,6 @@ import me.ash.reader.ui.page.home.feeds.drawer.group.GroupOptionDrawer
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeDialog
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.page.settings.accounts.AccountViewModel
-import me.ash.reader.ui.theme.Shape32
 import kotlin.collections.set
 
 @OptIn(
@@ -121,10 +115,8 @@ fun FeedsPage(
 
     val feedsUiState = feedsViewModel.feedsUiState.collectAsStateValue()
     val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
-    val importantSum =
-        feedsUiState.importantSum.collectAsStateValue(initial = stringResource(R.string.loading))
-    val groupWithFeedList =
-        feedsUiState.groupWithFeedList.collectAsStateValue(initial = emptyList())
+    val importantSum = feedsUiState.importantSum
+    val groupWithFeedList = feedsViewModel.groupWithFeedListFlow.collectAsStateValue()
     val groupsVisible: SnapshotStateMap<String, Boolean> = feedsUiState.groupsVisible
     val hasGroupVisible by remember(groupWithFeedList) { derivedStateOf { groupWithFeedList.fastAny { groupsVisible[it.group.id] == true } } }
 
@@ -153,7 +145,7 @@ fun FeedsPage(
                 when (it) {
                     Lifecycle.Event.ON_RESUME,
                     Lifecycle.Event.ON_PAUSE -> {
-                        homeViewModel.commitDiff()
+                        homeViewModel.commitDiffs()
                     }
 
                     else -> {/* no-op */
@@ -189,11 +181,9 @@ fun FeedsPage(
         feedsViewModel.fetchAccount()
     }
 
-    val hideEmptyGroups = LocalHideEmptyGroups.current.value
-
     LaunchedEffect(filterUiState, isSyncing) {
         snapshotFlow { filterUiState }.collect {
-            feedsViewModel.pullFeeds(it, hideEmptyGroups)
+            feedsViewModel.switchFilter(it.filter)
         }
     }
 
@@ -268,7 +258,7 @@ fun FeedsPage(
                     item {
                         FeedsBanner(
                             filter = filterUiState.filter,
-                            desc = importantSum,
+                            desc = importantSum.ifEmpty { stringResource(R.string.loading) },
                         ) {
                             filterChange(
                                 navController = navController,

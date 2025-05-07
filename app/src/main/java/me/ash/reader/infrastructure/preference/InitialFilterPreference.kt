@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.ui.ext.DataStoreKey
 import me.ash.reader.ui.ext.DataStoreKey.Companion.initialFilter
 import me.ash.reader.ui.ext.dataStore
@@ -34,6 +35,14 @@ sealed class InitialFilterPreference(val value: Int) : Preference() {
             Unread -> context.getString(R.string.unread)
             All -> context.getString(R.string.all)
         }
+
+    fun toFilter(): Filter {
+        return when (this) {
+            Starred -> Filter.Starred
+            Unread -> Filter.Unread
+            All -> Filter.All
+        }
+    }
 
     companion object {
 

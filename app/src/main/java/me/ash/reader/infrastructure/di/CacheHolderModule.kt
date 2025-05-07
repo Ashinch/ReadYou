@@ -1,0 +1,30 @@
+package me.ash.reader.infrastructure.di
+
+import android.content.Context
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import me.ash.reader.domain.service.RssService
+import me.ash.reader.infrastructure.cache.DiffMapHolder
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+object CacheHolderModule {
+    @Provides
+    @Singleton
+    fun provideDiffMapHolder(
+        @ApplicationContext context: Context,
+        @ApplicationScope applicationScope: CoroutineScope,
+        @IODispatcher ioDispatcher: CoroutineDispatcher,
+        rssService: RssService,
+    ): DiffMapHolder {
+        return DiffMapHolder(
+            context = context, applicationScope, ioDispatcher, rssService
+        )
+    }
+}

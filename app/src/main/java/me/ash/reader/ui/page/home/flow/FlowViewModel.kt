@@ -1,7 +1,6 @@
 package me.ash.reader.ui.page.home.flow
 
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.compose.LazyPagingItems
@@ -17,7 +16,7 @@ import me.ash.reader.domain.model.general.MarkAsReadConditions
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
-import me.ash.reader.ui.page.home.Diff
+import me.ash.reader.infrastructure.cache.DiffMapHolder
 import java.util.Date
 import javax.inject.Inject
 
@@ -26,6 +25,7 @@ class FlowViewModel @Inject constructor(
     private val rssService: RssService,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @ApplicationScope private val applicationScope: CoroutineScope,
+    private val diffMapHolder: DiffMapHolder,
 ) : ViewModel() {
 
     private val _flowUiState = MutableStateFlow(FlowUiState())
@@ -70,22 +70,21 @@ class FlowViewModel @Inject constructor(
     }
 
     fun markAsReadFromListByDate(
-        mutableDiffMap: MutableMap<String, Diff>,
         date: Date,
         isBefore: Boolean,
         lazyPagingItems: LazyPagingItems<ArticleFlowItem>,
     ) {
         viewModelScope.launch(ioDispatcher) {
             lazyPagingItems.itemSnapshotList.asSequence()
-                .filterIsInstance<ArticleFlowItem.Article>().map { it.articleWithFeed.article }
+                .filterIsInstance<ArticleFlowItem.Article>().map { it.articleWithFeed }
                 .filter {
                     if (isBefore) {
-                        date > it.date
+                        date > it.article.date && it.article.isUnread
                     } else {
-                        date < it.date
+                        date < it.article.date && it.article.isUnread
                     }
-                }.map { it.id }.distinct().forEach {
-                    mutableDiffMap[it] = Diff(isUnread = false)
+                }.distinctBy { it.article.id }.forEach { articleWithFeed ->
+                    diffMapHolder.updateDiff(articleWithFeed = articleWithFeed, isUnread = false)
                 }
         }
     }

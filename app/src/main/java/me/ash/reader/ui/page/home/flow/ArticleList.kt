@@ -11,7 +11,7 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.ArticleWithFeed
-import me.ash.reader.ui.page.home.Diff
+import me.ash.reader.infrastructure.cache.Diff
 
 @Suppress("FunctionName")
 @OptIn(ExperimentalFoundationApi::class)

@@ -78,7 +78,7 @@ import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.motion.materialSharedAxisYIn
 import me.ash.reader.ui.motion.materialSharedAxisYOut
 import me.ash.reader.ui.page.common.RouteName
-import me.ash.reader.ui.page.home.Diff
+import me.ash.reader.infrastructure.cache.Diff
 import me.ash.reader.ui.page.home.HomeViewModel
 
 @OptIn(
@@ -129,17 +129,16 @@ fun FlowPage(
         LaunchedEffect(listState.isScrollInProgress) {
             if (!listState.isScrollInProgress) {
                 val firstItemIndex = listState.firstVisibleItemIndex
-                val diffMap = homeViewModel.diffMap
                 if (firstItemIndex < pagingItems.itemCount)
                     for (index in 0 until firstItemIndex) {
                         val item = pagingItems.peek(index)
                         with(item) {
                             when (this) {
                                 is ArticleFlowItem.Article -> {
-                                    val id = articleWithFeed.article.id
-                                    if (!diffMap.containsKey(id)) {
-                                        diffMap[id] = Diff(isUnread = false)
-                                    }
+                                    homeViewModel.diffMapHolder.updateDiff(
+                                        articleWithFeed = articleWithFeed,
+                                        isUnread = false
+                                    )
                                 }
 
                                 else -> {}
@@ -169,7 +168,7 @@ fun FlowPage(
 
     LaunchedEffect(isSyncing) {
         if (isSyncing) {
-            homeViewModel.commitDiff()
+            homeViewModel.commitDiffs()
         }
     }
 
@@ -192,14 +191,8 @@ fun FlowPage(
     }
 
     val onToggleRead: (ArticleWithFeed) -> Unit = remember {
-        { article ->
-            val id = article.article.id
-            val isUnread = article.article.isUnread
-
-            with(homeViewModel.diffMap) {
-                if (contains(id)) remove(id)
-                else put(id, Diff(isUnread = !isUnread))
-            }
+        { articleWithFeed ->
+            homeViewModel.diffMapHolder.updateDiff(articleWithFeed)
         }
     }
 
@@ -210,7 +203,6 @@ fun FlowPage(
         remember(sortByEarliest) {
             {
                 flowViewModel.markAsReadFromListByDate(
-                    mutableDiffMap = homeViewModel.diffMap,
                     date = it.article.date,
                     isBefore = sortByEarliest,
                     lazyPagingItems = pagingItems
@@ -222,7 +214,6 @@ fun FlowPage(
         remember(sortByEarliest) {
             {
                 flowViewModel.markAsReadFromListByDate(
-                    mutableDiffMap = homeViewModel.diffMap,
                     date = it.article.date,
                     isBefore = !sortByEarliest,
                     lazyPagingItems = pagingItems
@@ -419,7 +410,7 @@ fun FlowPage(
                     }
                     ArticleList(
                         pagingItems = pagingItems,
-                        diffMap = homeViewModel.diffMap,
+                        diffMap = homeViewModel.diffMapHolder.diffMap,
                         isShowFeedIcon = articleListFeedIcon.value,
                         isShowStickyHeader = articleListDateStickyHeader.value,
                         articleListTonalElevation = articleListTonalElevation.value,
