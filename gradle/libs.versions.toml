@@ -27,7 +27,7 @@ room = "2.7.1"
 work = "2.10.1"
 
 # Compose
-composeBom = "2025.04.01"
+composeBom = "2025.05.00"
 composeHtml = "1.0.2"
 
 # Coil
@@ -71,9 +71,6 @@ compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-
-# Accompanist
-accompanist-swiperefresh = { group = "com.google.accompanist", name = "accompanist-swiperefresh", version.ref = "accompanist" }
 
 # Coil
 coil-base = { group = "io.coil-kt", name = "coil-base", version.ref = "coil" }

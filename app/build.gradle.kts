@@ -129,9 +129,6 @@ dependencies {
     androidTestImplementation(libs.compose.ui.test.junit4)
     implementation(libs.compose.material3)
 
-    // Accompanist
-    implementation(libs.accompanist.swiperefresh)
-
     // Coil
     implementation(libs.coil.base)
     implementation(libs.coil.compose)
