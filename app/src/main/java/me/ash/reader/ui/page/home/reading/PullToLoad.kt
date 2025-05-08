@@ -14,6 +14,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
@@ -24,6 +25,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -35,7 +37,6 @@ import kotlinx.coroutines.launch
 import me.ash.reader.ui.page.home.reading.PullToLoadDefaults.ContentOffsetMultiple
 import kotlin.math.abs
 import kotlin.math.sign
-import kotlin.math.sqrt
 
 private const val TAG = "PullToLoad"
 
@@ -112,7 +113,7 @@ fun rememberPullToLoadState(
     key: Any?,
     onLoadPrevious: (() -> Unit)?,
     onLoadNext: (() -> Unit)?,
-    loadThreshold: Dp = PullToLoadDefaults.LoadThreshold,
+    loadThreshold: Dp = PullToLoadDefaults.loadThreshold(),
 ): PullToLoadState {
     require(loadThreshold > 0.dp) { "The load trigger must be greater than zero!" }
 
@@ -204,8 +205,10 @@ class PullToLoadState internal constructor(
 
     private var offsetPulled by mutableFloatStateOf(0f)
     private var _threshold by mutableFloatStateOf(threshold)
+    var isSettled by mutableStateOf(false)
 
     internal fun onPull(pullDelta: Float): Float {
+        isSettled = false
         val consumed = if (offsetPulled.signOpposites(offsetPulled + pullDelta)) {
             -offsetPulled
         } else {
@@ -248,16 +251,26 @@ class PullToLoadState internal constructor(
     // Animatable as calling snapTo() on every drag delta has a one frame delay, and some extra
     // overhead of running through the animation pipeline instead of directly mutating the state.
     private val mutatorMutex = MutatorMutex()
-    internal fun animateDistanceTo(float: Float, velocity: Float = 0f) {
+    internal fun animateDistanceTo(targetValue: Float, velocity: Float = 0f) {
         animationScope.launch {
             mutatorMutex.mutate {
+                val initialValue = offsetPulled
+                val isAnimateDown = targetValue < initialValue
                 animate(
-                    initialValue = offsetPulled,
-                    targetValue = float,
+                    initialValue = initialValue,
+                    targetValue = targetValue,
                     initialVelocity = velocity,
-                    animationSpec = spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = 1_000f)
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioLowBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
                 ) { value, _ ->
                     offsetPulled = value
+                    if (isAnimateDown) {
+                        if (value - targetValue < 10f) isSettled = true
+                    } else {
+                        if (targetValue - value < 10f) isSettled = true
+                    }
                 }
             }
         }
@@ -290,10 +303,8 @@ class PullToLoadState internal constructor(
 
     private fun calculateOffsetFraction(): Float = when (status) {
         Status.Idle -> 0f
-        Status.PulledDown -> sqrt(progress)
-        Status.PulledUp -> -sqrt(progress)
-        Status.PullingDown -> progress
-        Status.PullingUp -> -progress
+        Status.PulledDown, Status.PullingDown -> (-progress * progress / 40 + progress) * .6f
+        Status.PulledUp, Status.PullingUp -> (progress * progress / 40 - progress) * .5f
     }
 
 }
@@ -304,13 +315,21 @@ private fun Float.signOpposites(f: Float): Boolean = this.sign * f.sign < 0f
  * Default parameter values for [rememberPullToLoadState].
  */
 object PullToLoadDefaults {
-    const val ContentOffsetMultiple = 48
+    const val ContentOffsetMultiple = 60
 
     /**
      * If the indicator is below this threshold offset when it is released, the load action
      * will be triggered.
      */
-    val LoadThreshold = 120.dp
+    const val LoadThresholdFraction = .05f
+
+    @Composable
+    fun loadThreshold(fraction: Float = LoadThresholdFraction): Dp {
+        val windowHeight = LocalWindowInfo.current.containerSize.height
+        return with(LocalDensity.current) {
+            (windowHeight * fraction).toDp()
+        }
+    }
 
 }
 

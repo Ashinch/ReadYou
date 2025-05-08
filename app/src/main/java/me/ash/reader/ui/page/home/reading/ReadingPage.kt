@@ -2,6 +2,17 @@ package me.ash.reader.ui.page.home.reading
 
 import android.util.Log
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.layout.Box
@@ -14,11 +25,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -27,11 +41,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
@@ -121,11 +137,31 @@ fun ReadingPage(
 
                                 else -> UPWARD
                             }
-                            materialSharedAxisY(
-                                initialOffsetY = { (it * 0.15f * direction).toInt() },
-                                targetOffsetY = { (it * -0.15f * direction).toInt() },
-                                durationMillis = 400
-                            )
+                            val exit = 100
+                            val enter = exit * 2
+                            (slideInVertically(
+                                initialOffsetY = { (it * 0.2f * direction).toInt() },
+                                animationSpec = spring(
+                                    dampingRatio = .9f,
+                                    stiffness = Spring.StiffnessLow,
+                                    visibilityThreshold = IntOffset.VisibilityThreshold
+                                )
+                            ) + fadeIn(
+                                tween(
+                                    delayMillis = exit,
+                                    durationMillis = enter,
+                                    easing = LinearOutSlowInEasing
+                                )
+                            )) togetherWith (slideOutVertically(
+                                targetOffsetY = { (it * -0.2f * direction).toInt() },
+                                animationSpec = spring(
+                                    dampingRatio = Spring.DampingRatioNoBouncy,
+                                    stiffness = Spring.StiffnessLow,
+                                    visibilityThreshold = IntOffset.VisibilityThreshold
+                                )
+                            ) + fadeOut(
+                                tween(durationMillis = exit, easing = FastOutLinearInEasing)
+                            ))
                         }, label = ""
                     ) {
 
@@ -168,8 +204,8 @@ fun ReadingPage(
                             }.collectAsStateValue(initial = false)
 
                             CompositionLocalProvider(
-                                LocalOverscrollConfiguration provides
-                                        if (isPullToSwitchArticleEnabled) null else LocalOverscrollConfiguration.current,
+//                                LocalOverscrollConfiguration provides
+//                                        if (isPullToSwitchArticleEnabled) null else LocalOverscrollConfiguration.current,
                                 LocalTextStyle provides LocalTextStyle.current.run {
                                     merge(lineHeight = if (lineHeight.isSpecified) (lineHeight.value * LocalReadingTextLineHeight.current).sp else TextUnit.Unspecified)
                                 }

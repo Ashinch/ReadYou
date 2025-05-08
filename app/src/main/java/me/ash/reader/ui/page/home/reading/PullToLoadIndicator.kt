@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.reading
 
-import android.os.Build
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -92,7 +91,7 @@ fun BoxScope.PullToLoadIndicator(
         }
     }
 
-    if (visible) {
+    if (visible && !state.isSettled) {
         Surface(
             modifier = modifier
                 .align(alignment)
@@ -100,7 +99,7 @@ fun BoxScope.PullToLoadIndicator(
                 .offset {
                     IntOffset(
                         x = 0,
-                        y = (fraction * PullToLoadDefaults.ContentOffsetMultiple * .8f).dp.roundToPx()
+                        y = (fraction * PullToLoadDefaults.ContentOffsetMultiple * .5f).dp.roundToPx()
                     )
                 }
                 .width(36.dp),
