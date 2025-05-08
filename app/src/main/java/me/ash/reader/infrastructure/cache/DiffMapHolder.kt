@@ -48,40 +48,61 @@ class DiffMapHolder @Inject constructor(
         }
     }
 
+    fun checkIfUnread(articleWithFeed: ArticleWithFeed): Boolean {
+        return diffMap[articleWithFeed.article.id]?.isUnread ?: articleWithFeed.article.isUnread
+    }
+
     /**
-     * Updates the diff map with changes related to an article's read/unread status.
+     * Updates the diff map with changes to an article's read/unread status.
      *
-     * This function manages a map (`diffMap`) that tracks changes (diffs) to the
-     * read/unread status of articles. It allows specifying a direct update of
-     * the unread status or toggling it based on the current state.
+     * This function manages a map (`diffMap`) that tracks pending changes (diffs) to the
+     * read/unread status of articles. These changes are not immediately applied to the
+     * underlying data store but are held in `diffMap` until a later commit operation.
+     *
+     * The function supports three modes of updating:
+     *
+     * 1. **Toggle:** If `isUnread` is `null`, the function toggles the current read/unread
+     *    status of the article.  If the article is currently unread, it will be marked as read,
+     *    and vice-versa.
+     * 2. **Mark as Unread:** If `isUnread` is `true`, the article will be marked as unread,
+     *    regardless of its current status.
+     * 3. **Mark as Read:** If `isUnread` is `false`, the article will be marked as read,
+     *    regardless of its current status.
+     *
+     * The function determines if a change needs to be tracked based on the current status and desired status:
+     *  - If the requested change matches the article's current status, the diff is removed from the map, if it exists. (No change is needed.)
+     *  - Otherwise, the diff is added to or updated in the map.
      *
      * @param articleWithFeed The article and its associated feed data. This is used to identify the article
      *                        and access its current read/unread state.
      * @param isUnread An optional boolean indicating the desired read/unread status of the article.
-     *                 - If `null`, the function toggles the current status of the article (unread becomes read, read becomes unread).
-     *                 - If `true`, the article is marked as unread.
-     *                 - If `false`, the article is marked as read.
+     *                 - `null`: Toggles the current read/unread status.
+     *                 - `true`: Marks the article as unread.
+     *                 - `false`: Marks the article as read.
+     *
+     * @see Diff
      */
     fun updateDiff(
         articleWithFeed: ArticleWithFeed,
         isUnread: Boolean? = null
     ) {
         val articleId = articleWithFeed.article.id
-        if (isUnread != null) {
+        val isArticleUnread = articleWithFeed.article.isUnread
+
+        if (isUnread == null) {
+            if (diffMap.remove(articleId) == null) {
+                diffMap[articleId] = Diff(
+                    isUnread = !isArticleUnread,
+                    articleWithFeed = articleWithFeed
+                )
+            }
+        } else if (isUnread == isArticleUnread) {
+            diffMap.remove(articleId)
+        } else {
             diffMap[articleId] = Diff(
                 isUnread = isUnread,
                 articleWithFeed = articleWithFeed
             )
-        } else {
-            val diff = diffMap[articleId]
-            if (diff != null) {
-                diffMap.remove(articleId)
-            } else {
-                diffMap[articleId] = Diff(
-                    isUnread = !articleWithFeed.article.isUnread,
-                    articleWithFeed = articleWithFeed
-                )
-            }
         }
     }
 

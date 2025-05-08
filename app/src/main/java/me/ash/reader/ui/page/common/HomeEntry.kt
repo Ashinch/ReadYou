@@ -16,14 +16,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.infrastructure.preference.LocalDarkTheme
 import me.ash.reader.ui.ext.animatedComposable
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.findActivity
-import me.ash.reader.ui.ext.initialFilter
 import me.ash.reader.ui.ext.initialPage
 import me.ash.reader.ui.ext.isFirstLaunch
 import me.ash.reader.ui.page.home.HomeViewModel
@@ -31,6 +30,7 @@ import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.page.home.flow.FlowPage
 import me.ash.reader.ui.page.home.reading.ReadingPage
+import me.ash.reader.ui.page.home.reading.ReadingViewModel
 import me.ash.reader.ui.page.settings.SettingsPage
 import me.ash.reader.ui.page.settings.accounts.AccountDetailsPage
 import me.ash.reader.ui.page.settings.accounts.AccountsPage
@@ -149,8 +149,26 @@ fun HomeEntry(
                     homeViewModel = homeViewModel,
                 )
             }
-            animatedComposable(route = "${RouteName.READING}/{articleId}") {
-                ReadingPage(navController = navController, homeViewModel = homeViewModel)
+            animatedComposable(route = "${RouteName.READING}/{articleId}") { entry ->
+                val articleId = entry.arguments?.getString("articleId")?.also {
+                    entry.arguments?.remove("articleId")
+                }
+                val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
+                val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
+
+                val readingViewModel: ReadingViewModel =
+                    hiltViewModel<ReadingViewModel, ReadingViewModel.ReadingViewModelFactory> { factory ->
+                        factory.create(articleId.toString(), pagingItems)
+                    }
+
+                LaunchedEffect(pagingItems) {
+                    readingViewModel.injectPagingData(pagingItems)
+                }
+
+                ReadingPage(
+                    navController = navController,
+                    readingViewModel = readingViewModel
+                )
             }
 
             // Settings

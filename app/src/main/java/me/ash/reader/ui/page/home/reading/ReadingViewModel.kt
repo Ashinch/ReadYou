@@ -5,6 +5,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.ItemSnapshotList
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -18,20 +21,23 @@ import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.service.RssService
+import me.ash.reader.infrastructure.android.AndroidImageDownloader
+import me.ash.reader.infrastructure.cache.DiffMapHolder
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.rss.RssHelper
-import me.ash.reader.infrastructure.android.AndroidImageDownloader
 import java.util.Date
-import javax.inject.Inject
 
-@HiltViewModel
-class ReadingViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = ReadingViewModel.ReadingViewModelFactory::class)
+class ReadingViewModel @AssistedInject constructor(
+    @Assisted private val initialArticleId: String,
+    @Assisted private var pagingItems: ItemSnapshotList<ArticleFlowItem>,
     private val rssService: RssService,
     private val rssHelper: RssHelper,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @ApplicationScope private val applicationScope: CoroutineScope,
-    private val imageDownloader: AndroidImageDownloader
+    private val imageDownloader: AndroidImageDownloader,
+    private val diffMapHolder: DiffMapHolder,
 ) : ViewModel() {
 
     private val _readingUiState = MutableStateFlow(ReadingUiState())
@@ -45,20 +51,23 @@ class ReadingViewModel @Inject constructor(
     private val currentFeed: Feed?
         get() = readingUiState.value.articleWithFeed?.feed
 
-    private var pagingItems: ItemSnapshotList<ArticleFlowItem> = ItemSnapshotList(0, 0, emptyList())
-
     fun injectPagingData(pagingItems: ItemSnapshotList<ArticleFlowItem>) {
         this.pagingItems = pagingItems
+    }
+
+    init {
+        initData(initialArticleId)
     }
 
     fun initData(articleId: String) {
         viewModelScope.launch(ioDispatcher) {
             rssService.get().findArticleById(articleId)?.run {
+                diffMapHolder.updateDiff(this, isUnread = false)
                 _readingUiState.update {
                     it.copy(
                         articleWithFeed = this,
                         isStarred = article.isStarred,
-                        isUnread = article.isUnread
+                        isUnread = false
                     )
                 }
                 _readerState.update {
@@ -116,24 +125,10 @@ class ReadingViewModel @Inject constructor(
         }
     }
 
-    /*    fun updateReadStatus(isUnread: Boolean) {
-            currentArticle?.run {
-                applicationScope.launch(ioDispatcher) {
-                    _readingUiState.update { it.copy(isUnread = isUnread) }
-                    rssService.get().markAsRead(
-                        groupId = null,
-                        feedId = null,
-                        articleId = id,
-                        before = null,
-                        isUnread = isUnread,
-                    )
-                }
-            }
-        }
-
-        fun markAsRead() = updateReadStatus(isUnread = false)
-
-        fun markAsUnread() = updateReadStatus(isUnread = true)*/
+    fun updateReadStatus(isUnread: Boolean) {
+        readingUiState.value.articleWithFeed?.let { diffMapHolder.updateDiff(it, isUnread) }
+        _readingUiState.update { it.copy(isUnread = diffMapHolder.checkIfUnread(it.articleWithFeed!!)) }
+    }
 
     fun updateStarredStatus(isStarred: Boolean) {
         applicationScope.launch(ioDispatcher) {
@@ -209,11 +204,19 @@ class ReadingViewModel @Inject constructor(
             imageDownloader.downloadImage(url).onSuccess(onSuccess).onFailure(onFailure)
         }
     }
+
+    @AssistedFactory
+    interface ReadingViewModelFactory {
+        fun create(
+            articleId: String,
+            pagingItems: ItemSnapshotList<ArticleFlowItem>
+        ): ReadingViewModel
+    }
 }
 
 data class ReadingUiState(
     val articleWithFeed: ArticleWithFeed? = null,
-    val isUnread: Boolean = false, // fixme: to be removed in favor of lazy read marking
+    val isUnread: Boolean = false,
     val isStarred: Boolean = false,
 )
 

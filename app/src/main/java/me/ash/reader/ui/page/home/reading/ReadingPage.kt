@@ -31,9 +31,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
@@ -44,8 +42,6 @@ import me.ash.reader.infrastructure.preference.not
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.motion.materialSharedAxisY
-import me.ash.reader.ui.page.home.HomeViewModel
-import me.ash.reader.infrastructure.cache.Diff
 import kotlin.math.abs
 
 private const val UPWARD = 1
@@ -57,7 +53,6 @@ private const val DOWNWARD = -1
 @Composable
 fun ReadingPage(
     navController: NavHostController,
-    homeViewModel: HomeViewModel,
     readingViewModel: ReadingViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -65,8 +60,8 @@ fun ReadingPage(
     val isPullToSwitchArticleEnabled = LocalPullToSwitchArticle.current.value
     val readingUiState = readingViewModel.readingUiState.collectAsStateValue()
     val readerState = readingViewModel.readerStateStateFlow.collectAsStateValue()
-    val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
     val bionicReading = LocalReadingBionicReading.current
+    val coroutineScope = rememberCoroutineScope()
 
     var isReaderScrollingDown by remember { mutableStateOf(false) }
     var showFullScreenImageViewer by remember { mutableStateOf(false) }
@@ -84,28 +79,6 @@ fun ReadingPage(
     }
 
     var bringToTop by remember { mutableStateOf(false) }
-
-    val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
-
-    LaunchedEffect(pagingItems) {
-        readingViewModel.injectPagingData(pagingItems)
-    }
-
-    LaunchedEffect(Unit) {
-        navController.currentBackStackEntryFlow.collect {
-            it.arguments?.getString("articleId")?.let { articleId ->
-                if (readerState.articleId != articleId) {
-                    readingViewModel.initData(articleId)
-                }
-            }
-        }
-    }
-
-    LaunchedEffect(readerState.articleId, pagingItems.isNotEmpty()) {
-        if (pagingItems.isNotEmpty() && readerState.articleId != null) {
-            readingUiState.articleWithFeed?.let { homeViewModel.diffMapHolder.updateDiff(it) }
-        }
-    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -245,19 +218,13 @@ fun ReadingPage(
                 if (readerState.articleId != null) {
                     BottomBar(
                         isShow = isShowToolBar,
-                        isUnread = homeViewModel.diffMapHolder.diffMap[readerState.articleId]?.isUnread
-                            ?: readingUiState.isUnread, // fixme
+                        isUnread = readingUiState.isUnread,
                         isStarred = readingUiState.isStarred,
                         isNextArticleAvailable = isNextArticleAvailable,
                         isFullContent = readerState.content is ReaderState.FullContent,
                         isBionicReading = bionicReading.value,
-                        onUnread = { isUnread ->
-                            readingUiState.articleWithFeed?.let {
-                                homeViewModel.diffMapHolder.updateDiff(
-                                    articleWithFeed = it,
-                                    isUnread = isUnread
-                                )
-                            }
+                        onUnread = {
+                            readingViewModel.updateReadStatus(it)
                         },
                         onStarred = {
                             readingViewModel.updateStarredStatus(it)
@@ -270,7 +237,7 @@ fun ReadingPage(
                             else readingViewModel.renderDescriptionContent()
                         },
                         onBionicReading = {
-                            (!bionicReading).put(context, homeViewModel.viewModelScope)
+                            (!bionicReading).put(context, coroutineScope)
                         },
                         onReadAloud = {
                             context.showToast(context.getString(R.string.coming_soon))
