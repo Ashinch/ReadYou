@@ -21,7 +21,7 @@ import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.rss.RssHelper
-import me.ash.reader.infrastructure.storage.AndroidImageDownloader
+import me.ash.reader.infrastructure.android.AndroidImageDownloader
 import java.util.Date
 import javax.inject.Inject
 

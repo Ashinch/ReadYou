@@ -19,7 +19,6 @@ import me.ash.reader.infrastructure.net.NetworkDataSource
 import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.infrastructure.rss.OPMLDataSource
 import me.ash.reader.infrastructure.rss.RssHelper
-import me.ash.reader.infrastructure.storage.AndroidImageDownloader
 import me.ash.reader.ui.ext.del
 import me.ash.reader.ui.ext.getLatestApk
 import me.ash.reader.ui.ext.isGitHub

@@ -1,4 +1,4 @@
-package me.ash.reader.infrastructure.storage
+package me.ash.reader.infrastructure.android
 
 import android.content.Context
 import android.media.MediaScannerConnection
@@ -24,8 +24,6 @@ import javax.inject.Inject
 import kotlin.io.path.Path
 import kotlin.io.path.createFile
 import kotlin.io.path.createParentDirectories
-
-private const val TAG = "AndroidImageDownloader"
 
 class AndroidImageDownloader @Inject constructor(
     @ApplicationContext private val context: Context,
