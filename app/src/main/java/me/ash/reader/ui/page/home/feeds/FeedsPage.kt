@@ -1,6 +1,9 @@
 package me.ash.reader.ui.page.home.feeds
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -89,11 +92,13 @@ import me.ash.reader.ui.page.settings.accounts.AccountViewModel
 import kotlin.collections.set
 
 @OptIn(
-    ExperimentalMaterial3Api::class
+    ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class
 )
 @Composable
 fun FeedsPage(
     navController: NavHostController,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     accountViewModel: AccountViewModel = hiltViewModel(),
     feedsViewModel: FeedsViewModel = hiltViewModel(),
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
@@ -373,6 +378,14 @@ fun FeedsPage(
         },
         bottomBar = {
             FilterBar(
+                modifier = with(sharedTransitionScope) {
+                    Modifier.sharedElement(
+                        sharedContentState = rememberSharedContentState(
+                            "filterBar"
+                        ),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
+                },
                 filter = filterUiState.filter,
                 filterBarStyle = filterBarStyle.value,
                 filterBarFilled = filterBarFilled.value,

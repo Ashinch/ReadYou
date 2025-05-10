@@ -2,6 +2,9 @@ package me.ash.reader.ui.page.home.flow
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -82,11 +85,13 @@ import me.ash.reader.infrastructure.cache.Diff
 import me.ash.reader.ui.page.home.HomeViewModel
 
 @OptIn(
-    ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class,
 )
 @Composable
 fun FlowPage(
     navController: NavHostController,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     flowViewModel: FlowViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel,
 ) {
@@ -446,6 +451,14 @@ fun FlowPage(
         },
         bottomBar = {
             FilterBar(
+                modifier = with(sharedTransitionScope) {
+                    Modifier.sharedElement(
+                        sharedContentState = rememberSharedContentState(
+                            "filterBar"
+                        ),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    )
+                },
                 filter = filterUiState.filter,
                 filterBarStyle = filterBarStyle.value,
                 filterBarFilled = filterBarFilled.value,

@@ -1,8 +1,12 @@
 package me.ash.reader.ui.page.common
 
 import android.util.Log
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -53,7 +57,7 @@ import me.ash.reader.ui.page.settings.troubleshooting.TroubleshootingPage
 import me.ash.reader.ui.page.startup.StartupPage
 import me.ash.reader.ui.theme.AppTheme
 
-@OptIn(androidx.compose.material.ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun HomeEntry(
     homeViewModel: HomeViewModel = hiltViewModel(),
@@ -122,126 +126,133 @@ fun HomeEntry(
     AppTheme(
         useDarkTheme = LocalDarkTheme.current.isDarkTheme()
     ) {
-
-        NavHost(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface),
-            navController = navController,
-            startDestination = if (context.isFirstLaunch) RouteName.STARTUP else RouteName.FEEDS,
-        ) {
-            // Startup
-            animatedComposable(route = RouteName.STARTUP) {
-                StartupPage(navController)
-            }
-
-            // Home
-            animatedComposable(route = RouteName.FEEDS) {
-                FeedsPage(
-                    navController = navController,
-                    homeViewModel = homeViewModel,
-                    subscribeViewModel = subscribeViewModel
-                )
-            }
-            animatedComposable(route = RouteName.FLOW) {
-                FlowPage(
-                    navController = navController,
-                    homeViewModel = homeViewModel,
-                )
-            }
-            animatedComposable(route = "${RouteName.READING}/{articleId}") { entry ->
-                val articleId = entry.arguments?.getString("articleId")?.also {
-                    entry.arguments?.remove("articleId")
+        SharedTransitionScope {
+            NavHost(
+                modifier = Modifier
+                    .then(it)
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surface),
+                navController = navController,
+                startDestination = if (context.isFirstLaunch) RouteName.STARTUP else RouteName.FEEDS,
+            ) {
+                // Startup
+                animatedComposable(route = RouteName.STARTUP) {
+                    StartupPage(navController)
                 }
-                val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
-                val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
 
-                val readingViewModel: ReadingViewModel =
-                    hiltViewModel<ReadingViewModel, ReadingViewModel.ReadingViewModelFactory> { factory ->
-                        factory.create(articleId.toString(), pagingItems)
+                // Home
+                animatedComposable(route = RouteName.FEEDS) {
+                    FeedsPage(
+                        navController = navController,
+                        homeViewModel = homeViewModel,
+                        sharedTransitionScope = this@SharedTransitionScope,
+                        animatedVisibilityScope = this,
+                        subscribeViewModel = subscribeViewModel
+                    )
+                }
+                animatedComposable(route = RouteName.FLOW) {
+                    FlowPage(
+                        navController = navController,
+                        homeViewModel = homeViewModel,
+                        sharedTransitionScope = this@SharedTransitionScope,
+                        animatedVisibilityScope = this,
+                    )
+                }
+                animatedComposable(route = "${RouteName.READING}/{articleId}") { entry ->
+                    val articleId = entry.arguments?.getString("articleId")?.also {
+                        entry.arguments?.remove("articleId")
+                    }
+                    val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
+                    val pagingItems =
+                        homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
+
+                    val readingViewModel: ReadingViewModel =
+                        hiltViewModel<ReadingViewModel, ReadingViewModel.ReadingViewModelFactory> { factory ->
+                            factory.create(articleId.toString(), pagingItems)
+                        }
+
+                    LaunchedEffect(pagingItems) {
+                        readingViewModel.injectPagingData(pagingItems)
                     }
 
-                LaunchedEffect(pagingItems) {
-                    readingViewModel.injectPagingData(pagingItems)
+                    ReadingPage(
+                        navController = navController,
+                        readingViewModel = readingViewModel
+                    )
                 }
 
-                ReadingPage(
-                    navController = navController,
-                    readingViewModel = readingViewModel
-                )
-            }
+                // Settings
+                animatedComposable(route = RouteName.SETTINGS) {
+                    SettingsPage(navController)
+                }
 
-            // Settings
-            animatedComposable(route = RouteName.SETTINGS) {
-                SettingsPage(navController)
-            }
+                // Accounts
+                animatedComposable(route = RouteName.ACCOUNTS) {
+                    AccountsPage(navController)
+                }
 
-            // Accounts
-            animatedComposable(route = RouteName.ACCOUNTS) {
-                AccountsPage(navController)
-            }
+                animatedComposable(route = "${RouteName.ACCOUNT_DETAILS}/{accountId}") {
+                    AccountDetailsPage(navController)
+                }
 
-            animatedComposable(route = "${RouteName.ACCOUNT_DETAILS}/{accountId}") {
-                AccountDetailsPage(navController)
-            }
+                animatedComposable(route = RouteName.ADD_ACCOUNTS) {
+                    AddAccountsPage(navController)
+                }
 
-            animatedComposable(route = RouteName.ADD_ACCOUNTS) {
-                AddAccountsPage(navController)
-            }
+                // Color & Style
+                animatedComposable(route = RouteName.COLOR_AND_STYLE) {
+                    ColorAndStylePage(navController)
+                }
+                animatedComposable(route = RouteName.DARK_THEME) {
+                    DarkThemePage(navController)
+                }
+                animatedComposable(route = RouteName.FEEDS_PAGE_STYLE) {
+                    FeedsPageStylePage(navController)
+                }
+                animatedComposable(route = RouteName.FLOW_PAGE_STYLE) {
+                    FlowPageStylePage(navController)
+                }
+                animatedComposable(route = RouteName.READING_PAGE_STYLE) {
+                    ReadingStylePage(navController)
+                }
+                animatedComposable(route = RouteName.READING_BIONIC_READING) {
+                    BionicReadingPage(navController)
+                }
+                animatedComposable(route = RouteName.READING_PAGE_TITLE) {
+                    ReadingTitlePage(navController)
+                }
+                animatedComposable(route = RouteName.READING_PAGE_TEXT) {
+                    ReadingTextPage(navController)
+                }
+                animatedComposable(route = RouteName.READING_PAGE_IMAGE) {
+                    ReadingImagePage(navController)
+                }
+                animatedComposable(route = RouteName.READING_PAGE_VIDEO) {
+                    ReadingVideoPage(navController)
+                }
 
-            // Color & Style
-            animatedComposable(route = RouteName.COLOR_AND_STYLE) {
-                ColorAndStylePage(navController)
-            }
-            animatedComposable(route = RouteName.DARK_THEME) {
-                DarkThemePage(navController)
-            }
-            animatedComposable(route = RouteName.FEEDS_PAGE_STYLE) {
-                FeedsPageStylePage(navController)
-            }
-            animatedComposable(route = RouteName.FLOW_PAGE_STYLE) {
-                FlowPageStylePage(navController)
-            }
-            animatedComposable(route = RouteName.READING_PAGE_STYLE) {
-                ReadingStylePage(navController)
-            }
-            animatedComposable(route = RouteName.READING_BIONIC_READING) {
-                BionicReadingPage(navController)
-            }
-            animatedComposable(route = RouteName.READING_PAGE_TITLE) {
-                ReadingTitlePage(navController)
-            }
-            animatedComposable(route = RouteName.READING_PAGE_TEXT) {
-                ReadingTextPage(navController)
-            }
-            animatedComposable(route = RouteName.READING_PAGE_IMAGE) {
-                ReadingImagePage(navController)
-            }
-            animatedComposable(route = RouteName.READING_PAGE_VIDEO) {
-                ReadingVideoPage(navController)
-            }
+                // Interaction
+                animatedComposable(route = RouteName.INTERACTION) {
+                    InteractionPage(navController)
+                }
 
-            // Interaction
-            animatedComposable(route = RouteName.INTERACTION) {
-                InteractionPage(navController)
-            }
+                // Languages
+                animatedComposable(route = RouteName.LANGUAGES) {
+                    LanguagesPage(navController = navController)
+                }
 
-            // Languages
-            animatedComposable(route = RouteName.LANGUAGES) {
-                LanguagesPage(navController = navController)
-            }
+                // Troubleshooting
+                animatedComposable(route = RouteName.TROUBLESHOOTING) {
+                    TroubleshootingPage(navController = navController)
+                }
 
-            // Troubleshooting
-            animatedComposable(route = RouteName.TROUBLESHOOTING) {
-                TroubleshootingPage(navController = navController)
-            }
-
-            // Tips & Support
-            animatedComposable(route = RouteName.TIPS_AND_SUPPORT) {
-                TipsAndSupportPage(navController)
-            }
-            animatedComposable(route = RouteName.LICENSE_LIST) {
-                LicenseListPage(navController)
+                // Tips & Support
+                animatedComposable(route = RouteName.TIPS_AND_SUPPORT) {
+                    TipsAndSupportPage(navController)
+                }
+                animatedComposable(route = RouteName.LICENSE_LIST) {
+                    LicenseListPage(navController)
+                }
             }
         }
     }
