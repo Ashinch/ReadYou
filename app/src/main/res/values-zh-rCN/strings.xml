@@ -324,4 +324,7 @@
     <string name="latest">最新</string>
     <string name="earliest">最早</string>
     <string name="sort_unread_articles">排列未读文章顺序</string>
+    <string name="short_desc">简短</string>
+    <string name="long_desc">冗长</string>
+    <string name="none_desc">没有</string>
 </resources>
