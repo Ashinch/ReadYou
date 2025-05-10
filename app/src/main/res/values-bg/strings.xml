@@ -325,4 +325,7 @@
     <string name="latest">Последни</string>
     <string name="earliest">Най-рано</string>
     <string name="all_open_in_browser_toast">Отворете всички статии в групата \"%1$s\" с помощта на браузъра</string>
+    <string name="short_desc">Кратко</string>
+    <string name="none_desc">Няма</string>
+    <string name="long_desc">Дълго</string>
 </resources>

@@ -321,4 +321,16 @@
     <string name="become_a_sponsor">Staňte se sponzorem</string>
     <string name="sponsor_desc">Tuto bezplatnou aplikaci s otevřeným zdrojovým kódem vytváříme a udržujeme v našem volném čase. Pokud se vám líbí, zvažte prosím, zda nás podpoříte malým darem! ☕️</string>
     <string name="toolbars">Nástrojové lišty</string>
+    <string name="client_certificate">Certifikát klienta (volitelné)</string>
+    <string name="short_desc">Krátké</string>
+    <string name="long_desc">Dlouhé</string>
+    <string name="open_in_browser">Otevřít v prohlížeči</string>
+    <string name="all_open_in_browser_tips">Otevře všechny články ve skupině \"%1$s\" pomocí prohlížeče</string>
+    <string name="all_open_in_browser_toast">Otevřít všechny články ve skupině \"%1$s\" pomocí prohlížeče</string>
+    <string name="all_deny_open_in_browser_toast">Již žádné otevírání všech článků ve skupině \"%1$s\" pomocí prohlížeče</string>
+    <string name="hide_empty_groups">Skrýt prázdné skupiny</string>
+    <string name="sort_unread_articles">Seřadit nepřečtené články</string>
+    <string name="latest">Poslední</string>
+    <string name="earliest">Nejstarší</string>
+    <string name="none_desc">Žádné</string>
 </resources>
