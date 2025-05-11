@@ -133,8 +133,7 @@ fun ColorAndStylePage(
                             .aspectRatio(1.38f)
                             .clip(RoundedCornerShape(24.dp))
                             .background(
-                                MaterialTheme.colorScheme.inverseOnSurface
-                                        onLight MaterialTheme.colorScheme.surface.copy(0.7f)
+                                MaterialTheme.colorScheme.surfaceContainerLow
                             )
                             .clickable { },
                         horizontalArrangement = Arrangement.Center,
