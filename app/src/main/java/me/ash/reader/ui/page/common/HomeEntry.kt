@@ -33,6 +33,7 @@ import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.page.home.flow.FlowPage
+import me.ash.reader.ui.page.home.flow.FlowViewModel
 import me.ash.reader.ui.page.home.reading.ReadingPage
 import me.ash.reader.ui.page.home.reading.ReadingViewModel
 import me.ash.reader.ui.page.settings.SettingsPage
@@ -68,6 +69,8 @@ fun HomeEntry(
     val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
     val subscribeUiState = subscribeViewModel.subscribeUiState.collectAsStateValue()
     val navController = rememberNavController()
+
+    val flowViewModel = hiltViewModel<FlowViewModel>()
 
     val intent by rememberSaveable { mutableStateOf(context.findActivity()?.intent) }
     var openArticleId by rememberSaveable {
@@ -154,6 +157,7 @@ fun HomeEntry(
                     FlowPage(
                         navController = navController,
                         homeViewModel = homeViewModel,
+                        flowViewModel = flowViewModel,
                         sharedTransitionScope = this@SharedTransitionScope,
                         animatedVisibilityScope = this,
                     )
@@ -177,7 +181,8 @@ fun HomeEntry(
 
                     ReadingPage(
                         navController = navController,
-                        readingViewModel = readingViewModel
+                        readingViewModel = readingViewModel,
+                        flowViewModel = flowViewModel
                     )
                 }
 

@@ -14,7 +14,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
@@ -27,12 +26,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -45,9 +42,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
@@ -57,7 +52,7 @@ import me.ash.reader.infrastructure.preference.LocalReadingTextLineHeight
 import me.ash.reader.infrastructure.preference.not
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
-import me.ash.reader.ui.motion.materialSharedAxisY
+import me.ash.reader.ui.page.home.flow.FlowViewModel
 import kotlin.math.abs
 
 private const val UPWARD = 1
@@ -69,7 +64,8 @@ private const val DOWNWARD = -1
 @Composable
 fun ReadingPage(
     navController: NavHostController,
-    readingViewModel: ReadingViewModel = hiltViewModel(),
+    flowViewModel: FlowViewModel,
+    readingViewModel: ReadingViewModel,
 ) {
     val context = LocalContext.current
     val hapticFeedback = LocalHapticFeedback.current
@@ -92,6 +88,14 @@ fun ReadingPage(
 
     var showTopDivider by remember {
         mutableStateOf(false)
+    }
+
+    DisposableEffect(readerState.listIndex) {
+        onDispose {
+            readerState.listIndex?.let {
+                flowViewModel.requestScrollTo(it)
+            }
+        }
     }
 
     var bringToTop by remember { mutableStateOf(false) }

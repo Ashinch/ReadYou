@@ -10,13 +10,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.general.MarkAsReadConditions
 import me.ash.reader.domain.service.RssService
+import me.ash.reader.infrastructure.cache.DiffMapHolder
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
-import me.ash.reader.infrastructure.cache.DiffMapHolder
 import java.util.Date
 import javax.inject.Inject
 
@@ -88,6 +89,12 @@ class FlowViewModel @Inject constructor(
                 }
         }
     }
+
+    fun requestScrollTo(index: Int? = null) {
+        viewModelScope.launch {
+            _flowUiState.update { it.copy(currentIndex = index) }
+        }
+    }
 }
 
 data class FlowUiState(
@@ -95,4 +102,5 @@ data class FlowUiState(
     val listState: LazyListState = LazyListState(),
     val isBack: Boolean = false,
     val syncWorkInfo: String = "",
+    val currentIndex: Int? = null
 )

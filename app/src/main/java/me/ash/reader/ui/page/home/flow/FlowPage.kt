@@ -130,6 +130,14 @@ fun FlowPage(
         else -> filterUiState.filter.toName()
     }
 
+    LaunchedEffect(flowUiState.currentIndex) {
+        launch {
+            flowUiState.currentIndex?.let {
+                listState.animateScrollToItem(it)
+            }
+        }.invokeOnCompletion { flowViewModel.requestScrollTo(null) }
+    }
+
     if (markAsReadOnScroll) {
         LaunchedEffect(listState.isScrollInProgress) {
             if (!listState.isScrollInProgress) {

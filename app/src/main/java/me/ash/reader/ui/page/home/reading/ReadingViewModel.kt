@@ -179,7 +179,7 @@ class ReadingViewModel @AssistedInject constructor(
         }
 
         return copy(
-            nextArticleId = nextId, previousArticleId = previousId
+            nextArticleId = nextId, previousArticleId = previousId, listIndex = index
         )
     }
 
@@ -228,6 +228,7 @@ data class ReaderState(
     val link: String? = null,
     val publishedDate: Date = Date(0L),
     val content: ContentState = Loading,
+    val listIndex: Int? = null,
     val nextArticleId: String? = null,
     val previousArticleId: String? = null
 ) {
