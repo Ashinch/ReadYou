@@ -2,7 +2,6 @@ package me.ash.reader.ui.page.common
 
 import android.util.Log
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import me.ash.reader.infrastructure.preference.LocalDarkTheme
 import me.ash.reader.ui.ext.animatedComposable
 import me.ash.reader.ui.ext.collectAsStateValue
@@ -69,8 +69,6 @@ fun HomeEntry(
     val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
     val subscribeUiState = subscribeViewModel.subscribeUiState.collectAsStateValue()
     val navController = rememberNavController()
-
-    val flowViewModel = hiltViewModel<FlowViewModel>()
 
     val intent by rememberSaveable { mutableStateOf(context.findActivity()?.intent) }
     var openArticleId by rememberSaveable {
@@ -153,7 +151,21 @@ fun HomeEntry(
                         subscribeViewModel = subscribeViewModel
                     )
                 }
-                animatedComposable(route = RouteName.FLOW) {
+                animatedComposable(route = RouteName.FLOW) { entry ->
+                    val indexFromReading = navController.currentBackStackEntry
+                        ?.savedStateHandle?.getStateFlow<Int?>("articleIndex", null)
+                        ?.collectAsStateValue()
+                    val flowViewModel = hiltViewModel<FlowViewModel>()
+
+                    LaunchedEffect(indexFromReading) {
+                        println(indexFromReading)
+                        if (indexFromReading != null) {
+                            flowViewModel.requestScrollTo(indexFromReading)
+                            navController.currentBackStackEntry
+                                ?.savedStateHandle?.remove<Int>("articleIndex")
+                        }
+                    }
+
                     FlowPage(
                         navController = navController,
                         homeViewModel = homeViewModel,
@@ -181,8 +193,7 @@ fun HomeEntry(
 
                     ReadingPage(
                         navController = navController,
-                        readingViewModel = readingViewModel,
-                        flowViewModel = flowViewModel
+                        readingViewModel = readingViewModel
                     )
                 }
 

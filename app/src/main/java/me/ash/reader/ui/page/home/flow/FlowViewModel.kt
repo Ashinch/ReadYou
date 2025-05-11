@@ -90,10 +90,8 @@ class FlowViewModel @Inject constructor(
         }
     }
 
-    fun requestScrollTo(index: Int? = null) {
-        viewModelScope.launch {
-            _flowUiState.update { it.copy(currentIndex = index) }
-        }
+    suspend fun requestScrollTo(index: Int) {
+        flowUiState.value.listState.animateScrollToItem(index)
     }
 }
 
@@ -102,5 +100,4 @@ data class FlowUiState(
     val listState: LazyListState = LazyListState(),
     val isBack: Boolean = false,
     val syncWorkInfo: String = "",
-    val currentIndex: Int? = null
 )

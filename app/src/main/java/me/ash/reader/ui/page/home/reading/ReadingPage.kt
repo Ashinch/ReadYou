@@ -52,7 +52,6 @@ import me.ash.reader.infrastructure.preference.LocalReadingTextLineHeight
 import me.ash.reader.infrastructure.preference.not
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
-import me.ash.reader.ui.page.home.flow.FlowViewModel
 import kotlin.math.abs
 
 private const val UPWARD = 1
@@ -64,7 +63,6 @@ private const val DOWNWARD = -1
 @Composable
 fun ReadingPage(
     navController: NavHostController,
-    flowViewModel: FlowViewModel,
     readingViewModel: ReadingViewModel,
 ) {
     val context = LocalContext.current
@@ -93,7 +91,7 @@ fun ReadingPage(
     DisposableEffect(readerState.listIndex) {
         onDispose {
             readerState.listIndex?.let {
-                flowViewModel.requestScrollTo(it)
+                navController.previousBackStackEntry?.savedStateHandle?.set("articleIndex", it)
             }
         }
     }
