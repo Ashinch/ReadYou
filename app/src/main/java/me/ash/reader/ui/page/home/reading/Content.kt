@@ -1,7 +1,6 @@
 package me.ash.reader.ui.page.home.reading
 
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.selection.DisableSelection
@@ -17,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -53,6 +54,8 @@ fun Content(
     val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
     val renderer = LocalReadingRenderer.current
 
+    val maxWidthModifier = Modifier.widthIn(max = 600.dp)
+
     if (isLoading) {
         Column {
             CircularProgressIndicator(
@@ -72,34 +75,39 @@ fun Content(
                         .fillMaxSize()
 
                 ) {
-                    Column(modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(scrollState)) {
-                        // Top bar height
-                        Spacer(modifier = Modifier.height(64.dp))
-                        // padding
-                        Column(
-                            modifier = Modifier.padding(horizontal = 12.dp)
-                        ) {
-                            DisableSelection {
-                                Metadata(
-                                    feedName = feedName,
-                                    title = title,
-                                    author = author,
-                                    link = link,
-                                    publishedDate = publishedDate,
-                                )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(scrollState),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Column(modifier = Modifier.then(maxWidthModifier)) {
+                            // Top bar height
+                            Spacer(modifier = Modifier.height(64.dp))
+                            // padding
+                            Column(
+                                modifier = Modifier.padding(horizontal = 12.dp)
+                            ) {
+                                DisableSelection {
+                                    Metadata(
+                                        feedName = feedName,
+                                        title = title,
+                                        author = author,
+                                        link = link,
+                                        publishedDate = publishedDate,
+                                    )
+                                }
                             }
-                        }
 
-                        RYWebView(
-                            modifier = Modifier.fillMaxSize(),
-                            content = content,
-                            refererDomain = link.extractDomain(),
-                            onImageClick = onImageClick,
-                        )
-                        Spacer(modifier = Modifier.height(128.dp))
-                        Spacer(modifier = Modifier.height(contentPadding.calculateBottomPadding()))
+                            RYWebView(
+                                modifier = Modifier.fillMaxSize(),
+                                content = content,
+                                refererDomain = link.extractDomain(),
+                                onImageClick = onImageClick,
+                            )
+                            Spacer(modifier = Modifier.height(128.dp))
+                            Spacer(modifier = Modifier.height(contentPadding.calculateBottomPadding()))
+                        }
                     }
                 }
 
@@ -112,6 +120,7 @@ fun Content(
                             .fillMaxSize()
                             .drawVerticalScrollbar(listState),
                         state = listState,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         item {
                             // Top bar height
@@ -120,6 +129,7 @@ fun Content(
                             Spacer(modifier = Modifier.height(contentPadding.calculateTopPadding()))
                             Column(
                                 modifier = Modifier
+                                    .then(maxWidthModifier)
                                     .padding(horizontal = 12.dp)
                             ) {
                                 DisableSelection {

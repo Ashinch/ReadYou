@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import me.ash.reader.infrastructure.preference.*
 import me.ash.reader.ui.ext.alphaLN
 
-const val MAX_CONTENT_WIDTH = 840.0
+const val MAX_CONTENT_WIDTH = 600
 
 @Stable
 @Composable

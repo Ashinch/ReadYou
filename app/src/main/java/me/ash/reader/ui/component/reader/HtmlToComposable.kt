@@ -111,8 +111,8 @@ private fun LazyListScope.formatBody(
                     text = paragraph,
                     style = textStyle,
                     modifier = Modifier
-                        .padding(horizontal = textHorizontalPadding().dp)
                         .width(MAX_CONTENT_WIDTH.dp)
+                        .padding(horizontal = textHorizontalPadding().dp)
                 ) { offset ->
                     paragraph.getStringAnnotations("URL", offset, offset)
                         .firstOrNull()
@@ -125,8 +125,8 @@ private fun LazyListScope.formatBody(
                     text = paragraph,
                     style = textStyle,
                     modifier = Modifier
-                        .padding(horizontal = textHorizontalPadding().dp)
                         .width(MAX_CONTENT_WIDTH.dp)
+                        .padding(horizontal = textHorizontalPadding().dp)
                 )
             }
         }
@@ -164,11 +164,11 @@ private fun LazyListScope.formatCodeBlock(
             ) {
                 Box(
                     modifier = Modifier
+                        .width(MAX_CONTENT_WIDTH.dp)
                         .padding(all = 8.dp)
                         .horizontalScroll(
                             state = scrollState
                         )
-                        .width(MAX_CONTENT_WIDTH.dp)
                 ) {
                     Text(
                         text = paragraphBuilder.toAnnotatedString(),
@@ -694,8 +694,8 @@ private fun TextComposer.appendTextChildren(
                                 lazyListScope.item {
                                     Column(
                                         modifier = Modifier
-                                            .padding(horizontal = textHorizontalPadding().dp)
                                             .width(MAX_CONTENT_WIDTH.dp)
+                                            .padding(horizontal = textHorizontalPadding().dp)
                                     ) {
                                         DisableSelection {
                                             BoxWithConstraints(
