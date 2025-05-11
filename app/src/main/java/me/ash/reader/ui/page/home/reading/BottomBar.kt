@@ -145,7 +145,11 @@ fun BottomBar(
                             } else {
                                 stringResource(R.string.read_aloud)
                             },
-                            tint = MaterialTheme.colorScheme.outline,
+                            tint = if (renderer == ReadingRendererPreference.WebView && isBionicReading) {
+                                MaterialTheme.colorScheme.onSecondaryContainer
+                            } else {
+                                MaterialTheme.colorScheme.outline
+                            },
                             icon = {
                                 BionicReadingIcon(
                                     activated = isBionicReading,
