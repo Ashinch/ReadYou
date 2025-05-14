@@ -214,6 +214,11 @@ fun FlowPage(
                 }
             }
         }
+        lastVisibleIndex.collect {
+            if (it in (pagingItems.itemCount - 25..pagingItems.itemCount - 1)) {
+                pagingItems.get(it)
+            }
+        }
     }
 
 
