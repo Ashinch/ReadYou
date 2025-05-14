@@ -88,11 +88,9 @@ fun ReadingPage(
         mutableStateOf(false)
     }
 
-    DisposableEffect(readerState.listIndex) {
-        onDispose {
-            readerState.listIndex?.let {
-                navController.previousBackStackEntry?.savedStateHandle?.set("articleIndex", it)
-            }
+    LaunchedEffect(readerState.listIndex) {
+        readerState.listIndex?.let {
+            navController.previousBackStackEntry?.savedStateHandle?.set("articleIndex", it)
         }
     }
 

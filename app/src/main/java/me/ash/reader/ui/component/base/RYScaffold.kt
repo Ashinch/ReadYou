@@ -21,6 +21,7 @@ fun RYScaffold(
     containerColor: Color = MaterialTheme.colorScheme.surface,
     topBarTonalElevation: Dp = 0.dp,
     containerTonalElevation: Dp = 0.dp,
+    floatingActionButtonPosition: FabPosition = FabPosition.End,
     navigationIcon: (@Composable () -> Unit)? = null,
     actions: (@Composable RowScope.() -> Unit)? = null,
     topBar: (@Composable () -> Unit)? = null,
@@ -62,5 +63,6 @@ fun RYScaffold(
         },
         bottomBar = { bottomBar?.invoke() },
         floatingActionButton = { floatingActionButton?.invoke() },
+        floatingActionButtonPosition = floatingActionButtonPosition
     )
 }

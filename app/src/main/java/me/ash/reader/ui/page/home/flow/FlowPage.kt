@@ -6,6 +6,10 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Spacer
@@ -16,12 +20,19 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -41,6 +52,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -53,6 +65,11 @@ import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.work.WorkInfo
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.dropWhile
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.flow.transformWhile
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.domain.model.article.ArticleFlowItem
@@ -81,8 +98,8 @@ import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.motion.materialSharedAxisYIn
 import me.ash.reader.ui.motion.materialSharedAxisYOut
 import me.ash.reader.ui.page.common.RouteName
-import me.ash.reader.infrastructure.cache.Diff
 import me.ash.reader.ui.page.home.HomeViewModel
+import me.ash.reader.ui.theme.palette.LocalFixedColorRoles
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class,
@@ -115,8 +132,9 @@ fun FlowPage(
     val flowUiState = flowViewModel.flowUiState.collectAsStateValue()
     val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
     val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems()
-    val listState =
-        if (pagingItems.itemCount > 0) flowUiState.listState else rememberLazyListState()
+    val listState = rememberSaveable(filterUiState, saver = LazyListState.Saver) {
+        LazyListState(0, 0)
+    }
 
     val isTopBarElevated = topBarTonalElevation.value > 0
     val isScrolled by remember(listState) { derivedStateOf { listState.firstVisibleItemIndex != 0 } }
@@ -176,6 +194,30 @@ fun FlowPage(
             homeViewModel.commitDiffs()
         }
     }
+
+    val lastVisibleIndex = remember(listState) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }.filterNotNull()
+    }
+
+    var showFab by remember(listState) { mutableStateOf(false) }
+
+    val lastReadIndex = flowUiState.lastReadIndex
+
+    LaunchedEffect(lastVisibleIndex, lastReadIndex) {
+        if (lastReadIndex != null) {
+            lastVisibleIndex.collect { index ->
+                if (index < lastReadIndex) {
+                    showFab = true
+                } else {
+                    showFab = false
+                    flowViewModel.updateLastReadIndex(null)
+                }
+            }
+        }
+    }
+
+
+
 
     DisposableEffect(owner) {
         homeViewModel.syncWorkLiveData.observe(owner) { workInfoList ->
@@ -243,14 +285,6 @@ fun FlowPage(
         }
     }
 
-    LaunchedEffect(flowUiState.listState) {
-        snapshotFlow { flowUiState.listState.firstVisibleItemIndex }.collect {
-            if (it > 0) {
-                keyboardController?.hide()
-            }
-        }
-    }
-
     BackHandler(onSearch) {
         onSearch = false
     }
@@ -312,8 +346,8 @@ fun FlowPage(
                             },
                         ) {
                             scope.launch {
-                                if (flowUiState.listState.firstVisibleItemIndex != 0) {
-                                    flowUiState.listState.animateScrollToItem(0)
+                                if (listState.firstVisibleItemIndex != 0) {
+                                    listState.animateScrollToItem(0)
                                 }
                                 markAsRead = !markAsRead
                                 onSearch = false
@@ -330,8 +364,8 @@ fun FlowPage(
                         },
                     ) {
                         scope.launch {
-                            if (flowUiState.listState.firstVisibleItemIndex != 0) {
-                                flowUiState.listState.animateScrollToItem(0)
+                            if (listState.firstVisibleItemIndex != 0) {
+                                listState.animateScrollToItem(0)
                             }
                             onSearch = !onSearch
                             if (onSearch) {
@@ -449,6 +483,33 @@ fun FlowPage(
                 }
             }
         },
+        floatingActionButton = {
+            AnimatedVisibility(
+                visible = showFab,
+                enter = scaleIn(transformOrigin = TransformOrigin(.5f, 1f)),
+                exit = scaleOut(transformOrigin = TransformOrigin(.5f, 1f)) + fadeOut(),
+                modifier = Modifier.padding(bottom = 12.dp)
+            ) {
+                FloatingActionButton(
+                    onClick = {
+                        scope.launch {
+                            lastReadIndex?.let {
+                                listState.animateScrollToItem(index = it)
+                            }
+                        }
+                        flowViewModel.updateLastReadIndex(null)
+                        showFab = false
+                    },
+                    shape = CircleShape,
+                    elevation = FloatingActionButtonDefaults.loweredElevation(),
+                    containerColor = LocalFixedColorRoles.current.primaryFixedDim,
+                    contentColor = LocalFixedColorRoles.current.onPrimaryFixedVariant
+                ) {
+                    Icon(Icons.Rounded.ArrowDownward, null)
+                }
+            }
+        },
+        floatingActionButtonPosition = FabPosition.Center,
         bottomBar = {
             FilterBar(
                 modifier = with(sharedTransitionScope) {
@@ -466,8 +527,8 @@ fun FlowPage(
                 filterBarTonalElevation = filterBarTonalElevation.value.dp,
             ) {
                 scope.launch {
-                    if (flowUiState.listState.firstVisibleItemIndex != 0) {
-                        flowUiState.listState.animateScrollToItem(0)
+                    if (listState.firstVisibleItemIndex != 0) {
+                        listState.animateScrollToItem(0)
                     }
                 }
                 if (filterUiState.filter != it) {

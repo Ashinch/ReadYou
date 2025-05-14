@@ -152,15 +152,17 @@ fun HomeEntry(
                     )
                 }
                 animatedComposable(route = RouteName.FLOW) { entry ->
-                    val indexFromReading = navController.currentBackStackEntry
-                        ?.savedStateHandle?.getStateFlow<Int?>("articleIndex", null)
-                        ?.collectAsStateValue()
                     val flowViewModel = hiltViewModel<FlowViewModel>()
 
-                    LaunchedEffect(indexFromReading) {
-                        println(indexFromReading)
-                        if (indexFromReading != null) {
-                            flowViewModel.requestScrollTo(indexFromReading)
+                    LaunchedEffect(navController) {
+                        val lastReadIndexFlow =
+                            navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Int?>(
+                                "articleIndex",
+                                null
+                            )
+                        val index = lastReadIndexFlow?.first { it != null }
+                        if (index != null) {
+                            flowViewModel.updateLastReadIndex(index)
                             navController.currentBackStackEntry
                                 ?.savedStateHandle?.remove<Int>("articleIndex")
                         }

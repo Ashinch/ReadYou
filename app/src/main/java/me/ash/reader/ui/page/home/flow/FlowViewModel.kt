@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.flow
 
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.compose.LazyPagingItems
@@ -90,14 +89,11 @@ class FlowViewModel @Inject constructor(
         }
     }
 
-    suspend fun requestScrollTo(index: Int) {
-        flowUiState.value.listState.animateScrollToItem(index)
+    fun updateLastReadIndex(index: Int?) {
+        _flowUiState.update { it.copy(lastReadIndex = index) }
     }
 }
 
 data class FlowUiState(
-    val filterImportant: Int = 0,
-    val listState: LazyListState = LazyListState(),
-    val isBack: Boolean = false,
-    val syncWorkInfo: String = "",
+    val lastReadIndex: Int? = null
 )
