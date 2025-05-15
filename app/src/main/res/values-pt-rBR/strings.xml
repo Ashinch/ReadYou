@@ -330,4 +330,7 @@
     <string name="latest">Últimos</string>
     <string name="earliest">Mais recentes</string>
     <string name="client_certificate">Certificado do Cliente (Opcional )</string>
+    <string name="short_desc">Curto</string>
+    <string name="long_desc">Longo</string>
+    <string name="none_desc">Nenhum</string>
 </resources>
