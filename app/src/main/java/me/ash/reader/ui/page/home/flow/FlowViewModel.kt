@@ -32,9 +32,9 @@ class FlowViewModel @Inject constructor(
     private val _flowUiState = MutableStateFlow(FlowUiState())
     val flowUiState: StateFlow<FlowUiState> = _flowUiState.asStateFlow()
 
-    fun sync() {
+    fun sync(group: String?, feed: String?) {
         applicationScope.launch(ioDispatcher) {
-            rssService.get().doSyncOneTime()
+            rssService.get().doSyncOneTime(group, feed)
         }
     }
 
