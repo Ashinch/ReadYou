@@ -331,4 +331,7 @@
     <string name="all_deny_open_in_browser_toast">Nie można już otwierać wszystkich artykułów z grupy „%1$s” za pomocą przeglądarki</string>
     <string name="latest">Najnowsze</string>
     <string name="earliest">Najwcześniejsze</string>
+    <string name="short_desc">Krótkie</string>
+    <string name="long_desc">Długie</string>
+    <string name="none_desc">Żadne</string>
 </resources>

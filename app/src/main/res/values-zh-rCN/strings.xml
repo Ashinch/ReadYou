@@ -119,7 +119,7 @@
     <string name="use_device_theme">跟随系统设置</string>
     <string name="on">开启</string>
     <string name="off">关闭</string>
-    <string name="amoled_dark_theme">AMOLED 深色主题</string>
+    <string name="amoled_dark_theme">黑色的 深色主题</string>
     <string name="other">其他</string>
     <string name="tonal_elevation">色调海拔</string>
     <string name="reading_fonts">阅读字体</string>
@@ -324,4 +324,7 @@
     <string name="latest">最新</string>
     <string name="earliest">最早</string>
     <string name="sort_unread_articles">排列未读文章顺序</string>
+    <string name="short_desc">简短</string>
+    <string name="long_desc">冗长</string>
+    <string name="none_desc">没有</string>
 </resources>
