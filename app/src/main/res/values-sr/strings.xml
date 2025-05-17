@@ -330,4 +330,7 @@
     <string name="sort_unread_articles">Сортирање непрочитаних чланака</string>
     <string name="latest">Најновије</string>
     <string name="earliest">Најраније</string>
+    <string name="short_desc">Кратко</string>
+    <string name="long_desc">Дуго</string>
+    <string name="none_desc">Ниједно</string>
 </resources>
