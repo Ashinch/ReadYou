@@ -61,7 +61,11 @@ class ReadingViewModel @AssistedInject constructor(
 
     fun initData(articleId: String) {
         viewModelScope.launch(ioDispatcher) {
-            rssService.get().findArticleById(articleId)?.run {
+            val item =
+                pagingItems.items.first { it is ArticleFlowItem.Article && it.articleWithFeed.article.id == articleId }
+                        as ArticleFlowItem.Article
+
+            item.articleWithFeed.run {
                 diffMapHolder.updateDiff(this, isUnread = false)
                 _readingUiState.update {
                     it.copy(
