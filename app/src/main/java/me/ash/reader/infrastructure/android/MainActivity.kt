@@ -44,6 +44,9 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var accountDao: AccountDao
 
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i("RLog", "onCreate: ${ProfileInstallerInitializer().create(this)}")
@@ -74,8 +77,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            !NotificationManagerCompat.from(this).areNotificationsEnabled()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !NotificationManagerCompat.from(
+                this
+            ).areNotificationsEnabled()
         ) {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
@@ -86,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                 LocalImageLoader provides imageLoader,
             ) {
                 AccountSettingsProvider(accountDao) {
-                    SettingsProvider {
+                    settingsProvider.ProvidesSettings {
                         val subscribeViewModel: SubscribeViewModel = hiltViewModel()
                         DisposableEffect(this) {
                             val listener = Consumer<Intent> { intent ->
@@ -115,8 +119,7 @@ private fun Intent.getTextOrNull(): String? {
         }
 
         Intent.ACTION_SEND -> {
-            getStringExtra(Intent.EXTRA_TEXT)
-                ?.also { removeExtra(Intent.EXTRA_TEXT) }
+            getStringExtra(Intent.EXTRA_TEXT)?.also { removeExtra(Intent.EXTRA_TEXT) }
         }
 
         else -> null

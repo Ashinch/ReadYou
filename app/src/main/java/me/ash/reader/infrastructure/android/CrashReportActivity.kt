@@ -1,4 +1,3 @@
-
 package me.ash.reader.infrastructure.android
 
 import android.os.Build
@@ -51,8 +50,12 @@ import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.theme.AppTheme
+import javax.inject.Inject
 
 class CrashReportActivity : ComponentActivity() {
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -61,7 +64,7 @@ class CrashReportActivity : ComponentActivity() {
         val errorMessage: String = intent.getStringExtra(ERROR_REPORT_KEY).toString()
 
         setContent {
-            SettingsProvider {
+            settingsProvider.ProvidesSettings {
                 AppTheme(useDarkTheme = LocalDarkTheme.current.isDarkTheme()) {
                     val clipboardManager = LocalClipboardManager.current
                     val appVersion = getCurrentVersion().toString()
