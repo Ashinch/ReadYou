@@ -10,8 +10,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.ash.reader.domain.data.ArticlePagingListUseCase
 import me.ash.reader.domain.service.*
-import me.ash.reader.infrastructure.cache.DiffMapHolder
+import me.ash.reader.domain.data.DiffMapHolder
 import me.ash.reader.infrastructure.db.AndroidDatabase
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
@@ -103,6 +104,9 @@ class AndroidApp : Application(), Configuration.Provider {
     @Inject
     lateinit var diffMapHolder: DiffMapHolder
 
+    @Inject
+    lateinit var pagingListUseCase: ArticlePagingListUseCase
+
     /**
      * When the application startup.
      *
@@ -126,10 +130,10 @@ class AndroidApp : Application(), Configuration.Provider {
      */
     override val workManagerConfiguration: Configuration
         get() =
-        Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .setMinimumLoggingLevel(android.util.Log.DEBUG)
-            .build()
+            Configuration.Builder()
+                .setWorkerFactory(workerFactory)
+                .setMinimumLoggingLevel(android.util.Log.DEBUG)
+                .build()
 
     private suspend fun accountInit() {
         withContext(ioDispatcher) {

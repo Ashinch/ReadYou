@@ -4,7 +4,6 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.ItemSnapshotList
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -16,13 +15,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import me.ash.reader.domain.data.ArticlePagingListUseCase
+import me.ash.reader.domain.data.DiffMapHolder
 import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.android.AndroidImageDownloader
-import me.ash.reader.infrastructure.cache.DiffMapHolder
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.rss.RssHelper
@@ -31,13 +31,13 @@ import java.util.Date
 @HiltViewModel(assistedFactory = ReadingViewModel.ReadingViewModelFactory::class)
 class ReadingViewModel @AssistedInject constructor(
     @Assisted private val initialArticleId: String,
-    @Assisted private var pagingItems: ItemSnapshotList<ArticleFlowItem>,
     private val rssService: RssService,
     private val rssHelper: RssHelper,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @ApplicationScope private val applicationScope: CoroutineScope,
     private val imageDownloader: AndroidImageDownloader,
     private val diffMapHolder: DiffMapHolder,
+    private val pagingListUseCase: ArticlePagingListUseCase,
 ) : ViewModel() {
 
     private val _readingUiState = MutableStateFlow(ReadingUiState())
@@ -51,10 +51,6 @@ class ReadingViewModel @AssistedInject constructor(
     private val currentFeed: Feed?
         get() = readingUiState.value.articleWithFeed?.feed
 
-    fun injectPagingData(pagingItems: ItemSnapshotList<ArticleFlowItem>) {
-        this.pagingItems = pagingItems
-    }
-
     init {
         initData(initialArticleId)
     }
@@ -62,16 +58,13 @@ class ReadingViewModel @AssistedInject constructor(
     fun initData(articleId: String) {
         viewModelScope.launch(ioDispatcher) {
             val item =
-                pagingItems.items.first { it is ArticleFlowItem.Article && it.articleWithFeed.article.id == articleId }
-                        as ArticleFlowItem.Article
+                pagingListUseCase.itemSnapshotList.first { it is ArticleFlowItem.Article && it.articleWithFeed.article.id == articleId } as ArticleFlowItem.Article
 
             item.articleWithFeed.run {
                 diffMapHolder.updateDiff(this, isUnread = false)
                 _readingUiState.update {
                     it.copy(
-                        articleWithFeed = this,
-                        isStarred = article.isStarred,
-                        isUnread = false
+                        articleWithFeed = this, isStarred = article.isStarred, isUnread = false
                     )
                 }
                 _readerState.update {
@@ -153,7 +146,7 @@ class ReadingViewModel @AssistedInject constructor(
     }
 
     fun ReaderState.prefetchArticleId(): ReaderState {
-        val items = pagingItems
+        val items = pagingListUseCase.itemSnapshotList
         val currentId = currentArticle?.id
         val index = items.indexOfFirst { item ->
             item is ArticleFlowItem.Article && item.articleWithFeed.article.id == currentId
@@ -213,7 +206,6 @@ class ReadingViewModel @AssistedInject constructor(
     interface ReadingViewModelFactory {
         fun create(
             articleId: String,
-            pagingItems: ItemSnapshotList<ArticleFlowItem>
         ): ReadingViewModel
     }
 }

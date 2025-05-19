@@ -6,7 +6,6 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -21,7 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
@@ -65,11 +63,7 @@ import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.work.WorkInfo
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.dropWhile
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.takeWhile
-import kotlinx.coroutines.flow.transformWhile
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.domain.model.article.ArticleFlowItem
@@ -128,10 +122,9 @@ fun FlowPage(
     val openLink = LocalOpenLink.current
     val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
 
-    val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
     val flowUiState = flowViewModel.flowUiState.collectAsStateValue()
-    val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
-    val pagingItems = homeUiState.pagingData.collectAsLazyPagingItems()
+    val filterUiState = homeViewModel.filterStateFlow.collectAsStateValue()
+    val pagingItems = homeViewModel.pagerFlow.collectAsStateValue().collectAsLazyPagingItems()
     val listState = rememberSaveable(filterUiState, saver = LazyListState.Saver) {
         LazyListState(0, 0)
     }
@@ -284,8 +277,8 @@ fun FlowPage(
     LaunchedEffect(onSearch) {
         if (!onSearch) {
             keyboardController?.hide()
-            if (homeUiState.searchContent.isNotBlank()) {
-                homeViewModel.inputSearchContent("")
+            if (filterUiState.searchContent.isNullOrBlank()) {
+                homeViewModel.inputSearchContent(null)
             }
         }
     }
@@ -421,7 +414,7 @@ fun FlowPage(
                         }
                         RYExtensibleVisibility(visible = onSearch) {
                             SearchBar(
-                                value = homeUiState.searchContent,
+                                value = filterUiState.searchContent ?: "",
                                 placeholder = when {
                                     filterUiState.group != null -> stringResource(
                                         R.string.search_for_in,
@@ -446,7 +439,7 @@ fun FlowPage(
                                 },
                                 onClose = {
                                     onSearch = false
-                                    homeViewModel.inputSearchContent("")
+                                    homeViewModel.inputSearchContent(null)
                                 }
                             )
                             Spacer(modifier = Modifier.height((56 + 24 + 10).dp))

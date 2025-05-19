@@ -61,6 +61,7 @@ import androidx.navigation.NavHostController
 import androidx.work.WorkInfo
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.domain.data.FilterState
 import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarFilled
 import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarPadding
 import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarStyle
@@ -68,7 +69,6 @@ import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarTonalElevation
 import me.ash.reader.infrastructure.preference.LocalFeedsGroupListExpand
 import me.ash.reader.infrastructure.preference.LocalFeedsGroupListTonalElevation
 import me.ash.reader.infrastructure.preference.LocalFeedsTopBarTonalElevation
-import me.ash.reader.infrastructure.preference.LocalHideEmptyGroups
 import me.ash.reader.infrastructure.preference.LocalNewVersionNumber
 import me.ash.reader.infrastructure.preference.LocalSkipVersionNumber
 import me.ash.reader.ui.component.FilterBar
@@ -81,7 +81,6 @@ import me.ash.reader.ui.ext.findActivity
 import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.ext.surfaceColorAtElevation
 import me.ash.reader.ui.page.common.RouteName
-import me.ash.reader.ui.page.home.FilterState
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.accounts.AccountsTab
 import me.ash.reader.ui.page.home.feeds.drawer.feed.FeedOptionDrawer
@@ -119,7 +118,7 @@ fun FeedsPage(
     val accounts = accountViewModel.accounts.collectAsStateValue(initial = emptyList())
 
     val feedsUiState = feedsViewModel.feedsUiState.collectAsStateValue()
-    val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
+    val filterUiState = homeViewModel.filterStateFlow.collectAsStateValue()
     val importantSum = feedsUiState.importantSum
     val groupWithFeedList = feedsViewModel.groupWithFeedListFlow.collectAsStateValue()
     val groupsVisible: SnapshotStateMap<String, Boolean> = feedsUiState.groupsVisible

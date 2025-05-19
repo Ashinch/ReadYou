@@ -9,7 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import me.ash.reader.domain.service.RssService
-import me.ash.reader.infrastructure.cache.DiffMapHolder
+import me.ash.reader.domain.data.DiffMapHolder
 import javax.inject.Singleton
 
 @Module

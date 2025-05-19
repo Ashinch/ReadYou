@@ -1,4 +1,4 @@
-package me.ash.reader.infrastructure.cache
+package me.ash.reader.domain.data
 
 import android.content.Context
 import androidx.compose.runtime.mutableStateMapOf

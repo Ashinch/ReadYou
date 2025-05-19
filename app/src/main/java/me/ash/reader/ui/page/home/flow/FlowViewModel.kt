@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.general.MarkAsReadConditions
 import me.ash.reader.domain.service.RssService
-import me.ash.reader.infrastructure.cache.DiffMapHolder
+import me.ash.reader.domain.data.DiffMapHolder
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import java.util.Date

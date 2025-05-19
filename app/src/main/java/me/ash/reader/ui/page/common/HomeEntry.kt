@@ -66,7 +66,7 @@ fun HomeEntry(
 ) {
     val context = LocalContext.current
     var isReadingPage by rememberSaveable { mutableStateOf(false) }
-    val filterUiState = homeViewModel.filterUiState.collectAsStateValue()
+    val filterUiState = homeViewModel.filterStateFlow.collectAsStateValue()
     val subscribeUiState = subscribeViewModel.subscribeUiState.collectAsStateValue()
     val navController = rememberNavController()
 
@@ -180,18 +180,11 @@ fun HomeEntry(
                     val articleId = entry.arguments?.getString("articleId")?.also {
                         entry.arguments?.remove("articleId")
                     }
-                    val homeUiState = homeViewModel.homeUiState.collectAsStateValue()
-                    val pagingItems =
-                        homeUiState.pagingData.collectAsLazyPagingItems().itemSnapshotList
 
                     val readingViewModel: ReadingViewModel =
                         hiltViewModel<ReadingViewModel, ReadingViewModel.ReadingViewModelFactory> { factory ->
-                            factory.create(articleId.toString(), pagingItems)
+                            factory.create(articleId.toString())
                         }
-
-                    LaunchedEffect(pagingItems) {
-                        readingViewModel.injectPagingData(pagingItems)
-                    }
 
                     ReadingPage(
                         navController = navController,
