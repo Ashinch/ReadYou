@@ -277,9 +277,7 @@ fun FlowPage(
     LaunchedEffect(onSearch) {
         if (!onSearch) {
             keyboardController?.hide()
-            if (filterUiState.searchContent.isNullOrBlank()) {
-                homeViewModel.inputSearchContent(null)
-            }
+            homeViewModel.inputSearchContent(null)
         }
     }
 
