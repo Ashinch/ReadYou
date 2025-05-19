@@ -28,9 +28,12 @@ import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.rss.RssHelper
 import java.util.Date
 
+private const val TAG = "ReadingViewModel"
+
 @HiltViewModel(assistedFactory = ReadingViewModel.ReadingViewModelFactory::class)
 class ReadingViewModel @AssistedInject constructor(
     @Assisted private val initialArticleId: String,
+    @Assisted private val initialListIndex: Int?,
     private val rssService: RssService,
     private val rssHelper: RssHelper,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -52,15 +55,30 @@ class ReadingViewModel @AssistedInject constructor(
         get() = readingUiState.value.articleWithFeed?.feed
 
     init {
-        initData(initialArticleId)
+        initData(initialArticleId, initialListIndex)
     }
 
-    fun initData(articleId: String) {
-        viewModelScope.launch(ioDispatcher) {
-            val item =
-                pagingListUseCase.itemSnapshotList.first { it is ArticleFlowItem.Article && it.articleWithFeed.article.id == articleId } as ArticleFlowItem.Article
+    fun initData(articleId: String, listIndex: Int? = null) {
+        viewModelScope.launch {
+            val snapshotList = pagingListUseCase.itemSnapshotList
 
-            item.articleWithFeed.run {
+            val itemByIndex =
+                listIndex?.let { snapshotList.getOrNull(it) as? ArticleFlowItem.Article }
+
+            val itemFromList =
+                if (itemByIndex != null && itemByIndex.articleWithFeed.article.id != articleId) {
+                    itemByIndex
+                } else {
+                    snapshotList.find { item ->
+                        item is ArticleFlowItem.Article && item.articleWithFeed.article.id == articleId
+                    } as? ArticleFlowItem.Article
+                }
+
+            val item =
+                itemByIndex?.articleWithFeed ?: (itemFromList?.articleWithFeed ?: rssService.get()
+                    .findArticleById(articleId)!!)
+
+            item.run {
                 diffMapHolder.updateDiff(this, isUnread = false)
                 _readingUiState.update {
                     it.copy(
@@ -151,46 +169,48 @@ class ReadingViewModel @AssistedInject constructor(
         val index = items.indexOfFirst { item ->
             item is ArticleFlowItem.Article && item.articleWithFeed.article.id == currentId
         }
-        var previousId: String? = null
-        var nextId: String? = null
+        var previousArticle: ReaderState.PrefetchResult? = null
+        var nextArticle: ReaderState.PrefetchResult? = null
 
         if (index != -1 || currentId == null) {
             val prevIterator = items.listIterator(index)
             while (prevIterator.hasPrevious()) {
-                Log.d("Log", "index: $index, previous: ${prevIterator.previousIndex()}")
+                val previousIndex = prevIterator.previousIndex()
                 val prev = prevIterator.previous()
                 if (prev is ArticleFlowItem.Article) {
-                    previousId = prev.articleWithFeed.article.id
+                    previousArticle = ReaderState.PrefetchResult(
+                        articleId = prev.articleWithFeed.article.id, index = previousIndex
+                    )
                     break
                 }
             }
             val nextIterator = items.listIterator(index + 1)
             while (nextIterator.hasNext()) {
-                Log.d("Log", "index: $index, next: ${nextIterator.nextIndex()}")
+                val nextIndex = nextIterator.nextIndex()
                 val next = nextIterator.next()
                 if (next is ArticleFlowItem.Article && next.articleWithFeed.article.id != currentId) {
-                    nextId = next.articleWithFeed.article.id
+                    nextArticle = ReaderState.PrefetchResult(
+                        articleId = next.articleWithFeed.article.id, index = nextIndex
+                    )
                     break
                 }
             }
         }
 
         return copy(
-            nextArticleId = nextId, previousArticleId = previousId, listIndex = index
+            nextArticle = nextArticle, previousArticle = previousArticle, listIndex = index
         )
     }
 
     fun loadPrevious(): Boolean {
-        readerStateStateFlow.value.previousArticleId?.run {
-            initData(this)
-        } ?: return false
+        val (articleId, listIndex) = readerStateStateFlow.value.previousArticle ?: return false
+        initData(articleId, listIndex)
         return true
     }
 
     fun loadNext(): Boolean {
-        readerStateStateFlow.value.nextArticleId?.run {
-            initData(this)
-        } ?: return false
+        val (articleId, listIndex) = readerStateStateFlow.value.nextArticle ?: return false
+        initData(articleId, listIndex)
         return true
     }
 
@@ -205,7 +225,7 @@ class ReadingViewModel @AssistedInject constructor(
     @AssistedFactory
     interface ReadingViewModelFactory {
         fun create(
-            articleId: String,
+            articleId: String, initialListIndex: Int?
         ): ReadingViewModel
     }
 }
@@ -225,9 +245,11 @@ data class ReaderState(
     val publishedDate: Date = Date(0L),
     val content: ContentState = Loading,
     val listIndex: Int? = null,
-    val nextArticleId: String? = null,
-    val previousArticleId: String? = null
+    val nextArticle: PrefetchResult? = null,
+    val previousArticle: PrefetchResult? = null
 ) {
+    data class PrefetchResult(val articleId: String, val index: Int)
+
     sealed interface ContentState {
         val text: String?
             get() {

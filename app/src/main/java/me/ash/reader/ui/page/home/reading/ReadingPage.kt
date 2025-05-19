@@ -24,7 +24,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -116,8 +115,8 @@ fun ReadingPage(
                     )
                 }
 
-                val isNextArticleAvailable = !readerState.nextArticleId.isNullOrEmpty()
-                val isPreviousArticleAvailable = !readerState.previousArticleId.isNullOrEmpty()
+                val isNextArticleAvailable = readerState.nextArticle != null
+                val isPreviousArticleAvailable = readerState.previousArticle != null
 
 
                 if (readerState.articleId != null) {
@@ -126,8 +125,8 @@ fun ReadingPage(
                         targetState = readerState,
                         transitionSpec = {
                             val direction = when {
-                                initialState.nextArticleId == targetState.articleId -> UPWARD
-                                initialState.previousArticleId == targetState.articleId -> DOWNWARD
+                                initialState.nextArticle?.articleId == targetState.articleId -> UPWARD
+                                initialState.previousArticle?.articleId == targetState.articleId -> DOWNWARD
                                 initialState.articleId == targetState.articleId -> {
                                     when (targetState.content) {
                                         is ReaderState.Description -> DOWNWARD

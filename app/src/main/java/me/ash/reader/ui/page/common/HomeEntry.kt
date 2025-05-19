@@ -180,7 +180,7 @@ fun HomeEntry(
 
                     val readingViewModel: ReadingViewModel =
                         hiltViewModel<ReadingViewModel, ReadingViewModel.ReadingViewModelFactory> { factory ->
-                            factory.create(articleId.toString())
+                            factory.create(articleId.toString(), null)
                         }
 
                     ReadingPage(
