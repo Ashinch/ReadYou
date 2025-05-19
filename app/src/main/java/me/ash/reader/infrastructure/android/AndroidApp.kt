@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import androidx.work.WorkManager
+import coil.Coil
 import coil.ImageLoader
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineDispatcher
@@ -120,6 +121,7 @@ class AndroidApp : Application(), Configuration.Provider {
             workerInit()
             checkUpdate()
         }
+        Coil.setImageLoader(imageLoader)
     }
 
     /**

@@ -6,21 +6,16 @@ import android.database.CursorWindow
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
-import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Consumer
-import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.profileinstaller.ProfileInstallerInitializer
 import coil.ImageLoader
-import coil.compose.LocalImageLoader
 import dagger.hilt.android.AndroidEntryPoint
 import me.ash.reader.domain.repository.AccountDao
 import me.ash.reader.infrastructure.preference.AccountSettingsProvider
@@ -84,27 +79,22 @@ class MainActivity : AppCompatActivity() {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
 
-
         setContent {
-            CompositionLocalProvider(
-                LocalImageLoader provides imageLoader,
-            ) {
-                AccountSettingsProvider(accountDao) {
-                    settingsProvider.ProvidesSettings {
-                        val subscribeViewModel: SubscribeViewModel = hiltViewModel()
-                        DisposableEffect(this) {
-                            val listener = Consumer<Intent> { intent ->
-                                intent.getTextOrNull()?.let {
-                                    subscribeViewModel.handleSharedUrlFromIntent(it)
-                                }
-                            }
-                            addOnNewIntentListener(listener)
-                            onDispose {
-                                removeOnNewIntentListener(listener)
+            AccountSettingsProvider(accountDao) {
+                settingsProvider.ProvidesSettings {
+                    val subscribeViewModel: SubscribeViewModel = hiltViewModel()
+                    DisposableEffect(this) {
+                        val listener = Consumer<Intent> { intent ->
+                            intent.getTextOrNull()?.let {
+                                subscribeViewModel.handleSharedUrlFromIntent(it)
                             }
                         }
-                        HomeEntry(subscribeViewModel = subscribeViewModel)
+                        addOnNewIntentListener(listener)
+                        onDispose {
+                            removeOnNewIntentListener(listener)
+                        }
                     }
+                    HomeEntry(subscribeViewModel = subscribeViewModel)
                 }
             }
         }
