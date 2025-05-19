@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
@@ -66,7 +65,6 @@ fun HomeEntry(
 ) {
     val context = LocalContext.current
     var isReadingPage by rememberSaveable { mutableStateOf(false) }
-    val filterUiState = homeViewModel.filterStateFlow.collectAsStateValue()
     val subscribeUiState = subscribeViewModel.subscribeUiState.collectAsStateValue()
     val navController = rememberNavController()
 
@@ -145,7 +143,6 @@ fun HomeEntry(
                 animatedComposable(route = RouteName.FEEDS) {
                     FeedsPage(
                         navController = navController,
-                        homeViewModel = homeViewModel,
                         sharedTransitionScope = this@SharedTransitionScope,
                         animatedVisibilityScope = this,
                         subscribeViewModel = subscribeViewModel

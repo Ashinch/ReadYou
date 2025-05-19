@@ -12,6 +12,7 @@ import me.ash.reader.domain.service.RssService
 import me.ash.reader.domain.service.SyncWorker
 import me.ash.reader.domain.data.DiffMapHolder
 import me.ash.reader.domain.data.FilterState
+import me.ash.reader.domain.data.FilterStateUseCase
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import javax.inject.Inject
@@ -26,10 +27,11 @@ class HomeViewModel @Inject constructor(
     @IODispatcher
     private val ioDispatcher: CoroutineDispatcher,
     private val pagingListUseCase: ArticlePagingListUseCase,
+    private val filterStateUseCase: FilterStateUseCase,
     val diffMapHolder: DiffMapHolder,
 ) : ViewModel() {
 
-    val filterStateFlow = pagingListUseCase.filterStateFlow
+    val filterStateFlow = filterStateUseCase.filterStateFlow
     val pagerFlow = pagingListUseCase.pagerFlow
 
     val syncWorkLiveData = workManager.getWorkInfosByTagLiveData(SyncWorker.WORK_TAG)
@@ -41,11 +43,15 @@ class HomeViewModel @Inject constructor(
     }
 
     fun changeFilter(filterState: FilterState) {
-        pagingListUseCase.updateFilterState(filterState.feed, filterState.group, filterState.filter)
+        filterStateUseCase.updateFilterState(
+            filterState.feed,
+            filterState.group,
+            filterState.filter
+        )
     }
 
     fun inputSearchContent(content: String? = null) {
-        pagingListUseCase.updateFilterState(searchContent = content)
+        filterStateUseCase.updateFilterState(searchContent = content)
     }
 
     fun commitDiffs() = diffMapHolder.commitDiffs()

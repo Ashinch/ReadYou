@@ -104,9 +104,6 @@ class AndroidApp : Application(), Configuration.Provider {
     @Inject
     lateinit var diffMapHolder: DiffMapHolder
 
-    @Inject
-    lateinit var pagingListUseCase: ArticlePagingListUseCase
-
     /**
      * When the application startup.
      *

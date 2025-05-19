@@ -101,7 +101,6 @@ fun FeedsPage(
     accountViewModel: AccountViewModel = hiltViewModel(),
     feedsViewModel: FeedsViewModel = hiltViewModel(),
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
-    homeViewModel: HomeViewModel,
 ) {
     var accountTabVisible by remember { mutableStateOf(false) }
 
@@ -118,9 +117,9 @@ fun FeedsPage(
     val accounts = accountViewModel.accounts.collectAsStateValue(initial = emptyList())
 
     val feedsUiState = feedsViewModel.feedsUiState.collectAsStateValue()
-    val filterUiState = homeViewModel.filterStateFlow.collectAsStateValue()
+    val filterState = feedsViewModel.filterStateFlow.collectAsStateValue()
     val importantSum = feedsUiState.importantSum
-    val groupWithFeedList = feedsViewModel.groupWithFeedListFlow.collectAsStateValue()
+    val groupWithFeedList = feedsViewModel.groupWithFeedsListFlow.collectAsStateValue()
     val groupsVisible: SnapshotStateMap<String, Boolean> = feedsUiState.groupsVisible
     val hasGroupVisible by remember(groupWithFeedList) { derivedStateOf { groupWithFeedList.fastAny { groupsVisible[it.group.id] == true } } }
 
@@ -139,7 +138,7 @@ fun FeedsPage(
         isSyncing = true
         syncingScope.launch {
 
-            homeViewModel.sync()
+            feedsViewModel.sync()
         }
     }
 
@@ -149,7 +148,7 @@ fun FeedsPage(
                 when (it) {
                     Lifecycle.Event.ON_RESUME,
                     Lifecycle.Event.ON_PAUSE -> {
-                        homeViewModel.commitDiffs()
+                        feedsViewModel.commitDiffs()
                     }
 
                     else -> {/* no-op */
@@ -157,12 +156,12 @@ fun FeedsPage(
                 }
             }
         }
-        homeViewModel.syncWorkLiveData.observe(owner) { workInfoList ->
+        feedsViewModel.syncWorkLiveData.observe(owner) { workInfoList ->
             workInfoList.let {
                 isSyncing = it.any { workInfo -> workInfo.state == WorkInfo.State.RUNNING }
             }
         }
-        onDispose { homeViewModel.syncWorkLiveData.removeObservers(owner) }
+        onDispose { feedsViewModel.syncWorkLiveData.removeObservers(owner) }
     }
 
     fun expandAllGroups() {
@@ -183,12 +182,6 @@ fun FeedsPage(
 
     LaunchedEffect(Unit) {
         feedsViewModel.fetchAccount()
-    }
-
-    LaunchedEffect(filterUiState, isSyncing) {
-        snapshotFlow { filterUiState }.collect {
-            feedsViewModel.switchFilter(it.filter)
-        }
     }
 
     BackHandler(true) {
@@ -261,13 +254,13 @@ fun FeedsPage(
                     }
                     item {
                         FeedsBanner(
-                            filter = filterUiState.filter,
+                            filter = filterState.filter,
                             desc = importantSum.ifEmpty { stringResource(R.string.loading) },
                         ) {
                             filterChange(
                                 navController = navController,
-                                homeViewModel = homeViewModel,
-                                filterState = filterUiState.copy(
+                                feedsViewModel = feedsViewModel,
+                                filterState = filterState.copy(
                                     group = null,
                                     feed = null,
                                 )
@@ -332,8 +325,8 @@ fun FeedsPage(
                             ) {
                                 filterChange(
                                     navController = navController,
-                                    homeViewModel = homeViewModel,
-                                    filterState = filterUiState.copy(
+                                    feedsViewModel = feedsViewModel,
+                                    filterState = filterState.copy(
                                         group = group,
                                         feed = null,
                                     )
@@ -352,8 +345,8 @@ fun FeedsPage(
                                     }, onClick = {
                                         filterChange(
                                             navController = navController,
-                                            homeViewModel = homeViewModel,
-                                            filterState = filterUiState.copy(
+                                            feedsViewModel = feedsViewModel,
+                                            filterState = filterState.copy(
                                                 group = null,
                                                 feed = feed,
                                             )
@@ -385,7 +378,7 @@ fun FeedsPage(
                         animatedVisibilityScope = animatedVisibilityScope
                     )
                 },
-                filter = filterUiState.filter,
+                filter = filterState.filter,
                 filterBarStyle = filterBarStyle.value,
                 filterBarFilled = filterBarFilled.value,
                 filterBarPadding = filterBarPadding.dp,
@@ -393,8 +386,8 @@ fun FeedsPage(
             ) {
                 filterChange(
                     navController = navController,
-                    homeViewModel = homeViewModel,
-                    filterState = filterUiState.copy(filter = it),
+                    feedsViewModel = feedsViewModel,
+                    filterState = filterState.copy(filter = it),
                     isNavigate = false,
                 )
             }
@@ -435,11 +428,11 @@ fun FeedsPage(
 
 private fun filterChange(
     navController: NavHostController,
-    homeViewModel: HomeViewModel,
+    feedsViewModel: FeedsViewModel,
     filterState: FilterState,
     isNavigate: Boolean = true,
 ) {
-    homeViewModel.changeFilter(filterState)
+    feedsViewModel.changeFilter(filterState)
     if (isNavigate) {
         navController.navigate(RouteName.FLOW) {
             launchSingleTop = true

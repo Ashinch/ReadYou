@@ -44,6 +44,7 @@ class ArticlePagingListUseCase @Inject constructor(
     @IODispatcher
     private val ioDispatcher: CoroutineDispatcher,
     private val settingsProvider: SettingsProvider,
+    private val filterStateUseCase: FilterStateUseCase,
     val diffMapHolder: DiffMapHolder,
 ) {
 
@@ -66,30 +67,9 @@ class ArticlePagingListUseCase @Inject constructor(
         }
     }
 
-    private val _filterUiState =
-        MutableStateFlow(FilterState(filter = settingsProvider.settings.initialFilter.toFilter()))
-    val filterStateFlow = _filterUiState.asStateFlow()
-    private val filterState get() = filterStateFlow.value
-
-    fun updateFilterState(
-        feed: Feed? = filterState.feed,
-        group: Group? = filterState.group,
-        filter: Filter = filterState.filter,
-        searchContent: String? = filterState.searchContent,
-    ) {
-        _filterUiState.update {
-            it.copy(
-                feed = feed,
-                group = group,
-                searchContent = searchContent,
-                filter = filter
-            )
-        }
-    }
-
     init {
         applicationScope.launch(ioDispatcher) {
-            filterStateFlow.collect { filterState ->
+            filterStateUseCase.filterStateFlow.collect { filterState ->
                 val searchContent = filterState.searchContent
 
                 mutablePagerFlow.value = Pager(
@@ -129,10 +109,3 @@ class ArticlePagingListUseCase @Inject constructor(
         }
     }
 }
-
-data class FilterState(
-    val group: Group? = null,
-    val feed: Feed? = null,
-    val filter: Filter = Filter.All,
-    val searchContent: String? = null,
-)
