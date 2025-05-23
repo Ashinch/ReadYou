@@ -126,7 +126,7 @@
     <string name="on">Encendido</string>
     <string name="off">Apagado</string>
     <string name="other">Otros</string>
-    <string name="amoled_dark_theme">Tema oscuro AMOLED</string>
+    <string name="amoled_dark_theme">Tema negro oscuro</string>
     <string name="tonal_elevation">Elevación del tono</string>
     <string name="reading_fonts">Letras lectura</string>
     <string name="basic_fonts">Letras básicas</string>

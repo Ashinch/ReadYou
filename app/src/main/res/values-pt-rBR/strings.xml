@@ -100,7 +100,7 @@
     <string name="on">Ativado</string>
     <string name="off">Desativado</string>
     <string name="other">Outros</string>
-    <string name="amoled_dark_theme">Tema Escuro para AMOLED</string>
+    <string name="amoled_dark_theme">Tema preto escuro</string>
     <string name="tonal_elevation">Elevação Tonal</string>
     <string name="reading_fonts">Fontes para Leitura</string>
     <string name="basic_fonts">Fontes Básicas</string>
@@ -330,4 +330,7 @@
     <string name="latest">Últimos</string>
     <string name="earliest">Mais recentes</string>
     <string name="client_certificate">Certificado do Cliente (Opcional )</string>
+    <string name="short_desc">Curto</string>
+    <string name="long_desc">Longo</string>
+    <string name="none_desc">Nenhum</string>
 </resources>

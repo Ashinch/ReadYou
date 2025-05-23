@@ -125,7 +125,7 @@
     <string name="on">Activé</string>
     <string name="off">Désactivé</string>
     <string name="other">Autres options</string>
-    <string name="amoled_dark_theme">Thème sombre AMOLED</string>
+    <string name="amoled_dark_theme">Thème sombre noir</string>
     <string name="tonal_elevation">Intensité</string>
     <string name="reading_fonts">Polices de lecture</string>
     <string name="basic_fonts">Polices de base</string>

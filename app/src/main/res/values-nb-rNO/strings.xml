@@ -128,7 +128,7 @@
     <string name="accounts_desc">Lokal, FreshRSS</string>
     <string name="basic_colors">Grunnfarger</string>
     <string name="primary_color_hint">Som #666666 eller 666666</string>
-    <string name="amoled_dark_theme">Svart</string>
+    <string name="amoled_dark_theme">Svart mørkt tema</string>
     <string name="basic_fonts">Grunnskrifter</string>
     <string name="reading_fonts">Leseskrifter</string>
     <string name="feeds_page">Informasjonskanalside</string>

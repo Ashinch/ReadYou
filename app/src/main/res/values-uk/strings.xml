@@ -147,7 +147,7 @@
     <string name="on">Ввімк</string>
     <string name="off">Вимк</string>
     <string name="other">Інше</string>
-    <string name="amoled_dark_theme">AMOLED тема</string>
+    <string name="amoled_dark_theme">Чорна темна тема</string>
     <string name="tonal_elevation">Підвищення тону</string>
     <string name="reading_fonts">Читання шрифтів</string>
     <string name="basic_fonts">Основні шрифти</string>
@@ -333,4 +333,7 @@
     <string name="all_deny_open_in_browser_toast">Більше не можна відкривати всі статті в групі \"%1$s\" за допомогою браузера</string>
     <string name="all_open_in_browser_tips">Відкрийте всі статті в групі \"%1$s\" за допомогою браузера</string>
     <string name="client_certificate">Сертифікат клієнта (необов\'язково)</string>
+    <string name="short_desc">Короткий</string>
+    <string name="long_desc">Довгий</string>
+    <string name="none_desc">Немає</string>
 </resources>

@@ -33,7 +33,7 @@
     <string name="style">Stylo</string>
     <string name="on">Activate</string>
     <string name="other">Alteres</string>
-    <string name="amoled_dark_theme">Thema obscur AMOLED</string>
+    <string name="amoled_dark_theme">Tema preto escuro</string>
     <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
     <string name="change_log">Registro de cambiamentos</string>
     <string name="update">Actualisation</string>
