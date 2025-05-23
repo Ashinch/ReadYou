@@ -136,7 +136,7 @@
     <string name="help">Помощ</string>
     <string name="unfold_more">Разгъни всички</string>
     <string name="unfold_less">Намали всички</string>
-    <string name="amoled_dark_theme">AMOLED тъмна тема</string>
+    <string name="amoled_dark_theme">черен тъмна тема</string>
     <string name="tonal_elevation">Тонално издигане</string>
     <string name="check_failure">Неуспешна проверка за актуализации</string>
     <string name="download_failure">Неуспешно изтегляне на актуализации</string>
@@ -325,4 +325,7 @@
     <string name="latest">Последни</string>
     <string name="earliest">Най-рано</string>
     <string name="all_open_in_browser_toast">Отворете всички статии в групата \"%1$s\" с помощта на браузъра</string>
+    <string name="short_desc">Кратко</string>
+    <string name="none_desc">Няма</string>
+    <string name="long_desc">Дълго</string>
 </resources>

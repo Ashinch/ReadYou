@@ -123,7 +123,7 @@
     <string name="on">Zap</string>
     <string name="off">Vyp</string>
     <string name="other">Ďalšie</string>
-    <string name="amoled_dark_theme">Tmavá téma AMOLED</string>
+    <string name="amoled_dark_theme">Čierna tmavá téma</string>
     <string name="tonal_elevation">Zvýraznenie tónovania</string>
     <string name="reading_fonts">Písmo čítania</string>
     <string name="basic_fonts">Základné písmo</string>
@@ -321,4 +321,16 @@
     <string name="toolbars">Panely nástrojov</string>
     <string name="sponsor_desc">Túto bezplatnú aplikáciu s otvoreným zdrojovým kódom vytvárame a udržiavame v mimopracovnom čase. Ak sa vám páči, zvážte, či nás podporíte malým darom! ☕️</string>
     <string name="become_a_sponsor">Staňte sa sponzorom</string>
+    <string name="hide_empty_groups">Skryť prázdne skupiny</string>
+    <string name="open_in_browser">Otvoriť v prehliadači</string>
+    <string name="all_open_in_browser_tips">Otvorí všetky články v skupine \"%1$s\" pomocou prehliadača</string>
+    <string name="all_open_in_browser_toast">Otvoriť všetky články v skupine \"%1$s\" pomocou prehliadača</string>
+    <string name="all_deny_open_in_browser_toast">Už žiadne otváranie všetkých článkov v skupine \"%1$s\" pomocou prehliadača</string>
+    <string name="client_certificate">Certifikát klienta (voliteľné)</string>
+    <string name="sort_unread_articles">Zoradiť neprečítané články</string>
+    <string name="latest">Posledné</string>
+    <string name="earliest">Prvé</string>
+    <string name="short_desc">Krátke</string>
+    <string name="long_desc">Dlhé</string>
+    <string name="none_desc">Žiadne</string>
 </resources>

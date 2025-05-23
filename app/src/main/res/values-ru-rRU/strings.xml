@@ -125,7 +125,7 @@
     <string name="clear_articles_feed_tips">Удалить все архивные статьи в ленте \"%1$s\"</string>
     <string name="all_parse_full_content_tips">Отображать полное содержание для всех статей в группе \"%1$s\"</string>
     <string name="tos_tips">Прочтите и примите Условия Использования и Политику Конфиденциальности для продолжения.</string>
-    <string name="amoled_dark_theme">Тёмная тема AMOLED</string>
+    <string name="amoled_dark_theme">Черная темная тема</string>
     <string name="browse_tos_tips">Открыть <i><u>Условия использования и Политику конфиденциальности</u></i></string>
     <string name="basic_fonts">Базовые шрифты</string>
     <string name="check_failure">Не удалость проверить наличие обновлений</string>
