@@ -11,10 +11,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import me.ash.reader.domain.data.ArticlePagingListUseCase
 import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.general.MarkAsReadConditions
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.domain.data.DiffMapHolder
+import me.ash.reader.domain.data.GroupWithFeedsListUseCase
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import java.util.Date
@@ -26,6 +28,7 @@ class FlowViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @ApplicationScope private val applicationScope: CoroutineScope,
     private val diffMapHolder: DiffMapHolder,
+    private val articlePagingListUseCase: ArticlePagingListUseCase,
 ) : ViewModel() {
 
     private val _flowUiState = MutableStateFlow(FlowUiState())
@@ -72,10 +75,9 @@ class FlowViewModel @Inject constructor(
     fun markAsReadFromListByDate(
         date: Date,
         isBefore: Boolean,
-        lazyPagingItems: LazyPagingItems<ArticleFlowItem>,
     ) {
         viewModelScope.launch(ioDispatcher) {
-            lazyPagingItems.itemSnapshotList.asSequence()
+            articlePagingListUseCase.itemSnapshotList.asSequence()
                 .filterIsInstance<ArticleFlowItem.Article>().map { it.articleWithFeed }
                 .filter {
                     if (isBefore) {

@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import me.ash.reader.domain.data.ArticlePagingListUseCase
 import me.ash.reader.domain.service.RssService
@@ -13,6 +14,7 @@ import me.ash.reader.domain.service.SyncWorker
 import me.ash.reader.domain.data.DiffMapHolder
 import me.ash.reader.domain.data.FilterState
 import me.ash.reader.domain.data.FilterStateUseCase
+import me.ash.reader.domain.data.PagerData
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import javax.inject.Inject
@@ -32,7 +34,7 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     val filterStateFlow = filterStateUseCase.filterStateFlow
-    val pagerFlow = pagingListUseCase.pagerFlow
+    val pagerFlow: StateFlow<PagerData> = pagingListUseCase.pagerFlow
 
     val syncWorkLiveData = workManager.getWorkInfosByTagLiveData(SyncWorker.WORK_TAG)
 

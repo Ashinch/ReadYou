@@ -1,6 +1,7 @@
 package me.ash.reader.ui.page.home.flow
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -71,6 +72,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.domain.data.PagerData
 import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.infrastructure.preference.LocalFlowArticleListDateStickyHeader
@@ -93,6 +95,8 @@ import me.ash.reader.ui.component.base.RYExtensibleVisibility
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.openURL
+import me.ash.reader.ui.motion.Direction
+import me.ash.reader.ui.motion.SharedYAxisTransitionSlow
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.theme.palette.LocalFixedColorRoles
@@ -126,8 +130,12 @@ fun FlowPage(
 
     val flowUiState = flowViewModel.flowUiState.collectAsStateValue()
     val filterUiState = homeViewModel.filterStateFlow.collectAsStateValue()
-    val pagingItems = homeViewModel.pagerFlow.collectAsStateValue().collectAsLazyPagingItems()
-    val listState = rememberSaveable(filterUiState, saver = LazyListState.Saver) {
+
+    val pagerData: PagerData = homeViewModel.pagerFlow.collectAsStateValue()
+
+//    val pagingItems = homeViewModel.pagerFlow.collectAsStateValue().collectAsLazyPagingItems()
+
+    val listState = rememberSaveable(pagerData, saver = LazyListState.Saver) {
         LazyListState(0, 0)
     }
 
@@ -140,28 +148,6 @@ fun FlowPage(
         filterUiState.group != null -> filterUiState.group.name
         filterUiState.feed != null -> filterUiState.feed.name
         else -> filterUiState.filter.toName()
-    }
-
-    if (markAsReadOnScroll) {
-        LaunchedEffect(listState.isScrollInProgress) {
-            if (!listState.isScrollInProgress) {
-                val firstItemIndex = listState.firstVisibleItemIndex
-                if (firstItemIndex < pagingItems.itemCount) for (index in 0 until firstItemIndex) {
-                    val item = pagingItems.peek(index)
-                    with(item) {
-                        when (this) {
-                            is ArticleFlowItem.Article -> {
-                                homeViewModel.diffMapHolder.updateDiff(
-                                    articleWithFeed = articleWithFeed, isUnread = false
-                                )
-                            }
-
-                            else -> {}
-                        }
-                    }
-                }
-            }
-        }
     }
 
     val scope = rememberCoroutineScope()
@@ -190,11 +176,11 @@ fun FlowPage(
                 }
             }
         }
-        lastVisibleIndex.collect {
-            if (it in (pagingItems.itemCount - 25..pagingItems.itemCount - 1)) {
-                pagingItems.get(it)
-            }
-        }
+//        lastVisibleIndex.collect {
+//            if (it in (pagingItems.itemCount - 25..pagingItems.itemCount - 1)) {
+//                pagingItems.get(it)
+//            }
+//        }
     }
 
 
@@ -225,7 +211,7 @@ fun FlowPage(
     val onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? = remember(sortByEarliest) {
         {
             flowViewModel.markAsReadFromListByDate(
-                date = it.article.date, isBefore = sortByEarliest, lazyPagingItems = pagingItems
+                date = it.article.date, isBefore = sortByEarliest
             )
         }
     }
@@ -233,7 +219,7 @@ fun FlowPage(
     val onMarkBelowAsRead: ((ArticleWithFeed) -> Unit)? = remember(sortByEarliest) {
         {
             flowViewModel.markAsReadFromListByDate(
-                date = it.article.date, isBefore = !sortByEarliest, lazyPagingItems = pagingItems
+                date = it.article.date, isBefore = !sortByEarliest
             )
         }
     }
@@ -417,43 +403,80 @@ fun FlowPage(
                 )
             }
         }
+        AnimatedContent(
+            targetState = pagerData,
+            contentKey = {
+                it.filterState.copy(searchContent = null)
+            },
+            transitionSpec = {
+                val direction =
+                    if (targetState.filterState.filter.index > initialState.filterState.filter.index) Direction.Upward else Direction.Downward
+                SharedYAxisTransitionSlow(direction = direction)
+            }
+        ) { (pager, _) ->
+            val pagingItems = pager.collectAsLazyPagingItems()
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .nestedScroll(scrollBehavior.nestedScrollConnection),
-            state = listState,
-        ) {
-            ArticleList(
-                pagingItems = pagingItems,
-                diffMap = homeViewModel.diffMapHolder.diffMap,
-                isShowFeedIcon = articleListFeedIcon.value,
-                isShowStickyHeader = articleListDateStickyHeader.value,
-                articleListTonalElevation = articleListTonalElevation.value,
-                isSwipeEnabled = { listState.isScrollInProgress },
-                onClick = { articleWithFeed ->
-                    if (articleWithFeed.feed.isBrowser) {
-                        if (articleWithFeed.article.isUnread) {
-                            onToggleRead(articleWithFeed)
-                        }
-                        context.openURL(
-                            articleWithFeed.article.link, openLink, openLinkSpecificBrowser
-                        )
-                    } else {
-                        navController.navigate("${RouteName.READING}/${articleWithFeed.article.id}") {
-                            launchSingleTop = true
+            if (markAsReadOnScroll) {
+                LaunchedEffect(listState.isScrollInProgress) {
+                    if (!listState.isScrollInProgress) {
+                        val firstItemIndex = listState.firstVisibleItemIndex
+                        if (firstItemIndex < pagingItems.itemCount) for (index in 0 until firstItemIndex) {
+                            val item = pagingItems.peek(index)
+                            with(item) {
+                                when (this) {
+                                    is ArticleFlowItem.Article -> {
+                                        homeViewModel.diffMapHolder.updateDiff(
+                                            articleWithFeed = articleWithFeed, isUnread = false
+                                        )
+                                    }
+
+                                    else -> {}
+                                }
+                            }
                         }
                     }
-                },
-                onToggleStarred = onToggleStarred,
-                onToggleRead = onToggleRead,
-                onMarkAboveAsRead = onMarkAboveAsRead,
-                onMarkBelowAsRead = onMarkBelowAsRead,
-                onShare = onShare,
-            )
-            item {
-                Spacer(modifier = Modifier.height(128.dp))
-                Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                }
+            }
+
+            val listState = remember(pager) { listState }
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .nestedScroll(scrollBehavior.nestedScrollConnection),
+                state = listState,
+            ) {
+                ArticleList(
+                    pagingItems = pagingItems,
+                    diffMap = homeViewModel.diffMapHolder.diffMap,
+                    isShowFeedIcon = articleListFeedIcon.value,
+                    isShowStickyHeader = articleListDateStickyHeader.value,
+                    articleListTonalElevation = articleListTonalElevation.value,
+                    isSwipeEnabled = { listState.isScrollInProgress },
+                    onClick = { articleWithFeed ->
+                        if (articleWithFeed.feed.isBrowser) {
+                            if (articleWithFeed.article.isUnread) {
+                                onToggleRead(articleWithFeed)
+                            }
+                            context.openURL(
+                                articleWithFeed.article.link, openLink, openLinkSpecificBrowser
+                            )
+                        } else {
+                            navController.navigate("${RouteName.READING}/${articleWithFeed.article.id}") {
+                                launchSingleTop = true
+                            }
+                        }
+                    },
+                    onToggleStarred = onToggleStarred,
+                    onToggleRead = onToggleRead,
+                    onMarkAboveAsRead = onMarkAboveAsRead,
+                    onMarkBelowAsRead = onMarkBelowAsRead,
+                    onShare = onShare,
+                )
+                item {
+                    Spacer(modifier = Modifier.height(128.dp))
+                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                }
             }
         }
     }, floatingActionButton = {

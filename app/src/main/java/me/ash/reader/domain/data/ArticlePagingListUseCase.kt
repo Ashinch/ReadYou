@@ -48,8 +48,8 @@ class ArticlePagingListUseCase @Inject constructor(
     val diffMapHolder: DiffMapHolder,
 ) {
 
-    private val mutablePagerFlow = MutableStateFlow<Flow<PagingData<ArticleFlowItem>>>(emptyFlow())
-    val pagerFlow: StateFlow<Flow<PagingData<ArticleFlowItem>>> = mutablePagerFlow
+    private val mutablePagerFlow = MutableStateFlow<PagerData>(PagerData())
+    val pagerFlow: StateFlow<PagerData> = mutablePagerFlow
 
     var itemSnapshotList by mutableStateOf(
         ItemSnapshotList<ArticleFlowItem>(
@@ -72,40 +72,46 @@ class ArticlePagingListUseCase @Inject constructor(
             filterStateUseCase.filterStateFlow.collect { filterState ->
                 val searchContent = filterState.searchContent
 
-                mutablePagerFlow.value = Pager(
-                    config = PagingConfig(
-                        pageSize = 50,
-                        enablePlaceholders = false,
-                    )
-                ) {
-                    if (!searchContent.isNullOrBlank()) {
-                        rssService.get().searchArticles(
-                            content = searchContent.trim(),
-                            groupId = filterState.group?.id,
-                            feedId = filterState.feed?.id,
-                            isStarred = filterState.filter.isStarred(),
-                            isUnread = filterState.filter.isUnread(),
-                            sortAscending = settingsProvider.settings.flowSortUnreadArticles.value
+                mutablePagerFlow.value = PagerData(
+                    Pager(
+                        config = PagingConfig(
+                            pageSize = 50,
+                            enablePlaceholders = false,
                         )
-                    } else {
-                        rssService.get().pullArticles(
-                            groupId = filterState.group?.id,
-                            feedId = filterState.feed?.id,
-                            isStarred = filterState.filter.isStarred(),
-                            isUnread = filterState.filter.isUnread(),
-                            sortAscending = settingsProvider.settings.flowSortUnreadArticles.value
-                        )
-                    }
-                }.flow.map { it.mapPagingFlowItem(androidStringsHelper) }
-                    .cachedIn(applicationScope)
+                    ) {
+                        if (!searchContent.isNullOrBlank()) {
+                            rssService.get().searchArticles(
+                                content = searchContent.trim(),
+                                groupId = filterState.group?.id,
+                                feedId = filterState.feed?.id,
+                                isStarred = filterState.filter.isStarred(),
+                                isUnread = filterState.filter.isUnread(),
+                                sortAscending = settingsProvider.settings.flowSortUnreadArticles.value
+                            )
+                        } else {
+                            rssService.get().pullArticles(
+                                groupId = filterState.group?.id,
+                                feedId = filterState.feed?.id,
+                                isStarred = filterState.filter.isStarred(),
+                                isUnread = filterState.filter.isUnread(),
+                                sortAscending = settingsProvider.settings.flowSortUnreadArticles.value
+                            )
+                        }
+                    }.flow.map { it.mapPagingFlowItem(androidStringsHelper) }
+                        .cachedIn(applicationScope), filterState = filterState)
             }
         }
         applicationScope.launch {
-            pagerFlow.collectLatest {
-                it.collectLatest {
+            pagerFlow.collectLatest { (pager, _) ->
+                pager.collectLatest {
                     pagingDataPresenter.collectFrom(it)
                 }
             }
         }
     }
 }
+
+data class PagerData(
+    val pager: Flow<PagingData<ArticleFlowItem>> = emptyFlow(),
+    val filterState: FilterState = FilterState(),
+)
