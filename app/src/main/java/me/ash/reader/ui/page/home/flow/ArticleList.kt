@@ -59,7 +59,7 @@ fun LazyListScope.ArticleList(
 
                 is ArticleFlowItem.Date -> {
                     if (item.showSpacer) {
-                        Spacer(modifier = Modifier.height(40.dp))
+                        Spacer(modifier = Modifier.height(32.dp))
                     }
                     StickyHeader(item.date, isShowFeedIcon, articleListTonalElevation)
                 }
@@ -91,7 +91,7 @@ fun LazyListScope.ArticleList(
 
                 is ArticleFlowItem.Date -> {
                     if (item.showSpacer) {
-                        item { Spacer(modifier = Modifier.height(40.dp)) }
+                        item { Spacer(modifier = Modifier.height(32.dp)) }
                     }
                     stickyHeader(key = key(item), contentType = contentType(item)) {
                         StickyHeader(item.date, isShowFeedIcon, articleListTonalElevation)

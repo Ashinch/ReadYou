@@ -37,8 +37,9 @@ fun SearchBar(
 
     Surface(
         modifier = Modifier
-            .height(56.dp)
             .padding(horizontal = 24.dp)
+            .padding(vertical = 16.dp)
+            .height(56.dp)
             .fillMaxWidth(),
         shape = CircleShape,
         tonalElevation = ElevationTokens.Level2.dp
@@ -64,12 +65,12 @@ fun SearchBar(
                         .fillMaxWidth()
                         .focusRequester(focusRequester),
                     colors = TextFieldDefaults.colors(
-                            unfocusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
                     ),
                     value = value,
                     onValueChange = { onValueChange(it) },
