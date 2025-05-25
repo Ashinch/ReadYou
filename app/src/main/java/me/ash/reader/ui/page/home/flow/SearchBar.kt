@@ -9,7 +9,10 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -34,6 +37,8 @@ fun SearchBar(
     onClose: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
+
+    var input by remember { mutableStateOf(value) }
 
     Surface(
         modifier = Modifier
@@ -72,8 +77,11 @@ fun SearchBar(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                     ),
-                    value = value,
-                    onValueChange = { onValueChange(it) },
+                    value = input,
+                    onValueChange = {
+                        input = it
+                        onValueChange(it)
+                    },
                     placeholder = {
                         Text(
                             modifier = Modifier.alpha(0.7f),
