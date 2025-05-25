@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowDownward
@@ -31,6 +33,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -54,9 +57,11 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -256,17 +261,11 @@ fun FlowPage(
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
 
-    val indent = with(LocalDensity.current) {
-        (if (articleListFeedIcon.value) 34.dp else 8.dp).toSp()
-    }
-
     RYScaffold(containerTonalElevation = articleListTonalElevation.value.dp, topBar = {
         MaterialTheme(
             colorScheme = MaterialTheme.colorScheme,
             typography = MaterialTheme.typography.copy(
-                headlineMedium = MaterialTheme.typography.displaySmall.merge(
-                    textIndent = TextIndent(indent)
-                ),
+                headlineMedium = MaterialTheme.typography.displaySmall,
                 titleLarge = MaterialTheme.typography.titleLarge.merge(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium
@@ -284,11 +283,26 @@ fun FlowPage(
                     },
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }), title = {
-                    Text(
-                        text = titleText,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
+                    val textStyle = LocalTextStyle.current
+                    if (textStyle.fontSize > 18.sp) {
+                        BasicText(
+                            modifier = Modifier.padding(
+                                start = if (articleListFeedIcon.value) 34.dp else 8.dp,
+                                end = 24.dp
+                            ),
+                            text = titleText,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            style = textStyle,
+                        )
+                    } else {
+                        Text(
+                            text = titleText,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+
                 },
                 expandedHeight = 172.dp,
                 scrollBehavior = scrollBehavior, navigationIcon = {
