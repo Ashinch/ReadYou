@@ -42,6 +42,9 @@ fun FlowPageStylePage(
     val articleListReadIndicator = LocalFlowArticleListReadIndicator.current
     val sortUnreadArticles = LocalSortUnreadArticles.current
 
+    val settings = LocalSettings.current
+    val pullToSwitchFeed = settings.pullToSwitchFeed
+
     val scope = rememberCoroutineScope()
 
     var filterBarStyleDialogVisible by remember { mutableStateOf(false) }
@@ -201,6 +204,18 @@ fun FlowPageStylePage(
                         desc = sortUnreadArticles.description()
                     ) {
                     }
+
+                    SettingItem(
+                        title = stringResource(R.string.pull_to_switch_feed),
+                        onClick = {
+                            pullToSwitchFeed.toggle(context, scope)
+                        },
+                    ) {
+                        RYSwitch(activated = settings.pullToSwitchFeed.value) {
+                            pullToSwitchFeed.toggle(context, scope)
+                        }
+                    }
+
                     SettingItem(
                         title = stringResource(R.string.tonal_elevation),
                         desc = "${articleListTonalElevation.value}dp",

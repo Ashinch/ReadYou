@@ -1,14 +1,9 @@
 package me.ash.reader.infrastructure.preference
 
-import android.util.Log
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.flow.map
+import androidx.compose.runtime.compositionLocalOf
 import me.ash.reader.domain.model.general.Version
-import me.ash.reader.ui.ext.collectAsStateValue
-import me.ash.reader.ui.ext.dataStore
+
+val LocalSettings = compositionLocalOf { Settings() }
 
 data class Settings(
     // Version
@@ -81,6 +76,7 @@ data class Settings(
     val swipeEndAction: SwipeEndActionPreference = SwipeEndActionPreference.default,
     val markAsReadOnScroll: MarkAsReadOnScrollPreference = MarkAsReadOnScrollPreference.default,
     val hideEmptyGroups: HideEmptyGroupsPreference = HideEmptyGroupsPreference.default,
+    val pullToSwitchFeed: PullToSwitchFeedPreference = PullToSwitchFeedPreference.default,
     val pullToSwitchArticle: PullToSwitchArticlePreference = PullToSwitchArticlePreference.default,
     val openLink: OpenLinkPreference = OpenLinkPreference.default,
     val openLinkSpecificBrowser: OpenLinkSpecificBrowserPreference = OpenLinkSpecificBrowserPreference.default,

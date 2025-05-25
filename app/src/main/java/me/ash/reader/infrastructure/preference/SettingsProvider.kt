@@ -60,6 +60,8 @@ class SettingsProvider @Inject constructor(
     fun ProvidesSettings(content: @Composable () -> Unit) {
         val settings = settingsFlow.collectAsStateValue()
         CompositionLocalProvider(
+            LocalSettings provides settings,
+
             // Version
             NewVersionNumberPreference.provide(settings),
             LocalSkipVersionNumber provides settings.skipVersionNumber,

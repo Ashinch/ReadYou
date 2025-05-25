@@ -86,6 +86,7 @@ import me.ash.reader.infrastructure.preference.LocalFlowTopBarTonalElevation
 import me.ash.reader.infrastructure.preference.LocalMarkAsReadOnScroll
 import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
+import me.ash.reader.infrastructure.preference.LocalSettings
 import me.ash.reader.infrastructure.preference.LocalSharedContent
 import me.ash.reader.infrastructure.preference.LocalSortUnreadArticles
 import me.ash.reader.infrastructure.preference.SortUnreadArticlesPreference
@@ -132,6 +133,9 @@ fun FlowPage(
 
     val openLink = LocalOpenLink.current
     val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
+
+    val settings = LocalSettings.current
+    val pullToSwitchFeed = settings.pullToSwitchFeed
 
     val flowUiState = flowViewModel.flowUiState.collectAsStateValue()
     val filterUiState = homeViewModel.filterStateFlow.collectAsStateValue()
@@ -468,7 +472,11 @@ fun FlowPage(
 
                 LazyColumn(
                     modifier = Modifier
-                        .pullToLoad(pullToLoadState, density = LocalDensity.current)
+                        .pullToLoad(
+                            pullToLoadState,
+                            density = LocalDensity.current,
+                            enabled = pullToSwitchFeed.value
+                        )
                         .nestedScroll(scrollBehavior.nestedScrollConnection)
                         .fillMaxSize(),
                     state = listState,

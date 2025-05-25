@@ -473,4 +473,5 @@
     <string name="short_desc">Short</string>
     <string name="long_desc">Long</string>
     <string name="none_desc">None</string>
+    <string name="pull_to_switch_feed">Pull to load next feed</string>
 </resources>

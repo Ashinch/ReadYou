@@ -33,6 +33,7 @@ import me.ash.reader.infrastructure.preference.LocalMarkAsReadOnScroll
 import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
+import me.ash.reader.infrastructure.preference.LocalSettings
 import me.ash.reader.infrastructure.preference.LocalSharedContent
 import me.ash.reader.infrastructure.preference.LocalSortUnreadArticles
 import me.ash.reader.infrastructure.preference.OpenLinkPreference
@@ -67,6 +68,9 @@ fun InteractionPage(
     val openLink = LocalOpenLink.current
     val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
     val sharedContent = LocalSharedContent.current
+    val settings = LocalSettings.current
+    val pullToSwitchFeed = settings.pullToSwitchFeed
+
     val scope = rememberCoroutineScope()
     val isOpenLinkSpecificBrowserItemEnabled = remember(openLink) {
         openLink == OpenLinkPreference.SpecificBrowser
@@ -170,6 +174,17 @@ fun InteractionPage(
                     ) {
                         RYSwitch(activated = markAsReadOnScroll.value) {
                             markAsReadOnScroll.toggle(context, scope)
+                        }
+                    }
+
+                    SettingItem(
+                        title = stringResource(R.string.pull_to_switch_feed),
+                        onClick = {
+                            pullToSwitchFeed.toggle(context, scope)
+                        },
+                    ) {
+                        RYSwitch(activated = settings.pullToSwitchFeed.value) {
+                            pullToSwitchFeed.toggle(context, scope)
                         }
                     }
 
