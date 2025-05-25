@@ -96,6 +96,7 @@ import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.motion.Direction
+import me.ash.reader.ui.motion.SharedXAxisTransitionSlow
 import me.ash.reader.ui.motion.SharedYAxisTransitionSlow
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
@@ -410,8 +411,8 @@ fun FlowPage(
             },
             transitionSpec = {
                 val direction =
-                    if (targetState.filterState.filter.index > initialState.filterState.filter.index) Direction.Upward else Direction.Downward
-                SharedYAxisTransitionSlow(direction = direction)
+                    if (targetState.filterState.filter.index > initialState.filterState.filter.index) Direction.Forward else Direction.Backward
+                SharedXAxisTransitionSlow(direction = direction)
             }
         ) { (pager, _) ->
             val pagingItems = pager.collectAsLazyPagingItems()
@@ -519,13 +520,15 @@ fun FlowPage(
             filterBarPadding = filterBarPadding.dp,
             filterBarTonalElevation = filterBarTonalElevation.value.dp,
         ) {
-            scope.launch {
-                if (listState.firstVisibleItemIndex != 0) {
-                    listState.animateScrollToItem(0)
-                }
-            }
+
             if (filterUiState.filter != it) {
                 homeViewModel.changeFilter(filterUiState.copy(filter = it))
+            } else {
+                scope.launch {
+                    if (listState.firstVisibleItemIndex != 0) {
+                        listState.animateScrollToItem(0)
+                    }
+                }
             }
         }
     })
