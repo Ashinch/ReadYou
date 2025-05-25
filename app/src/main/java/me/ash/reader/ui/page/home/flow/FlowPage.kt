@@ -466,7 +466,7 @@ fun FlowPage(
             }
 
             val listState = remember(pager) { listState }
-            val loadAction = remember(pager) {
+            val loadAction = remember(pager, flowUiState) {
                 when {
                     flowUiState.nextFilterState != null -> LoadAction.NextFeed
                     filterState.filter.isUnread() -> LoadAction.MarkAllAsRead
