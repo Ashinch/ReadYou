@@ -6,7 +6,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -46,20 +45,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -106,7 +102,6 @@ import me.ash.reader.ui.motion.SharedXAxisTransitionSlow
 import me.ash.reader.ui.motion.SharedYAxisTransitionFast
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
-import me.ash.reader.ui.page.home.reading.PullToLoadIndicator
 import me.ash.reader.ui.page.home.reading.pullToLoad
 import me.ash.reader.ui.page.home.reading.rememberPullToLoadState
 import me.ash.reader.ui.theme.palette.LocalFixedColorRoles
@@ -143,11 +138,10 @@ fun FlowPage(
     val pullToSwitchFeed = settings.pullToSwitchFeed
 
     val flowUiState = flowViewModel.flowUiState.collectAsStateValue()
-    val filterUiState = homeViewModel.filterStateFlow.collectAsStateValue()
 
-    val pagerData: PagerData = homeViewModel.pagerFlow.collectAsStateValue()
+    val pagerData: PagerData = flowUiState.pagerData
 
-//    val pagingItems = homeViewModel.pagerFlow.collectAsStateValue().collectAsLazyPagingItems()
+    val filterUiState = pagerData.filterState
 
     val listState = rememberSaveable(pagerData, saver = LazyListState.Saver) {
         LazyListState(0, 0)
@@ -195,13 +189,6 @@ fun FlowPage(
 //                pagingItems.get(it)
 //            }
 //        }
-    }
-
-
-
-
-    DisposableEffect(owner) {
-        onDispose { homeViewModel.syncWorkLiveData.removeObservers(owner) }
     }
 
     val onToggleStarred: (ArticleWithFeed) -> Unit = remember {
@@ -420,13 +407,13 @@ fun FlowPage(
             }
         }
         AnimatedContent(
-            targetState = pagerData,
+            targetState = flowUiState,
             contentKey = {
-                it.filterState.copy(searchContent = null)
+                it.pagerData.filterState.copy(searchContent = null)
             },
             transitionSpec = {
-                val targetFilter = targetState.filterState
-                val initialFilter = initialState.filterState
+                val targetFilter = targetState.pagerData.filterState
+                val initialFilter = initialState.pagerData.filterState
 
                 if (targetFilter.filter.index > initialFilter.filter.index) {
                     SharedXAxisTransitionSlow(direction = Direction.Forward)
@@ -440,7 +427,9 @@ fun FlowPage(
                     fadeIn() togetherWith fadeOut()
                 }
             }
-        ) { (pager, filterState) ->
+        ) { flowUiState ->
+            val pager = flowUiState.pagerData.pager
+            val filterState = flowUiState.pagerData.filterState
             val pagingItems = pager.collectAsLazyPagingItems()
 
             if (markAsReadOnScroll) {

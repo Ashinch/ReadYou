@@ -23,6 +23,7 @@ import me.ash.reader.domain.data.DiffMapHolder
 import me.ash.reader.domain.data.FilterState
 import me.ash.reader.domain.data.FilterStateUseCase
 import me.ash.reader.domain.data.GroupWithFeedsListUseCase
+import me.ash.reader.domain.data.PagerData
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.preference.SettingsProvider
@@ -48,8 +49,8 @@ class FlowViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-
-            filterStateUseCase.filterStateFlow.combine(groupWithFeedsListUseCase.groupWithFeedListFlow) { filterState, groupWithFeedsList ->
+            articlePagingListUseCase.pagerFlow.combine(groupWithFeedsListUseCase.groupWithFeedListFlow) { pagerData, groupWithFeedsList ->
+                val filterState = pagerData.filterState
                 var nextFilterState: FilterState? = null
                 if (filterState.group != null) {
                     val groupList = groupWithFeedsList.map { it.group }
@@ -71,9 +72,16 @@ class FlowViewModel @Inject constructor(
                         }
                     }
                 }
-                nextFilterState
+                FlowUiState(nextFilterState = nextFilterState, pagerData = pagerData)
             }
-                .collect { filterState -> _flowUiState.update { it.copy(nextFilterState = filterState) } }
+                .collect { flowUiState ->
+                    _flowUiState.update {
+                        it.copy(
+                            nextFilterState = flowUiState.nextFilterState,
+                            pagerData = flowUiState.pagerData
+                        )
+                    }
+                }
         }
     }
 
@@ -158,5 +166,6 @@ class FlowViewModel @Inject constructor(
 
 data class FlowUiState(
     val lastReadIndex: Int? = null,
-    val nextFilterState: FilterState? = null
+    val nextFilterState: FilterState? = null,
+    val pagerData: PagerData = PagerData()
 )
