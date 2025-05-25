@@ -25,6 +25,7 @@ import me.ash.reader.domain.data.FilterStateUseCase
 import me.ash.reader.domain.data.GroupWithFeedsListUseCase
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
+import me.ash.reader.infrastructure.preference.SettingsProvider
 import java.util.Date
 import javax.inject.Inject
 
@@ -39,6 +40,7 @@ class FlowViewModel @Inject constructor(
     private val articlePagingListUseCase: ArticlePagingListUseCase,
     private val filterStateUseCase: FilterStateUseCase,
     private val groupWithFeedsListUseCase: GroupWithFeedsListUseCase,
+    private val settingsProvider: SettingsProvider,
 ) : ViewModel() {
 
     private val _flowUiState = MutableStateFlow(FlowUiState())
@@ -132,6 +134,16 @@ class FlowViewModel @Inject constructor(
 
     fun loadNextFeedOrGroup() {
         viewModelScope.launch {
+            if (settingsProvider.settings.markAsReadOnScroll.value) {
+                articlePagingListUseCase.itemSnapshotList.items.forEach {
+                    if (it is ArticleFlowItem.Article) {
+                        diffMapHolder.updateDiff(
+                            articleWithFeed = it.articleWithFeed,
+                            isUnread = false
+                        )
+                    }
+                }
+            }
             flowUiState.value.nextFilterState?.let { filterStateUseCase.updateFilterState(it) }
         }
     }
