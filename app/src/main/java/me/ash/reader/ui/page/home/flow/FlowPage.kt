@@ -6,11 +6,14 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +25,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
-import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowDownward
@@ -58,11 +61,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
-import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -97,13 +97,17 @@ import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.motion.Direction
 import me.ash.reader.ui.motion.SharedXAxisTransitionSlow
-import me.ash.reader.ui.motion.SharedYAxisTransitionSlow
+import me.ash.reader.ui.motion.SharedYAxisTransitionFast
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
+import me.ash.reader.ui.page.home.reading.PullToLoadIndicator
+import me.ash.reader.ui.page.home.reading.pullToLoad
+import me.ash.reader.ui.page.home.reading.rememberPullToLoadState
 import me.ash.reader.ui.theme.palette.LocalFixedColorRoles
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class,
+    ExperimentalMaterialApi::class,
 )
 @Composable
 fun FlowPage(
@@ -410,9 +414,20 @@ fun FlowPage(
                 it.filterState.copy(searchContent = null)
             },
             transitionSpec = {
-                val direction =
-                    if (targetState.filterState.filter.index > initialState.filterState.filter.index) Direction.Forward else Direction.Backward
-                SharedXAxisTransitionSlow(direction = direction)
+                val targetFilter = targetState.filterState
+                val initialFilter = initialState.filterState
+
+                if (targetFilter.filter.index > initialFilter.filter.index) {
+                    SharedXAxisTransitionSlow(direction = Direction.Forward)
+                } else if (targetFilter.filter.index < initialFilter.filter.index) {
+                    SharedXAxisTransitionSlow(direction = Direction.Backward)
+                } else if (
+                    targetFilter.group != initialFilter.group || targetFilter.feed != initialFilter.feed
+                ) {
+                    SharedYAxisTransitionFast(direction = Direction.Forward)
+                } else {
+                    fadeIn() togetherWith fadeOut()
+                }
             }
         ) { (pager, _) ->
             val pagingItems = pager.collectAsLazyPagingItems()
@@ -441,43 +456,61 @@ fun FlowPage(
 
             val listState = remember(pager) { listState }
 
-            LazyColumn(
+            val pullToLoadState = rememberPullToLoadState(
+                pager,
+                onLoadNext = if (flowUiState.nextFilterState != null) flowViewModel::loadNextFeedOrGroup else null,
+                onLoadPrevious = null
+            )
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .nestedScroll(scrollBehavior.nestedScrollConnection),
-                state = listState,
             ) {
-                ArticleList(
-                    pagingItems = pagingItems,
-                    diffMap = homeViewModel.diffMapHolder.diffMap,
-                    isShowFeedIcon = articleListFeedIcon.value,
-                    isShowStickyHeader = articleListDateStickyHeader.value,
-                    articleListTonalElevation = articleListTonalElevation.value,
-                    isSwipeEnabled = { listState.isScrollInProgress },
-                    onClick = { articleWithFeed ->
-                        if (articleWithFeed.feed.isBrowser) {
-                            if (articleWithFeed.article.isUnread) {
-                                onToggleRead(articleWithFeed)
+
+                LazyColumn(
+                    modifier = Modifier
+                        .pullToLoad(pullToLoadState, density = LocalDensity.current)
+                        .nestedScroll(scrollBehavior.nestedScrollConnection)
+                        .fillMaxSize(),
+                    state = listState,
+                ) {
+                    ArticleList(
+                        pagingItems = pagingItems,
+                        diffMap = homeViewModel.diffMapHolder.diffMap,
+                        isShowFeedIcon = articleListFeedIcon.value,
+                        isShowStickyHeader = articleListDateStickyHeader.value,
+                        articleListTonalElevation = articleListTonalElevation.value,
+                        isSwipeEnabled = { listState.isScrollInProgress },
+                        onClick = { articleWithFeed ->
+                            if (articleWithFeed.feed.isBrowser) {
+                                if (articleWithFeed.article.isUnread) {
+                                    onToggleRead(articleWithFeed)
+                                }
+                                context.openURL(
+                                    articleWithFeed.article.link, openLink, openLinkSpecificBrowser
+                                )
+                            } else {
+                                navController.navigate("${RouteName.READING}/${articleWithFeed.article.id}") {
+                                    launchSingleTop = true
+                                }
                             }
-                            context.openURL(
-                                articleWithFeed.article.link, openLink, openLinkSpecificBrowser
-                            )
-                        } else {
-                            navController.navigate("${RouteName.READING}/${articleWithFeed.article.id}") {
-                                launchSingleTop = true
-                            }
-                        }
-                    },
-                    onToggleStarred = onToggleStarred,
-                    onToggleRead = onToggleRead,
-                    onMarkAboveAsRead = onMarkAboveAsRead,
-                    onMarkBelowAsRead = onMarkBelowAsRead,
-                    onShare = onShare,
-                )
-                item {
-                    Spacer(modifier = Modifier.height(128.dp))
-                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                        },
+                        onToggleStarred = onToggleStarred,
+                        onToggleRead = onToggleRead,
+                        onMarkAboveAsRead = onMarkAboveAsRead,
+                        onMarkBelowAsRead = onMarkBelowAsRead,
+                        onShare = onShare,
+                    )
+                    item {
+                        Spacer(modifier = Modifier.height(128.dp))
+                        Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                    }
                 }
+                PullToLoadIndicator(
+                    state = pullToLoadState,
+                    canLoadNext = flowUiState.nextFilterState != null,
+                    canLoadPrevious = false,
+                    modifier = Modifier.padding(bottom = 36.dp)
+                )
             }
         }
     }, floatingActionButton = {
