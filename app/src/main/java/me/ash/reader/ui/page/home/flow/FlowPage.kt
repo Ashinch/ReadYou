@@ -37,6 +37,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -55,6 +56,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -279,7 +281,8 @@ fun FlowPage(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }), title = {
                     val textStyle = LocalTextStyle.current
-                    if (textStyle.fontSize > 18.sp) {
+                    val color = LocalContentColor.current
+                    if (textStyle.fontSize.value > 18f) {
                         BasicText(
                             modifier = Modifier.padding(
                                 start = if (articleListFeedIcon.value) 34.dp else 8.dp,
@@ -289,6 +292,7 @@ fun FlowPage(
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
                             style = textStyle,
+                            color = { color }
                         )
                     } else {
                         Text(
