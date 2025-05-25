@@ -50,6 +50,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -437,7 +438,7 @@ fun FlowPage(
                     fadeIn() togetherWith fadeOut()
                 }
             }
-        ) { (pager, _) ->
+        ) { (pager, filterState) ->
             val pagingItems = pager.collectAsLazyPagingItems()
 
             if (markAsReadOnScroll) {
@@ -463,12 +464,39 @@ fun FlowPage(
             }
 
             val listState = remember(pager) { listState }
+            val loadAction = remember(pager) {
+                when {
+                    flowUiState.nextFilterState != null -> LoadAction.NextFeed
+                    filterState.filter.isUnread() -> LoadAction.MarkAllAsRead
+                    else -> null
+                }
+            }
+
+            val snapToSettle = remember { mutableStateOf({}) }
+
+            val onLoadNext: (() -> Unit)? = when (loadAction) {
+                LoadAction.NextFeed -> flowViewModel::loadNextFeedOrGroup
+                LoadAction.MarkAllAsRead -> {
+                    {
+                        flowViewModel.markAllAsRead()
+                        snapToSettle.value()
+                    }
+                }
+
+                else -> null
+            }
 
             val pullToLoadState = rememberPullToLoadState(
-                pager,
-                onLoadNext = if (flowUiState.nextFilterState != null) flowViewModel::loadNextFeedOrGroup else null,
+                key = pager,
+                onLoadNext = onLoadNext,
                 onLoadPrevious = null
             )
+
+            LaunchedEffect(pullToLoadState) {
+                snapToSettle.value = { pullToLoadState.animateDistanceTo(0f) }
+            }
+
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -517,10 +545,10 @@ fun FlowPage(
                         Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                     }
                 }
+
                 PullToLoadIndicator(
                     state = pullToLoadState,
-                    canLoadNext = flowUiState.nextFilterState != null,
-                    canLoadPrevious = false,
+                    loadAction = loadAction,
                     modifier = Modifier.padding(bottom = 36.dp)
                 )
             }

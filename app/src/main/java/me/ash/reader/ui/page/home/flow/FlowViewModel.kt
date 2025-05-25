@@ -135,16 +135,23 @@ class FlowViewModel @Inject constructor(
     fun loadNextFeedOrGroup() {
         viewModelScope.launch {
             if (settingsProvider.settings.markAsReadOnScroll.value) {
-                articlePagingListUseCase.itemSnapshotList.items.forEach {
-                    if (it is ArticleFlowItem.Article) {
-                        diffMapHolder.updateDiff(
-                            articleWithFeed = it.articleWithFeed,
-                            isUnread = false
-                        )
-                    }
-                }
+                markAllAsRead()
             }
             flowUiState.value.nextFilterState?.let { filterStateUseCase.updateFilterState(it) }
+        }
+    }
+
+    fun markAllAsRead() {
+        viewModelScope.launch {
+            val items = articlePagingListUseCase.itemSnapshotList.items
+            items.forEach {
+                if (it is ArticleFlowItem.Article) {
+                    diffMapHolder.updateDiff(
+                        articleWithFeed = it.articleWithFeed,
+                        isUnread = false
+                    )
+                }
+            }
         }
     }
 }
