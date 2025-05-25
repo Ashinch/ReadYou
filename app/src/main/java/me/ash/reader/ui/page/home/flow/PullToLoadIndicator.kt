@@ -35,6 +35,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -147,14 +149,24 @@ fun BoxScope.PullToLoadIndicator(
 
             }
         } else {
+            val offset by remember {
+                derivedStateOf {
+                    when {
+                        fraction < 1f -> (fraction * PullToLoadDefaults.ContentOffsetMultiple * .5f).dp
+                        else -> (PullToLoadDefaults.ContentOffsetMultiple * .5f).dp
+                    }
+                }
+
+            }
+
             Box(
                 modifier = modifier
                     .align(alignment)
-                    .padding(vertical = 80.dp)
+                    .padding(vertical = 48.dp)
                     .offset {
                         IntOffset(
                             x = 0,
-                            y = (fraction * PullToLoadDefaults.ContentOffsetMultiple * .5f).dp.roundToPx()
+                            y = offset.roundToPx()
                         )
                     }
             ) {
@@ -190,38 +202,6 @@ fun BoxScope.PullToLoadIndicator(
                         }
                     }
                 }
-            }
-        }
-    }
-
-}
-
-@Preview
-@Composable
-private fun MarkAllAsRead() {
-    Row {
-        Surface(
-            shape = CircleShape,
-            color = LocalFixedColorRoles.current.primaryFixed,
-        ) {
-            Box(
-                modifier = Modifier
-                    .width(36.dp)
-                    .height(36.dp), contentAlignment = Alignment.Center
-            ) {
-                Icon(Icons.Rounded.DoneAll, null, modifier = Modifier.size(16.dp))
-            }
-        }
-        Surface(
-            shape = CircleShape,
-            color = LocalFixedColorRoles.current.primaryFixed,
-        ) {
-            Box(
-                modifier = Modifier
-                    .width(36.dp)
-                    .height(36.dp), contentAlignment = Alignment.Center
-            ) {
-                Icon(Icons.Rounded.KeyboardArrowDown, null)
             }
         }
     }

@@ -6,6 +6,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -489,11 +491,12 @@ fun FlowPage(
             val pullToLoadState = rememberPullToLoadState(
                 key = pager,
                 onLoadNext = onLoadNext,
-                onLoadPrevious = null
+                onLoadPrevious = null,
             )
 
             LaunchedEffect(pullToLoadState) {
-                snapToSettle.value = { pullToLoadState.animateDistanceTo(0f) }
+                snapToSettle.value =
+                    { pullToLoadState.animateDistanceTo(0f, animationSpec = spring()) }
             }
 
 

@@ -1,6 +1,7 @@
 package me.ash.reader.ui.page.home.reading
 
 
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.FloatExponentialDecaySpec
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animate
@@ -114,6 +115,10 @@ fun rememberPullToLoadState(
     onLoadPrevious: (() -> Unit)?,
     onLoadNext: (() -> Unit)?,
     loadThreshold: Dp = PullToLoadDefaults.loadThreshold(),
+    snapAnimationSpec: AnimationSpec<Float> = spring(
+        dampingRatio = Spring.DampingRatioLowBouncy,
+        stiffness = Spring.StiffnessLow
+    )
 ): PullToLoadState {
     require(loadThreshold > 0.dp) { "The load trigger must be greater than zero!" }
 
@@ -131,7 +136,8 @@ fun rememberPullToLoadState(
             animationScope = scope,
             onLoadPrevious = onPrevious,
             onLoadNext = onNext,
-            threshold = thresholdPx
+            snapAnimationSpec = snapAnimationSpec,
+            threshold = thresholdPx,
         )
     }
 
@@ -157,6 +163,7 @@ class PullToLoadState internal constructor(
     private val animationScope: CoroutineScope,
     private val onLoadPrevious: State<(() -> Unit)?>,
     private val onLoadNext: State<(() -> Unit)?>,
+    private val snapAnimationSpec: AnimationSpec<Float>,
     threshold: Float
 ) {
     /**
@@ -251,7 +258,11 @@ class PullToLoadState internal constructor(
     // Animatable as calling snapTo() on every drag delta has a one frame delay, and some extra
     // overhead of running through the animation pipeline instead of directly mutating the state.
     private val mutatorMutex = MutatorMutex()
-    internal fun animateDistanceTo(targetValue: Float, velocity: Float = 0f) {
+    fun animateDistanceTo(
+        targetValue: Float,
+        velocity: Float = 0f,
+        animationSpec: AnimationSpec<Float> = snapAnimationSpec
+    ) {
         animationScope.launch {
             mutatorMutex.mutate {
                 val initialValue = offsetPulled
@@ -260,10 +271,7 @@ class PullToLoadState internal constructor(
                     initialValue = initialValue,
                     targetValue = targetValue,
                     initialVelocity = velocity,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioLowBouncy,
-                        stiffness = Spring.StiffnessLow
-                    )
+                    animationSpec = animationSpec
                 ) { value, _ ->
                     offsetPulled = value
                     if (isAnimateDown) {
