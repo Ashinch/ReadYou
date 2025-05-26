@@ -48,7 +48,7 @@ class ReaderCacheHelper @Inject constructor(
     }
 
     @CheckResult
-    private suspend fun readContentFromCache(articleId: String): Result<String> {
+    suspend fun readFullContent(articleId: String): Result<String> {
         return withContext(ioDispatcher) {
             runCatching {
                 val file = currentCacheDir.resolve(getFileNameFor(articleId))
@@ -74,7 +74,7 @@ class ReaderCacheHelper @Inject constructor(
     suspend fun readOrFetchFullContent(article: Article): Result<String> {
         return withContext(ioDispatcher) {
             runCatching {
-                val result = readContentFromCache(article.id)
+                val result = readFullContent(article.id)
                 if (result.isSuccess) return@withContext result
                 return@withContext fetchFullContentInternal(article)
             }

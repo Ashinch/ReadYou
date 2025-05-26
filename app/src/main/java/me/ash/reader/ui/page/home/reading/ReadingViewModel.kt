@@ -1,7 +1,6 @@
 package me.ash.reader.ui.page.home.reading
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
@@ -100,13 +99,17 @@ class ReadingViewModel @AssistedInject constructor(
         }
     }
 
-    fun ReaderState.renderContent(articleWithFeed: ArticleWithFeed): ReaderState {
-        if (articleWithFeed.feed.isFullContent) {
-            renderFullContent()
-            return this.copy(content = ReaderState.Loading)
-        } else return this.copy(
-            content = ReaderState.Description(articleWithFeed.article.rawDescription)
-        )
+    suspend fun ReaderState.renderContent(articleWithFeed: ArticleWithFeed): ReaderState {
+        val contentState = if (articleWithFeed.feed.isFullContent) {
+            val fullContent =
+                readerCacheHelper.readFullContent(articleWithFeed.article.id).getOrNull()
+            if (fullContent != null) ReaderState.FullContent(fullContent) else {
+                renderFullContent()
+                ReaderState.Loading
+            }
+        } else ReaderState.Description(articleWithFeed.article.rawDescription)
+
+        return copy(content = contentState)
     }
 
     fun renderDescriptionContent() {
@@ -126,7 +129,6 @@ class ReadingViewModel @AssistedInject constructor(
             ).onSuccess { content ->
                 _readerState.update { it.copy(content = ReaderState.FullContent(content = content)) }
             }.onFailure { th ->
-                Log.i("RLog", "renderFullContent: ${th.message}")
                 _readerState.update { it.copy(content = ReaderState.Error(th.message.toString())) }
             }
         }
