@@ -216,9 +216,8 @@ class GoogleReaderRssService @Inject constructor(
      * @link https://github.com/bazqux/bazqux-api?tab=readme-ov-file
      * @link https://github.com/theoldreader/api
      */
-    override suspend fun sync(coroutineWorker: CoroutineWorker): ListenableWorker.Result =
+    override suspend fun sync(): ListenableWorker.Result =
         supervisorScope {
-            coroutineWorker.setProgress(SyncWorker.setIsSyncing(true))
 
             try {
                 val preTime = System.currentTimeMillis()
@@ -398,13 +397,13 @@ class GoogleReaderRssService @Inject constructor(
                 accountDao.update(account.apply {
                     updateAt = Date()
                 })
-                ListenableWorker.Result.success(SyncWorker.setIsSyncing(false))
+                ListenableWorker.Result.success()
             } catch (e: Exception) {
                 Log.e("RLog", "On sync exception: ${e.message}", e)
 //                withContext(mainDispatcher) {
 //                    context.showToast(e.message) todo: find a good way to notice user the error
 //                }
-                ListenableWorker.Result.failure(SyncWorker.setIsSyncing(false))
+                ListenableWorker.Result.failure()
             }
         }
 

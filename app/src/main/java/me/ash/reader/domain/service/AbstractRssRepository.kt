@@ -99,9 +99,8 @@ abstract class AbstractRssRepository(
         }
     }
 
-    open suspend fun sync(coroutineWorker: CoroutineWorker): ListenableWorker.Result =
+    open suspend fun sync(): ListenableWorker.Result =
         supervisorScope {
-            coroutineWorker.setProgress(SyncWorker.setIsSyncing(true))
             val preTime = System.currentTimeMillis()
             val preDate = Date(preTime)
             val accountId = context.currentAccountId
@@ -122,7 +121,6 @@ abstract class AbstractRssRepository(
             accountDao.queryById(accountId)?.let { account ->
                 accountDao.update(account.apply { updateAt = Date() })
             }
-            coroutineWorker.setProgress(SyncWorker.setIsSyncing(false))
             ListenableWorker.Result.success()
         }
 

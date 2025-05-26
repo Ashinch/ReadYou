@@ -134,9 +134,8 @@ class FeverRssService @Inject constructor(
      * 3. Fetch the Fever articles
      * 4. Synchronize read/unread and starred/un-starred items
      */
-    override suspend fun sync(coroutineWorker: CoroutineWorker): ListenableWorker.Result =
+    override suspend fun sync(): ListenableWorker.Result =
         supervisorScope {
-            coroutineWorker.setProgress(SyncWorker.setIsSyncing(true))
 
             try {
                 val preTime = System.currentTimeMillis()
@@ -268,13 +267,13 @@ class FeverRssService @Inject constructor(
                         lastArticleId = accountId.spacerDollar(sinceId)
                     }
                 })
-                ListenableWorker.Result.success(SyncWorker.setIsSyncing(false))
+                ListenableWorker.Result.success()
             } catch (e: Exception) {
                 Log.e("RLog", "On sync exception: ${e.message}", e)
 //                withContext(mainDispatcher) {
 //                    context.showToast(e.message)
 //                }
-                ListenableWorker.Result.failure(SyncWorker.setIsSyncing(false))
+                ListenableWorker.Result.failure()
             }
         }
 

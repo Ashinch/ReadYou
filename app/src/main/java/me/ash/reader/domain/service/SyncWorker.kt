@@ -11,7 +11,6 @@ import kotlinx.coroutines.withContext
 import me.ash.reader.infrastructure.preference.SyncIntervalPreference
 import me.ash.reader.infrastructure.preference.SyncOnlyOnWiFiPreference
 import me.ash.reader.infrastructure.preference.SyncOnlyWhenChargingPreference
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 @HiltWorker
@@ -25,14 +24,13 @@ class SyncWorker @AssistedInject constructor(
     override suspend fun doWork(): Result =
         withContext(Dispatchers.Default) {
             Log.i("RLog", "doWork: ")
-            rssService.get().sync(this@SyncWorker).also {
+            rssService.get().sync().also {
                 rssService.get().clearKeepArchivedArticles()
             }
         }
 
-    companion object {
 
-        private const val IS_SYNCING = "isSyncing"
+    companion object {
         private const val WORK_NAME_PERIODIC = "ReadYou"
         private const val WORK_NAME_ONETIME = "SYNC_ONETIME"
         const val WORK_TAG = "SYNC_TAG"
@@ -76,8 +74,5 @@ class SyncWorker @AssistedInject constructor(
                     .build()
             )
         }
-
-        fun setIsSyncing(boolean: Boolean) = workDataOf(IS_SYNCING to boolean)
-        fun Data.getIsSyncing(): Boolean = getBoolean(IS_SYNCING, false)
     }
 }
