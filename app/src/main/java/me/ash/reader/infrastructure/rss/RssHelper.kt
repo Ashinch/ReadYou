@@ -119,7 +119,7 @@ class RssHelper @Inject constructor(
             author = syndEntry.author,
             rawDescription = content ?: desc ?: "",
             shortDescription = Readability.parseToText(desc ?: content, syndEntry.link).take(280),
-            fullContent = content,
+//            fullContent = content,
             img = findThumbnail(syndEntry) ?: findThumbnail(content ?: desc),
             link = syndEntry.link ?: "",
             updateAt = preDate,

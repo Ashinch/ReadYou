@@ -104,9 +104,7 @@ class ReadingViewModel @AssistedInject constructor(
             renderFullContent()
             return this.copy(content = ReaderState.Loading)
         } else return this.copy(
-            content = ReaderState.Description(articleWithFeed.article.let {
-                it.fullContent ?: it.rawDescription
-            })
+            content = ReaderState.Description(articleWithFeed.article.rawDescription)
         )
     }
 
@@ -114,7 +112,7 @@ class ReadingViewModel @AssistedInject constructor(
         _readerState.update {
             it.copy(
                 content = ReaderState.Description(
-                    content = currentArticle?.fullContent ?: currentArticle?.rawDescription ?: ""
+                    content = currentArticle?.rawDescription ?: ""
                 )
             )
         }
