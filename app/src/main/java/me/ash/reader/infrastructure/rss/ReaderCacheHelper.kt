@@ -58,7 +58,7 @@ class ReaderCacheHelper @Inject constructor(
         }
     }
 
-    suspend fun fetchFullContent(article: Article): Result<String> {
+    private suspend fun fetchFullContentInternal(article: Article): Result<String> {
         return withContext(ioDispatcher) {
             runCatching {
                 val fullContent = rssHelper.parseFullContent(article.link, article.title)
@@ -76,7 +76,24 @@ class ReaderCacheHelper @Inject constructor(
             runCatching {
                 val result = readContentFromCache(article.id)
                 if (result.isSuccess) return@withContext result
-                return@withContext fetchFullContent(article)
+                return@withContext fetchFullContentInternal(article)
+            }
+        }
+    }
+
+    suspend fun checkOrFetchFullContent(article: Article): Boolean {
+        return withContext(ioDispatcher) {
+            val file = currentCacheDir.resolve(getFileNameFor(article.id))
+            try {
+                if (!file.exists()) {
+                    return@withContext fetchFullContentInternal(article).fold(
+                        onFailure = { false },
+                        onSuccess = { true })
+                } else {
+                    return@withContext false
+                }
+            } catch (_: SecurityException) {
+                return@withContext false
             }
         }
     }

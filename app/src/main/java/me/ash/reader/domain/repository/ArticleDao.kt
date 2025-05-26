@@ -665,6 +665,20 @@ interface ArticleDao {
         accountId: Int,
     ): List<Article>
 
+    @Query(
+        """
+        SELECT a.*
+        FROM article AS a
+        LEFT JOIN feed AS f ON a.feedId = f.id
+        WHERE f.accountId = :accountId
+        AND f.isFullContent = 1
+        AND a.isUnread = 1
+        """
+    )
+    suspend fun queryUnreadFullContentArticles(
+        accountId: Int,
+    ): List<Article>
+
     @Transaction
     @Query(
         """

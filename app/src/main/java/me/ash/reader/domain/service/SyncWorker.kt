@@ -33,7 +33,9 @@ class SyncWorker @AssistedInject constructor(
         }
 
     companion object {
-        private const val WORK_NAME_PERIODIC = "ReadYou"
+        private const val SYNC_WORK_NAME_PERIODIC = "ReadYou"
+        private const val READER_WORK_NAME_PERIODIC = "FETCH_FULL_CONTENT_PERIODIC"
+
         private const val WORK_NAME_ONETIME = "SYNC_ONETIME"
         const val WORK_TAG = "SYNC_TAG"
 
@@ -42,17 +44,19 @@ class SyncWorker @AssistedInject constructor(
         }
 
         fun cancelPeriodicWork(workManager: WorkManager) {
-            workManager.cancelUniqueWork(WORK_NAME_PERIODIC)
+            workManager.cancelUniqueWork(SYNC_WORK_NAME_PERIODIC)
         }
 
         fun enqueueOneTimeWork(
             workManager: WorkManager,
         ) {
-            workManager.enqueueUniqueWork(
+            workManager.beginUniqueWork(
                 WORK_NAME_ONETIME,
                 ExistingWorkPolicy.KEEP,
                 OneTimeWorkRequestBuilder<SyncWorker>().addTag(WORK_TAG).build()
-            )
+            ).then(
+                OneTimeWorkRequestBuilder<ReaderWorker>().build()
+            ).enqueue()
         }
 
         fun enqueuePeriodicWork(
@@ -62,7 +66,7 @@ class SyncWorker @AssistedInject constructor(
             syncOnlyOnWiFi: SyncOnlyOnWiFiPreference,
         ) {
             workManager.enqueueUniquePeriodicWork(
-                WORK_NAME_PERIODIC,
+                SYNC_WORK_NAME_PERIODIC,
                 ExistingPeriodicWorkPolicy.UPDATE,
                 PeriodicWorkRequestBuilder<SyncWorker>(syncInterval.value, TimeUnit.MINUTES)
                     .setConstraints(
@@ -72,6 +76,20 @@ class SyncWorker @AssistedInject constructor(
                             .build()
                     )
                     .addTag(WORK_TAG)
+                    .setInitialDelay(syncInterval.value, TimeUnit.MINUTES)
+                    .build()
+            )
+
+            workManager.enqueueUniquePeriodicWork(
+                READER_WORK_NAME_PERIODIC,
+                ExistingPeriodicWorkPolicy.UPDATE,
+                PeriodicWorkRequestBuilder<ReaderWorker>(syncInterval.value, TimeUnit.MINUTES)
+                    .setConstraints(
+                        Constraints.Builder()
+                            .setRequiresCharging(syncOnlyWhenCharging.value)
+                            .setRequiredNetworkType(if (syncOnlyOnWiFi.value) NetworkType.UNMETERED else NetworkType.CONNECTED)
+                            .build()
+                    )
                     .setInitialDelay(syncInterval.value, TimeUnit.MINUTES)
                     .build()
             )

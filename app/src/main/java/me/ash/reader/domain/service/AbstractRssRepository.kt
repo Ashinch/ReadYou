@@ -487,4 +487,8 @@ abstract class AbstractRssRepository(
             }
         }
     }
+
+    suspend fun queryUnreadFullContentArticles() =
+        articleDao.queryUnreadFullContentArticles(context.currentAccountId)
+
 }
