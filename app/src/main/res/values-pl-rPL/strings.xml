@@ -5,18 +5,21 @@
         <item quantity="one">%1$d pobrany artykuł</item>
         <item quantity="few">%1$d pobrane artykuły</item>
         <item quantity="many">%1$d pobranych artykułów</item>
+        <item quantity="other">%1$d pobranych artykułów</item>
     </plurals>
     <string name="unread">Nieprzeczytane</string>
     <plurals name="unread_desc">
         <item quantity="one">%1$d nieprzeczytany artykuł</item>
         <item quantity="few">%1$d nieprzeczytane artykuły</item>
         <item quantity="many">%1$d nieprzeczytanych artykułów</item>
+        <item quantity="other">%1$d nieprzeczytanych artykułów</item>
     </plurals>
     <string name="starred">Wyróżnione</string>
     <plurals name="starred_desc">
         <item quantity="one">%1$d wyróżniony artykuł</item>
         <item quantity="few">%1$d wyróżnione artykuły</item>
         <item quantity="many">%1$d wyróżnionych artykułów</item>
+        <item quantity="other">%1$d wyróżnionych artykułów</item>
     </plurals>
     <string name="feeds">Kanały</string>
     <string name="syncing">Synchronizacja…</string>
@@ -43,7 +46,7 @@
     <string name="import_from_opml">Import pliku OPML</string>
     <string name="preset">Ustawienia grupy</string>
     <string name="selected">Zaznaczone</string>
-    <string name="allow_notification">Powiadomienia</string>
+    <string name="allow_notification">Zezwól na powiadomienia</string>
     <string name="all_allow_notification_tips">Zezwól wszystkim kanałom w grupie \"%1$s\" na wysyłanie powiadomień</string>
     <string name="all_allow_notification_toast">Zezwolono na wszystkie powiadomienia z grupy \"%1$s\"</string>
     <string name="all_deny_notification_toast">Cofnięto zezwolenie na powiadomienia z grupy \"%1$s\"</string>
@@ -80,10 +83,10 @@
     <string name="search_for_in">Przeszukaj %1$s artykuły w \"%2$s\"</string>
     <string name="search_for">Przeszukaj %1$s artykuły</string>
     <string name="mark_as_read">Oznacz jako przeczytane</string>
-    <string name="mark_all_as_read">Zaznacz wszystkie jako przeczytane</string>
+    <string name="mark_all_as_read">Oznacz wszystkie jako przeczytane</string>
     <string name="mark_as_unread">Oznacz jako nieprzeczytane</string>
     <string name="mark_as_starred">Oznacz jako wyróżnione</string>
-    <string name="mark_as_unstar">Odznacz jako wyróżnione</string>
+    <string name="mark_as_unstar">Oznacz jako niewyróżnione</string>
     <string name="mark_as_read_one_day">Oznacz artykuły starsze niż 1 dzień jako przeczytane</string>
     <string name="mark_as_read_three_days">Oznacz artykuły starsze niż 3 dni jako przeczytane</string>
     <string name="mark_as_read_seven_days">Oznacz artykuły starsze niż 7 dni jako przeczytane</string>
@@ -93,7 +96,7 @@
     <string name="close">Zamknij</string>
     <string name="get_new_updates">Sprawdź aktualizacje</string>
     <string name="get_new_updates_desc">Nowa wersja %1$s jest dostępna</string>
-    <string name="in_coding">W trakcie kodowania</string>
+    <string name="in_coding">W toku</string>
     <string name="coming_soon">Dostępne wkrótce</string>
     <string name="accounts">Konta</string>
     <string name="accounts_desc">Lokalne, FreshRSS</string>
@@ -107,11 +110,10 @@
     <string name="tips_and_support">Porady i wsparcie</string>
     <string name="tips_and_support_desc">O aplikacji i licencjach open source</string>
     <string name="welcome">Witamy</string>
-    <string name="tos_tips">Aby kontynuować, przeczytaj i zaakceptuj Warunki korzystania z usługi i Politykę prywatności Read You.</string>
-    <string name="browse_tos_tips">Zapoznaj się z &lt;i&gt;&lt;u&gt;Warunkami Świadczenia Usługi oraz Polityką Prywatności&lt;/u&gt;&lt;/i&gt;
-    </string>
+    <string name="tos_tips">Aby kontynuować, przeczytaj i zaakceptuj warunki korzystania z usługi Read You oraz politykę prywatności.</string>
+    <string name="browse_tos_tips">Zapoznaj się z <i><u>warunkami korzystania z usługi i polityką prywatności</u></i></string>
     <string name="terms_of_service">Warunki świadczenia usługi</string>
-    <string name="tos_content"><h5>Polityka prywatności</h5> <br/> <p>Twoją prywatność traktuję bardzo poważnie.</p> <br/> <p> <b>Read You</b> nie zbiera żadnych danych użytkownika, a wszystkie poufne informacje (hasła i inne informacje o koncie) są bezpiecznie przechowywane w lokalnej bazie danych aplikacji na Twoim urządzeniu.</p> <br/> <p> <b>Read You</b> będzie korzystać z następujących uprawnień, aby świadczyć Ci usługę.</p> <br/> <p> - Uprawnienie dostępu do sieci (aby uzyskać dostęp do treści online zgodnie z Twoimi ustawieniami)</p> <p> - Uprawnienie uzyskania stanu sieci (aby określić, czy urządzenie ma obecnie dostępne warunki sieciowe)</p> <p> - Uprawnienie usługi w tle (aby regularnie automatycznie synchronizować Twoje ulubione)</p> <br/> <br/> <h5>Usługi stron trzecich</h5> <br/> <p> Niniejsza polityka nie dotyczy usług stron trzecich, z których korzystasz w <b>Read You</b>. Możesz zapoznać się z polityką prywatności usług stron trzecich, z których korzystasz na ich stronach internetowych </p> <br/> <br/> <h5> Zastrzeżenia </h5> <br/> <p> <b>Read You</b> jest wyłącznie narzędziem do gromadzenia treści. Korzystanie z <b>Read You</b> podlega prawom i regulacjom obowiązującym w Twoim kraju i regionie, a wszelka odpowiedzialność wynikająca z Twoich działań będzie ponoszona przez Ciebie osobiście. </p> <br/> <br/> <h5> Licencja open source </h5> <br/> <p> <b>Read You</b> jest projektem typu open source na podstawie licencji GNU GPL 3.0[1], która pozwala na bezpłatne korzystanie, odwoływanie się do kodu źródłowego <b>Read You</b> i jego modyfikację, ale nie zezwala na dystrybucję i sprzedaż zmodyfikowanego i pochodnego kodu jako zamkniętego oprogramowania komercyjnego. Aby uzyskać szczegółowe informacje, zapoznaj się z pełną licencją GNU GPL 3.0[2]. </p> <br/> <br/> <h5> Załącznik </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
+    <string name="tos_content"><h5>Polityka prywatności</h5> <br/> <p>Twoja prywatność jest dla nas ważna.</p> <br/> <p> <b>Read You</b> nie zbiera żadnych danych użytkownika, a wszystkie poufne informacje (hasła i inne informacje o koncie) są bezpiecznie przechowywane w lokalnej bazie danych aplikacji na Twoim urządzeniu.</p> <br/> <p> <b>Read You</b> będzie korzystać z następujących uprawnień, aby świadczyć Ci usługę.</p> <br/> <p> - Uprawnienie dostępu do sieci (aby uzyskać dostęp do treści online zgodnie z Twoimi ustawieniami)</p> <p> - Uprawnienie uzyskania stanu sieci (aby określić, czy urządzenie ma obecnie dostępne warunki sieciowe)</p> <p> - Uprawnienie usługi w tle (aby regularnie automatycznie synchronizować Twoje ulubione)</p> <br/> <br/> <h5>Usługi stron trzecich</h5> <br/> <p> Niniejsza polityka nie dotyczy usług stron trzecich, z których korzystasz w <b>Read You</b>. Możesz zapoznać się z polityką prywatności usług stron trzecich, z których korzystasz na ich stronach internetowych </p> <br/> <br/> <h5> Zastrzeżenia </h5> <br/> <p> <b>Read You</b> jest wyłącznie narzędziem do gromadzenia treści. Korzystanie z <b>Read You</b> podlega prawom i regulacjom obowiązującym w Twoim kraju i regionie, a wszelka odpowiedzialność wynikająca z Twoich działań będzie ponoszona przez Ciebie osobiście. </p> <br/> <br/> <h5> Licencja open source </h5> <br/> <p> <b>Read You</b> jest projektem typu open source na podstawie licencji GNU GPL 3.0[1], która pozwala na bezpłatne korzystanie, odwoływanie się do kodu źródłowego <b>Read You</b> i jego modyfikację, ale nie zezwala na dystrybucję i sprzedaż zmodyfikowanego i pochodnego kodu jako zamkniętego oprogramowania komercyjnego. Aby uzyskać szczegółowe informacje, zapoznaj się z pełną licencją GNU GPL 3.0[2]. </p> <br/> <br/> <h5> Załącznik </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">Zgadzam się</string>
     <string name="wallpaper_colors">Kolory z tapety</string>
     <string name="no_palettes">Brak palet</string>
@@ -126,7 +128,7 @@
     <string name="on">Włączono</string>
     <string name="off">Wyłączono</string>
     <string name="other">Inne</string>
-    <string name="amoled_dark_theme">Ciemny motyw AMOLED</string>
+    <string name="amoled_dark_theme">Czarny ciemny motyw</string>
     <string name="tonal_elevation">Odcień</string>
     <string name="reading_fonts">Czcionka artykułu</string>
     <string name="basic_fonts">Podstawowe czcionki</string>
@@ -160,12 +162,12 @@
     <string name="article_images">Miniatury artykułów</string>
     <string name="feed_names">Nazwy kanałów</string>
     <string name="feed_favicons">Ikony kanałów</string>
-    <string name="article_date_sticky_header">Przypięte nagłówki z datami publikacji (eksperymentalne)</string>
+    <string name="article_date_sticky_header">Przypięte nagłówki z datami publikacji</string>
     <string name="article_list">Lista artykułów</string>
     <string name="group_list">Lista grup</string>
     <string name="always_expand">Zawsze rozwiń</string>
     <string name="top">Góra</string>
-    <string name="mark_as_read_button_position">Pozycja przycisku \"Oznacz jako przeczytane\"</string>
+    <string name="mark_as_read_button_position">Pozycja przycisku „Oznacz jako przeczytane”</string>
     <string name="top_bar">Pasek górny</string>
     <string name="fill_selected_icon">Wypełnij ikonę obecnego filtra</string>
     <string name="filter_bar">Pasek filtrów</string>
@@ -183,7 +185,7 @@
     <string name="line_spacing">Odstępy między liniami</string>
     <string name="alignment">Wyrównanie</string>
     <string name="general">Ogólne</string>
-    <string name="auto_hide_toolbars">Ukryj interfejs podczas czytania</string>
+    <string name="auto_hide_toolbars">Automatycznie ukrywaj paski narzędzi</string>
     <string name="rearrange_buttons">Zmień kolejność przycisków</string>
     <string name="bionic_reading">Czytanie bioniczne</string>
     <string name="images">Obrazy</string>
@@ -230,7 +232,7 @@
     <string name="add_accounts">Dodaj konta</string>
     <string name="list">Lista</string>
     <string name="synchronous">Synchronizacja</string>
-    <string name="add_accounts_desc">Konto lokalne, Usługi, Własny serwer</string>
+    <string name="add_accounts_desc">Konto lokalne, usługi, własny serwer</string>
     <string name="display">Wyświetlanie</string>
     <string name="only_on_wifi">Tylko przez Wi-Fi</string>
     <string name="only_when_charging">Tylko podczas ładowania</string>
@@ -239,8 +241,8 @@
     <string name="sync_interval">Synchronizuj</string>
     <string name="sync_once_on_start">Synchronizuj podczas startu</string>
     <string name="delete_account">Usuń konto</string>
-    <string name="must_have_an_account">Konto jest wymagane</string>
-    <string name="clear_all_articles_toast">Wyczyszczono listę artykułów</string>
+    <string name="must_have_an_account">Musisz mieć co najmniej 1 konto</string>
+    <string name="clear_all_articles_toast"> Wyczyszczono listę artykułów</string>
     <string name="delete_account_toast">Konto zostało usunięte</string>
     <string name="clear_all_articles">Usuń wszystkie artykuły</string>
     <string name="block_list">Lista zablokowanych</string>
@@ -250,7 +252,7 @@
     <string name="local_desc">Na tym urządzeniu</string>
     <string name="switch_account">Przełącz</string>
     <string name="add">Dodaj</string>
-    <string name="accounts_tips">Aby zmienić konto, stuknij jego nazwę na stronie głównej</string>
+    <string name="accounts_tips">Możesz przełączać konta, stukając nazwy konta na stronie kanału</string>
     <string name="empty">Pusty</string>
     <string name="username">Nazwa użytkownika</string>
     <string name="password">Hasło</string>
@@ -272,10 +274,10 @@
     <string name="shared_content">Udostępniona zawartość</string>
     <string name="only_link">Tylko link</string>
     <string name="title_and_link">Tytuł i link</string>
-    <string name="custom_tabs">Wymuś CustomTabs</string>
+    <string name="custom_tabs">Wymuś niestandardowe karty</string>
     <string name="specific_browser_name">Przeglądarka: %1$s</string>
     <string name="always_ask">Zawsze pytaj</string>
-    <string name="auto_customtabs">Automatycznie (preferuj CustomTabs)</string>
+    <string name="auto_customtabs">Automatycznie (preferuj niestandardowe karty)</string>
     <string name="specific_browser">Wymuś daną przeglądarkę</string>
     <string name="include_additional_info">Załącz dodatkowe informacje</string>
     <string name="none">Brak</string>
@@ -303,24 +305,24 @@
     <string name="keep_archived_tips">Zarchiwizowane elementy to artykuły oznaczone jako przeczytane, niewyróżnione i nieotagowane. Ustawienie „Zachowaj zarchiwizowane artykuły” jest skuteczne tylko na tym urządzeniu. Starsze zarchiwizowane artykuły zostaną usunięte z tego urządzenia. Usunięcia artykułów nie można cofnąć.</string>
     <string name="initial_open_app">Aplikacja po kliknięciu linku</string>
     <string name="additional_info_desc">Dodatkowe informacje obejmują opcje konfiguracji dla każdego kanału, takie jak zezwolenie na powiadomienia, analiza pełnej zawartości itp. Jeśli zamierzasz używać wyeksportowanego pliku OPML z innymi czytnikami, wybierz opcję „Wyklucz”.</string>
-    <string name="submit_bug_report">zgłoś błąd na GitHub</string>
-    <string name="unexpected_error_msg">Aplikacja napotkała nieoczekiwany błąd i musiała zostać zamknięta.\n\nAby szybko zidentyfikować i rozwiązać problem, zapoznaj się z poniższym śladem stosu błędów %1$s.</string>
+    <string name="submit_bug_report">Zgłoś błąd na GitHub</string>
+    <string name="unexpected_error_msg">Aplikacja napotkała nieoczekiwany błąd i została zamknięta.\n\nAby pomóc nam szybko zidentyfikować i rozwiązać ten problem, %1$s z poniższym śladem stosu.</string>
     <string name="pull_to_switch_article">Przeciągnij, aby zmienić artykuł</string>
     <string name="mark_above_as_read">Oznacz powyższe jako przeczytane</string>
     <string name="mark_below_as_read">Oznacz poniższe jako przeczytane</string>
     <string name="toolbars">Paski narzędzi</string>
-    <string name="open_link_something_wrong">Ustawienie „Otwórz link” zostało zignorowane, ponieważ coś poszło nie tak.</string>
+    <string name="open_link_something_wrong">Ustawienie „Otwórz link” zostało zignorowane, ponieważ coś poszło nie tak</string>
     <string name="native_component">Komponent natywny</string>
     <string name="content_renderer">Renderer treści</string>
     <string name="read_aloud">Czytać na głos</string>
-    <string name="only_available_on_webview">Dostępne tylko w WebView</string>
+    <string name="only_available_on_webview">Dostępne tylko podczas korzystania z renderera zawartości WebView</string>
     <string name="use_bionic_reading">Użyj czytania bionicznego</string>
     <string name="bionic_reading_tips">Czym jest czytanie bioniczne?</string>
     <string name="browse_bionic_reading_tips">Dowiedz się więcej na <i><u>bionic-reading.com</u></i>.</string>
     <string name="mark_as_read_on_scroll">Oznacz jako przeczytane podczas przewijania</string>
     <string name="become_a_sponsor">Zostań sponsorem</string>
-    <string name="sponsor_desc">Tworzymy i utrzymujemy tę darmową aplikację typu open source poza godzinami pracy. Jeśli Ci się podoba, rozważ wsparcie nas małą darowizną! ☕️</string>
-    <string name="troubleshooting_desc">Raport o błędach, narzędzia debugowania</string>
+    <string name="sponsor_desc">Tworzymy i utrzymujemy tę darmową, otwartą aplikację w naszym wolnym czasie. Jeśli Ci się podoba, rozważ wsparcie nas małą darowizną! ☕️</string>
+    <string name="troubleshooting_desc">Raport o błędzie, debugowanie</string>
     <string name="toggle_starred">Przełącz wyróżnione</string>
     <string name="hide_empty_groups">Ukryj puste grupy</string>
     <string name="client_certificate">Certyfikat klienta (opcjonalnie)</string>
@@ -331,4 +333,8 @@
     <string name="all_deny_open_in_browser_toast">Nie można już otwierać wszystkich artykułów z grupy „%1$s” za pomocą przeglądarki</string>
     <string name="latest">Najnowsze</string>
     <string name="earliest">Najwcześniejsze</string>
+    <string name="short_desc">Krótkie</string>
+    <string name="long_desc">Długie</string>
+    <string name="none_desc">Żadne</string>
+    <string name="pull_to_switch_feed">Przeciągnij, aby załadować następny kanał</string>
 </resources>

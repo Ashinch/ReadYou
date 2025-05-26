@@ -4,7 +4,7 @@
     <string name="wallpaper_colors">Achtergrond kleuren</string>
     <string name="tos_content"><h5> Privacybeleid </h5> <br/> <p> Ik neem uw privacy zeer serieus. </p> <br/> <p> <b>Read You</b> verzamelt geen gebruikersgegevens en alle gevoelige informatie (wachtwoorden en andere accountinformatie) wordt veilig opgeslagen in de lokale applicatiedatabase op uw apparaat. </p> <br/> <p> <b>Read You</b> gebruikt de volgende toestemmingen om u de dienst te leveren. </p> <br/> <p> - Toestemming voor toegang tot het netwerk (voor toegang tot online inhoud zoals u opgeeft) </p> <p> - Toestemming voor het verkrijgen van de netwerkstatus (voor het verkrijgen of het apparaat momenteel over een beschikbaar netwerk beschikt) </p> <p> - Toestemming voor achtergronddiensten (om uw favorieten regelmatig automatisch voor u te synchroniseren) </p> <br/> <br/> <h5> Diensten van derden </h5> <br/> <p> Dit beleid is niet van toepassing op diensten van derden die u gebruikt met <b>Read You</b>. U kunt het privacybeleid van de diensten van derden die u gebruikt nalezen op hun websites </p> <br/> <br/> <h5> Disclaimers </h5> <br/> <p> <b> Read You</b> is uitsluitend een hulpmiddel voor het verzamelen van inhoud. Uw gebruik van <b>Read You</b> is onderworpen aan de wetten en voorschriften van uw land en regio, en elke aansprakelijkheid die uit uw handelingen voortvloeit, wordt door u persoonlijk gedragen. </p> <br/> <br/> <h5> Open Source Licentie </h5> <br/> <p> <b> Read You</b> is een open source project onder de GNU GPL 3.0 Open Source Licentie[1], die u toestaat de broncode van <b>Read You</b> gratis te gebruiken, er naar te verwijzen en te wijzigen, maar niet toestaat dat de gewijzigde en afgeleide code wordt verspreid en verkocht als closed-source commerciële software. Zie voor details de volledige GNU GPL 3.0 Open Source License[2]. </p> <br/> <br/> <h5> Bijlage </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="other">Andere</string>
-    <string name="amoled_dark_theme">AMOLED donker thema</string>
+    <string name="amoled_dark_theme">Zwart donker thema</string>
     <string name="reading_fonts">Lettertypen lezen</string>
     <string name="basic_fonts">Basis fonts</string>
     <string name="flow_page">Flow-pagina</string>
@@ -273,9 +273,7 @@
     <string name="custom_tabs">Aangepaste tabbladen forceren</string>
     <string name="open_link_something_wrong">\"Open Link\" instelling genegeerd omdat er iets mis ging.</string>
     <string name="additional_info_desc">Aanvullende informatie bevat configuratieopties voor elke feed, zoals het al dan niet toestaan van meldingen, het parsen van de volledige inhoud, enzovoort. Als je het geëxporteerde OPML-bestand met andere lezers wilt gebruiken, selecteer dan \"Uitsluiten\".</string>
-    <string name="unexpected_error_msg">De app ondervond een onverwachte fout en moest worden afgesloten.
-\n
-\nOm ons te helpen dit probleem snel te identificeren en op te lossen, kunt u %1$s met de fout stack trace hieronder.</string>
+    <string name="unexpected_error_msg">De app ondervond een onverwachte fout en moest worden afgesloten. \n \nOm ons te helpen dit probleem snel te identificeren en op te lossen, kunt u %1$s met de fout stack trace hieronder.</string>
     <string name="empty">Leeg</string>
     <string name="unfold_more">Alles uitvouwen</string>
     <string name="unfold_less">Alles opvouwen</string>

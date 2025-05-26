@@ -71,7 +71,7 @@
     <string name="on">Укључено</string>
     <string name="maximize">Максимизуј</string>
     <string name="feed_names">Имена фидова</string>
-    <string name="amoled_dark_theme">AMOLED тамна тема</string>
+    <string name="amoled_dark_theme">Црна тамна тема</string>
     <string name="for_2_days">2 дана</string>
     <string name="auto_default_browser">Аутоматски (преферирање подразумеваног претраживача)</string>
     <string name="basic_fonts">Основни фонтови</string>
@@ -282,9 +282,7 @@
     <string name="none">Ниједно</string>
     <string name="toggle_read">Укључи читање</string>
     <string name="toggle_starred">Укључи са звездицом</string>
-    <string name="unexpected_error_msg">Апликација је наишла на неочекивану грешку и морала је да се затвори.
-\n
-\nДа бисте нам помогли да брзо идентификујемо и решимо овај проблем, можете %1$s помоћу праћења грешака у наставку.</string>
+    <string name="unexpected_error_msg">Апликација је наишла на неочекивану грешку и морала је да се затвори. \n \nДа бисте нам помогли да брзо идентификујемо и решимо овај проблем, можете %1$s помоћу праћења грешака у наставку.</string>
     <string name="export">Извези</string>
     <string name="pull_to_switch_article">Повуците да бисте променили чланак</string>
     <string name="save">Сачувај</string>
@@ -330,4 +328,7 @@
     <string name="sort_unread_articles">Сортирање непрочитаних чланака</string>
     <string name="latest">Најновије</string>
     <string name="earliest">Најраније</string>
+    <string name="short_desc">Кратко</string>
+    <string name="long_desc">Дуго</string>
+    <string name="none_desc">Ниједно</string>
 </resources>

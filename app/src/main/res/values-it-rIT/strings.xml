@@ -108,7 +108,7 @@
     <string name="tips_and_support_desc">Informazioni, licenze open source</string>
     <string name="welcome">Benvenuto</string>
     <string name="tos_tips">Per favore, leggi e accetta i termini di servizio e l\'informativa sulla privacy di Read You per continuare.</string>
-    <string name="browse_tos_tips">Sfoglia i&lt;i&gt;&lt;u&gt;Termini di servizio e l\'Informativa sulla privacy&lt;/u&gt;&lt;/i&gt;</string>
+    <string name="browse_tos_tips">Sfoglia i<i><u>Termini di servizio e l\'Informativa sulla privacy</u></i></string>
     <string name="terms_of_service">Termini di servizio</string>
     <string name="tos_content"><h5> Informativa sulla privacy </h5> <br/> <p> La privacy dell\'utente viene presa molto sul serio. </p> <br/> <p> <b>Read You</b> non raccoglie alcun dato dell\'utente e tutte le informazioni sensibili (password e altre informazioni sull\'account) vengono archiviate in modo sicuro nel database locale dell\'applicazione sul dispositivo. </p> <br/> <p> <b>Read You</b> utilizzerà le seguenti autorizzazioni per fornire il servizio. </p> <br/> <p> - Accesso alla rete (per l\'accesso ai contenuti online specificati dall\'utente) </p> <p> - Ottieni lo stato della rete (per sapere se il dispositivo dispone attualmente di condizioni di rete disponibili) </p> <p> - Servizio in background (per sincronizzare automaticamente i preferiti su base regolare) </p> <br/> <br/> <h5> Servizi di terze parti </h5> <br/> <p> Questa politica non si applica ai servizi di terze parti utilizzati con <b>Read You</b>. È possibile consultare le informative sulla privacy dei servizi di terze parti utilizzati sui loro siti web </p> <br/> <br/> <h5> Disclaimer </h5> <br/> <p> <b>Read You</b> è solo uno strumento di raccolta di contenuti. L\'uso di <b>Read You</b> è soggetto alle leggi e ai regolamenti del proprio Paese e della propria regione e qualsiasi responsabilità derivante dalle proprie azioni sarà a carico dell\'utente stesso. </p> <br/> <br/> <h5> Licenza Open Source </h5> <br/> <p> <b>Read You</b>è un progetto open source secondo la licenza GNU GPL 3.0 Open Source License[1], che consente di utilizzare, fare riferimento e modificare gratuitamente il codice sorgente di <b>Read You</b>, ma non permette che il codice modificato e derivato venga distribuito e venduto come software commerciale closed-source. Per i dettagli, consultare la licenza GNU GPL 3.0 Open Source completa[2]. </p> <br/> <br/> <h5> Appendice </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">Accetto</string>
@@ -125,7 +125,7 @@
     <string name="on">Attivo</string>
     <string name="off">Disattivo</string>
     <string name="other">Altro</string>
-    <string name="amoled_dark_theme">Tema scuro AMOLED</string>
+    <string name="amoled_dark_theme">Tema scuro nero</string>
     <string name="tonal_elevation">Elevazione tonale</string>
     <string name="reading_fonts">Font di lettura</string>
     <string name="basic_fonts">Font di base</string>
@@ -286,9 +286,7 @@
     <string name="swipe_to_start">Scorri a sinistra</string>
     <string name="swipe_to_end">Scorri a destra</string>
     <string name="none">Nessuno</string>
-    <string name="unexpected_error_msg">L\'applicazione ha riscontrato un errore imprevisto ed è stata chiusa.
-\n
-\nPer aiutarci a identificare e a risolvere rapidamente il problema, puoi %1$s con lo stack trace dell\'errore qui sotto.</string>
+    <string name="unexpected_error_msg">L\'applicazione ha riscontrato un errore imprevisto ed è stata chiusa. \n \nPer aiutarci a identificare e a risolvere rapidamente il problema, puoi %1$s con lo stack trace dell\'errore qui sotto.</string>
     <string name="toggle_read">Alterna letto</string>
     <string name="line_height_multiple">Altezza della linea multipla</string>
     <string name="toggle_starred">Alterna preferito</string>

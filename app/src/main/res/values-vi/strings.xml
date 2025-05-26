@@ -130,7 +130,7 @@
     <string name="use_device_theme">Giống như thiết bị</string>
     <string name="on">Bật</string>
     <string name="other">Nâng cao</string>
-    <string name="amoled_dark_theme">Chủ đề Tối AMOLED</string>
+    <string name="amoled_dark_theme">Chủ đề đen tối</string>
     <string name="reading_fonts">Phông chữ bài viết</string>
     <string name="feeds_page">Bảng tin</string>
     <string name="tonal_elevation">Tông màu</string>
@@ -268,9 +268,7 @@
     <string name="read_excluding_starred">Đã đọc, trừ yêu thích</string>
     <string name="external_links">Liên kết</string>
     <string name="unexpected_error_title">Oops! Chuyện gì đó đã xảy ra…</string>
-    <string name="unexpected_error_msg">Ứng dụng phải đóng vì một vấn đề.
-\n
-\nĐể giúp chúng tôi tìm và sửa vấn đề này, bạn có thể %1$s với dòng lỗi bên dưới.</string>
+    <string name="unexpected_error_msg">Ứng dụng phải đóng vì một vấn đề. \n \nĐể giúp chúng tôi tìm và sửa vấn đề này, bạn có thể %1$s với dòng lỗi bên dưới.</string>
     <string name="next_article">Bài tiếp theo</string>
     <string name="shared_content">Nội dung chia sẻ</string>
     <string name="only_link">Chỉ liên kết</string>
