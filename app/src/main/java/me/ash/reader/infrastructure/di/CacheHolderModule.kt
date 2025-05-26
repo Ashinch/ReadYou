@@ -10,6 +10,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.domain.data.DiffMapHolder
+import me.ash.reader.infrastructure.preference.SettingsProvider
+import me.ash.reader.infrastructure.rss.ReaderCacheHelper
+import me.ash.reader.infrastructure.rss.RssHelper
 import javax.inject.Singleton
 
 @Module
@@ -27,4 +30,17 @@ object CacheHolderModule {
             context = context, applicationScope, ioDispatcher, rssService
         )
     }
+
+    @Provides
+    @Singleton
+    fun provideCacheHelper(
+        @ApplicationContext context: Context,
+        @IODispatcher ioDispatcher: CoroutineDispatcher,
+        settingsProvider: SettingsProvider,
+        rssHelper: RssHelper,
+    ): ReaderCacheHelper = ReaderCacheHelper(
+        context = context, ioDispatcher = ioDispatcher,
+        rssHelper = rssHelper,
+        settingsProvider = settingsProvider,
+    )
 }

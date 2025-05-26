@@ -2,6 +2,7 @@ package me.ash.reader.domain.repository
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -300,6 +301,20 @@ interface ArticleDao {
         accountId: Int,
         before: Date,
     )
+
+    @Query(
+        """
+        select * FROM article
+        WHERE accountId = :accountId
+        AND updateAt < :before
+        AND isUnread = 0
+        AND isStarred = 0
+        """
+    )
+    suspend fun queryArchivedArticleBefore(
+        accountId: Int,
+        before: Date,
+    ): List<Article>
 
     @Transaction
     @Query(
@@ -808,6 +823,9 @@ interface ArticleDao {
 
     @Insert
     suspend fun insertList(articles: List<Article>)
+
+    @Delete
+    suspend fun delete(vararg article: Article)
 
     @Update
     suspend fun update(vararg article: Article)

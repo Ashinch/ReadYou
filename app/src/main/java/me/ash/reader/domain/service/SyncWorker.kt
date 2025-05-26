@@ -11,24 +11,26 @@ import kotlinx.coroutines.withContext
 import me.ash.reader.infrastructure.preference.SyncIntervalPreference
 import me.ash.reader.infrastructure.preference.SyncOnlyOnWiFiPreference
 import me.ash.reader.infrastructure.preference.SyncOnlyWhenChargingPreference
+import me.ash.reader.infrastructure.rss.ReaderCacheHelper
 import java.util.concurrent.TimeUnit
 
 @HiltWorker
 class SyncWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
-    private val accountService: AccountService,
     private val rssService: RssService,
+    private val readerCacheHelper: ReaderCacheHelper,
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result =
         withContext(Dispatchers.Default) {
             Log.i("RLog", "doWork: ")
             rssService.get().sync().also {
-                rssService.get().clearKeepArchivedArticles()
+                rssService.get().clearKeepArchivedArticles().forEach {
+                    readerCacheHelper.deleteCacheFor(articleId = it.id)
+                }
             }
         }
-
 
     companion object {
         private const val WORK_NAME_PERIODIC = "ReadYou"

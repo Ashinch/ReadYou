@@ -10,6 +10,7 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,7 +26,7 @@ import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.android.AndroidImageDownloader
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
-import me.ash.reader.infrastructure.rss.RssHelper
+import me.ash.reader.infrastructure.rss.ReaderCacheHelper
 import java.util.Date
 
 private const val TAG = "ReadingViewModel"
@@ -35,7 +36,7 @@ class ReadingViewModel @AssistedInject constructor(
     @Assisted private val initialArticleId: String,
     @Assisted private val initialListIndex: Int?,
     private val rssService: RssService,
-    private val rssHelper: RssHelper,
+    private val readerCacheHelper: ReaderCacheHelper,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @ApplicationScope private val applicationScope: CoroutineScope,
     private val imageDownloader: AndroidImageDownloader,
@@ -119,22 +120,21 @@ class ReadingViewModel @AssistedInject constructor(
     }
 
     fun renderFullContent() {
-        viewModelScope.launch {
-            internalRenderFullContent()
+        val fetchJob = viewModelScope.launch {
+            readerCacheHelper.readOrFetchFullContent(
+                currentArticle!!
+            ).onSuccess { content ->
+                _readerState.update { it.copy(content = ReaderState.FullContent(content = content)) }
+            }.onFailure { th ->
+                Log.i("RLog", "renderFullContent: ${th.message}")
+                _readerState.update { it.copy(content = ReaderState.Error(th.message.toString())) }
+            }
         }
-    }
-
-    suspend fun internalRenderFullContent() {
-        setLoading()
-        runCatching {
-            rssHelper.parseFullContent(
-                currentArticle?.link ?: "", currentArticle?.title ?: ""
-            )
-        }.onSuccess { content ->
-            _readerState.update { it.copy(content = ReaderState.FullContent(content = content)) }
-        }.onFailure { th ->
-            Log.i("RLog", "renderFullContent: ${th.message}")
-            _readerState.update { it.copy(content = ReaderState.Error(th.message.toString())) }
+        viewModelScope.launch {
+            delay(100L)
+            if (fetchJob.isActive) {
+                setLoading()
+            }
         }
     }
 
