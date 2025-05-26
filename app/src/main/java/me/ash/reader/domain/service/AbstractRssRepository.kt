@@ -109,7 +109,11 @@ abstract class AbstractRssRepository(
                 async(Dispatchers.IO) {
                     semaphore.withPermit {
                         val feedWithArticle = syncFeed(feed, preDate)
-                        val newArticles = articleDao.insertListIfNotExist(feedWithArticle.articles)
+                        val newArticles =
+                            articleDao.insertListIfNotExist(
+                                articles = feedWithArticle.articles,
+                                feed = feed
+                            )
                         if (feedWithArticle.feed.isNotification) {
                             notificationHelper.notify(feedWithArticle.copy(articles = newArticles))
                         }

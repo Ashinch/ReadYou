@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.article.ArticleMeta
 import me.ash.reader.domain.model.article.ArticleWithFeed
+import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.feed.ImportantNum
 import java.util.Date
 
@@ -653,16 +654,16 @@ interface ArticleDao {
     @Query(
         """
         SELECT * from article 
-        WHERE link = :link
+        WHERE link in (:linkList)
         AND feedId = :feedId
         AND accountId = :accountId
         """
     )
-    suspend fun queryArticleByLink(
-        link: String,
+    suspend fun queryArticlesByLinks(
+        linkList: List<String>,
         feedId: String,
         accountId: Int,
-    ): Article?
+    ): List<Article>
 
     @Transaction
     @Query(
@@ -831,16 +832,15 @@ interface ArticleDao {
     suspend fun update(vararg article: Article)
 
     @Transaction
-    suspend fun insertListIfNotExist(articles: List<Article>): List<Article> {
-        return articles.mapNotNull {
-            if (queryArticleByLink(
-                    link = it.link, feedId = it.feedId, accountId = it.accountId
-                ) == null
-            ) it else null
-        }.also {
-            if (it.isNotEmpty()) {
-                insertList(it)
-            }
-        }
+    suspend fun insertListIfNotExist(articles: List<Article>, feed: Feed): List<Article> {
+        if (articles.isEmpty()) return articles
+
+        val existingArticles = queryArticlesByLinks(
+            linkList = articles.map { it.link },
+            feedId = feed.id,
+            accountId = feed.accountId
+        ).associateBy { it.link }
+
+        return articles.filterNot { existingArticles.containsKey(it.link) }.also { insertList(it) }
     }
 }
