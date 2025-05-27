@@ -5,7 +5,6 @@
     <plurals name="starred_desc">
         <item quantity="one">פריט אחד סומן בכוכב</item>
         <item quantity="two">שני פריטים סומנו בכוכב</item>
-        <item quantity="many">%1$d פריטים סומנו בכוכב</item>
         <item quantity="other"/>
     </plurals>
     <string name="feeds">היזנים</string>
@@ -16,12 +15,12 @@
     <string name="already_subscribed">כבר נרשמת</string>
     <string name="clear">פינוי</string>
     <string name="paste">הדבקה</string>
-    <string name="feed_or_site_url">כתובת היזן או אתר</string>
+    <string name="feed_or_site_url">כתובת ערוץ או אתר</string>
     <string name="import_from_opml">ייבוא מ־OPML</string>
     <string name="preset">תצורה</string>
     <string name="selected">נבחרת</string>
     <string name="allow_notification">לאפשר התראות</string>
-    <string name="parse_full_content">פענוח התוכן המלא</string>
+    <string name="parse_full_content">ניתוח התוכן המלא</string>
     <string name="clear_articles">פינוי כתבות</string>
     <string name="create_new_group">יצירת קבוצה חדשה</string>
     <string name="name">שם</string>
@@ -118,13 +117,11 @@
     <plurals name="all_desc">
         <item quantity="one">פריט אחד הועבר לארכיון</item>
         <item quantity="two">שני פריטים הועברו לארכיון</item>
-        <item quantity="many">%1$d פריטים הועברו לארכיון</item>
         <item quantity="other"/>
     </plurals>
     <plurals name="unread_desc">
         <item quantity="one">פריט אחד לא נקרא</item>
         <item quantity="two">שני פריטים לא נקראו</item>
-        <item quantity="many">%1$d פריטים לא נקראו</item>
         <item quantity="other"/>
     </plurals>
     <string name="unknown">לא ידוע</string>
@@ -162,7 +159,7 @@
     <string name="article_images">תמונות הכתבה</string>
     <string name="tips_and_support_desc">על אודות, רישיונות קוד פתוח</string>
     <string name="on">פעיל</string>
-    <string name="amoled_dark_theme">ערכת עיצוב כהה ל־AMOLED</string>
+    <string name="amoled_dark_theme">ערכת עיצוב כהה שחורה</string>
     <string name="basic_fonts">גופנים בסיסיים</string>
     <string name="feeds_page">עמוד היזנים</string>
     <string name="flow_page">עמוד זרימה</string>
@@ -242,4 +239,22 @@
     <string name="mark_as_read_seven_days">סמן כנקראה לפני יותר מ-7 ימים</string>
     <string name="in_coding">בקידוד</string>
     <string name="tos_tips">אנא קרא והסכם לתנאי השירות ומדיניות הפרטיות כדי להמשיך.</string>
+    <string name="toggle_starred">עם/בלי כוכב</string>
+    <string name="none">ללא</string>
+    <string name="toggle_read">נקרא/לא נקרא</string>
+    <string name="unexpected_error_msg">היישום נתקל בשגיאה לא צפויה ונסגר.\n\nכדי לסייע לנו לאתר ולתקן את התקלה במהירות, אפשר %1$s עם תיעוד המהלכים (stack trace) להלן.</string>
+    <string name="next_article">הכתבה הבאה</string>
+    <string name="swipe_to_start">החלקה שמאלה</string>
+    <string name="open_in_browser">פתיחה בדפדפן</string>
+    <string name="all_open_in_browser_tips">לפתוח את כל הכתבות בקבוצה „%1$s” בעזרת הדפדפן</string>
+    <string name="all_open_in_browser_toast">לפתוח את כל הכתבות בקבוצה „%1$s” בעזרת הדפדפן</string>
+    <string name="swipe_to_end">החלקה ימינה</string>
+    <string name="line_height_multiple">מכפלת גובה שורה</string>
+    <string name="export">ייצוא</string>
+    <string name="pull_to_switch_article">יש למשוך כדי להחליף כתבה</string>
+    <string name="only_available_on_webview">זמין רק בעת שימוש בעיבוד תוכן דרך WebView</string>
+    <string name="use_bionic_reading">להשתמש בקריאה ביונית</string>
+    <string name="about">על אודות</string>
+    <string name="bionic_reading_tips">מה זאת קריאה ביונית?</string>
+    <string name="browse_bionic_reading_tips">יש מידע נוסף ב־<i><u>bionic-reading.com</u></i>.</string>
 </resources>

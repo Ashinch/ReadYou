@@ -118,7 +118,7 @@
     <string name="use_device_theme">使用裝置主題</string>
     <string name="on">開啟</string>
     <string name="off">關閉</string>
-    <string name="amoled_dark_theme">AMOLED 深色主題</string>
+    <string name="amoled_dark_theme">黑色暗色主題</string>
     <string name="other">其他</string>
     <string name="tonal_elevation">色調海拔</string>
     <string name="reading_fonts">閱讀字型</string>
@@ -270,9 +270,7 @@
     <string name="external_links">外部連結</string>
     <string name="unexpected_error_title">糟糕！發生錯誤…</string>
     <string name="copy_error_report">複製偵錯資訊</string>
-    <string name="unexpected_error_msg">由於發生未預期的錯誤，本應用程式必須關閉。
-\n
-\n如要協助我們儘速調查並修正此問題，請%1$s，並附上以下偵錯資訊。</string>
+    <string name="unexpected_error_msg">由於發生未預期的錯誤，本應用程式必須關閉。 \n \n如要協助我們儘速調查並修正此問題，請%1$s，並附上以下偵錯資訊。</string>
     <string name="swipe_to_start">向左滑動</string>
     <string name="swipe_to_end">向右滑動</string>
     <string name="none">無</string>

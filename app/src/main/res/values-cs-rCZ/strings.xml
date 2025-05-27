@@ -108,7 +108,7 @@
     <string name="tips_and_support_desc">O aplikaci, open source</string>
     <string name="welcome">Vítejte</string>
     <string name="tos_tips">Chcete-li pokračovat, přečtěte si prosím podmínky služby Read You a zásady ochrany osobních údajů a vyjádřete s nimi souhlas.</string>
-    <string name="browse_tos_tips">Podívejte se na &lt;i&gt;&lt;u&gt;podmínky služby a zásady ochrany osobních údajů&lt;/u&gt;&lt;/i&gt;</string>
+    <string name="browse_tos_tips">Podívejte se na <i><u>podmínky služby a zásady ochrany osobních údajů</u></i></string>
     <string name="terms_of_service">Podmínky služby</string>
     <string name="tos_content"><h5> Zásady ochrany osobních údajů </h5> <br/> <p> Vaše soukromí bereme velmi vážně. </p> <br/> <p> <b>Read You</b> neshromažďuje žádná uživatelská data a všechny citlivé informace (hesla a další informace o účtu) jsou bezpečně uloženy v místní databázi aplikací ve vašem zařízení. </p> <br/> <p> <b>Read You</b> použije k poskytování služby následující oprávnění. </p> <br/> <p> - Oprávnění k přístupu k síti (pro přístup k online obsahu, jak určíte) </p> <p> - Získat oprávnění ke stavu sítě (k určení, zda má zařízení aktuálně dostupné síťové podmínky) </p> <p> – Povolení služby na pozadí (aby se vaše oblíbené položky pravidelně automaticky synchronizovaly) </p> <br/> <br/> <h5> Služby třetích stran </h5> <br/> <p> Tyto zásady se nevztahují na služby třetích stran, které používáte s <b>Read You</b>. Zásady ochrany osobních údajů služeb třetích stran, které používáte, si můžete prohlédnout na jejich webových stránkách </p> <br/> <br/> <h5> Vyloučení odpovědnosti </h5> <br/> <p> <b>Read You</b> je pouze nástroj pro shromažďování obsahu. Vaše používání <b>Read You</b> podléhá zákonům a předpisům vaší země a regionu a veškerou odpovědnost vyplývající z vašeho jednání ponesete vy osobně. </p> <br/> <br/> <h5> Licence Open Source </h5> <br/> <p> <b>Read You</b> je projekt s otevřeným zdrojovým kódem pod GNU GPL 3.0 Open Source Licence[1], která vám umožňuje bezplatně používat, odkazovat a upravovat zdrojový kód <b>Read You</b>, ale neumožňuje distribuovat a prodávat upravený a odvozený kód jako uzavřený zdroj komerční software. Podrobnosti naleznete v plné verzi GNU GPL 3.0 Open Source License[2]. </p> <br/> <br/> <h5> Dodatek </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">Souhlasím</string>
@@ -125,7 +125,7 @@
     <string name="on">Zap</string>
     <string name="off">Vyp</string>
     <string name="other">Ostatní</string>
-    <string name="amoled_dark_theme">Tmavý motiv AMOLED</string>
+    <string name="amoled_dark_theme">Tmavý motiv černý</string>
     <string name="tonal_elevation">Zvýraznění tónů</string>
     <string name="reading_fonts">Přečtení písma</string>
     <string name="basic_fonts">Základní písma</string>
@@ -157,7 +157,7 @@
     <string name="article_images">Obrázky článku</string>
     <string name="feed_names">Názvy zdroje</string>
     <string name="feed_favicons">Favikony zdroje</string>
-    <string name="article_date_sticky_header">Vždy zobrazit záhlaví s datem zveřejnění článku (experimentální)</string>
+    <string name="article_date_sticky_header">Vždy zobrazit záhlaví s datem zveřejnění</string>
     <string name="article_list">Seznam článků</string>
     <string name="group_list">Seznam skupin</string>
     <string name="always_expand">Vždy rozšiřovat</string>
@@ -215,7 +215,7 @@
     <string name="keep_archived_articles">Uchovávat archivované články</string>
     <string name="delete_account">Smazat účet</string>
     <string name="clear_all_articles_tips">Opravdu chcete vymazat seznam článků pro tento účet?</string>
-    <string name="must_have_an_account">Je nutné mít účet</string>
+    <string name="must_have_an_account">Je nutné mít alespoň účet</string>
     <string name="add">Přidat</string>
     <string name="connection">Připojení</string>
     <string name="synchronous_tips">Aby se změny projevily, je nutný restart</string>
@@ -238,7 +238,7 @@
     <string name="services">Služby</string>
     <string name="self_hosted">Vlastní</string>
     <string name="fever_desc">Zastaralé. Nedoporučuje se.</string>
-    <string name="add_accounts_desc">Místní, Služby, Vlastní</string>
+    <string name="add_accounts_desc">Místní, služby, vlastní</string>
     <string name="sync_interval">Synchronizovat</string>
     <string name="sync_once_on_start">Synchronizovat jednou při spuštění</string>
     <string name="only_when_charging">Pouze při nabíjení</string>
@@ -257,9 +257,9 @@
     <string name="switch_account">Přepnout</string>
     <string name="initial_open_app">Aplikace při klepnutí na odkaz</string>
     <string name="open_link_specific_browser_not_selected">Žádná</string>
-    <string name="auto_customtabs">Automaticky (preferovat CustomTabs)</string>
+    <string name="auto_customtabs">Automaticky (preferovat vlastní karty)</string>
     <string name="auto_default_browser">Automaticky (preferovat výchozí prohlížeč)</string>
-    <string name="custom_tabs">Vynutit CustomTabs</string>
+    <string name="custom_tabs">Vynutit vlastní karty</string>
     <string name="specific_browser">Vynutit určitý prohlížeč</string>
     <string name="default_browser">Vynutit výchozí prohlížeč</string>
     <string name="system_default">Podle systému</string>
@@ -273,12 +273,10 @@
     <string name="all_read">Vše přečteno</string>
     <string name="read_excluding_starred">Přečteno, mimo oblíbených</string>
     <string name="external_links">Externí odkazy</string>
-    <string name="submit_bug_report">poslat hlášení o chybě na GitHub</string>
+    <string name="submit_bug_report">Poslat hlášení o chybě na GitHub</string>
     <string name="unexpected_error_title">Jejda! Něco se pokazilo…</string>
     <string name="copy_error_report">Kopírovat hlášení o chybě</string>
-    <string name="unexpected_error_msg">V aplikaci se vyskytla nečekaná chyba a musela být ukončena.
-\n
-\nPokud nám chcete pomoci identifikovat a rychle opravit tuto chybu, můžete %1$s s protokolem níže.</string>
+    <string name="unexpected_error_msg">V aplikaci se vyskytla nečekaná chyba a byla zavřena. \n \nPokud nám chcete pomoci identifikovat a rychle opravit tuto chybu, můžete %1$s s protokolem níže.</string>
     <string name="next_article">Další článek</string>
     <string name="swipe_to_start">Posunutí vlevo</string>
     <string name="swipe_to_end">Posunutí vpravo</string>
@@ -300,7 +298,7 @@
     <string name="app_preferences">Předvolby aplikace</string>
     <string name="import_from_protobuf_file">Importovat ze souboru protobuf</string>
     <string name="troubleshooting">Řešení chyb</string>
-    <string name="troubleshooting_desc">Hlášení chyb, ladicí nástroje</string>
+    <string name="troubleshooting_desc">Hlášení chyb, ladění</string>
     <string name="bug_report">Nahlásit chybu</string>
     <string name="export_as_protobuf_file">Exportovat do souboru protobuf</string>
     <string name="invalid_protobuf_file_warning">Tento soubor nejspíše není platným souborem protobuf. Jeho importováním můžete potenciálně poškodit aplikaci a ztratit aktuální předvolby. Opravdu chcete pokračovat?</string>
@@ -319,6 +317,19 @@
     <string name="bionic_reading_tips">Co je bionické čtení?</string>
     <string name="mark_as_read_on_scroll">Označit jako přečtené při posouvání</string>
     <string name="become_a_sponsor">Staňte se sponzorem</string>
-    <string name="sponsor_desc">Tuto bezplatnou aplikaci s otevřeným zdrojovým kódem vytváříme a udržujeme v našem volném čase. Pokud se vám líbí, zvažte prosím, zda nás podpoříte malým darem! ☕️</string>
+    <string name="sponsor_desc">Tuto bezplatnou aplikaci s otevřeným zdrojovým kódem vytváříme a spravujeme v našem volném čase. Pokud se vám líbí, zvažte prosím, zda nás podpoříte malým darem! ☕️</string>
     <string name="toolbars">Nástrojové lišty</string>
+    <string name="client_certificate">Certifikát klienta (volitelné)</string>
+    <string name="short_desc">Krátké</string>
+    <string name="long_desc">Dlouhé</string>
+    <string name="open_in_browser">Otevřít v prohlížeči</string>
+    <string name="all_open_in_browser_tips">Otevře všechny články ve skupině \"%1$s\" pomocí prohlížeče</string>
+    <string name="all_open_in_browser_toast">Otevřít všechny články ve skupině \"%1$s\" pomocí prohlížeče</string>
+    <string name="all_deny_open_in_browser_toast">Již žádné otevírání všech článků ve skupině \"%1$s\" pomocí prohlížeče</string>
+    <string name="hide_empty_groups">Skrýt prázdné skupiny</string>
+    <string name="sort_unread_articles">Seřadit nepřečtené články</string>
+    <string name="latest">Poslední</string>
+    <string name="earliest">Nejstarší</string>
+    <string name="none_desc">Žádné</string>
+    <string name="pull_to_switch_feed">Potáhnout pro načtení dalšího zdroje</string>
 </resources>

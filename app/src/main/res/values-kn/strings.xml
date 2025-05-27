@@ -98,7 +98,7 @@
     <string name="tos_tips">ಮುಂದುವರಿಯಲು ದಯವಿಟ್ಟು Read You ನ ಸೇವಾ ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತೆ ನೀತಿಯನ್ನು ಓದಿ ಮತ್ತು ಸಮ್ಮತಿಸಿ.</string>
     <string name="only_android_8.1_plus">ಆಂಡ್ರಾಯ್ಡ್ 8.1+ ಮಾತ್ರ</string>
     <string name="dark_theme">ಡಾರ್ಕ್ ಥೀಮ್</string>
-    <string name="amoled_dark_theme">AMOLED ಡಾರ್ಕ್ ಥೀಮ್</string>
+    <string name="amoled_dark_theme">ಕಪ್ಪು ಗಾಢ ಥೀಮ್</string>
     <string name="tonal_elevation">ಟೋನಲ್ ಎಲಿವೇಶನ್</string>
     <string name="reading_page">ಓದುವ ಪುಟ</string>
     <string name="sponsor">ಪ್ರಾಯೋಜಕರು</string>
@@ -275,9 +275,7 @@
     <string name="toggle_read">ಈಗಾಗಲೇ ಓದಿದ ಲೇಖನಗಳನ್ನು ತೋರಿಸಿ</string>
     <string name="additional_info_desc">ಹೆಚ್ಚುವರಿ ಮಾಹಿತಿಯು ಪ್ರತಿ ಫೀಡ್‌ಗೆ ಕಾನ್ಫಿಗರೇಶನ್ ಆಯ್ಕೆಗಳನ್ನು ಒಳಗೊಂಡಿರುತ್ತದೆ, ಉದಾಹರಣೆಗೆ ಅಧಿಸೂಚನೆಯನ್ನು ಅನುಮತಿಸಬೇಕೆ, ಪೂರ್ಣ ವಿಷಯವನ್ನು ಪಾರ್ಸ್ ಮಾಡುವುದು ಇತ್ಯಾದಿ. ನೀವು ರಫ್ತು ಮಾಡಲಾದ OPML ಫೈಲ್ ಅನ್ನು ಇತರ ರೀಡರ್ ಅಪ್ಲಿಕೇಶನ್‌ಗಳೊಂದಿಗೆ ಬಳಸಲು ಬಯಸಿದಾಗ, ದಯವಿಟ್ಟು \"ಹೊರತುಪಡಿಸಿ\" ಆಯ್ಕೆಮಾಡಿ.</string>
     <string name="swipe_to_start">ಎಡಕ್ಕೆ ಸ್ವೈಪ್ ಮಾಡಿ</string>
-    <string name="unexpected_error_msg">ಅಪ್ಲಿಕೇಶನ್ ಅನಿರೀಕ್ಷಿತ ದೋಷವನ್ನು ಎದುರಿಸಿದೆ ಮತ್ತು ಮುಚ್ಚಬೇಕಾಯಿತು.
-\n
-\nಈ ಸಮಸ್ಯೆಯನ್ನು ತ್ವರಿತವಾಗಿ ಗುರುತಿಸಲು ಮತ್ತು ಸರಿಪಡಿಸಲು ನಮಗೆ ಸಹಾಯ ಮಾಡಲು, ಕೆಳಗಿನ ದೋಷ ಸ್ಟ್ಯಾಕ್ ಟ್ರೇಸ್‌ನೊಂದಿಗೆ ನೀವು %1$s ಮಾಡಬಹುದು.</string>
+    <string name="unexpected_error_msg">ಅಪ್ಲಿಕೇಶನ್ ಅನಿರೀಕ್ಷಿತ ದೋಷವನ್ನು ಎದುರಿಸಿದೆ ಮತ್ತು ಮುಚ್ಚಬೇಕಾಯಿತು. \n \nಈ ಸಮಸ್ಯೆಯನ್ನು ತ್ವರಿತವಾಗಿ ಗುರುತಿಸಲು ಮತ್ತು ಸರಿಪಡಿಸಲು ನಮಗೆ ಸಹಾಯ ಮಾಡಲು, ಕೆಳಗಿನ ದೋಷ ಸ್ಟ್ಯಾಕ್ ಟ್ರೇಸ್‌ನೊಂದಿಗೆ ನೀವು %1$s ಮಾಡಬಹುದು.</string>
     <string name="next_article">ಮುಂದಿನ ಲೇಖನ</string>
     <string name="swipe_to_end">ಬಲಕ್ಕೆ ಸ್ವೈಪ್ ಮಾಡಿ</string>
     <string name="none">ಯಾವುದೂ ಇಲ್ಲ</string>
