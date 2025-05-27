@@ -45,6 +45,7 @@ class SyncWorker @AssistedInject constructor(
 
         fun cancelPeriodicWork(workManager: WorkManager) {
             workManager.cancelUniqueWork(SYNC_WORK_NAME_PERIODIC)
+            workManager.cancelUniqueWork(READER_WORK_NAME_PERIODIC)
         }
 
         fun enqueueOneTimeWork(
