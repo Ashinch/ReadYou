@@ -55,7 +55,7 @@ fun SharedYAxisTransitionSlow(direction: Direction): ContentTransform {
             easing = LinearOutSlowInEasing
         )
     )) togetherWith (slideOutVertically(
-        targetOffsetY = { (it * -0.1f * direction).toInt() },
+        targetOffsetY = { (it * -0.2f * direction).toInt() },
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioNoBouncy,
             stiffness = Spring.StiffnessLow,

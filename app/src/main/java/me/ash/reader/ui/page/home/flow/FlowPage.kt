@@ -4,8 +4,11 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -99,7 +102,7 @@ import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.motion.Direction
 import me.ash.reader.ui.motion.SharedXAxisTransitionSlow
-import me.ash.reader.ui.motion.SharedYAxisTransitionFast
+import me.ash.reader.ui.motion.SharedYAxisTransitionSlow
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.reading.pullToLoad
@@ -408,9 +411,7 @@ fun FlowPage(
         }
         AnimatedContent(
             targetState = flowUiState,
-            contentKey = {
-                it.pagerData.filterState.copy(searchContent = null)
-            },
+            contentKey = { it },
             transitionSpec = {
                 val targetFilter = targetState.pagerData.filterState
                 val initialFilter = initialState.pagerData.filterState
@@ -422,9 +423,9 @@ fun FlowPage(
                 } else if (
                     targetFilter.group != initialFilter.group || targetFilter.feed != initialFilter.feed
                 ) {
-                    SharedYAxisTransitionFast(direction = Direction.Forward)
+                    SharedYAxisTransitionSlow(direction = Direction.Forward)
                 } else {
-                    fadeIn() togetherWith fadeOut()
+                    EnterTransition.None togetherWith ExitTransition.None
                 }
             }
         ) { flowUiState ->
