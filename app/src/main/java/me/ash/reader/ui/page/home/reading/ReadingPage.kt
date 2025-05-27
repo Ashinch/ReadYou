@@ -256,7 +256,7 @@ fun ReadingPage(
                         isUnread = readingUiState.isUnread,
                         isStarred = readingUiState.isStarred,
                         isNextArticleAvailable = isNextArticleAvailable,
-                        isFullContent = readerState.content is ReaderState.FullContent,
+                        isFullContent = readerState.content is ReaderState.FullContent || readerState.content is ReaderState.Error,
                         isBionicReading = bionicReading.value,
                         onUnread = {
                             readingViewModel.updateReadStatus(it)
