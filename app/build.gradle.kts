@@ -110,6 +110,10 @@ android {
     namespace = "me.ash.reader"
 }
 
+aboutLibraries {
+    excludeFields = arrayOf("generated")
+}
+
 dependencies {
     // AboutLibraries
     implementation(libs.aboutlibraries.core)
