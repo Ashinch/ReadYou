@@ -122,7 +122,7 @@
     <string name="on">चालू</string>
     <string name="off">बंद</string>
     <string name="other">अन्य </string>
-    <string name="amoled_dark_theme">अमोलेड गहरी थीम</string>
+    <string name="amoled_dark_theme">काला गहरा विषय</string>
     <string name="tonal_elevation">टोनल एलिवेशन</string>
     <string name="reading_fonts">पठन मोड</string>
     <string name="basic_fonts">बेसिक फॉन्ट</string>
@@ -278,9 +278,7 @@
     <string name="toggle_read">पठित टॉगल करें</string>
     <string name="additional_info_desc">अतिरिक्त जानकारी में प्रत्येक feed के लिए कॉन्फिगरेशन विकल्प शामिल हैं, जैसे अधिसूचना की अनुमति देना है या नहीं, पूर्ण सामग्री को पार्स करना आदि। जब आप अन्य पाठकों के साथ निर्यातित OMPL फाइल का उपयोग करने का इरादा रखते हैं, तो कृपया \"बहिष्कृत करें\" चुनें।</string>
     <string name="toggle_starred">तारांकित टॉगल करें</string>
-    <string name="unexpected_error_msg">ऐप में एक अप्रत्याशित त्रुटि आई और उसे बंद करना पड़ा।
-\n
-\nइस समस्या को शीघ्रता से पहचानने और ठीक करने में हमारी सहायता के लिए, आप नीचे दिए गए त्रुटि स्टैक ट्रेस के साथ %1$s कर सकते हैं।</string>
+    <string name="unexpected_error_msg">ऐप में एक अप्रत्याशित त्रुटि आई और उसे बंद करना पड़ा। \n \nइस समस्या को शीघ्रता से पहचानने और ठीक करने में हमारी सहायता के लिए, आप नीचे दिए गए त्रुटि स्टैक ट्रेस के साथ %1$s कर सकते हैं।</string>
     <string name="swipe_to_end">दाएं स्वाइप करें</string>
     <string name="export">निर्यात</string>
     <string name="pull_to_switch_article">लेख बदलने के लिए खींचें</string>

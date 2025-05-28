@@ -25,7 +25,7 @@
     <string name="already_subscribed">Už odoberané</string>
     <string name="clear">Vyčistiť</string>
     <string name="paste">Vložiť</string>
-    <string name="feed_or_site_url">Adresa URL informačného kanála alebo webovej stránky</string>
+    <string name="feed_or_site_url">URL adresa zdroja alebo stránky</string>
     <string name="import_from_opml">Importovať z OPML</string>
     <string name="preset">Predvoľby</string>
     <string name="selected">Vybrané</string>
@@ -123,20 +123,18 @@
     <string name="on">Zap</string>
     <string name="off">Vyp</string>
     <string name="other">Ďalšie</string>
-    <string name="amoled_dark_theme">Tmavá téma AMOLED</string>
+    <string name="amoled_dark_theme">Čierna tmavá téma</string>
     <string name="tonal_elevation">Zvýraznenie tónovania</string>
     <string name="reading_fonts">Písmo čítania</string>
     <string name="basic_fonts">Základné písmo</string>
-    <string name="tos_content"><h5> Zásady ochrany osobných údajov </h5> <br/> <p> Vaše súkromie berieme veľmi vážne. </p> <br/> <p> <b>Read You</b> nezhromažďuje žiadne používateľské údaje a všetky citlivé informácie (heslá a ďalšie informácie o účte) sú bezpečne uložené v lokálnej databáze aplikácie vo vašom zariadení. </p> <br/> <p> <b>Read You</b> použije na poskytovanie služby nasledujúce povolenia. </p> <br/> <p> - Povolenie na prístup k sieti (na prístup k obsahu online, ako určíte) </p> <p> - Povolenie na získanie stavu siete (na určenie, či má zariadenie momentálne prístup k sieti) </p> <p> – Povolenie služby na pozadí (na pravidelnú automatickú synchronizáciu vašich obľúbených položiek) </p> <br/> <br/> <h5> Služby tretích strán </h5> <br/> <p> Tieto zásady sa nevzťahujú na služby tretích strán, ktoré používate s <b>Read You</b>. Zásady ochrany osobných údajov služieb tretích strán, ktoré používate, si môžete prečítať na ich webových stránkach </p> <br/> <br/><h5> Vylúčenie zodpovednosti </h5> <br/> <p> <b>Read You</b> je iba nástroj na zhromažďovanie obsahu. Vaše používanie <b>Read You</b> podlieha zákonom a predpisom vašej krajiny a regiónu a akúkoľvek zodpovednosť vyplývajúcu z vašich činov budete niesť vy osobne. </p> <br/> <br/> <h5> Open Source licencia </h5> <br/> <p> <b>Read You</b> je projekt s otvoreným zdrojovým kódom pod GNU GPL 3.0 Open Source License[1], ktorá vám umožňuje bezplatne používať, odkazovať a upravovať zdrojový kód <b>Read You</b>, ale neumožňuje distribuovať a predávať upravený a odvodený kód ako uzavretý zdroj komerčného softvéru. Podrobnosti nájdete v úplnom znení GNU GPL 3.0 Open Source License[2]. </p> <br/> <br/> <h5> Príloha </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p><p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
+    <string name="tos_content"><h5> Zásady ochrany osobných údajov </h5> <br/> <p> Vaše súkromie berieme veľmi vážne. </p> <br/> <p> <b>Read You</b> nezhromažďuje žiadne používateľské údaje a všetky citlivé informácie (heslá a ďalšie informácie o účte) sú bezpečne uložené v lokálnej databáze aplikácie vo vašom zariadení. </p> <br/> <p> <b>Read You</b> použije na poskytovanie služby nasledujúce povolenia. </p> <br/> <p> - Povolenie na prístup k sieti (na prístup k obsahu online, ako určíte) </p> <p> - Povolenie na získanie stavu siete (na určenie, či má zariadenie momentálne prístup k sieti) </p> <p> – Povolenie služby na pozadí (na pravidelnú automatickú synchronizáciu vašich obľúbených položiek) </p> <br/> <br/> <h5> Služby tretích strán </h5> <br/> <p> Tieto zásady sa nevzťahujú na služby tretích strán, ktoré používate s <b>Read You</b>. Zásady ochrany osobných údajov služieb tretích strán, ktoré používate, si môžete prečítať na ich webových stránkach </p> <br/> <br/><h5> Vylúčenie zodpovednosti </h5> <br/> <p> <b>Read You</b> je iba nástroj na zhromažďovanie obsahu. Vaše používanie <b>Read You</b> podlieha zákonom a predpisom vašej krajiny a regiónu a akúkoľvek zodpovednosť vyplývajúcu z vašich činov budete niesť vy osobne. </p> <br/> <br/> <h5> Open source licencia </h5> <br/> <p> <b>Read You</b> je projekt s otvoreným zdrojovým kódom pod GNU GPL 3.0 Open Source License[1], ktorá vám umožňuje bezplatne používať, odkazovať a upravovať zdrojový kód <b>Read You</b>, ale neumožňuje distribuovať a predávať upravený a odvodený kód ako uzavretý zdroj komerčného softvéru. Podrobnosti nájdete v úplnom znení GNU GPL 3.0 Open Source License[2]. </p> <br/> <br/> <h5> Príloha </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p><p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="feeds_page">Stránka informačných kanálov</string>
     <string name="open_source_licenses">Open source licencie</string>
     <string name="sponsor">Sponsor</string>
-    <string name="submit_bug_report">odoslať hlásenie o chybe na GitHub</string>
+    <string name="submit_bug_report">Odoslať hlásenie o chybe na GitHub</string>
     <string name="unexpected_error_title">Ojoj! Niečo sa pokazilo…</string>
     <string name="copy_error_report">Kopírovať chybové hlásenie</string>
-    <string name="unexpected_error_msg">V aplikácii sa vyskytla neočakávaná chyba a musela sa ukončiť.
-\n
-\nAk nám chcete pomôcť tento problém rýchlo identifikovať a opraviť, môžete odoslať %1$s pomocou hlásenia chýb nižšie.</string>
+    <string name="unexpected_error_msg">V aplikácii sa vyskytla neočakávaná chyba a zavrela sa. \n \nAk nám chcete pomôcť tento problém rýchlo identifikovať a opraviť, môžete odoslať %1$s pomocou hlásenia chýb nižšie.</string>
     <string name="all">Všetko</string>
     <string name="empty">Prázdne</string>
     <string name="update">Aktualizovať</string>
@@ -159,13 +157,13 @@
     <string name="clear_all_articles">Vymazať všetky články</string>
     <string name="delete_account">Odstrániť účet</string>
     <string name="delete_account_tips">Naozaj chcete odstrániť tento účet?</string>
-    <string name="must_have_an_account">Musíte mať účet</string>
+    <string name="must_have_an_account">Musíte mať aspoň 1 účet</string>
     <string name="clear_all_articles_toast">Zoznam článkov bol vymazaný</string>
     <string name="delete_account_toast">Účet bol odstránený</string>
     <string name="synchronous_tips">Aby sa zmeny prejavili, je potrebný reštart</string>
     <string name="switch_account">Prepnúť</string>
     <string name="add">Pridať</string>
-    <string name="accounts_tips">Klepnutím na názov účtu na stránke informačného kanála ho môžete prepnúť</string>
+    <string name="accounts_tips">Účty môžete prepínať klepnutím na názov účtu na stránke kanála</string>
     <string name="external_links">Externé odkazy</string>
     <string name="reading_page">Stránka čítania</string>
     <string name="flow_page">Stránka toku</string>
@@ -248,7 +246,7 @@
     <string name="preview_article_desc">Blázon je ôsmy a posledný diel série Pán záhad, ktorú napísala sépia, ktorá sa rada potápa.</string>
     <string name="preview_feed_name">Reddit</string>
     <string name="article_images">Obrázky článkov</string>
-    <string name="article_date_sticky_header">Pripnuté záhlavie s dátumom zverejnenia (experimentálne)</string>
+    <string name="article_date_sticky_header">Pripnuté záhlavie s dátumom zverejnenia</string>
     <string name="feed_names">Názvy informačných kanálov</string>
     <string name="tips_top_bar_tonal_elevation">Zvýraznenie tónovania pre zoznam na hornom paneli je k dispozícii len pri posúvaní</string>
     <string name="tips_group_list_tonal_elevation">Zvýraznenie tónovania pre zoznam skupín je k dispozícii len v svetlej téme</string>
@@ -278,8 +276,8 @@
     <string name="use_app_theme">Použiť tému aplikácie</string>
     <string name="advanced">Pokročilé</string>
     <string name="maximize">Maximalizovať</string>
-    <string name="auto_customtabs">Auto (Preferovať vlastné karty)</string>
-    <string name="auto_default_browser">Auto (Preferovať predvolený prehliadač)</string>
+    <string name="auto_customtabs">Auto (preferovať vlastné karty)</string>
+    <string name="auto_default_browser">Auto (preferovať predvolený prehliadač)</string>
     <string name="swipe_to_start">Potiahnutie doľava</string>
     <string name="swipe_to_end">Potiahnutie doprava</string>
     <string name="none">Nič</string>
@@ -298,7 +296,7 @@
     <string name="shared_content">Zdieľaný obsah</string>
     <string name="only_link">Len odkaz</string>
     <string name="troubleshooting">$Riešenie problémov</string>
-    <string name="troubleshooting_desc">Hlásenie chýb, nástroje na ladenie</string>
+    <string name="troubleshooting_desc">Hlásenie chýb, ladenie</string>
     <string name="bug_report">Nahlásiť chybu</string>
     <string name="app_preferences">Predvoľby aplikácie</string>
     <string name="import_from_protobuf_file">Importovať zo súboru protobuf</string>
@@ -319,6 +317,19 @@
     <string name="only_available_on_webview">Dostupné len vo WebView</string>
     <string name="mark_as_read_on_scroll">Označiť ako prečítané pri posúvaní</string>
     <string name="toolbars">Panely nástrojov</string>
-    <string name="sponsor_desc">Túto bezplatnú aplikáciu s otvoreným zdrojovým kódom vytvárame a udržiavame v mimopracovnom čase. Ak sa vám páči, zvážte, či nás podporíte malým darom! ☕️</string>
+    <string name="sponsor_desc">Túto bezplatnú aplikáciu s otvoreným zdrojovým kódom vytvárame a spravujeme vo voľnom čase. Ak sa vám páči, zvážte, či nás podporíte malým darom! ☕️</string>
     <string name="become_a_sponsor">Staňte sa sponzorom</string>
+    <string name="hide_empty_groups">Skryť prázdne skupiny</string>
+    <string name="open_in_browser">Otvoriť v prehliadači</string>
+    <string name="all_open_in_browser_tips">Otvorí všetky články v skupine \"%1$s\" pomocou prehliadača</string>
+    <string name="all_open_in_browser_toast">Otvoriť všetky články v skupine \"%1$s\" pomocou prehliadača</string>
+    <string name="all_deny_open_in_browser_toast">Už žiadne otváranie všetkých článkov v skupine \"%1$s\" pomocou prehliadača</string>
+    <string name="client_certificate">Certifikát klienta (voliteľné)</string>
+    <string name="sort_unread_articles">Zoradiť neprečítané články</string>
+    <string name="latest">Posledné</string>
+    <string name="earliest">Prvé</string>
+    <string name="short_desc">Krátke</string>
+    <string name="long_desc">Dlhé</string>
+    <string name="none_desc">Žiadne</string>
+    <string name="pull_to_switch_feed">Potiahnutím načítať ďalší zdroj</string>
 </resources>

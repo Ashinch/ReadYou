@@ -122,7 +122,7 @@
     <string name="on">An</string>
     <string name="off">Aus</string>
     <string name="other">Sonstiges</string>
-    <string name="amoled_dark_theme">AMOLED Dunkles Design</string>
+    <string name="amoled_dark_theme">Schwarz Dunkles Design</string>
     <string name="tonal_elevation">Farbliches Hervorheben</string>
     <string name="reading_fonts">Leseschriftarten</string>
     <string name="basic_fonts">Grundschriftarten</string>
@@ -274,9 +274,7 @@
     <string name="copy_error_report">Fehlerbericht kopieren</string>
     <string name="submit_bug_report">einen Fehlerbericht auf GitHub einreichen</string>
     <string name="next_article">Nächster Artikel</string>
-    <string name="unexpected_error_msg">Die App ist auf einen unerwarteten Fehler gestoßen und musste beendet werden.
-\n
-\nUm das Problem zügig zu identifizieren und zu beheben, können Sie %1$s mit unten stehenden Fehler-Stacktrace angeben.</string>
+    <string name="unexpected_error_msg">Die App ist auf einen unerwarteten Fehler gestoßen und musste beendet werden. \n \nUm das Problem zügig zu identifizieren und zu beheben, können Sie %1$s mit unten stehenden Fehler-Stacktrace angeben.</string>
     <string name="pull_to_switch_article">Zum Artikelwechsel ziehen</string>
     <string name="export">Exportieren</string>
     <string name="swipe_to_start">Wische links</string>

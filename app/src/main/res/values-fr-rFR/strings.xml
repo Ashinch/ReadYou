@@ -2,21 +2,21 @@
 <resources>
     <string name="all">Tout</string>
     <plurals name="all_desc">
-        <item quantity="one">%1$d élément archivé</item>
-        <item quantity="many">%1$d éléments archivés</item>
-        <item quantity="other">%1$d éléments archivés</item>
+        <item quantity="one">%1$d élément archivé</item>
+        <item quantity="many">%1$d éléments archivés</item>
+        <item quantity="other">%1$d éléments archivés</item>
     </plurals>
     <string name="unread">Non lus</string>
     <plurals name="unread_desc">
-        <item quantity="one">%1$d élément non lu</item>
-        <item quantity="many">%1$d éléments non lus</item>
-        <item quantity="other">%1$d éléments non lus</item>
+        <item quantity="one">%1$d élément non lu</item>
+        <item quantity="many">%1$d éléments non lus</item>
+        <item quantity="other">%1$d éléments non lus</item>
     </plurals>
     <string name="starred">Favoris</string>
     <plurals name="starred_desc">
-        <item quantity="one">%1$d élément favori</item>
-        <item quantity="many">%1$d éléments favoris</item>
-        <item quantity="other">%1$d éléments favoris</item>
+        <item quantity="one">%1$d élément favori</item>
+        <item quantity="many">%1$d éléments favoris</item>
+        <item quantity="other">%1$d éléments favoris</item>
     </plurals>
     <string name="feeds">Flux</string>
     <string name="syncing">Synchronisation…</string>
@@ -125,7 +125,7 @@
     <string name="on">Activé</string>
     <string name="off">Désactivé</string>
     <string name="other">Autres options</string>
-    <string name="amoled_dark_theme">Thème sombre AMOLED</string>
+    <string name="amoled_dark_theme">Thème sombre noir</string>
     <string name="tonal_elevation">Intensité</string>
     <string name="reading_fonts">Polices de lecture</string>
     <string name="basic_fonts">Polices de base</string>
@@ -275,9 +275,7 @@
     <string name="submit_bug_report">Créer un signalement de bug sur GitHub</string>
     <string name="unexpected_error_title">Une erreur est survenue…</string>
     <string name="copy_error_report">Copier le rapport d’erreur</string>
-    <string name="unexpected_error_msg">L’application a rencontré une erreur inattendue et s’est fermée.
-\n
-\nAfin de nous aider à identifier et corriger ce problème, vous pouvez %1$s avec le rapport d’erreur ci-dessous.</string>
+    <string name="unexpected_error_msg">L’application a rencontré une erreur inattendue et s’est fermée. \n \nAfin de nous aider à identifier et corriger ce problème, vous pouvez %1$s avec le rapport d’erreur ci-dessous.</string>
     <string name="next_article">Article suivant</string>
     <string name="include_additional_info">Ajouter des informations complémentaires</string>
     <string name="export">Exporter</string>
@@ -316,7 +314,7 @@
     <string name="only_available_on_webview">Uniquement disponible sur le WebView</string>
     <string name="about">À Propos</string>
     <string name="use_bionic_reading">Utiliser Bionic Reading</string>
-    <string name="bionic_reading_tips">Qu\'est-ce que Bionic Reading ?</string>
+    <string name="bionic_reading_tips">Qu\'est-ce que Bionic Reading ?</string>
     <string name="hide_empty_groups">Masquer les groupes vides</string>
     <string name="all_open_in_browser_tips">Ouvrir tous les articles du groupe « %1$s » à l\'aide du navigateur</string>
     <string name="all_deny_open_in_browser_toast">Plus d\'ouverture de tous les articles du groupe « %1$s » à l\'aide du navigateur</string>
@@ -325,7 +323,7 @@
     <string name="toolbars">Barres d\'outil</string>
     <string name="latest">Plus ancien</string>
     <string name="earliest">Plus récent</string>
-    <string name="sponsor_desc">Nous construisons et maintenons cette application gratuite et open-source pendant notre temps libre. Si vous l\'appréciez, n\'hésitez pas à nous soutenir en faisant un petit don ! ☕️</string>
+    <string name="sponsor_desc">Nous construisons et maintenons cette application gratuite et open-source pendant notre temps libre. Si vous l\'appréciez, n\'hésitez pas à nous soutenir en faisant un petit don ! ☕️</string>
     <string name="sort_unread_articles">Tri des articles non lus</string>
     <string name="open_in_browser">Ouvrir dans le navigateur</string>
     <string name="client_certificate">Certificat client (optionnel)</string>

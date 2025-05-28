@@ -108,8 +108,7 @@
     <string name="tips_and_support_desc">Acerca de, licencias de código abierto</string>
     <string name="welcome">Bienvenido</string>
     <string name="tos_tips">Para continuar, lee y acepta las Condiciones del servicio y la Política de privacidad de Read You.</string>
-    <string name="browse_tos_tips">Navegue por los &lt;i&gt;&lt;u&gt;Términos de Servicio y la Política de Privacidad&lt;/u&gt;&lt;/i&gt;
-    </string>
+    <string name="browse_tos_tips">Navegue por los <i><u>Términos de Servicio y la Política de Privacidad</u></i></string>
     <string name="terms_of_service">Términos de Servicio</string>
     <string name="tos_content"><h5> Política de Privacidad </h5> <br/> <p> Me tomo muy en serio tú privacidad. </p> <br/> <p> <b>Read You</b> no recopila ningún dato del usuario, y toda la información confidencial (contraseñas y otra información de la cuenta) se almacena de forma segura en la base de datos local de la aplicación en tú dispositivo. </p> <br/> <p> <b>Read You</b> utilizará los siguientes permisos para prestar el servicio. </p> <br/> <p> - Permiso de acceso a la red (para acceder a los contenidos en línea que específicas) </p> <p> - Obtener el permiso del estado de la red (para determinar si el dispositivo tiene actualmente opciones de redes disponibles) </p> <p> - Permiso de funcionamiento en segundo plano (para sincronizar automáticamente tus favoritos de forma regular)) </p> <br/> <br/> <h5> Servicios de terceros </h5> <br/> <p> Esta política no se aplica a los servicios de terceros que utilice con <b>Read You</b>. Puedes consultar las políticas de privacidad de los servicios de terceros que utilices en tus páginas web </p> <br/> <br/> <h5> Disclaimers </h5> <br/> <p> <b>Read You</b> es sólo una herramienta de recopilación de contenidos. El uso de <b>Read You</b> está sujeto a las leyes y normativas de tú país y región, y cualquiera responsabilidad derivada de tus acciones correrá por tú cuenta. </p> <br/> <br/> <h5> Licencia de código abierto </h5> <br/> <p> <b>Read You</b> es un proyecto de código abierto bajo GNU GPL 3.0 Open Source License[1], que permite utilizar, referenciar y modificar el código fuente de <b>Read You</b> de forma gratuita, pero no permite que el código modificado y derivado se distribuya y venda como software comercial y de código cerrado. Para más detalles, consulte la licencia completa de código abierto GNU GPL 3.0[2]. </p> <br/> <br/> <h5> Anexo </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">De acuerdo</string>
@@ -126,7 +125,7 @@
     <string name="on">Encendido</string>
     <string name="off">Apagado</string>
     <string name="other">Otros</string>
-    <string name="amoled_dark_theme">Tema oscuro AMOLED</string>
+    <string name="amoled_dark_theme">Tema negro oscuro</string>
     <string name="tonal_elevation">Elevación del tono</string>
     <string name="reading_fonts">Letras lectura</string>
     <string name="basic_fonts">Letras básicas</string>
@@ -275,9 +274,7 @@
     <string name="read_excluding_starred">Leer, sin estrellas</string>
     <string name="external_links">Enlaces externos</string>
     <string name="unexpected_error_title">¡Uy! Algo salió mal…</string>
-    <string name="unexpected_error_msg">La aplicación ha encontrado un error inesperado y ha tenido que cerrarse.
-\n
-\nPara ayudarnos a identificar y solucionar este problema rápidamente, puedes %1$s con el rastreo de pila de error a continuación.</string>
+    <string name="unexpected_error_msg">La aplicación ha encontrado un error inesperado y ha tenido que cerrarse. \n \nPara ayudarnos a identificar y solucionar este problema rápidamente, puedes %1$s con el rastreo de pila de error a continuación.</string>
     <string name="next_article">Artículo siguiente</string>
     <string name="grey_out_articles">Artículos en gris</string>
     <string name="all_read">Leer todo</string>

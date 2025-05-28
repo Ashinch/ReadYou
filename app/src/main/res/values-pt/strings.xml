@@ -129,7 +129,7 @@
     <string name="on">Ativado</string>
     <string name="off">Desativado</string>
     <string name="other">Outros</string>
-    <string name="amoled_dark_theme">Tema escuro AMOLED</string>
+    <string name="amoled_dark_theme">Tema preto escuro</string>
     <string name="tonal_elevation">Elevação tonal</string>
     <string name="basic_fonts">Tipos de letra básicos</string>
     <string name="reading_page">Página de leitura</string>
@@ -299,9 +299,7 @@
     <string name="read_excluding_starred">Ler, excluindo preferido</string>
     <string name="include_additional_info">Incluir informações adicionais</string>
     <string name="keep_archived_tips">Itens arquivados são artigos marcados como lidos, não marcados com estrela e não marcados. A configuração \"Manter artigos arquivados\" só é válida nesses dispositivos. Os artigos arquivados mais antigos serão excluídos desses dispositivos. A exclusão de artigos não pode ser desfeita.</string>
-    <string name="unexpected_error_msg">O aplicativo encontrou um erro inesperado e precisou ser fechado.
-\n
-\nPara nos ajudar a identificar e corrigir esse problema rapidamente, você pode %1$s com o pilha de rastreamento de erros abaixo.</string>
+    <string name="unexpected_error_msg">O aplicativo encontrou um erro inesperado e precisou ser fechado. \n \nPara nos ajudar a identificar e corrigir esse problema rapidamente, você pode %1$s com o pilha de rastreamento de erros abaixo.</string>
     <string name="image_saved">Imagem salva</string>
     <string name="permission_denied">Permissão negada</string>
     <string name="invalid_json_file_warning">Esse arquivo pode não ser um JSON válido. Importá-lo poderá corromper o app e resultar na perda das preferências atuais. Tem certeza de que deseja prosseguir?</string>

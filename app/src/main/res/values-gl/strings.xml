@@ -94,7 +94,7 @@
     <string name="on">Aceso</string>
     <string name="off">Apagado</string>
     <string name="other">Outros</string>
-    <string name="amoled_dark_theme">Tema escuro AMOLED</string>
+    <string name="amoled_dark_theme">Tema escuro negro</string>
     <string name="tonal_elevation">Elevación tonal</string>
     <string name="reading_fonts">Fontes de lectura</string>
     <string name="basic_fonts">Fontes básicas</string>
@@ -220,9 +220,7 @@
     <string name="external_links">Ligazons externas</string>
     <string name="unexpected_error_title">Vaites! Algo foi mal…</string>
     <string name="copy_error_report">Copiar informe de erro</string>
-    <string name="unexpected_error_msg">A aplicación atopou un erro non previsto e tivo que pechar.
-\n
-\nPara axudarnos a indentificar e arranxar o problema rápidamente, podes %1$s coa cadea de erro que se amosa a continuación.</string>
+    <string name="unexpected_error_msg">A aplicación atopou un erro non previsto e tivo que pechar. \n \nPara axudarnos a indentificar e arranxar o problema rápidamente, podes %1$s coa cadea de erro que se amosa a continuación.</string>
     <string name="next_article">Seguinte artigo</string>
     <plurals name="all_desc">
         <item quantity="one">%1$d Elemento arquivado</item>

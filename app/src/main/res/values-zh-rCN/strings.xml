@@ -2,7 +2,7 @@
 <resources>
     <string name="all">全部</string>
     <plurals name="all_desc">
-        <item quantity="other">%1$d 项已归档</item>
+        <item quantity="other">%1$d 项已存档</item>
     </plurals>
     <string name="unread">未读</string>
     <plurals name="unread_desc">
@@ -88,7 +88,7 @@
     <string name="close">关闭</string>
     <string name="get_new_updates">获取新的更新</string>
     <string name="get_new_updates_desc">有新版本 %1$s 可用</string>
-    <string name="in_coding">施工中</string>
+    <string name="in_coding">还在写</string>
     <string name="coming_soon">正在路上</string>
     <string name="accounts">账户</string>
     <string name="accounts_desc">本地、FreshRSS</string>
@@ -105,13 +105,13 @@
     <string name="tos_tips">在此之前，请阅读并同意 Read You 的服务条款与隐私政策。</string>
     <string name="browse_tos_tips">查看《<i><u>服务条款与隐私政策</u></i>》</string>
     <string name="terms_of_service">服务条款</string>
-    <string name="tos_content"><h5> 隐私政策 </h5> <br/> <p> 我非常重视您的隐私。 </p> <br/> <p> <b>Read You</b> 不收集任何用户数据，所有敏感信息（密码和其他账户信息）都安全地存储在您设备上的本地应用数据库中。 </p> <br/> <p> <b>Read You</b> 将使用以下权限为您提供服务： </p> <br/> <p> - 访问网络权限（用于访问您所指定的在线内容） </p> <p> - 获取网络状态权限（用于确定当前设备是否拥有可用的网络条件） </p> <p> - 后台服务权限（用于定时自动地为您同步已收藏的内容） </p> <br/> <br/> <h5> 第三方服务 </h5> <br/> <p> 本政策不适用于您与 <b>Read You</b> 一起使用的第三方服务。您可以在所使用的第三方服务的网站上查阅相关的隐私政策。 </p> <br/> <br/> <h5> 免责声明 </h5> <br/> <p> <b>Read You</b> 仅是一款内容收藏工具。您在使用 <b>Read You</b> 的过程中，应遵守所在国家和地区的法律法规，因您的行为所产生的一切责任将由您个人承担。 </p> <br/> <br/> <h5> 开源许可 </h5> <br/> <p> <b>Read You</b> 是一个使用 GNU GPL 3.0 开源许可协议的开源项目[1]，允许您免费使用、引用、修改 <b>Read You</b> 的源代码，但不允许修改后和其衍生的代码作为闭源的商业软件进行发布和销售。具体细节请查看完整的 GNU GPL 3.0 开源许可协议 [2]。 </p> <br/> <br/> <h5> 附录 </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
+    <string name="tos_content"><h5> 隐私政策 </h5> <br/> <p> 我们非常重视您的隐私。 </p> <br/> <p> <b>Read You</b> 不收集任何用户数据，所有敏感信息（密码和其他账户信息）都安全地存储在您设备上的本地应用数据库中。 </p> <br/> <p> <b>Read You</b> 将使用以下权限为您提供服务： </p> <br/> <p> - 访问网络权限（用于访问您所指定的在线内容） </p> <p> - 获取网络状态权限（用于确定当前设备是否拥有可用的网络条件） </p> <p> - 后台服务权限（用于定时自动地为您同步已收藏的内容） </p> <br/> <br/> <h5> 第三方服务 </h5> <br/> <p> 本政策不适用于您与 <b>Read You</b> 一起使用的第三方服务。您可以在所使用的第三方服务的网站上查阅相关的隐私政策。 </p> <br/> <br/> <h5> 免责声明 </h5> <br/> <p> <b>Read You</b> 仅是一款内容收藏工具。您在使用 <b>Read You</b> 的过程中，应遵守所在国家和地区的法律法规，因您的行为所产生的一切责任将由您个人承担。 </p> <br/> <br/> <h5> 开源许可 </h5> <br/> <p> <b>Read You</b> 是一个使用 GNU GPL 3.0 开源许可协议的开源项目[1]，允许您免费使用、引用、修改 <b>Read You</b> 的源代码，但不允许修改后和其衍生的代码作为闭源的商业软件进行发布和销售。具体细节请查看完整的 GNU GPL 3.0 开源许可协议 [2]。 </p> <br/> <br/> <h5> 附录 </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">同意并继续</string>
     <string name="wallpaper_colors">壁纸颜色</string>
-    <string name="no_palettes">暂无色板</string>
+    <string name="no_palettes">无色板</string>
     <string name="only_android_8.1_plus">仅限 Android 8.1+</string>
     <string name="basic_colors">基本颜色</string>
-    <string name="primary_color">强调色</string>
+    <string name="primary_color">主色</string>
     <string name="primary_color_hint">例如 #666666 或 666666</string>
     <string name="appearance">外观</string>
     <string name="style">样式</string>
@@ -119,7 +119,7 @@
     <string name="use_device_theme">跟随系统设置</string>
     <string name="on">开启</string>
     <string name="off">关闭</string>
-    <string name="amoled_dark_theme">AMOLED 深色主题</string>
+    <string name="amoled_dark_theme">黑色暗色主题</string>
     <string name="other">其他</string>
     <string name="tonal_elevation">色调海拔</string>
     <string name="reading_fonts">阅读字体</string>
@@ -152,9 +152,9 @@
     <string name="article_images">文章插图</string>
     <string name="feed_names">订阅源名称</string>
     <string name="feed_favicons">订阅源图标</string>
-    <string name="article_date_sticky_header">粘性发布日期标头（实验性）</string>
+    <string name="article_date_sticky_header">粘性发布日期标头</string>
     <string name="article_list">文章列表</string>
-    <string name="group_list">分组列表</string>
+    <string name="group_list">组列表</string>
     <string name="always_expand">始终展开</string>
     <string name="top">顶部</string>
     <string name="mark_as_read_button_position">“标记为已读”按钮的位置</string>
@@ -162,7 +162,7 @@
     <string name="fill_selected_icon">填充当前筛选器图标</string>
     <string name="filter_bar">过滤栏</string>
     <string name="icons">图标</string>
-    <string name="icons_and_labels">图标和文字</string>
+    <string name="icons_and_labels">图标和标签</string>
     <string name="icons_and_label_only_selected">图标和标签（仅活跃）</string>
     <string name="tips_top_bar_tonal_elevation">标题栏列表的色调海拔仅在滚动时可用</string>
     <string name="tips_article_list_tonal_elevation">文章列表的色调海拔仅在亮色主题时可用</string>
@@ -175,7 +175,7 @@
     <string name="line_spacing">行间距</string>
     <string name="alignment">对齐</string>
     <string name="general">通用</string>
-    <string name="auto_hide_toolbars">自动隐藏工具条</string>
+    <string name="auto_hide_toolbars">自动隐藏工具栏</string>
     <string name="rearrange_buttons">重新排列按钮</string>
     <string name="bionic_reading">仿生阅读</string>
     <string name="images">图片</string>
@@ -236,13 +236,13 @@
     <string name="delete_account">删除账户</string>
     <string name="clear_all_articles_tips">确定要清空该账户的文章列表吗？</string>
     <string name="delete_account_tips">确定要删除该账户吗？</string>
-    <string name="must_have_an_account">必须保留一个账户</string>
-    <string name="clear_all_articles_toast">已清空文章列表</string>
+    <string name="must_have_an_account">必须至少有一个账户</string>
+    <string name="clear_all_articles_toast"> 已清空文章列表</string>
     <string name="delete_account_toast">已删除帐户</string>
     <string name="synchronous_tips">需要重新启动才能使更改生效</string>
     <string name="switch_account">切换</string>
     <string name="add">添加</string>
-    <string name="accounts_tips">在订阅源页面中轻按帐户名称来切换它</string>
+    <string name="accounts_tips">在订阅源页面中轻按帐户名称来切换</string>
     <string name="server_url">服务器地址</string>
     <string name="username">用户名</string>
     <string name="password">密码</string>
@@ -258,7 +258,7 @@
     <string name="initial_open_app">单击链接打开应用</string>
     <string name="auto_customtabs">自动（偏好自定义标签页）</string>
     <string name="default_browser">强制使用默认浏览器</string>
-    <string name="open_link_something_wrong">“打开链接”设置被忽略，因为出现了错误。</string>
+    <string name="open_link_something_wrong">“打开链接”设置被忽略，因为出现了错误</string>
     <string name="open_link_specific_browser_not_selected">未选择</string>
     <string name="include_additional_info">包含附加信息</string>
     <string name="exclude">不包含</string>
@@ -270,9 +270,7 @@
     <string name="submit_bug_report">在 GitHub 上提交故障报告</string>
     <string name="unexpected_error_title">哎呀！出问题了…</string>
     <string name="copy_error_report">复制错误报告</string>
-    <string name="unexpected_error_msg">应用碰到了未预期的错误必须关闭。
-\n
-\n要帮助我们快速查明并修复问题，你可以 %1$s 下方的错误堆栈踪迹。</string>
+    <string name="unexpected_error_msg">应用碰到了未预期的错误，已关闭。 \n \n要帮助我们快速查明并修复问题，你可以 %1$s 下方的堆栈踪迹。</string>
     <string name="next_article">下一篇文章</string>
     <string name="swipe_to_start">左滑</string>
     <string name="swipe_to_end">右滑</string>
@@ -292,7 +290,7 @@
     <string name="title_and_link">标题和链接</string>
     <string name="keep_archived_tips">已归档的项目是指标记为已读、未加星标和未加标签的文章。\"保留已归档的文章\"设置仅在此设备上有效，较旧的已归档文章将从此设备中删除，文章的删除是无法撤销的。</string>
     <string name="troubleshooting">故障排除</string>
-    <string name="troubleshooting_desc">错误报告、调试工具</string>
+    <string name="troubleshooting_desc">错误报告、调试</string>
     <string name="bug_report">错误报告</string>
     <string name="app_preferences">应用程序偏好设置</string>
     <string name="import_from_protobuf_file">导入 protobuf 文件</string>
@@ -303,17 +301,17 @@
     <string name="invalid_json_file_warning">该文件可能不是有效的 JSON 文件！导入该文件可能会损坏应用程序并导致当前偏好设置丢失，您确定要继续吗？</string>
     <string name="unfold_more">全部展开</string>
     <string name="unfold_less">全部折叠</string>
-    <string name="read_aloud">Read Aloud</string>
-    <string name="only_available_on_webview">仅在 WebView 上可用</string>
+    <string name="read_aloud">大声读出</string>
+    <string name="only_available_on_webview">仅在使用 WebView 内容渲染器时可用</string>
     <string name="content_renderer">内容渲染器</string>
     <string name="native_component">原生组件</string>
-    <string name="use_bionic_reading">使用 Bionic Reading</string>
+    <string name="use_bionic_reading">使用仿生阅读</string>
     <string name="about">关于</string>
-    <string name="bionic_reading_tips">什么是 Bionic Reading？</string>
+    <string name="bionic_reading_tips">什么是仿生阅读？</string>
     <string name="browse_bionic_reading_tips">在 <i><u>bionic-reading.com</u></i>.了解更多信息。</string>
     <string name="mark_as_read_on_scroll">滚动时标记为已读</string>
     <string name="become_a_sponsor">成为赞助者</string>
-    <string name="sponsor_desc">我们在休息时间构建并维护这个自由开源应用。如果你觉得应用还不错，请考虑用小额捐赠支持哦我们！☕️</string>
+    <string name="sponsor_desc">我们在闲暇时间构建并维护这个自由开源应用。如果你觉得应用还不错，请考虑用小额捐赠支持哦我们！☕️</string>
     <string name="toolbars">工具栏</string>
     <string name="hide_empty_groups">隐藏空的分组</string>
     <string name="open_in_browser">在浏览器中打开</string>
@@ -324,4 +322,8 @@
     <string name="latest">最新</string>
     <string name="earliest">最早</string>
     <string name="sort_unread_articles">排列未读文章顺序</string>
+    <string name="short_desc">简短</string>
+    <string name="long_desc">冗长</string>
+    <string name="none_desc">没有</string>
+    <string name="pull_to_switch_feed">下拉加载下个源</string>
 </resources>

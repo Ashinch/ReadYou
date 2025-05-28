@@ -105,8 +105,7 @@
     <string name="tips_and_support_desc">Honi buruz, kode irekiko lizentziak</string>
     <string name="welcome">Ongi etorri</string>
     <string name="tos_tips">Mesedez irakurri eta onartu Read You-ren zerbitzu-baldintzak eta pribatutasun politika jarraitu ahal izateko.</string>
-    <string name="browse_tos_tips">Nabigatu &lt;i&gt;&lt;u&gt;zerbitzu-baldintzetan eta pribatutasun politikan&lt;/u&gt;&lt;/i&gt;
-    </string>
+    <string name="browse_tos_tips">Nabigatu <i><u>zerbitzu-baldintzetan eta pribatutasun politikan</u></i></string>
     <string name="terms_of_service">Zerbitzu-baldintzak</string>
     <string name="tos_content">
         &lt;h5&gt;
@@ -231,7 +230,7 @@
     <string name="on">Piztuta</string>
     <string name="off">Itzalita</string>
     <string name="other">Besteak</string>
-    <string name="amoled_dark_theme">AMOLED itxura iluna</string>
+    <string name="amoled_dark_theme">Beltza itxura iluna</string>
     <string name="tonal_elevation">Tonuaren goratzea</string>
     <string name="reading_fonts">Irakurtzeko letra-tipoak</string>
     <string name="basic_fonts">Oinarrizko letra-tipoak</string>
@@ -382,9 +381,7 @@
     <string name="all_read">Irakurritako guztiak</string>
     <string name="read_excluding_starred">Irakurritakoak, izartutakoak izan ezik</string>
     <string name="submit_bug_report">akats txosten bat ireki GitHub-en</string>
-    <string name="unexpected_error_msg">Aplikazioak ezusteko errore bat aurkitu du eta itxi behar izan da.
-\n
-\nArazo hau azkar identifikatzen eta konpontzen laguntzeko, %1$s egin dezakezu beheko pilaren arrastoarekin.</string>
+    <string name="unexpected_error_msg">Aplikazioak ezusteko errore bat aurkitu du eta itxi behar izan da. \n \nArazo hau azkar identifikatzen eta konpontzen laguntzeko, %1$s egin dezakezu beheko pilaren arrastoarekin.</string>
     <string name="next_article">Hurrengo artikulua</string>
     <string name="none">Bat ere ez</string>
     <string name="unexpected_error_title">Hara! Zeozer gaizki joan da…</string>

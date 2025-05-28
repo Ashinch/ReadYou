@@ -276,9 +276,7 @@
     <string name="unexpected_error_title">أوپسي! صار فيه مشكلة…</string>
     <string name="copy_error_report">عمول كوپل لتقرير الأرور</string>
     <string name="submit_bug_report">قدم تقرير عن الأرور ع \"گِت-هب\"</string>
-    <string name="unexpected_error_msg">واجه الآپ أرور مش مُتوقع و اضطرّ يسكر.
-\n
-\nت تساعدنا نحدد المشكلة و نصححها ب سرعة، فيك %1$s و تعمل پايست ل مسار اللي أدى ل الأرور يللي محطوط تحت.</string>
+    <string name="unexpected_error_msg">واجه الآپ أرور مش مُتوقع و اضطرّ يسكر. \n \nت تساعدنا نحدد المشكلة و نصححها ب سرعة، فيك %1$s و تعمل پايست ل مسار اللي أدى ل الأرور يللي محطوط تحت.</string>
     <string name="next_article">اللي بعدها</string>
     <string name="swipe_to_start">سحاب ل الشمال</string>
     <string name="swipe_to_end">سحاب ل اليمين</string>

@@ -109,7 +109,7 @@
     <string name="on">روشن</string>
     <string name="off">خاموش</string>
     <string name="other">سایر</string>
-    <string name="amoled_dark_theme">تم تیره AMOLED</string>
+    <string name="amoled_dark_theme">تم تاریک مشکی</string>
     <string name="tonal_elevation">ارتفاع تونال</string>
     <string name="reading_fonts">فونت های خواندن</string>
     <string name="basic_fonts">فونت های پایه</string>
@@ -269,9 +269,7 @@
     <string name="keep_archived_tips">موارد آرشیو شده مقاله هایی هستند که خوانده شده اند، اما ستاره یا تگ نخورده اند. گزینه \"مقاله های آرشیو شده را نگه دار\" تنها روی این دستگاه موثر است. مقاله های آرشیو شده قدیمی از این دستگاه حذف خواهند شد. عمل حذف مقاله ها برگشت پذیر نیست.</string>
     <string name="additional_info_desc">اطلاعات اضافه شامل گزینه های پیکربندی برای هر فید است، مانند اجازه نوتیفیکیشن، دریافت محتوای کامل یک مقاله،و غیره. وقتی تصمیم دارید که از فایل OPML خروجی گرفته شده در برنامه های دیگر استفاده کنید، لطفا گزینه \"مستثنی کردن\" را انتخاب کنید.</string>
     <string name="pull_to_switch_article">برای تعویض مقاله بکشید</string>
-    <string name="unexpected_error_msg">برنامه با یک خطای غیرمنتظره روبرو، و به اجبار بسته شد.
-\n
-\nبرای کمک به تشخیص و تعمیر سریع این مشکل، شما میتوانید%1$s با دسته ردیابی خطای زیر</string>
+    <string name="unexpected_error_msg">برنامه با یک خطای غیرمنتظره روبرو، و به اجبار بسته شد. \n \nبرای کمک به تشخیص و تعمیر سریع این مشکل، شما میتوانید%1$s با دسته ردیابی خطای زیر</string>
     <string name="none">هیچ کدام</string>
     <string name="toggle_read">علامت بعنوان خوانده شده</string>
     <string name="toggle_starred">علامت بعنوان ستاره دار</string>
