@@ -500,7 +500,13 @@ fun FlowPage(
                         .pullToLoad(
                             pullToLoadState,
                             density = LocalDensity.current,
-                            enabled = pullToSwitchFeed.value
+                            enabled = pullToSwitchFeed.value,
+                            onScroll = {
+                                if (it < -10f) {
+                                    onSearch = false
+                                    markAsRead = false
+                                }
+                            }
                         )
                         .nestedScroll(scrollBehavior.nestedScrollConnection)
                         .fillMaxSize(),
