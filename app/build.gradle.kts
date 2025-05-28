@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 import java.util.Properties
 import java.io.FileInputStream
 
@@ -106,6 +107,11 @@ android {
     }
     androidResources {
         generateLocaleConfig = true
+    }
+    composeCompiler {
+        featureFlags = setOf(
+            ComposeFeatureFlag.PausableComposition
+        )
     }
     namespace = "me.ash.reader"
 }
