@@ -135,29 +135,12 @@ private fun Preset(
     clearArticlesOnClick: () -> Unit = {},
     unsubscribeOnClick: () -> Unit = {},
 ) {
-    Subtitle(text = stringResource(R.string.preset))
+    Subtitle(text = stringResource(R.string.reading_page))
     Spacer(modifier = Modifier.height(10.dp))
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
     ) {
-        RYSelectionChip(
-            modifier = Modifier.animateContentSize(),
-            content = stringResource(R.string.allow_notification),
-            selected = selectedAllowNotificationPreset,
-            selectedIcon = {
-                Icon(
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .size(20.dp),
-                    imageVector = Icons.Outlined.Notifications,
-                    contentDescription = stringResource(R.string.allow_notification),
-                    tint = MaterialTheme.colorScheme.onSurface alwaysLight true,
-                )
-            },
-        ) {
-            allowNotificationPresetOnClick()
-        }
         RYSelectionChip(
             modifier = Modifier.animateContentSize(),
             content = stringResource(R.string.parse_full_content),
@@ -191,6 +174,32 @@ private fun Preset(
             },
         ) {
             openInBrowserPresetOnClick()
+        }
+    }
+    Spacer(modifier = Modifier.height(26.dp))
+
+    Subtitle(text = stringResource(R.string.preset))
+    Spacer(modifier = Modifier.height(10.dp))
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
+    ) {
+        RYSelectionChip(
+            modifier = Modifier.animateContentSize(),
+            content = stringResource(R.string.allow_notification),
+            selected = selectedAllowNotificationPreset,
+            selectedIcon = {
+                Icon(
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .size(20.dp),
+                    imageVector = Icons.Outlined.Notifications,
+                    contentDescription = stringResource(R.string.allow_notification),
+                    tint = MaterialTheme.colorScheme.onSurface alwaysLight true,
+                )
+            },
+        ) {
+            allowNotificationPresetOnClick()
         }
         if (notSubscribeMode) {
             RYSelectionChip(

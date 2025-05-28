@@ -111,16 +111,22 @@ class FeedOptionViewModel @Inject constructor(
     fun changeParseFullContentPreset() {
         viewModelScope.launch(ioDispatcher) {
             _feedOptionUiState.value.feed?.let {
-                rssService.get().updateFeed(it.copy(isFullContent = !it.isFullContent))
+                val isFullContent = !it.isFullContent
+                val isBrowser = if (isFullContent) false else it.isBrowser
+                rssService.get()
+                    .updateFeed(it.copy(isFullContent = isFullContent, isBrowser = isBrowser))
                 fetchFeed(it.id)
             }
         }
     }
-    
+
     fun changeOpenInBrowserPreset() {
         viewModelScope.launch(ioDispatcher) {
             _feedOptionUiState.value.feed?.let {
-                rssService.get().updateFeed(it.copy(isBrowser = !it.isBrowser))
+                val isBrowser = !it.isBrowser
+                val isFullContent = if (isBrowser) false else it.isFullContent
+                rssService.get()
+                    .updateFeed(it.copy(isBrowser = isBrowser, isFullContent = isFullContent))
                 fetchFeed(it.id)
             }
         }

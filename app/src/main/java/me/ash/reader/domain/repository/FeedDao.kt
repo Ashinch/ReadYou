@@ -27,12 +27,29 @@ interface FeedDao {
         AND groupId = :groupId
         """
     )
-    suspend fun updateIsFullContentByGroupId(
+    suspend fun updateIsFullContentByGroupIdInternal(
         accountId: Int,
         groupId: String,
         isFullContent: Boolean,
     )
-    
+
+    @Transaction
+    suspend fun updateIsFullContentByGroupId(
+        accountId: Int,
+        groupId: String,
+        isFullContent: Boolean,
+    ) {
+        updateIsFullContentByGroupIdInternal(accountId, groupId, isFullContent)
+        if (isFullContent) {
+            updateIsBrowserByGroupIdInternal(
+                accountId = accountId,
+                groupId = groupId,
+                isBrowser = false,
+            )
+        }
+    }
+
+
     @Query(
         """
         UPDATE feed SET isBrowser = :isBrowser
@@ -40,11 +57,26 @@ interface FeedDao {
         AND groupId = :groupId
         """
     )
-    suspend fun updateIsBrowserByGroupId(
+    suspend fun updateIsBrowserByGroupIdInternal(
         accountId: Int,
         groupId: String,
         isBrowser: Boolean,
     )
+
+    @Transaction
+    suspend fun updateIsBrowserByGroupId(
+        accountId: Int,
+        groupId: String,
+        isBrowser: Boolean,
+    ) {
+        updateIsBrowserByGroupIdInternal(accountId, groupId, isBrowser)
+        if (isBrowser) {
+            updateIsFullContentByGroupIdInternal(
+                accountId = accountId,
+                groupId = groupId,
+                isFullContent = false)
+        }
+    }
 
     @Query(
         """
