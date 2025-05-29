@@ -52,7 +52,6 @@ The following are the progress made so far and the goals to be worked on in the 
 - [x] Article readability optimization
 - [x] Full content parse for original articles
 - [x] Multi-account
-- [x] Bionic Reading
 - [x] Read aloud
 - [ ] Android widget
 - [ ] ...

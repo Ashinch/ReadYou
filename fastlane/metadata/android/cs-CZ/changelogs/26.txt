@@ -1,7 +1,6 @@
 ## 0.11.0
 
 Významné změny:
-1. Uvedení nové čtečky článků založené na WebView s podporou Bionic Reading.
 2. Automatické označování položek jako přečtených při posouvání
 3. Klepnutím na horní lištu aplikace se vrátíte na začátek stránky
 4. Přidané rozdělovače na panely nástrojů na stránce pro čtení

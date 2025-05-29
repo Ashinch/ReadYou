@@ -1,7 +1,6 @@
 ## 0.11.0
 
 Perubahan penting:
-1. Memperkenalkan pembaca artikel baru berdasarkan WebView, dengan dukungan Bionic Reading
 2. Menandai item secara otomatis sebagai telah dibaca saat menggulir
 3. Klik bilah aplikasi atas untuk kembali ke bagian atas halaman
 4. Menambahkan pemisah ke bilah alat di halaman bacaan

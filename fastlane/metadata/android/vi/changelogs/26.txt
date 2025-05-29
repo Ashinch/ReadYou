@@ -1,7 +1,6 @@
 ## 0.11.0
 
 Những thay đổi đáng chú ý:
-1. Giới thiệu trình đọc bài viết mới dựa trên WebView, có hỗ trợ Bionic Reading
 2. Tự động đánh dấu các mục là đã đọc khi cuộn
 3. Nhấp vào thanh ứng dụng trên cùng để quay lại đầu trang
 4. Thêm bộ chia vào thanh công cụ trong trang đọc

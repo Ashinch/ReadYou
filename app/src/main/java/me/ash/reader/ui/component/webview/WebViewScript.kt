@@ -66,7 +66,7 @@ function parseNode(node) {
     if (node.hasChildNodes()) [...node.childNodes].forEach(parseNode);
 }
 
-function setBionic(enabled) {
+function setBold(enabled) {
     if (enabled) {
         document.body.setAttribute("br-mode", "on");
         [...document.body.childNodes].forEach(parseNode);
@@ -75,7 +75,7 @@ function setBionic(enabled) {
     }
 }
 
-${if (boldCharacters) "setBionic(true);" else ""}
+${if (boldCharacters) "setBold(true);" else ""}
 
 var images = document.querySelectorAll("img");
 

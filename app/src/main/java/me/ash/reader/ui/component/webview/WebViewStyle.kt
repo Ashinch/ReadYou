@@ -349,7 +349,6 @@ hr {
     border-radius: 2px;
 }
 
-/* Bionic Reading */
 body {
     --br-boldness: 600;
 }

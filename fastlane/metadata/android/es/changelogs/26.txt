@@ -1,7 +1,6 @@
 ## 0.11.0
 
 Cambios notables:
-1. Introducir un nuevo lector de artículos basado en WebView, con soporte para Bionic Reading.
 2. Marcación automática de artículos como leídos al desplazarse
 3. Haga clic en la barra superior de la aplicación para volver a la parte superior de la página
 4. Añadir separadores a las barras de herramientas en la página de lectura
