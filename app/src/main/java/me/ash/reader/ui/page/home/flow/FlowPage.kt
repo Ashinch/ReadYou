@@ -411,7 +411,9 @@ fun FlowPage(
         }
         AnimatedContent(
             targetState = flowUiState,
-            contentKey = { it },
+            contentKey = {
+                it.pagerData.filterState.copy(searchContent = null)
+            },
             transitionSpec = {
                 val targetFilter = targetState.pagerData.filterState
                 val initialFilter = initialState.pagerData.filterState
