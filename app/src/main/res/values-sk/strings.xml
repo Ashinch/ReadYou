@@ -268,7 +268,6 @@
     <string name="include_additional_info">Zahrnúť ďalšie informácie</string>
     <string name="exclude">Vylúčiť</string>
     <string name="additional_info_desc">Ďalšie informácie zahŕňajú možnosti konfigurácie pre každý informačný kanál, napríklad či sa má povoliť oznamovanie, stiahnuť celý obsah atď. Ak máte v úmysle používať exportovaný súbor OPML s inými čítačkami, vyberte možnosť \"Vylúčiť\".</string>
-    <string name="bionic_reading">Bionické čítanie</string>
     <string name="rounded_corners">Zaoblené rohy</string>
     <string name="images">Obrázky</string>
     <string name="videos">Videá</string>
@@ -307,9 +306,6 @@
     <string name="invalid_json_file_warning">Tento súbor nemusí byť platným súborom JSON. Jeho importovanie môže spôsobiť poškodenie aplikácie a stratu aktuálnych predvolieb. Ste si istí, že chcete pokračovať?</string>
     <string name="unfold_more">Rozbaliť všetko</string>
     <string name="unfold_less">Zbaliť všetko</string>
-    <string name="use_bionic_reading">Použiť bionické čítanie</string>
-    <string name="bionic_reading_tips">Čo je bionické čítanie?</string>
-    <string name="browse_bionic_reading_tips">Ďalšie informácie nájdete na <i><u>bionic-reading.com</u></i>.</string>
     <string name="native_component">Natívny komponent</string>
     <string name="read_aloud">Čítať nahlas</string>
     <string name="about">Informácie</string>

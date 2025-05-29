@@ -48,7 +48,7 @@ data class Settings(
 
     // Reading page
     val readingRenderer: ReadingRendererPreference = ReadingRendererPreference.default,
-    val readingBionicReading: ReadingBionicReadingPreference = ReadingBionicReadingPreference.default,
+    val readingBoldCharacters: ReadingBoldCharactersPreference = ReadingBoldCharactersPreference.default,
     val readingTheme: ReadingThemePreference = ReadingThemePreference.default,
     val readingPageTonalElevation: ReadingPageTonalElevationPreference = ReadingPageTonalElevationPreference.default,
     val readingAutoHideToolbar: ReadingAutoHideToolbarPreference = ReadingAutoHideToolbarPreference.default,

@@ -47,7 +47,6 @@
     <string name="preview_feed_name">ரெட்டிட்</string>
     <string name="share">பகிர்</string>
     <string name="line_spacing">வரி இடைவிடல்</string>
-    <string name="bionic_reading">உயிர்மின்னியல் வாசிப்பு</string>
     <string name="alignment">செவ்வணப்பு</string>
     <string name="images">உருபடங்கள்</string>
     <string name="title">தலைப்பு</string>
@@ -161,7 +160,6 @@
     <string name="synchronous">ஒத்திசைக்கிறது</string>
     <string name="sync_interval">ஒத்திசை</string>
     <string name="keep_archived_articles">ஆவணக்கிடங்கிலிடப்பட்ட கட்டுரைகளை வைத்திரு</string>
-    <string name="bionic_reading_tips">உயிர்மின்னியல் வாசிப்பு என்றால் என்ன?</string>
     <string name="client_certificate">வாடிக்கையாளர் சான்றிதழ் (விருப்பத்தேர்வு)</string>
     <string name="auto_default_browser">தானியங்கு (முன்மதி இயப்புநிலை உலாவி)</string>
     <string name="specific_browser">குறிப்பிட்ட உலாவி திணிப்பு</string>
@@ -316,7 +314,6 @@
     <string name="export_as_json">JSON ஆக வெளியேற்று</string>
     <string name="app_preferences">செயலி விருப்பத்தேர்வுகள்</string>
     <string name="about">இதுபற்றி</string>
-    <string name="use_bionic_reading">உயிரி மின்னியல் வாசிப்பை பயன்படுத்து</string>
     <string name="mark_as_read_on_scroll">வாசித்தவை என குறியிட உருட்டு</string>
     <string name="hide_empty_groups">வெற்று குழுக்களை மறை</string>
     <string name="sort_unread_articles">வாசிக்காத கட்டுரைகளை தரம்பிரி</string>

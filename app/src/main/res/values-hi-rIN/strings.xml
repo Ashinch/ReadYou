@@ -179,7 +179,6 @@
     <string name="general">सामान्य </string>
     <string name="auto_hide_toolbars">टूलबार स्वतः छुपाएं</string>
     <string name="rearrange_buttons">बटन पुनर्व्यवस्थित करें </string>
-    <string name="bionic_reading">बैओनिक पठन</string>
     <string name="images">छवियां</string>
     <string name="rounded_corners">गोल कोने </string>
     <string name="videos">वीडियो</string>
@@ -308,10 +307,7 @@
     <string name="content_renderer">सामग्री रेंडरर</string>
     <string name="read_aloud">जोर से पढ़ें</string>
     <string name="only_available_on_webview">केवल वेबव्यू पर उपलब्ध</string>
-    <string name="use_bionic_reading">बायोनिक रीडिंग का उपयोग करें</string>
     <string name="about">परिचय</string>
-    <string name="bionic_reading_tips">बायोनिक रीडिंग क्या है?</string>
-    <string name="browse_bionic_reading_tips">अधिक जानकारी के लिए <i><u>bionic-reading.com</u></i> पर जाएं।</string>
     <string name="client_certificate">क्लाइंट प्रमाणपत्र (वैकल्पिक)</string>
     <string name="hide_empty_groups">रिक्त समूह छिपाएँ</string>
     <string name="open_in_browser">ब्राउज़र में खोलें</string>

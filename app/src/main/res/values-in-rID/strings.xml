@@ -176,7 +176,6 @@
     <string name="general">Umum</string>
     <string name="auto_hide_toolbars">Otomatis sembunyikan bilah alat</string>
     <string name="rearrange_buttons">Atur ulang tombol</string>
-    <string name="bionic_reading">Bionic Reading</string>
     <string name="images">Gambar</string>
     <string name="rounded_corners">Sudut membulat</string>
     <string name="videos">Video</string>
@@ -294,7 +293,6 @@
     <string name="invalid_protobuf_file_warning">Berkas ini mungkin bukan berkas protobuf yang valid. Mengimpornya berpotensi merusak aplikasi dan mengakibatkan hilangnya preferensi saat ini. Apakah Anda yakin ingin melanjutkan?</string>
     <string name="content_renderer">Perender konten</string>
     <string name="read_aloud">Bacakan</string>
-    <string name="browse_bionic_reading_tips">Pelajar lebih lanjut di <i><u>bionic-reading.com</u></i>.</string>
     <string name="about">Tentang</string>
     <string name="troubleshooting">Pemecahan Masalah</string>
     <string name="troubleshooting_desc">Laporan kutu, alat pengawakutuan</string>
@@ -307,8 +305,6 @@
     <string name="invalid_json_file_warning">Berkas ini mungkin bukan berkas JSON yang valid. Mengimpornya berpotensi merusak aplikasi dan mengakibatkan hilangnya preferensi saat ini. Apakah Anda yakin ingin melanjutkan?</string>
     <string name="native_component">Komponen Asli</string>
     <string name="only_available_on_webview">Hanya tersedia di WebView</string>
-    <string name="use_bionic_reading">Gunakan Bionic Reading</string>
-    <string name="bionic_reading_tips">Apa itu Bionic Reading?</string>
     <string name="mark_as_read_on_scroll">Baca sebagai dibaca saat digulir</string>
     <string name="become_a_sponsor">Jadilah sponsor</string>
     <string name="toolbars">Bilah alat</string>

@@ -177,7 +177,6 @@
     <string name="general">通用</string>
     <string name="auto_hide_toolbars">自动隐藏工具栏</string>
     <string name="rearrange_buttons">重新排列按钮</string>
-    <string name="bionic_reading">仿生阅读</string>
     <string name="images">图片</string>
     <string name="rounded_corners">圆角</string>
     <string name="videos">视频</string>
@@ -305,10 +304,7 @@
     <string name="only_available_on_webview">仅在使用 WebView 内容渲染器时可用</string>
     <string name="content_renderer">内容渲染器</string>
     <string name="native_component">原生组件</string>
-    <string name="use_bionic_reading">使用仿生阅读</string>
     <string name="about">关于</string>
-    <string name="bionic_reading_tips">什么是仿生阅读？</string>
-    <string name="browse_bionic_reading_tips">在 <i><u>bionic-reading.com</u></i>.了解更多信息。</string>
     <string name="mark_as_read_on_scroll">滚动时标记为已读</string>
     <string name="become_a_sponsor">成为赞助者</string>
     <string name="sponsor_desc">我们在闲暇时间构建并维护这个自由开源应用。如果你觉得应用还不错，请考虑用小额捐赠支持哦我们！☕️</string>

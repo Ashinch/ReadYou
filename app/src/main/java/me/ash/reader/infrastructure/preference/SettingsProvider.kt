@@ -1,24 +1,15 @@
 package me.ash.reader.infrastructure.preference
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.util.unpackInt1
-import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.emptyPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import me.ash.reader.infrastructure.di.ApplicationScope
@@ -26,7 +17,6 @@ import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.ui.ext.DataStoreKey
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.dataStore
-import java.io.IOException
 import javax.inject.Inject
 
 class SettingsProvider @Inject constructor(
@@ -105,7 +95,7 @@ class SettingsProvider @Inject constructor(
 
             // Reading page
             LocalReadingRenderer provides settings.readingRenderer,
-            LocalReadingBionicReading provides settings.readingBionicReading,
+            LocalReadingBoldCharacters provides settings.readingBoldCharacters,
             LocalReadingTheme provides settings.readingTheme,
             LocalReadingPageTonalElevation provides settings.readingPageTonalElevation,
             LocalReadingAutoHideToolbar provides settings.readingAutoHideToolbar,

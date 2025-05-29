@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
-import me.ash.reader.infrastructure.preference.LocalReadingBionicReading
+import me.ash.reader.infrastructure.preference.LocalReadingBoldCharacters
 import me.ash.reader.infrastructure.preference.LocalReadingFonts
 import me.ash.reader.infrastructure.preference.LocalReadingImageHorizontalPadding
 import me.ash.reader.infrastructure.preference.LocalReadingImageRoundedCorners
@@ -67,7 +67,7 @@ fun RYWebView(
     val codeTextColor: Int = MaterialTheme.colorScheme.tertiary.toArgb()
     val codeBgColor: Int = MaterialTheme.colorScheme
         .surfaceColorAtElevation((tonalElevation.value + 6).dp).toArgb()
-    val bionicReading = LocalReadingBionicReading.current
+    val boldCharacters = LocalReadingBoldCharacters.current
 
     val webView by remember(backgroundColor) {
         mutableStateOf(
@@ -126,7 +126,7 @@ fun RYWebView(
                         ),
                         url,
                         content,
-                        WebViewScript.get(bionicReading.value),
+                        WebViewScript.get(boldCharacters.value),
                     ),
                     "text/HTML",
                     "UTF-8", null

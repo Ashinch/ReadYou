@@ -55,7 +55,7 @@ fun Preferences.toSettings(): Settings {
 
         // Reading page
         readingRenderer = ReadingRendererPreference.fromPreferences(this),
-        readingBionicReading = ReadingBionicReadingPreference.fromPreferences(this),
+        readingBoldCharacters = ReadingBoldCharactersPreference.fromPreferences(this),
         readingTheme = ReadingThemePreference.fromPreferences(this),
         readingPageTonalElevation = ReadingPageTonalElevationPreference.fromPreferences(this),
         readingAutoHideToolbar = ReadingAutoHideToolbarPreference.fromPreferences(this),

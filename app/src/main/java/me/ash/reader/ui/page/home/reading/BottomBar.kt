@@ -38,7 +38,7 @@ import me.ash.reader.infrastructure.preference.LocalReadingRenderer
 import me.ash.reader.infrastructure.preference.ReadingPageTonalElevationPreference
 import me.ash.reader.infrastructure.preference.ReadingRendererPreference
 import me.ash.reader.ui.component.base.CanBeDisabledIconButton
-import me.ash.reader.ui.component.webview.BionicReadingIcon
+import me.ash.reader.ui.component.webview.BoldCharactersIcon
 
 @Composable
 fun BottomBar(
@@ -47,12 +47,12 @@ fun BottomBar(
     isStarred: Boolean,
     isNextArticleAvailable: Boolean,
     isFullContent: Boolean,
-    isBionicReading: Boolean,
+    isBoldCharacters: Boolean,
     onUnread: (isUnread: Boolean) -> Unit = {},
     onStarred: (isStarred: Boolean) -> Unit = {},
     onNextArticle: () -> Unit = {},
     onFullContent: (isFullContent: Boolean) -> Unit = {},
-    onBionicReading: () -> Unit = {},
+    onBoldCharacters: () -> Unit = {},
     onReadAloud: () -> Unit = {},
 ) {
     val tonalElevation = LocalReadingPageTonalElevation.current
@@ -141,26 +141,25 @@ fun BottomBar(
                             disabled = false,
                             imageVector = if (renderer == ReadingRendererPreference.WebView) null else Icons.Outlined.Headphones,
                             contentDescription = if (renderer == ReadingRendererPreference.WebView) {
-                                stringResource(R.string.bionic_reading)
+                                stringResource(R.string.bold_characters)
                             } else {
                                 stringResource(R.string.read_aloud)
                             },
-                            tint = if (renderer == ReadingRendererPreference.WebView && isBionicReading) {
+                            tint = if (renderer == ReadingRendererPreference.WebView && isBoldCharacters) {
                                 MaterialTheme.colorScheme.onSecondaryContainer
                             } else {
                                 MaterialTheme.colorScheme.outline
                             },
                             icon = {
-                                BionicReadingIcon(
-                                    activated = isBionicReading,
+                                BoldCharactersIcon(
+                                    activated = isBoldCharacters,
                                     size = 24.dp,
-                                    tint = MaterialTheme.colorScheme.outline
                                 )
                             },
                         ) {
                             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             if (renderer == ReadingRendererPreference.WebView) {
-                                onBionicReading()
+                                onBoldCharacters()
                             } else {
                                 onReadAloud()
                             }

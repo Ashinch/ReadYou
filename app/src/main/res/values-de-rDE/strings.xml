@@ -179,7 +179,6 @@
     <string name="general">Allgemein</string>
     <string name="auto_hide_toolbars">Leisten automatisch ausblenden</string>
     <string name="rearrange_buttons">Schaltflächen umpositionieren</string>
-    <string name="bionic_reading">Bionisches Lesen</string>
     <string name="images">Bilder</string>
     <string name="rounded_corners">Abgerundete Ecken</string>
     <string name="videos">Videos</string>
@@ -308,10 +307,7 @@
     <string name="content_renderer">Inhalts Renderer</string>
     <string name="read_aloud">Vorlesen</string>
     <string name="only_available_on_webview">Nur im WebView verfügbar</string>
-    <string name="use_bionic_reading">Bionisches Lesen verwenden</string>
     <string name="about">Über</string>
-    <string name="bionic_reading_tips">Was ist bionisches Lesen?</string>
-    <string name="browse_bionic_reading_tips">Erfahren Sie mehr unter <i><u>bionic-reading.com</u></i>.</string>
     <string name="toolbars">Werkzeugleisten</string>
     <string name="mark_as_read_on_scroll">Beim Scrollen als gelesen markieren</string>
     <string name="become_a_sponsor">Sponsor werden</string>

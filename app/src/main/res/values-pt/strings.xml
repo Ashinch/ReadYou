@@ -205,7 +205,6 @@
     <string name="letter_spacing">Espaçamento entre letras</string>
     <string name="line_spacing">Espaçamento entre linhas</string>
     <string name="rearrange_buttons">Rearranjar os botões</string>
-    <string name="bionic_reading">Leitura Biônica</string>
     <string name="images">Imagens</string>
     <string name="align_end">Alinhar a direita</string>
     <string name="center_text">Centralizar o texto</string>
@@ -311,10 +310,7 @@
     <string name="content_renderer">Renderizador de conteúdo</string>
     <string name="read_aloud">Ler em voz alta</string>
     <string name="only_available_on_webview">Disponível apenas em WebView</string>
-    <string name="use_bionic_reading">Usar Bionic Reading</string>
     <string name="about">Sobre</string>
-    <string name="bionic_reading_tips">O que é Bionic Reading?</string>
-    <string name="browse_bionic_reading_tips">Saiba mais em <i><u>bionic-reading.com</u></i>.</string>
     <string name="mark_as_read_on_scroll">Marcar como lido na rolagem</string>
     <string name="toolbars">Barras de ferramentas</string>
     <string name="become_a_sponsor">Torne-se um patrocinador</string>

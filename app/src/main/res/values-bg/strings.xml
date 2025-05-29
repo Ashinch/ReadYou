@@ -176,7 +176,7 @@
     <string name="icons_and_label_only_selected">Икони и етикет (само активни)</string>
     <string name="share">Сподели</string>
     <string name="touch_to_play_video">Докосни, за да изпълните видеоклип</string>
-    <string name="bionic_reading">Бионично четене</string>
+
     <string name="images">Изображения</string>
     <string name="rounded_corners">Заоблени ъгли</string>
     <string name="videos">Видеоклипове</string>
@@ -303,15 +303,12 @@
     <string name="content_renderer">Рендеринг на съдържание</string>
     <string name="read_aloud">Прочитане на глас</string>
     <string name="about">Относно</string>
-    <string name="bionic_reading_tips">Какво е бионично четене?</string>
-    <string name="browse_bionic_reading_tips">Научете повече на <i><u>bionic-reading.com</u></i>.</string>
     <string name="save">Запази</string>
     <string name="tips_group_list_tonal_elevation">Цветовото отстъпление за списъка с групи е налично само в светла тема</string>
     <string name="server_url">Сървър URL</string>
     <string name="include_additional_info">Включи допълнителна информация</string>
     <string name="only_available_on_webview">Предлага се само в WebView</string>
     <string name="native_component">Собствен компонент</string>
-    <string name="use_bionic_reading">Използвай на бионично четене</string>
     <string name="mark_as_read_on_scroll">Маркирай като прочетено при превъртане</string>
     <string name="become_a_sponsor">Станете спонсор</string>
     <string name="sponsor_desc">Ние създаваме и поддържаме това безплатно приложение с отворен код в извънработно време. Ако ви харесва, моля, помислете дали да ни подкрепите с малко дарение! ☕️</string>

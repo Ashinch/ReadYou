@@ -16,7 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -26,25 +25,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.ireward.htmlcompose.HtmlText
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalOpenLink
 import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
-import me.ash.reader.infrastructure.preference.LocalReadingBionicReading
+import me.ash.reader.infrastructure.preference.LocalReadingBoldCharacters
 import me.ash.reader.infrastructure.preference.not
 import me.ash.reader.ui.component.base.Banner
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
 import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.component.base.RYSwitch
-import me.ash.reader.ui.component.base.Subtitle
-import me.ash.reader.ui.component.base.Tips
 import me.ash.reader.ui.component.webview.RYWebView
-import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.theme.palette.onLight
 
 @Composable
-fun BionicReadingPage(
+fun BoldCharactersPage(
     navController: NavHostController,
 ) {
     val context = LocalContext.current
@@ -52,7 +47,7 @@ fun BionicReadingPage(
     val openLink = LocalOpenLink.current
     val openLinkSpecificBrowser = LocalOpenLinkSpecificBrowser.current
 
-    val bionicReading = LocalReadingBionicReading.current
+    val boldCharacters = LocalReadingBoldCharacters.current
 
     RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
@@ -68,7 +63,7 @@ fun BionicReadingPage(
         content = {
             LazyColumn {
                 item {
-                    DisplayText(text = stringResource(R.string.bionic_reading), desc = "")
+                    DisplayText(text = stringResource(R.string.bold_characters), desc = "")
                 }
 
                 // Preview
@@ -76,18 +71,17 @@ fun BionicReadingPage(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 24.dp)
-                            .clip(RoundedCornerShape(24.dp))
+                            .padding(horizontal = 24.dp, vertical = 24.dp)
                             .background(
-                                MaterialTheme.colorScheme.inverseOnSurface
-                                        onLight MaterialTheme.colorScheme.surface.copy(0.7f)
+                                MaterialTheme.colorScheme.surfaceContainerLow,
+                                shape = RoundedCornerShape(24.dp)
                             )
-                            .clickable { },
+                            .padding(vertical = 48.dp),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         RYWebView(
-                            content = stringResource(R.string.bionic_reading_preview),
+                            content = stringResource(R.string.bold_characters_preview),
                         )
                     }
                     Spacer(modifier = Modifier.height(24.dp))
@@ -96,38 +90,16 @@ fun BionicReadingPage(
                 item {
                     Banner(
                         modifier = Modifier.padding(horizontal = 8.dp),
-                        title = stringResource(R.string.use_bionic_reading),
+                        title = stringResource(R.string.use_bold_characters),
                         action = {
-                            RYSwitch(activated = bionicReading.value) {
-                                (!bionicReading).put(context, scope)
+                            RYSwitch(activated = boldCharacters.value) {
+                                (!boldCharacters).put(context, scope)
                             }
                         },
                     ) {
-                        (!bionicReading).put(context, scope)
+                        (!boldCharacters).put(context, scope)
                     }
                     Spacer(modifier = Modifier.height(16.dp))
-                }
-                item {
-                    Subtitle(
-                        modifier = Modifier.padding(horizontal = 24.dp),
-                        text = stringResource(R.string.about)
-                    )
-                    Tips(
-                        text = stringResource(R.string.bionic_reading_tips),
-                    )
-                    TextButton(
-                        modifier = Modifier.padding(horizontal = 12.dp),
-                        onClick = {
-                            context.openURL(context.getString(R.string.bionic_reading_link), openLink, openLinkSpecificBrowser)
-                        }
-                    ) {
-                        HtmlText(
-                            text = stringResource(R.string.browse_bionic_reading_tips),
-                            style = MaterialTheme.typography.bodySmall.copy(
-                                color = MaterialTheme.colorScheme.outline,
-                            ),
-                        )
-                    }
                 }
 
                 item {

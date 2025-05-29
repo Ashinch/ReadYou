@@ -3,6 +3,7 @@ package me.ash.reader.ui.component.webview
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,16 +21,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun BionicReadingIcon(
+fun BoldCharactersIcon(
     modifier: Modifier = Modifier,
     size: Dp = 24.dp,
-    tint: Color = Color.Black,
+    tint: Color = LocalContentColor.current,
     activated: Boolean = false,
 ) {
 
     val baseStyle = LocalTextStyle.current.merge(
         fontFamily = FontFamily.SansSerif,
-        fontSize = (size.value * 0.65F).sp,
+        fontSize = (size.value * 0.8F).sp,
         color = tint,
         textDecoration = if (activated) TextDecoration.Underline else TextDecoration.None
     ).toSpanStyle()
@@ -38,19 +39,11 @@ fun BionicReadingIcon(
         buildAnnotatedString {
             pushStyle(
                 baseStyle.copy(
-                    fontWeight = if (activated) FontWeight.W900 else FontWeight.W700,
+                    fontWeight = if (activated) FontWeight.W900 else FontWeight.Medium,
                     textDecoration = if (activated) TextDecoration.Underline else TextDecoration.None
                 )
             )
             append("B")
-            pop()
-            pushStyle(
-                baseStyle.copy(
-                    fontWeight = FontWeight.W300,
-                    textDecoration = if (activated) TextDecoration.Underline else TextDecoration.None
-                )
-            )
-            append("R")
         }
     }
 
@@ -64,9 +57,9 @@ fun BionicReadingIcon(
 
 @Preview(backgroundColor = 0xFFFFFF)
 @Composable
-private fun BionicReadingIconPreview() {
+private fun BoldCharactersIconPreview() {
     Column {
-        BionicReadingIcon()
-        BionicReadingIcon(activated = true)
+        BoldCharactersIcon()
+        BoldCharactersIcon(activated = true)
     }
 }

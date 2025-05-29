@@ -42,7 +42,7 @@ import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
 import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
-import me.ash.reader.infrastructure.preference.LocalReadingBionicReading
+import me.ash.reader.infrastructure.preference.LocalReadingBoldCharacters
 import me.ash.reader.infrastructure.preference.LocalReadingFonts
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.infrastructure.preference.LocalReadingRenderer
@@ -80,7 +80,7 @@ fun ReadingStylePage(
     val autoHideToolbar = LocalReadingAutoHideToolbar.current
     val pullToSwitchArticle = LocalPullToSwitchArticle.current
     val renderer = LocalReadingRenderer.current
-    val bionicReading = LocalReadingBionicReading.current
+    val boldCharacters = LocalReadingBoldCharacters.current
 
     var tonalElevationDialogVisible by remember { mutableStateOf(false) }
     var rendererDialogVisible by remember { mutableStateOf(false) }
@@ -165,13 +165,13 @@ fun ReadingStylePage(
                         onClick = { rendererDialogVisible = true },
                     ) {}
                     SettingItem(
-                        title = stringResource(R.string.bionic_reading),
+                        title = stringResource(R.string.bold_characters),
                         separatedActions = renderer == ReadingRendererPreference.WebView,
                         enabled = renderer == ReadingRendererPreference.WebView,
-                        desc = if (renderer == ReadingRendererPreference.WebView) stringResource(R.string.bionic_reading_domain)
+                        desc = if (renderer == ReadingRendererPreference.WebView) null
                         else stringResource(R.string.only_available_on_webview),
                         onClick = {
-                            navController.navigate(RouteName.READING_BIONIC_READING) {
+                            navController.navigate(RouteName.READING_BOLD_CHARACTERS) {
                                 launchSingleTop = true
                             }
                         },
@@ -179,9 +179,9 @@ fun ReadingStylePage(
                         if (renderer == ReadingRendererPreference.WebView) {
                             RYSwitch(
                                 enable = renderer == ReadingRendererPreference.WebView,
-                                activated = bionicReading.value,
+                                activated = boldCharacters.value,
                             ) {
-                                (!bionicReading).put(context, scope)
+                                (!boldCharacters).put(context, scope)
                             }
                         }
                     }

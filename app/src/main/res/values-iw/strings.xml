@@ -253,8 +253,5 @@
     <string name="export">ייצוא</string>
     <string name="pull_to_switch_article">יש למשוך כדי להחליף כתבה</string>
     <string name="only_available_on_webview">זמין רק בעת שימוש בעיבוד תוכן דרך WebView</string>
-    <string name="use_bionic_reading">להשתמש בקריאה ביונית</string>
     <string name="about">על אודות</string>
-    <string name="bionic_reading_tips">מה זאת קריאה ביונית?</string>
-    <string name="browse_bionic_reading_tips">יש מידע נוסף ב־<i><u>bionic-reading.com</u></i>.</string>
 </resources>

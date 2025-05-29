@@ -181,7 +181,6 @@
     <string name="align_end">Căn phải</string>
     <string name="center_text">Căn giữa</string>
     <string name="rounded_corners">Viền tròn góc</string>
-    <string name="bionic_reading">Đọc sinh học</string>
     <string name="justify">Căn đều</string>
     <string name="external_fonts">Phông chữ tùy chỉnh</string>
     <string name="always_expand">Luôn xổ xuống</string>
@@ -304,9 +303,6 @@
     <string name="content_renderer">Content renderer</string>
     <string name="read_aloud">Đọc</string>
     <string name="only_available_on_webview">Chỉ có trên WebView</string>
-    <string name="use_bionic_reading">Dùng Đọc Sinh Trắc</string>
     <string name="about">Giới thiệu</string>
     <string name="native_component">Native Component</string>
-    <string name="bionic_reading_tips">Đọc Sinh Trắc là gì?</string>
-    <string name="browse_bionic_reading_tips">Tìm hiểu thêm tại <i><u>bionic-reading.com</u></i>.</string>
 </resources>

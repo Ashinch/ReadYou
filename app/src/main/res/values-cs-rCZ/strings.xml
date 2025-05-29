@@ -182,7 +182,6 @@
     <string name="general">Všeobecné</string>
     <string name="auto_hide_toolbars">Automaticky skrývat lišty</string>
     <string name="rearrange_buttons">Změnit pořadí tlačítek</string>
-    <string name="bionic_reading">Bionické čtení</string>
     <string name="images">Obrázky</string>
     <string name="rounded_corners">Zaoblené rohy</string>
     <string name="videos">Videa</string>
@@ -311,10 +310,7 @@
     <string name="content_renderer">Zobrazovač obsahu</string>
     <string name="read_aloud">Číst nahlas</string>
     <string name="only_available_on_webview">K dispozici pouze ve WebView</string>
-    <string name="use_bionic_reading">Použít bionické čtení</string>
     <string name="about">Informace</string>
-    <string name="browse_bionic_reading_tips">Více informací najdete na <i><u>bionic-reading.com</u></i>.</string>
-    <string name="bionic_reading_tips">Co je bionické čtení?</string>
     <string name="mark_as_read_on_scroll">Označit jako přečtené při posouvání</string>
     <string name="become_a_sponsor">Staňte se sponzorem</string>
     <string name="sponsor_desc">Tuto bezplatnou aplikaci s otevřeným zdrojovým kódem vytváříme a spravujeme v našem volném čase. Pokud se vám líbí, zvažte prosím, zda nás podpoříte malým darem! ☕️</string>

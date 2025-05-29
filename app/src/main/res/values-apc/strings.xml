@@ -134,7 +134,7 @@
     <string name="general">عام</string>
     <string name="auto_hide_toolbars">خبي مينو الأدوات أوتوماتيكيًا</string>
     <string name="rearrange_buttons">غير ترتيب الكبسات</string>
-    <string name="bionic_reading">القراية البايونيك</string>
+
     <string name="images">الصور</string>
     <string name="rounded_corners">الزوايا المبرومة</string>
     <string name="videos">ڤيديوات</string>
@@ -309,9 +309,6 @@
     <string name="native_component">مكون محلي</string>
     <string name="content_renderer">مقدم المحتوى</string>
     <string name="about">عن</string>
-    <string name="browse_bionic_reading_tips">قرا عن القراية البايونيك ع <i><u>bionic-reading.com</u></i>.</string>
-    <string name="use_bionic_reading">ستعمل القراية البايونيك</string>
-    <string name="bionic_reading_tips">شو القراية البايونيك؟</string>
     <string name="toolbars">شريط الأدوات</string>
     <string name="mark_as_read_on_scroll">علّم إنه منرقرا عال تمرير</string>
     <string name="become_a_sponsor">صير سپانسر</string>

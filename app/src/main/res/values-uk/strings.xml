@@ -198,7 +198,6 @@
     <string name="general">Загальний</string>
     <string name="auto_hide_toolbars">Автоматичне приховування панелей інструментів</string>
     <string name="rearrange_buttons">Змінити порядок кнопок</string>
-    <string name="bionic_reading">Біонічне читання</string>
     <string name="videos">Відео</string>
     <string name="align_start">Вирівняти початок</string>
     <string name="align_end">Вирівняти кінець</string>
@@ -313,11 +312,8 @@
     <string name="native_component">Рідний компонент</string>
     <string name="content_renderer">Обробник вмісту</string>
     <string name="read_aloud">Читати вголос</string>
-    <string name="use_bionic_reading">Використовуйте біонічне зчитування</string>
-    <string name="browse_bionic_reading_tips">Дізнайтеся більше на <i><u>bionic-reading.com</u></i>.</string>
     <string name="only_available_on_webview">Доступно лише під час використання рендерера контенту WebView</string>
     <string name="about">Про застосунок</string>
-    <string name="bionic_reading_tips">Що таке біонічне читання?</string>
     <string name="mark_as_read_on_scroll">Позначити як прочитане при прокручуванні</string>
     <string name="become_a_sponsor">Стати спонсором</string>
     <string name="sponsor_desc">Ми створюємо та підтримуємо цей безкоштовний додаток з відкритим кодом у вільний час. Якщо він вам подобається, будь ласка, подумайте про те, щоб підтримати нас невеликим пожертвуванням! ☕️</string>

@@ -214,7 +214,6 @@
     <string name="more">Veel</string>
     <string name="fill_selected_icon">Ikoon: täida praegune filter</string>
     <string name="rearrange_buttons">Korralda nupud ümber</string>
-    <string name="bionic_reading">Biooniline lugemine</string>
     <string name="images">Pildid</string>
     <string name="rounded_corners">Ümarad nurgad</string>
     <string name="videos">Videod</string>
@@ -283,7 +282,6 @@
     <string name="only_available_on_webview">Kasutatav vaid WebView puhul</string>
     <string name="read_aloud">Loe valjult</string>
     <string name="about">Teave</string>
-    <string name="bionic_reading_tips">Mis on biooniline lugemine?</string>
     <string name="for_2_weeks">2 nädalat</string>
     <string name="for_3_days">3 päeva</string>
     <string name="display">Ekraanivaade</string>
@@ -298,14 +296,12 @@
     <string name="pull_to_switch_article">Artikli vahetamiseks viipa alla</string>
     <string name="mark_above_as_read">Märgi eelnev loetuks</string>
     <string name="permission_denied">Õigused puuduvad</string>
-    <string name="use_bionic_reading">Kasuta bioonilist lugemist</string>
     <string name="toolbars">Tööriistaribad</string>
     <string name="mark_as_read_on_scroll">Kerimisel märgi loetuks</string>
     <string name="sort_unread_articles">Järjesta lugemata artikleid</string>
     <string name="delete_account">Kustuta kasutajakonto</string>
     <string name="for_1_day">1 päev</string>
     <string name="for_1_month">1 kuu</string>
-    <string name="browse_bionic_reading_tips">Loe teemast juurde: <i><u>bionic-reading.com</u></i>.</string>
     <string name="image_saved">Pilt on salvestatud</string>
     <string name="none_desc">Määramata</string>
     <string name="sponsor_desc">Me arendame ja haldame seda avatud lähtekoodiga rakendust oma vabast ajast. Kui ta sulle meeldib, siis kaalu meie toetamist kasvõi pisikese summaga! ☕️</string>

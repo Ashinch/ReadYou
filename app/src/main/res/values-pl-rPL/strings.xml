@@ -187,7 +187,6 @@
     <string name="general">Ogólne</string>
     <string name="auto_hide_toolbars">Automatycznie ukrywaj paski narzędzi</string>
     <string name="rearrange_buttons">Zmień kolejność przycisków</string>
-    <string name="bionic_reading">Czytanie bioniczne</string>
     <string name="images">Obrazy</string>
     <string name="rounded_corners">Zaokrąglone rogi</string>
     <string name="videos">Filmy</string>
@@ -316,9 +315,6 @@
     <string name="content_renderer">Renderer treści</string>
     <string name="read_aloud">Czytać na głos</string>
     <string name="only_available_on_webview">Dostępne tylko podczas korzystania z renderera zawartości WebView</string>
-    <string name="use_bionic_reading">Użyj czytania bionicznego</string>
-    <string name="bionic_reading_tips">Czym jest czytanie bioniczne?</string>
-    <string name="browse_bionic_reading_tips">Dowiedz się więcej na <i><u>bionic-reading.com</u></i>.</string>
     <string name="mark_as_read_on_scroll">Oznacz jako przeczytane podczas przewijania</string>
     <string name="become_a_sponsor">Zostań sponsorem</string>
     <string name="sponsor_desc">Tworzymy i utrzymujemy tę darmową, otwartą aplikację w naszym wolnym czasie. Jeśli Ci się podoba, rozważ wsparcie nas małą darowizną! ☕️</string>

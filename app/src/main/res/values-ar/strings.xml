@@ -180,7 +180,7 @@
     <string name="preview_feed_name">رِدِت</string>
     <string name="font_size">حجم الخطِّ</string>
     <string name="letter_spacing">تباعد الحروف</string>
-    <string name="bionic_reading">القراءة الحيويَّة</string>
+
     <string name="videos">الفيديوهات</string>
     <string name="align_end">محاذاة معكوسة</string>
     <string name="subhead">عنوان فرعيٌّ</string>
@@ -321,9 +321,6 @@
     <string name="about">حول التطبيق</string>
     <string name="native_component">المكون الأصلي</string>
     <string name="content_renderer">مسجل المحتوى</string>
-    <string name="use_bionic_reading">استخدام القراءة الإلكترونية</string>
-    <string name="bionic_reading_tips">ما هي القراءة الحيوية؟?</string>
-    <string name="browse_bionic_reading_tips">تعرف على المزيد على <i><u>bionic-reading.com</u></i>.</string>
     <string name="mark_as_read_on_scroll">وضع علامة مقروء على التمرير</string>
     <string name="become_a_sponsor">كن داعما</string>
     <string name="sponsor_desc">نحن نبني ونحافظ على هذا التطبيق المجاني والمفتوح المصدر في غير ساعات العمل لدينا. إذا كنت تستمتع به، فيرجى التفكير في دعمنا بتبرع صغير! ☕️</string>

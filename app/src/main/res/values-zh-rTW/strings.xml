@@ -176,7 +176,6 @@
     <string name="general">一般</string>
     <string name="auto_hide_toolbars">自動隱藏工具列</string>
     <string name="rearrange_buttons">重新排列按鈕</string>
-    <string name="bionic_reading">仿生閱讀</string>
     <string name="images">圖片</string>
     <string name="rounded_corners">圓角</string>
     <string name="videos">影片</string>
@@ -305,10 +304,7 @@
     <string name="content_renderer">內容繪製器</string>
     <string name="read_aloud">朗讀</string>
     <string name="only_available_on_webview">僅限於 WebView</string>
-    <string name="use_bionic_reading">使用仿生閱讀</string>
     <string name="about">關於</string>
-    <string name="bionic_reading_tips">什麼是仿生閱讀？</string>
-    <string name="browse_bionic_reading_tips">了解更多資訊，請造訪 <i><u>bionic-reading.com</u></i>。</string>
     <string name="toolbars">工具列</string>
     <string name="mark_as_read_on_scroll">捲動時標記為已讀</string>
     <string name="become_a_sponsor">成為贊助者</string>

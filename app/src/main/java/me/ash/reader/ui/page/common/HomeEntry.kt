@@ -43,7 +43,7 @@ import me.ash.reader.ui.page.settings.color.ColorAndStylePage
 import me.ash.reader.ui.page.settings.color.DarkThemePage
 import me.ash.reader.ui.page.settings.color.feeds.FeedsPageStylePage
 import me.ash.reader.ui.page.settings.color.flow.FlowPageStylePage
-import me.ash.reader.ui.page.settings.color.reading.BionicReadingPage
+import me.ash.reader.ui.page.settings.color.reading.BoldCharactersPage
 import me.ash.reader.ui.page.settings.color.reading.ReadingImagePage
 import me.ash.reader.ui.page.settings.color.reading.ReadingStylePage
 import me.ash.reader.ui.page.settings.color.reading.ReadingTextPage
@@ -223,8 +223,8 @@ fun HomeEntry(
                 animatedComposable(route = RouteName.READING_PAGE_STYLE) {
                     ReadingStylePage(navController)
                 }
-                animatedComposable(route = RouteName.READING_BIONIC_READING) {
-                    BionicReadingPage(navController)
+                animatedComposable(route = RouteName.READING_BOLD_CHARACTERS) {
+                    BoldCharactersPage(navController)
                 }
                 animatedComposable(route = RouteName.READING_PAGE_TITLE) {
                     ReadingTitlePage(navController)

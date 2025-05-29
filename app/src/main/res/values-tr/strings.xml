@@ -118,7 +118,6 @@
     <string name="alignment">Hizalama</string>
     <string name="general">Genel</string>
     <string name="rearrange_buttons">Düğmeleri yeniden düzenle</string>
-    <string name="bionic_reading">Biyonik okuma</string>
     <string name="images">Resimler</string>
     <string name="rounded_corners">Yuvarlatılmış köşeler</string>
     <string name="videos">Videolar</string>
@@ -305,12 +304,9 @@
     <string name="unfold_more">Tümünü genişlet</string>
     <string name="unfold_less">Tümünü daralt</string>
     <string name="read_aloud">Yüksek sesle oku</string>
-    <string name="use_bionic_reading">Biyonik okumayı kullan</string>
     <string name="native_component">Yerel bileşen</string>
-    <string name="bionic_reading_tips">Biyonik okuma nedir?</string>
     <string name="hide_empty_groups">Boş grupları gizle</string>
     <string name="about">Hakkında</string>
-    <string name="browse_bionic_reading_tips">Daha fazla bilgi için <i><u>bionic-reading.com</u></i> adresini ziyaret edin.</string>
     <string name="latest">En son</string>
     <string name="open_in_browser">Tarayıcıda aç</string>
     <string name="all_open_in_browser_tips">\"%1$s\" grubundaki tüm makaleleri tarayıcı kullanarak aç</string>

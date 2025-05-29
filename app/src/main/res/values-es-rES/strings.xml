@@ -184,7 +184,6 @@
     <string name="general">General</string>
     <string name="auto_hide_toolbars">Ocultar automáticamente las barras de herramientas</string>
     <string name="rearrange_buttons">Reordenar botones</string>
-    <string name="bionic_reading">Lectura biónica</string>
     <string name="images">Imágenes</string>
     <string name="rounded_corners">Esquinas redondeadas</string>
     <string name="videos">Vídeos</string>
@@ -309,13 +308,10 @@
     <string name="invalid_json_file_warning">Es posible que este archivo no sea un archivo JSON válido. Importarlo podría dañar la aplicación y provocar la pérdida de las preferencias actuales. ¿Estas seguro que deseas continuar?</string>
     <string name="unfold_less">Contraer todo</string>
     <string name="unfold_more">Expandir todo</string>
-    <string name="bionic_reading_tips">¿Qué es la lectura biónica?</string>
-    <string name="browse_bionic_reading_tips">Más información en <i><u>bionic-reading.com</u></i>.</string>
     <string name="native_component">Componente nativo</string>
     <string name="content_renderer">Procesador de contenido</string>
     <string name="read_aloud">Lectura mediante la voz</string>
     <string name="only_available_on_webview">Solo disponible en WebView</string>
-    <string name="use_bionic_reading">Utiliza la lectura biónica</string>
     <string name="about">Acerca de</string>
     <string name="mark_as_read_on_scroll">Marcar como leído al desplazarse</string>
     <string name="become_a_sponsor">Conviértete en patrocinador</string>

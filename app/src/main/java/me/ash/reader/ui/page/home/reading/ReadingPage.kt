@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
 import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
-import me.ash.reader.infrastructure.preference.LocalReadingBionicReading
+import me.ash.reader.infrastructure.preference.LocalReadingBoldCharacters
 import me.ash.reader.infrastructure.preference.LocalReadingTextLineHeight
 import me.ash.reader.infrastructure.preference.not
 import me.ash.reader.ui.ext.collectAsStateValue
@@ -69,7 +69,7 @@ fun ReadingPage(
     val isPullToSwitchArticleEnabled = LocalPullToSwitchArticle.current.value
     val readingUiState = readingViewModel.readingUiState.collectAsStateValue()
     val readerState = readingViewModel.readerStateStateFlow.collectAsStateValue()
-    val bionicReading = LocalReadingBionicReading.current
+    val boldCharacters = LocalReadingBoldCharacters.current
     val coroutineScope = rememberCoroutineScope()
 
     var isReaderScrollingDown by remember { mutableStateOf(false) }
@@ -257,7 +257,7 @@ fun ReadingPage(
                         isStarred = readingUiState.isStarred,
                         isNextArticleAvailable = isNextArticleAvailable,
                         isFullContent = readerState.content is ReaderState.FullContent || readerState.content is ReaderState.Error,
-                        isBionicReading = bionicReading.value,
+                        isBoldCharacters = boldCharacters.value,
                         onUnread = {
                             readingViewModel.updateReadStatus(it)
                         },
@@ -271,8 +271,8 @@ fun ReadingPage(
                             if (it) readingViewModel.renderFullContent()
                             else readingViewModel.renderDescriptionContent()
                         },
-                        onBionicReading = {
-                            (!bionicReading).put(context, coroutineScope)
+                        onBoldCharacters = {
+                            (!boldCharacters).put(context, coroutineScope)
                         },
                         onReadAloud = {
                             context.showToast(context.getString(R.string.coming_soon))

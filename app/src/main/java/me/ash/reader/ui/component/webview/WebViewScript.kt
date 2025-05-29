@@ -2,7 +2,7 @@ package me.ash.reader.ui.component.webview
 
 object WebViewScript {
 
-    fun get(bionicReading: Boolean) = """
+    fun get(boldCharacters: Boolean) = """
 const BR_WORD_STEM_PERCENTAGE = 0.7;
 const MAX_FIXATION_PARTS = 4;
 const FIXATION_LOWER_BOUND = 0
@@ -75,7 +75,7 @@ function setBionic(enabled) {
     }
 }
 
-${if (bionicReading) "setBionic(true);" else ""}
+${if (boldCharacters) "setBionic(true);" else ""}
 
 var images = document.querySelectorAll("img");
 

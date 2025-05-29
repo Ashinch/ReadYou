@@ -167,7 +167,6 @@
     <string name="top_bar">Верхняя панель</string>
     <string name="article_date_sticky_header">Закреплённый заголовок даты публикации</string>
     <string name="feed_favicons">Значки для лент</string>
-    <string name="bionic_reading">Бионическое чтение</string>
     <string name="all_parse_full_content_toast">Получать полное содержимое для всех статей в группе «%1$s»</string>
     <string name="tips_top_bar_tonal_elevation">Цветовой отступ для верхнего списка панели доступен только при прокрутке</string>
     <string name="tips_article_list_tonal_elevation">Цветовой отступ для списка статей доступен только в светлой теме</string>
@@ -311,13 +310,10 @@
     <string name="import_from_json">Импортировать из JSON</string>
     <string name="invalid_protobuf_file_warning">Этот файл не похож на правильный файл protobuf. Его импорт может сломать приложение и сбросить текущие настройки. Вы уверены, что хотите продолжить?</string>
     <string name="content_renderer">Обработчик содержимого</string>
-    <string name="bionic_reading_tips">Что такое бионическое чтение?</string>
     <string name="about">Об</string>
-    <string name="use_bionic_reading">Использовать бионическое чтение</string>
     <string name="only_available_on_webview">Только доступно в WebView</string>
     <string name="read_aloud">Читать вслух</string>
     <string name="native_component">Изначальный компонент</string>
-    <string name="browse_bionic_reading_tips">Узнайте больше на <i><u>bionic-reading.com</u></i>.</string>
     <string name="toolbars">Панели инструментов</string>
     <string name="mark_as_read_on_scroll">Отметить как прочитанное при прокрутке</string>
     <string name="become_a_sponsor">Стать спонсором</string>
