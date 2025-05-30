@@ -28,7 +28,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.material3.Text
 import androidx.compose.material3.Surface
@@ -40,13 +39,14 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.size.Precision
@@ -88,6 +88,7 @@ fun LazyListScope.htmlFormattedText(
         }
 }
 
+@Suppress("UNCHECKED_CAST")
 private fun LazyListScope.formatBody(
     element: Element,
     subheadUpperCase: Boolean = false,
@@ -98,37 +99,30 @@ private fun LazyListScope.formatBody(
 ) {
     val composer = TextComposer { paragraphBuilder ->
         item {
-            val paragraph = paragraphBuilder.toAnnotatedString()
+            val textLinkStyles = textLinkStyles()
+            val paragraph = paragraphBuilder.toAnnotatedString().mapAnnotations {
+                when (it.item) {
+                    is LinkAnnotation.Url -> {
+                        val link = (it.item as LinkAnnotation.Url)
+                        val newLink = link.copy(
+                            styles = textLinkStyles,
+                            linkInteractionListener = { onLinkClick(link.url) })
+                        (it as AnnotatedString.Range<LinkAnnotation.Url>).copy(item = newLink)
+                    }
+
+                    else -> it
+                }
+            }
             val requiresBidi = paragraph.toString().requiresBidi()
             val textStyle = bodyStyle().applyTextDirection(requiresBidi = requiresBidi)
 
-            // ClickableText prevents taps from deselecting selected text
-            // So use regular Text if possible
-            if (paragraph.getStringAnnotations("URL", 0, paragraph.length)
-                    .isNotEmpty()
-            ) {
-                ClickableText(
-                    text = paragraph,
-                    style = textStyle,
-                    modifier = Modifier
-                        .width(MAX_CONTENT_WIDTH.dp)
-                        .padding(horizontal = textHorizontalPadding().dp)
-                ) { offset ->
-                    paragraph.getStringAnnotations("URL", offset, offset)
-                        .firstOrNull()
-                        ?.let {
-                            onLinkClick(it.item)
-                        }
-                }
-            } else {
-                Text(
-                    text = paragraph,
-                    style = textStyle,
-                    modifier = Modifier
-                        .width(MAX_CONTENT_WIDTH.dp)
-                        .padding(horizontal = textHorizontalPadding().dp)
-                )
-            }
+            Text(
+                text = paragraph,
+                style = textStyle,
+                modifier = Modifier
+                    .width(MAX_CONTENT_WIDTH.dp)
+                    .padding(horizontal = textHorizontalPadding().dp)
+            )
         }
     }
 
@@ -259,10 +253,10 @@ private fun TextComposer.appendTextChildren(
                     "h1" -> {
                         withParagraph {
                             withComposableStyle(
-                                style = { h1Style().toSpanStyle() }
+                                style = { h1Style() }
                             ) {
                                 append(
-                                    "\n${
+                                    "${
                                         if (subheadUpperCase) element.text()
                                             .uppercase() else element.text()
                                     }"
@@ -274,10 +268,10 @@ private fun TextComposer.appendTextChildren(
                     "h2" -> {
                         withParagraph {
                             withComposableStyle(
-                                style = { h2Style().toSpanStyle() }
+                                style = { h2Style() }
                             ) {
                                 append(
-                                    "\n${
+                                    "${
                                         if (subheadUpperCase) element.text()
                                             .uppercase() else element.text()
                                     }"
@@ -289,10 +283,10 @@ private fun TextComposer.appendTextChildren(
                     "h3" -> {
                         withParagraph {
                             withComposableStyle(
-                                style = { h3Style().toSpanStyle() }
+                                style = { h3Style() }
                             ) {
                                 append(
-                                    "\n${
+                                    "${
                                         if (subheadUpperCase) element.text()
                                             .uppercase() else element.text()
                                     }"
@@ -304,10 +298,10 @@ private fun TextComposer.appendTextChildren(
                     "h4" -> {
                         withParagraph {
                             withComposableStyle(
-                                style = { h4Style().toSpanStyle() }
+                                style = { h4Style() }
                             ) {
                                 append(
-                                    "\n${
+                                    "${
                                         if (subheadUpperCase) element.text()
                                             .uppercase() else element.text()
                                     }"
@@ -319,10 +313,10 @@ private fun TextComposer.appendTextChildren(
                     "h5" -> {
                         withParagraph {
                             withComposableStyle(
-                                style = { h5Style().toSpanStyle() }
+                                style = { h5Style() }
                             ) {
                                 append(
-                                    "\n${
+                                    "${
                                         if (subheadUpperCase) element.text()
                                             .uppercase() else element.text()
                                     }"
@@ -334,10 +328,10 @@ private fun TextComposer.appendTextChildren(
                     "h6" -> {
                         withParagraph {
                             withComposableStyle(
-                                style = { h6Style().toSpanStyle() }
+                                style = { h6Style() }
                             ) {
                                 append(
-                                    "\n${
+                                    "${
                                         if (subheadUpperCase) element.text()
                                             .uppercase() else element.text()
                                     }"
@@ -348,7 +342,7 @@ private fun TextComposer.appendTextChildren(
 
                     "strong", "b" -> {
                         withComposableStyle(
-                            style = { boldStyle().toSpanStyle() }
+                            style = { boldStyle() }
                         ) {
                             appendTextChildren(
                                 element.childNodes(),
@@ -362,7 +356,7 @@ private fun TextComposer.appendTextChildren(
                     }
 
                     "i", "em", "cite", "dfn" -> {
-                        withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
+                        withSpanStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
                             appendTextChildren(
                                 element.childNodes(),
                                 lazyListScope = lazyListScope,
@@ -375,7 +369,7 @@ private fun TextComposer.appendTextChildren(
                     }
 
                     "tt" -> {
-                        withStyle(SpanStyle(fontFamily = FontFamily.Monospace)) {
+                        withSpanStyle(SpanStyle(fontFamily = FontFamily.Monospace)) {
                             appendTextChildren(
                                 element.childNodes(),
                                 lazyListScope = lazyListScope,
@@ -388,7 +382,7 @@ private fun TextComposer.appendTextChildren(
                     }
 
                     "u" -> {
-                        withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
+                        withSpanStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
                             appendTextChildren(
                                 element.childNodes(),
                                 lazyListScope = lazyListScope,
@@ -401,7 +395,7 @@ private fun TextComposer.appendTextChildren(
                     }
 
                     "sup" -> {
-                        withStyle(SpanStyle(baselineShift = BaselineShift.Superscript)) {
+                        withSpanStyle(SpanStyle(baselineShift = BaselineShift.Superscript)) {
                             appendTextChildren(
                                 element.childNodes(),
                                 lazyListScope = lazyListScope,
@@ -414,7 +408,7 @@ private fun TextComposer.appendTextChildren(
                     }
 
                     "sub" -> {
-                        withStyle(SpanStyle(baselineShift = BaselineShift.Subscript)) {
+                        withSpanStyle(SpanStyle(baselineShift = BaselineShift.Subscript)) {
                             appendTextChildren(
                                 element.childNodes(),
                                 lazyListScope = lazyListScope,
@@ -428,7 +422,7 @@ private fun TextComposer.appendTextChildren(
 
                     "font" -> {
                         val fontFamily: FontFamily? = element.attr("face")?.asFontFamily()
-                        withStyle(SpanStyle(fontFamily = fontFamily)) {
+                        withSpanStyle(SpanStyle(fontFamily = fontFamily)) {
                             appendTextChildren(
                                 element.childNodes(),
                                 lazyListScope = lazyListScope,
@@ -482,7 +476,7 @@ private fun TextComposer.appendTextChildren(
 
                     "blockquote" -> {
                         withParagraph {
-                            withStyle(
+                            withSpanStyle(
                                 SpanStyle(
                                     fontStyle = FontStyle.Italic,
                                     fontWeight = FontWeight.Light,
@@ -501,20 +495,18 @@ private fun TextComposer.appendTextChildren(
                     }
 
                     "a" -> {
-                        withComposableStyle(
-                            style = { linkTextStyle().toSpanStyle() }
-                        ) {
-                            withAnnotation("URL", element.attr("abs:href") ?: "") {
-                                appendTextChildren(
-                                    element.childNodes(),
-                                    lazyListScope = lazyListScope,
-                                    imagePlaceholder = imagePlaceholder,
-                                    onImageClick = onImageClick,
-                                    onLinkClick = onLinkClick,
-                                    baseUrl = baseUrl,
-                                )
-                            }
+                        val url = element.attr("abs:href") ?: ""
+                        withLink(url = url) {
+                            appendTextChildren(
+                                element.childNodes(),
+                                lazyListScope = lazyListScope,
+                                imagePlaceholder = imagePlaceholder,
+                                onImageClick = onImageClick,
+                                onLinkClick = onLinkClick,
+                                baseUrl = baseUrl,
+                            )
                         }
+
                     }
 
                     "img" -> {
@@ -523,10 +515,8 @@ private fun TextComposer.appendTextChildren(
                             val alt = element.attr("alt") ?: ""
                             appendImage(onLinkClick = onLinkClick) { onClick ->
                                 lazyListScope.item {
-//                                    val scale = remember { mutableStateOf(1f) }
                                     Column(
                                         modifier = Modifier
-//                                            .padding(horizontal = horizontalPadding().dp)
                                             .width(MAX_CONTENT_WIDTH.dp)
                                     ) {
                                         Spacer(modifier = Modifier.height(textHorizontalPadding().dp))
@@ -534,23 +524,7 @@ private fun TextComposer.appendTextChildren(
                                             BoxWithConstraints(
                                                 modifier = Modifier
                                                     .clip(RectangleShape)
-//                                                    .clickable(
-//                                                        enabled = onClick != null
-//                                                    ) {
-//                                                        onClick?.invoke()
-//                                                    }
                                                     .fillMaxWidth()
-                                                // This makes scrolling a pain, find a way to solve that
-//                                            .pointerInput("imgzoom") {
-//                                                detectTransformGestures { centroid, pan, zoom, rotation ->
-//                                                    val z = zoom * scale.value
-//                                                    scale.value = when {
-//                                                        z < 1f -> 1f
-//                                                        z > 3f -> 3f
-//                                                        else -> z
-//                                                    }
-//                                                }
-//                                            }
                                             ) {
                                                 val imageSize = maxImageSize()
                                                 val imgUrl = imageCandidates.getBestImageForMaxSize(
@@ -692,14 +666,23 @@ private fun TextComposer.appendTextChildren(
                         if (video != null) {
                             appendImage(onLinkClick = onLinkClick) {
                                 lazyListScope.item {
+                                    val horizontalPadding = textHorizontalPadding().dp
+                                    val verticalPadding = 12.dp
+
                                     Column(
                                         modifier = Modifier
                                             .width(MAX_CONTENT_WIDTH.dp)
-                                            .padding(horizontal = textHorizontalPadding().dp)
+                                            .padding(
+                                                horizontal = horizontalPadding,
+                                                vertical = verticalPadding
+                                            )
                                     ) {
+
                                         DisableSelection {
                                             BoxWithConstraints(
-                                                modifier = Modifier.fillMaxWidth()
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(vertical = verticalPadding)
                                             ) {
                                                 RYAsyncImage(
                                                     modifier = Modifier
@@ -718,17 +701,15 @@ private fun TextComposer.appendTextChildren(
                                             }
                                         }
 
-                                        Spacer(modifier = Modifier.height(textHorizontalPadding().dp / 2))
-
                                         Text(
                                             modifier = Modifier
                                                 .fillMaxWidth()
-                                                .padding(horizontal = textHorizontalPadding().dp),
+                                                .padding(horizontal = horizontalPadding),
                                             text = stringResource(R.string.touch_to_play_video),
                                             style = captionStyle(),
                                         )
 
-                                        Spacer(modifier = Modifier.height(textHorizontalPadding().dp))
+                                        Spacer(modifier = Modifier.height(verticalPadding))
                                     }
                                 }
                             }

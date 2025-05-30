@@ -22,7 +22,10 @@ package me.ash.reader.ui.component.reader
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 
 class AnnotatedParagraphStringBuilder {
 
@@ -54,14 +57,15 @@ class AnnotatedParagraphStringBuilder {
     fun pushStyle(style: SpanStyle): Int =
         builder.pushStyle(style = style)
 
+    fun pushStyle(style: ParagraphStyle): Int = builder.pushStyle(style)
+
     fun pop(index: Int) =
         builder.pop(index)
 
-    fun pushStringAnnotation(tag: String, annotation: String): Int =
-        builder.pushStringAnnotation(tag = tag, annotation = annotation)
+    fun pop() = builder.pop()
 
     fun pushComposableStyle(
-        style: @Composable () -> SpanStyle,
+        style: @Composable () -> TextStyle,
     ): Int {
         composableStyles.add(
             ComposableStyleWithStartEnd(
@@ -79,6 +83,8 @@ class AnnotatedParagraphStringBuilder {
             composableStyles.removeAt(index).copy(end = builder.length)
         )
     }
+
+    fun pushLink(link: LinkAnnotation) = builder.pushLink(link)
 
     fun append(text: String) {
         if (text.count() >= 2) {
@@ -98,15 +104,31 @@ class AnnotatedParagraphStringBuilder {
     @Composable
     fun toAnnotatedString(): AnnotatedString {
         for (composableStyle in poppedComposableStyles) {
+            val style = composableStyle.style()
+            val spanStyle = style.toSpanStyle()
+            val paragraphStyle = style.toParagraphStyle()
             builder.addStyle(
-                style = composableStyle.style(),
+                style = spanStyle,
+                start = composableStyle.start,
+                end = composableStyle.end
+            )
+            builder.addStyle(
+                style = paragraphStyle,
                 start = composableStyle.start,
                 end = composableStyle.end
             )
         }
         for (composableStyle in composableStyles) {
+            val style = composableStyle.style()
+            val spanStyle = style.toSpanStyle()
+            val paragraphStyle = style.toParagraphStyle()
             builder.addStyle(
-                style = composableStyle.style(),
+                style = spanStyle,
+                start = composableStyle.start,
+                end = builder.length
+            )
+            builder.addStyle(
+                style = paragraphStyle,
                 start = composableStyle.start,
                 end = builder.length
             )
@@ -148,7 +170,7 @@ fun AnnotatedParagraphStringBuilder.ensureDoubleNewline() {
     }
 }
 
-private fun AnnotatedParagraphStringBuilder.ensureSingleNewline() {
+fun AnnotatedParagraphStringBuilder.ensureSingleNewline() {
     when {
         lastTwoChars.isEmpty() -> {
             // Nothing to do
@@ -194,7 +216,7 @@ private fun <T> List<T>.peekSecondLatest(): T? {
 }
 
 data class ComposableStyleWithStartEnd(
-    val style: @Composable () -> SpanStyle,
+    val style: @Composable () -> TextStyle,
     val start: Int,
     val end: Int = -1,
 )
