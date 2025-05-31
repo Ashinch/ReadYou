@@ -36,7 +36,7 @@ fun MarkAsReadBar(
     Row(
         modifier = Modifier
             .padding(horizontal = 24.dp)
-            .padding(vertical = 16.dp)
+            .padding(vertical = 12.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {

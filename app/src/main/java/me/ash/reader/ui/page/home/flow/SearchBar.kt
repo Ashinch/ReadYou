@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.flow
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -42,8 +43,9 @@ fun SearchBar(
 
     Surface(
         modifier = Modifier
+            .background(MaterialTheme.colorScheme.surface)
             .padding(horizontal = 24.dp)
-            .padding(vertical = 16.dp)
+            .padding(vertical = 12.dp)
             .height(56.dp)
             .fillMaxWidth(),
         shape = CircleShape,

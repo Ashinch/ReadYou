@@ -68,6 +68,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
@@ -371,7 +372,7 @@ fun FlowPage(
         }
     }, content = {
 
-        RYExtensibleVisibility(visible = onSearch) {
+        RYExtensibleVisibility(modifier = Modifier.zIndex(1f), visible = onSearch) {
             SearchBar(
                 value = filterUiState.searchContent ?: "", placeholder = when {
                     filterUiState.group != null -> stringResource(
@@ -505,7 +506,6 @@ fun FlowPage(
                             enabled = pullToSwitchFeed.value,
                             onScroll = {
                                 if (it < -10f) {
-                                    onSearch = false
                                     markAsRead = false
                                 }
                             }
