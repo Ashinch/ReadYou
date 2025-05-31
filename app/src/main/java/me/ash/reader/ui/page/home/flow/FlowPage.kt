@@ -435,7 +435,7 @@ fun FlowPage(
             val filterState = flowUiState.pagerData.filterState
             val pagingItems = pager.collectAsLazyPagingItems()
 
-            if (markAsReadOnScroll) {
+            if (markAsReadOnScroll && filterState.filter.isUnread()) {
                 LaunchedEffect(listState.isScrollInProgress) {
                     if (!listState.isScrollInProgress) {
                         val firstItemIndex = listState.firstVisibleItemIndex
