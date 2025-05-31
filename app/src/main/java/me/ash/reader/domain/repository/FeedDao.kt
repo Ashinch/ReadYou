@@ -2,6 +2,7 @@ package me.ash.reader.domain.repository
 
 import android.util.Log
 import androidx.room.*
+import me.ash.reader.domain.model.article.ArchivedArticle
 import me.ash.reader.domain.model.feed.Feed
 
 @Dao
@@ -74,7 +75,8 @@ interface FeedDao {
             updateIsFullContentByGroupIdInternal(
                 accountId = accountId,
                 groupId = groupId,
-                isFullContent = false)
+                isFullContent = false
+            )
         }
     }
 
@@ -180,4 +182,15 @@ interface FeedDao {
             }
         }
     }
+
+    @Insert
+    suspend fun insertArchivedArticles(links: List<ArchivedArticle>)
+
+    @Query(
+        """
+        SELECT * FROM archived_article
+        WHERE feedId = :feedId
+        """
+    )
+    suspend fun queryArchivedArticles(feedId: String): List<ArchivedArticle>
 }

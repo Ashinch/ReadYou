@@ -18,6 +18,7 @@ import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import me.ash.reader.domain.model.account.Account
+import me.ash.reader.domain.model.article.ArchivedArticle
 import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.feed.Feed
@@ -108,14 +109,20 @@ abstract class AbstractRssRepository(
             feedDao.queryAll(accountId).mapIndexed { _, feed ->
                 async(Dispatchers.IO) {
                     semaphore.withPermit {
-                        val feedWithArticle = syncFeed(feed, preDate)
+                        val archivedArticles =
+                            feedDao.queryArchivedArticles(feed.id).map { it.link }.toSet()
+                        val fetchedFeed = syncFeed(feed, preDate)
+                        val fetchedArticles = fetchedFeed.articles.filterNot {
+                            archivedArticles.contains(it.link)
+                        }
+
                         val newArticles =
                             articleDao.insertListIfNotExist(
-                                articles = feedWithArticle.articles,
+                                articles = fetchedArticles,
                                 feed = feed
                             )
-                        if (feedWithArticle.feed.isNotification) {
-                            notificationHelper.notify(feedWithArticle.copy(articles = newArticles))
+                        if (fetchedFeed.feed.isNotification) {
+                            notificationHelper.notify(fetchedFeed.copy(articles = newArticles))
                         }
                     }
                 }
@@ -205,7 +212,14 @@ abstract class AbstractRssRepository(
             articleDao.delete(
                 *archivedArticles.toTypedArray()
             )
-            return archivedArticles
+            return archivedArticles.also {
+                feedDao.insertArchivedArticles(it.map {
+                    ArchivedArticle(
+                        feedId = it.feedId,
+                        link = it.link
+                    )
+                })
+            }
         }
         return emptyList()
     }
