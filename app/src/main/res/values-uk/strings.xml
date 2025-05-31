@@ -296,9 +296,9 @@
     <string name="shared_content">Спільний вміст</string>
     <string name="only_link">Лише посилання</string>
     <string name="title_and_link">Назва та посилання</string>
-    <string name="keep_archived_tips">Архівні елементи — це статті, які позначені як прочитані, не в улюблених та без тегів. Налаштування «Зберігати архівні статті» діє лише на цих пристроях. Старі архівні статті будуть видалені з цих пристроїв. Видалення статей неможливо скасувати.</string>
+    <string name="keep_archived_tips">Архівні елементи – це статті, позначені як прочитані, не позначені зірочкою та не позначені тегами. Налаштування «Зберігати архівовані статті» діє лише на цьому пристрої. Старіші архівні статті будуть видалені з цього пристрою. Видалення статей не можна скасувати.</string>
     <string name="troubleshooting">Вирішення проблем</string>
-    <string name="troubleshooting_desc">Звіт про помилку, налагодження</string>
+    <string name="troubleshooting_desc">Звіт про помилку, налаштування програми</string>
     <string name="bug_report">Звіт про помилки</string>
     <string name="app_preferences">Налаштування застосунку</string>
     <string name="import_from_protobuf_file">Імпортувати з файла «protobuf»</string>
@@ -331,4 +331,7 @@
     <string name="long_desc">Довгий</string>
     <string name="none_desc">Немає</string>
     <string name="pull_to_switch_feed">Потягніть, щоб завантажити наступну стрічку</string>
+    <string name="use_bold_characters">Використовуйте жирний шрифт</string>
+    <string name="bold_characters">Жирний шрифт</string>
+    <string name="bold_characters_preview">Виділення жирним шрифтом перших кількох символів слів у статті</string>
 </resources>

@@ -4,17 +4,17 @@
     <string name="all">All</string>
     <plurals name="all_desc">
         <item quantity="one">%1$d Archived item</item>
-        <item quantity="other">%1$d Archived Items</item>
+        <item quantity="other">%1$d Archived items</item>
     </plurals>
     <string name="unread">Unread</string>
     <plurals name="unread_desc">
-        <item quantity="one">%1$d Unread item</item>
-        <item quantity="other">%1$d Unread items</item>
+        <item quantity="one">%1$d unread item</item>
+        <item quantity="other">%1$d unread items</item>
     </plurals>
     <string name="starred">Starred</string>
     <plurals name="starred_desc">
-        <item quantity="one">%1$d Starred item</item>
-        <item quantity="other">%1$d Starred items</item>
+        <item quantity="one">%1$d starred item</item>
+        <item quantity="other">%1$d starred items</item>
     </plurals>
     <string name="feeds">Feeds</string>
     <string name="syncing">Syncing…</string>
@@ -44,7 +44,7 @@
     <string name="import_from_opml">Import from OPML</string>
     <string name="preset">Preset</string>
     <string name="selected">Selected</string>
-    <string name="allow_notification">Allow notification</string>
+    <string name="allow_notification">Allow notifications</string>
     <string name="all_allow_notification_tips">Allow all feeds in the \"%1$s\" group to send notifications</string>
     <string name="all_allow_notification_toast">All notifications from the \"%1$s\" group are allowed</string>
     <string name="all_deny_notification_toast">All notifications from the \"%1$s\" group are denied</string>
@@ -130,7 +130,7 @@
     <string name="tos_tips">Please read and agree to Read You\'s terms of service and privacy policy to continue.</string>
     <string name="browse_tos_tips">Browse the <i><u>terms of service and privacy policy</u></i></string>
     <string name="terms_of_service">Terms of service</string>
-    <string name="tos_content"><h5> Privacy policy </h5> <br /> <p> We take your privacy very seriously. </p> <br /> <p> <b>Read You</b> does not collect any user data, and all sensitive information (passwords and other account information) is stored securely in the local application database on your device. </p> <br /> <p> <b>Read You</b> will use the following permissions to provide you with the service. </p> <br /> <p> - Access network permission (to access online content as you specify) </p> <p> - Get network status permission (to determine if the device currently has available network conditions) </p> <p> - Background service permission (to automatically sync your favorites for you on a regular basis) </p> <br /> <br /> <h5> Third-party services </h5> <br /> <p> This policy does not apply to third-party services that you use with <b>Read You</b>. You can review the privacy policies of the third-party services you use on their websites </p> <br /> <br /> <h5> Disclaimers </h5> <br /> <p> <b>Read You</b> is a content collection tool only. Your use of <b>Read You</b> is subject to the laws and regulations of your country and region, and any liability arising from your actions will be borne by you personally. </p> <br /> <br /> <h5> Open source license </h5> <br /> <p> <b>Read You</b> is an open source project under the GNU GPL 3.0 Open Source License[1], which allows you to use, reference, and modify the source code of <b>Read You</b> free of charge, but does not allow the modified and derived code to be distributed and sold as closed-source commercial software. For details, please see the full GNU GPL 3.0 Open Source License[2]. </p> <br /> <br /> <h5> Appendix </h5> <br /> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
+    <string name="tos_content"><h5> Privacy policy </h5> <br/> <p> We take your privacy very seriously. </p> <br/> <p> <b>Read You</b> does not collect any user data, and all sensitive information (passwords and other account information) is stored securely in the local application database on your device. </p> <br/> <p> <b>Read You</b> will use the following permissions to provide you with the service. </p> <br/> <p> - Access network permission (to access online content as you specify) </p> <p> - Get network status permission (to determine if the device currently has available network conditions) </p> <p> - Background service permission (to automatically sync your favorites for you on a regular basis) </p> <br/> <br/> <h5> Third-party services </h5> <br/> <p> This policy does not apply to third-party services that you use with <b>Read You</b>. You can review the privacy policies of the third-party services you use on their websites </p> <br/> <br/> <h5> Disclaimers </h5> <br/> <p> <b>Read You</b> is a content collection tool only. Your use of <b>Read You</b> is subject to the laws and regulations of your country and region, and any liability arising from your actions will be borne by you personally. </p> <br/> <br/> <h5> Open source license </h5> <br/> <p> <b>Read You</b> is an open source project under the GNU GPL 3.0 Open Source License[1], which allows you to use, reference, and modify the source code of <b>Read You</b> free of charge, but does not allow the modified and derived code to be distributed and sold as closed-source commercial software. For details, please see the full GNU GPL 3.0 Open Source License[2]. </p> <br/> <br/> <h5> Appendix </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">Agree</string>
     <string name="wallpaper_colors">Wallpaper colors</string>
     <string name="no_palettes">No palettes</string>
@@ -278,7 +278,7 @@
     <string name="clear_all_articles_toast"> Cleared the articles list</string>
     <string name="delete_account_toast">Account deleted</string>
     <string name="synchronous_tips">Restart required for changes to take effect</string>
-    <string name="keep_archived_tips">Archived items are articles which are marked as read, not starred and not tagged. The \"Keep archived articles\" setting is only effective on this devices. Older archived articles will be deleted from this devices. The deletion of articles can\'t be undone.</string>
+    <string name="keep_archived_tips">Archived items are articles which are marked as read, not starred and not tagged. The \"Keep archived articles\" setting is only effective on this device. Older archived articles will be deleted from this device. The deletion of articles cannot be undone.</string>
     <string name="switch_account">Switch</string>
     <string name="add">Add</string>
     <string name="accounts_tips">You can switch accounts by tapping on the account name on the feed page</string>
@@ -329,7 +329,7 @@
     <string name="only_link">Only link</string>
     <string name="title_and_link">Title and link</string>
     <string name="troubleshooting">Troubleshooting</string>
-    <string name="troubleshooting_desc">Bug report, debugging</string>
+    <string name="troubleshooting_desc">Bug report, app preferences</string>
     <string name="bug_report">Bug report</string>
     <string name="issue_tracer_url" translatable="false">https://github.com/Ashinch/ReadYou/issues</string>
     <string name="app_preferences">App preferences</string>
@@ -358,6 +358,6 @@
     <string name="none_desc">None</string>
     <string name="pull_to_switch_feed">Pull to load next feed</string>
     <string name="bold_characters">Bold characters</string>
-    <string name="use_bold_characters">Use Bold Characters</string>
-    <string name="bold_characters_preview">Bold the first few characters of words in the article</string>
+    <string name="use_bold_characters">Use bold characters</string>
+    <string name="bold_characters_preview">Bold the first few characters of words in an article</string>
 </resources>
