@@ -1,4 +1,4 @@
-<i>Read You</i> moodne ja elegantne RSS-uudistevoo lugeja, mis kasutab <a href='https://m3.material.io/' target='_blank' rel='nofollow'>Material You </a> kujunduskeelt
+<i>Read You</i> on moodne ja elegantne RSS-uudistevoo lugeja, mis kasutab <a href='https://m3.material.io/' target='_blank' rel='nofollow'>Material You </a> kujunduskeelt
 
 <b>Funktsionaalsused:</b>
 
