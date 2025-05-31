@@ -76,7 +76,7 @@ class RssHelper @Inject constructor(
         try {
             val accountId = context.currentAccountId
             inputStream(okHttpClient, feed.url).use {
-                SyndFeedInput(true, Locale.getDefault()).apply { isPreserveWireFeed = true }
+                SyndFeedInput().apply { isPreserveWireFeed = true }
                     .build(XmlReader(it))
                     .entries
                     .asSequence()
