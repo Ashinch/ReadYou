@@ -282,8 +282,8 @@
     <string name="swipe_to_start">Glisser à gauche</string>
     <string name="swipe_to_end">Glisser à droite</string>
     <string name="none">Aucun</string>
-    <string name="toggle_read">Afficher ou masquer les articles lus</string>
-    <string name="toggle_starred">Afficher les favoris</string>
+    <string name="toggle_read">Marquer comme lu ou non lu</string>
+    <string name="toggle_starred">Ajouter ou retirer des favoris</string>
     <string name="invalid_protobuf_file_warning">Ce fichier n’est peut-être pas un fichier protobuf valide. L’importer pourrait potentiellement corrompre l’application et entraîner la perte des préférences actuelles. Êtes-vous sur de vouloir continuer ?</string>
     <string name="mark_above_as_read">Marquer ci-dessus comme lu</string>
     <string name="keep_archived_tips">Les éléments archivés sont des articles marqués comme lus, non suivis et non étiquetés. Le paramètre « Conserver les articles archivés » n\'est efficace que sur ces appareils. Les articles archivés plus anciens seront supprimés de ces appareils. La suppression des articles est irréversible.</string>
@@ -317,11 +317,18 @@
     <string name="mark_as_read_on_scroll">Marquer comme lu lors du défilement</string>
     <string name="become_a_sponsor">Devenir un sponsor</string>
     <string name="toolbars">Barres d\'outil</string>
-    <string name="latest">Plus ancien</string>
-    <string name="earliest">Plus récent</string>
+    <string name="latest">Plus récents d\'abord</string>
+    <string name="earliest">Plus anciens d\'abord</string>
     <string name="sponsor_desc">Nous construisons et maintenons cette application gratuite et open-source pendant notre temps libre. Si vous l\'appréciez, n\'hésitez pas à nous soutenir en faisant un petit don ! ☕️</string>
     <string name="sort_unread_articles">Tri des articles non lus</string>
     <string name="open_in_browser">Ouvrir dans le navigateur</string>
     <string name="client_certificate">Certificat client (optionnel)</string>
     <string name="all_open_in_browser_toast">Ouvrir tous les articles du groupe « %1$s » à l\'aide du navigateur</string>
+    <string name="short_desc">Court</string>
+    <string name="long_desc">Long</string>
+    <string name="none_desc">Aucun</string>
+    <string name="bold_characters">Caractères gras</string>
+    <string name="use_bold_characters">Utiliser les caractères gras</string>
+    <string name="bold_characters_preview">Mettre en gras les premiers caractères des mots dans les articles</string>
+    <string name="pull_to_switch_feed">Tirer pour charger le flux suivant</string>
 </resources>

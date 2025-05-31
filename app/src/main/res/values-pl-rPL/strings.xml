@@ -301,7 +301,7 @@
     <string name="grey_out_articles">Wyszarzaj artykuły</string>
     <string name="all_read">Wszystko przeczytane</string>
     <string name="export_as_protobuf_file">Eksportuj jako plik protobuf</string>
-    <string name="keep_archived_tips">Zarchiwizowane elementy to artykuły oznaczone jako przeczytane, niewyróżnione i nieotagowane. Ustawienie „Zachowaj zarchiwizowane artykuły” jest skuteczne tylko na tym urządzeniu. Starsze zarchiwizowane artykuły zostaną usunięte z tego urządzenia. Usunięcia artykułów nie można cofnąć.</string>
+    <string name="keep_archived_tips">Zarchiwizowane elementy to artykuły oznaczone jako przeczytane, niewyróżnione i nieotagowane. Ustawienie „Zachowaj zarchiwizowane artykuły” jest skuteczne tylko na tym urządzeniu. Starsze zarchiwizowane artykuły zostaną usunięte z tego urządzenia. Usunięcia artykułów nie można cofnąć.</string>
     <string name="initial_open_app">Aplikacja po kliknięciu linku</string>
     <string name="additional_info_desc">Dodatkowe informacje obejmują opcje konfiguracji dla każdego kanału, takie jak zezwolenie na powiadomienia, analiza pełnej zawartości itp. Jeśli zamierzasz używać wyeksportowanego pliku OPML z innymi czytnikami, wybierz opcję „Wyklucz”.</string>
     <string name="submit_bug_report">Zgłoś błąd na GitHub</string>
@@ -318,7 +318,7 @@
     <string name="mark_as_read_on_scroll">Oznacz jako przeczytane podczas przewijania</string>
     <string name="become_a_sponsor">Zostań sponsorem</string>
     <string name="sponsor_desc">Tworzymy i utrzymujemy tę darmową, otwartą aplikację w naszym wolnym czasie. Jeśli Ci się podoba, rozważ wsparcie nas małą darowizną! ☕️</string>
-    <string name="troubleshooting_desc">Raport o błędzie, debugowanie</string>
+    <string name="troubleshooting_desc">Raport o błędzie, preferencje aplikacji</string>
     <string name="toggle_starred">Przełącz wyróżnione</string>
     <string name="hide_empty_groups">Ukryj puste grupy</string>
     <string name="client_certificate">Certyfikat klienta (opcjonalnie)</string>
@@ -333,4 +333,7 @@
     <string name="long_desc">Długie</string>
     <string name="none_desc">Żadne</string>
     <string name="pull_to_switch_feed">Przeciągnij, aby załadować następny kanał</string>
+    <string name="bold_characters_preview">Pogrub pierwsze kilka znaków słów w artykule</string>
+    <string name="bold_characters">Pogrubione znaki</string>
+    <string name="use_bold_characters">Użyj pogrubionych znaków</string>
 </resources>
