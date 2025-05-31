@@ -51,7 +51,7 @@ object UseCaseModule {
     @Singleton
     fun providesGroupWithFeedsList(
         @ApplicationScope applicationScope: CoroutineScope,
-        @DefaultDispatcher defaultDispatcher: CoroutineDispatcher,
+        @IODispatcher ioDispatcher: CoroutineDispatcher,
         settingsProvider: SettingsProvider,
         rssService: RssService,
         filterStateUseCase: FilterStateUseCase,
@@ -59,7 +59,7 @@ object UseCaseModule {
     ): GroupWithFeedsListUseCase {
         return GroupWithFeedsListUseCase(
             applicationScope,
-            defaultDispatcher,
+            ioDispatcher,
             settingsProvider,
             rssService,
             filterStateUseCase,

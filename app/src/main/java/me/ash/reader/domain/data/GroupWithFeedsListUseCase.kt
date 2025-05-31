@@ -17,7 +17,7 @@ import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.domain.model.group.GroupWithFeed
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.di.ApplicationScope
-import me.ash.reader.infrastructure.di.DefaultDispatcher
+import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.ui.ext.DataStoreKey.Companion.currentAccountId
 import me.ash.reader.ui.ext.getDefaultGroupId
@@ -27,12 +27,12 @@ import javax.inject.Inject
 class GroupWithFeedsListUseCase @Inject constructor(
     @ApplicationScope
     private val applicationScope: CoroutineScope,
-    @DefaultDispatcher
-    private val defaultDispatcher: CoroutineDispatcher,
+    @IODispatcher
+    private val ioDispatcher: CoroutineDispatcher,
     private val settingsProvider: SettingsProvider,
     private val rssService: RssService,
     private val filterStateUseCase: FilterStateUseCase,
-    private val diffMapHolder: DiffMapHolder
+    private val diffMapHolder: DiffMapHolder,
 ) {
 
     private var currentJob: Job? = null
@@ -85,7 +85,7 @@ class GroupWithFeedsListUseCase @Inject constructor(
                     }
                 }
                 result
-            }.flowOn(defaultDispatcher).collect { _groupWithFeedsListFlow.value = it }
+            }.flowOn(ioDispatcher).collect { _groupWithFeedsListFlow.value = it }
 
         }
     }
@@ -126,7 +126,7 @@ class GroupWithFeedsListUseCase @Inject constructor(
                     }
                 }
                 result
-            }.flowOn(defaultDispatcher).collect {
+            }.flowOn(ioDispatcher).collect {
                 _groupWithFeedsListFlow.value = it
             }
         }
@@ -190,7 +190,7 @@ class GroupWithFeedsListUseCase @Inject constructor(
                     }
                 }
                 result
-            }.debounce(200L).flowOn(defaultDispatcher)
+            }.debounce(200L).flowOn(ioDispatcher)
                 .collect { _groupWithFeedsListFlow.value = it }
         }
     }
