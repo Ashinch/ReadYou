@@ -67,7 +67,7 @@
     <string name="in_coding">Vo vývoji</string>
     <string name="coming_soon">Už čoskoro</string>
     <string name="accounts">Účty</string>
-    <string name="accounts_desc">Miestne, FreshRSS</string>
+    <string name="accounts_desc">Lokálne, služby, vlastné</string>
     <string name="color_and_style">Farba a štýl</string>
     <string name="color_and_style_desc">Téma, farebný štýl, veľkosť písma</string>
     <string name="languages">Jazyky</string>
@@ -291,11 +291,11 @@
     <string name="mark_below_as_read">Označiť nižšie uvedené ako prečítané</string>
     <string name="line_height_multiple">Násobok výšky riadku</string>
     <string name="title_and_link">Názov a odkaz</string>
-    <string name="keep_archived_tips">Archivované položky sú články, ktoré sú označené ako prečítané, nie sú obľúbené a nie sú označené. Nastavenie \"Uchovávať archivované články\" je účinné len na týchto zariadeniach. Staršie archivované články sa z tohto zariadenia odstránia. Vymazanie článkov sa nedá vrátiť späť.</string>
+    <string name="keep_archived_tips">Archivované položky sú články, ktoré sú označené ako prečítané, nie sú obľúbené a nie sú označené. Nastavenie \"Uchovávať archivované články\" je účinné len na tomto zariadení. Staršie archivované články sa z tohto zariadenia odstránia. Vymazanie článkov sa nedá vrátiť späť.</string>
     <string name="shared_content">Zdieľaný obsah</string>
     <string name="only_link">Len odkaz</string>
     <string name="troubleshooting">$Riešenie problémov</string>
-    <string name="troubleshooting_desc">Hlásenie chýb, ladenie</string>
+    <string name="troubleshooting_desc">Hlásenie chýb, nastavenia aplikácie</string>
     <string name="bug_report">Nahlásiť chybu</string>
     <string name="app_preferences">Predvoľby aplikácie</string>
     <string name="import_from_protobuf_file">Importovať zo súboru protobuf</string>
@@ -328,4 +328,7 @@
     <string name="long_desc">Dlhé</string>
     <string name="none_desc">Žiadne</string>
     <string name="pull_to_switch_feed">Potiahnutím načítať ďalší zdroj</string>
+    <string name="bold_characters">Tučné písmo</string>
+    <string name="use_bold_characters">Použiť tučné písmo</string>
+    <string name="bold_characters_preview">Zvýrazniť prvé znaky slov v článku</string>
 </resources>
