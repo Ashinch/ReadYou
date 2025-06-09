@@ -1,0 +1,50 @@
+## 0.10.1
+
+1. Hírforrások szöveges ikonstílusainak javítása (#726, @Ashinch)
+2. A korai felhasználók által az alkalmazásbeállítások importálása után nem elindított alkalmazáshiba javítása (#718, @Ashinch)
+3. Az OPML importálási hibákat okozó néhány eset javítása (#735, @Ashinch)
+4. Néhány ablaknavigációs animáció javítása (#717, @JunkFood02)
+5. Néhány stílushiba javítása jobbról balra író nyelveknél (#732, #733, @JunkFood02)
+6. Fordítási frissítések (Köszönet minden közreműködőnek)
+
+### Megjegyzések
+
+**Teljes változáslista:** [0.10.0...0.10.1](https://github.com/Ashinch/ReadYou/compare/0.10.0...0.10.1)
+
+Ez egy hibajavító javítás. Ha esetleg lemaradtál róla, itt a 0.10.0 verzió változásnaplója:
+
+## 0.10.0
+
+1. Material Design 3 függőségeinek javítása, sdk és Gradle verzió fordítása (#502, @JunkFood02)
+2. Alkalmazáson belüli nyelvválasztó támogatása Android 13-on (#541, #571, @JunkFood02)
+3. hírforrás hozzáadásának támogatása a rendszermegosztási lapon keresztül (#618, @JunkFood02)
+4. Megosztott tartalom összetételének megadásának támogatása (#660, @Ashinch)
+5. Csillagozás/csillag eltávolítása, olvasatlanként való jelölés húzással és konfiguráció hozzáadása (#594, @JunkFood02)
+6. Rendszerterület-beállítások használata az idő megjelenítésének alapértelmezés szerinti formázásához. (#617, @JunkFood02)
+7. Váltás androidx széltől szélig implementációra (#690, @Moderpach)
+8. Képnézegető hozzáadása az olvasási oldalhoz (#578, #545, @JunkFood02, @nvllz)
+9. Gesztusok hozzáadása az olvasási oldalon a cikkek közötti fel-le húzáshoz (#589, @JunkFood02)
+10. Összeomlási jelentési tevékenység hozzáadása a nem észlelt kivételek kezeléséhez (#576, @JunkFood02)
+11. Helyi menü hozzáadása hosszú megnyomásra a folyamatoldalon lévő elemekhez (#613, @JunkFood02)
+12. Többszörös sormagasság-beállítás hozzáadása az olvasási oldalhoz (#620, @JunkFood02)
+13. Licenclista oldal hozzáadása és a névjegy oldal fejlesztése (#664, @Ashinch)
+14. Hibaelhárítási oldal és alkalmazásbeállítások importálási/exportálási eszközeinek hozzáadása (#672, #710, @Ashinch)
+15. Értesítési engedélykérés javítása indításkor Android 13 rendszeren (@JunkFood02)
+16. Ütközés javítása, amikor a közzétételi dátum és a frissítési dátum is üres (@JunkFood02)
+17. Mostantól a cikk közzétételi dátumát lecseréli a jelenlegi időre, ha az egy jövőbeli dátum (#638, @Ashinch)
+18. Mostantól a hírforrás vagy csoport törlésekor a csillaggal jelölt cikkek mellőzve lesznek (#652, @Ashinch)
+19. Mostantól automatikusan újraindul az alkalmazás a külső betűtípusok betöltése után (#667, @Ashinch)
+20. Mostantól először mekeresi a „<melléklet>” címkét a cikk bélyegképéhez (#681, @Ashinch)
+21. Mostantól alapértelmezés szerint ábécé sorrendbe rendezi a kategóriákat a Google Olvasóban történő szinkronizáláskor (#700, @mbestavros)
+22. Új helyőrző a képekhez (#712, @JunkFood02)
+23. További felhasználói felület fejlesztések és hibajavítások (@Ashinch, @JunkFood02)
+24. Fordítások frissítései (köszönet mindenkinek, aki segített)
+
+### Megjegyzések
+
+1. A beállítások exportálásának támogatása érdekében, néhány beállítási elem visszaállt az alapértelmezett értékre, és lehet, hogy vissza kell állítania őket.
+2. A buymeacoffee.com szponzorációs csatorna jelenleg nem érhető el, és a korábban adományozott pénzt visszatérítettük az adományozók számláira.
+3. Más szponzorációs csatornákat keresünk, jelenleg az AFDIAN érhető el. Ha szeretné támogatni a ReadYou fejlesztését, megteheti az [AFDIAN](https://afdian.net/a/ashinch) oldalon keresztül.
+4. Köszönet a szponzorainknak: @User_3072e, @User_223be, @User_3c5c7(Simon), @User_97ebe, @Lowae, @User_28b9f, @User_yuHC, @nullqwertyuiop, @openisgood, @User_vWca, @qgmzmy, @User_97ee1
+
+**Teljes változáslista:** [0.9.12...0.10.0](https://github.com/Ashinch/ReadYou/compare/0.9.12...0.10.0)
