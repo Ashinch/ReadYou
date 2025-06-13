@@ -255,6 +255,16 @@ fun FlowPage(
         onSearch = false
     }
 
+    BackHandler {
+        if (navController.previousBackStackEntry == null) {
+            navController.navigate(RouteName.FEEDS) {
+                launchSingleTop = true
+            }
+        } else {
+            navController.popBackStack()
+        }
+    }
+
     val topAppBarState = rememberTopAppBarState()
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)

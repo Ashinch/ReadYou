@@ -12,6 +12,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -22,7 +23,9 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
+import me.ash.reader.infrastructure.preference.InitialPagePreference
 import me.ash.reader.infrastructure.preference.LocalDarkTheme
+import me.ash.reader.infrastructure.preference.LocalSettings
 import me.ash.reader.ui.ext.animatedComposable
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.findActivity
@@ -64,7 +67,6 @@ fun HomeEntry(
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    var isReadingPage by rememberSaveable { mutableStateOf(false) }
     val subscribeUiState = subscribeViewModel.subscribeUiState.collectAsStateValue()
     val navController = rememberNavController()
 
@@ -73,26 +75,6 @@ fun HomeEntry(
         mutableStateOf(intent?.extras?.getString(ExtraName.ARTICLE_ID) ?: "")
     }.also {
         intent?.replaceExtras(null)
-    }
-
-    LaunchedEffect(Unit) {
-        when (context.initialPage) {
-            1 -> {
-                navController.navigate(RouteName.FLOW) {
-                    launchSingleTop = true
-                }
-            }
-            // Other initial pages
-        }
-
-        // This is finally
-        navController.currentBackStackEntryFlow.collectLatest {
-            Log.i("RLog", "currentBackStackEntry: ${navController.currentDestination?.route}")
-            // Animation duration takes 310 ms
-            delay(310L)
-            isReadingPage =
-                navController.currentDestination?.route == "${RouteName.READING}/{articleId}"
-        }
     }
 
     DisposableEffect(subscribeUiState.shouldNavigateToFeedPage) {
@@ -121,6 +103,13 @@ fun HomeEntry(
             openArticleId = ""
         }
     }
+    val settings = LocalSettings.current
+    val isFirstLaunch = remember { context.isFirstLaunch }
+    val initialPage = remember { settings.initialPage }
+    val startDestination =
+        if (isFirstLaunch) RouteName.STARTUP else if (initialPage == InitialPagePreference.FlowPage) {
+            RouteName.FLOW
+        } else RouteName.FEEDS
 
     AppTheme(
         useDarkTheme = LocalDarkTheme.current.isDarkTheme()
@@ -132,7 +121,7 @@ fun HomeEntry(
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.surface),
                 navController = navController,
-                startDestination = if (context.isFirstLaunch) RouteName.STARTUP else RouteName.FEEDS,
+                startDestination = startDestination,
             ) {
                 // Startup
                 animatedComposable(route = RouteName.STARTUP) {
