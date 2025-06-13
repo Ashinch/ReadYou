@@ -217,7 +217,6 @@ fun ReadingPage(
                                         modifier = Modifier
                                             .pullToLoad(
                                                 state = state,
-                                                density = LocalDensity.current,
                                                 onScroll = { f ->
                                                     if (abs(f) > 2f)
                                                         isReaderScrollingDown = f < 0f

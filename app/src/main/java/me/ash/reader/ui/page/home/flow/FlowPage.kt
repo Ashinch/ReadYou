@@ -10,7 +10,6 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -49,7 +48,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -61,7 +62,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -106,6 +106,9 @@ import me.ash.reader.ui.motion.SharedXAxisTransitionSlow
 import me.ash.reader.ui.motion.SharedYAxisTransitionSlow
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
+import me.ash.reader.ui.page.home.reading.PullToLoadDefaults
+import me.ash.reader.ui.page.home.reading.PullToLoadDefaults.ContentOffsetMultiple
+import me.ash.reader.ui.page.home.reading.PullToLoadState
 import me.ash.reader.ui.page.home.reading.pullToLoad
 import me.ash.reader.ui.page.home.reading.rememberPullToLoadState
 import me.ash.reader.ui.theme.palette.LocalFixedColorRoles
@@ -167,7 +170,11 @@ fun FlowPage(
     var markAsRead by remember { mutableStateOf(false) }
     var onSearch by rememberSaveable { mutableStateOf(false) }
 
-    val owner = LocalLifecycleOwner.current
+    var currentPullToLoadState: PullToLoadState? by remember { mutableStateOf(null) }
+
+    val settleSpec = remember {
+        spring<Float>(dampingRatio = Spring.DampingRatioLowBouncy)
+    }
 
     val lastVisibleIndex = remember(listState) {
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }.filterNotNull()
@@ -252,359 +259,383 @@ fun FlowPage(
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
 
-    RYScaffold(containerTonalElevation = articleListTonalElevation.value.dp, topBar = {
-        MaterialTheme(
-            colorScheme = MaterialTheme.colorScheme,
-            typography = MaterialTheme.typography.copy(
-                headlineMedium = MaterialTheme.typography.displaySmall,
-                titleLarge = MaterialTheme.typography.titleLarge.merge(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Medium
-                )
-            )
-        ) {
-            LargeTopAppBar(
-                modifier = Modifier.clickable(
-                    onClick = {
-                        scope.launch {
-                            if (listState.firstVisibleItemIndex != 0) {
-                                listState.animateScrollToItem(0)
-                            }
-                        }
-                    },
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }), title = {
-                    val textStyle = LocalTextStyle.current
-                    val color = LocalContentColor.current
-                    if (textStyle.fontSize.value > 18f) {
-                        BasicText(
-                            modifier = Modifier.padding(
-                                start = if (articleListFeedIcon.value) 34.dp else 8.dp,
-                                end = 24.dp
-                            ),
-                            text = titleText,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
-                            style = textStyle,
-                            color = { color }
-                        )
-                    } else {
-                        Text(
-                            text = titleText,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
+    val isSyncing = flowViewModel.isSyncingFlow.collectAsStateValue()
 
-                },
-                expandedHeight = 172.dp,
-                scrollBehavior = scrollBehavior, navigationIcon = {
-                    FeedbackIconButton(
-                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                        contentDescription = stringResource(R.string.back),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    ) {
-                        onSearch = false
-                        if (navController.previousBackStackEntry == null) {
-                            navController.navigate(RouteName.FEEDS) {
-                                launchSingleTop = true
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        RYScaffold(containerTonalElevation = articleListTonalElevation.value.dp, topBar = {
+            MaterialTheme(
+                colorScheme = MaterialTheme.colorScheme,
+                typography = MaterialTheme.typography.copy(
+                    headlineMedium = MaterialTheme.typography.displaySmall,
+                    titleLarge = MaterialTheme.typography.titleLarge.merge(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+            ) {
+                LargeTopAppBar(
+                    modifier = Modifier.clickable(
+                        onClick = {
+                            scope.launch {
+                                if (listState.firstVisibleItemIndex != 0) {
+                                    listState.animateScrollToItem(0)
+                                }
                             }
+                        },
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }), title = {
+                        val textStyle = LocalTextStyle.current
+                        val color = LocalContentColor.current
+                        if (textStyle.fontSize.value > 18f) {
+                            BasicText(
+                                modifier = Modifier.padding(
+                                    start = if (articleListFeedIcon.value) 34.dp else 8.dp,
+                                    end = 24.dp
+                                ),
+                                text = titleText,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                style = textStyle,
+                                color = { color }
+                            )
                         } else {
-                            navController.popBackStack()
+                            Text(
+                                text = titleText,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
                         }
-                    }
-                }, actions = {
-                    RYExtensibleVisibility(visible = !filterUiState.filter.isStarred()) {
+
+                    },
+                    expandedHeight = 172.dp,
+                    scrollBehavior = scrollBehavior, navigationIcon = {
                         FeedbackIconButton(
-                            imageVector = Icons.Rounded.DoneAll,
-                            contentDescription = stringResource(R.string.mark_all_as_read),
-                            tint = if (markAsRead) {
+                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                            contentDescription = stringResource(R.string.back),
+                            tint = MaterialTheme.colorScheme.onSurface
+                        ) {
+                            onSearch = false
+                            if (navController.previousBackStackEntry == null) {
+                                navController.navigate(RouteName.FEEDS) {
+                                    launchSingleTop = true
+                                }
+                            } else {
+                                navController.popBackStack()
+                            }
+                        }
+                    }, actions = {
+                        RYExtensibleVisibility(visible = !filterUiState.filter.isStarred()) {
+                            FeedbackIconButton(
+                                imageVector = Icons.Rounded.DoneAll,
+                                contentDescription = stringResource(R.string.mark_all_as_read),
+                                tint = if (markAsRead) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.onSurface
+                                },
+                            ) {
+                                if (markAsRead) {
+                                    markAsRead = false
+                                } else {
+                                    scope.launch {
+                                        if (listState.firstVisibleItemIndex != 0) {
+                                            listState.animateScrollToItem(0)
+                                        }
+                                    }.invokeOnCompletion {
+                                        markAsRead = true
+                                        onSearch = false
+                                    }
+                                }
+
+                            }
+                        }
+                        FeedbackIconButton(
+                            imageVector = Icons.Rounded.Search,
+                            contentDescription = stringResource(R.string.search),
+                            tint = if (onSearch) {
                                 MaterialTheme.colorScheme.primary
                             } else {
                                 MaterialTheme.colorScheme.onSurface
                             },
                         ) {
-                            if (markAsRead) {
-                                markAsRead = false
+                            if (onSearch) {
+                                onSearch = false
                             } else {
                                 scope.launch {
                                     if (listState.firstVisibleItemIndex != 0) {
                                         listState.animateScrollToItem(0)
                                     }
                                 }.invokeOnCompletion {
-                                    markAsRead = true
-                                    onSearch = false
-                                }
-                            }
-
-                        }
-                    }
-                    FeedbackIconButton(
-                        imageVector = Icons.Rounded.Search,
-                        contentDescription = stringResource(R.string.search),
-                        tint = if (onSearch) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.onSurface
-                        },
-                    ) {
-                        if (onSearch) {
-                            onSearch = false
-                        } else {
-                            scope.launch {
-                                if (listState.firstVisibleItemIndex != 0) {
-                                    listState.animateScrollToItem(0)
-                                }
-                            }.invokeOnCompletion {
-                                scope.launch {
-                                    onSearch = true
-                                    markAsRead = false
-                                    delay(100)
-                                    focusRequester.requestFocus()
-                                }
-                            }
-                        }
-                    }
-                }, colors = TopAppBarDefaults.topAppBarColors(
-                    scrolledContainerColor = scrolledTopBarContainerColor
-                )
-            )
-        }
-    }, content = {
-
-        RYExtensibleVisibility(modifier = Modifier.zIndex(1f), visible = onSearch) {
-            SearchBar(
-                value = filterUiState.searchContent ?: "", placeholder = when {
-                    filterUiState.group != null -> stringResource(
-                        R.string.search_for_in,
-                        filterUiState.filter.toName(),
-                        filterUiState.group.name
-                    )
-
-                    filterUiState.feed != null -> stringResource(
-                        R.string.search_for_in,
-                        filterUiState.filter.toName(),
-                        filterUiState.feed.name
-                    )
-
-                    else -> stringResource(
-                        R.string.search_for, filterUiState.filter.toName()
-                    )
-                }, focusRequester = focusRequester, onValueChange = {
-                    homeViewModel.inputSearchContent(it)
-                }, onClose = {
-                    onSearch = false
-                    homeViewModel.inputSearchContent(null)
-                })
-        }
-
-        RYExtensibleVisibility(markAsRead) {
-            MarkAsReadBar {
-                markAsRead = false
-                flowViewModel.updateReadStatus(
-                    groupId = filterUiState.group?.id,
-                    feedId = filterUiState.feed?.id,
-                    articleId = null,
-                    conditions = it,
-                    isUnread = false
-                )
-            }
-        }
-        AnimatedContent(
-            targetState = flowUiState,
-            contentKey = {
-                it.pagerData.filterState.copy(searchContent = null)
-            },
-            transitionSpec = {
-                val targetFilter = targetState.pagerData.filterState
-                val initialFilter = initialState.pagerData.filterState
-
-                if (targetFilter.filter.index > initialFilter.filter.index) {
-                    SharedXAxisTransitionSlow(direction = Direction.Forward)
-                } else if (targetFilter.filter.index < initialFilter.filter.index) {
-                    SharedXAxisTransitionSlow(direction = Direction.Backward)
-                } else if (
-                    targetFilter.group != initialFilter.group || targetFilter.feed != initialFilter.feed
-                ) {
-                    SharedYAxisTransitionSlow(direction = Direction.Forward)
-                } else {
-                    EnterTransition.None togetherWith ExitTransition.None
-                }
-            }
-        ) { flowUiState ->
-            val pager = flowUiState.pagerData.pager
-            val filterState = flowUiState.pagerData.filterState
-            val pagingItems = pager.collectAsLazyPagingItems()
-
-            if (markAsReadOnScroll && filterState.filter.isUnread()) {
-                LaunchedEffect(listState.isScrollInProgress) {
-                    if (!listState.isScrollInProgress) {
-                        val firstItemIndex = listState.firstVisibleItemIndex
-                        if (firstItemIndex < pagingItems.itemCount) for (index in 0 until firstItemIndex) {
-                            val item = pagingItems.peek(index)
-                            with(item) {
-                                when (this) {
-                                    is ArticleFlowItem.Article -> {
-                                        homeViewModel.diffMapHolder.updateDiff(
-                                            articleWithFeed = articleWithFeed, isUnread = false
-                                        )
+                                    scope.launch {
+                                        onSearch = true
+                                        markAsRead = false
+                                        delay(100)
+                                        focusRequester.requestFocus()
                                     }
+                                }
+                            }
+                        }
+                    }, colors = TopAppBarDefaults.topAppBarColors(
+                        scrolledContainerColor = scrolledTopBarContainerColor
+                    )
+                )
+            }
+        }, content = {
 
-                                    else -> {}
+            RYExtensibleVisibility(modifier = Modifier.zIndex(1f), visible = onSearch) {
+                SearchBar(
+                    value = filterUiState.searchContent ?: "", placeholder = when {
+                        filterUiState.group != null -> stringResource(
+                            R.string.search_for_in,
+                            filterUiState.filter.toName(),
+                            filterUiState.group.name
+                        )
+
+                        filterUiState.feed != null -> stringResource(
+                            R.string.search_for_in,
+                            filterUiState.filter.toName(),
+                            filterUiState.feed.name
+                        )
+
+                        else -> stringResource(
+                            R.string.search_for, filterUiState.filter.toName()
+                        )
+                    }, focusRequester = focusRequester, onValueChange = {
+                        homeViewModel.inputSearchContent(it)
+                    }, onClose = {
+                        onSearch = false
+                        homeViewModel.inputSearchContent(null)
+                    })
+            }
+
+            RYExtensibleVisibility(markAsRead) {
+                MarkAsReadBar {
+                    markAsRead = false
+                    flowViewModel.updateReadStatus(
+                        groupId = filterUiState.group?.id,
+                        feedId = filterUiState.feed?.id,
+                        articleId = null,
+                        conditions = it,
+                        isUnread = false
+                    )
+                }
+            }
+            AnimatedContent(
+                targetState = flowUiState,
+                contentKey = {
+                    it.pagerData.filterState.copy(searchContent = null)
+                },
+                transitionSpec = {
+                    val targetFilter = targetState.pagerData.filterState
+                    val initialFilter = initialState.pagerData.filterState
+
+                    if (targetFilter.filter.index > initialFilter.filter.index) {
+                        SharedXAxisTransitionSlow(direction = Direction.Forward)
+                    } else if (targetFilter.filter.index < initialFilter.filter.index) {
+                        SharedXAxisTransitionSlow(direction = Direction.Backward)
+                    } else if (
+                        targetFilter.group != initialFilter.group || targetFilter.feed != initialFilter.feed
+                    ) {
+                        SharedYAxisTransitionSlow(direction = Direction.Forward)
+                    } else {
+                        EnterTransition.None togetherWith ExitTransition.None
+                    }
+                }
+            ) { flowUiState ->
+                val pager = flowUiState.pagerData.pager
+                val filterState = flowUiState.pagerData.filterState
+                val pagingItems = pager.collectAsLazyPagingItems()
+
+                if (markAsReadOnScroll && filterState.filter.isUnread()) {
+                    LaunchedEffect(listState.isScrollInProgress) {
+                        if (!listState.isScrollInProgress) {
+                            val firstItemIndex = listState.firstVisibleItemIndex
+                            if (firstItemIndex < pagingItems.itemCount) for (index in 0 until firstItemIndex) {
+                                val item = pagingItems.peek(index)
+                                with(item) {
+                                    when (this) {
+                                        is ArticleFlowItem.Article -> {
+                                            homeViewModel.diffMapHolder.updateDiff(
+                                                articleWithFeed = articleWithFeed, isUnread = false
+                                            )
+                                        }
+
+                                        else -> {}
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            val listState = remember(pager) { listState }
-            val loadAction = remember(pager, flowUiState) {
-                when {
-                    flowUiState.nextFilterState != null -> LoadAction.NextFeed
-                    filterState.filter.isUnread() && markAsReadOnScroll -> LoadAction.MarkAllAsRead
+                val listState = remember(pager) { listState }
+                val loadAction = remember(pager, flowUiState) {
+                    when {
+                        flowUiState.nextFilterState != null -> LoadAction.NextFeed
+                        filterState.filter.isUnread() && markAsReadOnScroll -> LoadAction.MarkAllAsRead
+                        else -> null
+                    }
+                }
+
+                val onLoadNext: (() -> Unit)? = when (loadAction) {
+                    LoadAction.NextFeed -> flowViewModel::loadNextFeedOrGroup
+                    LoadAction.MarkAllAsRead -> {
+                        {
+                            flowViewModel.markAllAsRead()
+                            currentPullToLoadState?.animateDistanceTo(
+                                targetValue = 0f,
+                                animationSpec = settleSpec
+                            )
+                        }
+                    }
+
                     else -> null
                 }
-            }
 
-            val snapToSettle = remember { mutableStateOf({}) }
-
-            val onLoadNext: (() -> Unit)? = when (loadAction) {
-                LoadAction.NextFeed -> flowViewModel::loadNextFeedOrGroup
-                LoadAction.MarkAllAsRead -> {
+                val onPullToSync: (() -> Unit)? = if (isSyncing) null else {
                     {
-                        flowViewModel.markAllAsRead()
-                        snapToSettle.value()
-                    }
-                }
-
-                else -> null
-            }
-
-            val pullToLoadState = rememberPullToLoadState(
-                key = pager,
-                onLoadNext = onLoadNext,
-                onLoadPrevious = null,
-            )
-
-            LaunchedEffect(pullToLoadState) {
-                snapToSettle.value =
-                    { pullToLoadState.animateDistanceTo(0f, animationSpec = spring()) }
-            }
-
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-
-                LazyColumn(
-                    modifier = Modifier
-                        .pullToLoad(
-                            pullToLoadState,
-                            density = LocalDensity.current,
-                            enabled = pullToSwitchFeed.value,
-                            onScroll = {
-                                if (it < -10f) {
-                                    markAsRead = false
-                                }
-                            }
+                        flowViewModel.sync()
+                        currentPullToLoadState?.animateDistanceTo(
+                            targetValue = 0f,
+                            animationSpec = settleSpec
                         )
-                        .nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .fillMaxSize(),
-                    state = listState,
-                ) {
-                    ArticleList(
-                        pagingItems = pagingItems,
-                        diffMap = homeViewModel.diffMapHolder.diffMap,
-                        isShowFeedIcon = articleListFeedIcon.value,
-                        isShowStickyHeader = articleListDateStickyHeader.value,
-                        articleListTonalElevation = articleListTonalElevation.value,
-                        isSwipeEnabled = { listState.isScrollInProgress },
-                        onClick = { articleWithFeed ->
-                            if (articleWithFeed.feed.isBrowser) {
-                                homeViewModel.diffMapHolder.updateDiff(
-                                    articleWithFeed = articleWithFeed,
-                                    isUnread = false
-                                )
-                                context.openURL(
-                                    articleWithFeed.article.link, openLink, openLinkSpecificBrowser
-                                )
-                            } else {
-                                navController.navigate("${RouteName.READING}/${articleWithFeed.article.id}") {
-                                    launchSingleTop = true
-                                }
-                            }
-                        },
-                        onToggleStarred = onToggleStarred,
-                        onToggleRead = onToggleRead,
-                        onMarkAboveAsRead = onMarkAboveAsRead,
-                        onMarkBelowAsRead = onMarkBelowAsRead,
-                        onShare = onShare,
-                    )
-                    item {
-                        Spacer(modifier = Modifier.height(128.dp))
-                        Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                     }
                 }
 
-                PullToLoadIndicator(
-                    state = pullToLoadState,
-                    loadAction = loadAction,
-                    modifier = Modifier.padding(bottom = 36.dp)
-                )
-            }
-        }
-    }, floatingActionButton = {
-        AnimatedVisibility(
-            visible = showFab,
-            enter = scaleIn(transformOrigin = TransformOrigin(.5f, 1f)),
-            exit = scaleOut(transformOrigin = TransformOrigin(.5f, 1f)) + fadeOut(),
-            modifier = Modifier.padding(bottom = 12.dp)
-        ) {
-            FloatingActionButton(
-                onClick = {
-                    scope.launch {
-                        lastReadIndex?.let {
-                            listState.animateScrollToItem(index = it)
+                val pullToLoadState = rememberPullToLoadState(
+                    key = pager,
+                    onLoadNext = onLoadNext,
+                    onLoadPrevious = onPullToSync,
+                    loadThreshold = PullToLoadDefaults.loadThreshold(.15f)
+                ).also { currentPullToLoadState = it }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .pullToLoad(
+                                pullToLoadState,
+                                enabled = pullToSwitchFeed.value,
+                                contentOffsetY = { fraction ->
+                                    if (fraction > 0f) {
+                                        (fraction * ContentOffsetMultiple * 1.5f).dp.roundToPx()
+                                    } else {
+                                        (fraction * ContentOffsetMultiple * 2f).dp.roundToPx()
+                                    }
+                                },
+                                onScroll = {
+                                    if (it < -10f) {
+                                        markAsRead = false
+                                    }
+                                }
+                            )
+                            .nestedScroll(scrollBehavior.nestedScrollConnection)
+                            .fillMaxSize(),
+                        state = listState,
+                    ) {
+                        ArticleList(
+                            pagingItems = pagingItems,
+                            diffMap = homeViewModel.diffMapHolder.diffMap,
+                            isShowFeedIcon = articleListFeedIcon.value,
+                            isShowStickyHeader = articleListDateStickyHeader.value,
+                            articleListTonalElevation = articleListTonalElevation.value,
+                            isSwipeEnabled = { listState.isScrollInProgress },
+                            onClick = { articleWithFeed ->
+                                if (articleWithFeed.feed.isBrowser) {
+                                    homeViewModel.diffMapHolder.updateDiff(
+                                        articleWithFeed = articleWithFeed,
+                                        isUnread = false
+                                    )
+                                    context.openURL(
+                                        articleWithFeed.article.link,
+                                        openLink,
+                                        openLinkSpecificBrowser
+                                    )
+                                } else {
+                                    navController.navigate("${RouteName.READING}/${articleWithFeed.article.id}") {
+                                        launchSingleTop = true
+                                    }
+                                }
+                            },
+                            onToggleStarred = onToggleStarred,
+                            onToggleRead = onToggleRead,
+                            onMarkAboveAsRead = onMarkAboveAsRead,
+                            onMarkBelowAsRead = onMarkBelowAsRead,
+                            onShare = onShare,
+                        )
+                        item {
+                            Spacer(modifier = Modifier.height(128.dp))
+                            Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                         }
                     }
-                    flowViewModel.updateLastReadIndex(null)
-                    showFab = false
-                },
-                shape = CircleShape,
-                elevation = FloatingActionButtonDefaults.loweredElevation(),
-                containerColor = LocalFixedColorRoles.current.primaryFixedDim,
-                contentColor = LocalFixedColorRoles.current.onPrimaryFixedVariant
-            ) {
-                Icon(Icons.Rounded.ArrowDownward, null)
-            }
-        }
-    }, floatingActionButtonPosition = FabPosition.Center, bottomBar = {
-        FilterBar(
-            modifier = with(sharedTransitionScope) {
-                Modifier.sharedElement(
-                    sharedContentState = rememberSharedContentState(
-                        "filterBar"
-                    ), animatedVisibilityScope = animatedVisibilityScope
-                )
-            },
-            filter = filterUiState.filter,
-            filterBarStyle = filterBarStyle.value,
-            filterBarFilled = filterBarFilled.value,
-            filterBarPadding = filterBarPadding.dp,
-            filterBarTonalElevation = filterBarTonalElevation.value.dp,
-        ) {
 
-            if (filterUiState.filter != it) {
-                homeViewModel.changeFilter(filterUiState.copy(filter = it))
-            } else {
-                scope.launch {
-                    if (listState.firstVisibleItemIndex != 0) {
-                        listState.animateScrollToItem(0)
+                    PullToLoadIndicator(
+                        state = pullToLoadState,
+                        loadAction = loadAction,
+                        modifier = Modifier.padding(bottom = 36.dp)
+                    )
+                }
+            }
+        }, floatingActionButton = {
+            AnimatedVisibility(
+                visible = showFab,
+                enter = scaleIn(transformOrigin = TransformOrigin(.5f, 1f)),
+                exit = scaleOut(transformOrigin = TransformOrigin(.5f, 1f)) + fadeOut(),
+                modifier = Modifier.padding(bottom = 12.dp)
+            ) {
+                FloatingActionButton(
+                    onClick = {
+                        scope.launch {
+                            lastReadIndex?.let {
+                                listState.animateScrollToItem(index = it)
+                            }
+                        }
+                        flowViewModel.updateLastReadIndex(null)
+                        showFab = false
+                    },
+                    shape = CircleShape,
+                    elevation = FloatingActionButtonDefaults.loweredElevation(),
+                    containerColor = LocalFixedColorRoles.current.primaryFixedDim,
+                    contentColor = LocalFixedColorRoles.current.onPrimaryFixedVariant
+                ) {
+                    Icon(Icons.Rounded.ArrowDownward, null)
+                }
+            }
+        }, floatingActionButtonPosition = FabPosition.Center, bottomBar = {
+            FilterBar(
+                modifier = with(sharedTransitionScope) {
+                    Modifier.sharedElement(
+                        sharedContentState = rememberSharedContentState(
+                            "filterBar"
+                        ), animatedVisibilityScope = animatedVisibilityScope
+                    )
+                },
+                filter = filterUiState.filter,
+                filterBarStyle = filterBarStyle.value,
+                filterBarFilled = filterBarFilled.value,
+                filterBarPadding = filterBarPadding.dp,
+                filterBarTonalElevation = filterBarTonalElevation.value.dp,
+            ) {
+
+                if (filterUiState.filter != it) {
+                    homeViewModel.changeFilter(filterUiState.copy(filter = it))
+                } else {
+                    scope.launch {
+                        if (listState.firstVisibleItemIndex != 0) {
+                            listState.animateScrollToItem(0)
+                        }
                     }
                 }
             }
+        })
+        currentPullToLoadState?.let {
+            PullToSyncIndicator(
+                pullToLoadState = it,
+                isSyncing = isSyncing
+            )
         }
-    })
+    }
 }

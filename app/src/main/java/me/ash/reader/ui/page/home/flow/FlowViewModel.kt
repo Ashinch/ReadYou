@@ -4,17 +4,25 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.compose.LazyPagingItems
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.combineTransform
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import me.ash.reader.domain.data.ArticlePagingListUseCase
 import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.general.MarkAsReadConditions
@@ -24,11 +32,13 @@ import me.ash.reader.domain.data.FilterState
 import me.ash.reader.domain.data.FilterStateUseCase
 import me.ash.reader.domain.data.GroupWithFeedsListUseCase
 import me.ash.reader.domain.data.PagerData
+import me.ash.reader.domain.service.SyncWorker
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.preference.SettingsProvider
 import java.util.Date
 import javax.inject.Inject
+import kotlin.collections.any
 
 private const val TAG = "FlowViewModel"
 
@@ -42,10 +52,19 @@ class FlowViewModel @Inject constructor(
     private val filterStateUseCase: FilterStateUseCase,
     private val groupWithFeedsListUseCase: GroupWithFeedsListUseCase,
     private val settingsProvider: SettingsProvider,
+    workManager: WorkManager,
 ) : ViewModel() {
 
     private val _flowUiState = MutableStateFlow(FlowUiState())
     val flowUiState: StateFlow<FlowUiState> = _flowUiState.asStateFlow()
+
+    private val _isSyncingFlow = workManager.getWorkInfosByTagFlow(SyncWorker.WORK_TAG).map {
+        it.any { workInfo ->
+            workInfo.state == WorkInfo.State.RUNNING
+        }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
+    val isSyncingFlow = MutableStateFlow(false)
 
     init {
         viewModelScope.launch {
@@ -82,6 +101,10 @@ class FlowViewModel @Inject constructor(
                         )
                     }
                 }
+        }
+
+        viewModelScope.launch {
+            _isSyncingFlow.collect { isSyncingFlow.value = it }
         }
     }
 
@@ -160,6 +183,23 @@ class FlowViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+
+    fun sync() {
+        viewModelScope.launch {
+            val isSyncing = isSyncingFlow.value
+            if (!isSyncing) {
+                isSyncingFlow.value = true
+                delay(1000L)
+                if (_isSyncingFlow.value == false) {
+                    isSyncingFlow.value = false
+                }
+            }
+        }
+        applicationScope.launch(ioDispatcher) {
+            rssService.get().doSyncOneTime()
         }
     }
 }
