@@ -27,7 +27,7 @@ room = "2.7.1"
 work = "2.10.1"
 
 # Compose
-composeBom = "2025.05.01"
+composeBom = "2025.06.00"
 composeHtml = "1.0.2"
 
 # Coil
@@ -61,7 +61,7 @@ aboutlibraries-compose = { group = "com.mikepenz", name = "aboutlibraries-compos
 
 # Compose
 compose-html = { group = "com.github.ireward", name = "compose-html", version.ref = "composeHtml" }
-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+compose-bom = { group = "androidx.compose", name = "compose-bom-alpha", version.ref = "composeBom" }
 compose-animation-graphics = { group = "androidx.compose.animation", name = "animation-graphics" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
 compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
