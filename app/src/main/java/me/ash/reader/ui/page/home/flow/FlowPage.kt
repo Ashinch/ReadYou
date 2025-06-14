@@ -2,7 +2,6 @@ package me.ash.reader.ui.page.home.flow
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -10,9 +9,6 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -26,19 +22,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.DoneAll
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -57,7 +48,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -267,6 +257,16 @@ fun FlowPage(
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
 
     val isSyncing = flowViewModel.isSyncingFlow.collectAsStateValue()
+
+    LaunchedEffect(isSyncing, listState) {
+        if (isSyncing) {
+            snapshotFlow { listState.layoutInfo.totalItemsCount }.collect {
+                if (listState.firstVisibleItemIndex <= 2) {
+                    listState.animateScrollToItem(0)
+                }
+            }
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -585,29 +585,14 @@ fun FlowPage(
                 }
             }
         }, floatingActionButton = {
-            AnimatedVisibility(
-                visible = showFab,
-                enter = scaleIn(transformOrigin = TransformOrigin(.5f, 1f)),
-                exit = scaleOut(transformOrigin = TransformOrigin(.5f, 1f)) + fadeOut(),
-                modifier = Modifier.padding(bottom = 12.dp)
-            ) {
-                FloatingActionButton(
-                    onClick = {
-                        scope.launch {
-                            lastReadIndex?.let {
-                                listState.animateScrollToItem(index = it)
-                            }
-                        }
-                        flowViewModel.updateLastReadIndex(null)
-                        showFab = false
-                    },
-                    shape = CircleShape,
-                    elevation = FloatingActionButtonDefaults.loweredElevation(),
-                    containerColor = MaterialTheme.colorScheme.primaryFixedDim,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryFixedVariant
-                ) {
-                    Icon(Icons.Rounded.ArrowDownward, null)
+            ScrollToLastReadFab(visible = showFab) {
+                scope.launch {
+                    lastReadIndex?.let {
+                        listState.animateScrollToItem(index = it)
+                    }
                 }
+                flowViewModel.updateLastReadIndex(null)
+                showFab = false
             }
         }, floatingActionButtonPosition = FabPosition.Center, bottomBar = {
             FilterBar(
