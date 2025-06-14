@@ -1,11 +1,9 @@
 package me.ash.reader.ui.component.menu
 
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
@@ -14,6 +12,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -84,6 +83,7 @@ class AnchorEndPopupPositionProvider(
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun DropdownMenuContent(
     expandedState: MutableTransitionState<Boolean>,
@@ -100,10 +100,7 @@ fun DropdownMenuContent(
         transitionSpec = {
             if (false isTransitioningTo true) {
                 // Dismissed to expanded
-                spring(
-                    dampingRatio = Spring.DampingRatioLowBouncy,
-                    stiffness = Spring.StiffnessMedium
-                )
+                spring(dampingRatio = .6f, stiffness = Spring.StiffnessMedium)
             } else {
                 // Expanded to dismissed.
                 spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMedium)
@@ -118,10 +115,7 @@ fun DropdownMenuContent(
         transitionSpec = {
             if (false isTransitioningTo true) {
                 // Dismissed to expanded
-                spring(
-                    dampingRatio = Spring.DampingRatioNoBouncy,
-                    stiffness = 4_000f
-                )
+                MaterialTheme.motionScheme.fastEffectsSpec()
             } else {
                 // Expanded to dismissed.
                 spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessHigh)
@@ -146,9 +140,8 @@ fun DropdownMenuContent(
                 else if (expandedState.targetState) ExpandedAlphaTarget else ClosedAlphaTarget
             transformOrigin = transformOriginState.value
         },
-        shape = MaterialTheme.shapes.extraSmall,
-        color = MaterialTheme.colorScheme.surface,
-        tonalElevation = ElevationTokens.Level2.dp,
+        shape = MaterialTheme.shapes.small,
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
         shadowElevation = ElevationTokens.Level1.dp
     ) {
         Column(

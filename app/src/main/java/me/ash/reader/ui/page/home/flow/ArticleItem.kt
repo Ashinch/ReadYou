@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.flow
 
-import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -45,7 +44,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -332,14 +330,11 @@ fun SwipeableArticleItem(
 ) {
 
 
-    val view = LocalView.current
-
     var isMenuExpanded by remember { mutableStateOf(false) }
 
 
     val onLongClick = if (isMenuEnabled) {
         {
-            view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             isMenuExpanded = true
         }
     } else {
