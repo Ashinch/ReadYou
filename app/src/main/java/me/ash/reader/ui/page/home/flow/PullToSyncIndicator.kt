@@ -35,7 +35,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.ash.reader.ui.page.home.reading.PullToLoadDefaults
 import me.ash.reader.ui.page.home.reading.PullToLoadState
-import me.ash.reader.ui.theme.palette.LocalFixedColorRoles
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -143,7 +142,7 @@ fun BoxScope.PullToSyncIndicator(
                 this.scaleY = animateScale.value
             }
             .size(48.dp),
-        color = LocalFixedColorRoles.current.primaryFixedDim,
+        color = MaterialTheme.colorScheme.primaryFixedDim,
         shape = MaterialTheme.shapes.extraLarge) {
         Box(
             modifier = Modifier, contentAlignment = Alignment.Center
@@ -154,7 +153,7 @@ fun BoxScope.PullToSyncIndicator(
                     scale.animateTo(1.2f, animationSpec = scaleSpec)
                 }
                 LoadingIndicator(
-                    color = LocalFixedColorRoles.current.onPrimaryFixedVariant,
+                    color = MaterialTheme.colorScheme.onPrimaryFixedVariant,
                     modifier = Modifier
                         .size(38.dp)
                         .scale(scale.value)
@@ -162,7 +161,7 @@ fun BoxScope.PullToSyncIndicator(
             } else {
                 LoadingIndicator(
                     progress = { fraction },
-                    color = LocalFixedColorRoles.current.onPrimaryFixedVariant,
+                    color = MaterialTheme.colorScheme.onPrimaryFixedVariant,
                     modifier = Modifier.size(34.dp)
                 )
             }

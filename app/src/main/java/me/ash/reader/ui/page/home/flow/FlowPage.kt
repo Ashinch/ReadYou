@@ -111,7 +111,6 @@ import me.ash.reader.ui.page.home.reading.PullToLoadDefaults.ContentOffsetMultip
 import me.ash.reader.ui.page.home.reading.PullToLoadState
 import me.ash.reader.ui.page.home.reading.pullToLoad
 import me.ash.reader.ui.page.home.reading.rememberPullToLoadState
-import me.ash.reader.ui.theme.palette.LocalFixedColorRoles
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class,
@@ -608,8 +607,8 @@ fun FlowPage(
                     },
                     shape = CircleShape,
                     elevation = FloatingActionButtonDefaults.loweredElevation(),
-                    containerColor = LocalFixedColorRoles.current.primaryFixedDim,
-                    contentColor = LocalFixedColorRoles.current.onPrimaryFixedVariant
+                    containerColor = MaterialTheme.colorScheme.primaryFixedDim,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryFixedVariant
                 ) {
                     Icon(Icons.Rounded.ArrowDownward, null)
                 }

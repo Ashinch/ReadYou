@@ -33,9 +33,6 @@ import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.ui.component.base.RYDialog
 import me.ash.reader.ui.ext.currentAccountId
-import me.ash.reader.ui.theme.palette.FixedColorRoles
-import me.ash.reader.ui.theme.palette.LocalFixedColorRoles
-import me.ash.reader.ui.theme.palette.alwaysLight
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -84,7 +81,7 @@ fun AccountsTab(
                                 .clip(CircleShape)
                                 .background(
                                     if (selected) {
-                                        LocalFixedColorRoles.current.primaryFixed
+                                        MaterialTheme.colorScheme.primaryFixed
                                     } else {
                                         MaterialTheme.colorScheme.surfaceContainerHighest
                                     }
@@ -133,7 +130,7 @@ fun AccountTypeIcon(
     val icon = account.type.toIcon().takeIf { it is ImageVector }?.let { it as ImageVector }
     val iconPainter = account.type.toIcon().takeIf { it is Painter }?.let { it as Painter }
     val contentColor =
-        if (selected) LocalFixedColorRoles.current.onPrimaryFixed else MaterialTheme.colorScheme.onSurfaceVariant
+        if (selected) MaterialTheme.colorScheme.onPrimaryFixed else MaterialTheme.colorScheme.onSurfaceVariant
 
     if (icon != null) {
         Icon(

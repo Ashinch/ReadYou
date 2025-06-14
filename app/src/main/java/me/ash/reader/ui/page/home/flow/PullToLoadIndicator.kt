@@ -5,12 +5,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,11 +21,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.DoneAll
-import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -43,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import me.ash.reader.R
@@ -51,7 +45,6 @@ import me.ash.reader.ui.page.home.reading.PullToLoadDefaults
 import me.ash.reader.ui.page.home.reading.PullToLoadState
 import me.ash.reader.ui.page.home.reading.PullToLoadState.Status.PulledUp
 import me.ash.reader.ui.page.home.reading.PullToLoadState.Status.PullingUp
-import me.ash.reader.ui.theme.palette.LocalFixedColorRoles
 import kotlin.math.abs
 
 enum class LoadAction {
@@ -113,7 +106,7 @@ fun BoxScope.PullToLoadIndicator(
                         )
                     }
                     .width(36.dp),
-                color = LocalFixedColorRoles.current.primaryFixed,
+                color = MaterialTheme.colorScheme.primaryFixed,
                 shape = MaterialTheme.shapes.extraLarge) {
                 Column(
                     modifier = Modifier.align(Alignment.Center),
@@ -131,7 +124,7 @@ fun BoxScope.PullToLoadIndicator(
                             Icon(
                                 imageVector = Icons.Rounded.KeyboardArrowDown,
                                 contentDescription = null,
-                                tint = LocalFixedColorRoles.current.onPrimaryFixedVariant,
+                                tint = MaterialTheme.colorScheme.onPrimaryFixedVariant,
                                 modifier = Modifier
                                     .padding(horizontal = 4.dp)
                                     .padding(vertical = (2 * absFraction).dp)
@@ -177,7 +170,7 @@ fun BoxScope.PullToLoadIndicator(
                     Box(
                         modifier = modifier
                             .background(
-                                LocalFixedColorRoles.current.tertiaryFixed,
+                                MaterialTheme.colorScheme.tertiaryFixed,
                                 shape = MaterialTheme.shapes.extraLarge
                             ), contentAlignment = Alignment.Center
                     ) {
@@ -190,14 +183,14 @@ fun BoxScope.PullToLoadIndicator(
                             Icon(
                                 imageVector = Icons.Rounded.DoneAll,
                                 contentDescription = null,
-                                tint = LocalFixedColorRoles.current.onTertiaryFixed,
+                                tint = MaterialTheme.colorScheme.onTertiaryFixed,
                                 modifier = Modifier.size(20.dp)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
                                 stringResource(R.string.mark_all_as_read),
                                 style = MaterialTheme.typography.labelLarge,
-                                color = LocalFixedColorRoles.current.onTertiaryFixed
+                                color = MaterialTheme.colorScheme.onTertiaryFixed
                             )
                         }
                     }

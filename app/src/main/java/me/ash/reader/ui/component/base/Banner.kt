@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,14 +35,13 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import me.ash.reader.ui.theme.palette.fixedColorRoles
 
 @Composable
 fun Banner(
     modifier: Modifier = Modifier,
     title: String,
     desc: String? = null,
-    backgroundColor: Color = MaterialTheme.fixedColorRoles.primaryFixed,
+    backgroundColor: Color = MaterialTheme.colorScheme.primaryFixed,
     icon: ImageVector? = null,
     action: (@Composable () -> Unit)? = null,
     onClick: () -> Unit = {},
@@ -51,14 +51,14 @@ fun Banner(
         title = title,
         desc = desc,
         backgroundColor = backgroundColor,
-        contentColor = MaterialTheme.fixedColorRoles.contentColorFor(backgroundColor),
+        contentColor = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
         icon = icon?.let {
             {
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
                     modifier = Modifier,
-                    tint = MaterialTheme.fixedColorRoles.contentColorFor(backgroundColor),
+                    tint = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
                 )
                 Spacer(modifier = Modifier.width(16.dp))
             }
@@ -74,8 +74,8 @@ fun Banner(
     modifier: Modifier = Modifier,
     title: String,
     desc: String? = null,
-    backgroundColor: Color = MaterialTheme.fixedColorRoles.primaryFixed,
-    contentColor: Color = MaterialTheme.fixedColorRoles.contentColorFor(backgroundColor),
+    backgroundColor: Color = MaterialTheme.colorScheme.primaryFixed,
+    contentColor: Color = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
     icon: (@Composable () -> Unit)? = null,
     action: (@Composable () -> Unit)? = null,
     onClick: () -> Unit = {},

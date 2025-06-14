@@ -33,7 +33,6 @@ import me.ash.reader.ui.page.home.reading.PullToLoadState.Status.PulledDown
 import me.ash.reader.ui.page.home.reading.PullToLoadState.Status.PulledUp
 import me.ash.reader.ui.page.home.reading.PullToLoadState.Status.PullingDown
 import me.ash.reader.ui.page.home.reading.PullToLoadState.Status.PullingUp
-import me.ash.reader.ui.theme.palette.LocalFixedColorRoles
 import kotlin.math.abs
 
 @Composable
@@ -103,7 +102,7 @@ fun BoxScope.PullToLoadIndicator(
                     )
                 }
                 .width(36.dp),
-            color = LocalFixedColorRoles.current.primaryFixed,
+            color = MaterialTheme.colorScheme.primaryFixed,
             shape = MaterialTheme.shapes.extraLarge
         ) {
             Column(
@@ -123,7 +122,7 @@ fun BoxScope.PullToLoadIndicator(
                         Icon(
                             imageVector = it,
                             contentDescription = null,
-                            tint = LocalFixedColorRoles.current.onPrimaryFixedVariant,
+                            tint = MaterialTheme.colorScheme.onPrimaryFixedVariant,
                             modifier = Modifier
                                 .padding(horizontal = 4.dp)
                                 .padding(vertical = (2 * absFraction).dp)

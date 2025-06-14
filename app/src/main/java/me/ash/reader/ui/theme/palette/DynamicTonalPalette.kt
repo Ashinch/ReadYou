@@ -46,6 +46,18 @@ fun dynamicLightColorScheme(): ColorScheme {
         surfaceContainer = palettes neutral 94,
         surfaceContainerHigh = palettes neutral 92,
         surfaceContainerHighest = palettes neutral 90,
+        primaryFixed = palettes primary 90,
+        onPrimaryFixed = palettes primary 10,
+        primaryFixedDim = palettes primary 90,
+        onPrimaryFixedVariant = palettes primary 30,
+        secondaryFixed = palettes secondary 90,
+        onSecondaryFixed = palettes secondary 10,
+        secondaryFixedDim = palettes secondary 90,
+        onSecondaryFixedVariant = palettes secondary 30,
+        tertiaryFixed = palettes tertiary 90,
+        onTertiaryFixed = palettes tertiary 10,
+        tertiaryFixedDim = palettes tertiary 90,
+        onTertiaryFixedVariant = palettes tertiary 30
     )
 }
 
@@ -86,6 +98,18 @@ fun dynamicDarkColorScheme(): ColorScheme {
         surfaceContainer = palettes neutral 12,
         surfaceContainerHigh = palettes neutral 17,
         surfaceContainerHighest = palettes neutral 22,
+        primaryFixed = palettes primary 90,
+        onPrimaryFixed = palettes primary 10,
+        primaryFixedDim = palettes primary 90,
+        onPrimaryFixedVariant = palettes primary 30,
+        secondaryFixed = palettes secondary 90,
+        onSecondaryFixed = palettes secondary 10,
+        secondaryFixedDim = palettes secondary 90,
+        onSecondaryFixedVariant = palettes secondary 30,
+        tertiaryFixed = palettes tertiary 90,
+        onTertiaryFixed = palettes tertiary 10,
+        tertiaryFixedDim = palettes tertiary 90,
+        onTertiaryFixedVariant = palettes tertiary 30
     ).run {
         if (useAmoledDarkTheme) copy(
             surface = Color.Black,
