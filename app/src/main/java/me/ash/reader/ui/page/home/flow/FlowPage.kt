@@ -89,7 +89,7 @@ import me.ash.reader.ui.component.base.RYScaffold
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.motion.Direction
-import me.ash.reader.ui.motion.SharedXAxisTransitionSlow
+import me.ash.reader.ui.motion.sharedXAxisTransitionSlow
 import me.ash.reader.ui.motion.sharedYAxisTransitionExpressive
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
@@ -428,7 +428,11 @@ fun FlowPage(
                     )
                 }
             }
-            val contentTransition = sharedYAxisTransitionExpressive(direction = Direction.Forward)
+            val contentTransitionVertical =
+                sharedYAxisTransitionExpressive(direction = Direction.Forward)
+            val contentTransitionBackward =
+                sharedXAxisTransitionSlow(direction = Direction.Backward)
+            val contentTransitionForward = sharedXAxisTransitionSlow(direction = Direction.Forward)
             AnimatedContent(
                 targetState = flowUiState,
                 contentKey = {
@@ -439,13 +443,13 @@ fun FlowPage(
                     val initialFilter = initialState.pagerData.filterState
 
                     if (targetFilter.filter.index > initialFilter.filter.index) {
-                        SharedXAxisTransitionSlow(direction = Direction.Forward)
+                        contentTransitionForward
                     } else if (targetFilter.filter.index < initialFilter.filter.index) {
-                        SharedXAxisTransitionSlow(direction = Direction.Backward)
+                        contentTransitionBackward
                     } else if (
                         targetFilter.group != initialFilter.group || targetFilter.feed != initialFilter.feed
                     ) {
-                        contentTransition
+                        contentTransitionVertical
                     } else {
                         EnterTransition.None togetherWith ExitTransition.None
                     }
