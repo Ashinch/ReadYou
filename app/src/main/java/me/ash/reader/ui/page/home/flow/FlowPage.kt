@@ -48,9 +48,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -70,7 +68,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.delay
@@ -103,7 +100,7 @@ import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.motion.Direction
 import me.ash.reader.ui.motion.SharedXAxisTransitionSlow
-import me.ash.reader.ui.motion.SharedYAxisTransitionSlow
+import me.ash.reader.ui.motion.sharedYAxisTransitionExpressive
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.reading.PullToLoadDefaults
@@ -170,6 +167,7 @@ fun FlowPage(
     var onSearch by rememberSaveable { mutableStateOf(false) }
 
     var currentPullToLoadState: PullToLoadState? by remember { mutableStateOf(null) }
+    var currentLoadAction: LoadAction? by remember { mutableStateOf(null) }
 
     val settleSpec = remember {
         spring<Float>(dampingRatio = Spring.DampingRatioLowBouncy)
@@ -430,6 +428,7 @@ fun FlowPage(
                     )
                 }
             }
+            val contentTransition = sharedYAxisTransitionExpressive(direction = Direction.Forward)
             AnimatedContent(
                 targetState = flowUiState,
                 contentKey = {
@@ -446,7 +445,7 @@ fun FlowPage(
                     } else if (
                         targetFilter.group != initialFilter.group || targetFilter.feed != initialFilter.feed
                     ) {
-                        SharedYAxisTransitionSlow(direction = Direction.Forward)
+                        contentTransition
                     } else {
                         EnterTransition.None togetherWith ExitTransition.None
                     }
@@ -481,14 +480,17 @@ fun FlowPage(
                 val listState = remember(pager) { listState }
                 val loadAction = remember(pager, flowUiState) {
                     when {
-                        flowUiState.nextFilterState != null -> LoadAction.NextFeed
+                        flowUiState.nextFilterState != null -> LoadAction.NextFeed.fromFilterState(
+                            flowUiState.nextFilterState
+                        )
+
                         filterState.filter.isUnread() && markAsReadOnScroll -> LoadAction.MarkAllAsRead
                         else -> null
                     }
-                }
+                }.also { currentLoadAction = it }
 
                 val onLoadNext: (() -> Unit)? = when (loadAction) {
-                    LoadAction.NextFeed -> flowViewModel::loadNextFeedOrGroup
+                    is LoadAction.NextFeed -> flowViewModel::loadNextFeedOrGroup
                     LoadAction.MarkAllAsRead -> {
                         {
                             flowViewModel.markAllAsRead()
@@ -516,7 +518,7 @@ fun FlowPage(
                     key = pager,
                     onLoadNext = onLoadNext,
                     onLoadPrevious = onPullToSync,
-                    loadThreshold = PullToLoadDefaults.loadThreshold(.15f)
+                    loadThreshold = PullToLoadDefaults.loadThreshold(.1f)
                 ).also { currentPullToLoadState = it }
 
                 Box(
@@ -580,12 +582,6 @@ fun FlowPage(
                             Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                         }
                     }
-
-                    PullToLoadIndicator(
-                        state = pullToLoadState,
-                        loadAction = loadAction,
-                        modifier = Modifier.padding(bottom = 36.dp)
-                    )
                 }
             }
         }, floatingActionButton = {
@@ -644,6 +640,11 @@ fun FlowPage(
             PullToSyncIndicator(
                 pullToLoadState = it,
                 isSyncing = isSyncing
+            )
+            PullToLoadIndicator(
+                state = it,
+                loadAction = currentLoadAction,
+                modifier = Modifier.padding(bottom = 36.dp)
             )
         }
     }

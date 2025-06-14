@@ -15,6 +15,9 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.IntOffset
 import kotlin.math.roundToInt
 
@@ -34,7 +37,9 @@ fun SharedYAxisTransition(direction: Direction): ContentTransform {
     )
 }
 
-fun SharedYAxisTransitionSlow(direction: Direction): ContentTransform {
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun sharedYAxisTransitionExpressive(direction: Direction): ContentTransform {
     val direction = when (direction) {
         Direction.Backward -> -1
         Direction.Forward -> 1
@@ -43,11 +48,7 @@ fun SharedYAxisTransitionSlow(direction: Direction): ContentTransform {
     val enter = exit * 2
     return (slideInVertically(
         initialOffsetY = { (it * 0.2f * direction).toInt() },
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioNoBouncy,
-            stiffness = Spring.StiffnessLow,
-            visibilityThreshold = IntOffset.VisibilityThreshold
-        )
+        animationSpec = MaterialTheme.motionScheme.defaultSpatialSpec()
     ) + fadeIn(
         tween(
             delayMillis = exit,
@@ -56,11 +57,8 @@ fun SharedYAxisTransitionSlow(direction: Direction): ContentTransform {
         )
     )) togetherWith (slideOutVertically(
         targetOffsetY = { (it * -0.2f * direction).toInt() },
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioNoBouncy,
-            stiffness = Spring.StiffnessLow,
-            visibilityThreshold = IntOffset.VisibilityThreshold
-        )
+        animationSpec = MaterialTheme.motionScheme.slowSpatialSpec()
+
     ) + fadeOut(
         tween(durationMillis = exit, easing = FastOutLinearInEasing)
     ))

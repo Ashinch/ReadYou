@@ -2,8 +2,10 @@ package me.ash.reader.ui.theme
 
 import android.os.Build
 import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MotionScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -18,6 +20,7 @@ import me.ash.reader.ui.theme.palette.dynamic.extractTonalPalettesFromUserWallpa
 import me.ash.reader.ui.theme.palette.dynamicDarkColorScheme
 import me.ash.reader.ui.theme.palette.dynamicLightColorScheme
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AppTheme(
     useDarkTheme: Boolean,
@@ -62,6 +65,7 @@ fun AppTheme(
             val lightColors = dynamicLightColorScheme()
             val darkColors = dynamicDarkColorScheme()
             MaterialTheme(
+                motionScheme = MotionScheme.expressive(),
                 colorScheme = if (useDarkTheme) darkColors else lightColors,
                 typography = LocalBasicFonts.current.asTypography(LocalContext.current)
                     .applyTextDirection(),
