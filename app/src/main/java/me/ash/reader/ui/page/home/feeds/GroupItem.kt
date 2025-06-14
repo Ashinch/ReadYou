@@ -50,7 +50,6 @@ fun GroupItem(
                     groupOnClick()
                 },
                 onLongClick = {
-                    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                     groupOptionViewModel.fetchGroup(groupId = group.id)
                     onLongClick()
                 }

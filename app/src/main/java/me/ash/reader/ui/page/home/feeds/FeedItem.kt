@@ -60,7 +60,6 @@ fun FeedItem(
                     },
                     onLongClick = {
                         onLongClick()
-                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                         scope.launch {
                             feedOptionViewModel.fetchFeed(feedId = feed.id)
                         }
