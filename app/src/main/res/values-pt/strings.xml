@@ -161,7 +161,7 @@
     <string name="icons_and_labels">Ícones e rótulos</string>
     <string name="tips_article_list_tonal_elevation">Esta elevação de tom está disponível apenas no tema claro</string>
     <string name="share">Compartilhar</string>
-    <string name="tips_group_list_tonal_elevation">Esta elevação de tom está disponível apenas no tema claro.</string>
+    <string name="tips_group_list_tonal_elevation">A elevação tonal para a lista de grupos está disponível apenas no tema claro</string>
     <string name="touch_to_play_video">Toque para executar o video</string>
     <string name="alignment">Alinhamento</string>
     <string name="general">Geral</string>
@@ -262,7 +262,7 @@
     <string name="specific_browser_name">Navegador: %1$s</string>
     <string name="always_ask">Pergunte sempre</string>
     <string name="open_link_specific_browser">Navegador</string>
-    <string name="open_link_something_wrong">A configuração \"Abrir link\" foi ignorada porque algo deu errado.</string>
+    <string name="open_link_something_wrong">A configuração \"Abrir ligação\" foi ignorada porque ocorreu um erro</string>
     <string name="open_link_ask_dialog_title">Abrir com…</string>
     <string name="additional_info_desc">As informações adicionais incluem opções de configuração para cada feed, como permitir ou não a notificação, analisar o conteúdo completo etc. Se você pretende usar o arquivo OPML exportado com outros leitores, selecione \"Excluir\".</string>
     <string name="next_article">Próximo artigo</string>
@@ -315,4 +315,20 @@
     <string name="toolbars">Barras de ferramentas</string>
     <string name="become_a_sponsor">Torne-se um patrocinador</string>
     <string name="sponsor_desc">Construímos e mantemos este aplicativo gratuito e de código aberto fora do horário comercial. Se você gostou, considere nos apoiar com uma pequena doação! ☕️</string>
+    <string name="pull_to_switch_feed">Arraste para carregar a próxima feed</string>
+    <string name="all_open_in_browser_toast">Abrir todos os artigos do grupo \"%1$s\" utilizando o navegador</string>
+    <string name="all_open_in_browser_tips">Abrir todos os artigos do grupo \"%1$s\" utilizando o navegador</string>
+    <string name="long_desc">Longo</string>
+    <string name="short_desc">Curto</string>
+    <string name="none_desc">Nenhum</string>
+    <string name="bold_characters">Caracteres em negrito</string>
+    <string name="open_in_browser">Abrir no navegador</string>
+    <string name="all_deny_open_in_browser_toast">Não é mais necessário abrir todos os artigos do grupo \"%1$s\" usando o navegador</string>
+    <string name="hide_empty_groups">Ocultar grupos vazios</string>
+    <string name="sort_unread_articles">Classificar artigos não lidos</string>
+    <string name="latest">Mais recente</string>
+    <string name="earliest">Mais antigo</string>
+    <string name="use_bold_characters">Use caracteres em negrito</string>
+    <string name="bold_characters_preview">Colocar em negrito os primeiros caracteres das palavras num artigo</string>
+    <string name="client_certificate">Certificado de cliente (opcional)</string>
 </resources>

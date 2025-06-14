@@ -82,7 +82,7 @@
     <string name="search_for_in">Поиск %1$s элементов в \"%2$s\"</string>
     <string name="search_for">Поиск %1$s элементов</string>
     <string name="get_new_updates_desc">Доступна версия %1$s</string>
-    <string name="accounts_desc">Локальный, FreshRSS</string>
+    <string name="accounts_desc">Локальный, services, self-hosted</string>
     <string name="color_and_style_desc">Тема, цветовая палитра, размер текста</string>
     <string name="interaction">Взаимодействие</string>
     <string name="interaction_desc">Начальный экран, тактильная отдача</string>
@@ -188,22 +188,22 @@
     <string name="mark_as_read_seven_days">Отметить как прочитанное старше 7 дней</string>
     <string name="filter_bar">Панель фильтров</string>
     <plurals name="unread_desc">
-        <item quantity="one">%1$d Непрочитанная статья</item>
-        <item quantity="few">%1$d Непрочитанные статьи</item>
-        <item quantity="many">%1$d Непрочитанных статей</item>
-        <item quantity="other">%1$d Непрочитанных статей</item>
+        <item quantity="one">%1$d непрочитанная статья</item>
+        <item quantity="few">%1$d непрочитанные статьи</item>
+        <item quantity="many">%1$d непрочитанных статей</item>
+        <item quantity="other">%1$d непрочитанных статей</item>
     </plurals>
     <plurals name="all_desc">
-        <item quantity="one">%1$d Архивированная статья</item>
-        <item quantity="few">%1$d Архивированные статьи</item>
-        <item quantity="many">%1$d Архивированных статей</item>
-        <item quantity="other">%1$d Архивированных статей</item>
+        <item quantity="one">%1$d архивированная статья</item>
+        <item quantity="few">%1$d архивированные статьи</item>
+        <item quantity="many">%1$d архивированных статей</item>
+        <item quantity="other">%1$d архивированных статей</item>
     </plurals>
     <plurals name="starred_desc">
-        <item quantity="one">%1$d Избранная статья</item>
-        <item quantity="few">%1$d Избранные статьи</item>
-        <item quantity="many">%1$d Избранных статей</item>
-        <item quantity="other">%1$d Избранных статей</item>
+        <item quantity="one">%1$d избранная статья</item>
+        <item quantity="few">%1$d избранные статьи</item>
+        <item quantity="many">%1$d избранных статей</item>
+        <item quantity="other">%1$d избранных статей</item>
     </plurals>
     <string name="every_15_minutes">Каждые 15 минут</string>
     <string name="every_30_minutes">Каждые 30 минут</string>
@@ -283,7 +283,7 @@
     <string name="image_saved">Изображение сохранено</string>
     <string name="permission_denied">Разрешение отклонено</string>
     <string name="shared_content">Общее содержимое</string>
-    <string name="keep_archived_tips">Архивированные элементы, которые не отмечены как прочитанные, избранные статьи или статьи без тегов. Настройка \"Сохранять архивированные статьи\" применяется только на этом устройстве. Старые архивированные статьи будут удалены с устройство. Удаление статей отменить невозможно.</string>
+    <string name="keep_archived_tips">Архивные статьи - это статьи, которые отмечены как прочитанные, не отмечены звездами и не помечены тегами. Настройка \"Сохранять архивные статьи\" действует только на этом устройстве. Более старые архивные статьи будут удалены с этого устройства. Удаление статей нельзя отменить.</string>
     <string name="swipe_to_end">Свайпнуть вправо</string>
     <string name="unexpected_error_msg">Приложение столкнулось с непредвиденной ошибкой и было закрыться. \n\nЧтобы помочь нам быстро выявить и устранить эту проблему, вы можете %1$s с трассировкой стека ошибки ниже.</string>
     <string name="only_link">Только ссылка</string>
@@ -300,7 +300,7 @@
     <string name="unfold_more">Развернуть все</string>
     <string name="unfold_less">Свернуть все</string>
     <string name="troubleshooting">Диагностика</string>
-    <string name="troubleshooting_desc">Отчёт об ошибке, отладка</string>
+    <string name="troubleshooting_desc">Сообщение об ошибке, настройки приложения</string>
     <string name="app_preferences">Предпочтения</string>
     <string name="import_from_protobuf_file">Импортировать из файла protobuf</string>
     <string name="export_as_protobuf_file">Экспортировать в файл protobuf</string>
@@ -331,4 +331,7 @@
     <string name="short_desc">Кратко</string>
     <string name="long_desc">Развёрнуто</string>
     <string name="none_desc">Нету</string>
+    <string name="bold_characters">Жирные символы</string>
+    <string name="bold_characters_preview">Выделите жирным первые несколько символов слов в статье</string>
+    <string name="use_bold_characters">Используйте жирные символы</string>
 </resources>
