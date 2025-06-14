@@ -2,6 +2,7 @@ package me.ash.reader.ui.page.home.reading
 
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.*
@@ -30,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import me.ash.reader.R
@@ -39,6 +41,8 @@ import me.ash.reader.infrastructure.preference.ReadingPageTonalElevationPreferen
 import me.ash.reader.infrastructure.preference.ReadingRendererPreference
 import me.ash.reader.ui.component.base.CanBeDisabledIconButton
 import me.ash.reader.ui.component.webview.BoldCharactersIcon
+
+private val sizeSpec = spring<IntSize>(stiffness = 700f)
 
 @Composable
 fun BottomBar(
@@ -67,8 +71,8 @@ fun BottomBar(
     ) {
         AnimatedVisibility(
             visible = isShow,
-            enter = expandVertically(expandFrom = Alignment.Top),
-            exit = shrinkVertically(shrinkTowards = Alignment.Top)
+            enter = expandVertically(expandFrom = Alignment.Top, animationSpec = sizeSpec),
+            exit = shrinkVertically(shrinkTowards = Alignment.Top, animationSpec = sizeSpec)
         ) {
             val view = LocalView.current
             Column {

@@ -98,7 +98,6 @@ fun ReadingPage(
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
         content = { paddings ->
-            Log.i("RLog", "TopBar: recomposition")
 
             Box(modifier = Modifier.fillMaxSize()) {
                 if (readerState.articleId != null) {
@@ -203,8 +202,6 @@ fun ReadingPage(
                             }.collectAsStateValue(initial = false)
 
                             CompositionLocalProvider(
-//                                LocalOverscrollConfiguration provides
-//                                        if (isPullToSwitchArticleEnabled) null else LocalOverscrollConfiguration.current,
                                 LocalTextStyle provides LocalTextStyle.current.run {
                                     merge(lineHeight = if (lineHeight.isSpecified) (lineHeight.value * LocalReadingTextLineHeight.current).sp else TextUnit.Unspecified)
                                 }
