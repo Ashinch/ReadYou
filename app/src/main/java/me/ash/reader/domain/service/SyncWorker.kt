@@ -24,8 +24,11 @@ class SyncWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result =
         withContext(Dispatchers.Default) {
-            Log.i("RLog", "doWork: ")
-            rssService.get().sync().also {
+            val data = inputData
+            val feedId = data.getString("feedId")
+            val groupId = data.getString("groupId")
+
+            rssService.get().sync(feedId = feedId, groupId = groupId).also {
                 rssService.get().clearKeepArchivedArticles().forEach {
                     readerCacheHelper.deleteCacheFor(articleId = it.id)
                 }
@@ -50,11 +53,13 @@ class SyncWorker @AssistedInject constructor(
 
         fun enqueueOneTimeWork(
             workManager: WorkManager,
+            inputData: Data = workDataOf()
         ) {
             workManager.beginUniqueWork(
                 WORK_NAME_ONETIME,
                 ExistingWorkPolicy.KEEP,
-                OneTimeWorkRequestBuilder<SyncWorker>().addTag(WORK_TAG).build()
+                OneTimeWorkRequestBuilder<SyncWorker>().addTag(WORK_TAG).setInputData(inputData)
+                    .build()
             ).then(
                 OneTimeWorkRequestBuilder<ReaderWorker>().build()
             ).enqueue()

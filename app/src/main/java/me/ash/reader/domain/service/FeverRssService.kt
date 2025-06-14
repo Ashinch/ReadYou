@@ -134,7 +134,7 @@ class FeverRssService @Inject constructor(
      * 3. Fetch the Fever articles
      * 4. Synchronize read/unread and starred/un-starred items
      */
-    override suspend fun sync(): ListenableWorker.Result =
+    override suspend fun sync(feedId: String?, groupId: String?): ListenableWorker.Result =
         supervisorScope {
 
             try {

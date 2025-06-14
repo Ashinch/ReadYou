@@ -216,7 +216,7 @@ class GoogleReaderRssService @Inject constructor(
      * @link https://github.com/bazqux/bazqux-api?tab=readme-ov-file
      * @link https://github.com/theoldreader/api
      */
-    override suspend fun sync(): ListenableWorker.Result =
+    override suspend fun sync(feedId: String?, groupId: String?): ListenableWorker.Result =
         supervisorScope {
 
             try {

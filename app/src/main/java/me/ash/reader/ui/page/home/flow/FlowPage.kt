@@ -261,9 +261,7 @@ fun FlowPage(
     LaunchedEffect(isSyncing, listState) {
         if (isSyncing) {
             snapshotFlow { listState.layoutInfo.totalItemsCount }.collect {
-                if (listState.firstVisibleItemIndex <= 2) {
-                    listState.animateScrollToItem(0)
-                }
+                listState.animateScrollToItem(0)
             }
         }
     }

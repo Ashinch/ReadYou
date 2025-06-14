@@ -100,40 +100,7 @@ abstract class AbstractRssRepository(
         }
     }
 
-    open suspend fun sync(): ListenableWorker.Result =
-        supervisorScope {
-            val preTime = System.currentTimeMillis()
-            val preDate = Date(preTime)
-            val accountId = context.currentAccountId
-            val semaphore = Semaphore(16)
-            feedDao.queryAll(accountId).mapIndexed { _, feed ->
-                async(Dispatchers.IO) {
-                    semaphore.withPermit {
-                        val archivedArticles =
-                            feedDao.queryArchivedArticles(feed.id).map { it.link }.toSet()
-                        val fetchedFeed = syncFeed(feed, preDate)
-                        val fetchedArticles = fetchedFeed.articles.filterNot {
-                            archivedArticles.contains(it.link)
-                        }
-
-                        val newArticles =
-                            articleDao.insertListIfNotExist(
-                                articles = fetchedArticles,
-                                feed = feed
-                            )
-                        if (fetchedFeed.feed.isNotification) {
-                            notificationHelper.notify(fetchedFeed.copy(articles = newArticles))
-                        }
-                    }
-                }
-            }.awaitAll()
-
-            Log.i("RlOG", "onCompletion: ${System.currentTimeMillis() - preTime}")
-            accountDao.queryById(accountId)?.let { account ->
-                accountDao.update(account.apply { updateAt = Date() })
-            }
-            ListenableWorker.Result.success()
-        }
+    abstract suspend fun sync(feedId: String?, groupId: String?): ListenableWorker.Result
 
     open suspend fun markAsRead(
         groupId: String?,
@@ -185,20 +152,6 @@ abstract class AbstractRssRepository(
         articleDao.markAsStarredByArticleId(accountId, articleId, isStarred)
     }
 
-    private suspend fun syncFeed(feed: Feed, preDate: Date = Date()): FeedWithArticle {
-        val latest = articleDao.queryLatestByFeedId(context.currentAccountId, feed.id)
-        val articles = rssHelper.queryRssXml(feed, "", preDate)
-        if (feed.icon == null) {
-            val iconLink = rssHelper.queryRssIconLink(feed.url)
-            if (iconLink != null) {
-                rssHelper.saveRssIcon(feedDao, feed, iconLink)
-            }
-        }
-        return FeedWithArticle(
-            feed = feed.apply { isNotification = feed.isNotification && articles.isNotEmpty() },
-            articles = articles
-        )
-    }
 
     suspend fun clearKeepArchivedArticles(): List<Article> {
         val articleId = context.currentAccountId

@@ -32,6 +32,7 @@ import me.ash.reader.domain.data.FilterState
 import me.ash.reader.domain.data.FilterStateUseCase
 import me.ash.reader.domain.data.GroupWithFeedsListUseCase
 import me.ash.reader.domain.data.PagerData
+import me.ash.reader.domain.service.LocalRssService
 import me.ash.reader.domain.service.SyncWorker
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
@@ -199,7 +200,16 @@ class FlowViewModel @Inject constructor(
             }
         }
         applicationScope.launch(ioDispatcher) {
-            rssService.get().doSyncOneTime()
+            val filterState = filterStateUseCase.filterStateFlow.value
+            val service = rssService.get()
+            when (service) {
+                is LocalRssService -> service.doSyncOneTime(
+                    feedId = filterState.feed?.id,
+                    groupId = filterState.group?.id
+                )
+
+                else -> service.doSyncOneTime()
+            }
         }
     }
 }
