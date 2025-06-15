@@ -1,14 +1,26 @@
 package me.ash.reader.infrastructure.rss.provider.greader
 
 import android.content.Context
+import androidx.annotation.CheckResult
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import me.ash.reader.infrastructure.di.USER_AGENT_STRING
 import me.ash.reader.infrastructure.exception.GoogleReaderAPIException
 import me.ash.reader.infrastructure.exception.RetryException
+import me.ash.reader.infrastructure.net.ApiResult
+import me.ash.reader.infrastructure.net.RetryConfig
+import me.ash.reader.infrastructure.net.RetryableTaskResult
+import me.ash.reader.infrastructure.net.getOrThrow
+import me.ash.reader.infrastructure.net.onSuccess
+import me.ash.reader.infrastructure.net.withRetries
 import me.ash.reader.infrastructure.rss.provider.ProviderAPI
 import okhttp3.FormBody
 import okhttp3.Request
 import okhttp3.executeAsync
+import okio.IOException
 import java.util.concurrent.ConcurrentHashMap
+
+private const val TAG = "GoogleReaderAPI"
 
 class GoogleReaderAPI private constructor(
     context: Context,
@@ -30,80 +42,109 @@ class GoogleReaderAPI private constructor(
     }
 
     private data class AuthData(
-        var clientLoginToken: String?,
-        var actionToken: String?,
+        val clientLoginToken: String?,
+        val actionToken: String?,
     )
 
-    private val authData = AuthData(null, null)
+    private val authDataStateFlow = MutableStateFlow(AuthData(null, null))
+
+    fun clearAuthData() = authDataStateFlow.update { it.copy(null, null) }
+
+    private var authData
+        get() = authDataStateFlow.value
+        set(value) {
+            authDataStateFlow.value = value
+        }
 
     suspend fun validCredentials(): Boolean {
-        reAuthenticate()
-        return authData.clientLoginToken?.isNotEmpty() ?: false
+        val result = reAuthenticate().onSuccess {
+            authData = it
+        }
+        return result.isSuccess
     }
 
-    private suspend fun reAuthenticate() {
+    private suspend fun refreshCredentialsIfNeeded() {
+        if (authData.clientLoginToken.isNullOrEmpty()) {
+            reAuthenticate().getOrThrow().let { authData = it }
+        }
+    }
+
+    @CheckResult
+    private suspend fun reAuthenticate(): ApiResult<AuthData> {
         // Get client login token
-        val clResponse = client.newCall(
-            Request.Builder()
-                .url("${serverUrl}accounts/ClientLogin")
-                .header("User-Agent", USER_AGENT_STRING)
-                .post(FormBody.Builder()
-                    .add("output", "json")
-                    .add("Email", username)
-                    .add("Passwd", password)
-                    .add("client", "ReadYou")
-                    .add("accountType", "HOSTED_OR_GOOGLE")
-                    .add("service", "reader")
-                    .build())
-                .build())
-            .executeAsync()
+        val clResponse = try {
+            client.newCall(
+                Request.Builder()
+                    .url("${serverUrl}accounts/ClientLogin")
+                    .header("User-Agent", USER_AGENT_STRING)
+                    .post(
+                        FormBody.Builder()
+                            .add("output", "json")
+                            .add("Email", username)
+                            .add("Passwd", password)
+                            .add("client", "ReadYou")
+                            .add("accountType", "HOSTED_OR_GOOGLE")
+                            .add("service", "reader")
+                            .build()
+                    )
+                    .build()
+            )
+                .executeAsync()
+        } catch (e: IOException) {
+            return ApiResult.NetworkError(e)
+        }
 
         val clBody = clResponse.body.string()
         when (clResponse.code) {
-            400 -> throw GoogleReaderAPIException("BadRequest for CL Token")
-            401 -> throw GoogleReaderAPIException("Unauthorized for CL Token")
+            400 -> return ApiResult.BizError(GoogleReaderAPIException("BadRequest for CL Token"))
+            401 -> return ApiResult.BizError(GoogleReaderAPIException("Unauthorized for CL Token"))
             !in 200..299 -> {
-                throw GoogleReaderAPIException(clBody)
+                return ApiResult.BizError(GoogleReaderAPIException(clBody))
             }
         }
 
-        authData.clientLoginToken = try {
+        val loginToken = try {
             toDTO<GoogleReaderDTO.MinifluxAuthData>(clBody).Auth
         } catch (ignore: Exception) {
             clBody
                 .split("\n")
                 .find { it.startsWith("Auth=") }
                 ?.substring(5)
-                ?: throw GoogleReaderAPIException("body format error for CL Token:\n$clBody")
+                ?: return ApiResult.BizError(GoogleReaderAPIException("body format error for CL Token:\n$clBody"))
         }
 
         // Get action token
-        val actResponse = client.newCall(
-            Request.Builder()
-                .url("${serverUrl}reader/api/0/token")
-                .header("Authorization", "GoogleLogin auth=${authData.clientLoginToken}")
-                .get()
-                .build())
-            .executeAsync()
-        val actBody = actResponse.body.string()
-        if (actResponse.code !in 200..299) {
+        val actResponse = try {
+            client.newCall(
+                Request.Builder()
+                    .url("${serverUrl}reader/api/0/token")
+                    .header("Authorization", "GoogleLogin auth=${authData.clientLoginToken}")
+                    .get()
+                    .build()
+            )
+                .executeAsync()
+        } catch (e: IOException) {
+            return ApiResult.NetworkError(e)
+        }
+        val actBody = actResponse.run {
+            if (code !in 200..299) null else body.string()
             // It's not used currently but may be used later the same way Google Reader uses it
             // (expires in 30 minutes, with "x-reader-google-bad-token: true" header set).
         }
-        authData.actionToken = actBody
+        return ApiResult.Success(AuthData(actionToken = actBody, clientLoginToken = loginToken))
     }
+
+    private val retryConfig = RetryConfig(
+        onRetry = {
+            clearAuthData()
+        },
+    )
 
     private suspend inline fun <reified T> retryableGetRequest(
         query: String,
         params: List<Pair<String, String>>? = null,
     ): T {
-        return try {
-            getRequest<T>(query, params)
-        } catch (e: RetryException) {
-            authData.clientLoginToken = null
-            authData.actionToken = null
-            getRequest<T>(query, params)
-        }
+        return withRetries(retryConfig) { getRequest<T>(query, params) }.getOrThrow()
     }
 
     private suspend inline fun <reified T> retryablePostRequest(
@@ -111,22 +152,23 @@ class GoogleReaderAPI private constructor(
         params: List<Pair<String, String>>? = null,
         form: List<Pair<String, String>>? = null,
     ): T {
-        return try {
-            postRequest<T>(query, params, form)
-        } catch (e: RetryException) {
-            authData.clientLoginToken = null
-            authData.actionToken = null
-            postRequest<T>(query, params, form)
-        }
+        return withRetries(retryConfig) { postRequest<T>(query, params, form) }.getOrThrow()
+    }
+
+    @CheckResult
+    private suspend inline fun <reified T> retryablePostRequestWithResult(
+        query: String,
+        params: List<Pair<String, String>>? = null,
+        form: List<Pair<String, String>>? = null,
+    ): RetryableTaskResult<T> {
+        return withRetries(retryConfig) { postRequest<T>(query, params, form) }
     }
 
     private suspend inline fun <reified T> getRequest(
         query: String,
         params: List<Pair<String, String>>? = null,
     ): T {
-        if (authData.clientLoginToken.isNullOrEmpty()) {
-            reAuthenticate()
-        }
+        refreshCredentialsIfNeeded()
 
         val response = client.newCall(
             Request.Builder()
@@ -159,21 +201,22 @@ class GoogleReaderAPI private constructor(
         params: List<Pair<String, String>>? = null,
         form: List<Pair<String, String>>? = null,
     ): T {
-        if (authData.clientLoginToken.isNullOrEmpty()) {
-            reAuthenticate()
-        }
+        refreshCredentialsIfNeeded()
         val response = client.newCall(
             Request.Builder()
                 .url("$serverUrl$query?output=json${params?.joinToString(separator = "") { "&${it.first}=${it.second}" } ?: ""}")
                 .addHeader("Authorization", "GoogleLogin auth=${authData.clientLoginToken}")
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .addHeader("User-Agent", USER_AGENT_STRING)
-                .post(FormBody.Builder()
-                    .apply {
-                        form?.forEach { add(it.first, it.second) }
-                        authData.actionToken?.let { add("T", it) }
-                    }.build())
-                .build())
+                .post(
+                    FormBody.Builder()
+                        .apply {
+                            form?.forEach { add(it.first, it.second) }
+                            authData.actionToken?.let { add("T", it) }
+                        }.build()
+                )
+                .build()
+        )
             .executeAsync()
 
         val responseBody = response.body.string()
@@ -255,8 +298,13 @@ class GoogleReaderAPI private constructor(
             form = listOf(Pair("quickadd", feedUrl))
         )
 
-    suspend fun editTag(itemIds: List<String>, mark: String? = null, unmark: String? = null): String =
-        retryablePostRequest<String>(
+    @CheckResult
+    suspend fun editTag(
+        itemIds: List<String>,
+        mark: String? = null,
+        unmark: String? = null
+    ): RetryableTaskResult<String> =
+        retryablePostRequestWithResult<String>(
             query = "reader/api/0/edit-tag",
             form = mutableListOf<Pair<String, String>>().apply {
                 itemIds.forEach { add(Pair("i", it.ofItemIdToHexId())) }
@@ -360,9 +408,18 @@ class GoogleReaderAPI private constructor(
             httpUsername: String? = null,
             httpPassword: String? = null,
             clientCertificateAlias: String? = null
-        ): GoogleReaderAPI = instances.getOrPut("$serverUrl$username$password$httpUsername$httpPassword$clientCertificateAlias") {
-            GoogleReaderAPI(context, serverUrl, username, password, httpUsername, httpPassword, clientCertificateAlias)
-        }
+        ): GoogleReaderAPI =
+            instances.getOrPut("$serverUrl$username$password$httpUsername$httpPassword$clientCertificateAlias") {
+                GoogleReaderAPI(
+                    context,
+                    serverUrl,
+                    username,
+                    password,
+                    httpUsername,
+                    httpPassword,
+                    clientCertificateAlias
+                )
+            }
 
         fun clearInstance() {
             instances.clear()
