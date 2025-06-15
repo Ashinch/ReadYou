@@ -146,7 +146,7 @@ class FlowViewModel @Inject constructor(
         isBefore: Boolean,
     ) {
         viewModelScope.launch(ioDispatcher) {
-            articlePagingListUseCase.itemSnapshotList.asSequence()
+            val items = articlePagingListUseCase.itemSnapshotList
                 .filterIsInstance<ArticleFlowItem.Article>().map { it.articleWithFeed }
                 .filter {
                     if (isBefore) {
@@ -154,9 +154,9 @@ class FlowViewModel @Inject constructor(
                     } else {
                         date < it.article.date && it.article.isUnread
                     }
-                }.distinctBy { it.article.id }.forEach { articleWithFeed ->
-                    diffMapHolder.updateDiff(articleWithFeed = articleWithFeed, isUnread = false)
-                }
+                }.distinctBy { it.article.id }
+
+            diffMapHolder.updateDiff(articleWithFeed = items.toTypedArray(), isUnread = false)
         }
     }
 
@@ -175,15 +175,14 @@ class FlowViewModel @Inject constructor(
 
     fun markAllAsRead() {
         viewModelScope.launch {
-            val items = articlePagingListUseCase.itemSnapshotList.items
-            items.forEach {
-                if (it is ArticleFlowItem.Article) {
-                    diffMapHolder.updateDiff(
-                        articleWithFeed = it.articleWithFeed,
-                        isUnread = false
-                    )
-                }
-            }
+            val items =
+                articlePagingListUseCase.itemSnapshotList.items.filterIsInstance<ArticleFlowItem.Article>()
+                    .map { it.articleWithFeed }
+
+            diffMapHolder.updateDiff(
+                articleWithFeed = items.toTypedArray(),
+                isUnread = false
+            )
         }
     }
 

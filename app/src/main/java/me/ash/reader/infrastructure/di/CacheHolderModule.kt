@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.domain.data.DiffMapHolder
+import me.ash.reader.domain.service.AccountService
 import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.infrastructure.rss.ReaderCacheHelper
 import me.ash.reader.infrastructure.rss.RssHelper
@@ -24,10 +25,11 @@ object CacheHolderModule {
         @ApplicationContext context: Context,
         @ApplicationScope applicationScope: CoroutineScope,
         @IODispatcher ioDispatcher: CoroutineDispatcher,
+        accountService: AccountService,
         rssService: RssService,
     ): DiffMapHolder {
         return DiffMapHolder(
-            context = context, applicationScope, ioDispatcher, rssService
+            context = context, applicationScope, ioDispatcher, accountService, rssService
         )
     }
 

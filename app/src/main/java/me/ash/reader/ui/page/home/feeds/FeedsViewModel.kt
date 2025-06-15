@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.feeds
 
-import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
@@ -26,7 +25,6 @@ import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.general.Filter
-import me.ash.reader.domain.model.group.GroupWithFeed
 import me.ash.reader.domain.service.AccountService
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.android.AndroidStringsHelper
@@ -39,7 +37,6 @@ import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.DefaultDispatcher
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.preference.SettingsProvider
-import me.ash.reader.ui.ext.getDefaultGroupId
 import javax.inject.Inject
 
 private const val TAG = "FeedsViewModel"
@@ -80,7 +77,7 @@ class FeedsViewModel @Inject constructor(
         }
     }
 
-    fun commitDiffs() = diffMapHolder.commitDiffs()
+    fun commitDiffs() = diffMapHolder.commitDiffsToDb()
 
     fun changeFilter(filterState: FilterState) {
         filterStateUseCase.updateFilterState(filterState)

@@ -461,19 +461,15 @@ fun FlowPage(
                     LaunchedEffect(listState.isScrollInProgress) {
                         if (!listState.isScrollInProgress) {
                             val firstItemIndex = listState.firstVisibleItemIndex
-                            if (firstItemIndex < pagingItems.itemCount) for (index in 0 until firstItemIndex) {
-                                val item = pagingItems.peek(index)
-                                with(item) {
-                                    when (this) {
-                                        is ArticleFlowItem.Article -> {
-                                            homeViewModel.diffMapHolder.updateDiff(
-                                                articleWithFeed = articleWithFeed, isUnread = false
-                                            )
-                                        }
-
-                                        else -> {}
-                                    }
+                            val items = mutableListOf<ArticleWithFeed>()
+                            if (firstItemIndex < pagingItems.itemCount) {
+                                for (index in 0 until firstItemIndex) {
+                                    pagingItems.peek(index)
+                                        .let { if (it is ArticleFlowItem.Article) items.add(it.articleWithFeed) }
                                 }
+                                homeViewModel.diffMapHolder.updateDiff(
+                                    articleWithFeed = items.toTypedArray(), isUnread = false
+                                )
                             }
                         }
                     }
@@ -559,7 +555,7 @@ fun FlowPage(
                             onClick = { articleWithFeed ->
                                 if (articleWithFeed.feed.isBrowser) {
                                     homeViewModel.diffMapHolder.updateDiff(
-                                        articleWithFeed = articleWithFeed,
+                                        articleWithFeed,
                                         isUnread = false
                                     )
                                     context.openURL(

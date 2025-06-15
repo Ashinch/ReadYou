@@ -2,6 +2,7 @@ package me.ash.reader.domain.service
 
 import android.content.Context
 import android.util.Log
+import androidx.annotation.CheckResult
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
 import com.rometools.rome.feed.synd.SyndFeed
@@ -28,7 +29,6 @@ import me.ash.reader.infrastructure.html.Readability
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.rss.provider.fever.FeverAPI
 import me.ash.reader.infrastructure.rss.provider.fever.FeverDTO
-import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.dollarLast
 import me.ash.reader.ui.ext.isFuture
@@ -324,17 +324,19 @@ class FeverRssService @Inject constructor(
         }
     }
 
-
-    override suspend fun batchMarkAsRead(articleIds: Set<String>, isUnread: Boolean) {
-        super.batchMarkAsRead(articleIds, isUnread)
+    @CheckResult
+    override suspend fun syncReadStatus(articleIds: Set<String>, isUnread: Boolean): Set<String> {
         val feverAPI = getFeverAPI()
+        val syncedEntries = mutableSetOf<String>()
         articleIds.takeIf { it.isNotEmpty() }?.forEachIndexed { index, it ->
             Log.d("RLog", "sync markAsRead: ${index}/${articleIds.size} num")
             feverAPI.markItem(
                 status = if (isUnread) FeverDTO.StatusEnum.Unread else FeverDTO.StatusEnum.Read,
                 id = it.dollarLast(),
             )
+            syncedEntries += it
         }
+        return syncedEntries
     }
 
     override suspend fun markAsStarred(articleId: String, isStarred: Boolean) {

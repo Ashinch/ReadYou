@@ -23,7 +23,6 @@ import me.ash.reader.infrastructure.android.NotificationHelper
 import me.ash.reader.infrastructure.di.DefaultDispatcher
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.rss.RssHelper
-import me.ash.reader.ui.ext.currentAccountId
 import java.util.Date
 import javax.inject.Inject
 
@@ -43,7 +42,7 @@ class LocalRssService @Inject constructor(
     @DefaultDispatcher
     private val defaultDispatcher: CoroutineDispatcher,
     private val workManager: WorkManager,
-    accountService: AccountService,
+    private val accountService: AccountService,
 ) : AbstractRssRepository(
     accountDao,
     articleDao,
@@ -67,7 +66,7 @@ class LocalRssService @Inject constructor(
     override suspend fun sync(feedId: String?, groupId: String?) = supervisorScope {
         val preTime = System.currentTimeMillis()
         val preDate = Date(preTime)
-        val accountId = context.currentAccountId
+        val accountId = accountService.getCurrentAccountId()
         val semaphore = Semaphore(16)
 
         val feedsToSync = when {

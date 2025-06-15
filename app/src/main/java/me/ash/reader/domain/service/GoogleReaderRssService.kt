@@ -23,6 +23,8 @@ import me.ash.reader.infrastructure.di.DefaultDispatcher
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.di.MainDispatcher
 import me.ash.reader.infrastructure.html.Readability
+import me.ash.reader.infrastructure.net.onFailure
+import me.ash.reader.infrastructure.net.onSuccess
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofCategoryIdToStreamId
@@ -30,7 +32,6 @@ import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Compani
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofFeedStreamIdToId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofItemStreamIdToId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderDTO
-import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.dollarLast
 import me.ash.reader.ui.ext.isFuture
@@ -76,7 +77,7 @@ class GoogleReaderRssService @Inject constructor(
     override val updateSubscription: Boolean = true
 
     private suspend fun getGoogleReaderAPI() =
-        GoogleReaderSecurityKey(accountDao.queryById(accountService.getCurrentAccountId())!!.securityKey).run {
+        GoogleReaderSecurityKey(accountService.getCurrentAccount().securityKey).run {
             GoogleReaderAPI.getInstance(
                 context = context,
                 serverUrl = serverUrl!!,
@@ -527,17 +528,23 @@ class GoogleReaderRssService @Inject constructor(
         }
     }
 
-    override suspend fun batchMarkAsRead(articleIds: Set<String>, isUnread: Boolean) {
-        super.batchMarkAsRead(articleIds, isUnread)
+    override suspend fun syncReadStatus(articleIds: Set<String>, isUnread: Boolean): Set<String> {
         val googleReaderAPI = getGoogleReaderAPI()
-        articleIds.takeIf { it.isNotEmpty() }?.chunked(500)?.forEachIndexed { index, it ->
-            Log.d("RLog", "sync markAsRead:  ${(index * 500) + it.size}/${articleIds.size} num")
+        val syncedEntries = mutableSetOf<String>()
+        articleIds.takeIf { it.isNotEmpty() }?.chunked(500)?.forEachIndexed { index, idList ->
+            Log.d("RLog", "sync markAsRead:  ${(index * 500) + idList.size}/${articleIds.size} num")
             googleReaderAPI.editTag(
-                itemIds = it.map { it.dollarLast() },
+                itemIds = idList.map { it.dollarLast() },
                 mark = if (!isUnread) GoogleReaderAPI.Stream.READ.tag else null,
                 unmark = if (isUnread) GoogleReaderAPI.Stream.READ.tag else null,
-            )
+            ).onFailure {
+                it.printStackTrace()
+            }.onSuccess {
+                syncedEntries += idList
+                println("synced $idList to isUnread: $isUnread")
+            }
         }
+        return syncedEntries
     }
 
     override suspend fun markAsStarred(articleId: String, isStarred: Boolean) {

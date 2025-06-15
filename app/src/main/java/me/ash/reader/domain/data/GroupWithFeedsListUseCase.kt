@@ -145,8 +145,7 @@ class GroupWithFeedsListUseCase @Inject constructor(
                         val feedCount = unreadCountMap[feedId] ?: 0
                         val combinedFeedCount =
                             feedCount + unreadDiffs.count { it.feedId == feedId } - readDiffs.count { it.feedId == feedId }
-                        check(combinedFeedCount >= 0)
-                        feed.copy(important = combinedFeedCount)
+                        feed.copy(important = combinedFeedCount.coerceAtLeast(0))
                     }
 
                     val groupItem = if (hideEmptyGroups) {

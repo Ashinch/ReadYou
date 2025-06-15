@@ -56,5 +56,5 @@ class HomeViewModel @Inject constructor(
         filterStateUseCase.updateFilterState(searchContent = content)
     }
 
-    fun commitDiffs() = diffMapHolder.commitDiffs()
+    fun commitDiffs() = diffMapHolder.commitDiffsToDb()
 }

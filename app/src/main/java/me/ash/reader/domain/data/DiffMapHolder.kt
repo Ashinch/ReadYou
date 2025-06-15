@@ -13,10 +13,13 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import me.ash.reader.domain.model.account.AccountType
 import me.ash.reader.domain.model.article.ArticleWithFeed
+import me.ash.reader.domain.service.AccountService
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
+import java.io.File
 import javax.inject.Inject
 
 private const val TAG = "DiffMapHolder"
@@ -26,16 +29,29 @@ class DiffMapHolder @Inject constructor(
     @ApplicationContext private val context: Context,
     @ApplicationScope private val applicationScope: CoroutineScope,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val accountService: AccountService,
     private val rssService: RssService,
 ) {
     val diffMap = mutableStateMapOf<String, Diff>()
+
+    private val pendingSyncDiffs = mutableStateMapOf<String, Diff>()
+    private val syncedDiffs = mutableMapOf<String, Diff>()
+
     val diffMapSnapshotFlow = snapshotFlow { diffMap.toMap() }.stateIn(
-        applicationScope,
-        SharingStarted.Eagerly,
-        emptyMap()
+        applicationScope, SharingStarted.Eagerly, emptyMap()
     )
+
+    private val pendingSyncDiffsSnapshotFlow = snapshotFlow { pendingSyncDiffs.toMap() }.stateIn(
+        applicationScope, SharingStarted.Eagerly, emptyMap()
+    )
+
+    val shouldSyncWithRemote get() = accountService.getCurrentAccount().type != AccountType.Local
+
     private val gson = Gson()
-    private val cacheFile = context.cacheDir.resolve("diff_map.json")
+
+    val cacheDir get() = context.cacheDir.resolve(accountService.getCurrentAccountId().toString())
+
+    private val cacheFile: File get() = cacheDir.resolve("diff_map.json")
 
     init {
         commitDiffsFromCache()
@@ -44,6 +60,11 @@ class DiffMapHolder @Inject constructor(
                 if (it.isNotEmpty()) {
                     writeDiffsToCache()
                 }
+            }
+        }
+        applicationScope.launch(ioDispatcher) {
+            pendingSyncDiffsSnapshotFlow.debounce(2_000).collect {
+                syncDiffsWithRemote(it)
             }
         }
     }
@@ -80,49 +101,67 @@ class DiffMapHolder @Inject constructor(
      *                 - `true`: Marks the article as unread.
      *                 - `false`: Marks the article as read.
      *
+     * @return A [Diff] object representing the changes made to the article.
+     *
      * @see Diff
      */
-    fun updateDiff(
-        articleWithFeed: ArticleWithFeed,
-        isUnread: Boolean? = null
-    ) {
+    private fun updateDiffInternal(
+        articleWithFeed: ArticleWithFeed, isUnread: Boolean? = null
+    ): Diff? {
         val articleId = articleWithFeed.article.id
-        val isArticleUnread = articleWithFeed.article.isUnread
 
-        if (isUnread == null) {
-            if (diffMap.remove(articleId) == null) {
-                diffMap[articleId] = Diff(
-                    isUnread = !isArticleUnread,
-                    articleWithFeed = articleWithFeed
-                )
-            }
-        } else if (isUnread == isArticleUnread) {
-            diffMap.remove(articleId)
-        } else {
-            diffMap[articleId] = Diff(
-                isUnread = isUnread,
-                articleWithFeed = articleWithFeed
+        val diff = diffMap[articleId]
+
+        if (diff == null) {
+            val isUnread = isUnread ?: !articleWithFeed.article.isUnread
+            val diff = Diff(
+                isUnread = isUnread, articleWithFeed = articleWithFeed
             )
+            diffMap[articleId] = diff
+            return diff
+        } else {
+            if (isUnread == null || diff.isUnread != isUnread) {
+                val diff = diffMap.remove(articleId)
+                return diff?.copy(isUnread = !diff.isUnread)
+            }
+        }
+        return null
+    }
+
+    fun updateDiff(
+        vararg articleWithFeed: ArticleWithFeed, isUnread: Boolean? = null
+    ) {
+        val appliedDiffs = articleWithFeed.mapNotNull {
+            updateDiffInternal(it, isUnread)
+        }
+        if (shouldSyncWithRemote) {
+            appliedDiffs.forEach {
+                appendDiffToSync(it)
+            }
         }
     }
 
-    fun commitDiffs() {
+    private fun appendDiffToSync(diff: Diff) {
+        val syncedDiff = syncedDiffs[diff.articleId]
+        if (syncedDiff == null || syncedDiff.isUnread != diff.isUnread) {
+            pendingSyncDiffs[diff.articleId] = diff
+        }
+    }
+
+    fun commitDiffsToDb() {
         applicationScope.launch(ioDispatcher) {
-            val markAsReadArticles =
-                diffMap.filter { !it.value.isUnread }.map { it.key }.toSet()
-            val markAsUnreadArticles =
-                diffMap.filter { it.value.isUnread }.map { it.key }.toSet()
+            val markAsReadArticles = diffMap.filter { !it.value.isUnread }.map { it.key }.toSet()
+            val markAsUnreadArticles = diffMap.filter { it.value.isUnread }.map { it.key }.toSet()
             clearDiffs()
-            rssService.get()
-                .batchMarkAsRead(articleIds = markAsReadArticles, isUnread = false)
-            rssService.get()
-                .batchMarkAsRead(articleIds = markAsUnreadArticles, isUnread = true)
+            rssService.get().batchMarkAsRead(articleIds = markAsReadArticles, isUnread = false)
+            rssService.get().batchMarkAsRead(articleIds = markAsUnreadArticles, isUnread = true)
         }
     }
 
     private fun writeDiffsToCache() {
         applicationScope.launch(ioDispatcher) {
             val tmpJson = gson.toJson(diffMap)
+            cacheDir.mkdirs()
             cacheFile.createNewFile()
             if (cacheFile.exists() && cacheFile.canWrite()) {
                 cacheFile.writeText(tmpJson)
@@ -130,15 +169,35 @@ class DiffMapHolder @Inject constructor(
         }
     }
 
+    private fun syncDiffsWithRemote(diffs: Map<String, Diff>) {
+        applicationScope.launch(ioDispatcher) {
+            if (!shouldSyncWithRemote) return@launch
+            if (diffs.isEmpty()) return@launch
+            val toBeSync = diffs
+            val markAsReadArticles =
+                toBeSync.filter { !it.value.isUnread }.map { it.key }.toSet()
+            val markAsUnreadArticles =
+                toBeSync.filter { it.value.isUnread }.map { it.key }.toSet()
+
+            val rssService = rssService.get()
+
+            val read = rssService.syncReadStatus(articleIds = markAsReadArticles, isUnread = false)
+            val unread =
+                rssService.syncReadStatus(articleIds = markAsUnreadArticles, isUnread = true)
+
+            val synced = read + unread
+            pendingSyncDiffs -= synced
+            syncedDiffs += diffs.filter { synced.contains(it.key) }
+        }
+    }
+
     private fun commitDiffsFromCache() {
         applicationScope.launch(ioDispatcher) {
             if (cacheFile.exists() && cacheFile.canRead()) {
                 val tmpJson = cacheFile.readText()
-                val mapType = object :
-                    TypeToken<Map<String, Diff>>() {}.type
+                val mapType = object : TypeToken<Map<String, Diff>>() {}.type
                 val diffMapFromCache = gson.fromJson<Map<String, Diff>>(
-                    tmpJson,
-                    mapType
+                    tmpJson, mapType
                 )
                 diffMapFromCache?.let {
                     diffMap.clear()
@@ -146,7 +205,7 @@ class DiffMapHolder @Inject constructor(
                 }
             }
         }.invokeOnCompletion {
-            commitDiffs()
+            commitDiffsToDb()
         }
     }
 
@@ -161,15 +220,11 @@ class DiffMapHolder @Inject constructor(
 }
 
 data class Diff(
-    val isUnread: Boolean,
-    val articleId: String,
-    val feedId: String,
-    val groupId: String
+    val isUnread: Boolean, val articleId: String, val feedId: String
 ) {
     constructor(isUnread: Boolean, articleWithFeed: ArticleWithFeed) : this(
         isUnread = isUnread,
         articleId = articleWithFeed.article.id,
         feedId = articleWithFeed.feed.id,
-        groupId = articleWithFeed.feed.groupId
     )
 }

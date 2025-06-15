@@ -141,7 +141,7 @@ class ReadingViewModel @AssistedInject constructor(
     }
 
     fun updateReadStatus(isUnread: Boolean) {
-        readingUiState.value.articleWithFeed?.let { diffMapHolder.updateDiff(it, isUnread) }
+        readingUiState.value.articleWithFeed?.let { diffMapHolder.updateDiff(it, isUnread = isUnread) }
         _readingUiState.update { it.copy(isUnread = diffMapHolder.checkIfUnread(it.articleWithFeed!!)) }
     }
 
