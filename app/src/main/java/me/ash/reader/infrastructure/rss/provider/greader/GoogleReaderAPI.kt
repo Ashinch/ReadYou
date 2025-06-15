@@ -118,7 +118,7 @@ class GoogleReaderAPI private constructor(
             client.newCall(
                 Request.Builder()
                     .url("${serverUrl}reader/api/0/token")
-                    .header("Authorization", "GoogleLogin auth=${authData.clientLoginToken}")
+                    .header("Authorization", "GoogleLogin auth=${loginToken}")
                     .get()
                     .build()
             )
@@ -126,12 +126,13 @@ class GoogleReaderAPI private constructor(
         } catch (e: IOException) {
             return ApiResult.NetworkError(e)
         }
-        val actBody = actResponse.run {
-            if (code !in 200..299) null else body.string()
+        val actionToken = actResponse.body.string()
+
+        if (actResponse.code !in 200..299) {
             // It's not used currently but may be used later the same way Google Reader uses it
             // (expires in 30 minutes, with "x-reader-google-bad-token: true" header set).
         }
-        return ApiResult.Success(AuthData(actionToken = actBody, clientLoginToken = loginToken))
+        return ApiResult.Success(AuthData(actionToken = actionToken, clientLoginToken = loginToken))
     }
 
     private val retryConfig = RetryConfig(

@@ -1,6 +1,11 @@
 package me.ash.reader.infrastructure.net
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 data class RetryConfig(
     val attempts: Int = 5,
@@ -8,7 +13,7 @@ data class RetryConfig(
     val initialDelay: Long = 1000L,
     val maxDelay: Long = 20000L,
     val delayFactor: Double = 2.0,
-    val onRetry: (() -> Unit)? = null,
+    val onRetry: ((Throwable) -> Unit)? = null,
     val shouldRetry: (Throwable) -> Boolean = { it !is CancellationException },
 )
 
@@ -36,6 +41,28 @@ sealed class RetryableTaskResult<out R> {
             is Failure -> null
         }
     }
+}
+
+@OptIn(ExperimentalContracts::class)
+inline fun <T> RetryableTaskResult<T>.onSuccess(block: (T) -> Unit): RetryableTaskResult<T> {
+    contract {
+        callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+    }
+    if (this is RetryableTaskResult.Success) {
+        block(value)
+    }
+    return this
+}
+
+@OptIn(ExperimentalContracts::class)
+inline fun <T> RetryableTaskResult<T>.onFailure(block: (Throwable) -> Unit): RetryableTaskResult<T> {
+    contract {
+        callsInPlace(block, InvocationKind.AT_MOST_ONCE)
+    }
+    if (this is RetryableTaskResult.Failure) {
+        block(finalException ?: IllegalStateException("No exception was thrown"))
+    }
+    return this
 }
 
 suspend fun <R> withRetries(
@@ -70,7 +97,7 @@ suspend fun <R> withRetries(
                     )
                 }
 
-                onRetry?.invoke()
+                onRetry?.invoke(th)
             }
         }
         return RetryableTaskResult.Failure(
