@@ -1,28 +1,20 @@
 package me.ash.reader.domain.service
 
-import android.content.Context
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
 import com.rometools.rome.feed.synd.SyndFeed
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.supervisorScope
-import kotlinx.coroutines.sync.Semaphore
-import kotlinx.coroutines.sync.withPermit
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.article.ArchivedArticle
 import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.feed.Feed
-import me.ash.reader.domain.model.feed.FeedWithArticle
 import me.ash.reader.domain.model.group.Group
 import me.ash.reader.domain.model.group.GroupWithFeed
 import me.ash.reader.domain.repository.AccountDao
@@ -33,14 +25,12 @@ import me.ash.reader.infrastructure.android.NotificationHelper
 import me.ash.reader.infrastructure.preference.KeepArchivedPreference
 import me.ash.reader.infrastructure.preference.SyncIntervalPreference
 import me.ash.reader.infrastructure.rss.RssHelper
-import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.spacerDollar
 import java.util.Date
 import java.util.UUID
 
 abstract class AbstractRssRepository(
-    private val context: Context,
     private val accountDao: AccountDao,
     private val articleDao: ArticleDao,
     private val groupDao: GroupDao,
@@ -50,6 +40,7 @@ abstract class AbstractRssRepository(
     private val notificationHelper: NotificationHelper,
     private val dispatcherIO: CoroutineDispatcher,
     private val dispatcherDefault: CoroutineDispatcher,
+    private val accountService: AccountService,
 ) {
 
     open val importSubscription: Boolean = true
@@ -66,7 +57,7 @@ abstract class AbstractRssRepository(
         feedLink: String, searchedFeed: SyndFeed, groupId: String,
         isNotification: Boolean, isFullContent: Boolean, isBrowser: Boolean,
     ) {
-        val accountId = context.currentAccountId
+        val accountId = accountService.getCurrentAccountId()
         val feed = Feed(
             id = accountId.spacerDollar(UUID.randomUUID().toString()),
             name = searchedFeed.title.decodeHTML()!!,
@@ -87,7 +78,7 @@ abstract class AbstractRssRepository(
         destFeed: Feed?,
         newGroupName: String
     ): String {
-        context.currentAccountId.let { accountId ->
+        accountService.getCurrentAccountId().let { accountId ->
             return accountId.spacerDollar(UUID.randomUUID().toString()).also {
                 groupDao.insert(
                     Group(
@@ -109,7 +100,7 @@ abstract class AbstractRssRepository(
         before: Date?,
         isUnread: Boolean,
     ) {
-        val accountId = context.currentAccountId
+        val accountId = accountService.getCurrentAccountId()
         when {
             groupId != null -> {
                 articleDao.markAllAsReadByGroupId(
@@ -140,7 +131,7 @@ abstract class AbstractRssRepository(
     }
 
     open suspend fun batchMarkAsRead(articleIds: Set<String>, isUnread: Boolean) {
-        val accountId = context.currentAccountId
+        val accountId = accountService.getCurrentAccountId()
         articleIds.takeIf { it.isNotEmpty() }?.chunked(500)?.forEachIndexed { index, it ->
             Log.d("RLog", "sync markAsRead: ${(index * 500) + it.size}/${articleIds.size} num")
             articleDao.markAsReadByIdSet(accountId, it.toSet(), isUnread)
@@ -148,13 +139,13 @@ abstract class AbstractRssRepository(
     }
 
     open suspend fun markAsStarred(articleId: String, isStarred: Boolean) {
-        val accountId = context.currentAccountId
+        val accountId = accountService.getCurrentAccountId()
         articleDao.markAsStarredByArticleId(accountId, articleId, isStarred)
     }
 
 
     suspend fun clearKeepArchivedArticles(): List<Article> {
-        val articleId = context.currentAccountId
+        val articleId = accountService.getCurrentAccountId()
         val currentAccount = accountDao.queryById(articleId)!!
         val keepArchived = currentAccount.keepArchived
         if (keepArchived != KeepArchivedPreference.Always) {
@@ -187,7 +178,7 @@ abstract class AbstractRssRepository(
     }
 
     suspend fun initSync() {
-        accountDao.queryById(context.currentAccountId)?.let {
+        accountDao.queryById(accountService.getCurrentAccountId())?.let {
             val syncOnStart = it.syncOnStart.value
             if (syncOnStart) {
                 doSyncOneTime()
@@ -206,10 +197,10 @@ abstract class AbstractRssRepository(
     }
 
     fun pullGroups(): Flow<MutableList<Group>> =
-        groupDao.queryAllGroup(context.currentAccountId).flowOn(dispatcherIO)
+        groupDao.queryAllGroup(accountService.getCurrentAccountId()).flowOn(dispatcherIO)
 
     fun pullFeeds(): Flow<MutableList<GroupWithFeed>> =
-        groupDao.queryAllGroupWithFeedAsFlow(context.currentAccountId).flowOn(dispatcherIO)
+        groupDao.queryAllGroupWithFeedAsFlow(accountService.getCurrentAccountId()).flowOn(dispatcherIO)
 
     fun pullArticles(
         groupId: String?,
@@ -218,7 +209,7 @@ abstract class AbstractRssRepository(
         isUnread: Boolean,
         sortAscending: Boolean = false,
     ): PagingSource<Int, ArticleWithFeed> {
-        val accountId = context.currentAccountId
+        val accountId = accountService.getCurrentAccountId()
         Log.i(
             "RLog",
             "pullArticles: accountId: ${accountId}, groupId: ${groupId}, feedId: ${feedId}, isStarred: ${isStarred}, isUnread: ${isUnread}"
@@ -276,7 +267,7 @@ abstract class AbstractRssRepository(
         isStarred: Boolean,
         isUnread: Boolean,
     ): Flow<Map<String, Int>> {
-        val accountId = context.currentAccountId
+        val accountId = accountService.getCurrentAccountId()
         Log.i(
             "RLog",
             "pullImportant: accountId: ${accountId}, isStarred: ${isStarred}, isUnread: ${isUnread}"
@@ -305,7 +296,7 @@ abstract class AbstractRssRepository(
     suspend fun findArticleById(id: String): ArticleWithFeed? = articleDao.queryById(id)
 
     suspend fun isFeedExist(url: String): Boolean =
-        feedDao.queryByLink(context.currentAccountId, url).isNotEmpty()
+        feedDao.queryByLink(accountService.getCurrentAccountId(), url).isNotEmpty()
 
     open suspend fun renameGroup(group: Group) {
         groupDao.update(group)
@@ -328,7 +319,7 @@ abstract class AbstractRssRepository(
     }
 
     open suspend fun deleteGroup(group: Group, onlyDeleteNoStarred: Boolean? = false) {
-        val accountId = context.currentAccountId
+        val accountId = accountService.getCurrentAccountId()
         if (onlyDeleteNoStarred == true
             && articleDao.countByGroupIdWhenIsStarred(accountId, group.id, true) > 0
         ) {
@@ -341,7 +332,7 @@ abstract class AbstractRssRepository(
 
     open suspend fun deleteFeed(feed: Feed, onlyDeleteNoStarred: Boolean? = false) {
         if (onlyDeleteNoStarred == true
-            && articleDao.countByFeedIdWhenIsStarred(context.currentAccountId, feed.id, true) > 0
+            && articleDao.countByFeedIdWhenIsStarred(accountService.getCurrentAccountId(), feed.id, true) > 0
         ) {
             return
         }
@@ -356,13 +347,13 @@ abstract class AbstractRssRepository(
     ) {
         when {
             group != null -> articleDao.deleteByGroupId(
-                context.currentAccountId,
+                accountService.getCurrentAccountId(),
                 group.id,
                 includeStarred
             )
 
             feed != null -> articleDao.deleteByFeedId(
-                context.currentAccountId,
+                accountService.getCurrentAccountId(),
                 feed.id,
                 includeStarred
             )
@@ -374,19 +365,19 @@ abstract class AbstractRssRepository(
     }
 
     suspend fun groupParseFullContent(group: Group, isFullContent: Boolean) {
-        feedDao.updateIsFullContentByGroupId(context.currentAccountId, group.id, isFullContent)
+        feedDao.updateIsFullContentByGroupId(accountService.getCurrentAccountId(), group.id, isFullContent)
     }
 
     suspend fun groupOpenInBrowser(group: Group, isBrowser: Boolean) {
-        feedDao.updateIsBrowserByGroupId(context.currentAccountId, group.id, isBrowser)
+        feedDao.updateIsBrowserByGroupId(accountService.getCurrentAccountId(), group.id, isBrowser)
     }
 
     suspend fun groupAllowNotification(group: Group, isNotification: Boolean) {
-        feedDao.updateIsNotificationByGroupId(context.currentAccountId, group.id, isNotification)
+        feedDao.updateIsNotificationByGroupId(accountService.getCurrentAccountId(), group.id, isNotification)
     }
 
     suspend fun groupMoveToTargetGroup(group: Group, targetGroup: Group) {
-        feedDao.updateTargetGroupIdByGroupId(context.currentAccountId, group.id, targetGroup.id)
+        feedDao.updateTargetGroupIdByGroupId(accountService.getCurrentAccountId(), group.id, targetGroup.id)
     }
 
     fun searchArticles(
@@ -397,7 +388,7 @@ abstract class AbstractRssRepository(
         isUnread: Boolean,
         sortAscending: Boolean = false
     ): PagingSource<Int, ArticleWithFeed> {
-        val accountId = context.currentAccountId
+        val accountId = accountService.getCurrentAccountId()
         Log.i(
             "RLog",
             "searchArticles: content: ${content}, accountId: ${accountId}, groupId: ${groupId}, feedId: ${feedId}, isStarred: ${isStarred}, isUnread: ${isUnread}"
@@ -456,6 +447,6 @@ abstract class AbstractRssRepository(
     }
 
     suspend fun queryUnreadFullContentArticles() =
-        articleDao.queryUnreadFullContentArticles(context.currentAccountId)
+        articleDao.queryUnreadFullContentArticles(accountService.getCurrentAccountId())
 
 }

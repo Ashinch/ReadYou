@@ -2,8 +2,13 @@ package me.ash.reader.domain.service
 
 import android.content.Context
 import android.os.Looper
+import androidx.datastore.preferences.core.intPreferencesKey
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.account.AccountType
@@ -12,8 +17,9 @@ import me.ash.reader.domain.repository.AccountDao
 import me.ash.reader.domain.repository.ArticleDao
 import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.domain.repository.GroupDao
+import me.ash.reader.infrastructure.di.ApplicationScope
+import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.ui.ext.DataStoreKey
-import me.ash.reader.ui.ext.currentAccountId
 import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.getDefaultGroupId
 import me.ash.reader.ui.ext.put
@@ -27,14 +33,32 @@ class AccountService @Inject constructor(
     private val groupDao: GroupDao,
     private val feedDao: FeedDao,
     private val articleDao: ArticleDao,
-    private val rssService: RssService,
+    @ApplicationScope
+    private val coroutineScope: CoroutineScope,
+    settingsProvider: SettingsProvider,
 ) {
+
+    private val accountIdKey = intPreferencesKey(DataStoreKey.currentAccountId)
+
+    val currentAccountIdFlow =
+        settingsProvider.preferencesFlow.map { it[accountIdKey] ?: 1 }
+            .stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = 1)
+
+    val currentAccountFlow = currentAccountIdFlow.map {
+        accountDao.queryById(it)!!
+    }.stateIn(
+        scope = coroutineScope,
+        SharingStarted.Eagerly,
+        initialValue = getDefaultAccount()
+    )
 
     fun getAccounts(): Flow<List<Account>> = accountDao.queryAllAsFlow()
 
     fun getAccountById(accountId: Int): Flow<Account?> = accountDao.queryAccount(accountId)
 
-    suspend fun getCurrentAccount(): Account = accountDao.queryById(context.currentAccountId)!!
+    fun getCurrentAccount(): Account = currentAccountFlow.value
+
+    fun getCurrentAccountId(): Int = currentAccountIdFlow.value
 
     suspend fun isNoAccount(): Boolean = accountDao.queryAll().isEmpty()
 
@@ -58,11 +82,13 @@ class AccountService @Inject constructor(
             context.dataStore.put(DataStoreKey.currentAccountType, it.type.id)
         }
 
+    private fun getDefaultAccount(): Account = Account(
+        type = AccountType.Local,
+        name = context.getString(R.string.read_you),
+    )
+
     suspend fun addDefaultAccount(): Account =
-        addAccount(Account(
-            type = AccountType.Local,
-            name = context.getString(R.string.read_you),
-        ))
+        addAccount(getDefaultAccount())
 
     suspend fun update(accountId: Int, block: Account.() -> Unit) {
         accountDao.queryById(accountId)?.let {
@@ -77,7 +103,6 @@ class AccountService @Inject constructor(
             Looper.loop()
             return
         }
-        rssService.get().cancelSync()
         accountDao.queryById(accountId)?.let {
             articleDao.deleteByAccountId(accountId)
             feedDao.deleteByAccountId(accountId)
@@ -91,7 +116,6 @@ class AccountService @Inject constructor(
     }
 
     suspend fun switch(account: Account) {
-        rssService.get().cancelSync()
         context.dataStore.put(DataStoreKey.currentAccountId, account.id!!)
         context.dataStore.put(DataStoreKey.currentAccountType, account.type.id)
     }

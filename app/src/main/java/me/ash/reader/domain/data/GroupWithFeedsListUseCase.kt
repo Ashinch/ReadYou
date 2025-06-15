@@ -7,14 +7,18 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.domain.model.group.GroupWithFeed
+import me.ash.reader.domain.service.AccountService
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
@@ -33,14 +37,20 @@ class GroupWithFeedsListUseCase @Inject constructor(
     private val rssService: RssService,
     private val filterStateUseCase: FilterStateUseCase,
     private val diffMapHolder: DiffMapHolder,
+    private val accountService: AccountService,
 ) {
 
     private var currentJob: Job? = null
 
     init {
         applicationScope.launch {
-            filterStateUseCase.filterStateFlow.mapLatest { it.filter }.distinctUntilChanged()
-                .collect {
+            rssService.flow().collectLatest {
+                it.pullFeeds().collect { feedsFlow.value = it }
+            }
+        }
+        applicationScope.launch {
+            filterStateUseCase.filterStateFlow.map { it.filter }
+                .collectLatest {
                     currentJob?.cancel()
                     currentJob = when (it) {
                         Filter.Unread -> pullUnreadFeeds()
@@ -55,10 +65,9 @@ class GroupWithFeedsListUseCase @Inject constructor(
         MutableStateFlow<List<GroupWithFeed>>(emptyList())
     val groupWithFeedListFlow: StateFlow<List<GroupWithFeed>> = _groupWithFeedsListFlow
 
-    private val feedsFlow = rssService.get().pullFeeds()
+    private val feedsFlow: MutableStateFlow<List<GroupWithFeed>> = MutableStateFlow(emptyList())
 
-    private val defaultGroupId =
-        settingsProvider.getOrDefault<Int>(currentAccountId, 1).getDefaultGroupId()
+    private val defaultGroupId get() = accountService.getCurrentAccountId().getDefaultGroupId()
 
     private val hideEmptyGroups get() = settingsProvider.settings.hideEmptyGroups.value
 

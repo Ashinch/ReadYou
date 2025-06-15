@@ -82,17 +82,16 @@ class FeedsViewModel @Inject constructor(
 
     fun commitDiffs() = diffMapHolder.commitDiffs()
 
-    fun fetchAccount() {
-        viewModelScope.launch(ioDispatcher) {
-            _feedsUiState.update { it.copy(account = accountService.getCurrentAccount()) }
-        }
-    }
-
     fun changeFilter(filterState: FilterState) {
         filterStateUseCase.updateFilterState(filterState)
     }
 
     init {
+        viewModelScope.launch {
+            accountService.currentAccountFlow.collect { account ->
+                _feedsUiState.update { it.copy(account = account) }
+            }
+        }
         viewModelScope.launch {
             filterStateUseCase.filterStateFlow.mapLatest { it.filter }.distinctUntilChanged()
                 .collect {

@@ -27,8 +27,11 @@ val Context.skipVersionNumber: String
     get() = this.dataStore.get(DataStoreKey.skipVersionNumber) ?: ""
 val Context.isFirstLaunch: Boolean
     get() = this.dataStore.get(DataStoreKey.isFirstLaunch) ?: true
+
+@Deprecated("Use AccountService to retrieve the current account")
 val Context.currentAccountId: Int
     get() = this.dataStore.get(DataStoreKey.currentAccountId) ?: 1
+@Deprecated("Use AccountService to retrieve the current account")
 val Context.currentAccountType: Int
     get() = this.dataStore.get(DataStoreKey.currentAccountType) ?: 1
 

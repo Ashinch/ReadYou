@@ -180,10 +180,6 @@ fun FeedsPage(
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val feedDrawerState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
-    LaunchedEffect(Unit) {
-        feedsViewModel.fetchAccount()
-    }
-
     BackHandler(true) {
         context.findActivity()?.moveTaskToBack(false)
     }

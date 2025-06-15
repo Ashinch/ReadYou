@@ -43,9 +43,18 @@ class LocalRssService @Inject constructor(
     @DefaultDispatcher
     private val defaultDispatcher: CoroutineDispatcher,
     private val workManager: WorkManager,
+    accountService: AccountService,
 ) : AbstractRssRepository(
-    context, accountDao, articleDao, groupDao,
-    feedDao, workManager, rssHelper, notificationHelper, ioDispatcher, defaultDispatcher
+    accountDao,
+    articleDao,
+    groupDao,
+    feedDao,
+    workManager,
+    rssHelper,
+    notificationHelper,
+    ioDispatcher,
+    defaultDispatcher,
+    accountService
 ) {
 
     fun doSyncOneTime(feedId: String?, groupId: String?) {

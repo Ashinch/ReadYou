@@ -1,20 +1,32 @@
 package me.ash.reader.domain.service
 
-import android.content.Context
-import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import me.ash.reader.domain.model.account.AccountType
-import me.ash.reader.ui.ext.currentAccountType
+import me.ash.reader.infrastructure.di.ApplicationScope
 import javax.inject.Inject
 
 class RssService @Inject constructor(
-    @ApplicationContext
-    private val context: Context,
+    @ApplicationScope
+    private val coroutineScope: CoroutineScope,
+    accountService: AccountService,
     private val localRssService: LocalRssService,
     private val feverRssService: FeverRssService,
     private val googleReaderRssService: GoogleReaderRssService,
 ) {
 
-    fun get() = get(context.currentAccountType)
+    private val currentServiceFlow =
+        accountService.currentAccountFlow.map { it.type.id }.distinctUntilChanged()
+            .map { get(it) }
+            .stateIn(coroutineScope, SharingStarted.Eagerly, localRssService)
+
+    fun get() = currentServiceFlow.value
+
+    fun flow() = currentServiceFlow
 
     fun get(accountTypeId: Int) = when (accountTypeId) {
         AccountType.Local.id -> localRssService

@@ -4,14 +4,17 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.preferencesOf
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import me.ash.reader.infrastructure.datastore.get
+import me.ash.reader.infrastructure.datastore.getOrDefault
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.ui.ext.DataStoreKey
@@ -28,9 +31,18 @@ class SettingsProvider @Inject constructor(
     val settingsFlow: StateFlow<Settings> = _settingsFlow
     val settings: Settings get() = settingsFlow.value
 
-    val dataStore = context.dataStore
+    val dataStore = context.dataStore.data
 
-    val preferences get() = runBlocking { dataStore.data.first() }
+    val preferencesFlow: StateFlow<Preferences> =
+        dataStore.stateIn(
+            scope = coroutineScope,
+            started = SharingStarted.Eagerly,
+            initialValue = preferencesOf()
+        )
+
+    val preferences get() = preferencesFlow.value
+
+    inline fun <reified T> get(key: Preferences.Key<T>): T? = preferences[key]
 
     inline fun <reified T> get(key: String): T? = preferences.get(key)
 
@@ -40,8 +52,9 @@ class SettingsProvider @Inject constructor(
 
     init {
         coroutineScope.launch(ioDispatcher) {
-            dataStore.data.collect {
+            preferencesFlow.collect {
                 _settingsFlow.value = it.toSettings()
+                println("id: ${it.get<Int>(DataStoreKey.currentAccountId)}")
             }
         }
     }
@@ -134,24 +147,4 @@ class SettingsProvider @Inject constructor(
             content()
         }
     }
-}
-
-inline fun <reified T> Preferences.get(key: String): T? {
-    val dataStoreKey = DataStoreKey.keys[key] ?: return null
-    val key = if (dataStoreKey.type::class == T::class) {
-        dataStoreKey.key as Preferences.Key<T>
-    } else {
-        return null
-    }
-    return get(key)
-}
-
-inline fun <reified T> Preferences.getOrDefault(key: String, default: T): T {
-    val dataStoreKey = DataStoreKey.keys[key] ?: return default
-    val key = if (dataStoreKey.type::class == T::class) {
-        dataStoreKey.key as Preferences.Key<T>
-    } else {
-        return default
-    }
-    return get(key) ?: default
 }

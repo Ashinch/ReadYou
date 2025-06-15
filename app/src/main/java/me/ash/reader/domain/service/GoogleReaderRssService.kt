@@ -2,7 +2,6 @@ package me.ash.reader.domain.service
 
 import android.content.Context
 import android.util.Log
-import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
 import com.rometools.rome.feed.synd.SyndFeed
@@ -56,9 +55,18 @@ class GoogleReaderRssService @Inject constructor(
     @DefaultDispatcher
     private val defaultDispatcher: CoroutineDispatcher,
     private val workManager: WorkManager,
+    private val accountService: AccountService
 ) : AbstractRssRepository(
-    context, accountDao, articleDao, groupDao,
-    feedDao, workManager, rssHelper, notificationHelper, ioDispatcher, defaultDispatcher
+    accountDao,
+    articleDao,
+    groupDao,
+    feedDao,
+    workManager,
+    rssHelper,
+    notificationHelper,
+    ioDispatcher,
+    defaultDispatcher,
+    accountService
 ) {
 
     override val importSubscription: Boolean = false
@@ -68,7 +76,7 @@ class GoogleReaderRssService @Inject constructor(
     override val updateSubscription: Boolean = true
 
     private suspend fun getGoogleReaderAPI() =
-        GoogleReaderSecurityKey(accountDao.queryById(context.currentAccountId)!!.securityKey).run {
+        GoogleReaderSecurityKey(accountDao.queryById(accountService.getCurrentAccountId())!!.securityKey).run {
             GoogleReaderAPI.getInstance(
                 context = context,
                 serverUrl = serverUrl!!,
@@ -100,7 +108,7 @@ class GoogleReaderRssService @Inject constructor(
         feedLink: String, searchedFeed: SyndFeed, groupId: String,
         isNotification: Boolean, isFullContent: Boolean, isBrowser: Boolean,
     ) {
-        val accountId = context.currentAccountId
+        val accountId = accountService.getCurrentAccountId()
         val quickAdd = getGoogleReaderAPI().subscriptionQuickAdd(feedLink)
         val feedId = quickAdd.streamId?.ofFeedStreamIdToId()
         requireNotNull(feedId) {
@@ -134,7 +142,7 @@ class GoogleReaderRssService @Inject constructor(
     }
 
     override suspend fun addGroup(destFeed: Feed?, newGroupName: String): String {
-        val accountId = context.currentAccountId
+        val accountId = accountService.getCurrentAccountId()
         getGoogleReaderAPI().subscriptionEdit(
             destFeedId = destFeed?.id?.dollarLast(),
             destCategoryId = newGroupName
@@ -182,7 +190,7 @@ class GoogleReaderRssService @Inject constructor(
     }
 
     override suspend fun deleteGroup(group: Group, onlyDeleteNoStarred: Boolean?) {
-        feedDao.queryByGroupId(context.currentAccountId, group.id)
+        feedDao.queryByGroupId(accountService.getCurrentAccountId(), group.id)
             .forEach { deleteFeed(it) }
         getGoogleReaderAPI().disableTag(group.id.dollarLast())
         super.deleteGroup(group, false)
@@ -222,8 +230,8 @@ class GoogleReaderRssService @Inject constructor(
             try {
                 val preTime = System.currentTimeMillis()
                 val preDate = Date(preTime)
-                val accountId = context.currentAccountId
-                val account = accountDao.queryById(accountId)
+                val accountId = accountService.getCurrentAccountId()
+                val account = accountService.getCurrentAccount()
                 requireNotNull(account) {
                     "cannot find account"
                 }
@@ -472,7 +480,7 @@ class GoogleReaderRssService @Inject constructor(
         before: Date?,
         isUnread: Boolean,
     ) {
-        val accountId = context.currentAccountId
+        val accountId = accountService.getCurrentAccountId()
         val googleReaderAPI = getGoogleReaderAPI()
         val markList: List<String> = when {
             groupId != null -> {

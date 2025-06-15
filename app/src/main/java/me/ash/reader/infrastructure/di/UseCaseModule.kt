@@ -10,6 +10,7 @@ import me.ash.reader.domain.data.ArticlePagingListUseCase
 import me.ash.reader.domain.data.DiffMapHolder
 import me.ash.reader.domain.data.FilterStateUseCase
 import me.ash.reader.domain.data.GroupWithFeedsListUseCase
+import me.ash.reader.domain.service.AccountService
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.android.AndroidStringsHelper
 import me.ash.reader.infrastructure.preference.SettingsProvider
@@ -55,7 +56,8 @@ object UseCaseModule {
         settingsProvider: SettingsProvider,
         rssService: RssService,
         filterStateUseCase: FilterStateUseCase,
-        diffMapHolder: DiffMapHolder
+        diffMapHolder: DiffMapHolder,
+        accountService: AccountService
     ): GroupWithFeedsListUseCase {
         return GroupWithFeedsListUseCase(
             applicationScope,
@@ -63,7 +65,8 @@ object UseCaseModule {
             settingsProvider,
             rssService,
             filterStateUseCase,
-            diffMapHolder
+            diffMapHolder,
+            accountService
         )
     }
 }

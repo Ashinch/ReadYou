@@ -2,7 +2,6 @@ package me.ash.reader.domain.service
 
 import android.content.Context
 import android.util.Log
-import androidx.work.CoroutineWorker
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
 import com.rometools.rome.feed.synd.SyndFeed
@@ -54,9 +53,11 @@ class FeverRssService @Inject constructor(
     @DefaultDispatcher
     private val defaultDispatcher: CoroutineDispatcher,
     workManager: WorkManager,
+    private val accountService: AccountService,
 ) : AbstractRssRepository(
-    context, accountDao, articleDao, groupDao,
-    feedDao, workManager, rssHelper, notificationHelper, ioDispatcher, defaultDispatcher
+    accountDao, articleDao, groupDao,
+    feedDao, workManager, rssHelper, notificationHelper, ioDispatcher, defaultDispatcher,
+    accountService
 ) {
 
     override val importSubscription: Boolean = false
@@ -66,7 +67,7 @@ class FeverRssService @Inject constructor(
     override val updateSubscription: Boolean = false
 
     private suspend fun getFeverAPI() =
-        FeverSecurityKey(accountDao.queryById(context.currentAccountId)!!.securityKey).run {
+        FeverSecurityKey(accountService.getCurrentAccount().securityKey).run {
             FeverAPI.getInstance(
                 context = context,
                 serverUrl = serverUrl!!,
@@ -140,8 +141,8 @@ class FeverRssService @Inject constructor(
             try {
                 val preTime = System.currentTimeMillis()
                 val preDate = Date(preTime)
-                val accountId = context.currentAccountId
-                val account = accountDao.queryById(accountId)!!
+                val accountId = accountService.getCurrentAccountId()
+                val account = accountService.getCurrentAccount()
                 val feverAPI = getFeverAPI()
 
                 // 1. Fetch the Fever groups
@@ -312,7 +313,7 @@ class FeverRssService @Inject constructor(
             }
 
             else -> {
-                feedDao.queryAll(context.currentAccountId).forEach {
+                feedDao.queryAll(accountService.getCurrentAccountId()).forEach {
                     feverAPI.markFeed(
                         status = if (isUnread) FeverDTO.StatusEnum.Unread else FeverDTO.StatusEnum.Read,
                         id = it.id.dollarLast().toLong(),
