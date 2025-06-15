@@ -112,14 +112,11 @@ class DiffMapHolder @Inject constructor(
                 diffMap.filter { !it.value.isUnread }.map { it.key }.toSet()
             val markAsUnreadArticles =
                 diffMap.filter { it.value.isUnread }.map { it.key }.toSet()
-
+            clearDiffs()
             rssService.get()
                 .batchMarkAsRead(articleIds = markAsReadArticles, isUnread = false)
             rssService.get()
                 .batchMarkAsRead(articleIds = markAsUnreadArticles, isUnread = true)
-
-        }.invokeOnCompletion {
-            clearDiffs()
         }
     }
 
