@@ -119,7 +119,7 @@ class LocalRssService @Inject constructor(
             }
         }
         return FeedWithArticle(
-            feed = feed.apply { isNotification = feed.isNotification && articles.isNotEmpty() },
+            feed = feed.copy(isNotification = feed.isNotification && articles.isNotEmpty()),
             articles = articles
         )
     }

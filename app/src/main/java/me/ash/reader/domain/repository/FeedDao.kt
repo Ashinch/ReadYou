@@ -167,18 +167,18 @@ interface FeedDao {
 
     suspend fun insertOrUpdate(feeds: List<Feed>) {
         feeds.forEach {
-            val feed = queryById(it.id)
-            if (feed == null) {
+            val existingFeed = queryById(it.id)
+            if (existingFeed == null) {
                 insert(it)
             } else {
                 Log.i("RLog", "insertOrUpdate it: $it")
-                Log.i("RLog", "insertOrUpdate feed: $feed")
-                if (it.icon.isNullOrEmpty()) it.icon = feed.icon
-                // TODO: Consider migrating the fields to be nullable.
-                it.isNotification = feed.isNotification
-                it.isFullContent = feed.isFullContent
-                it.isBrowser = feed.isBrowser
-                update(it)
+                Log.i("RLog", "insertOrUpdate feed: $existingFeed")
+                val updatedFeed = it.copy(
+                    icon = if (it.icon.isNullOrEmpty()) existingFeed.icon else it.icon,
+                    isNotification = existingFeed.isNotification,
+                    isFullContent = existingFeed.isFullContent,
+                    isBrowser = existingFeed.isBrowser)
+                update(updatedFeed)
             }
         }
     }

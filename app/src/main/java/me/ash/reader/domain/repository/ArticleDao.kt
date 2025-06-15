@@ -4,6 +4,8 @@ import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.MapColumn
+import androidx.room.MapInfo
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RewriteQueriesToDropUnusedColumns
@@ -433,49 +435,44 @@ interface ArticleDao {
     @Transaction
     @Query(
         """
-        SELECT COUNT(*) AS important, a.feedId, b.groupId
-        FROM article AS a
-        LEFT JOIN feed AS b
-        ON a.feedId = b.id
-        WHERE a.isUnread = :isUnread
-        AND a.accountId = :accountId
-        GROUP BY a.feedId
+        SELECT feedId, COUNT(*) AS important
+        FROM article
+        WHERE isUnread = :isUnread
+        AND accountId = :accountId
+        GROUP BY feedId
         """
     )
     fun queryImportantCountWhenIsUnread(
         accountId: Int,
         isUnread: Boolean,
-    ): Flow<List<ImportantNum>>
+    ): Flow<Map<@MapColumn("feedId") String, @MapColumn("important") Int>>
 
     @Transaction
     @Query(
         """
-        SELECT COUNT(*) AS important, a.feedId, b.groupId 
-        FROM article AS a
-        LEFT JOIN feed AS b
-        ON a.feedId = b.id
-        WHERE a.isStarred = :isStarred
-        AND a.accountId = :accountId
-        GROUP BY a.feedId
+        SELECT feedId, COUNT(*) AS important
+        FROM article
+        WHERE isStarred = :isStarred
+        AND accountId = :accountId
+        GROUP BY feedId
         """
     )
     fun queryImportantCountWhenIsStarred(
         accountId: Int,
         isStarred: Boolean,
-    ): Flow<List<ImportantNum>>
+    ): Flow<Map<@MapColumn("feedId") String, @MapColumn("important") Int>>
 
     @Transaction
     @Query(
         """
-        SELECT COUNT(*) AS important, a.feedId, b.groupId 
-        FROM article AS a
-        LEFT JOIN feed AS b
-        ON a.feedId = b.id
-        WHERE a.accountId = :accountId
-        GROUP BY a.feedId
+        SELECT feedId, COUNT(*) AS important
+        FROM article
+        WHERE accountId = :accountId
+        GROUP BY feedId
         """
     )
-    fun queryImportantCountWhenIsAll(accountId: Int): Flow<List<ImportantNum>>
+    fun queryImportantCountWhenIsAll(accountId: Int):
+            Flow<Map<@MapColumn("feedId") String, @MapColumn("important") Int>>
 
 
     @Transaction

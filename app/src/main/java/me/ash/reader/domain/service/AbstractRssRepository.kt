@@ -200,7 +200,8 @@ abstract class AbstractRssRepository(
         groupDao.queryAllGroup(accountService.getCurrentAccountId()).flowOn(dispatcherIO)
 
     fun pullFeeds(): Flow<MutableList<GroupWithFeed>> =
-        groupDao.queryAllGroupWithFeedAsFlow(accountService.getCurrentAccountId()).flowOn(dispatcherIO)
+        groupDao.queryAllGroupWithFeedAsFlow(accountService.getCurrentAccountId())
+            .flowOn(dispatcherIO)
 
     fun pullArticles(
         groupId: String?,
@@ -276,17 +277,7 @@ abstract class AbstractRssRepository(
             isStarred -> articleDao.queryImportantCountWhenIsStarred(accountId, true)
             isUnread -> articleDao.queryImportantCountWhenIsUnread(accountId, true)
             else -> articleDao.queryImportantCountWhenIsAll(accountId)
-        }.mapLatest {
-            mapOf(
-                // Groups
-                *(it.groupBy { it.groupId }.map { it.key to it.value.sumOf { it.important } }
-                    .toTypedArray()),
-                // Feeds
-                *(it.map { it.feedId to it.important }.toTypedArray()),
-                // All summary
-                "sum" to it.sumOf { it.important }
-            )
-        }.flowOn(dispatcherDefault)
+        }
     }
 
     suspend fun findFeedById(id: String): Feed? = feedDao.queryById(id)
@@ -332,7 +323,11 @@ abstract class AbstractRssRepository(
 
     open suspend fun deleteFeed(feed: Feed, onlyDeleteNoStarred: Boolean? = false) {
         if (onlyDeleteNoStarred == true
-            && articleDao.countByFeedIdWhenIsStarred(accountService.getCurrentAccountId(), feed.id, true) > 0
+            && articleDao.countByFeedIdWhenIsStarred(
+                accountService.getCurrentAccountId(),
+                feed.id,
+                true
+            ) > 0
         ) {
             return
         }
@@ -365,7 +360,11 @@ abstract class AbstractRssRepository(
     }
 
     suspend fun groupParseFullContent(group: Group, isFullContent: Boolean) {
-        feedDao.updateIsFullContentByGroupId(accountService.getCurrentAccountId(), group.id, isFullContent)
+        feedDao.updateIsFullContentByGroupId(
+            accountService.getCurrentAccountId(),
+            group.id,
+            isFullContent
+        )
     }
 
     suspend fun groupOpenInBrowser(group: Group, isBrowser: Boolean) {
@@ -373,11 +372,19 @@ abstract class AbstractRssRepository(
     }
 
     suspend fun groupAllowNotification(group: Group, isNotification: Boolean) {
-        feedDao.updateIsNotificationByGroupId(accountService.getCurrentAccountId(), group.id, isNotification)
+        feedDao.updateIsNotificationByGroupId(
+            accountService.getCurrentAccountId(),
+            group.id,
+            isNotification
+        )
     }
 
     suspend fun groupMoveToTargetGroup(group: Group, targetGroup: Group) {
-        feedDao.updateTargetGroupIdByGroupId(accountService.getCurrentAccountId(), group.id, targetGroup.id)
+        feedDao.updateTargetGroupIdByGroupId(
+            accountService.getCurrentAccountId(),
+            group.id,
+            targetGroup.id
+        )
     }
 
     fun searchArticles(

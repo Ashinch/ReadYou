@@ -95,7 +95,6 @@ class FeedsViewModel @Inject constructor(
         viewModelScope.launch {
             filterStateUseCase.filterStateFlow.mapLatest { it.filter }.distinctUntilChanged()
                 .collect {
-                    Log.d(TAG, "Recollect!")
                     currentJob?.cancel()
                     currentJob = when (it) {
                         Filter.Unread -> pullUnreadFeeds()
@@ -113,7 +112,7 @@ class FeedsViewModel @Inject constructor(
         return viewModelScope.launch {
             launch {
                 articleCountMapFlow.mapLatest {
-                    val sum = it["sum"] ?: 0
+                    val sum = it.values.sum()
                     androidStringsHelper.getQuantityString(R.plurals.all_desc, sum, sum)
                 }.flowOn(defaultDispatcher).collect { text ->
                     _feedsUiState.update { it.copy(importantSum = text) }
@@ -127,7 +126,7 @@ class FeedsViewModel @Inject constructor(
 
         return viewModelScope.launch {
             starredCountMap.mapLatest {
-                val sum = it["sum"] ?: 0
+                val sum = it.values.sum()
                 androidStringsHelper.getQuantityString(R.plurals.starred_desc, sum, sum)
             }.flowOn(defaultDispatcher).collect { text ->
                 _feedsUiState.update { it.copy(importantSum = text) }
@@ -144,7 +143,7 @@ class FeedsViewModel @Inject constructor(
                 .combine(
                     unreadCountMapFlow
                 ) { diffMap, unreadCountMap ->
-                    val sum = unreadCountMap["sum"] ?: 0
+                    val sum = unreadCountMap.values.sum()
                     val combinedSum =
                         sum + diffMap.values.sumOf { if (it.isUnread) 1.toInt() else -1 } // KT-46360
                     androidStringsHelper.getQuantityString(

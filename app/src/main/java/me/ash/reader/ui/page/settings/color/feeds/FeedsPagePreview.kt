@@ -134,9 +134,8 @@ fun generateFeedPreview(): Feed =
         accountId = 0,
         groupId = "",
         url = "",
-    ).apply {
         important = 100
-    }
+    )
 
 @Stable
 @Composable

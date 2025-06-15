@@ -1,5 +1,7 @@
 package me.ash.reader.domain.data
 
+import androidx.compose.ui.util.fastFilteredMap
+import androidx.compose.ui.util.fastMap
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -10,11 +12,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.domain.model.group.GroupWithFeed
@@ -23,7 +22,6 @@ import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.preference.SettingsProvider
-import me.ash.reader.ui.ext.DataStoreKey.Companion.currentAccountId
 import me.ash.reader.ui.ext.getDefaultGroupId
 import javax.inject.Inject
 
@@ -78,22 +76,14 @@ class GroupWithFeedsListUseCase @Inject constructor(
 
         return applicationScope.launch {
             feedsFlow.combine(articleCountMapFlow) { groupWithFeedsList, articleCountMap ->
-                val result = mutableListOf<GroupWithFeed>()
-                for (groupItem in groupWithFeedsList) {
-
-                    val groupCount = articleCountMap[groupItem.group.id] ?: 0
-                    groupItem.group.important = groupCount
-                    groupItem.group.feeds = groupItem.feeds.size
-
-                    for (feed in groupItem.feeds) {
-                        feed.important = articleCountMap[feed.id] ?: 0
+                groupWithFeedsList.fastFilteredMap(predicate = {
+                    it.group.id != defaultGroupId || it.feeds.isNotEmpty()
+                }, transform = {
+                    val feedList = it.feeds.map { feed ->
+                        feed.copy(important = articleCountMap[feed.id] ?: 0)
                     }
-
-                    if (groupItem.group.id != defaultGroupId || groupItem.feeds.isNotEmpty()) {
-                        result.add(groupItem)
-                    }
-                }
-                result
+                    it.copy(feeds = feedList.toMutableList())
+                })
             }.flowOn(ioDispatcher).collect { _groupWithFeedsListFlow.value = it }
 
         }
@@ -107,27 +97,21 @@ class GroupWithFeedsListUseCase @Inject constructor(
             feedsFlow.combine(starredCountMap) { groupWithFeedsList, starredCountMap ->
                 val result = mutableListOf<GroupWithFeed>()
                 for (groupItem in groupWithFeedsList) {
-                    val groupItem = groupItem.copy()
 
-                    val groupCount = starredCountMap[groupItem.group.id] ?: 0
+                    val feedList = groupItem.feeds.fastMap { feed ->
+                        val feedCount = (starredCountMap[feed.id] ?: 0)
+                        feed.copy(important = feedCount)
+                    }
 
-                    if (!hideEmptyGroups) {
-                        groupItem.feeds.forEach { feed ->
-                            val feedCount = (starredCountMap[feed.id] ?: 0)
-                            feed.important = feedCount
+                    val groupItem = if (hideEmptyGroups) {
+                        val filteredFeeds = feedList.filterNot { it.important == 0 }
+                        if (filteredFeeds.isEmpty()) {
+                            continue
+                        } else {
+                            groupItem.copy(feeds = filteredFeeds.toMutableList())
                         }
-                        groupItem.group.feeds = groupItem.feeds.size
-                        groupItem.group.important = groupCount
-                    } else if (groupCount > 0) {
-                        groupItem.feeds.removeAll { feed ->
-                            val feedCount = (starredCountMap[feed.id] ?: 0)
-                            if (feedCount != 0) feed.important = feedCount
-                            return@removeAll feedCount == 0
-                        }
-                        groupItem.group.feeds = groupItem.feeds.size
-                        groupItem.group.important = groupCount
                     } else {
-                        continue
+                        groupItem.copy(feeds = feedList.toMutableList())
                     }
 
                     if (groupItem.group.id != defaultGroupId || groupItem.feeds.isNotEmpty()) {
@@ -155,48 +139,31 @@ class GroupWithFeedsListUseCase @Inject constructor(
                 val readDiffs = diffMap.values.filterNot { it.isUnread }
 
                 for (groupItem in groupWithFeedsList) {
-                    val groupItem = groupItem.copy()
 
-                    val groupId = groupItem.group.id
-
-                    val groupCount = unreadCountMap[groupId] ?: 0
-                    val combinedGroupCount =
-                        groupCount + unreadDiffs.count { it.groupId == groupId } - readDiffs.count { it.groupId == groupId }
-
-                    if (!hideEmptyGroups) {
-                        for (feed in groupItem.feeds) {
-                            val feedId = feed.id
-                            val feedCount = unreadCountMap[feedId] ?: 0
-                            val combinedFeedCount =
-                                feedCount + unreadDiffs.count { it.feedId == feedId } - readDiffs.count { it.feedId == feedId }
-                            check(combinedFeedCount >= 0)
-                            feed.important = combinedFeedCount
-                        }
-
-                        groupItem.group.feeds = groupItem.feeds.size
-                        groupItem.group.important = combinedGroupCount
-                    } else if (combinedGroupCount > 0) {
-                        groupItem.feeds.removeAll { feed ->
-                            val feedId = feed.id
-                            val feedCount = unreadCountMap[feedId] ?: 0
-                            val combinedFeedCount =
-                                feedCount + unreadDiffs.count { it.feedId == feedId } - readDiffs.count { it.feedId == feedId }
-                            feed.important = combinedFeedCount
-                            check(combinedFeedCount >= 0)
-                            if (combinedFeedCount > 0) {
-                                feed.important = combinedFeedCount
-                            }
-                            combinedFeedCount == 0
-                        }
-
-                        groupItem.group.important = combinedGroupCount
-                        groupItem.group.feeds = groupItem.feeds.size
-                    } else {
-                        continue
+                    val feedList = groupItem.feeds.map { feed ->
+                        val feedId = feed.id
+                        val feedCount = unreadCountMap[feedId] ?: 0
+                        val combinedFeedCount =
+                            feedCount + unreadDiffs.count { it.feedId == feedId } - readDiffs.count { it.feedId == feedId }
+                        check(combinedFeedCount >= 0)
+                        feed.copy(important = combinedFeedCount)
                     }
+
+                    val groupItem = if (hideEmptyGroups) {
+                        val filteredFeeds = feedList.filterNot { it.important == 0 }
+                        if (filteredFeeds.isEmpty()) {
+                            continue
+                        } else {
+                            groupItem.copy(feeds = filteredFeeds.toMutableList())
+                        }
+                    } else {
+                        groupItem.copy(feeds = feedList.toMutableList())
+                    }
+
                     if (groupItem.group.id != defaultGroupId || groupItem.feeds.isNotEmpty()) {
                         result.add(groupItem)
                     }
+
                 }
                 result
             }.debounce(200L).flowOn(ioDispatcher)
