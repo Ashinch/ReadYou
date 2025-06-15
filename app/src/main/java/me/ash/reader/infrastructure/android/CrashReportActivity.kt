@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,6 +43,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dagger.hilt.android.AndroidEntryPoint
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalDarkTheme
 import me.ash.reader.infrastructure.preference.LocalOpenLink
@@ -52,7 +54,8 @@ import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.theme.AppTheme
 import javax.inject.Inject
 
-class CrashReportActivity : ComponentActivity() {
+@AndroidEntryPoint
+class CrashReportActivity : AppCompatActivity() {
     @Inject
     lateinit var settingsProvider: SettingsProvider
 
