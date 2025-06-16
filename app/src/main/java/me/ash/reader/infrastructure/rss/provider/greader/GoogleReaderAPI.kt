@@ -137,7 +137,6 @@ class GoogleReaderAPI private constructor(
 
     private val retryConfig = RetryConfig(
         onRetry = {
-            it.printStackTrace()
             clearAuthData()
         },
     )
