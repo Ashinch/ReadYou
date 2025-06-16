@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import me.ash.reader.domain.model.account.AccountType
@@ -20,7 +21,8 @@ class RssService @Inject constructor(
 ) {
 
     private val currentServiceFlow =
-        accountService.currentAccountFlow.map { it.type.id }.distinctUntilChanged()
+        accountService.currentAccountFlow.mapNotNull { it }.map { it.type.id }
+            .distinctUntilChanged()
             .map { get(it) }
             .stateIn(coroutineScope, SharingStarted.Eagerly, localRssService)
 

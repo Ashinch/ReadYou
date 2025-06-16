@@ -9,10 +9,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.account.AccountType
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.service.AccountService
@@ -45,24 +48,63 @@ class DiffMapHolder @Inject constructor(
         applicationScope, SharingStarted.Eagerly, emptyMap()
     )
 
-    val shouldSyncWithRemote get() = accountService.getCurrentAccount().type != AccountType.Local
+    val shouldSyncWithRemote get() = currentAccount?.type != AccountType.Local
 
     private val gson = Gson()
 
-    val cacheDir get() = context.cacheDir.resolve(accountService.getCurrentAccountId().toString())
+    private val cacheDir = context.cacheDir.resolve("diff")
+    private var userCacheDir = cacheDir
 
-    private val cacheFile: File get() = cacheDir.resolve("diff_map.json")
+    private var currentAccount: Account? = null
+
+    private val cacheFile: File get() = userCacheDir.resolve("diff_map.json")
+
+    var dbJob: Job? = null
+    var remoteJob: Job? = null
 
     init {
+        applicationScope.launch {
+            accountService.currentAccountFlow.mapNotNull { it }.collect { account ->
+                val previousAccount = currentAccount
+                if (previousAccount != null && previousAccount != account) {
+                    cleanup(previousAccount)
+                }
+                currentAccount = account
+                init(account)
+            }
+        }
+    }
+
+    private fun init(account: Account) {
+        userCacheDir = cacheDir.resolve(account.id.toString())
         commitDiffsFromCache()
-        applicationScope.launch(ioDispatcher) {
+        commitOnChange()
+        if (account.type != AccountType.Local) {
+            syncOnChange()
+        }
+    }
+
+    private fun cleanup(account: Account) {
+        dbJob?.cancel()
+        remoteJob?.cancel()
+        writeDiffsToCache()
+        diffMap.clear()
+        pendingSyncDiffs.clear()
+        syncedDiffs.clear()
+    }
+
+    private fun commitOnChange() {
+        dbJob = applicationScope.launch(ioDispatcher) {
             diffMapSnapshotFlow.debounce(2_000).collect {
                 if (it.isNotEmpty()) {
                     writeDiffsToCache()
                 }
             }
         }
-        applicationScope.launch(ioDispatcher) {
+    }
+
+    private fun syncOnChange() {
+        remoteJob = applicationScope.launch(ioDispatcher) {
             pendingSyncDiffsSnapshotFlow.debounce(2_000).collect {
                 syncDiffsWithRemote(it)
             }
@@ -161,7 +203,7 @@ class DiffMapHolder @Inject constructor(
     private fun writeDiffsToCache() {
         applicationScope.launch(ioDispatcher) {
             val tmpJson = gson.toJson(diffMap)
-            cacheDir.mkdirs()
+            userCacheDir.mkdirs()
             cacheFile.createNewFile()
             if (cacheFile.exists() && cacheFile.canWrite()) {
                 cacheFile.writeText(tmpJson)

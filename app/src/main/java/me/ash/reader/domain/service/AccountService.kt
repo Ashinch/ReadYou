@@ -7,8 +7,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.runBlocking
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.account.AccountType
@@ -41,24 +43,26 @@ class AccountService @Inject constructor(
     private val accountIdKey = intPreferencesKey(DataStoreKey.currentAccountId)
 
     val currentAccountIdFlow =
-        settingsProvider.preferencesFlow.map { it[accountIdKey] ?: 1 }
-            .stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = 1)
+        settingsProvider.preferencesFlow.map { it[accountIdKey] }
+            .stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = null)
 
     val currentAccountFlow = currentAccountIdFlow.map {
-        accountDao.queryById(it)!!
+        it?.let { id -> accountDao.queryById(id) }
     }.stateIn(
         scope = coroutineScope,
         SharingStarted.Eagerly,
-        initialValue = getDefaultAccount()
+        initialValue = null
     )
 
     fun getAccounts(): Flow<List<Account>> = accountDao.queryAllAsFlow()
 
     fun getAccountById(accountId: Int): Flow<Account?> = accountDao.queryAccount(accountId)
 
-    fun getCurrentAccount(): Account = currentAccountFlow.value
+    fun getCurrentAccount(): Account =
+        runBlocking { currentAccountFlow.first { it != null } as Account }
 
-    fun getCurrentAccountId(): Int = currentAccountIdFlow.value
+    fun getCurrentAccountId(): Int =
+        runBlocking { currentAccountIdFlow.first { it != null } as Int }
 
     suspend fun isNoAccount(): Boolean = accountDao.queryAll().isEmpty()
 
