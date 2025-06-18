@@ -508,7 +508,7 @@ class GoogleReaderRssService @Inject constructor(
                                 author = it.author,
                                 rawDescription = it.summary?.content ?: "",
                                 shortDescription = Readability
-                                    .parseToText(it.summary?.content, findArticleURL(it)).take(110),
+                                    .parseToText(it.summary?.content, findArticleURL(it)).take(280),
 //                        fullContent = it.summary?.content ?: "",
                                 img = rssHelper.findThumbnail(it.summary?.content),
                                 link = findArticleURL(it),
