@@ -3,8 +3,8 @@
     <string name="read_you" translatable="false">Read You</string>
     <string name="all">All</string>
     <plurals name="all_desc">
-        <item quantity="one">%1$d Archived item</item>
-        <item quantity="other">%1$d Archived items</item>
+        <item quantity="one">%1$d archived item</item>
+        <item quantity="other">%1$d archived items</item>
     </plurals>
     <string name="unread">Unread</string>
     <plurals name="unread_desc">
@@ -102,7 +102,7 @@
     <string name="in_coding">In progress</string>
     <string name="coming_soon">Coming soon</string>
     <string name="accounts">Accounts</string>
-    <string name="accounts_desc">Local, FreshRSS</string>
+    <string name="accounts_desc">Local, services, self-hosted</string>
     <string name="color_and_style">Color &amp; style</string>
     <string name="color_and_style_desc">Theme, color style, font size</string>
     <string name="interaction">Usage preferences</string>
