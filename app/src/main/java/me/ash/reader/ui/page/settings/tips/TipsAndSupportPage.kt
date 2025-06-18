@@ -105,7 +105,7 @@ fun TipsAndSupportPage(
 
     val morphProgress = remember { Animatable(0f) }
 
-    val polygonShape = ShapeGacha.random()
+    val polygonShape = remember { ShapeGacha.random() }
     val circle = MaterialShapes.Circle
     val morph = Morph(polygonShape, circle)
 
@@ -132,7 +132,7 @@ fun TipsAndSupportPage(
         )
     }
 
-    val logoBGColor = colorGacha.random()
+    val logoBGColor = remember { colorGacha.random() }
 
 
     LaunchedEffect(Unit) {

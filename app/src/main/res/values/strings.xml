@@ -105,8 +105,8 @@
     <string name="accounts_desc">Local, FreshRSS</string>
     <string name="color_and_style">Color &amp; style</string>
     <string name="color_and_style_desc">Theme, color style, font size</string>
-    <string name="interaction">Interaction</string>
-    <string name="interaction_desc">Initial page, haptic feedback</string>
+    <string name="interaction">Usage preferences</string>
+    <string name="interaction_desc">Startup page, gestures</string>
     <string name="languages">Languages</string>
     <string name="help_translate">Help translate</string>
     <string name="translatable_url" translatable="false">https://hosted.weblate.org/projects/readyou/</string>
@@ -125,12 +125,12 @@
     <string name="indonesian" translatable="false">Bahasa Indonesia</string>
     <string name="chinese_traditional" translatable="false">繁體中文</string>
     <string name="tips_and_support">Tips &amp; support</string>
-    <string name="tips_and_support_desc">About, open source licenses</string>
+    <string name="tips_and_support_desc">About, sponsor, open source licenses</string>
     <string name="welcome">Welcome</string>
     <string name="tos_tips">Please read and agree to Read You\'s terms of service and privacy policy to continue.</string>
     <string name="browse_tos_tips">Browse the <i><u>terms of service and privacy policy</u></i></string>
     <string name="terms_of_service">Terms of service</string>
-    <string name="tos_content"><h5> Privacy policy </h5> <br/> <p> We take your privacy very seriously. </p> <br/> <p> <b>Read You</b> does not collect any user data, and all sensitive information (passwords and other account information) is stored securely in the local application database on your device. </p> <br/> <p> <b>Read You</b> will use the following permissions to provide you with the service. </p> <br/> <p> - Access network permission (to access online content as you specify) </p> <p> - Get network status permission (to determine if the device currently has available network conditions) </p> <p> - Background service permission (to automatically sync your favorites for you on a regular basis) </p> <br/> <br/> <h5> Third-party services </h5> <br/> <p> This policy does not apply to third-party services that you use with <b>Read You</b>. You can review the privacy policies of the third-party services you use on their websites </p> <br/> <br/> <h5> Disclaimers </h5> <br/> <p> <b>Read You</b> is a content collection tool only. Your use of <b>Read You</b> is subject to the laws and regulations of your country and region, and any liability arising from your actions will be borne by you personally. </p> <br/> <br/> <h5> Open source license </h5> <br/> <p> <b>Read You</b> is an open source project under the GNU GPL 3.0 Open Source License[1], which allows you to use, reference, and modify the source code of <b>Read You</b> free of charge, but does not allow the modified and derived code to be distributed and sold as closed-source commercial software. For details, please see the full GNU GPL 3.0 Open Source License[2]. </p> <br/> <br/> <h5> Appendix </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
+    <string name="tos_content"><h5> Privacy policy </h5> <br /> <p> We take your privacy very seriously. </p> <br /> <p> <b>Read You</b> does not collect any user data, and all sensitive information (passwords and other account information) is stored securely in the local application database on your device. </p> <br /> <p> <b>Read You</b> will use the following permissions to provide you with the service. </p> <br /> <p> - Access network permission (to access online content as you specify) </p> <p> - Get network status permission (to determine if the device currently has available network conditions) </p> <p> - Background service permission (to automatically sync your favorites for you on a regular basis) </p> <br /> <br /> <h5> Third-party services </h5> <br /> <p> This policy does not apply to third-party services that you use with <b>Read You</b>. You can review the privacy policies of the third-party services you use on their websites </p> <br /> <br /> <h5> Disclaimers </h5> <br /> <p> <b>Read You</b> is a content collection tool only. Your use of <b>Read You</b> is subject to the laws and regulations of your country and region, and any liability arising from your actions will be borne by you personally. </p> <br /> <br /> <h5> Open source license </h5> <br /> <p> <b>Read You</b> is an open source project under the GNU GPL 3.0 Open Source License[1], which allows you to use, reference, and modify the source code of <b>Read You</b> free of charge, but does not allow the modified and derived code to be distributed and sold as closed-source commercial software. For details, please see the full GNU GPL 3.0 Open Source License[2]. </p> <br /> <br /> <h5> Appendix </h5> <br /> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">Agree</string>
     <string name="wallpaper_colors">Wallpaper colors</string>
     <string name="no_palettes">No palettes</string>
@@ -168,8 +168,8 @@
     <string name="rate_limit">The request rate is limited</string>
     <string name="help">Help</string>
     <string name="on_start">On start</string>
-    <string name="initial_page">Initial page</string>
-    <string name="initial_filter">Initial filter</string>
+    <string name="initial_page">Startup page</string>
+    <string name="initial_filter">Default filter</string>
     <string name="preview_article_title">The novel "Lord of the Mysteries" has finally come to an end</string>
     <string name="preview_article_desc">The Fool is the eighth and final volume of the Lord of the Mysteries series
         written by Cuttlefish That Loves Diving.
