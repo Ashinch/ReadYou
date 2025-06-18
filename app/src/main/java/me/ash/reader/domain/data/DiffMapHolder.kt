@@ -8,13 +8,18 @@ import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.withContext
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.account.AccountType
 import me.ash.reader.domain.model.article.ArticleWithFeed
@@ -106,7 +111,9 @@ class DiffMapHolder @Inject constructor(
     private fun syncOnChange() {
         remoteJob = applicationScope.launch(ioDispatcher) {
             pendingSyncDiffsSnapshotFlow.debounce(2_000).collect {
-                syncDiffsWithRemote(it)
+                withContext(ioDispatcher) {
+                    syncDiffsWithRemote(it)
+                }
             }
         }
     }
@@ -211,26 +218,36 @@ class DiffMapHolder @Inject constructor(
         }
     }
 
-    private fun syncDiffsWithRemote(diffs: Map<String, Diff>) {
-        applicationScope.launch(ioDispatcher) {
-            if (!shouldSyncWithRemote) return@launch
-            if (diffs.isEmpty()) return@launch
-            val toBeSync = diffs
-            val markAsReadArticles =
-                toBeSync.filter { !it.value.isUnread }.map { it.key }.toSet()
-            val markAsUnreadArticles =
-                toBeSync.filter { it.value.isUnread }.map { it.key }.toSet()
+    private suspend fun syncDiffsWithRemote(diffs: Map<String, Diff>) {
+        if (!shouldSyncWithRemote) return
+        if (diffs.isEmpty()) return
+        val toBeSync = diffs
+        val markAsReadArticles =
+            toBeSync.filter { !it.value.isUnread }.map { it.key }.toSet()
+        val markAsUnreadArticles =
+            toBeSync.filter { it.value.isUnread }.map { it.key }.toSet()
 
-            val rssService = rssService.get()
+        val rssService = rssService.get()
 
-            val read = rssService.syncReadStatus(articleIds = markAsReadArticles, isUnread = false)
-            val unread =
-                rssService.syncReadStatus(articleIds = markAsUnreadArticles, isUnread = true)
-
-            val synced = read + unread
-            pendingSyncDiffs -= synced
-            syncedDiffs += diffs.filter { synced.contains(it.key) }
+        val synced = supervisorScope {
+            val read = async {
+                rssService.syncReadStatus(
+                    articleIds = markAsReadArticles,
+                    isUnread = false
+                )
+            }
+            val unread = async {
+                rssService.syncReadStatus(
+                    articleIds = markAsUnreadArticles,
+                    isUnread = true
+                )
+            }
+            runCatching { read.await() }.getOrElse { emptySet() } +
+                    runCatching { unread.await() }.getOrElse { emptySet() }
         }
+
+        pendingSyncDiffs -= synced
+        syncedDiffs += diffs.filter { synced.contains(it.key) }
     }
 
     private fun commitDiffsFromCache() {
