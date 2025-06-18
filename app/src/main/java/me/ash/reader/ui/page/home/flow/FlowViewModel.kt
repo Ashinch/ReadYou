@@ -32,6 +32,7 @@ import me.ash.reader.domain.data.FilterState
 import me.ash.reader.domain.data.FilterStateUseCase
 import me.ash.reader.domain.data.GroupWithFeedsListUseCase
 import me.ash.reader.domain.data.PagerData
+import me.ash.reader.domain.service.GoogleReaderRssService
 import me.ash.reader.domain.service.LocalRssService
 import me.ash.reader.domain.service.SyncWorker
 import me.ash.reader.infrastructure.di.ApplicationScope
@@ -192,7 +193,7 @@ class FlowViewModel @Inject constructor(
             val isSyncing = isSyncingFlow.value
             if (!isSyncing) {
                 isSyncingFlow.value = true
-                delay(1000L)
+                delay(500L)
                 if (_isSyncingFlow.value == false) {
                     isSyncingFlow.value = false
                 }
@@ -203,6 +204,11 @@ class FlowViewModel @Inject constructor(
             val service = rssService.get()
             when (service) {
                 is LocalRssService -> service.doSyncOneTime(
+                    feedId = filterState.feed?.id,
+                    groupId = filterState.group?.id
+                )
+
+                is GoogleReaderRssService -> service.doSyncOneTime(
                     feedId = filterState.feed?.id,
                     groupId = filterState.group?.id
                 )

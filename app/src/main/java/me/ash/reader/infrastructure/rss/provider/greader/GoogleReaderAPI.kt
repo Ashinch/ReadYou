@@ -32,13 +32,14 @@ class GoogleReaderAPI private constructor(
     clientCertificateAlias: String? = null,
 ) : ProviderAPI(context, clientCertificateAlias) {
 
-    enum class Stream(val tag: String) {
-        ALL_ITEMS("user/-/state/com.google/reading-list"),
-        READ("user/-/state/com.google/read"),
-        STARRED("user/-/state/com.google/starred"),
-        LIKE("user/-/state/com.google/like"),
-        BROADCAST("user/-/state/com.google/broadcast"),
-        ;
+    sealed class Stream(val tag: String) {
+        data object AllItems : Stream("user/-/state/com.google/reading-list")
+        data object Read : Stream("user/-/state/com.google/read")
+        data object Starred : Stream("user/-/state/com.google/starred")
+        data object Like : Stream("user/-/state/com.google/like")
+        data object Broadcast : Stream("user/-/state/com.google/broadcast")
+        data class Feed(val feedId: String) : Stream("feed/$feedId")
+        data class Category(val categoryId: String) : Stream("user/-/label/$categoryId")
     }
 
     private data class AuthData(
@@ -137,6 +138,7 @@ class GoogleReaderAPI private constructor(
 
     private val retryConfig = RetryConfig(
         onRetry = {
+            it.printStackTrace()
             clearAuthData()
         },
     )
@@ -246,9 +248,45 @@ class GoogleReaderAPI private constructor(
         retryableGetRequest<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
             params = mutableListOf<Pair<String, String>>().apply {
-                add(Pair("s", Stream.READ.tag))
+                add(Pair("s", Stream.Read.tag))
                 add(Pair("ot", since.toString()))
                 limit?.let { add(Pair("n", limit)) }
+                continuationId?.let { add(Pair("c", continuationId)) }
+            }
+        )
+
+    suspend fun getItemIdsForFeed(
+        feedId: String,
+        filterRead: Boolean = false,
+        since: Long? = null,
+        limit: String? = MAXIMUM_ITEMS_LIMIT,
+        continuationId: String? = null,
+    ): GoogleReaderDTO.ItemIds =
+        retryableGetRequest<GoogleReaderDTO.ItemIds>(
+            query = "reader/api/0/stream/items/ids",
+            params = mutableListOf<Pair<String, String>>().apply {
+                add(Pair("s", Stream.Feed(feedId).tag))
+                if (filterRead) add(Pair("xt", Stream.Read.tag))
+                limit?.let { add(Pair("n", limit)) }
+                since?.let { add(Pair("ot", since.toString())) }
+                continuationId?.let { add(Pair("c", continuationId)) }
+            }
+        )
+
+    suspend fun getItemIdsForCategory(
+        categoryId: String,
+        filterRead: Boolean = false,
+        since: Long? = null,
+        limit: String? = MAXIMUM_ITEMS_LIMIT,
+        continuationId: String? = null,
+    ): GoogleReaderDTO.ItemIds =
+        retryableGetRequest<GoogleReaderDTO.ItemIds>(
+            query = "reader/api/0/stream/items/ids",
+            params = mutableListOf<Pair<String, String>>().apply {
+                add(Pair("s", Stream.Category(categoryId).tag))
+                if (filterRead) add(Pair("xt", Stream.Read.tag))
+                limit?.let { add(Pair("n", limit)) }
+                since?.let { add(Pair("ot", since.toString())) }
                 continuationId?.let { add(Pair("c", continuationId)) }
             }
         )
@@ -261,8 +299,8 @@ class GoogleReaderAPI private constructor(
         retryableGetRequest<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
             params = mutableListOf<Pair<String, String>>().apply {
-                add(Pair("s", Stream.ALL_ITEMS.tag))
-                add(Pair("xt", Stream.READ.tag))
+                add(Pair("s", Stream.AllItems.tag))
+                add(Pair("xt", Stream.Read.tag))
                 limit?.let { add(Pair("n", limit)) }
                 since?.let { add(Pair("ot", since.toString())) }
                 continuationId?.let { add(Pair("c", continuationId)) }
@@ -277,7 +315,7 @@ class GoogleReaderAPI private constructor(
         retryableGetRequest<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
             params = mutableListOf<Pair<String, String>>().apply {
-                add(Pair("s", Stream.STARRED.tag))
+                add(Pair("s", Stream.Starred.tag))
                 limit?.let { add(Pair("n", limit)) }
                 since?.let { add(Pair("ot", since.toString())) }
                 continuationId?.let { add(Pair("c", continuationId)) }
@@ -330,15 +368,19 @@ class GoogleReaderAPI private constructor(
         )
 
     suspend fun subscriptionEdit(
-        action: String = "edit", destFeedId: String? = null, destCategoryId: String? = null,
-        originCategoryId: String? = null, destFeedName: String? = null,
+        action: String = "edit",
+        destFeedId: String? = null,
+        destCategoryId: String? = null,
+        originCategoryId: String? = null,
+        destFeedName: String? = null,
     ): String = retryablePostRequest<String>(
         query = "reader/api/0/subscription/edit",
         form = mutableListOf(Pair("ac", action)).apply {
             destFeedId?.let { add(Pair("s", it.ofFeedIdToStreamId())) }
             destCategoryId?.let { add(Pair("a", it.ofCategoryIdToStreamId())) }
             originCategoryId?.let { add(Pair("r", it.ofCategoryIdToStreamId())) }
-            destFeedName?.takeIf { it.isNotBlank() }?.let { add(Pair("t", destFeedName)) }
+            destFeedName?.takeIf { it.isNotBlank() }
+                ?.let { add(Pair("t", destFeedName)) }
         }
     )
 
@@ -399,7 +441,8 @@ class GoogleReaderAPI private constructor(
             return replace(categoryStreamIdRegex, "")
         }
 
-        private val instances: ConcurrentHashMap<String, GoogleReaderAPI> = ConcurrentHashMap()
+        private val instances: ConcurrentHashMap<String, GoogleReaderAPI> =
+            ConcurrentHashMap()
 
         fun getInstance(
             context: Context,

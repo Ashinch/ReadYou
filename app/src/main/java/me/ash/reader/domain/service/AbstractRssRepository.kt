@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.rometools.rome.feed.synd.SyndFeed
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -177,8 +178,11 @@ abstract class AbstractRssRepository(
         SyncWorker.cancelOneTimeWork(workManager)
     }
 
-    fun doSyncOneTime() {
-        SyncWorker.enqueueOneTimeWork(workManager)
+    open fun doSyncOneTime(feedId: String? = null, groupId: String? = null) {
+        SyncWorker.enqueueOneTimeWork(
+            workManager,
+            workDataOf("feedId" to feedId, "groupId" to groupId)
+        )
     }
 
     suspend fun initSync() {

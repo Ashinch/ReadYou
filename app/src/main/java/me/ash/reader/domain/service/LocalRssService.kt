@@ -56,13 +56,6 @@ class LocalRssService @Inject constructor(
     accountService
 ) {
 
-    fun doSyncOneTime(feedId: String?, groupId: String?) {
-        SyncWorker.enqueueOneTimeWork(
-            workManager,
-            workDataOf("feedId" to feedId, "groupId" to groupId)
-        )
-    }
-
     override suspend fun sync(feedId: String?, groupId: String?) = supervisorScope {
         val preTime = System.currentTimeMillis()
         val preDate = Date(preTime)

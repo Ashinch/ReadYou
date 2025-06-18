@@ -7,7 +7,6 @@ import androidx.work.WorkManager
 import com.rometools.rome.feed.synd.SyndFeed
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -212,6 +211,15 @@ class GoogleReaderRssService @Inject constructor(
         super.deleteFeed(feed, false)
     }
 
+    override suspend fun sync(feedId: String?, groupId: String?): ListenableWorker.Result {
+        return if (feedId != null) {
+            syncFeed(feedId)
+        } else {
+            sync()
+        }
+    }
+
+
     /**
      * This is improved from Reeder's synchronization strategy,
      * which syncs well across multiple devices.
@@ -232,7 +240,7 @@ class GoogleReaderRssService @Inject constructor(
      * @link https://github.com/bazqux/bazqux-api?tab=readme-ov-file
      * @link https://github.com/theoldreader/api
      */
-    override suspend fun sync(feedId: String?, groupId: String?): ListenableWorker.Result =
+    private suspend fun sync(): ListenableWorker.Result =
         supervisorScope {
 
             try {
@@ -366,15 +374,15 @@ class GoogleReaderRssService @Inject constructor(
                 groupDao.insertOrUpdate(groups)
                 feedDao.insertOrUpdate(feeds)
 
-                // Handle empty icon for feeds
-                launch {
-                    feedDao.queryNoIcon(accountId).let {
-                        it.forEach { feed ->
-                            feed.icon = rssHelper.queryRssIconLink(feed.url)
-                        }
-                        feedDao.update(*it.toTypedArray())
-                    }
-                }
+//                // Handle empty icon for feeds
+//                launch {
+//                    feedDao.queryNoIcon(accountId).let {
+//                        it.forEach { feed ->
+//                            feed.icon = rssHelper.queryRssIconLink(feed.url)
+//                        }
+//                        feedDao.update(*it.toTypedArray())
+//                    }
+//                }
 
                 articleDao.insert(
                     *fetchedArticles.await().toTypedArray()
@@ -382,10 +390,10 @@ class GoogleReaderRssService @Inject constructor(
 
                 // 8. Remove orphaned groups and feeds, after synchronizing the starred/un-starred
                 groupDao.queryAll(accountId)
-                    .filter { it !in groups }
+                    .filter { it.id !in groups.map { group -> group.id } }
                     .forEach { super.deleteGroup(it, true) }
                 feedDao.queryAll(accountId)
-                    .filter { it !in feeds }
+                    .filter { it.id !in feeds.map { feed -> feed.id } }
                     .forEach { super.deleteFeed(it, true) }
 
                 Log.i("RLog", "onCompletion: ${System.currentTimeMillis() - preTime}")
@@ -401,6 +409,66 @@ class GoogleReaderRssService @Inject constructor(
                 ListenableWorker.Result.failure()
             }
         }
+
+    private suspend fun syncFeed(feedId: String): ListenableWorker.Result = supervisorScope {
+
+        val preTime = System.currentTimeMillis()
+        val account = accountService.getCurrentAccount()
+        requireNotNull(account) {
+            "cannot find account"
+        }
+        val accountId = account.id!!
+        val googleReaderAPI = getGoogleReaderAPI()
+
+        val localUnreadIds = articleDao.queryMetadataByFeedId(accountId, feedId, isUnread = true)
+        val localReadIds = articleDao.queryMetadataByFeedId(accountId, feedId, isUnread = false)
+
+        val localIds = (localReadIds + localUnreadIds).map { it.id }
+
+        val unreadIds = async {
+            fetchItemIdsAndContinue {
+                googleReaderAPI.getItemIdsForFeed(
+                    feedId = feedId.dollarLast(),
+                    filterRead = true,
+                    continuationId = it
+                )
+            }.toSet()
+        }
+
+        val allIds = async {
+            fetchItemIdsAndContinue {
+                googleReaderAPI.getItemIdsForFeed(
+                    feedId = feedId.dollarLast(),
+                    filterRead = false,
+                    continuationId = it
+                )
+            }.toSet()
+        }
+
+        val starredIds = async {
+            fetchItemIdsAndContinue {
+                googleReaderAPI.getStarredItemIds(
+                    continuationId = it
+                )
+            }.toSet()
+        }
+
+        val toFetch = allIds.await() - localIds
+
+        val items = fetchItemsContents(
+            itemIds = toFetch,
+            googleReaderAPI = googleReaderAPI,
+            accountId = accountId,
+            unreadIds = unreadIds.await(),
+            starredIds = starredIds.await(),
+            preDate = Date()
+        )
+
+        articleDao.insert(*items.toTypedArray())
+        Log.i("RLog", "onCompletion: ${System.currentTimeMillis() - preTime}")
+
+        ListenableWorker.Result.success()
+    }
 
     private suspend fun fetchItemIdsAndContinue(getItemIdsFunc: suspend (continuationId: String?) -> GoogleReaderDTO.ItemIds): MutableList<String> {
         var result = getItemIdsFunc(null)
@@ -511,8 +579,8 @@ class GoogleReaderRssService @Inject constructor(
             Log.d("RLog", "sync markAsRead:  ${(index * 500) + it.size}/${markList.size} num")
             googleReaderAPI.editTag(
                 itemIds = it,
-                mark = if (!isUnread) GoogleReaderAPI.Stream.READ.tag else null,
-                unmark = if (isUnread) GoogleReaderAPI.Stream.READ.tag else null,
+                mark = if (!isUnread) GoogleReaderAPI.Stream.Read.tag else null,
+                unmark = if (isUnread) GoogleReaderAPI.Stream.Read.tag else null,
             )
         }
     }
@@ -524,8 +592,8 @@ class GoogleReaderRssService @Inject constructor(
             Log.d("RLog", "sync markAsRead:  ${(index * 500) + idList.size}/${articleIds.size} num")
             googleReaderAPI.editTag(
                 itemIds = idList.map { it.dollarLast() },
-                mark = if (!isUnread) GoogleReaderAPI.Stream.READ.tag else null,
-                unmark = if (isUnread) GoogleReaderAPI.Stream.READ.tag else null,
+                mark = if (!isUnread) GoogleReaderAPI.Stream.Read.tag else null,
+                unmark = if (isUnread) GoogleReaderAPI.Stream.Read.tag else null,
             ).onFailure {
                 it.printStackTrace()
             }.onSuccess {
@@ -540,8 +608,8 @@ class GoogleReaderRssService @Inject constructor(
         super.markAsStarred(articleId, isStarred)
         getGoogleReaderAPI().editTag(
             itemIds = listOf(articleId.dollarLast()),
-            mark = if (isStarred) GoogleReaderAPI.Stream.STARRED.tag else null,
-            unmark = if (!isStarred) GoogleReaderAPI.Stream.STARRED.tag else null,
+            mark = if (isStarred) GoogleReaderAPI.Stream.Starred.tag else null,
+            unmark = if (!isStarred) GoogleReaderAPI.Stream.Starred.tag else null,
         )
     }
 }
