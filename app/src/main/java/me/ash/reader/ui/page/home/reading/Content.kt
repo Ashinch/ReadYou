@@ -15,6 +15,8 @@ import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,6 +35,7 @@ import me.ash.reader.ui.ext.extractDomain
 import me.ash.reader.ui.ext.openURL
 import java.util.Date
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun Content(
     modifier: Modifier = Modifier,
@@ -58,10 +61,8 @@ fun Content(
 
     if (isLoading) {
         Column {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .size(30.dp),
-                color = MaterialTheme.colorScheme.onSurface,
+            LoadingIndicator(
+                modifier = Modifier.size(56.dp),
             )
         }
     } else {

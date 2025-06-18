@@ -23,6 +23,7 @@ import me.ash.reader.ui.ext.spacerDollar
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.executeAsync
+import okhttp3.internal.commonIsSuccessful
 import java.io.InputStream
 import java.util.*
 import javax.inject.Inject
@@ -56,15 +57,17 @@ class RssHelper @Inject constructor(
     suspend fun parseFullContent(link: String, title: String): String {
         return withContext(ioDispatcher) {
             val response = response(okHttpClient, link)
-            val content = response.body.string()
-            val articleContent = Readability.parseToElement(content, link)
-            articleContent?.run {
-                val h1Element = articleContent.selectFirst("h1")
-                if (h1Element != null && h1Element.hasText() && h1Element.text() == title) {
-                    h1Element.remove()
-                }
-                articleContent.toString()
-            } ?: ""
+            if (response.commonIsSuccessful) {
+                val content = response.body.string()
+                val articleContent = Readability.parseToElement(content, link)
+                articleContent?.run {
+                    val h1Element = articleContent.selectFirst("h1")
+                    if (h1Element != null && h1Element.hasText() && h1Element.text() == title) {
+                        h1Element.remove()
+                    }
+                    articleContent.toString()
+                } ?: ""
+            } else throw Exception()
         }
     }
 
@@ -114,7 +117,8 @@ class RssHelper @Inject constructor(
             id = accountId.spacerDollar(UUID.randomUUID().toString()),
             accountId = accountId,
             feedId = feed.id,
-            date = (syndEntry.publishedDate ?: syndEntry.updatedDate)?.takeIf { !it.isFuture(preDate) } ?: preDate,
+            date = (syndEntry.publishedDate
+                ?: syndEntry.updatedDate)?.takeIf { !it.isFuture(preDate) } ?: preDate,
             title = syndEntry.title.decodeHTML() ?: feed.name,
             author = syndEntry.author,
             rawDescription = content ?: desc ?: "",
