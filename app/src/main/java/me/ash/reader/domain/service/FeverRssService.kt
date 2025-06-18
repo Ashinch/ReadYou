@@ -146,7 +146,9 @@ class FeverRssService @Inject constructor(
                 val feverAPI = getFeverAPI()
 
                 // 1. Fetch the Fever groups
-                val groups = feverAPI.getGroups().groups?.map {
+                val groupsBody = feverAPI.getGroups()
+
+                val groups = groupsBody.groups?.map {
                     Group(
                         id = accountId.spacerDollar(it.id!!),
                         name = it.title ?: context.getString(R.string.empty),
@@ -157,14 +159,25 @@ class FeverRssService @Inject constructor(
 
                 // 2. Fetch the Fever feeds
                 val feedsBody = feverAPI.getFeeds()
-                val feedsGroupsMap = mutableMapOf<String, String>()
-                feedsBody.feeds_groups?.forEach { feedsGroups ->
-                    feedsGroups.group_id?.toString()?.let { groupId ->
-                        feedsGroups.feed_ids?.split(",")?.forEach { feedId ->
-                            feedsGroupsMap[feedId] = groupId
+
+                val feedsGroupsMap = buildMap<String, String> {
+                    groupsBody.feeds_groups?.forEach { feedsGroups ->
+                        feedsGroups.group_id?.toString()?.let { groupId ->
+                            feedsGroups.feed_ids?.split(",")?.forEach { feedId ->
+                                this[feedId] = groupId
+                            }
+                        }
+                    }
+
+                    feedsBody.feeds_groups?.forEach { feedsGroups ->
+                        feedsGroups.group_id?.toString()?.let { groupId ->
+                            feedsGroups.feed_ids?.split(",")?.forEach { feedId ->
+                                this[feedId] = groupId
+                            }
                         }
                     }
                 }
+
 
                 // Fetch the Fever favicons
                 val faviconsById =
