@@ -287,26 +287,38 @@ class GoogleReaderRssService @Inject constructor(
                 val localItemIds = localAllItems.map { it.id.dollarLast() }.toSet()
 
                 launch {
-                    val toBeUnread = localReadIds - unreadIds.await()
-                    val toBeRead = localUnreadIds - readIds.await()
-                    val toBeStarred = localStarredIds - starredIds.await()
+                    val toBeReadLocal = localUnreadIds.intersect(readIds.await())
 
                     articleDao.markAsReadByIdSet(
                         accountId = accountId,
-                        ids = toBeUnread,
-                        isUnread = true,
-                    )
-
-                    articleDao.markAsReadByIdSet(
-                        accountId = accountId,
-                        ids = toBeRead,
+                        ids = toBeReadLocal,
                         isUnread = false,
                     )
 
+                }
+
+                launch {
+                    val toBeStarredRemote = localStarredIds - starredIds.await()
+                    googleReaderAPI.editTag(
+                        itemIds = toBeStarredRemote.toList(),
+                        mark = GoogleReaderAPI.Stream.Starred.tag
+                    )
+                }
+
+                launch {
+                    val toBeStarredLocal =
+                        (localItemIds - localStarredIds).intersect(starredIds.await())
                     articleDao.markAsStarredByIdSet(
                         accountId = accountId,
-                        ids = toBeStarred,
+                        ids = toBeStarredLocal,
                         isStarred = true,
+                    )
+                }
+
+                launch {
+                    val toBeReadRemote = localReadIds - unreadIds.await()
+                    googleReaderAPI.editTag(
+                        itemIds = toBeReadRemote.toList(), mark = GoogleReaderAPI.Stream.Read.tag
                     )
                 }
 
