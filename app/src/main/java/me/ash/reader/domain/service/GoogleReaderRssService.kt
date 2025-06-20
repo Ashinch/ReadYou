@@ -257,19 +257,19 @@ class GoogleReaderRssService @Inject constructor(
                     add(Calendar.MONTH, -1)
                 }.time.time / 1000
 
-                val unreadIds = async {
+                val remoteUnreadIds = async {
                     fetchItemIdsAndContinue {
                         googleReaderAPI.getUnreadItemIds(continuationId = it)
                     }.toSet()
                 }
 
-                val starredIds = async {
+                val remoteStarredIds = async {
                     fetchItemIdsAndContinue {
                         googleReaderAPI.getStarredItemIds(continuationId = it)
                     }.toSet()
                 }
 
-                val readIds = async {
+                val remoteReadIds = async {
                     fetchItemIdsAndContinue {
                         googleReaderAPI.getReadItemIds(since = lastMonthAt, continuationId = it)
                     }.toSet()
@@ -287,7 +287,7 @@ class GoogleReaderRssService @Inject constructor(
                 val localItemIds = localAllItems.map { it.id.dollarLast() }.toSet()
 
                 launch {
-                    val toBeReadLocal = localUnreadIds.intersect(readIds.await())
+                    val toBeReadLocal = localUnreadIds.intersect(remoteReadIds.await())
 
                     articleDao.markAsReadByIdSet(
                         accountId = accountId,
@@ -298,7 +298,7 @@ class GoogleReaderRssService @Inject constructor(
                 }
 
                 launch {
-                    val toBeStarredRemote = localStarredIds - starredIds.await()
+                    val toBeStarredRemote = localStarredIds - remoteStarredIds.await()
                     googleReaderAPI.editTag(
                         itemIds = toBeStarredRemote.toList(),
                         mark = GoogleReaderAPI.Stream.Starred.tag
@@ -307,7 +307,7 @@ class GoogleReaderRssService @Inject constructor(
 
                 launch {
                     val toBeStarredLocal =
-                        (localItemIds - localStarredIds).intersect(starredIds.await())
+                        (localItemIds - localStarredIds).intersect(remoteStarredIds.await())
                     articleDao.markAsStarredByIdSet(
                         accountId = accountId,
                         ids = toBeStarredLocal,
@@ -316,7 +316,7 @@ class GoogleReaderRssService @Inject constructor(
                 }
 
                 launch {
-                    val toBeReadRemote = localReadIds - unreadIds.await()
+                    val toBeReadRemote = localReadIds.intersect(remoteUnreadIds.await())
                     googleReaderAPI.editTag(
                         itemIds = toBeReadRemote.toList(), mark = GoogleReaderAPI.Stream.Read.tag
                     )
@@ -324,7 +324,7 @@ class GoogleReaderRssService @Inject constructor(
 
                 val toBeSync =
                     async {
-                        (listOf(unreadIds, starredIds, readIds).awaitAll()
+                        (listOf(remoteUnreadIds, remoteStarredIds, remoteReadIds).awaitAll()
                             .flatten() - localItemIds).toSet()
                     }
 
@@ -335,8 +335,8 @@ class GoogleReaderRssService @Inject constructor(
                             itemIds = toBeSync.await(),
                             googleReaderAPI = googleReaderAPI,
                             accountId = accountId,
-                            unreadIds = unreadIds.await(),
-                            starredIds = starredIds.await(),
+                            unreadIds = remoteUnreadIds.await(),
+                            starredIds = remoteStarredIds.await(),
                             preDate = preDate,
                         )
                     }
