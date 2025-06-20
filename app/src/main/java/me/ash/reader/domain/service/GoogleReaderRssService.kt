@@ -348,6 +348,7 @@ class GoogleReaderRssService @Inject constructor(
                 // 2. Fetch folder and subscription list
                 val groupWithFeedsMap = async {
                     googleReaderAPI.getSubscriptionList()
+                        .also { println(it) }
                         .subscriptions.groupBy { it.categories?.first() }
                         .mapKeys { (category, _) ->
                             val categoryId = category?.id
@@ -363,7 +364,7 @@ class GoogleReaderRssService @Inject constructor(
                                 requireNotNull(it.id) {
                                     "feed id is null"
                                 }
-                                requireNotNull(it.url) {
+                                requireNotNull(it.url ?: it.htmlUrl) {
                                     "feed url is null"
                                 }
                                 val feedId = accountId spacerDollar it.id.ofFeedStreamIdToId()
@@ -371,7 +372,7 @@ class GoogleReaderRssService @Inject constructor(
                                     id = feedId,
                                     name = it.title.decodeHTML()
                                         ?: context.getString(R.string.empty),
-                                    url = it.url,
+                                    url = it.url ?: it.htmlUrl!!,
                                     groupId = group.id,
                                     accountId = accountId,
                                     icon = it.iconUrl
