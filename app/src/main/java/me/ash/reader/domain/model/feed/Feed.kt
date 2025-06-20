@@ -59,4 +59,28 @@ data class Feed(
         isBrowser = isBrowser,
         important = 0
     )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Feed
+
+        if (accountId != other.accountId) return false
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (url != other.url) return false
+        if (groupId != other.groupId) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = accountId
+        result = 31 * result + id.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + url.hashCode()
+        result = 31 * result + groupId.hashCode()
+        return result
+    }
 }

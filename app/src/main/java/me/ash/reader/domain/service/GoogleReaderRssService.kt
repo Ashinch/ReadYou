@@ -288,21 +288,21 @@ class GoogleReaderRssService @Inject constructor(
 
                 launch {
                     val toBeReadLocal = localUnreadIds.intersect(remoteReadIds.await())
-
                     articleDao.markAsReadByIdSet(
                         accountId = accountId,
                         ids = toBeReadLocal,
                         isUnread = false,
                     )
-
                 }
 
                 launch {
                     val toBeStarredRemote = localStarredIds - remoteStarredIds.await()
-                    googleReaderAPI.editTag(
-                        itemIds = toBeStarredRemote.toList(),
-                        mark = GoogleReaderAPI.Stream.Starred.tag
-                    )
+                    if (toBeStarredRemote.isNotEmpty()) {
+                        googleReaderAPI.editTag(
+                            itemIds = toBeStarredRemote.toList(),
+                            mark = GoogleReaderAPI.Stream.Starred.tag
+                        )
+                    }
                 }
 
                 launch {
@@ -317,9 +317,12 @@ class GoogleReaderRssService @Inject constructor(
 
                 launch {
                     val toBeReadRemote = localReadIds.intersect(remoteUnreadIds.await())
-                    googleReaderAPI.editTag(
-                        itemIds = toBeReadRemote.toList(), mark = GoogleReaderAPI.Stream.Read.tag
-                    )
+                    if (toBeReadRemote.isNotEmpty()) {
+                        googleReaderAPI.editTag(
+                            itemIds = toBeReadRemote.toList(),
+                            mark = GoogleReaderAPI.Stream.Read.tag
+                        )
+                    }
                 }
 
                 val toBeSync =

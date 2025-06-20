@@ -1,9 +1,9 @@
 package me.ash.reader.ui.page.home.flow
 
-import android.util.Log
+import androidx.compose.ui.util.fastFirst
+import androidx.compose.ui.util.fastFirstOrNull
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.compose.LazyPagingItems
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,15 +14,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.combineTransform
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 import me.ash.reader.domain.data.ArticlePagingListUseCase
 import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.general.MarkAsReadConditions
@@ -75,12 +71,23 @@ class FlowViewModel @Inject constructor(
                 var nextFilterState: FilterState? = null
                 if (filterState.group != null) {
                     val groupList = groupWithFeedsList.map { it.group }
-                    val index =
-                        groupList.indexOfFirst { it.id == filterState.group.id }
+                    val index = groupList.indexOfFirst { it.id == filterState.group.id }
                     if (index != -1) {
                         val nextGroup = groupList.getOrNull(index + 1)
                         if (nextGroup != null) {
                             nextFilterState = filterState.copy(group = nextGroup)
+                        }
+                    } else {
+                        val allGroupList = rssService.get().queryAllGroupWithFeeds()
+                        val index = allGroupList.indexOfFirst {
+                            it.group.id == filterState.group.id
+                        }
+                        if (index != -1) {
+                            val nextGroup = allGroupList.subList(index, allGroupList.size)
+                                .fastFirstOrNull { groupList.contains(it.group) }
+                            if (nextGroup != null) {
+                                nextFilterState = filterState.copy(group = nextGroup.group)
+                            }
                         }
                     }
                 } else if (filterState.feed != null) {
@@ -91,18 +98,30 @@ class FlowViewModel @Inject constructor(
                         if (nextFeed != null) {
                             nextFilterState = filterState.copy(feed = nextFeed)
                         }
+                    } else {
+                        val allFeedList =
+                            rssService.get().queryAllGroupWithFeeds().flatMap { it.feeds }
+                        val index = allFeedList.indexOfFirst {
+                            it.id == filterState.feed.id
+                        }
+                        if (index != -1) {
+                            val nextFeed = allFeedList.subList(index, allFeedList.size)
+                                .fastFirstOrNull { feedList.contains(it) }
+                            if (nextFeed != null) {
+                                nextFilterState = filterState.copy(feed = nextFeed)
+                            }
+                        }
                     }
                 }
                 FlowUiState(nextFilterState = nextFilterState, pagerData = pagerData)
-            }
-                .collect { flowUiState ->
-                    _flowUiState.update {
-                        it.copy(
-                            nextFilterState = flowUiState.nextFilterState,
-                            pagerData = flowUiState.pagerData
-                        )
-                    }
+            }.collect { flowUiState ->
+                _flowUiState.update {
+                    it.copy(
+                        nextFilterState = flowUiState.nextFilterState,
+                        pagerData = flowUiState.pagerData
+                    )
                 }
+            }
         }
 
         viewModelScope.launch {
@@ -147,15 +166,15 @@ class FlowViewModel @Inject constructor(
         isBefore: Boolean,
     ) {
         viewModelScope.launch(ioDispatcher) {
-            val items = articlePagingListUseCase.itemSnapshotList
-                .filterIsInstance<ArticleFlowItem.Article>().map { it.articleWithFeed }
-                .filter {
-                    if (isBefore) {
-                        date > it.article.date && it.article.isUnread
-                    } else {
-                        date < it.article.date && it.article.isUnread
-                    }
-                }.distinctBy { it.article.id }
+            val items =
+                articlePagingListUseCase.itemSnapshotList.filterIsInstance<ArticleFlowItem.Article>()
+                    .map { it.articleWithFeed }.filter {
+                        if (isBefore) {
+                            date > it.article.date && it.article.isUnread
+                        } else {
+                            date < it.article.date && it.article.isUnread
+                        }
+                    }.distinctBy { it.article.id }
 
             diffMapHolder.updateDiff(articleWithFeed = items.toTypedArray(), isUnread = false)
         }
@@ -181,8 +200,7 @@ class FlowViewModel @Inject constructor(
                     .map { it.articleWithFeed }
 
             diffMapHolder.updateDiff(
-                articleWithFeed = items.toTypedArray(),
-                isUnread = false
+                articleWithFeed = items.toTypedArray(), isUnread = false
             )
         }
     }
@@ -204,13 +222,11 @@ class FlowViewModel @Inject constructor(
             val service = rssService.get()
             when (service) {
                 is LocalRssService -> service.doSyncOneTime(
-                    feedId = filterState.feed?.id,
-                    groupId = filterState.group?.id
+                    feedId = filterState.feed?.id, groupId = filterState.group?.id
                 )
 
                 is GoogleReaderRssService -> service.doSyncOneTime(
-                    feedId = filterState.feed?.id,
-                    groupId = filterState.group?.id
+                    feedId = filterState.feed?.id, groupId = filterState.group?.id
                 )
 
                 else -> service.doSyncOneTime()

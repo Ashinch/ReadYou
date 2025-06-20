@@ -297,6 +297,8 @@ abstract class AbstractRssRepository(
     suspend fun isFeedExist(url: String): Boolean =
         feedDao.queryByLink(accountService.getCurrentAccountId(), url).isNotEmpty()
 
+    suspend fun queryAllGroupWithFeeds(): List<GroupWithFeed> = groupDao.queryAllGroupWithFeed(accountService.getCurrentAccountId())
+
     open suspend fun renameGroup(group: Group) {
         groupDao.update(group)
     }
