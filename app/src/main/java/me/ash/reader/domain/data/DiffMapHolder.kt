@@ -209,11 +209,15 @@ class DiffMapHolder @Inject constructor(
 
     private fun writeDiffsToCache() {
         applicationScope.launch(ioDispatcher) {
-            val tmpJson = gson.toJson(diffMap)
-            userCacheDir.mkdirs()
-            cacheFile.createNewFile()
-            if (cacheFile.exists() && cacheFile.canWrite()) {
-                cacheFile.writeText(tmpJson)
+            try {
+                val tmpJson = gson.toJson(diffMap)
+                userCacheDir.mkdirs()
+                cacheFile.createNewFile()
+                if (cacheFile.exists() && cacheFile.canWrite()) {
+                    cacheFile.writeText(tmpJson)
+                }
+            } catch (_: Exception) {
+
             }
         }
     }

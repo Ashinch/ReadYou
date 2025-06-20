@@ -67,6 +67,7 @@ data class Feed(
         other as Feed
 
         if (accountId != other.accountId) return false
+        if (important != other.important) return false
         if (id != other.id) return false
         if (name != other.name) return false
         if (url != other.url) return false
@@ -77,10 +78,13 @@ data class Feed(
 
     override fun hashCode(): Int {
         var result = accountId
+        result = 31 * result + important
         result = 31 * result + id.hashCode()
         result = 31 * result + name.hashCode()
         result = 31 * result + url.hashCode()
         result = 31 * result + groupId.hashCode()
         return result
     }
+
+
 }

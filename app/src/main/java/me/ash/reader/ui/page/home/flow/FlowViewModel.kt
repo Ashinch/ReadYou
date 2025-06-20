@@ -233,6 +233,10 @@ class FlowViewModel @Inject constructor(
             }
         }
     }
+
+    fun clearFilter() {
+        filterStateUseCase.updateFilterState(feed = null, group = null, searchContent = null)
+    }
 }
 
 data class FlowUiState(
