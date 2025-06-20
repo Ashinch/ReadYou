@@ -75,7 +75,7 @@
     <string name="mark_as_read_one_day">Позначити як прочитане більше 1 дня</string>
     <string name="mark_as_read_seven_days">Позначити як прочитане більше 7 днів тому</string>
     <string name="welcome">Ласкаво Просимо</string>
-    <string name="tips_and_support_desc">Про застосунок, ліцензії з відкритим кодом</string>
+    <string name="tips_and_support_desc">Про застосунок, спонсор, ліцензії з відкритим кодом</string>
     <string name="tos_tips">Будь ласка, прочитайте та погодьтеся з умовами надання послуг та політикою конфіденційності Read You, щоб продовжити.</string>
     <string name="open_with">Відкрити %1$s</string>
     <string name="mark_as_read">Позначити як прочитане</string>
@@ -122,11 +122,11 @@
     <string name="in_coding">У процесі</string>
     <string name="coming_soon">Скоро</string>
     <string name="accounts">Облікові записи</string>
-    <string name="accounts_desc">Локальний, FreshRSS</string>
+    <string name="accounts_desc">Локальні, послуги, самостійне розміщення</string>
     <string name="color_and_style">Колір та стиль</string>
     <string name="color_and_style_desc">Тема, кольорова палітра, розмір тексту</string>
-    <string name="interaction">Взаємодія</string>
-    <string name="interaction_desc">Початкова сторінка, тактильний зворотній зв\'язок</string>
+    <string name="interaction">Налаштування використання</string>
+    <string name="interaction_desc">Стартова сторінка, жести</string>
     <string name="languages">Мова</string>
     <string name="help_translate">Допомога з перекладом</string>
     <string name="use_device_languages">Використовувати мову пристрою</string>
@@ -167,8 +167,8 @@
     <string name="rate_limit">Кількість запитів обмежена</string>
     <string name="help">Допомога</string>
     <string name="on_start">Під час запуску</string>
-    <string name="initial_page">Початкова сторінка</string>
-    <string name="initial_filter">Початковий фільтр</string>
+    <string name="initial_page">Стартова сторінка</string>
+    <string name="initial_filter">Типовий фільтр</string>
     <string name="preview_article_title">Роман «Володар таємниць» нарешті завершився</string>
     <string name="preview_feed_name">Reddit</string>
     <string name="value">значення</string>
