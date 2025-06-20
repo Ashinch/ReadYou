@@ -8,6 +8,7 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
@@ -587,6 +588,18 @@ fun FlowPage(
                 scope.launch {
                     lastReadIndex?.let {
                         listState.animateScrollToItem(index = it)
+                    }
+                }
+                scope.launch {
+                    val initial = topAppBarState.heightOffset
+                    val target = topAppBarState.heightOffsetLimit
+                    animate(
+                        initialValue = initial,
+                        targetValue = target,
+                        initialVelocity = 0f,
+                        animationSpec = settleSpec
+                    ) { value, _ ->
+                        topAppBarState.heightOffset = value
                     }
                 }
                 flowViewModel.updateLastReadIndex(null)
