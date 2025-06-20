@@ -122,7 +122,7 @@
     <string name="in_coding">У процесі</string>
     <string name="coming_soon">Скоро</string>
     <string name="accounts">Облікові записи</string>
-    <string name="accounts_desc">Локальний, FreshRSS</string>
+    <string name="accounts_desc">Локальні, послуги, самостійне розміщення</string>
     <string name="color_and_style">Колір та стиль</string>
     <string name="color_and_style_desc">Тема, кольорова палітра, розмір тексту</string>
     <string name="interaction">Взаємодія</string>

@@ -96,7 +96,7 @@
     <string name="in_coding">Ve vývoji</string>
     <string name="coming_soon">Již brzy</string>
     <string name="accounts">Účty</string>
-    <string name="accounts_desc">Místní, FreshRSS</string>
+    <string name="accounts_desc">Místní, služby, vlastní</string>
     <string name="color_and_style">Barva a styl</string>
     <string name="color_and_style_desc">Motiv, barevný styl, velikost písma</string>
     <string name="interaction">Interakce</string>
@@ -297,7 +297,7 @@
     <string name="app_preferences">Předvolby aplikace</string>
     <string name="import_from_protobuf_file">Importovat ze souboru protobuf</string>
     <string name="troubleshooting">Řešení chyb</string>
-    <string name="troubleshooting_desc">Hlášení chyb, ladění</string>
+    <string name="troubleshooting_desc">Hlášení chyb, nastavení aplikace</string>
     <string name="bug_report">Nahlásit chybu</string>
     <string name="export_as_protobuf_file">Exportovat do souboru protobuf</string>
     <string name="invalid_protobuf_file_warning">Tento soubor nejspíše není platným souborem protobuf. Jeho importováním můžete potenciálně poškodit aplikaci a ztratit aktuální předvolby. Opravdu chcete pokračovat?</string>
@@ -328,4 +328,7 @@
     <string name="earliest">Nejstarší</string>
     <string name="none_desc">Žádné</string>
     <string name="pull_to_switch_feed">Potáhnout pro načtení dalšího zdroje</string>
+    <string name="bold_characters">Tučné znaky</string>
+    <string name="use_bold_characters">Použít tučné znaky</string>
+    <string name="bold_characters_preview">Tučně označit několik prvních znaků slov v článku</string>
 </resources>
