@@ -22,7 +22,7 @@ data class Feed(
     @ColumnInfo
     val name: String,
     @ColumnInfo
-    var icon: String? = null,
+    val icon: String? = null,
     @ColumnInfo
     val url: String,
     @ColumnInfo(index = true)
@@ -70,6 +70,7 @@ data class Feed(
         if (important != other.important) return false
         if (id != other.id) return false
         if (name != other.name) return false
+        if (icon != other.icon) return false
         if (url != other.url) return false
         if (groupId != other.groupId) return false
 
@@ -81,6 +82,7 @@ data class Feed(
         result = 31 * result + important
         result = 31 * result + id.hashCode()
         result = 31 * result + name.hashCode()
+        result = 31 * result + (icon?.hashCode() ?: 0)
         result = 31 * result + url.hashCode()
         result = 31 * result + groupId.hashCode()
         return result

@@ -197,10 +197,9 @@ class FeverRssService @Inject constructor(
 
                 // Handle empty icon for feeds
                 val noIconFeeds = feedDao.queryNoIcon(accountId)
-                noIconFeeds.forEach {
-                    it.icon = rssHelper.queryRssIconLink(it.url)
-                }
-                feedDao.update(*noIconFeeds.toTypedArray())
+                feedDao.update(*noIconFeeds.map {
+                    it.copy(icon = rssHelper.queryRssIconLink(it.url))
+                }.toTypedArray())
 
                 // 3. Fetch the Fever articles (up to unlimited counts)
                 var sinceId = account.lastArticleId?.dollarLast() ?: ""

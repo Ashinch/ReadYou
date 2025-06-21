@@ -42,6 +42,7 @@ import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.dollarLast
 import me.ash.reader.ui.ext.isFuture
 import me.ash.reader.ui.ext.spacerDollar
+import timber.log.Timber
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
@@ -384,21 +385,29 @@ class GoogleReaderRssService @Inject constructor(
                         }
                 }
 
-                val groups = groupWithFeedsMap.await().keys.toList()
-                val feeds = groupWithFeedsMap.await().values.flatten()
+                val remoteGroups = async {
+                    groupWithFeedsMap.await().keys.toList()
+                }
+                val remoteFeeds = async {
+                    groupWithFeedsMap.await().values.flatten()
+                }
 
-                groupDao.insertOrUpdate(groups)
-                feedDao.insertOrUpdate(feeds)
+                // Handle empty icon for feeds
+                launch {
+                    val localFeeds = feedDao.queryAll(accountId)
+                    val remoteFeeds = remoteFeeds.await()
+                    val newFeeds = remoteFeeds.filterNot { it.id in localFeeds.map { it.id } }
+                    val feedsWithIconFetched =
+                        newFeeds.filter { it.icon.isNullOrEmpty() }.map { feed ->
+                            async { feed.copy(icon = rssHelper.queryRssIconLink(feed.url)) }
+                        }
+                    feedsWithIconFetched.awaitAll().filterNot { it.icon.isNullOrEmpty() }.also {
+                        feedDao.update(*it.toTypedArray())
+                    }
+                }
 
-//                // Handle empty icon for feeds
-//                launch {
-//                    feedDao.queryNoIcon(accountId).let {
-//                        it.forEach { feed ->
-//                            feed.icon = rssHelper.queryRssIconLink(feed.url)
-//                        }
-//                        feedDao.update(*it.toTypedArray())
-//                    }
-//                }
+                groupDao.insertOrUpdate(remoteGroups.await())
+                feedDao.insertOrUpdate(remoteFeeds.await())
 
                 articleDao.insert(
                     *fetchedArticles.await().toTypedArray()
@@ -406,19 +415,19 @@ class GoogleReaderRssService @Inject constructor(
 
                 // 8. Remove orphaned groups and feeds, after synchronizing the starred/un-starred
                 groupDao.queryAll(accountId)
-                    .filter { it.id !in groups.map { group -> group.id } }
+                    .filter { it.id !in remoteGroups.await().map { group -> group.id } }
                     .forEach { super.deleteGroup(it, true) }
                 feedDao.queryAll(accountId)
-                    .filter { it.id !in feeds.map { feed -> feed.id } }
+                    .filter { it.id !in remoteFeeds.await().map { feed -> feed.id } }
                     .forEach { super.deleteFeed(it, true) }
 
-                Log.i("RLog", "onCompletion: ${System.currentTimeMillis() - preTime}")
+                Timber.tag("RLog").i("onCompletion: ${System.currentTimeMillis() - preTime}")
                 accountDao.update(account.apply {
                     updateAt = Date()
                 })
                 ListenableWorker.Result.success()
             } catch (e: Exception) {
-                Log.e("RLog", "On sync exception: ${e.message}", e)
+                Timber.tag("RLog").e(e, "On sync exception: ${e.message}")
 //                withContext(mainDispatcher) {
 //                    context.showToast(e.message) todo: find a good way to notice user the error
 //                }

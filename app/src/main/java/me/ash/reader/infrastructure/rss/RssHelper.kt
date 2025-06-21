@@ -164,9 +164,7 @@ class RssHelper @Inject constructor(
 
     suspend fun saveRssIcon(feedDao: FeedDao, feed: Feed, iconLink: String) {
         feedDao.update(
-            feed.apply {
-                icon = iconLink
-            }
+            feed.copy(icon = iconLink)
         )
     }
 
