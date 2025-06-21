@@ -53,6 +53,7 @@ retrofit2 = "2.11.0"
 rome = "1.18.0"
 telephoto = "0.15.1"
 swipe = "1.3.0"
+timber = "5.0.1"
 
 [libraries]
 # AboutLibraries
@@ -113,6 +114,8 @@ lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtim
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+
+timber = {group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 # Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }

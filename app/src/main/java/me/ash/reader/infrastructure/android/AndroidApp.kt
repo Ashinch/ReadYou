@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import me.ash.reader.BuildConfig
 import me.ash.reader.domain.data.ArticlePagingListUseCase
 import me.ash.reader.domain.service.*
 import me.ash.reader.domain.data.DiffMapHolder
@@ -25,6 +26,7 @@ import me.ash.reader.ui.ext.del
 import me.ash.reader.ui.ext.getLatestApk
 import me.ash.reader.ui.ext.isGitHub
 import okhttp3.OkHttpClient
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -116,6 +118,9 @@ class AndroidApp : Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
         CrashHandler(this)
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
         applicationScope.launch {
             accountInit()
             workerInit()

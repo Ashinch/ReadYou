@@ -18,6 +18,7 @@ import okhttp3.FormBody
 import okhttp3.Request
 import okhttp3.executeAsync
 import okio.IOException
+import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 
 private const val TAG = "GoogleReaderAPI"
@@ -138,7 +139,7 @@ class GoogleReaderAPI private constructor(
 
     private val retryConfig = RetryConfig(
         onRetry = {
-            it.printStackTrace()
+            Timber.e(it)
             clearAuthData()
         },
     )

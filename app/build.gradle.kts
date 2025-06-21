@@ -180,6 +180,8 @@ dependencies {
     implementation(libs.activity.compose)
     implementation(libs.appcompat)
 
+    implementation(libs.timber)
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit.ext)
