@@ -327,7 +327,7 @@ class GoogleReaderAPI private constructor(
         retryablePostRequest<GoogleReaderDTO.ItemsContents>(
             query = "reader/api/0/stream/items/contents",
             form = ids?.map {
-                Pair("i", it.ofItemIdToHexId())
+                Pair("i", it)
             }
         )
 
@@ -347,7 +347,7 @@ class GoogleReaderAPI private constructor(
         retryablePostRequestWithResult<String>(
             query = "reader/api/0/edit-tag",
             form = mutableListOf<Pair<String, String>>().apply {
-                itemIds.forEach { add(Pair("i", it.ofItemIdToHexId())) }
+                itemIds.forEach { add(Pair("i", it)) }
                 mark?.let { add(Pair("a", mark)) }
                 unmark?.let { add(Pair("r", unmark)) }
             }
