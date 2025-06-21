@@ -1,0 +1,10 @@
+## 0.9.5
+
+1. Több fiók hozzáadásának támogatása (helyi)
+
+2. Fordítás hozzáadása (köszönöm mindenkinek)
+
+3. Néhány hiba javítása
+
+A több fiók közötti adatelkülönítés megfelelő tesztelésének kérése.
+A Fever API és a Google Reader API hamarosan támogatott lesz.

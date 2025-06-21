@@ -1,0 +1,17 @@
+## 0.8.1
+
+1. Francia fordítás hozzáadva (köszönet DodoLeDevnek).
+
+2. Cseh fordítás hozzáadva (köszönet Fjuro-nak).
+
+3. Néhány lefordított szöveg módosítása (köszönet comradekingu).
+
+4. A 0.8.0 verzióból származó OPML-fájl importálása után nem a szinkronizálható probléma javítva.
+
+5. Nagyon nagy (50MB+) képek betöltésekor bekövetkező összeomlás javítása (köszönet Feeder-nek).
+
+6.Javítja azt a problémát, hogy néhány hírforrásra nem lehetett feliratkozni (köszönet kzaemrio).
+
+7. Optimalizálva lett a túl sok hírforrás (100+) esetet.
+
+8. Néhány teljesítményoptimalizálás és részletmódosítás.
