@@ -543,8 +543,8 @@ class GoogleReaderRssService @Inject constructor(
         }
     }
 
-    private fun findArticleURL(it: GoogleReaderDTO.Item) = it.canonical?.first()?.href
-        ?: it.alternate?.first()?.href
+    private fun findArticleURL(it: GoogleReaderDTO.Item) = it.canonical?.firstOrNull()?.href
+        ?: it.alternate?.firstOrNull()?.href
         ?: it.origin?.htmlUrl ?: ""
 
     override suspend fun markAsRead(
