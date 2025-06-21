@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.flow
 
-import androidx.compose.ui.util.fastFirst
 import androidx.compose.ui.util.fastFirstOrNull
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -235,9 +234,6 @@ class FlowViewModel @Inject constructor(
         }
     }
 
-    fun clearFilter() {
-        filterStateUseCase.updateFilterState(feed = null, group = null, searchContent = null)
-    }
 }
 
 data class FlowUiState(

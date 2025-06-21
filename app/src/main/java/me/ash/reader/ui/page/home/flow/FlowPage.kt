@@ -191,10 +191,6 @@ fun FlowPage(
 //        }
     }
 
-    DisposableEffect(flowViewModel) {
-        onDispose { flowViewModel.clearFilter() }
-    }
-
     val onToggleStarred: (ArticleWithFeed) -> Unit = remember {
         { article ->
             flowViewModel.updateStarredStatus(
