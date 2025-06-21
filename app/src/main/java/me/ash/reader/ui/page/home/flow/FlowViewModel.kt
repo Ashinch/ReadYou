@@ -78,15 +78,16 @@ class FlowViewModel @Inject constructor(
                             nextFilterState = filterState.copy(group = nextGroup)
                         }
                     } else {
-                        val allGroupList = rssService.get().queryAllGroupWithFeeds()
+                        val allGroupList =
+                            rssService.get().queryAllGroupWithFeeds().map { it.group }
                         val index = allGroupList.indexOfFirst {
-                            it.group.id == filterState.group.id
+                            it.id == filterState.group.id
                         }
                         if (index != -1) {
                             val nextGroup = allGroupList.subList(index, allGroupList.size)
-                                .fastFirstOrNull { groupList.contains(it.group) }
+                                .fastFirstOrNull { groupList.map { it.id }.contains(it.id) }
                             if (nextGroup != null) {
-                                nextFilterState = filterState.copy(group = nextGroup.group)
+                                nextFilterState = filterState.copy(group = nextGroup)
                             }
                         }
                     }
@@ -106,7 +107,7 @@ class FlowViewModel @Inject constructor(
                         }
                         if (index != -1) {
                             val nextFeed = allFeedList.subList(index, allFeedList.size)
-                                .fastFirstOrNull { feedList.contains(it) }
+                                .fastFirstOrNull { feedList.map { it.id }.contains(it.id) }
                             if (nextFeed != null) {
                                 nextFilterState = filterState.copy(feed = nextFeed)
                             }
