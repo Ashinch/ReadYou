@@ -4,12 +4,15 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.with
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CreateNewFolder
@@ -20,6 +23,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -40,6 +45,7 @@ import me.ash.reader.ui.ext.MimeType
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.roundClick
 import me.ash.reader.ui.page.home.feeds.FeedOptionView
+import timber.log.Timber
 
 @OptIn(
     androidx.compose.ui.ExperimentalComposeUiApi::class,
@@ -80,7 +86,8 @@ fun SubscribeDialog(
         },
         icon = {
             FeedIcon(
-                feedName = subscribeUiState.searchedFeed?.title ?: stringResource(R.string.subscribe),
+                feedName = subscribeUiState.searchedFeed?.title
+                    ?: stringResource(R.string.subscribe),
                 iconUrl = subscribeUiState.searchedFeed?.icon?.url,
                 placeholderIcon = Icons.Rounded.RssFeed,
             )
@@ -103,21 +110,23 @@ fun SubscribeDialog(
         },
         text = {
             AnimatedContent(
-                targetState = subscribeUiState.isSearchPage,
+                targetState = subscribeUiState,
                 transitionSpec = {
                     (slideInHorizontally { width -> width } + fadeIn()).togetherWith(
-                        slideOutHorizontally { width -> -width } + fadeOut())
-                }
-            ) { targetExpanded ->
-                if (targetExpanded) {
+                        slideOutHorizontally { width -> -width } + fadeOut()) using null
+                },
+                contentKey = { it.isSearchPage }
+            ) { uiState ->
+                if (uiState.isSearchPage) {
                     ClipboardTextField(
-                        readOnly = subscribeUiState.lockLinkInput,
-                        value = subscribeUiState.linkContent,
+                        modifier = Modifier.fillMaxWidth(),
+                        readOnly = uiState.lockLinkInput,
+                        value = uiState.linkContent,
                         onValueChange = {
                             subscribeViewModel.inputLink(it)
                         },
                         placeholder = stringResource(R.string.feed_or_site_url),
-                        errorText = subscribeUiState.errorMessage,
+                        errorText = uiState.errorMessage,
                         imeAction = ImeAction.Search,
                         focusManager = focusManager,
                         onConfirm = {
@@ -126,12 +135,12 @@ fun SubscribeDialog(
                     )
                 } else {
                     FeedOptionView(
-                        link = subscribeUiState.linkContent,
+                        link = uiState.linkContent,
                         groups = groupsState.value,
-                        selectedAllowNotificationPreset = subscribeUiState.allowNotificationPreset,
-                        selectedParseFullContentPreset = subscribeUiState.parseFullContentPreset,
-                        selectedOpenInBrowserPreset = subscribeUiState.openInBrowserPreset,
-                        selectedGroupId = subscribeUiState.selectedGroupId,
+                        selectedAllowNotificationPreset = uiState.allowNotificationPreset,
+                        selectedParseFullContentPreset = uiState.parseFullContentPreset,
+                        selectedOpenInBrowserPreset = uiState.openInBrowserPreset,
+                        selectedGroupId = uiState.selectedGroupId,
                         allowNotificationPresetOnClick = {
                             subscribeViewModel.changeAllowNotificationPreset()
                         },

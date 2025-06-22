@@ -1,5 +1,8 @@
 package me.ash.reader.ui.component.base
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,6 +42,7 @@ fun TextFieldDialog(
 
     RYDialog(
         modifier = modifier,
+        properties = properties,
         visible = visible,
         onDismissRequest = onDismissRequest,
         icon = {
@@ -54,7 +58,7 @@ fun TextFieldDialog(
         },
         text = {
             ClipboardTextField(
-                modifier = modifier,
+                modifier = modifier.fillMaxWidth(),
                 readOnly = readOnly,
                 value = value,
                 singleLine = singleLine,

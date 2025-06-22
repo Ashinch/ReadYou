@@ -172,7 +172,6 @@ class SubscribeViewModel @Inject constructor(
         _subscribeUiState.update {
             it.copy(
                 linkContent = content,
-                errorMessage = "",
             )
         }
     }

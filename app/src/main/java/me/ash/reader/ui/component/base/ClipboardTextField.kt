@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActionScope
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,7 +34,7 @@ fun ClipboardTextField(
 ) {
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.height(10.dp))
-        RYTextField(
+        RYTextField2(
             readOnly = readOnly,
             value = value,
             singleLine = singleLine,
@@ -42,37 +42,13 @@ fun ClipboardTextField(
             placeholder = placeholder,
             isPassword = isPassword,
             errorMessage = errorText,
-            keyboardActions = KeyboardActions(
-                onDone = if (imeAction == ImeAction.Done)
-                    action(focusManager, onConfirm, value) else null,
-                onGo = if (imeAction == ImeAction.Go)
-                    action(focusManager, onConfirm, value) else null,
-                onNext = if (imeAction == ImeAction.Next)
-                    action(focusManager, onConfirm, value) else null,
-                onPrevious = if (imeAction == ImeAction.Previous)
-                    action(focusManager, onConfirm, value) else null,
-                onSearch = if (imeAction == ImeAction.Search)
-                    action(focusManager, onConfirm, value) else null,
-                onSend = if (imeAction == ImeAction.Send)
-                    action(focusManager, onConfirm, value) else null,
-            ),
+            onKeyboardAction = if (imeAction != ImeAction.Default || imeAction != ImeAction.None) {
+                KeyboardActionHandler { action(focusManager, onConfirm, value) }
+            } else null,
             keyboardOptions = KeyboardOptions(
                 imeAction = imeAction
             ),
         )
-        if (errorText.isNotEmpty()) {
-            SelectionContainer {
-                Text(
-                    modifier = Modifier
-                        .padding(start = 16.dp)
-                        .horizontalScroll(rememberScrollState()),
-                    text = errorText,
-                    color = MaterialTheme.colorScheme.error,
-                    maxLines = 1,
-                    softWrap = false,
-                )
-            }
-        }
         Spacer(modifier = Modifier.height(10.dp))
     }
 }
