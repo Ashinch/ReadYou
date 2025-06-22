@@ -94,6 +94,14 @@ class AccountService @Inject constructor(
     suspend fun addDefaultAccount(): Account =
         addAccount(getDefaultAccount())
 
+    fun getDefaultGroup(): Group = getCurrentAccountId().let {
+        Group(
+            id = it.getDefaultGroupId(),
+            name = context.getString(R.string.defaults),
+            accountId = it,
+        )
+    }
+
     suspend fun update(accountId: Int, block: Account.() -> Unit) {
         accountDao.queryById(accountId)?.let {
             accountDao.update(it.apply(block))

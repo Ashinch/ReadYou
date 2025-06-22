@@ -40,6 +40,7 @@ import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Compani
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderDTO
 import me.ash.reader.ui.ext.decodeHTML
 import me.ash.reader.ui.ext.dollarLast
+import me.ash.reader.ui.ext.getDefaultGroupId
 import me.ash.reader.ui.ext.isFuture
 import me.ash.reader.ui.ext.spacerDollar
 import timber.log.Timber
@@ -350,22 +351,25 @@ class GoogleReaderRssService @Inject constructor(
                 val groupWithFeedsMap = async {
                     googleReaderAPI.getSubscriptionList()
                         .also { println(it) }
-                        .subscriptions.groupBy { it.categories?.first() }
+                        .subscriptions.groupBy { it.categories?.firstOrNull() }
                         .mapKeys { (category, _) ->
                             val categoryId = category?.id
-                            requireNotNull(categoryId) { "category id is null" }
-                            val groupId = accountId spacerDollar categoryId.ofCategoryStreamIdToId()
-                            Group(
-                                id = groupId,
-                                name = category.label.toString(),
-                                accountId = accountId,
-                            )
+                            if (categoryId != null) {
+                                val groupId =
+                                    accountId spacerDollar categoryId.ofCategoryStreamIdToId()
+                                Group(
+                                    id = groupId,
+                                    name = category.label.toString(),
+                                    accountId = accountId,
+                                )
+                            } else accountService.getDefaultGroup()
                         }.mapValues { (group, feeds) ->
                             feeds.map {
                                 requireNotNull(it.id) {
                                     "feed id is null"
                                 }
-                                requireNotNull(it.url ?: it.htmlUrl) {
+                                val feedUrl = it.url ?: it.htmlUrl
+                                requireNotNull(feedUrl) {
                                     "feed url is null"
                                 }
                                 val feedId = accountId spacerDollar it.id.ofFeedStreamIdToId()
@@ -373,7 +377,7 @@ class GoogleReaderRssService @Inject constructor(
                                     id = feedId,
                                     name = it.title.decodeHTML()
                                         ?: context.getString(R.string.empty),
-                                    url = it.url ?: it.htmlUrl!!,
+                                    url = feedUrl,
                                     groupId = group.id,
                                     accountId = accountId,
                                     icon = it.iconUrl
