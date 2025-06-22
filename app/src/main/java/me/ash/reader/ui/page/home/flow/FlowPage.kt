@@ -184,11 +184,6 @@ fun FlowPage(
                 }
             }
         }
-//        lastVisibleIndex.collect {
-//            if (it in (pagingItems.itemCount - 25..pagingItems.itemCount - 1)) {
-//                pagingItems.get(it)
-//            }
-//        }
     }
 
     val onToggleStarred: (ArticleWithFeed) -> Unit = remember {
@@ -263,7 +258,7 @@ fun FlowPage(
     LaunchedEffect(isSyncing, listState) {
         if (isSyncing) {
             snapshotFlow { listState.layoutInfo.totalItemsCount }.collect {
-                listState.animateScrollToItem(0)
+                listState.requestScrollToItem(0)
             }
         }
     }
@@ -272,120 +267,115 @@ fun FlowPage(
 
         RYScaffold(containerTonalElevation = articleListTonalElevation.value.dp, topBar = {
             MaterialTheme(
-                colorScheme = MaterialTheme.colorScheme,
-                typography = MaterialTheme.typography.copy(
+                colorScheme = MaterialTheme.colorScheme, typography = MaterialTheme.typography.copy(
                     headlineMedium = MaterialTheme.typography.displaySmall,
                     titleLarge = MaterialTheme.typography.titleLarge.merge(
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Medium
+                        fontSize = 18.sp, fontWeight = FontWeight.Medium
                     )
                 )
             ) {
                 LargeTopAppBar(
                     modifier = Modifier.clickable(
                         onClick = {
-                            scope.launch {
-                                if (listState.firstVisibleItemIndex != 0) {
-                                    listState.animateScrollToItem(0)
-                                }
+                    scope.launch {
+                        if (listState.firstVisibleItemIndex != 0) {
+                            listState.animateScrollToItem(0)
+                        }
+                    }
+                },
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }), title = {
+                    val textStyle = LocalTextStyle.current
+                    val color = LocalContentColor.current
+                    if (textStyle.fontSize.value > 18f) {
+                        BasicText(
+                            modifier = Modifier.padding(
+                                start = if (articleListFeedIcon.value) 34.dp else 8.dp,
+                                end = 24.dp
+                            ),
+                            text = titleText,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            style = textStyle,
+                            color = { color })
+                    } else {
+                        Text(
+                            text = titleText,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+
+                }, expandedHeight = 172.dp, scrollBehavior = scrollBehavior, navigationIcon = {
+                    FeedbackIconButton(
+                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                        contentDescription = stringResource(R.string.back),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    ) {
+                        onSearch = false
+                        if (navController.previousBackStackEntry == null) {
+                            navController.navigate(RouteName.FEEDS) {
+                                launchSingleTop = true
                             }
-                        },
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }), title = {
-                        val textStyle = LocalTextStyle.current
-                        val color = LocalContentColor.current
-                        if (textStyle.fontSize.value > 18f) {
-                            BasicText(
-                                modifier = Modifier.padding(
-                                    start = if (articleListFeedIcon.value) 34.dp else 8.dp,
-                                    end = 24.dp
-                                ),
-                                text = titleText,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis,
-                                style = textStyle,
-                                color = { color }
-                            )
                         } else {
-                            Text(
-                                text = titleText,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                            )
+                            navController.popBackStack()
                         }
-
-                    },
-                    expandedHeight = 172.dp,
-                    scrollBehavior = scrollBehavior, navigationIcon = {
+                    }
+                }, actions = {
+                    RYExtensibleVisibility(visible = !filterUiState.filter.isStarred()) {
                         FeedbackIconButton(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.back),
-                            tint = MaterialTheme.colorScheme.onSurface
-                        ) {
-                            onSearch = false
-                            if (navController.previousBackStackEntry == null) {
-                                navController.navigate(RouteName.FEEDS) {
-                                    launchSingleTop = true
-                                }
-                            } else {
-                                navController.popBackStack()
-                            }
-                        }
-                    }, actions = {
-                        RYExtensibleVisibility(visible = !filterUiState.filter.isStarred()) {
-                            FeedbackIconButton(
-                                imageVector = Icons.Rounded.DoneAll,
-                                contentDescription = stringResource(R.string.mark_all_as_read),
-                                tint = if (markAsRead) {
-                                    MaterialTheme.colorScheme.primary
-                                } else {
-                                    MaterialTheme.colorScheme.onSurface
-                                },
-                            ) {
-                                if (markAsRead) {
-                                    markAsRead = false
-                                } else {
-                                    scope.launch {
-                                        if (listState.firstVisibleItemIndex != 0) {
-                                            listState.animateScrollToItem(0)
-                                        }
-                                    }.invokeOnCompletion {
-                                        markAsRead = true
-                                        onSearch = false
-                                    }
-                                }
-
-                            }
-                        }
-                        FeedbackIconButton(
-                            imageVector = Icons.Rounded.Search,
-                            contentDescription = stringResource(R.string.search),
-                            tint = if (onSearch) {
+                            imageVector = Icons.Rounded.DoneAll,
+                            contentDescription = stringResource(R.string.mark_all_as_read),
+                            tint = if (markAsRead) {
                                 MaterialTheme.colorScheme.primary
                             } else {
                                 MaterialTheme.colorScheme.onSurface
                             },
                         ) {
-                            if (onSearch) {
-                                onSearch = false
+                            if (markAsRead) {
+                                markAsRead = false
                             } else {
                                 scope.launch {
                                     if (listState.firstVisibleItemIndex != 0) {
                                         listState.animateScrollToItem(0)
                                     }
                                 }.invokeOnCompletion {
-                                    scope.launch {
-                                        onSearch = true
-                                        markAsRead = false
-                                        delay(100)
-                                        focusRequester.requestFocus()
-                                    }
+                                    markAsRead = true
+                                    onSearch = false
+                                }
+                            }
+
+                        }
+                    }
+                    FeedbackIconButton(
+                        imageVector = Icons.Rounded.Search,
+                        contentDescription = stringResource(R.string.search),
+                        tint = if (onSearch) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        },
+                    ) {
+                        if (onSearch) {
+                            onSearch = false
+                        } else {
+                            scope.launch {
+                                if (listState.firstVisibleItemIndex != 0) {
+                                    listState.animateScrollToItem(0)
+                                }
+                            }.invokeOnCompletion {
+                                scope.launch {
+                                    onSearch = true
+                                    markAsRead = false
+                                    delay(100)
+                                    focusRequester.requestFocus()
                                 }
                             }
                         }
-                    }, colors = TopAppBarDefaults.topAppBarColors(
-                        scrolledContainerColor = scrolledTopBarContainerColor
-                    )
+                    }
+                }, colors = TopAppBarDefaults.topAppBarColors(
+                    scrolledContainerColor = scrolledTopBarContainerColor
+                )
                 )
             }
         }, content = {
@@ -393,27 +383,27 @@ fun FlowPage(
             RYExtensibleVisibility(modifier = Modifier.zIndex(1f), visible = onSearch) {
                 SearchBar(
                     value = filterUiState.searchContent ?: "", placeholder = when {
-                        filterUiState.group != null -> stringResource(
-                            R.string.search_for_in,
-                            filterUiState.filter.toName(),
-                            filterUiState.group.name
-                        )
+                    filterUiState.group != null -> stringResource(
+                        R.string.search_for_in,
+                        filterUiState.filter.toName(),
+                        filterUiState.group.name
+                    )
 
-                        filterUiState.feed != null -> stringResource(
-                            R.string.search_for_in,
-                            filterUiState.filter.toName(),
-                            filterUiState.feed.name
-                        )
+                    filterUiState.feed != null -> stringResource(
+                        R.string.search_for_in,
+                        filterUiState.filter.toName(),
+                        filterUiState.feed.name
+                    )
 
-                        else -> stringResource(
-                            R.string.search_for, filterUiState.filter.toName()
-                        )
-                    }, focusRequester = focusRequester, onValueChange = {
-                        homeViewModel.inputSearchContent(it)
-                    }, onClose = {
-                        onSearch = false
-                        homeViewModel.inputSearchContent(null)
-                    })
+                    else -> stringResource(
+                        R.string.search_for, filterUiState.filter.toName()
+                    )
+                }, focusRequester = focusRequester, onValueChange = {
+                    homeViewModel.inputSearchContent(it)
+                }, onClose = {
+                    onSearch = false
+                    homeViewModel.inputSearchContent(null)
+                })
             }
 
             RYExtensibleVisibility(markAsRead) {
@@ -433,28 +423,22 @@ fun FlowPage(
             val contentTransitionBackward =
                 sharedXAxisTransitionSlow(direction = Direction.Backward)
             val contentTransitionForward = sharedXAxisTransitionSlow(direction = Direction.Forward)
-            AnimatedContent(
-                targetState = flowUiState,
-                contentKey = {
-                    it.pagerData.filterState.copy(searchContent = null)
-                },
-                transitionSpec = {
-                    val targetFilter = targetState.pagerData.filterState
-                    val initialFilter = initialState.pagerData.filterState
+            AnimatedContent(targetState = flowUiState, contentKey = {
+                it.pagerData.filterState.copy(searchContent = null)
+            }, transitionSpec = {
+                val targetFilter = targetState.pagerData.filterState
+                val initialFilter = initialState.pagerData.filterState
 
-                    if (targetFilter.filter.index > initialFilter.filter.index) {
-                        contentTransitionForward
-                    } else if (targetFilter.filter.index < initialFilter.filter.index) {
-                        contentTransitionBackward
-                    } else if (
-                        targetFilter.group != initialFilter.group || targetFilter.feed != initialFilter.feed
-                    ) {
-                        contentTransitionVertical
-                    } else {
-                        EnterTransition.None togetherWith ExitTransition.None
-                    }
+                if (targetFilter.filter.index > initialFilter.filter.index) {
+                    contentTransitionForward
+                } else if (targetFilter.filter.index < initialFilter.filter.index) {
+                    contentTransitionBackward
+                } else if (targetFilter.group != initialFilter.group || targetFilter.feed != initialFilter.feed) {
+                    contentTransitionVertical
+                } else {
+                    EnterTransition.None togetherWith ExitTransition.None
                 }
-            ) { flowUiState ->
+            }) { flowUiState ->
                 val pager = flowUiState.pagerData.pager
                 val filterState = flowUiState.pagerData.filterState
                 val pagingItems = pager.collectAsLazyPagingItems()
@@ -472,6 +456,16 @@ fun FlowPage(
                                 homeViewModel.diffMapHolder.updateDiff(
                                     articleWithFeed = items.toTypedArray(), isUnread = false
                                 )
+                            }
+                        }
+                    }
+                }
+
+                if (settings.flowArticleListDateStickyHeader.value) {
+                    LaunchedEffect(lastVisibleIndex) {
+                        lastVisibleIndex.collect {
+                            if (it in (pagingItems.itemCount - 25..pagingItems.itemCount - 1)) {
+                                pagingItems.get(it)
                             }
                         }
                     }
@@ -495,8 +489,7 @@ fun FlowPage(
                         {
                             flowViewModel.markAllAsRead()
                             currentPullToLoadState?.animateDistanceTo(
-                                targetValue = 0f,
-                                animationSpec = settleSpec
+                                targetValue = 0f, animationSpec = settleSpec
                             )
                         }
                     }
@@ -508,8 +501,7 @@ fun FlowPage(
                     {
                         flowViewModel.sync()
                         currentPullToLoadState?.animateDistanceTo(
-                            targetValue = 0f,
-                            animationSpec = settleSpec
+                            targetValue = 0f, animationSpec = settleSpec
                         )
                     }
                 }
@@ -522,8 +514,7 @@ fun FlowPage(
                 ).also { currentPullToLoadState = it }
 
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     LazyColumn(
                         modifier = Modifier
@@ -541,8 +532,7 @@ fun FlowPage(
                                     if (it < -10f) {
                                         markAsRead = false
                                     }
-                                }
-                            )
+                                })
                             .nestedScroll(scrollBehavior.nestedScrollConnection)
                             .fillMaxSize(),
                         state = listState,
@@ -557,8 +547,7 @@ fun FlowPage(
                             onClick = { articleWithFeed ->
                                 if (articleWithFeed.feed.isBrowser) {
                                     homeViewModel.diffMapHolder.updateDiff(
-                                        articleWithFeed,
-                                        isUnread = false
+                                        articleWithFeed, isUnread = false
                                     )
                                     context.openURL(
                                         articleWithFeed.article.link,
@@ -635,8 +624,7 @@ fun FlowPage(
         })
         currentPullToLoadState?.let {
             PullToSyncIndicator(
-                pullToLoadState = it,
-                isSyncing = isSyncing
+                pullToLoadState = it, isSyncing = isSyncing
             )
             PullToLoadIndicator(
                 state = it,

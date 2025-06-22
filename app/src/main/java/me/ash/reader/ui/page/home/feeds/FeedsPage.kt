@@ -137,13 +137,8 @@ fun FeedsPage(
     val doSync: () -> Unit = {
         isSyncing = true
         syncingScope.launch {
-
             feedsViewModel.sync()
         }
-    }
-
-    LaunchedEffect(Unit) {
-        feedsViewModel.changeFilter(filterState.copy(feed = null, group = null))
     }
 
     DisposableEffect(owner) {
