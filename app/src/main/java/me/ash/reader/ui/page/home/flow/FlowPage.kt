@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
@@ -39,7 +40,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -102,7 +102,8 @@ import me.ash.reader.ui.page.home.reading.pullToLoad
 import me.ash.reader.ui.page.home.reading.rememberPullToLoadState
 
 @OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalSharedTransitionApi::class,
     ExperimentalMaterialApi::class,
 )
 @Composable
@@ -138,20 +139,18 @@ fun FlowPage(
 
     val filterUiState = pagerData.filterState
 
-    val listState = rememberSaveable(pagerData, saver = LazyListState.Saver) {
-        LazyListState(0, 0)
-    }
+    val listState = rememberSaveable(pagerData, saver = LazyListState.Saver) { LazyListState(0, 0) }
 
     val isTopBarElevated = topBarTonalElevation.value > 0
-    val scrolledTopBarContainerColor = with(MaterialTheme.colorScheme) {
-        if (isTopBarElevated) surfaceContainer else surface
-    }
+    val scrolledTopBarContainerColor =
+        with(MaterialTheme.colorScheme) { if (isTopBarElevated) surfaceContainer else surface }
 
-    val titleText = when {
-        filterUiState.group != null -> filterUiState.group.name
-        filterUiState.feed != null -> filterUiState.feed.name
-        else -> filterUiState.filter.toName()
-    }
+    val titleText =
+        when {
+            filterUiState.group != null -> filterUiState.group.name
+            filterUiState.feed != null -> filterUiState.feed.name
+            else -> filterUiState.filter.toName()
+        }
 
     val scope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
@@ -161,13 +160,13 @@ fun FlowPage(
     var currentPullToLoadState: PullToLoadState? by remember { mutableStateOf(null) }
     var currentLoadAction: LoadAction? by remember { mutableStateOf(null) }
 
-    val settleSpec = remember {
-        spring<Float>(dampingRatio = Spring.DampingRatioLowBouncy)
-    }
+    val settleSpec = remember { spring<Float>(dampingRatio = Spring.DampingRatioLowBouncy) }
 
-    val lastVisibleIndex = remember(listState) {
-        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }.filterNotNull()
-    }
+    val lastVisibleIndex =
+        remember(listState) {
+            snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+                .filterNotNull()
+        }
 
     var showFab by remember(listState) { mutableStateOf(false) }
 
@@ -196,35 +195,36 @@ fun FlowPage(
     }
 
     val onToggleRead: (ArticleWithFeed) -> Unit = remember {
-        { articleWithFeed ->
-            homeViewModel.diffMapHolder.updateDiff(articleWithFeed)
-        }
+        { articleWithFeed -> homeViewModel.diffMapHolder.updateDiff(articleWithFeed) }
     }
 
     val sortByEarliest =
-        filterUiState.filter.isUnread() && LocalSortUnreadArticles.current == SortUnreadArticlesPreference.Earliest
+        filterUiState.filter.isUnread() &&
+            LocalSortUnreadArticles.current == SortUnreadArticlesPreference.Earliest
 
-    val onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? = remember(sortByEarliest) {
-        {
-            flowViewModel.markAsReadFromListByDate(
-                date = it.article.date, isBefore = sortByEarliest
-            )
+    val onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? =
+        remember(sortByEarliest) {
+            {
+                flowViewModel.markAsReadFromListByDate(
+                    date = it.article.date,
+                    isBefore = sortByEarliest,
+                )
+            }
         }
-    }
 
-    val onMarkBelowAsRead: ((ArticleWithFeed) -> Unit)? = remember(sortByEarliest) {
-        {
-            flowViewModel.markAsReadFromListByDate(
-                date = it.article.date, isBefore = !sortByEarliest
-            )
+    val onMarkBelowAsRead: ((ArticleWithFeed) -> Unit)? =
+        remember(sortByEarliest) {
+            {
+                flowViewModel.markAsReadFromListByDate(
+                    date = it.article.date,
+                    isBefore = !sortByEarliest,
+                )
+            }
         }
-    }
 
     val onShare: ((ArticleWithFeed) -> Unit)? = remember {
         { articleWithFeed ->
-            with(articleWithFeed.article) {
-                sharedContent.share(context, title, link)
-            }
+            with(articleWithFeed.article) { sharedContent.share(context, title, link) }
         }
     }
 
@@ -235,15 +235,11 @@ fun FlowPage(
         }
     }
 
-    BackHandler(onSearch) {
-        onSearch = false
-    }
+    BackHandler(onSearch) { onSearch = false }
 
     BackHandler {
         if (navController.previousBackStackEntry == null) {
-            navController.navigate(RouteName.FEEDS) {
-                launchSingleTop = true
-            }
+            navController.navigate(RouteName.FEEDS) { launchSingleTop = true }
         } else {
             navController.popBackStack()
         }
@@ -257,379 +253,441 @@ fun FlowPage(
 
     LaunchedEffect(isSyncing, listState) {
         if (isSyncing) {
-            snapshotFlow { listState.layoutInfo.totalItemsCount }.collect {
-                listState.requestScrollToItem(0)
-            }
+            snapshotFlow { listState.layoutInfo.totalItemsCount }
+                .collect { listState.requestScrollToItem(0) }
         }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-
-        RYScaffold(containerTonalElevation = articleListTonalElevation.value.dp, topBar = {
-            MaterialTheme(
-                colorScheme = MaterialTheme.colorScheme, typography = MaterialTheme.typography.copy(
-                    headlineMedium = MaterialTheme.typography.displaySmall,
-                    titleLarge = MaterialTheme.typography.titleLarge.merge(
-                        fontSize = 18.sp, fontWeight = FontWeight.Medium
-                    )
-                )
-            ) {
-                LargeTopAppBar(
-                    modifier = Modifier.clickable(
-                        onClick = {
-                    scope.launch {
-                        if (listState.firstVisibleItemIndex != 0) {
-                            listState.animateScrollToItem(0)
-                        }
-                    }
-                },
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }), title = {
-                    val textStyle = LocalTextStyle.current
-                    val color = LocalContentColor.current
-                    if (textStyle.fontSize.value > 18f) {
-                        BasicText(
-                            modifier = Modifier.padding(
-                                start = if (articleListFeedIcon.value) 34.dp else 8.dp,
-                                end = 24.dp
+        RYScaffold(
+            containerTonalElevation = articleListTonalElevation.value.dp,
+            topBar = {
+                MaterialTheme(
+                    colorScheme = MaterialTheme.colorScheme,
+                    typography =
+                        MaterialTheme.typography.copy(
+                            headlineMedium = MaterialTheme.typography.displaySmall,
+                            titleLarge =
+                                MaterialTheme.typography.titleLarge.merge(
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Medium,
+                                ),
+                        ),
+                ) {
+                    LargeTopAppBar(
+                        modifier =
+                            Modifier.clickable(
+                                onClick = {
+                                    scope.launch {
+                                        if (listState.firstVisibleItemIndex != 0) {
+                                            listState.animateScrollToItem(0)
+                                        }
+                                    }
+                                },
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() },
                             ),
-                            text = titleText,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
-                            style = textStyle,
-                            color = { color })
-                    } else {
-                        Text(
-                            text = titleText,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
+                        title = {
+                            val textStyle = LocalTextStyle.current
+                            val color = LocalContentColor.current
+                            if (textStyle.fontSize.value > 18f) {
+                                BasicText(
+                                    modifier =
+                                        Modifier.padding(
+                                            start = if (articleListFeedIcon.value) 34.dp else 8.dp,
+                                            end = 24.dp,
+                                        ),
+                                    text = titleText,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis,
+                                    style = textStyle,
+                                    color = { color },
+                                    autoSize =
+                                        TextAutoSize.StepBased(
+                                            minFontSize = 28.sp,
+                                            maxFontSize = textStyle.fontSize,
+                                        ),
+                                )
+                            } else {
+                                Text(
+                                    text = titleText,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                            }
+                        },
+                        expandedHeight = 172.dp,
+                        scrollBehavior = scrollBehavior,
+                        navigationIcon = {
+                            FeedbackIconButton(
+                                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                                contentDescription = stringResource(R.string.back),
+                                tint = MaterialTheme.colorScheme.onSurface,
+                            ) {
+                                onSearch = false
+                                if (navController.previousBackStackEntry == null) {
+                                    navController.navigate(RouteName.FEEDS) {
+                                        launchSingleTop = true
+                                    }
+                                } else {
+                                    navController.popBackStack()
+                                }
+                            }
+                        },
+                        actions = {
+                            RYExtensibleVisibility(visible = !filterUiState.filter.isStarred()) {
+                                FeedbackIconButton(
+                                    imageVector = Icons.Rounded.DoneAll,
+                                    contentDescription = stringResource(R.string.mark_all_as_read),
+                                    tint =
+                                        if (markAsRead) {
+                                            MaterialTheme.colorScheme.primary
+                                        } else {
+                                            MaterialTheme.colorScheme.onSurface
+                                        },
+                                ) {
+                                    if (markAsRead) {
+                                        markAsRead = false
+                                    } else {
+                                        scope
+                                            .launch {
+                                                if (listState.firstVisibleItemIndex != 0) {
+                                                    listState.animateScrollToItem(0)
+                                                }
+                                            }
+                                            .invokeOnCompletion {
+                                                markAsRead = true
+                                                onSearch = false
+                                            }
+                                    }
+                                }
+                            }
+                            FeedbackIconButton(
+                                imageVector = Icons.Rounded.Search,
+                                contentDescription = stringResource(R.string.search),
+                                tint =
+                                    if (onSearch) {
+                                        MaterialTheme.colorScheme.primary
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurface
+                                    },
+                            ) {
+                                if (onSearch) {
+                                    onSearch = false
+                                } else {
+                                    scope
+                                        .launch {
+                                            if (listState.firstVisibleItemIndex != 0) {
+                                                listState.animateScrollToItem(0)
+                                            }
+                                        }
+                                        .invokeOnCompletion {
+                                            scope.launch {
+                                                onSearch = true
+                                                markAsRead = false
+                                                delay(100)
+                                                focusRequester.requestFocus()
+                                            }
+                                        }
+                                }
+                            }
+                        },
+                        colors =
+                            TopAppBarDefaults.topAppBarColors(
+                                scrolledContainerColor = scrolledTopBarContainerColor
+                            ),
+                    )
+                }
+            },
+            content = {
+                RYExtensibleVisibility(modifier = Modifier.zIndex(1f), visible = onSearch) {
+                    SearchBar(
+                        value = filterUiState.searchContent ?: "",
+                        placeholder =
+                            when {
+                                filterUiState.group != null ->
+                                    stringResource(
+                                        R.string.search_for_in,
+                                        filterUiState.filter.toName(),
+                                        filterUiState.group.name,
+                                    )
+
+                                filterUiState.feed != null ->
+                                    stringResource(
+                                        R.string.search_for_in,
+                                        filterUiState.filter.toName(),
+                                        filterUiState.feed.name,
+                                    )
+
+                                else ->
+                                    stringResource(
+                                        R.string.search_for,
+                                        filterUiState.filter.toName(),
+                                    )
+                            },
+                        focusRequester = focusRequester,
+                        onValueChange = { homeViewModel.inputSearchContent(it) },
+                        onClose = {
+                            onSearch = false
+                            homeViewModel.inputSearchContent(null)
+                        },
+                    )
+                }
+
+                RYExtensibleVisibility(markAsRead) {
+                    MarkAsReadBar {
+                        markAsRead = false
+                        flowViewModel.updateReadStatus(
+                            groupId = filterUiState.group?.id,
+                            feedId = filterUiState.feed?.id,
+                            articleId = null,
+                            conditions = it,
+                            isUnread = false,
                         )
                     }
+                }
+                val contentTransitionVertical =
+                    sharedYAxisTransitionExpressive(direction = Direction.Forward)
+                val contentTransitionBackward =
+                    sharedXAxisTransitionSlow(direction = Direction.Backward)
+                val contentTransitionForward =
+                    sharedXAxisTransitionSlow(direction = Direction.Forward)
+                AnimatedContent(
+                    targetState = flowUiState,
+                    contentKey = { it.pagerData.filterState.copy(searchContent = null) },
+                    transitionSpec = {
+                        val targetFilter = targetState.pagerData.filterState
+                        val initialFilter = initialState.pagerData.filterState
 
-                }, expandedHeight = 172.dp, scrollBehavior = scrollBehavior, navigationIcon = {
-                    FeedbackIconButton(
-                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                        contentDescription = stringResource(R.string.back),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    ) {
-                        onSearch = false
-                        if (navController.previousBackStackEntry == null) {
-                            navController.navigate(RouteName.FEEDS) {
-                                launchSingleTop = true
-                            }
-                        } else {
-                            navController.popBackStack()
-                        }
-                    }
-                }, actions = {
-                    RYExtensibleVisibility(visible = !filterUiState.filter.isStarred()) {
-                        FeedbackIconButton(
-                            imageVector = Icons.Rounded.DoneAll,
-                            contentDescription = stringResource(R.string.mark_all_as_read),
-                            tint = if (markAsRead) {
-                                MaterialTheme.colorScheme.primary
-                            } else {
-                                MaterialTheme.colorScheme.onSurface
-                            },
+                        if (targetFilter.filter.index > initialFilter.filter.index) {
+                            contentTransitionForward
+                        } else if (targetFilter.filter.index < initialFilter.filter.index) {
+                            contentTransitionBackward
+                        } else if (
+                            targetFilter.group != initialFilter.group ||
+                                targetFilter.feed != initialFilter.feed
                         ) {
-                            if (markAsRead) {
-                                markAsRead = false
-                            } else {
-                                scope.launch {
-                                    if (listState.firstVisibleItemIndex != 0) {
-                                        listState.animateScrollToItem(0)
+                            contentTransitionVertical
+                        } else {
+                            EnterTransition.None togetherWith ExitTransition.None
+                        }
+                    },
+                ) { flowUiState ->
+                    val pager = flowUiState.pagerData.pager
+                    val filterState = flowUiState.pagerData.filterState
+                    val pagingItems = pager.collectAsLazyPagingItems()
+
+                    if (markAsReadOnScroll && filterState.filter.isUnread()) {
+                        LaunchedEffect(listState.isScrollInProgress) {
+                            if (!listState.isScrollInProgress) {
+                                val firstItemIndex = listState.firstVisibleItemIndex
+                                val items = mutableListOf<ArticleWithFeed>()
+                                if (firstItemIndex < pagingItems.itemCount) {
+                                    for (index in 0 until firstItemIndex) {
+                                        pagingItems.peek(index).let {
+                                            if (it is ArticleFlowItem.Article)
+                                                items.add(it.articleWithFeed)
+                                        }
                                     }
-                                }.invokeOnCompletion {
-                                    markAsRead = true
-                                    onSearch = false
-                                }
-                            }
-
-                        }
-                    }
-                    FeedbackIconButton(
-                        imageVector = Icons.Rounded.Search,
-                        contentDescription = stringResource(R.string.search),
-                        tint = if (onSearch) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.onSurface
-                        },
-                    ) {
-                        if (onSearch) {
-                            onSearch = false
-                        } else {
-                            scope.launch {
-                                if (listState.firstVisibleItemIndex != 0) {
-                                    listState.animateScrollToItem(0)
-                                }
-                            }.invokeOnCompletion {
-                                scope.launch {
-                                    onSearch = true
-                                    markAsRead = false
-                                    delay(100)
-                                    focusRequester.requestFocus()
+                                    homeViewModel.diffMapHolder.updateDiff(
+                                        articleWithFeed = items.toTypedArray(),
+                                        isUnread = false,
+                                    )
                                 }
                             }
                         }
                     }
-                }, colors = TopAppBarDefaults.topAppBarColors(
-                    scrolledContainerColor = scrolledTopBarContainerColor
-                )
-                )
-            }
-        }, content = {
 
-            RYExtensibleVisibility(modifier = Modifier.zIndex(1f), visible = onSearch) {
-                SearchBar(
-                    value = filterUiState.searchContent ?: "", placeholder = when {
-                    filterUiState.group != null -> stringResource(
-                        R.string.search_for_in,
-                        filterUiState.filter.toName(),
-                        filterUiState.group.name
-                    )
-
-                    filterUiState.feed != null -> stringResource(
-                        R.string.search_for_in,
-                        filterUiState.filter.toName(),
-                        filterUiState.feed.name
-                    )
-
-                    else -> stringResource(
-                        R.string.search_for, filterUiState.filter.toName()
-                    )
-                }, focusRequester = focusRequester, onValueChange = {
-                    homeViewModel.inputSearchContent(it)
-                }, onClose = {
-                    onSearch = false
-                    homeViewModel.inputSearchContent(null)
-                })
-            }
-
-            RYExtensibleVisibility(markAsRead) {
-                MarkAsReadBar {
-                    markAsRead = false
-                    flowViewModel.updateReadStatus(
-                        groupId = filterUiState.group?.id,
-                        feedId = filterUiState.feed?.id,
-                        articleId = null,
-                        conditions = it,
-                        isUnread = false
-                    )
-                }
-            }
-            val contentTransitionVertical =
-                sharedYAxisTransitionExpressive(direction = Direction.Forward)
-            val contentTransitionBackward =
-                sharedXAxisTransitionSlow(direction = Direction.Backward)
-            val contentTransitionForward = sharedXAxisTransitionSlow(direction = Direction.Forward)
-            AnimatedContent(targetState = flowUiState, contentKey = {
-                it.pagerData.filterState.copy(searchContent = null)
-            }, transitionSpec = {
-                val targetFilter = targetState.pagerData.filterState
-                val initialFilter = initialState.pagerData.filterState
-
-                if (targetFilter.filter.index > initialFilter.filter.index) {
-                    contentTransitionForward
-                } else if (targetFilter.filter.index < initialFilter.filter.index) {
-                    contentTransitionBackward
-                } else if (targetFilter.group != initialFilter.group || targetFilter.feed != initialFilter.feed) {
-                    contentTransitionVertical
-                } else {
-                    EnterTransition.None togetherWith ExitTransition.None
-                }
-            }) { flowUiState ->
-                val pager = flowUiState.pagerData.pager
-                val filterState = flowUiState.pagerData.filterState
-                val pagingItems = pager.collectAsLazyPagingItems()
-
-                if (markAsReadOnScroll && filterState.filter.isUnread()) {
-                    LaunchedEffect(listState.isScrollInProgress) {
-                        if (!listState.isScrollInProgress) {
-                            val firstItemIndex = listState.firstVisibleItemIndex
-                            val items = mutableListOf<ArticleWithFeed>()
-                            if (firstItemIndex < pagingItems.itemCount) {
-                                for (index in 0 until firstItemIndex) {
-                                    pagingItems.peek(index)
-                                        .let { if (it is ArticleFlowItem.Article) items.add(it.articleWithFeed) }
+                    if (settings.flowArticleListDateStickyHeader.value) {
+                        LaunchedEffect(lastVisibleIndex) {
+                            lastVisibleIndex.collect {
+                                if (it in (pagingItems.itemCount - 25..pagingItems.itemCount - 1)) {
+                                    pagingItems.get(it)
                                 }
-                                homeViewModel.diffMapHolder.updateDiff(
-                                    articleWithFeed = items.toTypedArray(), isUnread = false
+                            }
+                        }
+                    }
+
+                    val listState = remember(pager) { listState }
+                    val loadAction =
+                        remember(pager, flowUiState) {
+                                when {
+                                    flowUiState.nextFilterState != null ->
+                                        LoadAction.NextFeed.fromFilterState(
+                                            flowUiState.nextFilterState
+                                        )
+
+                                    filterState.filter.isUnread() && markAsReadOnScroll ->
+                                        LoadAction.MarkAllAsRead
+                                    else -> null
+                                }
+                            }
+                            .also { currentLoadAction = it }
+
+                    val onLoadNext: (() -> Unit)? =
+                        when (loadAction) {
+                            is LoadAction.NextFeed -> flowViewModel::loadNextFeedOrGroup
+                            LoadAction.MarkAllAsRead -> {
+                                {
+                                    flowViewModel.markAllAsRead()
+                                    currentPullToLoadState?.animateDistanceTo(
+                                        targetValue = 0f,
+                                        animationSpec = settleSpec,
+                                    )
+                                }
+                            }
+
+                            else -> null
+                        }
+
+                    val onPullToSync: (() -> Unit)? =
+                        if (isSyncing) null
+                        else {
+                            {
+                                flowViewModel.sync()
+                                currentPullToLoadState?.animateDistanceTo(
+                                    targetValue = 0f,
+                                    animationSpec = settleSpec,
+                                )
+                            }
+                        }
+
+                    val pullToLoadState =
+                        rememberPullToLoadState(
+                                key = pager,
+                                onLoadNext = onLoadNext,
+                                onLoadPrevious = onPullToSync,
+                                loadThreshold = PullToLoadDefaults.loadThreshold(.1f),
+                            )
+                            .also { currentPullToLoadState = it }
+
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        LazyColumn(
+                            modifier =
+                                Modifier.pullToLoad(
+                                        pullToLoadState,
+                                        enabled = pullToSwitchFeed.value,
+                                        contentOffsetY = { fraction ->
+                                            if (fraction > 0f) {
+                                                (fraction * ContentOffsetMultiple * 1.5f)
+                                                    .dp
+                                                    .roundToPx()
+                                            } else {
+                                                (fraction * ContentOffsetMultiple * 2f)
+                                                    .dp
+                                                    .roundToPx()
+                                            }
+                                        },
+                                        onScroll = {
+                                            if (it < -10f) {
+                                                markAsRead = false
+                                            }
+                                        },
+                                    )
+                                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                                    .fillMaxSize(),
+                            state = listState,
+                        ) {
+                            ArticleList(
+                                pagingItems = pagingItems,
+                                diffMap = homeViewModel.diffMapHolder.diffMap,
+                                isShowFeedIcon = articleListFeedIcon.value,
+                                isShowStickyHeader = articleListDateStickyHeader.value,
+                                articleListTonalElevation = articleListTonalElevation.value,
+                                isSwipeEnabled = { listState.isScrollInProgress },
+                                onClick = { articleWithFeed ->
+                                    if (articleWithFeed.feed.isBrowser) {
+                                        homeViewModel.diffMapHolder.updateDiff(
+                                            articleWithFeed,
+                                            isUnread = false,
+                                        )
+                                        context.openURL(
+                                            articleWithFeed.article.link,
+                                            openLink,
+                                            openLinkSpecificBrowser,
+                                        )
+                                    } else {
+                                        navController.navigate(
+                                            "${RouteName.READING}/${articleWithFeed.article.id}"
+                                        ) {
+                                            launchSingleTop = true
+                                        }
+                                    }
+                                },
+                                onToggleStarred = onToggleStarred,
+                                onToggleRead = onToggleRead,
+                                onMarkAboveAsRead = onMarkAboveAsRead,
+                                onMarkBelowAsRead = onMarkBelowAsRead,
+                                onShare = onShare,
+                            )
+                            item {
+                                Spacer(modifier = Modifier.height(128.dp))
+                                Spacer(
+                                    modifier =
+                                        Modifier.windowInsetsBottomHeight(
+                                            WindowInsets.navigationBars
+                                        )
                                 )
                             }
                         }
                     }
                 }
-
-                if (settings.flowArticleListDateStickyHeader.value) {
-                    LaunchedEffect(lastVisibleIndex) {
-                        lastVisibleIndex.collect {
-                            if (it in (pagingItems.itemCount - 25..pagingItems.itemCount - 1)) {
-                                pagingItems.get(it)
+            },
+            floatingActionButton = {
+                ScrollToLastReadFab(visible = showFab) {
+                    scope.launch {
+                        lastReadIndex?.let { listState.animateScrollToItem(index = it) }
+                    }
+                    scope.launch {
+                        val initial = topAppBarState.heightOffset
+                        val target = topAppBarState.heightOffsetLimit
+                        animate(
+                            initialValue = initial,
+                            targetValue = target,
+                            initialVelocity = 0f,
+                            animationSpec = settleSpec,
+                        ) { value, _ ->
+                            topAppBarState.heightOffset = value
+                        }
+                    }
+                    flowViewModel.updateLastReadIndex(null)
+                    showFab = false
+                }
+            },
+            floatingActionButtonPosition = FabPosition.Center,
+            bottomBar = {
+                FilterBar(
+                    modifier =
+                        with(sharedTransitionScope) {
+                            Modifier.sharedElement(
+                                sharedContentState = rememberSharedContentState("filterBar"),
+                                animatedVisibilityScope = animatedVisibilityScope,
+                            )
+                        },
+                    filter = filterUiState.filter,
+                    filterBarStyle = filterBarStyle.value,
+                    filterBarFilled = filterBarFilled.value,
+                    filterBarPadding = filterBarPadding.dp,
+                    filterBarTonalElevation = filterBarTonalElevation.value.dp,
+                ) {
+                    if (filterUiState.filter != it) {
+                        homeViewModel.changeFilter(filterUiState.copy(filter = it))
+                    } else {
+                        scope.launch {
+                            if (listState.firstVisibleItemIndex != 0) {
+                                listState.animateScrollToItem(0)
                             }
                         }
                     }
                 }
-
-                val listState = remember(pager) { listState }
-                val loadAction = remember(pager, flowUiState) {
-                    when {
-                        flowUiState.nextFilterState != null -> LoadAction.NextFeed.fromFilterState(
-                            flowUiState.nextFilterState
-                        )
-
-                        filterState.filter.isUnread() && markAsReadOnScroll -> LoadAction.MarkAllAsRead
-                        else -> null
-                    }
-                }.also { currentLoadAction = it }
-
-                val onLoadNext: (() -> Unit)? = when (loadAction) {
-                    is LoadAction.NextFeed -> flowViewModel::loadNextFeedOrGroup
-                    LoadAction.MarkAllAsRead -> {
-                        {
-                            flowViewModel.markAllAsRead()
-                            currentPullToLoadState?.animateDistanceTo(
-                                targetValue = 0f, animationSpec = settleSpec
-                            )
-                        }
-                    }
-
-                    else -> null
-                }
-
-                val onPullToSync: (() -> Unit)? = if (isSyncing) null else {
-                    {
-                        flowViewModel.sync()
-                        currentPullToLoadState?.animateDistanceTo(
-                            targetValue = 0f, animationSpec = settleSpec
-                        )
-                    }
-                }
-
-                val pullToLoadState = rememberPullToLoadState(
-                    key = pager,
-                    onLoadNext = onLoadNext,
-                    onLoadPrevious = onPullToSync,
-                    loadThreshold = PullToLoadDefaults.loadThreshold(.1f)
-                ).also { currentPullToLoadState = it }
-
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    LazyColumn(
-                        modifier = Modifier
-                            .pullToLoad(
-                                pullToLoadState,
-                                enabled = pullToSwitchFeed.value,
-                                contentOffsetY = { fraction ->
-                                    if (fraction > 0f) {
-                                        (fraction * ContentOffsetMultiple * 1.5f).dp.roundToPx()
-                                    } else {
-                                        (fraction * ContentOffsetMultiple * 2f).dp.roundToPx()
-                                    }
-                                },
-                                onScroll = {
-                                    if (it < -10f) {
-                                        markAsRead = false
-                                    }
-                                })
-                            .nestedScroll(scrollBehavior.nestedScrollConnection)
-                            .fillMaxSize(),
-                        state = listState,
-                    ) {
-                        ArticleList(
-                            pagingItems = pagingItems,
-                            diffMap = homeViewModel.diffMapHolder.diffMap,
-                            isShowFeedIcon = articleListFeedIcon.value,
-                            isShowStickyHeader = articleListDateStickyHeader.value,
-                            articleListTonalElevation = articleListTonalElevation.value,
-                            isSwipeEnabled = { listState.isScrollInProgress },
-                            onClick = { articleWithFeed ->
-                                if (articleWithFeed.feed.isBrowser) {
-                                    homeViewModel.diffMapHolder.updateDiff(
-                                        articleWithFeed, isUnread = false
-                                    )
-                                    context.openURL(
-                                        articleWithFeed.article.link,
-                                        openLink,
-                                        openLinkSpecificBrowser
-                                    )
-                                } else {
-                                    navController.navigate("${RouteName.READING}/${articleWithFeed.article.id}") {
-                                        launchSingleTop = true
-                                    }
-                                }
-                            },
-                            onToggleStarred = onToggleStarred,
-                            onToggleRead = onToggleRead,
-                            onMarkAboveAsRead = onMarkAboveAsRead,
-                            onMarkBelowAsRead = onMarkBelowAsRead,
-                            onShare = onShare,
-                        )
-                        item {
-                            Spacer(modifier = Modifier.height(128.dp))
-                            Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
-                        }
-                    }
-                }
-            }
-        }, floatingActionButton = {
-            ScrollToLastReadFab(visible = showFab) {
-                scope.launch {
-                    lastReadIndex?.let {
-                        listState.animateScrollToItem(index = it)
-                    }
-                }
-                scope.launch {
-                    val initial = topAppBarState.heightOffset
-                    val target = topAppBarState.heightOffsetLimit
-                    animate(
-                        initialValue = initial,
-                        targetValue = target,
-                        initialVelocity = 0f,
-                        animationSpec = settleSpec
-                    ) { value, _ ->
-                        topAppBarState.heightOffset = value
-                    }
-                }
-                flowViewModel.updateLastReadIndex(null)
-                showFab = false
-            }
-        }, floatingActionButtonPosition = FabPosition.Center, bottomBar = {
-            FilterBar(
-                modifier = with(sharedTransitionScope) {
-                    Modifier.sharedElement(
-                        sharedContentState = rememberSharedContentState(
-                            "filterBar"
-                        ), animatedVisibilityScope = animatedVisibilityScope
-                    )
-                },
-                filter = filterUiState.filter,
-                filterBarStyle = filterBarStyle.value,
-                filterBarFilled = filterBarFilled.value,
-                filterBarPadding = filterBarPadding.dp,
-                filterBarTonalElevation = filterBarTonalElevation.value.dp,
-            ) {
-
-                if (filterUiState.filter != it) {
-                    homeViewModel.changeFilter(filterUiState.copy(filter = it))
-                } else {
-                    scope.launch {
-                        if (listState.firstVisibleItemIndex != 0) {
-                            listState.animateScrollToItem(0)
-                        }
-                    }
-                }
-            }
-        })
+            },
+        )
         currentPullToLoadState?.let {
-            PullToSyncIndicator(
-                pullToLoadState = it, isSyncing = isSyncing
-            )
+            PullToSyncIndicator(pullToLoadState = it, isSyncing = isSyncing)
             PullToLoadIndicator(
                 state = it,
                 loadAction = currentLoadAction,
-                modifier = Modifier.padding(bottom = 36.dp)
+                modifier = Modifier.padding(bottom = 36.dp),
             )
         }
     }

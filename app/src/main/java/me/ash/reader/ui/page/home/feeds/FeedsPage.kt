@@ -145,8 +145,7 @@ fun FeedsPage(
         scope.launch {
             owner.lifecycle.eventFlow.collect {
                 when (it) {
-                    Lifecycle.Event.ON_RESUME,
-                    Lifecycle.Event.ON_PAUSE -> {
+                    Lifecycle.Event.ON_RESUME, Lifecycle.Event.ON_PAUSE -> {
                         feedsViewModel.commitDiffs()
                     }
 
@@ -190,15 +189,14 @@ fun FeedsPage(
             TopAppBar(
                 modifier = Modifier.clickable(
                     onClick = {
-                        scope.launch {
-                            if (listState.firstVisibleItemIndex != 0) {
-                                listState.animateScrollToItem(0)
-                            }
-                        }
-                    },
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ),
+                scope.launch {
+                    if (listState.firstVisibleItemIndex != 0) {
+                        listState.animateScrollToItem(0)
+                    }
+                }
+            },
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }),
                 title = {},
                 navigationIcon = {
                     FeedbackIconButton(
@@ -230,16 +228,12 @@ fun FeedsPage(
                     ),
                 )
             )
-        },
-        content = {
+        }, content = {
             PullToRefreshBox(
-                state = syncingState,
-                isRefreshing = isSyncing,
-                onRefresh = doSync
+                state = syncingState, isRefreshing = isSyncing, onRefresh = doSync
             ) {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    state = listState
+                    modifier = Modifier.fillMaxSize(), state = listState
                 ) {
                     item {
                         DisplayText(
@@ -297,27 +291,19 @@ fun FeedsPage(
                     itemsIndexed(groupWithFeedList) { _, (group, feeds) ->
 
                         GroupWithFeedsContainer {
-                            GroupItem(
-                                isExpanded = {
-                                    groupsVisible.getOrPut(
-                                        group.id,
-                                        groupListExpand::value
-                                    )
-                                },
-                                group = group,
-                                onExpanded = {
-                                    groupsVisible[group.id] =
-                                        groupsVisible.getOrPut(
-                                            group.id,
-                                            groupListExpand::value
-                                        ).not()
-                                },
-                                onLongClick = {
-                                    scope.launch {
-                                        groupDrawerState.show()
-                                    }
+                            GroupItem(isExpanded = {
+                                groupsVisible.getOrPut(
+                                    group.id, groupListExpand::value
+                                )
+                            }, group = group, onExpanded = {
+                                groupsVisible[group.id] = groupsVisible.getOrPut(
+                                    group.id, groupListExpand::value
+                                ).not()
+                            }, onLongClick = {
+                                scope.launch {
+                                    groupDrawerState.show()
                                 }
-                            ) {
+                            }) {
                                 filterChange(
                                     navController = navController,
                                     feedsViewModel = feedsViewModel,
@@ -334,10 +320,10 @@ fun FeedsPage(
                                     isLastItem = { index == feeds.lastIndex },
                                     isExpanded = {
                                         groupsVisible.getOrPut(
-                                            feed.groupId,
-                                            groupListExpand::value
+                                            feed.groupId, groupListExpand::value
                                         )
-                                    }, onClick = {
+                                    },
+                                    onClick = {
                                         filterChange(
                                             navController = navController,
                                             feedsViewModel = feedsViewModel,
@@ -346,12 +332,12 @@ fun FeedsPage(
                                                 feed = feed,
                                             )
                                         )
-                                    }, onLongClick = {
+                                    },
+                                    onLongClick = {
                                         scope.launch {
                                             feedDrawerState.show()
                                         }
-                                    }
-                                )
+                                    })
                             }
                         }
                     }
@@ -362,15 +348,13 @@ fun FeedsPage(
                     }
                 }
             }
-        },
-        bottomBar = {
+        }, bottomBar = {
             FilterBar(
                 modifier = with(sharedTransitionScope) {
                     Modifier.sharedElement(
                         sharedContentState = rememberSharedContentState(
                             "filterBar"
-                        ),
-                        animatedVisibilityScope = animatedVisibilityScope
+                        ), animatedVisibilityScope = animatedVisibilityScope
                     )
                 },
                 filter = filterState.filter,
@@ -386,8 +370,7 @@ fun FeedsPage(
                     isNavigate = false,
                 )
             }
-        }
-    )
+        })
 
     SubscribeDialog(subscribeViewModel = subscribeViewModel)
 
