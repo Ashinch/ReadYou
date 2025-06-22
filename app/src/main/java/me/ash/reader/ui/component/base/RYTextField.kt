@@ -130,6 +130,7 @@ fun RYTextField(
 }
 
 
+@Deprecated("Use overloads with state instead")
 @Composable
 fun RYTextField2(
     value: String,
@@ -145,6 +146,44 @@ fun RYTextField2(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onKeyboardAction: KeyboardActionHandler? = null,
 ) {
+
+    val state = rememberTextFieldState().also { it.edit { value } }
+    val textFlow = snapshotFlow { state.text }
+
+    LaunchedEffect(textFlow) {
+        textFlow.collect { onValueChange(it.toString()) }
+    }
+
+    RYTextField2(
+        state = state,
+        modifier = modifier,
+        readOnly = readOnly,
+        label = label,
+        singleLine = singleLine,
+        isPassword = isPassword,
+        placeholder = placeholder,
+        errorMessage = errorMessage,
+        autoFocus = autoFocus,
+        keyboardOptions = keyboardOptions,
+        onKeyboardAction = onKeyboardAction
+    )
+}
+
+
+@Composable
+fun RYTextField2(
+    state: TextFieldState,
+    modifier: Modifier = Modifier,
+    readOnly: Boolean = false,
+    label: String = "",
+    singleLine: Boolean = true,
+    isPassword: Boolean = false,
+    placeholder: String = "",
+    errorMessage: String = "",
+    autoFocus: Boolean = true,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    onKeyboardAction: KeyboardActionHandler? = null,
+) {
     val focusRequester = remember { FocusRequester() }
 
     if (autoFocus) {
@@ -152,13 +191,6 @@ fun RYTextField2(
             delay(100)  // ???
             focusRequester.requestFocus()
         }
-    }
-
-    val state = rememberTextFieldState().also { it.edit { value } }
-    val textFlow = snapshotFlow { state.text }
-
-    LaunchedEffect(textFlow) {
-        textFlow.collect { onValueChange(it.toString()) }
     }
 
     if (isPassword) {
@@ -197,7 +229,7 @@ fun RYTextField2(
             },
             lineLimits = if (singleLine) TextFieldLineLimits.SingleLine else TextFieldLineLimits.MultiLine(),
             trailingIcon = {
-                if (value.isNotEmpty()) {
+                if (state.text.isNotEmpty()) {
                     ClearButton(state)
                 } else {
                     PasteButton(state)
@@ -216,7 +248,6 @@ fun RYTextField2(
             } else null
         )
     }
-
 }
 
 @Composable

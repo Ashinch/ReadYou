@@ -65,7 +65,10 @@ abstract class AbstractRssRepository(
             url = feedLink,
             groupId = groupId,
             accountId = accountId,
-            icon = searchedFeed.icon?.link
+            icon = searchedFeed.icon?.link,
+            isBrowser = isBrowser,
+            isNotification = isNotification,
+            isFullContent = isFullContent
         )
         val articles =
             searchedFeed.entries.map { rssHelper.buildArticleFromSyndEntry(feed, accountId, it) }
@@ -297,7 +300,8 @@ abstract class AbstractRssRepository(
     suspend fun isFeedExist(url: String): Boolean =
         feedDao.queryByLink(accountService.getCurrentAccountId(), url).isNotEmpty()
 
-    suspend fun queryAllGroupWithFeeds(): List<GroupWithFeed> = groupDao.queryAllGroupWithFeed(accountService.getCurrentAccountId())
+    suspend fun queryAllGroupWithFeeds(): List<GroupWithFeed> =
+        groupDao.queryAllGroupWithFeed(accountService.getCurrentAccountId())
 
     open suspend fun renameGroup(group: Group) {
         groupDao.update(group)

@@ -52,9 +52,6 @@ fun FeedOptionView(
     onFeedUrlClick: () -> Unit = {},
     onFeedUrlLongClick: () -> Unit = {},
 ) {
-    LaunchedEffect(Unit) {
-        if (groups.isNotEmpty() && selectedGroupId.isEmpty()) onGroupClick(groups.first().id)
-    }
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState())

@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
@@ -63,33 +64,17 @@ import me.ash.reader.ui.theme.AppTheme
 @OptIn(ExperimentalMaterialApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun HomeEntry(
+    navController: NavHostController = rememberNavController(),
     homeViewModel: HomeViewModel = hiltViewModel(),
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val subscribeUiState = subscribeViewModel.subscribeUiState.collectAsStateValue()
-    val navController = rememberNavController()
 
     val intent by rememberSaveable { mutableStateOf(context.findActivity()?.intent) }
     var openArticleId by rememberSaveable {
         mutableStateOf(intent?.extras?.getString(ExtraName.ARTICLE_ID) ?: "")
     }.also {
         intent?.replaceExtras(null)
-    }
-
-    DisposableEffect(subscribeUiState.shouldNavigateToFeedPage) {
-        if (subscribeUiState.shouldNavigateToFeedPage) {
-            if (navController.currentDestination?.route != RouteName.FEEDS) {
-                navController.popBackStack(
-                    route = RouteName.FEEDS,
-                    inclusive = false,
-                    saveState = true
-                )
-            }
-        }
-        onDispose {
-            subscribeViewModel.onIntentConsumed()
-        }
     }
 
     LaunchedEffect(openArticleId) {

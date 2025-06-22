@@ -15,6 +15,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Consumer
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import androidx.profileinstaller.ProfileInstallerInitializer
 import coil.ImageLoader
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +25,7 @@ import me.ash.reader.infrastructure.preference.LanguagesPreference
 import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.ui.ext.languages
 import me.ash.reader.ui.page.common.HomeEntry
+import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import java.lang.reflect.Field
 import javax.inject.Inject
@@ -84,10 +86,20 @@ class MainActivity : AppCompatActivity() {
             AccountSettingsProvider(accountDao) {
                 settingsProvider.ProvidesSettings {
                     val subscribeViewModel: SubscribeViewModel = hiltViewModel()
+                    val navController = rememberNavController()
+
                     DisposableEffect(this) {
                         val listener = Consumer<Intent> { intent ->
                             intent.getTextOrNull()?.let {
                                 subscribeViewModel.handleSharedUrlFromIntent(it)
+                                val res = navController.popBackStack(
+                                    route = RouteName.FEEDS,
+                                    inclusive = false,
+                                    saveState = true
+                                )
+                                if (!res) navController.navigate(
+                                    route = RouteName.FEEDS,
+                                )
                             }
                         }
                         addOnNewIntentListener(listener)
@@ -95,6 +107,7 @@ class MainActivity : AppCompatActivity() {
                             removeOnNewIntentListener(listener)
                         }
                     }
+
                     HomeEntry(subscribeViewModel = subscribeViewModel)
                 }
             }

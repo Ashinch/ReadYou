@@ -1,5 +1,6 @@
 package me.ash.reader.ui.page.home.feeds.subscribe
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rometools.rome.feed.synd.SyndFeed
@@ -7,11 +8,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.ash.reader.R
@@ -31,29 +32,39 @@ class SubscribeViewModel @Inject constructor(
     val rssService: RssService,
     private val rssHelper: RssHelper,
     private val androidStringsHelper: AndroidStringsHelper,
-    @ApplicationScope
-    private val applicationScope: CoroutineScope,
+    @ApplicationScope private val applicationScope: CoroutineScope,
 ) : ViewModel() {
 
     private val _subscribeUiState = MutableStateFlow(SubscribeUiState())
     val subscribeUiState: StateFlow<SubscribeUiState> = _subscribeUiState.asStateFlow()
-    private var searchJob: Job? = null
 
-    fun init() {
-        _subscribeUiState.update {
-            it.copy(
-                title = androidStringsHelper.getString(R.string.subscribe),
-                groups = rssService.get().pullGroups(),
-            )
+    private val _subscribeState: MutableStateFlow<SubscribeState> =
+        MutableStateFlow(SubscribeState.Hidden)
+    val subscribeState = _subscribeState.asStateFlow()
+
+
+    val groupsFlow =
+        rssService.get().pullGroups().stateIn(
+            scope = viewModelScope,
+            initialValue = emptyList(),
+            started = SharingStarted.Eagerly
+        )
+
+    init {
+        viewModelScope.launch {
+            groupsFlow.collect { groups ->
+                _subscribeState.update {
+                    when (it) {
+                        is SubscribeState.Configure -> it.copy(groups = groups)
+                        else -> it
+                    }
+                }
+            }
         }
     }
 
     fun reset() {
-        searchJob?.cancel()
-        searchJob = null
-        _subscribeUiState.update {
-            SubscribeUiState(title = androidStringsHelper.getString(R.string.subscribe))
-        }
+        cancelSearch()
     }
 
     fun importFromInputStream(inputStream: InputStream) {
@@ -64,7 +75,12 @@ class SubscribeViewModel @Inject constructor(
     }
 
     fun selectedGroup(groupId: String) {
-        _subscribeUiState.update { it.copy(selectedGroupId = groupId) }
+        _subscribeState.update {
+            when (it) {
+                is SubscribeState.Configure -> it.copy(selectedGroupId = groupId)
+                else -> it
+            }
+        }
     }
 
     fun addNewGroup() {
@@ -80,99 +96,100 @@ class SubscribeViewModel @Inject constructor(
         }
     }
 
-    fun changeParseFullContentPreset() {
-        _subscribeUiState.update {
-            it.copy(parseFullContentPreset = !_subscribeUiState.value.parseFullContentPreset)
+    fun toggleParseFullContentPreset() {
+        _subscribeState.update { state ->
+            when (state) {
+                is SubscribeState.Configure -> state.copy(
+                    fullContent = !state.fullContent,
+                    browser = false
+                )
+
+                else -> state
+            }
         }
     }
 
-    fun changeOpenInBrowserPreset() {
-        _subscribeUiState.update {
-            it.copy(openInBrowserPreset = !_subscribeUiState.value.openInBrowserPreset)
+    fun toggleOpenInBrowserPreset() {
+        _subscribeState.update { state ->
+            when (state) {
+                is SubscribeState.Configure -> state.copy(
+                    browser = !state.browser,
+                    fullContent = false
+                )
+
+                else -> state
+            }
         }
     }
 
-    fun changeAllowNotificationPreset() {
-        _subscribeUiState.update {
-            it.copy(allowNotificationPreset = !_subscribeUiState.value.allowNotificationPreset)
+    fun toggleAllowNotificationPreset() {
+        _subscribeState.update { state ->
+            when (state) {
+                is SubscribeState.Configure -> state.copy(notification = !state.notification)
+                else -> state
+            }
         }
     }
 
-    fun search() {
-        searchJob?.cancel()
+    fun searchFeed() {
+        val currentState = _subscribeState.value
+        if (currentState !is SubscribeState.Idle) return
         viewModelScope.launch {
-            try {
-                _subscribeUiState.update {
-                    it.copy(
-                        errorMessage = "",
+            val feedLink = currentState.linkState.text.trim().toString().formatUrl()
+            currentState.linkState.edit { this.replace(0, length, feedLink) }
+
+            if (rssService.get().isFeedExist(feedLink)) {
+                _subscribeState.value =
+                    currentState.copy(errorMessage = androidStringsHelper.getString(R.string.already_subscribed))
+                return@launch
+            }
+            val groups = groupsFlow.value
+            val firstGroupId = groups.firstOrNull()?.id ?: return@launch
+
+            val job = viewModelScope.launch {
+                runCatching {
+                    rssHelper.searchFeed(feedLink)
+                }.onSuccess {
+                    val groups = groupsFlow.value
+                    _subscribeState.value = SubscribeState.Configure(
+                        searchedFeed = it,
+                        feedLink = feedLink,
+                        groups = groups,
+                        selectedGroupId = firstGroupId
                     )
-                }
-                _subscribeUiState.value.linkContent.trim().formatUrl().let { str ->
-                    if (str != _subscribeUiState.value.linkContent) {
-                        _subscribeUiState.update {
-                            it.copy(
-                                linkContent = str
-                            )
-                        }
-                    }
-                }
-                _subscribeUiState.update {
-                    it.copy(
-                        title = androidStringsHelper.getString(R.string.searching),
-                        lockLinkInput = true,
-                    )
-                }
-                if (rssService.get().isFeedExist(_subscribeUiState.value.linkContent)) {
-                    _subscribeUiState.update {
-                        it.copy(
-                            title = androidStringsHelper.getString(R.string.subscribe),
-                            errorMessage = androidStringsHelper.getString(R.string.already_subscribed),
-                            lockLinkInput = false,
-                        )
-                    }
-                    return@launch
-                }
-                _subscribeUiState.update {
-                    it.copy(
-                        searchedFeed = rssHelper.searchFeed(_subscribeUiState.value.linkContent),
-                    )
-                }
-                switchPage(false)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                _subscribeUiState.update {
-                    it.copy(
-                        title = androidStringsHelper.getString(R.string.subscribe),
-                        errorMessage = e.message
-                            ?: androidStringsHelper.getString(R.string.unknown),
-                        lockLinkInput = false,
-                    )
+                }.onFailure {
+                    _subscribeState.value = currentState.copy(errorMessage = it.message)
                 }
             }
-        }.also {
-            searchJob = it
+
+            _subscribeState.value =
+                SubscribeState.Fetching(linkState = currentState.linkState, job = job)
+        }
+    }
+
+    fun cancelSearch() {
+        _subscribeState.value.let {
+            if (it is SubscribeState.Fetching && it.job.isActive) {
+                it.job.cancel()
+            }
         }
     }
 
     fun subscribe() {
+        val state = _subscribeState.value
+        if (state !is SubscribeState.Configure) return
+
         applicationScope.launch {
+            val searchedFeed = state.searchedFeed
             rssService.get().subscribe(
-                searchedFeed = _subscribeUiState.value.searchedFeed ?: return@launch,
-                feedLink = _subscribeUiState.value.linkContent,
-                groupId = _subscribeUiState.value.selectedGroupId,
-                isNotification = _subscribeUiState.value.allowNotificationPreset,
-                isFullContent = _subscribeUiState.value.parseFullContentPreset,
-                isBrowser = _subscribeUiState.value.openInBrowserPreset,
+                searchedFeed = searchedFeed,
+                feedLink = state.feedLink,
+                groupId = state.selectedGroupId,
+                isNotification = state.notification,
+                isFullContent = state.fullContent,
+                isBrowser = state.browser,
             )
             hideDrawer()
-        }
-    }
-
-    fun inputLink(content: String) {
-        _subscribeUiState.update {
-            it.copy(
-                linkContent = content,
-            )
         }
     }
 
@@ -182,28 +199,23 @@ class SubscribeViewModel @Inject constructor(
 
     fun handleSharedUrlFromIntent(url: String) {
         viewModelScope.launch {
-            _subscribeUiState.update {
-                it.copy(
-                    visible = true,
-                    shouldNavigateToFeedPage = true,
-                    linkContent = url,
-                    errorMessage = "",
+            _subscribeState.update {
+                SubscribeState.Idle(
+                    linkState = TextFieldState(url),
                 )
             }
             delay(50)
-        }.invokeOnCompletion { search() }
-    }
-
-    fun onIntentConsumed() {
-        _subscribeUiState.update { it.copy(shouldNavigateToFeedPage = false) }
+        }.invokeOnCompletion { searchFeed() }
     }
 
     fun showDrawer() {
-        _subscribeUiState.update { it.copy(visible = true) }
+        _subscribeState.value =
+            SubscribeState.Idle(importFromOpmlEnabled = rssService.get().importSubscription)
     }
 
     fun hideDrawer() {
-        _subscribeUiState.update { it.copy(visible = false) }
+        cancelSearch()
+        _subscribeState.value = SubscribeState.Hidden
     }
 
     fun showNewGroupDialog() {
@@ -214,16 +226,16 @@ class SubscribeViewModel @Inject constructor(
         _subscribeUiState.update { it.copy(newGroupDialogVisible = false) }
     }
 
-    fun switchPage(isSearchPage: Boolean) {
-        _subscribeUiState.update { it.copy(isSearchPage = isSearchPage) }
-    }
-
     fun showRenameDialog() {
         _subscribeUiState.update {
             it.copy(
-                renameDialogVisible = true,
-                newName = _subscribeUiState.value.searchedFeed?.title ?: "",
+                renameDialogVisible = true
             )
+        }
+        _subscribeUiState.update { uiState ->
+            (_subscribeState.value as? SubscribeState.Configure)?.searchedFeed?.title?.let { title ->
+                uiState.copy(newName = title)
+            } ?: uiState
         }
     }
 
@@ -241,26 +253,55 @@ class SubscribeViewModel @Inject constructor(
     }
 
     fun renameFeed() {
-        _subscribeUiState.value.searchedFeed?.title = _subscribeUiState.value.newName
+        _subscribeState.update { state ->
+            when (state) {
+                is SubscribeState.Configure -> state.copy(
+                    searchedFeed = state.searchedFeed.apply {
+                        title = _subscribeUiState.value.newName
+                    }
+                )
+
+                else -> state
+            }
+        }
     }
 }
 
 data class SubscribeUiState(
-    val visible: Boolean = false,
-    val title: String = "",
-    val errorMessage: String = "",
-    val linkContent: String = "",
-    val lockLinkInput: Boolean = false,
-    val searchedFeed: SyndFeed? = null,
-    val allowNotificationPreset: Boolean = false,
-    val parseFullContentPreset: Boolean = false,
-    val openInBrowserPreset: Boolean = false,
-    val selectedGroupId: String = "",
     val newGroupDialogVisible: Boolean = false,
     val newGroupContent: String = "",
-    val groups: Flow<List<Group>> = emptyFlow(),
-    val isSearchPage: Boolean = true,
     val newName: String = "",
     val renameDialogVisible: Boolean = false,
-    val shouldNavigateToFeedPage: Boolean = false,
 )
+
+sealed interface SubscribeState {
+    object Hidden : SubscribeState
+
+    sealed interface Visible
+
+    sealed interface Input : SubscribeState, Visible {
+        val linkState: TextFieldState
+    }
+
+    data class Idle(
+        override val linkState: TextFieldState = TextFieldState(),
+        val importFromOpmlEnabled: Boolean = false,
+        val errorMessage: String? = null
+    ) :
+        SubscribeState, Input
+
+    data class Fetching(
+        override val linkState: TextFieldState,
+        val job: Job
+    ) : SubscribeState, Input
+
+    data class Configure(
+        val searchedFeed: SyndFeed,
+        val feedLink: String,
+        val groups: List<Group> = emptyList(),
+        val notification: Boolean = false,
+        val fullContent: Boolean = false,
+        val browser: Boolean = false,
+        val selectedGroupId: String,
+    ) : SubscribeState, Visible
+}
