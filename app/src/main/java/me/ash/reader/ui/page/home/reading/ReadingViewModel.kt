@@ -80,8 +80,10 @@ class ReadingViewModel @AssistedInject constructor(
                 itemByIndex?.articleWithFeed ?: (itemFromList?.articleWithFeed ?: rssService.get()
                     .findArticleById(articleId)!!)
 
+            if (diffMapHolder.checkIfUnread(item)) {
+                diffMapHolder.updateDiff(item, isUnread = false)
+            }
             item.run {
-                diffMapHolder.updateDiff(this, isUnread = false)
                 _readingUiState.update {
                     it.copy(
                         articleWithFeed = this, isStarred = article.isStarred, isUnread = false
