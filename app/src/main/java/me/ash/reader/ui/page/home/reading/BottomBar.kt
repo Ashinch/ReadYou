@@ -52,6 +52,7 @@ fun BottomBar(
     isNextArticleAvailable: Boolean,
     isFullContent: Boolean,
     isBoldCharacters: Boolean,
+    ttsButton: @Composable () -> Unit,
     onUnread: (isUnread: Boolean) -> Unit = {},
     onStarred: (isStarred: Boolean) -> Unit = {},
     onNextArticle: () -> Unit = {},
@@ -140,34 +141,7 @@ fun BottomBar(
                             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                             onNextArticle()
                         }
-                        CanBeDisabledIconButton(
-                            modifier = Modifier.size(36.dp),
-                            disabled = false,
-                            imageVector = if (renderer == ReadingRendererPreference.WebView) null else Icons.Outlined.Headphones,
-                            contentDescription = if (renderer == ReadingRendererPreference.WebView) {
-                                stringResource(R.string.bold_characters)
-                            } else {
-                                stringResource(R.string.read_aloud)
-                            },
-                            tint = if (renderer == ReadingRendererPreference.WebView && isBoldCharacters) {
-                                MaterialTheme.colorScheme.onSecondaryContainer
-                            } else {
-                                MaterialTheme.colorScheme.outline
-                            },
-                            icon = {
-                                BoldCharactersIcon(
-                                    activated = isBoldCharacters,
-                                    size = 24.dp,
-                                )
-                            },
-                        ) {
-                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                            if (renderer == ReadingRendererPreference.WebView) {
-                                onBoldCharacters()
-                            } else {
-                                onReadAloud()
-                            }
-                        }
+                        ttsButton()
                         CanBeDisabledIconButton(
                             disabled = false,
                             modifier = Modifier.size(40.dp),

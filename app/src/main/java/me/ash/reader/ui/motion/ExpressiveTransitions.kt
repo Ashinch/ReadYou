@@ -13,6 +13,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MotionScheme
 import androidx.compose.runtime.Composable
 import kotlin.math.roundToInt
 
@@ -41,6 +42,32 @@ fun sharedYAxisTransitionExpressive(direction: Direction): ContentTransform {
     )) togetherWith (slideOutVertically(
         targetOffsetY = { (it / -4 * direction).toInt() },
         animationSpec = MaterialTheme.motionScheme.slowSpatialSpec()
+
+    ) + fadeOut(
+        tween(durationMillis = exit, easing = FastOutLinearInEasing)
+    ))
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+fun sharedYAxisTransitionSlow(direction: Direction, motionScheme: MotionScheme): ContentTransform {
+    val direction = when (direction) {
+        Direction.Backward -> -1
+        Direction.Forward -> 1
+    }
+    val exit = 150
+    val enter = exit * 2
+    return (slideInVertically(
+        initialOffsetY = { (it / 2 * direction).toInt() },
+        animationSpec = motionScheme.slowSpatialSpec()
+    ) + fadeIn(
+        tween(
+            delayMillis = exit,
+            durationMillis = enter,
+            easing = LinearOutSlowInEasing
+        )
+    )) togetherWith (slideOutVertically(
+        targetOffsetY = { (it / -2 * direction).toInt() },
+        animationSpec = motionScheme.slowSpatialSpec()
 
     ) + fadeOut(
         tween(durationMillis = exit, easing = FastOutLinearInEasing)

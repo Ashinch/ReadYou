@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.home.reading
 
-import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -35,7 +34,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.TextUnit
@@ -44,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import me.ash.reader.R
+import me.ash.reader.infrastructure.android.TextToSpeechManager
 import me.ash.reader.infrastructure.preference.LocalPullToSwitchArticle
 import me.ash.reader.infrastructure.preference.LocalReadingAutoHideToolbar
 import me.ash.reader.infrastructure.preference.LocalReadingBoldCharacters
@@ -51,6 +50,7 @@ import me.ash.reader.infrastructure.preference.LocalReadingTextLineHeight
 import me.ash.reader.infrastructure.preference.not
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
+import me.ash.reader.ui.page.home.reading.tts.TtsButton
 import kotlin.math.abs
 
 private const val UPWARD = 1
@@ -271,7 +271,34 @@ fun ReadingPage(
                             (!boldCharacters).put(context, coroutineScope)
                         },
                         onReadAloud = {
-                            context.showToast(context.getString(R.string.coming_soon))
+                            readingViewModel.textToSpeechManager.readHtml(
+                                readerState.content.text ?: return@BottomBar
+                            )
+                        },
+                        ttsButton = {
+                            TtsButton(
+                                onClick = {
+                                    when (it) {
+                                        TextToSpeechManager.State.Error -> {
+                                            context.showToast("TextToSpeech initialization failed")
+                                        }
+
+                                        TextToSpeechManager.State.Idle -> {
+                                            readingViewModel.textToSpeechManager.readHtml(
+                                                readerState.content.text ?: ""
+                                            )
+                                        }
+
+                                        is TextToSpeechManager.State.Reading -> {
+                                            readingViewModel.textToSpeechManager.stop()
+                                        }
+
+                                        TextToSpeechManager.State.Preparing -> {/* no-op */
+                                        }
+                                    }
+                                },
+                                state = readingViewModel.textToSpeechManager.stateFlow.collectAsStateValue()
+                            )
                         }
                     )
                 }

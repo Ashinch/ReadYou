@@ -23,6 +23,7 @@ import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.android.AndroidImageDownloader
+import me.ash.reader.infrastructure.android.TextToSpeechManager
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.rss.ReaderCacheHelper
@@ -38,6 +39,7 @@ class ReadingViewModel @AssistedInject constructor(
     private val readerCacheHelper: ReaderCacheHelper,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @ApplicationScope private val applicationScope: CoroutineScope,
+    val textToSpeechManager: TextToSpeechManager,
     private val imageDownloader: AndroidImageDownloader,
     private val diffMapHolder: DiffMapHolder,
     private val pagingListUseCase: ArticlePagingListUseCase,
@@ -141,7 +143,12 @@ class ReadingViewModel @AssistedInject constructor(
     }
 
     fun updateReadStatus(isUnread: Boolean) {
-        readingUiState.value.articleWithFeed?.let { diffMapHolder.updateDiff(it, isUnread = isUnread) }
+        readingUiState.value.articleWithFeed?.let {
+            diffMapHolder.updateDiff(
+                it,
+                isUnread = isUnread
+            )
+        }
         _readingUiState.update { it.copy(isUnread = diffMapHolder.checkIfUnread(it.articleWithFeed!!)) }
     }
 
