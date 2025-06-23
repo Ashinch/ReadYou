@@ -235,8 +235,6 @@ fun FlowPage(
         }
     }
 
-    BackHandler(onSearch) { onSearch = false }
-
     BackHandler {
         if (navController.previousBackStackEntry == null) {
             navController.navigate(RouteName.FEEDS) { launchSingleTop = true }
@@ -401,6 +399,7 @@ fun FlowPage(
             },
             content = {
                 RYExtensibleVisibility(modifier = Modifier.zIndex(1f), visible = onSearch) {
+                    BackHandler { onSearch = false }
                     SearchBar(
                         value = filterUiState.searchContent ?: "",
                         placeholder =
@@ -435,6 +434,8 @@ fun FlowPage(
                 }
 
                 RYExtensibleVisibility(markAsRead) {
+                    BackHandler { markAsRead = false }
+
                     MarkAsReadBar {
                         markAsRead = false
                         flowViewModel.updateReadStatus(
