@@ -1,0 +1,9 @@
+## 0.9.7
+
+Šis ir papildu atjauninājums.
+
+1. Pieņemts c0ff8ba nepieciešamais labojums
+
+2. Uzlabots tulkojums (paldies visiem)
+
+3. Atjauninātas GitHub README apraksta datnes
