@@ -50,7 +50,7 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun update(accountId: Int, block: Account.() -> Unit) {
+    fun update(accountId: Int, block: Account.() -> Account) {
         applicationScope.launch(ioDispatcher) {
             accountService.update(accountId, block)
             rssService.get(accountId).clearAuthorization()

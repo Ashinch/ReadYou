@@ -15,6 +15,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -84,13 +85,17 @@ class FeedsViewModel @Inject constructor(
     }
 
     init {
+        val accountFlow = accountService.currentAccountFlow
         viewModelScope.launch {
-            accountService.currentAccountFlow.collect { account ->
+            accountFlow.collect { account ->
                 _feedsUiState.update { it.copy(account = account) }
             }
         }
         viewModelScope.launch {
-            filterStateUseCase.filterStateFlow.mapLatest { it.filter }.distinctUntilChanged()
+            filterStateUseCase.filterStateFlow.mapLatest { it.filter }
+                .combine(accountFlow) { filter, account ->
+                    filter
+                }
                 .collect {
                     currentJob?.cancel()
                     currentJob = when (it) {

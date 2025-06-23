@@ -274,12 +274,14 @@ class FeverRssService @Inject constructor(
 
 
                 Log.i("RLog", "onCompletion: ${System.currentTimeMillis() - preTime}")
-                accountDao.update(account.apply {
-                    updateAt = Date()
-                    if (sinceId.isNotEmpty()) {
-                        lastArticleId = accountId.spacerDollar(sinceId)
-                    }
-                })
+                accountDao.update(
+                    account.copy(
+                        updateAt = Date(),
+                        lastArticleId = if (sinceId.isNotEmpty()) {
+                            accountId.spacerDollar(sinceId)
+                        } else account.lastArticleId
+                    )
+                )
                 ListenableWorker.Result.success()
             } catch (e: Exception) {
                 Log.e("RLog", "On sync exception: ${e.message}", e)

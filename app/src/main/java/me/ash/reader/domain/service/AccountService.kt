@@ -7,6 +7,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -46,13 +47,14 @@ class AccountService @Inject constructor(
         settingsProvider.preferencesFlow.map { it[accountIdKey] }
             .stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = null)
 
-    val currentAccountFlow = currentAccountIdFlow.map {
-        it?.let { id -> accountDao.queryById(id) }
-    }.stateIn(
-        scope = coroutineScope,
-        SharingStarted.Eagerly,
-        initialValue = null
-    )
+    val currentAccountFlow =
+        currentAccountIdFlow.combine(getAccounts()) { id, accounts ->
+            id?.let { accounts.firstOrNull { it.id == id } }
+        }.stateIn(
+            scope = coroutineScope,
+            SharingStarted.Eagerly,
+            initialValue = null
+        )
 
     fun getAccounts(): Flow<List<Account>> = accountDao.queryAllAsFlow()
 
@@ -66,11 +68,9 @@ class AccountService @Inject constructor(
 
     suspend fun isNoAccount(): Boolean = accountDao.queryAll().isEmpty()
 
-    suspend fun addAccount(account: Account): Account =
-        account.apply {
-            id = accountDao.insert(this).toInt()
-        }.also {
-            // handle default group
+    suspend fun addAccount(account: Account): Account {
+        val id = accountDao.insert(account).toInt()
+        return account.copy(id = id).also {
             when (it.type) {
                 AccountType.Local -> {
                     groupDao.insert(
@@ -85,6 +85,7 @@ class AccountService @Inject constructor(
             context.dataStore.put(DataStoreKey.currentAccountId, it.id!!)
             context.dataStore.put(DataStoreKey.currentAccountType, it.type.id)
         }
+    }
 
     private fun getDefaultAccount(): Account = Account(
         type = AccountType.Local,
@@ -102,9 +103,9 @@ class AccountService @Inject constructor(
         )
     }
 
-    suspend fun update(accountId: Int, block: Account.() -> Unit) {
+    suspend fun update(accountId: Int, block: Account.() -> Account) {
         accountDao.queryById(accountId)?.let {
-            accountDao.update(it.apply(block))
+            accountDao.update(it.run(block))
         }
     }
 

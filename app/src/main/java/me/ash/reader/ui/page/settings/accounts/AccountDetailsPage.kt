@@ -87,8 +87,12 @@ fun AccountDetailsPage(
     var nameValue by remember { mutableStateOf(selectedAccount?.name) }
     var nameDialogVisible by remember { mutableStateOf(false) }
     var blockListValue by remember {
-        mutableStateOf(SyncBlockListPreference.toString(selectedAccount?.syncBlockList
-            ?: SyncBlockListPreference.default))
+        mutableStateOf(
+            SyncBlockListPreference.toString(
+                selectedAccount?.syncBlockList
+                    ?: SyncBlockListPreference.default
+            )
+        )
     }
     var blockListDialogVisible by remember { mutableStateOf(false) }
     var syncIntervalDialogVisible by remember { mutableStateOf(false) }
@@ -224,7 +228,11 @@ fun AccountDetailsPage(
                     //     title = stringResource(R.string.block_list),
                     //     onClick = { blockListDialogVisible = true },
                     // ) {}
-                    Tips(text = stringResource(R.string.synchronous_tips) + "\n\n" + stringResource(R.string.keep_archived_tips))
+                    Tips(
+                        text = stringResource(R.string.synchronous_tips) + "\n\n" + stringResource(
+                            R.string.keep_archived_tips
+                        )
+                    )
                     Spacer(modifier = Modifier.height(24.dp))
                 }
                 item {
@@ -235,7 +243,7 @@ fun AccountDetailsPage(
                     SettingItem(
                         title = stringResource(R.string.export_as_opml),
                         onClick = {
-                           exportOPMLModeDialogVisible = true
+                            exportOPMLModeDialogVisible = true
                         },
                     ) {}
                     SettingItem(
@@ -271,7 +279,7 @@ fun AccountDetailsPage(
             if (nameValue?.isNotBlank() == true) {
                 selectedAccount?.id?.let {
                     viewModel.update(it) {
-                        name = nameValue ?: ""
+                        copy(name = nameValue ?: "")
                     }
                 }
                 nameDialogVisible = false
@@ -442,20 +450,21 @@ fun AccountDetailsPage(
                     Text(text = stringResource(R.string.additional_info_desc))
                     Spacer(modifier = Modifier.height(16.dp))
                 }
-                items(listOf(
-                    RadioDialogOption(
-                        text = context.getString(R.string.include_additional_info),
-                        selected = uiState.exportOPMLMode == ExportOPMLMode.ATTACH_INFO,
-                    ) {
-                        viewModel.changeExportOPMLMode(ExportOPMLMode.ATTACH_INFO)
-                    },
-                    RadioDialogOption(
-                        text = context.getString(R.string.exclude),
-                        selected = uiState.exportOPMLMode == ExportOPMLMode.NO_ATTACH,
-                    ) {
-                        viewModel.changeExportOPMLMode(ExportOPMLMode.NO_ATTACH)
-                    }
-                )) { option ->
+                items(
+                    listOf(
+                        RadioDialogOption(
+                            text = context.getString(R.string.include_additional_info),
+                            selected = uiState.exportOPMLMode == ExportOPMLMode.ATTACH_INFO,
+                        ) {
+                            viewModel.changeExportOPMLMode(ExportOPMLMode.ATTACH_INFO)
+                        },
+                        RadioDialogOption(
+                            text = context.getString(R.string.exclude),
+                            selected = uiState.exportOPMLMode == ExportOPMLMode.NO_ATTACH,
+                        ) {
+                            viewModel.changeExportOPMLMode(ExportOPMLMode.NO_ATTACH)
+                        }
+                    )) { option ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -507,7 +516,9 @@ private fun subscriptionOPMLFileLauncher(
     context: Context,
     launcher: ManagedActivityResultLauncher<String, Uri?>,
 ) {
-    launcher.launch("Read-You-" +
-            "${context.getCurrentVersion()}-subscription-" +
-            "${Date().toString(DateFormat.YYYY_MM_DD_DASH_HH_MM_SS_DASH)}.opml")
+    launcher.launch(
+        "Read-You-" +
+                "${context.getCurrentVersion()}-subscription-" +
+                "${Date().toString(DateFormat.YYYY_MM_DD_DASH_HH_MM_SS_DASH)}.opml"
+    )
 }

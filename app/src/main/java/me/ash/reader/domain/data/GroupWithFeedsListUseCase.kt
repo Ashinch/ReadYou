@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import me.ash.reader.domain.model.general.Filter
 import me.ash.reader.domain.model.group.GroupWithFeed
@@ -27,10 +28,8 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GroupWithFeedsListUseCase @Inject constructor(
-    @ApplicationScope
-    private val applicationScope: CoroutineScope,
-    @IODispatcher
-    private val ioDispatcher: CoroutineDispatcher,
+    @ApplicationScope private val applicationScope: CoroutineScope,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val settingsProvider: SettingsProvider,
     private val rssService: RssService,
     private val filterStateUseCase: FilterStateUseCase,
@@ -41,14 +40,17 @@ class GroupWithFeedsListUseCase @Inject constructor(
     private var currentJob: Job? = null
 
     init {
+        val accountFlow = accountService.currentAccountFlow.mapNotNull { it }
         applicationScope.launch {
-            rssService.flow().collectLatest {
-                it.pullFeeds().collect { feedsFlow.value = it }
+            accountFlow.collectLatest {
+                rssService.get(it.type.id).pullFeeds().collect { feeds -> feedsFlow.value = feeds }
             }
         }
         applicationScope.launch {
             filterStateUseCase.filterStateFlow.map { it.filter }
-                .collectLatest {
+                .combine(accountFlow) { filter, account ->
+                    filter
+                }.collectLatest {
                     currentJob?.cancel()
                     currentJob = when (it) {
                         Filter.Unread -> pullUnreadFeeds()
@@ -130,9 +132,7 @@ class GroupWithFeedsListUseCase @Inject constructor(
         val unreadCountMapFlow = rssService.get().pullImportant(isStarred = false, isUnread = true)
         return applicationScope.launch {
             combine(
-                feedsFlow,
-                unreadCountMapFlow,
-                diffMapHolder.diffMapSnapshotFlow
+                feedsFlow, unreadCountMapFlow, diffMapHolder.diffMapSnapshotFlow
             ) { groupWithFeedsList, unreadCountMap, diffMap ->
                 val result = mutableListOf<GroupWithFeed>()
                 val unreadDiffs = diffMap.values.filter { it.isUnread }
@@ -165,8 +165,7 @@ class GroupWithFeedsListUseCase @Inject constructor(
 
                 }
                 result
-            }.debounce(200L).flowOn(ioDispatcher)
-                .collect { _groupWithFeedsListFlow.value = it }
+            }.debounce(200L).flowOn(ioDispatcher).collect { _groupWithFeedsListFlow.value = it }
         }
     }
 

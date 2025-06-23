@@ -97,7 +97,7 @@ class LocalRssService @Inject constructor(
 
         Log.i("RlOG", "onCompletion: ${System.currentTimeMillis() - preTime}")
         accountDao.queryById(accountId)?.let { account ->
-            accountDao.update(account.apply { updateAt = Date() })
+            accountDao.update(account.copy(updateAt = Date()))
         }
         ListenableWorker.Result.success()
     }

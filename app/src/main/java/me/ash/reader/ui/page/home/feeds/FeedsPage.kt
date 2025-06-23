@@ -189,14 +189,14 @@ fun FeedsPage(
             TopAppBar(
                 modifier = Modifier.clickable(
                     onClick = {
-                scope.launch {
-                    if (listState.firstVisibleItemIndex != 0) {
-                        listState.animateScrollToItem(0)
-                    }
-                }
-            },
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }),
+                        scope.launch {
+                            if (listState.firstVisibleItemIndex != 0) {
+                                listState.animateScrollToItem(0)
+                            }
+                        }
+                    },
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }),
                 title = {},
                 navigationIcon = {
                     FeedbackIconButton(
@@ -383,11 +383,6 @@ fun FeedsPage(
         onAccountSwitch = {
             accountViewModel.switchAccount(it) {
                 accountTabVisible = false
-                navController.navigate(RouteName.SETTINGS)
-                navController.navigate(RouteName.FEEDS) {
-                    launchSingleTop = true
-                    restoreState = true
-                }
             }
         },
         onClickSettings = {

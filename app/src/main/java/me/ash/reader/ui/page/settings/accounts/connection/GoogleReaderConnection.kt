@@ -147,7 +147,7 @@ private fun save(
 ) {
     account.id?.let {
         viewModel.update(it) {
-            this.securityKey = securityKey.toString()
+            copy(securityKey = securityKey.toString())
         }
     }
 }

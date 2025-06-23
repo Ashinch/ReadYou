@@ -426,9 +426,9 @@ class GoogleReaderRssService @Inject constructor(
                     .forEach { super.deleteFeed(it, true) }
 
                 Timber.tag("RLog").i("onCompletion: ${System.currentTimeMillis() - preTime}")
-                accountDao.update(account.apply {
-                    updateAt = Date()
-                })
+                accountDao.update(
+                    account.copy(updateAt = Date())
+                )
                 ListenableWorker.Result.success()
             } catch (e: Exception) {
                 Timber.tag("RLog").e(e, "On sync exception: ${e.message}")
