@@ -2,6 +2,7 @@ package me.ash.reader.infrastructure.rss.provider.greader
 
 import android.content.Context
 import androidx.annotation.CheckResult
+import androidx.core.text.isDigitsOnly
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import me.ash.reader.infrastructure.di.USER_AGENT_STRING
@@ -20,6 +21,7 @@ import okhttp3.executeAsync
 import okio.IOException
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.text.hexToLong
 
 private const val TAG = "GoogleReaderAPI"
 
@@ -398,17 +400,29 @@ class GoogleReaderAPI private constructor(
 
     companion object {
 
+        /*
+        || Long form || Short form || notes ||
+        || `tag:google.com,2005:reader/item/5d0cfa30041d4348` || `6705009029382226760` || ||
+        || `tag:google.com,2005:reader/item/024025978b5e50d2` ||  `162170919393841362` || Long form needs 0-padding ||
+        || `tag:google.com,2005:reader/item/fb115bd6d34a8e9f` || `-355401917359550817` || Short form ends up being negative ||
+         */
+
         const val MAXIMUM_ITEMS_LIMIT = "10000"
 
-        fun String.ofItemIdToHexId(): String {
-            return String.format("%016x", toLong())
+        @OptIn(ExperimentalStdlibApi::class)
+        private fun String.ofItemIdToHexId(): String {
+            if (this.toLongOrNull() == null) return this
+            return this.toLong().toHexString()
         }
 
-        fun String.ofItemHexIdToId(): String {
-            return toLong(16).toString()
+        @OptIn(ExperimentalStdlibApi::class)
+        private fun String.ofItemHexIdToId(): String {
+            if (this.length != 16 && this.toLongOrNull() != null) return this
+            return hexToLong().toString()
         }
 
-        fun String.ofItemStreamIdToHexId(): String {
+
+        private fun String.ofItemStreamIdToHexId(): String {
             return replace("tag:google.com,2005:reader/item/", "")
         }
 
@@ -416,11 +430,11 @@ class GoogleReaderAPI private constructor(
             return ofItemStreamIdToHexId().ofItemHexIdToId()
         }
 
-        fun String.ofItemHexIdToStreamId(): String {
+        private fun String.ofItemHexIdToStreamId(): String {
             return "tag:google.com,2005:reader/item/$this"
         }
 
-        fun String.ofItemIdToStreamId(): String {
+        private fun String.ofItemIdToStreamId(): String {
             return "tag:google.com,2005:reader/item/${ofItemIdToHexId()}"
         }
 

@@ -251,11 +251,13 @@ constructor(
 
             val remoteUnreadIds = async {
                 fetchItemIdsAndContinue { googleReaderAPI.getUnreadItemIds(continuationId = it) }
+                    .map { it.ofItemStreamIdToId() }
                     .toSet()
             }
 
             val remoteStarredIds = async {
                 fetchItemIdsAndContinue { googleReaderAPI.getStarredItemIds(continuationId = it) }
+                    .map { it.ofItemStreamIdToId() }
                     .toSet()
             }
 
@@ -263,6 +265,7 @@ constructor(
                 fetchItemIdsAndContinue {
                         googleReaderAPI.getReadItemIds(since = lastMonthAt, continuationId = it)
                     }
+                    .map { it.ofItemStreamIdToId() }
                     .toSet()
             }
 
@@ -278,15 +281,6 @@ constructor(
             val localItemIds = localAllItems.map { it.id.dollarLast() }.toSet()
 
             launch {
-                val toBeReadLocal = localUnreadIds.intersect(remoteReadIds.await())
-                articleDao.markAsReadByIdSet(
-                    accountId = accountId,
-                    ids = toBeReadLocal,
-                    isUnread = false,
-                )
-            }
-
-            launch {
                 val toBeStarredRemote = localStarredIds - remoteStarredIds.await()
                 if (toBeStarredRemote.isNotEmpty()) {
                     googleReaderAPI.editTag(
@@ -298,7 +292,10 @@ constructor(
 
             launch {
                 val toBeStarredLocal =
-                    (localItemIds - localStarredIds).intersect(remoteStarredIds.await())
+                    (localItemIds - localStarredIds)
+                        .intersect(remoteStarredIds.await())
+                        .map { accountId spacerDollar it }
+                        .toSet()
                 articleDao.markAsStarredByIdSet(
                     accountId = accountId,
                     ids = toBeStarredLocal,
@@ -395,6 +392,14 @@ constructor(
 
             articleDao.insert(*fetchedArticles.await().toTypedArray())
 
+            launch {
+                articleDao.markAsReadByIdSet(
+                    accountId = accountId,
+                    ids = remoteReadIds.await().map { accountId spacerDollar it }.toSet(),
+                    isUnread = false,
+                )
+            }
+
             // 8. Remove orphaned groups and feeds, after synchronizing the starred/un-starred
             groupDao
                 .queryAll(accountId)
@@ -464,8 +469,8 @@ constructor(
                 itemIds = toFetch,
                 googleReaderAPI = googleReaderAPI,
                 accountId = accountId,
-                unreadIds = unreadIds.await(),
-                starredIds = starredIds.await(),
+                unreadIds = unreadIds.await().map { it.ofItemStreamIdToId() }.toSet(),
+                starredIds = starredIds.await().map { it.ofItemStreamIdToId() }.toSet(),
                 preDate = Date(),
             )
 
