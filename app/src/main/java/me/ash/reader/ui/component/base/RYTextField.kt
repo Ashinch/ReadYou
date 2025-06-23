@@ -41,7 +41,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.ash.reader.R
-import timber.log.Timber
 
 @Deprecated("Use overloads with BTF2 instead")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,63 +63,67 @@ fun RYTextField(
     var showPassword by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        delay(100)  // ???
+        delay(100) // ???
         focusRequester.requestFocus()
     }
 
     TextField(
         modifier = Modifier.focusRequester(focusRequester),
-        colors = TextFieldDefaults.colors(
-            unfocusedContainerColor = Color.Transparent,
-            focusedContainerColor = Color.Transparent
-        ),
+        colors =
+            TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.Transparent,
+                focusedContainerColor = Color.Transparent,
+            ),
         maxLines = if (singleLine) 1 else Int.MAX_VALUE,
         enabled = !readOnly,
         value = value,
-        label = if (label.isEmpty()) null else {
-            { Text(label) }
-        },
-        onValueChange = {
-            if (!readOnly) onValueChange(it)
-        },
-        visualTransformation = if (isPassword && !showPassword) PasswordVisualTransformation() else visualTransformation,
+        label =
+            if (label.isEmpty()) null
+            else {
+                { Text(label) }
+            },
+        onValueChange = { if (!readOnly) onValueChange(it) },
+        visualTransformation =
+            if (isPassword && !showPassword) PasswordVisualTransformation()
+            else visualTransformation,
         placeholder = {
             Text(
                 text = placeholder,
                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
         },
         isError = errorMessage.isNotEmpty(),
         singleLine = singleLine,
         trailingIcon = {
             if (value.isNotEmpty()) {
-                IconButton(onClick = {
-                    if (isPassword) {
-                        showPassword = !showPassword
-                    } else if (!readOnly) {
-                        onValueChange("")
+                IconButton(
+                    onClick = {
+                        if (isPassword) {
+                            showPassword = !showPassword
+                        } else if (!readOnly) {
+                            onValueChange("")
+                        }
                     }
-                }) {
+                ) {
                     Icon(
-                        imageVector = if (isPassword) {
-                            if (showPassword) Icons.Rounded.Visibility
-                            else Icons.Rounded.VisibilityOff
-                        } else Icons.Rounded.Close,
-                        contentDescription = if (isPassword) stringResource(R.string.password) else stringResource(
-                            R.string.clear
-                        ),
+                        imageVector =
+                            if (isPassword) {
+                                if (showPassword) Icons.Rounded.Visibility
+                                else Icons.Rounded.VisibilityOff
+                            } else Icons.Rounded.Close,
+                        contentDescription =
+                            if (isPassword) stringResource(R.string.password)
+                            else stringResource(R.string.clear),
                         tint = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
                     )
                 }
             } else {
-                IconButton(onClick = {
-                    onValueChange(clipboardManager.getText()?.text ?: "")
-                }) {
+                IconButton(onClick = { onValueChange(clipboardManager.getText()?.text ?: "") }) {
                     Icon(
                         imageVector = Icons.Rounded.ContentPaste,
                         contentDescription = stringResource(R.string.paste),
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                 }
             }
@@ -128,7 +131,6 @@ fun RYTextField(
         keyboardOptions = keyboardOptions,
     )
 }
-
 
 @Deprecated("Use overloads with state instead")
 @Composable
@@ -147,12 +149,10 @@ fun RYTextField2(
     onKeyboardAction: KeyboardActionHandler? = null,
 ) {
 
-    val state = rememberTextFieldState().also { it.edit { value } }
+    val state = rememberTextFieldState(value)
     val textFlow = snapshotFlow { state.text }
 
-    LaunchedEffect(textFlow) {
-        textFlow.collect { onValueChange(it.toString()) }
-    }
+    LaunchedEffect(textFlow) { textFlow.collect { onValueChange(it.toString()) } }
 
     RYTextField2(
         state = state,
@@ -165,10 +165,9 @@ fun RYTextField2(
         errorMessage = errorMessage,
         autoFocus = autoFocus,
         keyboardOptions = keyboardOptions,
-        onKeyboardAction = onKeyboardAction
+        onKeyboardAction = onKeyboardAction,
     )
 }
-
 
 @Composable
 fun RYTextField2(
@@ -188,7 +187,7 @@ fun RYTextField2(
 
     if (autoFocus) {
         LaunchedEffect(Unit) {
-            delay(100)  // ???
+            delay(100) // ???
             focusRequester.requestFocus()
         }
     }
@@ -197,85 +196,93 @@ fun RYTextField2(
         var showPassword by remember { mutableStateOf(false) }
 
         SecureTextField(
-            state = state, colors = textFieldColors(),
-            label = if (label.isEmpty()) null else {
-                { Text(label) }
-            },
+            state = state,
+            colors = textFieldColors(),
+            label =
+                if (label.isEmpty()) null
+                else {
+                    { Text(label) }
+                },
             modifier = modifier.focusRequester(focusRequester),
             trailingIcon = {
                 PasswordVisibilityButton(
                     showPassword = showPassword,
-                    onValueChange = { showPassword = it })
+                    onValueChange = { showPassword = it },
+                )
             },
-            textObfuscationMode = if (showPassword) TextObfuscationMode.Visible else TextObfuscationMode.RevealLastTyped,
-            placeholder = {
-                Text(text = placeholder)
-            },
+            textObfuscationMode =
+                if (showPassword) TextObfuscationMode.Visible
+                else TextObfuscationMode.RevealLastTyped,
+            placeholder = { Text(text = placeholder) },
             keyboardOptions = keyboardOptions,
             onKeyboardAction = onKeyboardAction,
             isError = errorMessage.isNotEmpty(),
-            supportingText = if (errorMessage.isNotEmpty()) {
-                {
-                    Text(errorMessage)
-                }
-            } else null
+            supportingText =
+                if (errorMessage.isNotEmpty()) {
+                    { Text(errorMessage) }
+                } else null,
         )
     } else {
         TextField(
-            state = state, modifier = modifier.focusRequester(focusRequester),
+            state = state,
+            modifier = modifier.focusRequester(focusRequester),
             colors = textFieldColors(),
-            label = if (label.isEmpty()) null else {
-                { Text(label) }
-            },
-            lineLimits = if (singleLine) TextFieldLineLimits.SingleLine else TextFieldLineLimits.MultiLine(),
+            label =
+                if (label.isEmpty()) null
+                else {
+                    { Text(label) }
+                },
+            lineLimits =
+                if (singleLine) TextFieldLineLimits.SingleLine else TextFieldLineLimits.MultiLine(),
             trailingIcon = {
                 if (state.text.isNotEmpty()) {
                     ClearButton(state)
                 } else {
                     PasteButton(state)
                 }
-            }, isError = errorMessage.isNotEmpty(),
-            placeholder = {
-                Text(text = placeholder)
             },
+            isError = errorMessage.isNotEmpty(),
+            placeholder = { Text(text = placeholder) },
             keyboardOptions = keyboardOptions,
             onKeyboardAction = onKeyboardAction,
             readOnly = readOnly,
-            supportingText = if (errorMessage.isNotEmpty()) {
-                {
-                    Text(errorMessage)
-                }
-            } else null
+            supportingText =
+                if (errorMessage.isNotEmpty()) {
+                    { Text(errorMessage) }
+                } else null,
         )
     }
 }
 
 @Composable
-private fun textFieldColors(): TextFieldColors = TextFieldDefaults.colors(
-    unfocusedContainerColor = Color.Transparent,
-    focusedContainerColor = Color.Transparent,
-    unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-    focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant
-)
+private fun textFieldColors(): TextFieldColors =
+    TextFieldDefaults.colors(
+        unfocusedContainerColor = Color.Transparent,
+        focusedContainerColor = Color.Transparent,
+        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = .7f),
+        focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = .7f),
+    )
 
 @Composable
 private fun PasteButton(state: TextFieldState, modifier: Modifier = Modifier) {
     val clipboardManager = LocalClipboard.current
     val scope = rememberCoroutineScope()
 
-    IconButton(onClick = {
-        scope.launch {
-            val clipboardText =
-                clipboardManager.getClipEntry()?.clipData?.getItemAt(0)?.text
-            if (!clipboardText.isNullOrBlank()) {
-                state.edit { clipboardText }
+    IconButton(
+        onClick = {
+            scope.launch {
+                val clipboardText = clipboardManager.getClipEntry()?.clipData?.getItemAt(0)?.text
+                if (!clipboardText.isNullOrBlank()) {
+                    state.edit { clipboardText }
+                }
             }
-        }
-    }, modifier = modifier) {
+        },
+        modifier = modifier,
+    ) {
         Icon(
             imageVector = Icons.Rounded.ContentPaste,
             contentDescription = stringResource(R.string.paste),
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorScheme.primary,
         )
     }
 }
@@ -285,10 +292,8 @@ fun ClearButton(state: TextFieldState, modifier: Modifier = Modifier) {
     IconButton(onClick = { state.clearText() }, modifier = modifier) {
         Icon(
             imageVector = Icons.Rounded.Close,
-            contentDescription = stringResource(
-                R.string.clear
-            ),
-            tint = MaterialTheme.colorScheme.onSurface
+            contentDescription = stringResource(R.string.clear),
+            tint = MaterialTheme.colorScheme.onSurface,
         )
     }
 }
@@ -297,17 +302,14 @@ fun ClearButton(state: TextFieldState, modifier: Modifier = Modifier) {
 fun PasswordVisibilityButton(
     showPassword: Boolean,
     onValueChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    IconButton(onClick = {
-        onValueChange(!showPassword)
-    }, modifier = modifier) {
+    IconButton(onClick = { onValueChange(!showPassword) }, modifier = modifier) {
         Icon(
             imageVector =
-                if (showPassword) Icons.Rounded.Visibility
-                else Icons.Rounded.VisibilityOff,
+                if (showPassword) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff,
             contentDescription = if (showPassword) "Show password" else "Hide password",
-            tint = MaterialTheme.colorScheme.onSurface
+            tint = MaterialTheme.colorScheme.onSurface,
         )
     }
 }

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.DeleteSweep
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import java.util.Date
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.KeepArchivedPreference
 import me.ash.reader.infrastructure.preference.SyncBlockListPreference
@@ -71,7 +73,6 @@ import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.page.settings.accounts.connection.AccountConnection
 import me.ash.reader.ui.theme.palette.onLight
-import java.util.Date
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -89,8 +90,7 @@ fun AccountDetailsPage(
     var blockListValue by remember {
         mutableStateOf(
             SyncBlockListPreference.toString(
-                selectedAccount?.syncBlockList
-                    ?: SyncBlockListPreference.default
+                selectedAccount?.syncBlockList ?: SyncBlockListPreference.default
             )
         )
     }
@@ -101,31 +101,30 @@ fun AccountDetailsPage(
 
     LaunchedEffect(Unit) {
         navController.currentBackStackEntryFlow.collect {
-            it.arguments?.getString("accountId")?.let {
-                viewModel.initData(it.toInt())
-            }
+            it.arguments?.getString("accountId")?.let { viewModel.initData(it.toInt()) }
         }
     }
 
-    val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.CreateDocument(MimeType.ANY)
-    ) { result ->
-        viewModel.exportAsOPML(selectedAccount!!.id!!) { string ->
-            result?.let { uri ->
-                context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                    outputStream.write(string.toByteArray())
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(MimeType.ANY)) {
+            result ->
+            viewModel.exportAsOPML(selectedAccount!!.id!!) { string ->
+                result?.let { uri ->
+                    context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                        outputStream.write(string.toByteArray())
+                    }
                 }
             }
         }
-    }
 
     RYScaffold(
-        containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
+        containerColor =
+            MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
                 imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                 contentDescription = stringResource(R.string.back),
-                tint = MaterialTheme.colorScheme.onSurface
+                tint = MaterialTheme.colorScheme.onSurface,
             ) {
                 navController.popBackStack()
             }
@@ -134,11 +133,9 @@ fun AccountDetailsPage(
             FeedbackIconButton(
                 imageVector = Icons.Rounded.Close,
                 contentDescription = stringResource(R.string.close),
-                tint = MaterialTheme.colorScheme.onSurface
+                tint = MaterialTheme.colorScheme.onSurface,
             ) {
-                navController.navigate(RouteName.FEEDS) {
-                    launchSingleTop = true
-                }
+                navController.navigate(RouteName.FEEDS) { launchSingleTop = true }
             }
         },
         content = {
@@ -163,9 +160,7 @@ fun AccountDetailsPage(
                     Spacer(modifier = Modifier.height(24.dp))
                 }
                 if (selectedAccount != null) {
-                    item {
-                        AccountConnection(account = selectedAccount)
-                    }
+                    item { AccountConnection(account = selectedAccount) }
                 }
                 item {
                     Subtitle(
@@ -229,9 +224,10 @@ fun AccountDetailsPage(
                     //     onClick = { blockListDialogVisible = true },
                     // ) {}
                     Tips(
-                        text = stringResource(R.string.synchronous_tips) + "\n\n" + stringResource(
-                            R.string.keep_archived_tips
-                        )
+                        text =
+                            stringResource(R.string.synchronous_tips) +
+                                "\n\n" +
+                                stringResource(R.string.keep_archived_tips)
                     )
                     Spacer(modifier = Modifier.height(24.dp))
                 }
@@ -242,9 +238,7 @@ fun AccountDetailsPage(
                     )
                     SettingItem(
                         title = stringResource(R.string.export_as_opml),
-                        onClick = {
-                            exportOPMLModeDialogVisible = true
-                        },
+                        onClick = { exportOPMLModeDialogVisible = true },
                     ) {}
                     SettingItem(
                         title = stringResource(R.string.clear_all_articles),
@@ -258,48 +252,43 @@ fun AccountDetailsPage(
                 }
                 item {
                     Spacer(modifier = Modifier.height(24.dp))
-                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                    Spacer(
+                        modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars)
+                    )
                 }
             }
-        }
+        },
     )
 
-    TextFieldDialog(
-        visible = nameDialogVisible,
-        title = stringResource(R.string.name),
-        value = nameValue ?: "",
-        placeholder = stringResource(R.string.value),
-        onValueChange = {
-            nameValue = it
-        },
-        onDismissRequest = {
-            nameDialogVisible = false
-        },
-        onConfirm = {
-            if (nameValue?.isNotBlank() == true) {
-                selectedAccount?.id?.let {
-                    viewModel.update(it) {
-                        copy(name = nameValue ?: "")
+    if (nameDialogVisible) {
+        val textFieldState = rememberTextFieldState(nameValue ?: "")
+        TextFieldDialog(
+            title = stringResource(R.string.name),
+            textFieldState = textFieldState,
+            onDismissRequest = { nameDialogVisible = false },
+            onConfirm = {
+                if (textFieldState.text.isNotBlank() == true) {
+                    selectedAccount?.id?.let {
+                        viewModel.update(it) { copy(name = textFieldState.text.toString()) }
                     }
+                    nameDialogVisible = false
                 }
-                nameDialogVisible = false
-            }
-        }
-    )
+            },
+        )
+    }
 
     RadioDialog(
         visible = syncIntervalDialogVisible,
         title = stringResource(R.string.sync_interval),
-        options = SyncIntervalPreference.values.map {
-            RadioDialogOption(
-                text = it.toDesc(context),
-                selected = it == selectedAccount?.syncInterval,
-            ) {
-                selectedAccount?.id?.let { accountId ->
-                    it.put(accountId, viewModel)
+        options =
+            SyncIntervalPreference.values.map {
+                RadioDialogOption(
+                    text = it.toDesc(context),
+                    selected = it == selectedAccount?.syncInterval,
+                ) {
+                    selectedAccount?.id?.let { accountId -> it.put(accountId, viewModel) }
                 }
-            }
-        }
+            },
     ) {
         syncIntervalDialogVisible = false
     }
@@ -307,16 +296,15 @@ fun AccountDetailsPage(
     RadioDialog(
         visible = keepArchivedDialogVisible,
         title = stringResource(R.string.keep_archived_articles),
-        options = KeepArchivedPreference.values.map {
-            RadioDialogOption(
-                text = it.toDesc(context),
-                selected = it == selectedAccount?.keepArchived,
-            ) {
-                selectedAccount?.id?.let { accountId ->
-                    it.put(accountId, viewModel)
+        options =
+            KeepArchivedPreference.values.map {
+                RadioDialogOption(
+                    text = it.toDesc(context),
+                    selected = it == selectedAccount?.keepArchived,
+                ) {
+                    selectedAccount?.id?.let { accountId -> it.put(accountId, viewModel) }
                 }
-            }
-        }
+            },
     ) {
         keepArchivedDialogVisible = false
     }
@@ -326,85 +314,62 @@ fun AccountDetailsPage(
         title = stringResource(R.string.block_list),
         value = blockListValue,
         singleLine = false,
-        placeholder = stringResource(R.string.value),
-        onValueChange = {
-            blockListValue = it
-        },
-        onDismissRequest = {
-            blockListDialogVisible = false
-        },
+        onValueChange = { blockListValue = it },
+        onDismissRequest = { blockListDialogVisible = false },
         onConfirm = {
             selectedAccount?.id?.let {
                 SyncBlockListPreference.put(it, viewModel, selectedAccount.syncBlockList)
                 blockListDialogVisible = false
                 context.showToast(selectedAccount.syncBlockList.toString())
             }
-        }
+        },
     )
 
     RYDialog(
         visible = uiState.clearDialogVisible,
-        onDismissRequest = {
-            viewModel.hideClearDialog()
-        },
+        onDismissRequest = { viewModel.hideClearDialog() },
         icon = {
             Icon(
                 imageVector = Icons.Outlined.DeleteSweep,
                 contentDescription = stringResource(R.string.clear_all_articles),
             )
         },
-        title = {
-            Text(text = stringResource(R.string.clear_all_articles))
-        },
-        text = {
-            Text(text = stringResource(R.string.clear_all_articles_tips))
-        },
+        title = { Text(text = stringResource(R.string.clear_all_articles)) },
+        text = { Text(text = stringResource(R.string.clear_all_articles_tips)) },
         confirmButton = {
             TextButton(
                 onClick = {
                     selectedAccount?.let {
                         viewModel.clear(it) {
                             viewModel.hideClearDialog()
-                            context.showToastLong(context.getString(R.string.clear_all_articles_toast))
+                            context.showToastLong(
+                                context.getString(R.string.clear_all_articles_toast)
+                            )
                         }
                     }
                 }
             ) {
-                Text(
-                    text = stringResource(R.string.clear),
-                )
+                Text(text = stringResource(R.string.clear))
             }
         },
         dismissButton = {
-            TextButton(
-                onClick = {
-                    viewModel.hideClearDialog()
-                }
-            ) {
-                Text(
-                    text = stringResource(R.string.cancel),
-                )
+            TextButton(onClick = { viewModel.hideClearDialog() }) {
+                Text(text = stringResource(R.string.cancel))
             }
         },
     )
 
     RYDialog(
         visible = uiState.deleteDialogVisible,
-        onDismissRequest = {
-            viewModel.hideDeleteDialog()
-        },
+        onDismissRequest = { viewModel.hideDeleteDialog() },
         icon = {
             Icon(
                 imageVector = Icons.Outlined.PersonOff,
                 contentDescription = stringResource(R.string.delete_account),
             )
         },
-        title = {
-            Text(text = stringResource(R.string.delete_account))
-        },
-        text = {
-            Text(text = stringResource(R.string.delete_account_tips))
-        },
+        title = { Text(text = stringResource(R.string.delete_account)) },
+        text = { Text(text = stringResource(R.string.delete_account_tips)) },
         confirmButton = {
             TextButton(
                 onClick = {
@@ -416,20 +381,12 @@ fun AccountDetailsPage(
                     }
                 }
             ) {
-                Text(
-                    text = stringResource(R.string.delete),
-                )
+                Text(text = stringResource(R.string.delete))
             }
         },
         dismissButton = {
-            TextButton(
-                onClick = {
-                    viewModel.hideDeleteDialog()
-                }
-            ) {
-                Text(
-                    text = stringResource(R.string.cancel),
-                )
+            TextButton(onClick = { viewModel.hideDeleteDialog() }) {
+                Text(text = stringResource(R.string.cancel))
             }
         },
     )
@@ -463,26 +420,24 @@ fun AccountDetailsPage(
                             selected = uiState.exportOPMLMode == ExportOPMLMode.NO_ATTACH,
                         ) {
                             viewModel.changeExportOPMLMode(ExportOPMLMode.NO_ATTACH)
-                        }
-                    )) { option ->
+                        },
+                    )
+                ) { option ->
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(CircleShape)
-                            .clickable {
+                        modifier =
+                            Modifier.fillMaxWidth().clip(CircleShape).clickable {
                                 option.onClick()
                             },
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        RadioButton(selected = option.selected, onClick = {
-                            option.onClick()
-                        })
+                        RadioButton(selected = option.selected, onClick = { option.onClick() })
                         Text(
                             modifier = Modifier.padding(start = 6.dp),
                             text = option.text,
-                            style = MaterialTheme.typography.bodyLarge.copy(
-                                baselineShift = BaselineShift.None
-                            ).merge(other = option.style),
+                            style =
+                                MaterialTheme.typography.bodyLarge
+                                    .copy(baselineShift = BaselineShift.None)
+                                    .merge(other = option.style),
                             color = MaterialTheme.colorScheme.onSurface,
                         )
                     }
@@ -500,15 +455,11 @@ fun AccountDetailsPage(
             }
         },
         dismissButton = {
-            TextButton(
-                onClick = { exportOPMLModeDialogVisible = false }
-            ) {
+            TextButton(onClick = { exportOPMLModeDialogVisible = false }) {
                 Text(stringResource(R.string.cancel))
             }
         },
-        onDismissRequest = {
-            exportOPMLModeDialogVisible = false
-        }
+        onDismissRequest = { exportOPMLModeDialogVisible = false },
     )
 }
 
@@ -518,7 +469,7 @@ private fun subscriptionOPMLFileLauncher(
 ) {
     launcher.launch(
         "Read-You-" +
-                "${context.getCurrentVersion()}-subscription-" +
-                "${Date().toString(DateFormat.YYYY_MM_DD_DASH_HH_MM_SS_DASH)}.opml"
+            "${context.getCurrentVersion()}-subscription-" +
+            "${Date().toString(DateFormat.YYYY_MM_DD_DASH_HH_MM_SS_DASH)}.opml"
     )
 }

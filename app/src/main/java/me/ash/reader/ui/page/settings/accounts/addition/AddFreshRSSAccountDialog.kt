@@ -119,7 +119,7 @@ fun AddFreshRSSAccountDialog(
                     value = freshRSSUsername,
                     onValueChange = { freshRSSUsername = it },
                     label = stringResource(R.string.username),
-                    placeholder = "demo",
+                    
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -131,7 +131,7 @@ fun AddFreshRSSAccountDialog(
                     onValueChange = { freshRSSPassword = it },
                     isPassword = true,
                     label = stringResource(R.string.password),
-                    placeholder = "demodemo",
+                    
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 )
                 Spacer(modifier = Modifier.height(10.dp))

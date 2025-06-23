@@ -89,10 +89,7 @@ fun AddFeverAccountDialog(
             )
         },
         text = {
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-            ) {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Spacer(modifier = Modifier.height(10.dp))
                 RYOutlineTextField(
                     modifier = Modifier.fillMaxWidth(),
@@ -111,7 +108,6 @@ fun AddFeverAccountDialog(
                     value = feverUsername,
                     onValueChange = { feverUsername = it },
                     label = stringResource(R.string.username),
-                    placeholder = "demo",
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -123,13 +119,12 @@ fun AddFeverAccountDialog(
                     onValueChange = { feverPassword = it },
                     isPassword = true,
                     label = stringResource(R.string.password),
-                    placeholder = "demodemo",
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CertificateSelector(
                     value = feverClientCertificateAlias,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     feverClientCertificateAlias = it
                 }
@@ -138,22 +133,25 @@ fun AddFeverAccountDialog(
         },
         confirmButton = {
             TextButton(
-                enabled = !accountUiState.isLoading
-                        && feverServerUrl.isNotBlank()
-                        && feverUsername.isNotEmpty()
-                        && feverPassword.isNotEmpty(),
+                enabled =
+                    !accountUiState.isLoading &&
+                        feverServerUrl.isNotBlank() &&
+                        feverUsername.isNotEmpty() &&
+                        feverPassword.isNotEmpty(),
                 onClick = {
                     focusManager.clearFocus()
                     accountViewModel.addAccount(
                         Account(
                             type = AccountType.Fever,
                             name = context.getString(R.string.fever),
-                            securityKey = FeverSecurityKey(
-                                serverUrl = feverServerUrl,
-                                username = feverUsername,
-                                password = feverPassword,
-                                clientCertificateAlias = feverClientCertificateAlias,
-                            ).toString(),
+                            securityKey =
+                                FeverSecurityKey(
+                                        serverUrl = feverServerUrl,
+                                        username = feverUsername,
+                                        password = feverPassword,
+                                        clientCertificateAlias = feverClientCertificateAlias,
+                                    )
+                                    .toString(),
                         )
                     ) { account, exception ->
                         if (account == null) {
@@ -166,7 +164,7 @@ fun AddFeverAccountDialog(
                             }
                         }
                     }
-                }
+                },
             ) {
                 Text(stringResource(R.string.add))
             }

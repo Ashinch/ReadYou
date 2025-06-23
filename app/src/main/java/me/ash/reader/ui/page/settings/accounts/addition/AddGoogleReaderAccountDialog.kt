@@ -1,8 +1,5 @@
 package me.ash.reader.ui.page.settings.accounts.addition
 
-import android.app.Activity
-import android.security.KeyChain
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +14,6 @@ import androidx.compose.material.icons.rounded.RssFeed
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -75,8 +71,7 @@ fun AddGoogleReaderAccountDialog(
         icon = {
             if (accountUiState.isLoading) {
                 CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(24.dp),
+                    modifier = Modifier.size(24.dp),
                     color = MaterialTheme.colorScheme.onSurface,
                 )
             } else {
@@ -95,9 +90,7 @@ fun AddGoogleReaderAccountDialog(
             )
         },
         text = {
-            Column(
-                modifier = Modifier.verticalScroll(rememberScrollState())
-            ) {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Spacer(modifier = Modifier.height(10.dp))
                 RYOutlineTextField(
                     modifier = Modifier.fillMaxWidth(),
@@ -116,7 +109,6 @@ fun AddGoogleReaderAccountDialog(
                     value = googleReaderUsername,
                     onValueChange = { googleReaderUsername = it },
                     label = stringResource(R.string.username),
-                    placeholder = "demo",
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -128,13 +120,12 @@ fun AddGoogleReaderAccountDialog(
                     onValueChange = { googleReaderPassword = it },
                     isPassword = true,
                     label = stringResource(R.string.password),
-                    placeholder = "demodemo",
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 CertificateSelector(
                     value = googleReaderClientCertificateAlias,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     googleReaderClientCertificateAlias = it
                 }
@@ -143,10 +134,11 @@ fun AddGoogleReaderAccountDialog(
         },
         confirmButton = {
             TextButton(
-                enabled = !accountUiState.isLoading
-                        && googleReaderServerUrl.isNotBlank()
-                        && googleReaderUsername.isNotEmpty()
-                        && googleReaderPassword.isNotEmpty(),
+                enabled =
+                    !accountUiState.isLoading &&
+                        googleReaderServerUrl.isNotBlank() &&
+                        googleReaderUsername.isNotEmpty() &&
+                        googleReaderPassword.isNotEmpty(),
                 onClick = {
                     focusManager.clearFocus()
                     if (!googleReaderServerUrl.endsWith("/")) {
@@ -156,12 +148,17 @@ fun AddGoogleReaderAccountDialog(
                         Account(
                             type = AccountType.GoogleReader,
                             name = context.getString(R.string.google_reader),
-                            securityKey = GoogleReaderSecurityKey(
-                                serverUrl = googleReaderServerUrl,
-                                username = googleReaderUsername,
-                                password = googleReaderPassword,
-                                clientCertificateAlias = googleReaderClientCertificateAlias.takeIf { it.isNotEmpty() },
-                            ).toString(),
+                            securityKey =
+                                GoogleReaderSecurityKey(
+                                        serverUrl = googleReaderServerUrl,
+                                        username = googleReaderUsername,
+                                        password = googleReaderPassword,
+                                        clientCertificateAlias =
+                                            googleReaderClientCertificateAlias.takeIf {
+                                                it.isNotEmpty()
+                                            },
+                                    )
+                                    .toString(),
                         )
                     ) { account, exception ->
                         if (account == null) {
@@ -174,7 +171,7 @@ fun AddGoogleReaderAccountDialog(
                             }
                         }
                     }
-                }
+                },
             ) {
                 Text(stringResource(R.string.add))
             }
