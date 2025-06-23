@@ -87,6 +87,7 @@ article {
     margin: 0;
     margin-left: var(--text-margin) !important;
     margin-right: var(--text-margin) !important;
+    line-height: var(--line-height) !important;
     font-family: var(--font-family) !important;
     font-size: var(--font-size) !important;
     font-weight: var(--text-bold) !important;
