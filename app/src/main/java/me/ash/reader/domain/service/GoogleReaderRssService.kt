@@ -484,7 +484,6 @@ constructor(
                 accountId = accountId,
                 unreadIds = unreadIds.await().map { it.ofItemStreamIdToId() }.toSet(),
                 starredIds = starredIds.await().map { it.ofItemStreamIdToId() }.toSet(),
-                updateAt = Date(),
             )
 
         articleDao.insert(*items.toTypedArray())
@@ -511,7 +510,6 @@ constructor(
         accountId: Int,
         unreadIds: Set<String>,
         starredIds: Set<String>,
-        updateAt: Date? = null,
     ): List<Deferred<List<Article>>> {
         val currentDate = Date()
         val semaphore = Semaphore(8)
@@ -519,7 +517,9 @@ constructor(
             itemIds.chunked(100).map { chunkedIds ->
                 async(ioDispatcher) {
                     semaphore.withPermit {
-                        val fetchedItems = googleReaderAPI.getItemsContents(chunkedIds).items
+                        val result = googleReaderAPI.getItemsContents(chunkedIds)
+                        val updated = result.updated
+                        val fetchedItems = result.items
                         fetchedItems?.map {
                             val articleId = it.id?.ofItemStreamIdToId()
                             requireNotNull(articleId) { "articleId is null" }
@@ -547,8 +547,8 @@ constructor(
                                 isUnread = unreadIds.contains(articleId),
                                 isStarred = starredIds.contains(articleId),
                                 updateAt =
-                                    updateAt
-                                        ?: it.crawlTimeMsec?.run { Date(this.toLong()) }
+                                    updated?.let { Date(updated * 1000L) }
+                                        ?: it.crawlTimeMsec?.let { Date(it.toLong()) }
                                         ?: currentDate,
                             )
                         } ?: emptyList()
@@ -564,7 +564,6 @@ constructor(
         accountId: Int,
         unreadIds: Set<String>,
         starredIds: Set<String>,
-        updateAt: Date? = null,
     ): List<Article> =
         fetchItemsContentsDeferred(
                 itemIds = itemIds,
@@ -572,7 +571,6 @@ constructor(
                 accountId = accountId,
                 unreadIds = unreadIds,
                 starredIds = starredIds,
-                updateAt = updateAt,
             )
             .awaitAll()
             .flatten()
