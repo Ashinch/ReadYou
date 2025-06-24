@@ -2,7 +2,6 @@ package me.ash.reader.domain.service
 
 import android.content.Context
 import android.util.Log
-import androidx.annotation.CheckResult
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
 import com.rometools.rome.feed.synd.SyndFeed
@@ -11,11 +10,11 @@ import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.whileSelect
 import kotlinx.coroutines.supervisorScope
@@ -238,9 +237,10 @@ constructor(
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     private suspend fun sync(): ListenableWorker.Result = supervisorScope {
+        val preTime = System.currentTimeMillis()
+        val preDate = Date(preTime)
+
         try {
-            val preTime = System.currentTimeMillis()
-            val preDate = Date(preTime)
             val accountId = accountService.getCurrentAccountId()
             val account = accountService.getCurrentAccount()
             requireNotNull(account) { "cannot find account" }
@@ -318,30 +318,14 @@ constructor(
                 }
             }
 
-            val toBeSync = async {
-                (listOf(remoteUnreadIds, remoteStarredIds, remoteReadIds).awaitAll().flatten() -
-                        localItemIds)
-                    .toSet()
-            }
-
-            val remoteArticlesDeferredList =
-                fetchItemsContentsDeferred(
-                        itemIds = toBeSync.await(),
-                        googleReaderAPI = googleReaderAPI,
-                        accountId = accountId,
-                        unreadIds = remoteUnreadIds.await(),
-                        starredIds = remoteStarredIds.await(),
-                    )
-                    .toMutableList()
-
             // 2. Fetch folder and subscription list
             val groupWithFeedsMap = async {
                 googleReaderAPI
                     .getSubscriptionList()
-                    .also { println(it) }
                     .subscriptions
                     .groupBy { it.categories?.firstOrNull() }
                     .mapKeys { (category, _) ->
+                        val defaultGroup = accountService.getDefaultGroup()
                         val categoryId = category?.id
                         if (categoryId != null) {
                             val groupId = accountId spacerDollar categoryId.ofCategoryStreamIdToId()
@@ -350,7 +334,7 @@ constructor(
                                 name = category.label.toString(),
                                 accountId = accountId,
                             )
-                        } else accountService.getDefaultGroup()
+                        } else defaultGroup
                     }
                     .mapValues { (group, feeds) ->
                         feeds.map {
@@ -370,6 +354,23 @@ constructor(
                     }
                     .toSortedMap { c1, c2 -> c1?.name.toString().compareTo(c2?.name.toString()) }
             }
+
+            val toBeSync = async {
+                (listOf(remoteUnreadIds, remoteStarredIds, remoteReadIds).awaitAll().flatten() -
+                        localItemIds)
+                    .toSet()
+            }
+
+            val deferredList =
+                fetchItemsContentsDeferred(
+                        itemIds = toBeSync.await(),
+                        googleReaderAPI = googleReaderAPI,
+                        accountId = accountId,
+                        unreadIds = remoteUnreadIds.await(),
+                        starredIds = remoteStarredIds.await(),
+                        scope = this,
+                    )
+                    .toMutableList()
 
             val remoteGroups = async { groupWithFeedsMap.await().keys.toList() }
             val remoteFeeds = async { groupWithFeedsMap.await().values.flatten() }
@@ -395,13 +396,15 @@ constructor(
             groupDao.insertOrUpdate(remoteGroups.await())
             feedDao.insertOrUpdate(remoteFeeds.await())
 
-            if (remoteArticlesDeferredList.isNotEmpty()) {
-                whileSelect {
-                    for (deferred in remoteArticlesDeferredList) {
-                        deferred.onAwait {
-                            articleDao.insertList(it)
-                            remoteArticlesDeferredList.remove(deferred)
-                            remoteArticlesDeferredList.isNotEmpty()
+            if (deferredList.isNotEmpty()) {
+                launch {
+                    whileSelect {
+                        for (deferred in deferredList) {
+                            deferred.onAwait {
+                                articleDao.insertList(it)
+                                deferredList.remove(deferred)
+                                deferredList.isNotEmpty()
+                            }
                         }
                     }
                 }
@@ -415,7 +418,8 @@ constructor(
                 )
             }
 
-            // 8. Remove orphaned groups and feeds, after synchronizing the starred/un-starred
+            // 8. Remove orphaned groups and feeds, after synchronizing the
+            // starred/un-starred
             groupDao
                 .queryAll(accountId)
                 .filter { it.id !in remoteGroups.await().map { group -> group.id } }
@@ -425,13 +429,13 @@ constructor(
                 .filter { it.id !in remoteFeeds.await().map { feed -> feed.id } }
                 .forEach { super.deleteFeed(it, true) }
 
-            Timber.tag("RLog").i("onCompletion: ${System.currentTimeMillis() - preTime}")
             accountDao.update(account.copy(updateAt = Date()))
             ListenableWorker.Result.success()
         } catch (e: Exception) {
             Timber.tag("RLog").e(e, "On sync exception: ${e.message}")
             //                withContext(mainDispatcher) {
-            //                    context.showToast(e.message) todo: find a good way to notice user
+            //                    context.showToast(e.message) todo: find a good way to
+            // notice user
             // the error
             //                }
             ListenableWorker.Result.failure()
@@ -506,56 +510,54 @@ constructor(
         return ids
     }
 
-    private suspend fun fetchItemsContentsDeferred(
+    fun fetchItemsContentsDeferred(
         itemIds: Set<String>,
         googleReaderAPI: GoogleReaderAPI,
         accountId: Int,
         unreadIds: Set<String>,
         starredIds: Set<String>,
+        scope: CoroutineScope,
     ): List<Deferred<List<Article>>> {
         if (itemIds.isEmpty()) return emptyList()
         val currentDate = Date()
         val semaphore = Semaphore(8)
-        return coroutineScope {
-            itemIds.chunked(100).map { chunkedIds ->
-                async(ioDispatcher) {
-                    semaphore.withPermit {
-                        val result = googleReaderAPI.getItemsContents(chunkedIds)
-                        val updated = result.updated
-                        val fetchedItems = result.items
-                        fetchedItems?.map {
-                            val articleId = it.id?.ofItemStreamIdToId()
-                            requireNotNull(articleId) { "articleId is null" }
-                            Article(
-                                id = accountId.spacerDollar(articleId),
-                                date =
-                                    it.published
-                                        ?.run { Date(this * 1000) }
-                                        ?.takeIf { !it.isFuture(currentDate) } ?: currentDate,
-                                title = it.title.decodeHTML() ?: context.getString(R.string.empty),
-                                author = it.author,
-                                rawDescription = it.summary?.content ?: "",
-                                shortDescription =
-                                    Readability.parseToText(it.summary?.content, findArticleURL(it))
-                                        .take(280),
-                                //                        fullContent = it.summary?.content ?:
-                                // "",
-                                img = rssHelper.findThumbnail(it.summary?.content),
-                                link = findArticleURL(it),
-                                feedId =
-                                    accountId.spacerDollar(
-                                        it.origin?.streamId?.ofFeedStreamIdToId()!!
-                                    ),
-                                accountId = accountId,
-                                isUnread = unreadIds.contains(articleId),
-                                isStarred = starredIds.contains(articleId),
-                                updateAt =
-                                    updated?.let { Date(updated * 1000L) }
-                                        ?: it.crawlTimeMsec?.let { Date(it.toLong()) }
-                                        ?: currentDate,
-                            )
-                        } ?: emptyList()
-                    }
+        return itemIds.chunked(100).mapIndexed { index, chunkedIds ->
+            scope.async(ioDispatcher) {
+                semaphore.withPermit {
+                    val result = googleReaderAPI.getItemsContents(chunkedIds)
+                    val updated = result.updated
+                    val fetchedItems = result.items
+                    fetchedItems?.map {
+                        val articleId = it.id?.ofItemStreamIdToId()
+                        requireNotNull(articleId) { "articleId is null" }
+                        Article(
+                            id = accountId.spacerDollar(articleId),
+                            date =
+                                it.published
+                                    ?.run { Date(this * 1000) }
+                                    ?.takeIf { !it.isFuture(currentDate) } ?: currentDate,
+                            title = it.title.decodeHTML() ?: context.getString(R.string.empty),
+                            author = it.author,
+                            rawDescription = it.summary?.content ?: "",
+                            shortDescription =
+                                Readability.parseToText(it.summary?.content, findArticleURL(it))
+                                    .take(280),
+                            //                        fullContent = it.summary?.content
+                            // ?:
+                            // "",
+                            img = rssHelper.findThumbnail(it.summary?.content),
+                            link = findArticleURL(it),
+                            feedId =
+                                accountId.spacerDollar(it.origin?.streamId?.ofFeedStreamIdToId()!!),
+                            accountId = accountId,
+                            isUnread = unreadIds.contains(articleId),
+                            isStarred = starredIds.contains(articleId),
+                            updateAt =
+                                updated?.let { Date(updated * 1000L) }
+                                    ?: it.crawlTimeMsec?.let { Date(it.toLong()) }
+                                    ?: currentDate,
+                        )
+                    } ?: emptyList()
                 }
             }
         }
@@ -567,16 +569,18 @@ constructor(
         accountId: Int,
         unreadIds: Set<String>,
         starredIds: Set<String>,
-    ): List<Article> =
+    ): List<Article> = supervisorScope {
         fetchItemsContentsDeferred(
                 itemIds = itemIds,
                 googleReaderAPI = googleReaderAPI,
                 accountId = accountId,
                 unreadIds = unreadIds,
                 starredIds = starredIds,
+                scope = this,
             )
             .awaitAll()
             .flatten()
+    }
 
     private fun findArticleURL(it: GoogleReaderDTO.Item) =
         it.canonical?.firstOrNull()?.href
