@@ -2,6 +2,7 @@ package me.ash.reader.domain.service
 
 import android.content.Context
 import android.util.Log
+import androidx.annotation.CheckResult
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
 import com.rometools.rome.feed.synd.SyndFeed
@@ -376,13 +377,14 @@ constructor(
             // Handle empty icon for feeds
             launch {
                 val localFeeds = feedDao.queryAll(accountId)
+                val remoteFeeds = remoteFeeds.await()
+                val newFeeds = remoteFeeds.filter { feed -> feed.id !in localFeeds.map { it.id } }
+
                 val feedsWithIconFetched =
-                    localFeeds
+                    newFeeds
                         .filter { it.icon == null }
                         .map { feed ->
-                            async {
-                                feed.copy(icon = rssHelper.queryRssIconLink(feed.url) ?: "")
-                            } // set icon url to empty string if failed
+                            async { feed.copy(icon = rssHelper.queryRssIconLink(feed.url)) }
                         }
                 feedsWithIconFetched
                     .awaitAll()
@@ -487,7 +489,7 @@ constructor(
             )
 
         articleDao.insert(*items.toTypedArray())
-        Log.i("RLog", "onCompletion: ${System.currentTimeMillis() - preTime}")
+        Timber.i("onCompletion: ${System.currentTimeMillis() - preTime}")
 
         ListenableWorker.Result.success()
     }
@@ -511,6 +513,7 @@ constructor(
         unreadIds: Set<String>,
         starredIds: Set<String>,
     ): List<Deferred<List<Article>>> {
+        if (itemIds.isEmpty()) return emptyList()
         val currentDate = Date()
         val semaphore = Semaphore(8)
         return coroutineScope {
