@@ -10,10 +10,13 @@ import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.whileSelect
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
@@ -232,6 +235,7 @@ constructor(
      * @link https://github.com/bazqux/bazqux-api?tab=readme-ov-file
      * @link https://github.com/theoldreader/api
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     private suspend fun sync(): ListenableWorker.Result = supervisorScope {
         try {
             val preTime = System.currentTimeMillis()
@@ -319,16 +323,15 @@ constructor(
                     .toSet()
             }
 
-            val fetchedArticles = async {
-                fetchItemsContents(
-                    itemIds = toBeSync.await(),
-                    googleReaderAPI = googleReaderAPI,
-                    accountId = accountId,
-                    unreadIds = remoteUnreadIds.await(),
-                    starredIds = remoteStarredIds.await(),
-                    preDate = preDate,
-                )
-            }
+            val remoteArticlesDeferredList =
+                fetchItemsContentsDeferred(
+                        itemIds = toBeSync.await(),
+                        googleReaderAPI = googleReaderAPI,
+                        accountId = accountId,
+                        unreadIds = remoteUnreadIds.await(),
+                        starredIds = remoteStarredIds.await(),
+                    )
+                    .toMutableList()
 
             // 2. Fetch folder and subscription list
             val groupWithFeedsMap = async {
@@ -390,7 +393,17 @@ constructor(
             groupDao.insertOrUpdate(remoteGroups.await())
             feedDao.insertOrUpdate(remoteFeeds.await())
 
-            articleDao.insert(*fetchedArticles.await().toTypedArray())
+            if (remoteArticlesDeferredList.isNotEmpty()) {
+                whileSelect {
+                    for (deferred in remoteArticlesDeferredList) {
+                        deferred.onAwait {
+                            articleDao.insertList(it)
+                            remoteArticlesDeferredList.remove(deferred)
+                            remoteArticlesDeferredList.isNotEmpty()
+                        }
+                    }
+                }
+            }
 
             launch {
                 articleDao.markAsReadByIdSet(
@@ -471,7 +484,7 @@ constructor(
                 accountId = accountId,
                 unreadIds = unreadIds.await().map { it.ofItemStreamIdToId() }.toSet(),
                 starredIds = starredIds.await().map { it.ofItemStreamIdToId() }.toSet(),
-                preDate = Date(),
+                updateAt = Date(),
             )
 
         articleDao.insert(*items.toTypedArray())
@@ -492,62 +505,77 @@ constructor(
         return ids
     }
 
+    private suspend fun fetchItemsContentsDeferred(
+        itemIds: Set<String>,
+        googleReaderAPI: GoogleReaderAPI,
+        accountId: Int,
+        unreadIds: Set<String>,
+        starredIds: Set<String>,
+        updateAt: Date? = null,
+    ): List<Deferred<List<Article>>> {
+        val currentDate = Date()
+        val semaphore = Semaphore(8)
+        return coroutineScope {
+            itemIds.chunked(100).map { chunkedIds ->
+                async(ioDispatcher) {
+                    semaphore.withPermit {
+                        val fetchedItems = googleReaderAPI.getItemsContents(chunkedIds).items
+                        fetchedItems?.map {
+                            val articleId = it.id?.ofItemStreamIdToId()
+                            requireNotNull(articleId) { "articleId is null" }
+                            Article(
+                                id = accountId.spacerDollar(articleId),
+                                date =
+                                    it.published
+                                        ?.run { Date(this * 1000) }
+                                        ?.takeIf { !it.isFuture(currentDate) } ?: currentDate,
+                                title = it.title.decodeHTML() ?: context.getString(R.string.empty),
+                                author = it.author,
+                                rawDescription = it.summary?.content ?: "",
+                                shortDescription =
+                                    Readability.parseToText(it.summary?.content, findArticleURL(it))
+                                        .take(280),
+                                //                        fullContent = it.summary?.content ?:
+                                // "",
+                                img = rssHelper.findThumbnail(it.summary?.content),
+                                link = findArticleURL(it),
+                                feedId =
+                                    accountId.spacerDollar(
+                                        it.origin?.streamId?.ofFeedStreamIdToId()!!
+                                    ),
+                                accountId = accountId,
+                                isUnread = unreadIds.contains(articleId),
+                                isStarred = starredIds.contains(articleId),
+                                updateAt =
+                                    updateAt
+                                        ?: it.crawlTimeMsec?.run { Date(this.toLong()) }
+                                        ?: currentDate,
+                            )
+                        } ?: emptyList()
+                    }
+                }
+            }
+        }
+    }
+
     private suspend fun fetchItemsContents(
         itemIds: Set<String>,
         googleReaderAPI: GoogleReaderAPI,
         accountId: Int,
         unreadIds: Set<String>,
         starredIds: Set<String>,
-        preDate: Date,
-    ): List<Article> {
-        val semaphore = Semaphore(8)
-        return coroutineScope {
-            itemIds
-                .chunked(100)
-                .map { chunkedIds ->
-                    async(ioDispatcher) {
-                        semaphore.withPermit {
-                            googleReaderAPI.getItemsContents(chunkedIds).items?.map {
-                                val articleId = it.id?.ofItemStreamIdToId()
-                                requireNotNull(articleId) { "articleId is null" }
-                                Article(
-                                    id = accountId.spacerDollar(articleId),
-                                    date =
-                                        it.published
-                                            ?.run { Date(this * 1000) }
-                                            ?.takeIf { !it.isFuture(preDate) } ?: preDate,
-                                    title =
-                                        it.title.decodeHTML() ?: context.getString(R.string.empty),
-                                    author = it.author,
-                                    rawDescription = it.summary?.content ?: "",
-                                    shortDescription =
-                                        Readability.parseToText(
-                                                it.summary?.content,
-                                                findArticleURL(it),
-                                            )
-                                            .take(280),
-                                    //                        fullContent = it.summary?.content ?:
-                                    // "",
-                                    img = rssHelper.findThumbnail(it.summary?.content),
-                                    link = findArticleURL(it),
-                                    feedId =
-                                        accountId.spacerDollar(
-                                            it.origin?.streamId?.ofFeedStreamIdToId()!!
-                                        ),
-                                    accountId = accountId,
-                                    isUnread = unreadIds.contains(articleId),
-                                    isStarred = starredIds.contains(articleId),
-                                    updateAt =
-                                        it.crawlTimeMsec?.run { Date(this.toLong()) } ?: preDate,
-                                )
-                            }
-                        }
-                    }
-                }
-                .awaitAll()
-                .flatMap { it ?: emptyList() }
-        }
-    }
+        updateAt: Date? = null,
+    ): List<Article> =
+        fetchItemsContentsDeferred(
+                itemIds = itemIds,
+                googleReaderAPI = googleReaderAPI,
+                accountId = accountId,
+                unreadIds = unreadIds,
+                starredIds = starredIds,
+                updateAt = updateAt,
+            )
+            .awaitAll()
+            .flatten()
 
     private fun findArticleURL(it: GoogleReaderDTO.Item) =
         it.canonical?.firstOrNull()?.href
