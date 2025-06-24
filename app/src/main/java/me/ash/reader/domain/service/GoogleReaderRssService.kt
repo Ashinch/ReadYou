@@ -433,7 +433,7 @@ constructor(
         val localUnreadIds = articleDao.queryMetadataByFeedId(accountId, feedId, isUnread = true)
         val localReadIds = articleDao.queryMetadataByFeedId(accountId, feedId, isUnread = false)
 
-        val localIds = (localReadIds + localUnreadIds).map { it.id }
+        val localIds = (localReadIds + localUnreadIds).map { it.id.dollarLast() }
 
         val unreadIds = async {
             fetchItemIdsAndContinue {
