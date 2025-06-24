@@ -102,13 +102,13 @@
     <string name="accounts_desc">Lokalne, usługi, hostowane samodzielnie</string>
     <string name="color_and_style">Wygląd</string>
     <string name="color_and_style_desc">Motyw, kolorystyka, czcionki</string>
-    <string name="interaction">Interakcje</string>
-    <string name="interaction_desc">Strona startowa, reakcja na dotyk</string>
+    <string name="interaction">Preferencje użytkowania</string>
+    <string name="interaction_desc">Strona startowa, gesty</string>
     <string name="languages">Język</string>
     <string name="help_translate">Pomóż w tłumaczeniu</string>
     <string name="use_device_languages">Zgodny z systemem</string>
     <string name="tips_and_support">Porady i wsparcie</string>
-    <string name="tips_and_support_desc">O aplikacji i licencjach open source</string>
+    <string name="tips_and_support_desc">O aplikacji, sponsor, licencje open source</string>
     <string name="welcome">Witamy</string>
     <string name="tos_tips">Aby kontynuować, przeczytaj i zaakceptuj warunki korzystania z usługi Read You oraz politykę prywatności.</string>
     <string name="browse_tos_tips">Zapoznaj się z <i><u>warunkami korzystania z usługi i polityką prywatności</u></i></string>
@@ -148,8 +148,8 @@
     <string name="rate_limit">Limit częstotliwości żądań</string>
     <string name="help">Pomoc</string>
     <string name="on_start">Po uruchomieniu</string>
-    <string name="initial_page">Strona powitalna</string>
-    <string name="initial_filter">Domyślny filtr</string>
+    <string name="initial_page">Strona startowa</string>
+    <string name="initial_filter">Filtr domyślny</string>
     <string name="preview_article_title">Powieść "Władca Tajemnic" zakończyła się</string>
     <string name="preview_article_desc">"Głupiec" jest ósmym i zarazem ostatnim tomem serii Władca Tajemnic
         autorstwa Jana Kowalskiego.

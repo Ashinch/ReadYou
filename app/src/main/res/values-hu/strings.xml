@@ -67,8 +67,8 @@
     <string name="name">Név</string>
     <string name="reading_fonts">Olvasási betűkészletek</string>
     <string name="basic_fonts">Alap betűkészletek</string>
-    <string name="feeds_page">Hírforrások oldal</string>
-    <string name="flow_page">Folyam oldal</string>
+    <string name="feeds_page">Hírforrás-oldal</string>
+    <string name="flow_page">Folyamoldal</string>
     <string name="images">Képek</string>
     <string name="local_desc">Ezen az eszközön</string>
     <string name="services">Szolgáltatások</string>
@@ -82,7 +82,7 @@
     <string name="mark_as_read_three_days">3 napnál régebbiek megjelölése olvasottként</string>
     <string name="mark_as_read_seven_days">7 napnál régebbiek megjelölése olvasottként</string>
     <string name="get_new_updates_desc">Új %1$s verzió érhető el</string>
-    <string name="interaction_desc">Kezdőoldal, haptikus visszajelzés</string>
+    <string name="interaction_desc">Kezdőoldal, gesztusok</string>
     <string name="tos_tips">Olvassa át és fogadja el a Read You használati feltételeit és adatvédelmi irányelveit a folytatáshoz.</string>
     <string name="delete_account_toast">Fiók törölve</string>
     <string name="always_expand">Mindig kibontva</string>
@@ -142,12 +142,12 @@
     <string name="accounts_desc">Helyi, szolgáltatások, saját üzemeltetés</string>
     <string name="color_and_style">Szín és stílus</string>
     <string name="color_and_style_desc">Téma, színstílus, betűméret</string>
-    <string name="interaction">Interakció</string>
+    <string name="interaction">Használati beállítások</string>
     <string name="languages">Nyelvek</string>
     <string name="help_translate">Segítsen a fordításban</string>
     <string name="use_device_languages">Eszköz nyelvének használata</string>
     <string name="tips_and_support">Tippek és támogatás</string>
-    <string name="tips_and_support_desc">Névjegy, nyílt forráskódú licencek</string>
+    <string name="tips_and_support_desc">Névjegy, szponzorálás, nyílt forráskódú licencek</string>
     <string name="welcome">Üdvözöljük</string>
     <string name="browse_tos_tips">A <i><u>használati feltételek és adatvédelmi irányelvek</u></i> böngészése</string>
     <string name="terms_of_service">Használati feltételek</string>
@@ -170,7 +170,7 @@
     <string name="other">Egyéb</string>
     <string name="amoled_dark_theme">Fekete sötét téma</string>
     <string name="tonal_elevation">Tónusos emelkedés</string>
-    <string name="reading_page">Olvasás oldal</string>
+    <string name="reading_page">Olvasási oldal</string>
     <string name="sponsor">Támogató</string>
     <string name="open_source_licenses">Nyílt forráskódú licencek</string>
     <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
@@ -185,7 +185,7 @@
     <string name="help">Súgó</string>
     <string name="on_start">Indításkor</string>
     <string name="initial_page">Kezdőoldal</string>
-    <string name="initial_filter">Kezdeti szűrő</string>
+    <string name="initial_filter">Alapértelmezett szűrő</string>
     <string name="preview_article_title">A rejtélyek ura című regény végre véget ért</string>
     <string name="preview_article_desc">A Bolond című kötet A rejtélyek ura sorozat nyolcadik és egyben utolsó kötete, amelyet Tintahal írt, aki szeret búvárkodni.</string>
     <string name="preview_feed_name">Reddit</string>
@@ -247,7 +247,7 @@
     <string name="synchronous_tips">Újraindítás szükséges a változtatások érvénybe léptetéséhez</string>
     <string name="switch_account">Kapcsoló</string>
     <string name="add">Hozzáadás</string>
-    <string name="accounts_tips">A fiókváltáshoz koppintson a fiók nevére a hírforrások oldalon</string>
+    <string name="accounts_tips">A fiókváltáshoz koppintson a fiók nevére a hírforrás-oldalon</string>
     <string name="server_url">Kiszolgáló webcíme</string>
     <string name="connection">Kapcsolat</string>
     <string name="custom_tabs">Egyéni lapok kényszerítése</string>

@@ -94,13 +94,13 @@
     <string name="accounts_desc">本地、服务、自托管</string>
     <string name="color_and_style">颜色和样式</string>
     <string name="color_and_style_desc">主题、色调样式、字体大小</string>
-    <string name="interaction">交互</string>
-    <string name="interaction_desc">初始页面、触感反馈</string>
+    <string name="interaction">使用偏好</string>
+    <string name="interaction_desc">启动页面、手势</string>
     <string name="languages">语言</string>
     <string name="use_device_languages">跟随系统设置</string>
     <string name="help_translate">帮助我们翻译</string>
     <string name="tips_and_support">提示和支持</string>
-    <string name="tips_and_support_desc">关于、开源</string>
+    <string name="tips_and_support_desc">关于、赞助者、开源许可证</string>
     <string name="welcome">欢迎</string>
     <string name="tos_tips">在此之前，请阅读并同意 Read You 的服务条款与隐私政策。</string>
     <string name="browse_tos_tips">查看《<i><u>服务条款与隐私政策</u></i>》</string>
@@ -140,8 +140,8 @@
     <string name="rate_limit">请求速率受限</string>
     <string name="help">帮助</string>
     <string name="on_start">启动时</string>
-    <string name="initial_page">起始页面</string>
-    <string name="initial_filter">起始过滤条件</string>
+    <string name="initial_page">启动页面</string>
+    <string name="initial_filter">默认筛选器</string>
     <string name="preview_article_title">呜呜呜，黎明之剑完结了</string>
     <string name="preview_article_desc">是宴席，就有结束的时候，但这本书真的陪了我好久啊，好舍不得，而且主线结束了坑却没填完，不知道啥时候才有番外啊。</string>
     <string name="preview_feed_name">漩涡书院</string>

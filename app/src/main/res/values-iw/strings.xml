@@ -35,7 +35,7 @@
     <string name="color_and_style">צבע וסגנון</string>
     <string name="color_and_style_desc">ערכת עיצוב, סגנון צבע, גודל גופן</string>
     <string name="interaction">אינטראקציה</string>
-    <string name="interaction_desc">עמוד ראשוני, משוב ברטט</string>
+    <string name="interaction_desc">עמוד התחלה, תנועות</string>
     <string name="languages">שפות</string>
     <string name="help_translate">עזרה בתרגום</string>
     <string name="use_device_languages">להשתמש בשפת המכשיר</string>
@@ -59,7 +59,7 @@
     <string name="download_failure">לא ניתן להוריד עדכונים</string>
     <string name="help">עזרה</string>
     <string name="on_start">בפתיחה</string>
-    <string name="initial_filter">מסנן ראשוני</string>
+    <string name="initial_filter">מסנן ברירת מחדל</string>
     <string name="value">ערך</string>
     <string name="feed_names">שמות ההיזנים</string>
     <string name="article_list">רשימת כתבות</string>
@@ -157,7 +157,7 @@
     <string name="accounts_desc">מקומי, שירותים, אירוח עצמי</string>
     <string name="rate_limit">קצב הבקשות מוגבל</string>
     <string name="article_images">תמונות הכתבה</string>
-    <string name="tips_and_support_desc">על אודות, רישיונות קוד פתוח</string>
+    <string name="tips_and_support_desc">על אודות, מימון, רישיונות קוד פתוח</string>
     <string name="on">פעיל</string>
     <string name="amoled_dark_theme">ערכת עיצוב כהה שחורה</string>
     <string name="basic_fonts">גופנים בסיסיים</string>
@@ -166,7 +166,7 @@
     <string name="primary_color_hint">כגון #666666 או 666666</string>
     <string name="other">אחר</string>
     <string name="open_source_licenses">רישיונות קוד פתוח</string>
-    <string name="initial_page">עמוד ראשוני</string>
+    <string name="initial_page">עמוד פתיחה</string>
     <string name="horizontal_padding">ריפוד אופקי</string>
     <string name="article_date">מועד פרסום הכתבה</string>
     <string name="article_desc">תיאורי הכתבה</string>
@@ -294,4 +294,5 @@
     <string name="read_aloud">לקרוא בקול</string>
     <string name="bold_characters_preview">להדגיש כמה מהמילים הראשונות בכתבות</string>
     <string name="permission_denied">ההרשאה נדחתה</string>
+    <string name="preview_article_title">לורד התעלומות המסתורי הגיע לסיומו</string>
 </resources>
