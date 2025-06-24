@@ -1,9 +1,9 @@
 package me.ash.reader.domain.repository
 
-import android.util.Log
 import androidx.room.*
 import me.ash.reader.domain.model.article.ArchivedArticle
 import me.ash.reader.domain.model.feed.Feed
+import timber.log.Timber
 
 @Dao
 interface FeedDao {
@@ -15,11 +15,7 @@ interface FeedDao {
         AND accountId = :accountId
         """
     )
-    suspend fun updateTargetGroupIdByGroupId(
-        accountId: Int,
-        groupId: String,
-        targetGroupId: String,
-    )
+    suspend fun updateTargetGroupIdByGroupId(accountId: Int, groupId: String, targetGroupId: String)
 
     @Query(
         """
@@ -50,7 +46,6 @@ interface FeedDao {
         }
     }
 
-
     @Query(
         """
         UPDATE feed SET isBrowser = :isBrowser
@@ -65,17 +60,13 @@ interface FeedDao {
     )
 
     @Transaction
-    suspend fun updateIsBrowserByGroupId(
-        accountId: Int,
-        groupId: String,
-        isBrowser: Boolean,
-    ) {
+    suspend fun updateIsBrowserByGroupId(accountId: Int, groupId: String, isBrowser: Boolean) {
         updateIsBrowserByGroupIdInternal(accountId, groupId, isBrowser)
         if (isBrowser) {
             updateIsFullContentByGroupIdInternal(
                 accountId = accountId,
                 groupId = groupId,
-                isFullContent = false
+                isFullContent = false,
             )
         }
     }
@@ -130,6 +121,14 @@ interface FeedDao {
     @Query(
         """
         SELECT * FROM feed
+        WHERE id in (:idList)
+        """
+    )
+    suspend fun queryByIds(idList: List<String>): List<Feed>
+
+    @Query(
+        """
+        SELECT * FROM feed
         WHERE accountId = :accountId
         """
     )
@@ -153,38 +152,46 @@ interface FeedDao {
     )
     suspend fun queryByLink(accountId: Int, url: String): List<Feed>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(vararg feed: Feed)
+    @Insert(onConflict = OnConflictStrategy.REPLACE) suspend fun insert(vararg feed: Feed)
 
-    @Insert
-    suspend fun insertList(feeds: List<Feed>): List<Long>
+    @Insert suspend fun insertList(feeds: List<Feed>): List<Long>
 
-    @Update
-    suspend fun update(vararg feed: Feed)
+    @Update suspend fun update(vararg feed: Feed)
 
-    @Delete
-    suspend fun delete(vararg feed: Feed)
+    @Delete suspend fun delete(vararg feed: Feed)
 
+    @Insert suspend fun insertAll(feeds: List<Feed>)
+
+    @Update suspend fun updateAll(feeds: List<Feed>)
+
+    @Transaction
     suspend fun insertOrUpdate(feeds: List<Feed>) {
-        feeds.forEach {
-            val existingFeed = queryById(it.id)
-            if (existingFeed == null) {
-                insert(it)
-            } else {
-                Log.i("RLog", "insertOrUpdate it: $it")
-                Log.i("RLog", "insertOrUpdate feed: $existingFeed")
-                val updatedFeed = it.copy(
-                    icon = if (it.icon.isNullOrEmpty()) existingFeed.icon else it.icon,
-                    isNotification = existingFeed.isNotification,
-                    isFullContent = existingFeed.isFullContent,
-                    isBrowser = existingFeed.isBrowser)
-                update(updatedFeed)
+        val localFeeds = queryByIds(feeds.map { it.id }).associateBy { it.id }
+        val (newFeeds, feedsToUpdate) = feeds.partition { !localFeeds.contains(it.id) }
+
+        if (newFeeds.isNotEmpty()) insertAll(newFeeds)
+
+        feedsToUpdate
+            .mapNotNull { new ->
+                val existing = localFeeds[new.id] ?: return@mapNotNull null
+                val updated =
+                    new.copy(
+                        icon = if (new.icon.isNullOrEmpty()) existing.icon else new.icon,
+                        isNotification = existing.isNotification,
+                        isFullContent = existing.isFullContent,
+                        isBrowser = existing.isBrowser,
+                    )
+                if (updated == existing) {
+                    null
+                } else {
+                    Timber.d("Update ${new.name}")
+                    updated
+                }
             }
-        }
+            .let { updateAll(it) }
     }
 
-    @Insert
-    suspend fun insertArchivedArticles(links: List<ArchivedArticle>)
+    @Insert suspend fun insertArchivedArticles(links: List<ArchivedArticle>)
 
     @Query(
         """
