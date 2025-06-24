@@ -49,7 +49,9 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastAny
@@ -106,6 +108,7 @@ fun FeedsPage(
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val hapticFeedback = LocalHapticFeedback.current
     val topBarTonalElevation = LocalFeedsTopBarTonalElevation.current
     val groupListTonalElevation = LocalFeedsGroupListTonalElevation.current
     val groupListExpand = LocalFeedsGroupListExpand.current
@@ -239,7 +242,10 @@ fun FeedsPage(
                         DisplayText(
                             text = feedsUiState.account?.name ?: "",
                             desc = "",
-                        ) { accountTabVisible = true }
+                        ) {
+                            hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
+                            accountTabVisible = true
+                        }
                     }
                     item {
                         FeedsBanner(
@@ -377,9 +383,12 @@ fun FeedsPage(
     GroupOptionDrawer(drawerState = groupDrawerState)
     FeedOptionDrawer(drawerState = feedDrawerState)
 
+    val currentAccountId = feedsUiState.account?.id
+
     AccountsTab(
         visible = accountTabVisible,
         accounts = accounts,
+        currentAccountId = currentAccountId,
         onAccountSwitch = {
             accountViewModel.switchAccount(it) {
                 accountTabVisible = false
@@ -387,7 +396,7 @@ fun FeedsPage(
         },
         onClickSettings = {
             accountTabVisible = false
-            navController.navigate("${RouteName.ACCOUNT_DETAILS}/${context.currentAccountId}")
+            navController.navigate("${RouteName.ACCOUNT_DETAILS}/${currentAccountId}")
         },
         onClickManage = {
             accountTabVisible = false
