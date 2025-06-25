@@ -113,7 +113,7 @@ class AccountViewModel @Inject constructor(
                     throw Exception("Unauthorized")
                 }
             } catch (e: Exception) {
-                accountService.delete(account.id!!)
+                accountService.delete(addAccount.id!!)
                 withContext(mainDispatcher) {
                     callback(null, e)
                 }
