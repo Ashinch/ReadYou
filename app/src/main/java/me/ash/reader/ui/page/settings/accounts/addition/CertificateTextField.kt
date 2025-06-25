@@ -54,7 +54,6 @@ fun CertificateSelector(
                 Icon(
                     imageVector = Icons.Default.Key,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         },

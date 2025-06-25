@@ -66,7 +66,6 @@ fun TextFieldDialog(
                 isPassword = isPassword,
                 errorText = errorText,
                 imeAction = imeAction,
-                focusManager = focusManager,
                 onConfirm = onConfirm,
             )
         },
@@ -131,7 +130,6 @@ fun TextFieldDialog(
                 isPassword = isPassword,
                 errorText = errorText,
                 imeAction = imeAction,
-                focusManager = focusManager,
                 onConfirm = onConfirm,
             )
         },
@@ -194,7 +192,6 @@ fun TextFieldDialog(
                 isPassword = isPassword,
                 errorText = errorText,
                 imeAction = imeAction,
-                focusManager = focusManager,
                 onConfirm = onConfirm,
             )
         },

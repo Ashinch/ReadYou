@@ -127,7 +127,6 @@ fun SubscribeDialog(
                                 placeholder = stringResource(R.string.feed_or_site_url),
                                 errorText = errorText,
                                 imeAction = ImeAction.Search,
-                                focusManager = focusManager,
                                 onConfirm = {
                                     subscribeViewModel.searchFeed()
                                 },
