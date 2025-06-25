@@ -1,39 +1,37 @@
 package me.ash.reader.domain.service
 
 import android.content.Context
-import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 import me.ash.reader.infrastructure.preference.SyncIntervalPreference
 import me.ash.reader.infrastructure.preference.SyncOnlyOnWiFiPreference
 import me.ash.reader.infrastructure.preference.SyncOnlyWhenChargingPreference
 import me.ash.reader.infrastructure.rss.ReaderCacheHelper
-import java.util.concurrent.TimeUnit
 
 @HiltWorker
-class SyncWorker @AssistedInject constructor(
+class SyncWorker
+@AssistedInject
+constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
     private val rssService: RssService,
     private val readerCacheHelper: ReaderCacheHelper,
 ) : CoroutineWorker(context, workerParams) {
 
-    override suspend fun doWork(): Result =
-        withContext(Dispatchers.Default) {
-            val data = inputData
-            val feedId = data.getString("feedId")
-            val groupId = data.getString("groupId")
+    override suspend fun doWork(): Result {
+        val data = inputData
+        val feedId = data.getString("feedId")
+        val groupId = data.getString("groupId")
 
-            rssService.get().sync(feedId = feedId, groupId = groupId).also {
-                rssService.get().clearKeepArchivedArticles().forEach {
-                    readerCacheHelper.deleteCacheFor(articleId = it.id)
-                }
+        return rssService.get().sync(feedId = feedId, groupId = groupId).also {
+            rssService.get().clearKeepArchivedArticles().forEach {
+                readerCacheHelper.deleteCacheFor(articleId = it.id)
             }
         }
+    }
 
     companion object {
         private const val SYNC_WORK_NAME_PERIODIC = "ReadYou"
@@ -51,18 +49,18 @@ class SyncWorker @AssistedInject constructor(
             workManager.cancelUniqueWork(READER_WORK_NAME_PERIODIC)
         }
 
-        fun enqueueOneTimeWork(
-            workManager: WorkManager,
-            inputData: Data = workDataOf()
-        ) {
-            workManager.beginUniqueWork(
-                WORK_NAME_ONETIME,
-                ExistingWorkPolicy.KEEP,
-                OneTimeWorkRequestBuilder<SyncWorker>().addTag(WORK_TAG).setInputData(inputData)
-                    .build()
-            ).then(
-                OneTimeWorkRequestBuilder<ReaderWorker>().build()
-            ).enqueue()
+        fun enqueueOneTimeWork(workManager: WorkManager, inputData: Data = workDataOf()) {
+            workManager
+                .beginUniqueWork(
+                    WORK_NAME_ONETIME,
+                    ExistingWorkPolicy.KEEP,
+                    OneTimeWorkRequestBuilder<SyncWorker>()
+                        .addTag(WORK_TAG)
+                        .setInputData(inputData)
+                        .build(),
+                )
+                .then(OneTimeWorkRequestBuilder<ReaderWorker>().build())
+                .enqueue()
         }
 
         fun enqueuePeriodicWork(
@@ -78,12 +76,15 @@ class SyncWorker @AssistedInject constructor(
                     .setConstraints(
                         Constraints.Builder()
                             .setRequiresCharging(syncOnlyWhenCharging.value)
-                            .setRequiredNetworkType(if (syncOnlyOnWiFi.value) NetworkType.UNMETERED else NetworkType.CONNECTED)
+                            .setRequiredNetworkType(
+                                if (syncOnlyOnWiFi.value) NetworkType.UNMETERED
+                                else NetworkType.CONNECTED
+                            )
                             .build()
                     )
                     .addTag(WORK_TAG)
                     .setInitialDelay(syncInterval.value, TimeUnit.MINUTES)
-                    .build()
+                    .build(),
             )
 
             workManager.enqueueUniquePeriodicWork(
@@ -93,11 +94,14 @@ class SyncWorker @AssistedInject constructor(
                     .setConstraints(
                         Constraints.Builder()
                             .setRequiresCharging(syncOnlyWhenCharging.value)
-                            .setRequiredNetworkType(if (syncOnlyOnWiFi.value) NetworkType.UNMETERED else NetworkType.CONNECTED)
+                            .setRequiredNetworkType(
+                                if (syncOnlyOnWiFi.value) NetworkType.UNMETERED
+                                else NetworkType.CONNECTED
+                            )
                             .build()
                     )
                     .setInitialDelay(syncInterval.value, TimeUnit.MINUTES)
-                    .build()
+                    .build(),
             )
         }
     }
