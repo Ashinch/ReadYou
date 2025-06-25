@@ -97,7 +97,7 @@ class FeverAPI private constructor(
             )
         }
 
-    private val retryConfig = RetryConfig(attempts = 3)
+    private val retryConfig = RetryConfig()
 
     suspend fun getUnreadItems(): FeverDTO.ItemsByUnread =
         postRequest<FeverDTO.ItemsByUnread>("unread_item_ids").apply { checkAuth(auth) }

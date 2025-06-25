@@ -8,10 +8,10 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 data class RetryConfig(
-    val attempts: Int = 5,
-    val timeoutPerAttempt: Long = 5000L,
+    val attempts: Int = 2,
+    val timeoutPerAttempt: Long = 10000L,
     val initialDelay: Long = 1000L,
-    val maxDelay: Long = 20000L,
+    val maxDelay: Long = 5000L,
     val delayFactor: Double = 2.0,
     val onRetry: ((Throwable) -> Unit)? = null,
     val shouldRetry: (Throwable) -> Boolean = { it !is CancellationException },

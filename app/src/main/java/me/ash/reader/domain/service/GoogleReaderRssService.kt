@@ -15,6 +15,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.whileSelect
 import kotlinx.coroutines.supervisorScope
@@ -236,7 +237,7 @@ constructor(
      * @link https://github.com/theoldreader/api
      */
     @OptIn(ExperimentalCoroutinesApi::class)
-    private suspend fun sync(): ListenableWorker.Result = supervisorScope {
+    private suspend fun sync(): ListenableWorker.Result = coroutineScope {
         val preTime = System.currentTimeMillis()
         val preDate = Date(preTime)
 
@@ -320,9 +321,9 @@ constructor(
 
             // 2. Fetch folder and subscription list
             val groupWithFeedsMap = async {
-                googleReaderAPI
-                    .getSubscriptionList()
-                    .subscriptions
+                val subscriptionList = googleReaderAPI.getSubscriptionList()
+                requireNotNull(subscriptionList) { "subscriptionList is null" }
+                subscriptionList.subscriptions
                     .groupBy { it.categories?.firstOrNull() }
                     .mapKeys { (category, _) ->
                         val defaultGroup = accountService.getDefaultGroup()
@@ -499,13 +500,13 @@ constructor(
     }
 
     private suspend fun fetchItemIdsAndContinue(
-        getItemIdsFunc: suspend (continuationId: String?) -> GoogleReaderDTO.ItemIds
+        getItemIdsFunc: suspend (continuationId: String?) -> GoogleReaderDTO.ItemIds?
     ): MutableList<String> {
         var result = getItemIdsFunc(null)
-        val ids = result.itemRefs?.mapNotNull { it.id }?.toMutableList() ?: return mutableListOf()
-        while (result.continuation != null) {
+        val ids = result?.itemRefs?.mapNotNull { it.id }?.toMutableList() ?: return mutableListOf()
+        while (result != null && result.continuation != null) {
             result = getItemIdsFunc(result.continuation)
-            result.itemRefs?.mapNotNull { it.id }?.let { ids.addAll(it) }
+            result?.itemRefs?.mapNotNull { it.id }?.let { ids.addAll(it) }
         }
         return ids
     }

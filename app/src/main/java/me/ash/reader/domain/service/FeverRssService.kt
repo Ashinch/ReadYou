@@ -8,6 +8,7 @@ import androidx.work.WorkManager
 import com.rometools.rome.feed.synd.SyndFeed
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.supervisorScope
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
@@ -136,7 +137,7 @@ class FeverRssService @Inject constructor(
      * 4. Synchronize read/unread and starred/un-starred items
      */
     override suspend fun sync(feedId: String?, groupId: String?): ListenableWorker.Result =
-        supervisorScope {
+        coroutineScope {
 
             try {
                 val preTime = System.currentTimeMillis()

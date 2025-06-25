@@ -2,7 +2,8 @@ package me.ash.reader.infrastructure.rss.provider.greader
 
 import android.content.Context
 import androidx.annotation.CheckResult
-import androidx.core.text.isDigitsOnly
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.text.hexToLong
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import me.ash.reader.infrastructure.di.USER_AGENT_STRING
@@ -20,12 +21,11 @@ import okhttp3.Request
 import okhttp3.executeAsync
 import okio.IOException
 import timber.log.Timber
-import java.util.concurrent.ConcurrentHashMap
-import kotlin.text.hexToLong
 
 private const val TAG = "GoogleReaderAPI"
 
-class GoogleReaderAPI private constructor(
+class GoogleReaderAPI
+private constructor(
     context: Context,
     private val serverUrl: String,
     private val username: String,
@@ -37,18 +37,21 @@ class GoogleReaderAPI private constructor(
 
     sealed class Stream(val tag: String) {
         data object AllItems : Stream("user/-/state/com.google/reading-list")
+
         data object Read : Stream("user/-/state/com.google/read")
+
         data object Starred : Stream("user/-/state/com.google/starred")
+
         data object Like : Stream("user/-/state/com.google/like")
+
         data object Broadcast : Stream("user/-/state/com.google/broadcast")
+
         data class Feed(val feedId: String) : Stream("feed/$feedId")
+
         data class Category(val categoryId: String) : Stream("user/-/label/$categoryId")
     }
 
-    private data class AuthData(
-        val clientLoginToken: String?,
-        val actionToken: String?,
-    )
+    private data class AuthData(val clientLoginToken: String?, val actionToken: String?)
 
     private val authDataStateFlow = MutableStateFlow(AuthData(null, null))
 
@@ -61,9 +64,7 @@ class GoogleReaderAPI private constructor(
         }
 
     suspend fun validCredentials(): Boolean {
-        val result = reAuthenticate().onSuccess {
-            authData = it
-        }
+        val result = reAuthenticate().onSuccess { authData = it }
         return result.isSuccess
     }
 
@@ -76,27 +77,29 @@ class GoogleReaderAPI private constructor(
     @CheckResult
     private suspend fun reAuthenticate(): ApiResult<AuthData> {
         // Get client login token
-        val clResponse = try {
-            client.newCall(
-                Request.Builder()
-                    .url("${serverUrl}accounts/ClientLogin")
-                    .header("User-Agent", USER_AGENT_STRING)
-                    .post(
-                        FormBody.Builder()
-                            .add("output", "json")
-                            .add("Email", username)
-                            .add("Passwd", password)
-                            .add("client", "ReadYou")
-                            .add("accountType", "HOSTED_OR_GOOGLE")
-                            .add("service", "reader")
+        val clResponse =
+            try {
+                client
+                    .newCall(
+                        Request.Builder()
+                            .url("${serverUrl}accounts/ClientLogin")
+                            .header("User-Agent", USER_AGENT_STRING)
+                            .post(
+                                FormBody.Builder()
+                                    .add("output", "json")
+                                    .add("Email", username)
+                                    .add("Passwd", password)
+                                    .add("client", "ReadYou")
+                                    .add("accountType", "HOSTED_OR_GOOGLE")
+                                    .add("service", "reader")
+                                    .build()
+                            )
                             .build()
                     )
-                    .build()
-            )
-                .executeAsync()
-        } catch (e: IOException) {
-            return ApiResult.NetworkError(e)
-        }
+                    .executeAsync()
+            } catch (e: IOException) {
+                return ApiResult.NetworkError(e)
+            }
 
         val clBody = clResponse.body.string()
         when (clResponse.code) {
@@ -107,29 +110,31 @@ class GoogleReaderAPI private constructor(
             }
         }
 
-        val loginToken = try {
-            toDTO<GoogleReaderDTO.MinifluxAuthData>(clBody).Auth
-        } catch (ignore: Exception) {
-            clBody
-                .split("\n")
-                .find { it.startsWith("Auth=") }
-                ?.substring(5)
-                ?: return ApiResult.BizError(GoogleReaderAPIException("body format error for CL Token:\n$clBody"))
-        }
+        val loginToken =
+            try {
+                toDTO<GoogleReaderDTO.MinifluxAuthData>(clBody).Auth
+            } catch (ignore: Exception) {
+                clBody.split("\n").find { it.startsWith("Auth=") }?.substring(5)
+                    ?: return ApiResult.BizError(
+                        GoogleReaderAPIException("body format error for CL Token:\n$clBody")
+                    )
+            }
 
         // Get action token
-        val actResponse = try {
-            client.newCall(
-                Request.Builder()
-                    .url("${serverUrl}reader/api/0/token")
-                    .header("Authorization", "GoogleLogin auth=${loginToken}")
-                    .get()
-                    .build()
-            )
-                .executeAsync()
-        } catch (e: IOException) {
-            return ApiResult.NetworkError(e)
-        }
+        val actResponse =
+            try {
+                client
+                    .newCall(
+                        Request.Builder()
+                            .url("${serverUrl}reader/api/0/token")
+                            .header("Authorization", "GoogleLogin auth=${loginToken}")
+                            .get()
+                            .build()
+                    )
+                    .executeAsync()
+            } catch (e: IOException) {
+                return ApiResult.NetworkError(e)
+            }
         val actionToken = actResponse.body.string()
 
         if (actResponse.code !in 200..299) {
@@ -139,12 +144,13 @@ class GoogleReaderAPI private constructor(
         return ApiResult.Success(AuthData(actionToken = actionToken, clientLoginToken = loginToken))
     }
 
-    private val retryConfig = RetryConfig(
-        onRetry = {
-            Timber.e(it)
-            clearAuthData()
-        },
-    )
+    private val retryConfig =
+        RetryConfig(
+            onRetry = {
+                Timber.e(it)
+                clearAuthData()
+            }
+        )
 
     private suspend inline fun <reified T> retryableGetRequest(
         query: String,
@@ -162,6 +168,14 @@ class GoogleReaderAPI private constructor(
     }
 
     @CheckResult
+    private suspend inline fun <reified T> retryableGetRequestWithResult(
+        query: String,
+        params: List<Pair<String, String>>? = null,
+    ): RetryableTaskResult<T> {
+        return withRetries(retryConfig) { getRequest<T>(query, params) }
+    }
+
+    @CheckResult
     private suspend inline fun <reified T> retryablePostRequestWithResult(
         query: String,
         params: List<Pair<String, String>>? = null,
@@ -176,25 +190,31 @@ class GoogleReaderAPI private constructor(
     ): T {
         refreshCredentialsIfNeeded()
 
-        val response = client.newCall(
-            Request.Builder()
-                .url("$serverUrl$query?output=json${params?.joinToString(separator = "") { "&${it.first}=${it.second}" } ?: ""}")
-                .addHeader("Authorization", "GoogleLogin auth=${authData.clientLoginToken}")
-                .addHeader("User-Agent", USER_AGENT_STRING)
-                .get()
-                .build())
-            .executeAsync()
+        val response =
+            client
+                .newCall(
+                    Request.Builder()
+                        .url(
+                            "$serverUrl$query?output=json${params?.joinToString(separator = "") { "&${it.first}=${it.second}" } ?: ""}"
+                        )
+                        .addHeader("Authorization", "GoogleLogin auth=${authData.clientLoginToken}")
+                        .addHeader("User-Agent", USER_AGENT_STRING)
+                        .get()
+                        .build()
+                )
+                .executeAsync()
 
         val body = response.body.string()
         when (response.code) {
             400 -> throw GoogleReaderAPIException("BadRequest")
             401 -> throw RetryException("Unauthorized")
             !in 200..299 -> {
-                val gReaderError = try {
-                    toDTO<GoogleReaderDTO.GReaderError>(body)
-                } catch (ignore: Exception) {
-                    GoogleReaderDTO.GReaderError(listOf(body))
-                }
+                val gReaderError =
+                    try {
+                        toDTO<GoogleReaderDTO.GReaderError>(body)
+                    } catch (ignore: Exception) {
+                        GoogleReaderDTO.GReaderError(listOf(body))
+                    }
                 throw GoogleReaderAPIException(gReaderError.errors.joinToString(";\n "))
             }
         }
@@ -208,22 +228,27 @@ class GoogleReaderAPI private constructor(
         form: List<Pair<String, String>>? = null,
     ): T {
         refreshCredentialsIfNeeded()
-        val response = client.newCall(
-            Request.Builder()
-                .url("$serverUrl$query?output=json${params?.joinToString(separator = "") { "&${it.first}=${it.second}" } ?: ""}")
-                .addHeader("Authorization", "GoogleLogin auth=${authData.clientLoginToken}")
-                .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .addHeader("User-Agent", USER_AGENT_STRING)
-                .post(
-                    FormBody.Builder()
-                        .apply {
-                            form?.forEach { add(it.first, it.second) }
-                            authData.actionToken?.let { add("T", it) }
-                        }.build()
+        val response =
+            client
+                .newCall(
+                    Request.Builder()
+                        .url(
+                            "$serverUrl$query?output=json${params?.joinToString(separator = "") { "&${it.first}=${it.second}" } ?: ""}"
+                        )
+                        .addHeader("Authorization", "GoogleLogin auth=${authData.clientLoginToken}")
+                        .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                        .addHeader("User-Agent", USER_AGENT_STRING)
+                        .post(
+                            FormBody.Builder()
+                                .apply {
+                                    form?.forEach { add(it.first, it.second) }
+                                    authData.actionToken?.let { add("T", it) }
+                                }
+                                .build()
+                        )
+                        .build()
                 )
-                .build()
-        )
-            .executeAsync()
+                .executeAsync()
 
         val responseBody = response.body.string()
         when (response.code) {
@@ -240,23 +265,24 @@ class GoogleReaderAPI private constructor(
     suspend fun getUserInfo(): GoogleReaderDTO.User =
         retryableGetRequest<GoogleReaderDTO.User>("reader/api/0/user-info")
 
-    suspend fun getSubscriptionList(): GoogleReaderDTO.SubscriptionList =
-        retryableGetRequest<GoogleReaderDTO.SubscriptionList>("reader/api/0/subscription/list")
+    suspend fun getSubscriptionList(): GoogleReaderDTO.SubscriptionList? =
+        retryableGetRequestWithResult<GoogleReaderDTO.SubscriptionList>("reader/api/0/subscription/list").getOrNull()
 
     suspend fun getReadItemIds(
         since: Long,
         limit: String? = MAXIMUM_ITEMS_LIMIT,
         continuationId: String? = null,
-    ): GoogleReaderDTO.ItemIds =
-        retryableGetRequest<GoogleReaderDTO.ItemIds>(
+    ): GoogleReaderDTO.ItemIds? =
+        retryableGetRequestWithResult<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
-            params = mutableListOf<Pair<String, String>>().apply {
-                add(Pair("s", Stream.Read.tag))
-                add(Pair("ot", since.toString()))
-                limit?.let { add(Pair("n", limit)) }
-                continuationId?.let { add(Pair("c", continuationId)) }
-            }
-        )
+            params =
+                mutableListOf<Pair<String, String>>().apply {
+                    add(Pair("s", Stream.Read.tag))
+                    add(Pair("ot", since.toString()))
+                    limit?.let { add(Pair("n", limit)) }
+                    continuationId?.let { add(Pair("c", continuationId)) }
+                },
+        ).getOrNull()
 
     suspend fun getItemIdsForFeed(
         feedId: String,
@@ -264,17 +290,18 @@ class GoogleReaderAPI private constructor(
         since: Long? = null,
         limit: String? = MAXIMUM_ITEMS_LIMIT,
         continuationId: String? = null,
-    ): GoogleReaderDTO.ItemIds =
-        retryableGetRequest<GoogleReaderDTO.ItemIds>(
+    ): GoogleReaderDTO.ItemIds? =
+        retryableGetRequestWithResult<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
-            params = mutableListOf<Pair<String, String>>().apply {
-                add(Pair("s", Stream.Feed(feedId).tag))
-                if (filterRead) add(Pair("xt", Stream.Read.tag))
-                limit?.let { add(Pair("n", limit)) }
-                since?.let { add(Pair("ot", since.toString())) }
-                continuationId?.let { add(Pair("c", continuationId)) }
-            }
-        )
+            params =
+                mutableListOf<Pair<String, String>>().apply {
+                    add(Pair("s", Stream.Feed(feedId).tag))
+                    if (filterRead) add(Pair("xt", Stream.Read.tag))
+                    limit?.let { add(Pair("n", limit)) }
+                    since?.let { add(Pair("ot", since.toString())) }
+                    continuationId?.let { add(Pair("c", continuationId)) }
+                },
+        ).getOrNull()
 
     suspend fun getItemIdsForCategory(
         categoryId: String,
@@ -282,92 +309,95 @@ class GoogleReaderAPI private constructor(
         since: Long? = null,
         limit: String? = MAXIMUM_ITEMS_LIMIT,
         continuationId: String? = null,
-    ): GoogleReaderDTO.ItemIds =
-        retryableGetRequest<GoogleReaderDTO.ItemIds>(
+    ): GoogleReaderDTO.ItemIds? =
+        retryableGetRequestWithResult<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
-            params = mutableListOf<Pair<String, String>>().apply {
-                add(Pair("s", Stream.Category(categoryId).tag))
-                if (filterRead) add(Pair("xt", Stream.Read.tag))
-                limit?.let { add(Pair("n", limit)) }
-                since?.let { add(Pair("ot", since.toString())) }
-                continuationId?.let { add(Pair("c", continuationId)) }
-            }
-        )
+            params =
+                mutableListOf<Pair<String, String>>().apply {
+                    add(Pair("s", Stream.Category(categoryId).tag))
+                    if (filterRead) add(Pair("xt", Stream.Read.tag))
+                    limit?.let { add(Pair("n", limit)) }
+                    since?.let { add(Pair("ot", since.toString())) }
+                    continuationId?.let { add(Pair("c", continuationId)) }
+                },
+        ).getOrNull()
 
     suspend fun getUnreadItemIds(
         since: Long? = null,
         limit: String? = MAXIMUM_ITEMS_LIMIT,
         continuationId: String? = null,
-    ): GoogleReaderDTO.ItemIds =
-        retryableGetRequest<GoogleReaderDTO.ItemIds>(
+    ): GoogleReaderDTO.ItemIds? =
+        retryableGetRequestWithResult<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
-            params = mutableListOf<Pair<String, String>>().apply {
-                add(Pair("s", Stream.AllItems.tag))
-                add(Pair("xt", Stream.Read.tag))
-                limit?.let { add(Pair("n", limit)) }
-                since?.let { add(Pair("ot", since.toString())) }
-                continuationId?.let { add(Pair("c", continuationId)) }
-            }
-        )
+            params =
+                mutableListOf<Pair<String, String>>().apply {
+                    add(Pair("s", Stream.AllItems.tag))
+                    add(Pair("xt", Stream.Read.tag))
+                    limit?.let { add(Pair("n", limit)) }
+                    since?.let { add(Pair("ot", since.toString())) }
+                    continuationId?.let { add(Pair("c", continuationId)) }
+                },
+        ).getOrNull()
 
     suspend fun getStarredItemIds(
         since: Long? = null,
         limit: String? = MAXIMUM_ITEMS_LIMIT,
         continuationId: String? = null,
-    ): GoogleReaderDTO.ItemIds =
-        retryableGetRequest<GoogleReaderDTO.ItemIds>(
+    ): GoogleReaderDTO.ItemIds? =
+        retryableGetRequestWithResult<GoogleReaderDTO.ItemIds>(
             query = "reader/api/0/stream/items/ids",
-            params = mutableListOf<Pair<String, String>>().apply {
-                add(Pair("s", Stream.Starred.tag))
-                limit?.let { add(Pair("n", limit)) }
-                since?.let { add(Pair("ot", since.toString())) }
-                continuationId?.let { add(Pair("c", continuationId)) }
-            }
-        )
+            params =
+                mutableListOf<Pair<String, String>>().apply {
+                    add(Pair("s", Stream.Starred.tag))
+                    limit?.let { add(Pair("n", limit)) }
+                    since?.let { add(Pair("ot", since.toString())) }
+                    continuationId?.let { add(Pair("c", continuationId)) }
+                },
+        ).getOrNull()
 
     suspend fun getItemsContents(ids: List<String>?) =
         retryablePostRequest<GoogleReaderDTO.ItemsContents>(
             query = "reader/api/0/stream/items/contents",
-            form = ids?.map {
-                Pair("i", it)
-            }
+            form = ids?.map { Pair("i", it) },
         )
 
     suspend fun subscriptionQuickAdd(feedUrl: String): GoogleReaderDTO.QuickAddFeed =
         retryablePostRequest<GoogleReaderDTO.QuickAddFeed>(
             query = "reader/api/0/subscription/quickadd",
             params = listOf(Pair("quickadd", feedUrl)),
-            form = listOf(Pair("quickadd", feedUrl))
+            form = listOf(Pair("quickadd", feedUrl)),
         )
 
     @CheckResult
     suspend fun editTag(
         itemIds: List<String>,
         mark: String? = null,
-        unmark: String? = null
+        unmark: String? = null,
     ): RetryableTaskResult<String> =
         retryablePostRequestWithResult<String>(
             query = "reader/api/0/edit-tag",
-            form = mutableListOf<Pair<String, String>>().apply {
-                itemIds.forEach { add(Pair("i", it)) }
-                mark?.let { add(Pair("a", mark)) }
-                unmark?.let { add(Pair("r", unmark)) }
-            }
+            form =
+                mutableListOf<Pair<String, String>>().apply {
+                    itemIds.forEach { add(Pair("i", it)) }
+                    mark?.let { add(Pair("a", mark)) }
+                    unmark?.let { add(Pair("r", unmark)) }
+                },
         )
 
     suspend fun disableTag(categoryId: String): String =
         retryablePostRequest<String>(
             query = "reader/api/0/disable-tag",
-            form = listOf(Pair("s", categoryId.ofCategoryIdToStreamId()))
+            form = listOf(Pair("s", categoryId.ofCategoryIdToStreamId())),
         )
 
     suspend fun renameTag(categoryId: String, renameToName: String): String =
         retryablePostRequest<String>(
             query = "reader/api/0/rename-tag",
-            form = listOf(
-                Pair("s", categoryId.ofCategoryIdToStreamId()),
-                Pair("dest", renameToName.ofCategoryIdToStreamId()),
-            )
+            form =
+                listOf(
+                    Pair("s", categoryId.ofCategoryIdToStreamId()),
+                    Pair("dest", renameToName.ofCategoryIdToStreamId()),
+                ),
         )
 
     suspend fun subscriptionEdit(
@@ -376,26 +406,26 @@ class GoogleReaderAPI private constructor(
         destCategoryId: String? = null,
         originCategoryId: String? = null,
         destFeedName: String? = null,
-    ): String = retryablePostRequest<String>(
-        query = "reader/api/0/subscription/edit",
-        form = mutableListOf(Pair("ac", action)).apply {
-            destFeedId?.let { add(Pair("s", it.ofFeedIdToStreamId())) }
-            destCategoryId?.let { add(Pair("a", it.ofCategoryIdToStreamId())) }
-            originCategoryId?.let { add(Pair("r", it.ofCategoryIdToStreamId())) }
-            destFeedName?.takeIf { it.isNotBlank() }
-                ?.let { add(Pair("t", destFeedName)) }
-        }
-    )
+    ): String =
+        retryablePostRequest<String>(
+            query = "reader/api/0/subscription/edit",
+            form =
+                mutableListOf(Pair("ac", action)).apply {
+                    destFeedId?.let { add(Pair("s", it.ofFeedIdToStreamId())) }
+                    destCategoryId?.let { add(Pair("a", it.ofCategoryIdToStreamId())) }
+                    originCategoryId?.let { add(Pair("r", it.ofCategoryIdToStreamId())) }
+                    destFeedName?.takeIf { it.isNotBlank() }?.let { add(Pair("t", destFeedName)) }
+                },
+        )
 
     // Not all services support it
     suspend fun markAllAsRead(streamId: String, sinceTimestamp: Long? = null): String =
         retryablePostRequest<String>(
             query = "reader/api/0/mark-all-as-read",
-            form = mutableListOf(
-                Pair("s", streamId),
-            ).apply {
-                sinceTimestamp?.let { add(Pair("ts", it.toString())) }
-            }
+            form =
+                mutableListOf(Pair("s", streamId)).apply {
+                    sinceTimestamp?.let { add(Pair("ts", it.toString())) }
+                },
         )
 
     companion object {
@@ -420,7 +450,6 @@ class GoogleReaderAPI private constructor(
             if (this.length != 16 && this.toLongOrNull() != null) return this
             return hexToLong().toString()
         }
-
 
         private fun String.ofItemStreamIdToHexId(): String {
             return replace("tag:google.com,2005:reader/item/", "")
@@ -456,8 +485,7 @@ class GoogleReaderAPI private constructor(
             return replace(categoryStreamIdRegex, "")
         }
 
-        private val instances: ConcurrentHashMap<String, GoogleReaderAPI> =
-            ConcurrentHashMap()
+        private val instances: ConcurrentHashMap<String, GoogleReaderAPI> = ConcurrentHashMap()
 
         fun getInstance(
             context: Context,
@@ -466,9 +494,11 @@ class GoogleReaderAPI private constructor(
             password: String,
             httpUsername: String? = null,
             httpPassword: String? = null,
-            clientCertificateAlias: String? = null
+            clientCertificateAlias: String? = null,
         ): GoogleReaderAPI =
-            instances.getOrPut("$serverUrl$username$password$httpUsername$httpPassword$clientCertificateAlias") {
+            instances.getOrPut(
+                "$serverUrl$username$password$httpUsername$httpPassword$clientCertificateAlias"
+            ) {
                 GoogleReaderAPI(
                     context,
                     serverUrl,
@@ -476,7 +506,7 @@ class GoogleReaderAPI private constructor(
                     password,
                     httpUsername,
                     httpPassword,
-                    clientCertificateAlias
+                    clientCertificateAlias,
                 )
             }
 
