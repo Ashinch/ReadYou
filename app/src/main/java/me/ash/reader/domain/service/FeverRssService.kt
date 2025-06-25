@@ -9,7 +9,6 @@ import com.rometools.rome.feed.synd.SyndFeed
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.supervisorScope
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.account.security.FeverSecurityKey
@@ -17,7 +16,6 @@ import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.article.ArticleMeta
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.group.Group
-import me.ash.reader.domain.repository.AccountDao
 import me.ash.reader.domain.repository.ArticleDao
 import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.domain.repository.GroupDao
@@ -45,7 +43,6 @@ class FeverRssService @Inject constructor(
     private val feedDao: FeedDao,
     private val rssHelper: RssHelper,
     private val notificationHelper: NotificationHelper,
-    private val accountDao: AccountDao,
     private val groupDao: GroupDao,
     @IODispatcher
     private val ioDispatcher: CoroutineDispatcher,
@@ -56,7 +53,7 @@ class FeverRssService @Inject constructor(
     workManager: WorkManager,
     private val accountService: AccountService,
 ) : AbstractRssRepository(
-    accountDao, articleDao, groupDao,
+    articleDao, groupDao,
     feedDao, workManager, rssHelper, notificationHelper, ioDispatcher, defaultDispatcher,
     accountService
 ) {
@@ -275,7 +272,7 @@ class FeverRssService @Inject constructor(
 
 
                 Log.i("RLog", "onCompletion: ${System.currentTimeMillis() - preTime}")
-                accountDao.update(
+                accountService.update(
                     account.copy(
                         updateAt = Date(),
                         lastArticleId = if (sinceId.isNotEmpty()) {

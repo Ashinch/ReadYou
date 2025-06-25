@@ -38,11 +38,11 @@ object CacheHolderModule {
     fun provideCacheHelper(
         @ApplicationContext context: Context,
         @IODispatcher ioDispatcher: CoroutineDispatcher,
-        settingsProvider: SettingsProvider,
         rssHelper: RssHelper,
+        accountService: AccountService,
     ): ReaderCacheHelper = ReaderCacheHelper(
         context = context, ioDispatcher = ioDispatcher,
         rssHelper = rssHelper,
-        settingsProvider = settingsProvider,
+        accountService = accountService,
     )
 }

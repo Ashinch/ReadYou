@@ -13,13 +13,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.DisposableEffect
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Consumer
-import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import androidx.profileinstaller.ProfileInstallerInitializer
 import coil.ImageLoader
 import dagger.hilt.android.AndroidEntryPoint
-import me.ash.reader.domain.repository.AccountDao
+import me.ash.reader.domain.service.AccountService
 import me.ash.reader.infrastructure.preference.AccountSettingsProvider
 import me.ash.reader.infrastructure.preference.LanguagesPreference
 import me.ash.reader.infrastructure.preference.SettingsProvider
@@ -40,10 +39,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var imageLoader: ImageLoader
 
     @Inject
-    lateinit var accountDao: AccountDao
-
-    @Inject
     lateinit var settingsProvider: SettingsProvider
+
+    @Inject lateinit var accountService: AccountService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         setContent {
-            AccountSettingsProvider(accountDao) {
+            AccountSettingsProvider(accountService = accountService) {
                 settingsProvider.ProvidesSettings {
                     val subscribeViewModel: SubscribeViewModel = hiltViewModel()
                     val navController = rememberNavController()

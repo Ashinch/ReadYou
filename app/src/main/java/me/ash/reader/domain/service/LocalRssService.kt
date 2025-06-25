@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
-import androidx.work.workDataOf
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +14,6 @@ import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.feed.FeedWithArticle
-import me.ash.reader.domain.repository.AccountDao
 import me.ash.reader.domain.repository.ArticleDao
 import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.domain.repository.GroupDao
@@ -35,7 +33,6 @@ class LocalRssService @Inject constructor(
     private val feedDao: FeedDao,
     private val rssHelper: RssHelper,
     private val notificationHelper: NotificationHelper,
-    private val accountDao: AccountDao,
     private val groupDao: GroupDao,
     @IODispatcher
     private val ioDispatcher: CoroutineDispatcher,
@@ -44,7 +41,6 @@ class LocalRssService @Inject constructor(
     private val workManager: WorkManager,
     private val accountService: AccountService,
 ) : AbstractRssRepository(
-    accountDao,
     articleDao,
     groupDao,
     feedDao,
@@ -59,7 +55,8 @@ class LocalRssService @Inject constructor(
     override suspend fun sync(feedId: String?, groupId: String?) = supervisorScope {
         val preTime = System.currentTimeMillis()
         val preDate = Date(preTime)
-        val accountId = accountService.getCurrentAccountId()
+        val currentAccount = accountService.getCurrentAccount()
+        val accountId = currentAccount.id!!
         val semaphore = Semaphore(16)
 
         val feedsToSync = when {
@@ -96,9 +93,7 @@ class LocalRssService @Inject constructor(
         }.awaitAll()
 
         Log.i("RlOG", "onCompletion: ${System.currentTimeMillis() - preTime}")
-        accountDao.queryById(accountId)?.let { account ->
-            accountDao.update(account.copy(updateAt = Date()))
-        }
+        accountService.update(currentAccount.copy(updateAt = Date()))
         ListenableWorker.Result.success()
     }
 

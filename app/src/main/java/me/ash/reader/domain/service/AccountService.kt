@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Looper
 import androidx.datastore.preferences.core.intPreferencesKey
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -27,44 +28,44 @@ import me.ash.reader.ui.ext.dataStore
 import me.ash.reader.ui.ext.getDefaultGroupId
 import me.ash.reader.ui.ext.put
 import me.ash.reader.ui.ext.showToast
-import javax.inject.Inject
 
-class AccountService @Inject constructor(
-    @ApplicationContext
-    private val context: Context,
+class AccountService
+@Inject
+constructor(
+    @ApplicationContext private val context: Context,
     private val accountDao: AccountDao,
     private val groupDao: GroupDao,
     private val feedDao: FeedDao,
     private val articleDao: ArticleDao,
-    @ApplicationScope
-    private val coroutineScope: CoroutineScope,
+    @ApplicationScope private val coroutineScope: CoroutineScope,
     settingsProvider: SettingsProvider,
 ) {
 
     private val accountIdKey = intPreferencesKey(DataStoreKey.currentAccountId)
 
     val currentAccountIdFlow =
-        settingsProvider.preferencesFlow.map { it[accountIdKey] }
+        settingsProvider.preferencesFlow
+            .map { it[accountIdKey] }
             .stateIn(scope = coroutineScope, started = SharingStarted.Eagerly, initialValue = null)
 
     val currentAccountFlow =
-        currentAccountIdFlow.combine(getAccounts()) { id, accounts ->
-            id?.let { accounts.firstOrNull { it.id == id } }
-        }.stateIn(
-            scope = coroutineScope,
-            SharingStarted.Eagerly,
-            initialValue = null
-        )
+        currentAccountIdFlow
+            .combine(getAccounts()) { id, accounts ->
+                id?.let { accounts.firstOrNull { it.id == id } }
+            }
+            .stateIn(scope = coroutineScope, SharingStarted.Eagerly, initialValue = null)
 
     fun getAccounts(): Flow<List<Account>> = accountDao.queryAllAsFlow()
 
     fun getAccountById(accountId: Int): Flow<Account?> = accountDao.queryAccount(accountId)
 
-    fun getCurrentAccount(): Account =
-        runBlocking { currentAccountFlow.first { it != null } as Account }
+    fun getCurrentAccount(): Account = runBlocking {
+        currentAccountFlow.first { it != null } as Account
+    }
 
-    fun getCurrentAccountId(): Int =
-        runBlocking { currentAccountIdFlow.first { it != null } as Int }
+    fun getCurrentAccountId(): Int = runBlocking {
+        currentAccountIdFlow.first { it != null } as Int
+    }
 
     suspend fun isNoAccount(): Boolean = accountDao.queryAll().isEmpty()
 
@@ -87,27 +88,25 @@ class AccountService @Inject constructor(
         }
     }
 
-    private fun getDefaultAccount(): Account = Account(
-        type = AccountType.Local,
-        name = context.getString(R.string.read_you),
-    )
+    private fun getDefaultAccount(): Account =
+        Account(type = AccountType.Local, name = context.getString(R.string.read_you))
 
-    suspend fun addDefaultAccount(): Account =
-        addAccount(getDefaultAccount())
+    suspend fun addDefaultAccount(): Account = addAccount(getDefaultAccount())
 
-    fun getDefaultGroup(): Group = getCurrentAccountId().let {
-        Group(
-            id = it.getDefaultGroupId(),
-            name = context.getString(R.string.defaults),
-            accountId = it,
-        )
-    }
+    fun getDefaultGroup(): Group =
+        getCurrentAccountId().let {
+            Group(
+                id = it.getDefaultGroupId(),
+                name = context.getString(R.string.defaults),
+                accountId = it,
+            )
+        }
 
     suspend fun update(accountId: Int, block: Account.() -> Account) {
-        accountDao.queryById(accountId)?.let {
-            accountDao.update(it.run(block))
-        }
+        accountDao.queryById(accountId)?.let { accountDao.update(it.run(block)) }
     }
+
+    suspend fun update(account: Account) = accountDao.update(account)
 
     suspend fun delete(accountId: Int) {
         if (accountDao.queryAll().size == 1) {

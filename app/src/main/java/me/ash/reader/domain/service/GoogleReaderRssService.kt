@@ -27,7 +27,6 @@ import me.ash.reader.domain.model.account.security.GoogleReaderSecurityKey
 import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.group.Group
-import me.ash.reader.domain.repository.AccountDao
 import me.ash.reader.domain.repository.ArticleDao
 import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.domain.repository.GroupDao
@@ -59,7 +58,6 @@ constructor(
     private val feedDao: FeedDao,
     private val rssHelper: RssHelper,
     private val notificationHelper: NotificationHelper,
-    private val accountDao: AccountDao,
     private val groupDao: GroupDao,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
@@ -68,7 +66,6 @@ constructor(
     private val accountService: AccountService,
 ) :
     AbstractRssRepository(
-        accountDao,
         articleDao,
         groupDao,
         feedDao,
@@ -104,7 +101,7 @@ constructor(
             if (success)
                 try {
                     getGoogleReaderAPI().getUserInfo().userName?.let {
-                        accountDao.update(account.copy(name = it))
+                        accountService.update(account.copy(name = it))
                     }
                 } catch (ignore: Exception) {
                     Log.e("RLog", "get user info is failed: ", ignore)
@@ -430,7 +427,7 @@ constructor(
                 .filter { it.id !in remoteFeeds.await().map { feed -> feed.id } }
                 .forEach { super.deleteFeed(it, true) }
 
-            accountDao.update(account.copy(updateAt = Date()))
+            accountService.update(account.copy(updateAt = Date()))
             ListenableWorker.Result.success()
         } catch (e: Exception) {
             Timber.tag("RLog").e(e, "On sync exception: ${e.message}")

@@ -10,7 +10,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.mapLatest
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.article.ArchivedArticle
 import me.ash.reader.domain.model.article.Article
@@ -18,7 +17,6 @@ import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.feed.Feed
 import me.ash.reader.domain.model.group.Group
 import me.ash.reader.domain.model.group.GroupWithFeed
-import me.ash.reader.domain.repository.AccountDao
 import me.ash.reader.domain.repository.ArticleDao
 import me.ash.reader.domain.repository.FeedDao
 import me.ash.reader.domain.repository.GroupDao
@@ -32,7 +30,6 @@ import java.util.Date
 import java.util.UUID
 
 abstract class AbstractRssRepository(
-    private val accountDao: AccountDao,
     private val articleDao: ArticleDao,
     private val groupDao: GroupDao,
     private val feedDao: FeedDao,
@@ -153,12 +150,12 @@ abstract class AbstractRssRepository(
 
 
     suspend fun clearKeepArchivedArticles(): List<Article> {
-        val articleId = accountService.getCurrentAccountId()
-        val currentAccount = accountDao.queryById(articleId)!!
+        val accountId = accountService.getCurrentAccountId()
+        val currentAccount = accountService.getCurrentAccount()
         val keepArchived = currentAccount.keepArchived
         if (keepArchived != KeepArchivedPreference.Always) {
             val archivedArticles = articleDao.queryArchivedArticleBefore(
-                articleId,
+                accountId,
                 Date(System.currentTimeMillis() - keepArchived.value)
             )
             articleDao.delete(
@@ -188,8 +185,8 @@ abstract class AbstractRssRepository(
         )
     }
 
-    suspend fun initSync() {
-        accountDao.queryById(accountService.getCurrentAccountId())?.let {
+    fun initSync() {
+        accountService.getCurrentAccount().let {
             val syncOnStart = it.syncOnStart.value
             if (syncOnStart) {
                 doSyncOneTime()

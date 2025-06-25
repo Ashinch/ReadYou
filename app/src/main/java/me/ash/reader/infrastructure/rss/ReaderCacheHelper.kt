@@ -3,28 +3,29 @@ package me.ash.reader.infrastructure.rss
 import android.content.Context
 import androidx.annotation.CheckResult
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
-import me.ash.reader.domain.model.article.Article
-import me.ash.reader.infrastructure.di.IODispatcher
-import me.ash.reader.infrastructure.preference.SettingsProvider
-import me.ash.reader.ui.ext.DataStoreKey.Companion.currentAccountId
 import java.io.File
 import java.io.FileNotFoundException
 import java.security.MessageDigest
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
+import me.ash.reader.domain.model.article.Article
+import me.ash.reader.domain.service.AccountService
+import me.ash.reader.infrastructure.di.IODispatcher
 
-class ReaderCacheHelper @Inject constructor(
+class ReaderCacheHelper
+@Inject
+constructor(
     @ApplicationContext private val context: Context,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val rssHelper: RssHelper,
-    private val settingsProvider: SettingsProvider
+    private val accountService: AccountService,
 ) {
     private val cacheDir = context.cacheDir.resolve("readability")
     private val md = MessageDigest.getInstance("SHA-256")
 
     private val currentCacheDir: File
-        get() = cacheDir.resolve(settingsProvider.getOrDefault<Int>(currentAccountId, 1).toString())
+        get() = cacheDir.resolve(accountService.getCurrentAccountId().toString())
 
     @OptIn(ExperimentalStdlibApi::class)
     private fun getFileNameFor(articleId: String): String {
@@ -36,14 +37,15 @@ class ReaderCacheHelper @Inject constructor(
     private suspend fun writeContentToCache(content: String, articleId: String): Boolean {
         return withContext(ioDispatcher) {
             runCatching {
-                currentCacheDir.run {
-                    mkdirs()
-                    resolve(getFileNameFor(articleId)).run {
-                        createNewFile()
-                        writeText(content)
+                    currentCacheDir.run {
+                        mkdirs()
+                        resolve(getFileNameFor(articleId)).run {
+                            createNewFile()
+                            writeText(content)
+                        }
                     }
                 }
-            }.fold(onSuccess = { true }, onFailure = { false })
+                .fold(onSuccess = { true }, onFailure = { false })
         }
     }
 
@@ -86,9 +88,8 @@ class ReaderCacheHelper @Inject constructor(
             val file = currentCacheDir.resolve(getFileNameFor(article.id))
             try {
                 if (!file.exists()) {
-                    return@withContext fetchFullContentInternal(article).fold(
-                        onFailure = { false },
-                        onSuccess = { true })
+                    return@withContext fetchFullContentInternal(article)
+                        .fold(onFailure = { false }, onSuccess = { true })
                 } else {
                     return@withContext false
                 }
@@ -101,18 +102,20 @@ class ReaderCacheHelper @Inject constructor(
     suspend fun deleteCacheFor(articleId: String): Boolean {
         return withContext(ioDispatcher) {
             runCatching {
-                val file = currentCacheDir.resolve(getFileNameFor(articleId))
-                if (!file.exists()) return@runCatching false
-                return@runCatching file.delete()
-            }.fold(onSuccess = { true }, onFailure = { false })
+                    val file = currentCacheDir.resolve(getFileNameFor(articleId))
+                    if (!file.exists()) return@runCatching false
+                    return@runCatching file.delete()
+                }
+                .fold(onSuccess = { true }, onFailure = { false })
         }
     }
 
     suspend fun clearCache(): Boolean {
         return withContext(ioDispatcher) {
             runCatching {
-                return@withContext currentCacheDir.deleteRecursively()
-            }.fold(onSuccess = { true }, onFailure = { false })
+                    return@withContext currentCacheDir.deleteRecursively()
+                }
+                .fold(onSuccess = { true }, onFailure = { false })
         }
     }
 }
