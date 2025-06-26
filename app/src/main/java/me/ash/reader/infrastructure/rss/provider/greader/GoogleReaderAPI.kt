@@ -21,6 +21,7 @@ import okhttp3.Request
 import okhttp3.executeAsync
 import okio.IOException
 import timber.log.Timber
+import kotlin.text.startsWith
 
 private const val TAG = "GoogleReaderAPI"
 
@@ -430,42 +431,41 @@ private constructor(
 
     companion object {
 
+        const val MAXIMUM_ITEMS_LIMIT = "10000"
+
+        private const val PREFIX = "tag:google.com,2005:reader/item/"
+
         /*
         || Long form || Short form || notes ||
         || `tag:google.com,2005:reader/item/5d0cfa30041d4348` || `6705009029382226760` || ||
         || `tag:google.com,2005:reader/item/024025978b5e50d2` ||  `162170919393841362` || Long form needs 0-padding ||
         || `tag:google.com,2005:reader/item/fb115bd6d34a8e9f` || `-355401917359550817` || Short form ends up being negative ||
-         */
+        */
+        @OptIn(ExperimentalStdlibApi::class)
+        private val hexFormat = HexFormat {
+            number {
+                minLength = 16
+                removeLeadingZeros = false
+            }
+        }
 
-        const val MAXIMUM_ITEMS_LIMIT = "10000"
+        val ItemId.isLongId: Boolean get() = startsWith(PREFIX)
 
         @OptIn(ExperimentalStdlibApi::class)
-        private fun String.ofItemIdToHexId(): String {
-            if (this.toLongOrNull() == null) return this
-            return this.toLong().toHexString()
-        }
+        val ItemId.longId: String
+            get() = if (isLongId) {
+                this
+            } else {
+                PREFIX + this.toLong(10).toHexString(hexFormat)
+            }
 
         @OptIn(ExperimentalStdlibApi::class)
-        private fun String.ofItemHexIdToId(): String {
-            if (this.length != 16 && this.toLongOrNull() != null) return this
-            return hexToLong().toString()
-        }
-
-        private fun String.ofItemStreamIdToHexId(): String {
-            return replace("tag:google.com,2005:reader/item/", "")
-        }
-
-        fun String.ofItemStreamIdToId(): String {
-            return ofItemStreamIdToHexId().ofItemHexIdToId()
-        }
-
-        private fun String.ofItemHexIdToStreamId(): String {
-            return "tag:google.com,2005:reader/item/$this"
-        }
-
-        private fun String.ofItemIdToStreamId(): String {
-            return "tag:google.com,2005:reader/item/${ofItemIdToHexId()}"
-        }
+        val ItemId.shortId: String
+            get() = if (!isLongId) {
+                this
+            } else {
+                this.removePrefix(PREFIX).hexToLong().toString()
+            }
 
         fun String.ofFeedIdToStreamId(): String {
             return "feed/$this"
@@ -515,3 +515,5 @@ private constructor(
         }
     }
 }
+
+typealias ItemId = String
