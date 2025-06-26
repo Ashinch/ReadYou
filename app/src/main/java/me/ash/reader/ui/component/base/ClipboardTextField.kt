@@ -23,9 +23,10 @@ fun ClipboardTextField(
     imeAction: ImeAction = ImeAction.Done,
     onConfirm: (String) -> Unit = {},
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = Modifier) {
         Spacer(modifier = Modifier.height(10.dp))
         RYTextField2(
+            modifier = modifier,
             readOnly = readOnly,
             state = state,
             singleLine = singleLine,

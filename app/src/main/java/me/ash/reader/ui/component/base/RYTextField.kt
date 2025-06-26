@@ -7,6 +7,7 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.TextObfuscationMode
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.ContentPaste
@@ -322,7 +323,7 @@ private fun PasteButton(
             scope.launch {
                 val clipboardText = clipboardManager.getClipEntry()?.clipData?.getItemAt(0)?.text
                 if (!clipboardText.isNullOrBlank()) {
-                    state.edit { clipboardText }
+                    state.setTextAndPlaceCursorAtEnd(clipboardText.toString())
                 }
             }
         },
