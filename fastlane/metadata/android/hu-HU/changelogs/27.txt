@@ -1,0 +1,6 @@
+## 0.11.1
+
+Említésre méltó változások:
+1. Egyéni betűtípus-támogatás a WebView olvasóhoz
+2. Új vizuális stílusok hozzáadása az eszköztárakhoz a folyamatoldalon és az olvasási oldalon
+3. Felhasználói felület fejlesztései és javításai
