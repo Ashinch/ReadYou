@@ -244,6 +244,7 @@ constructor(
             val account = accountService.getCurrentAccount()
             requireNotNull(account) { "cannot find account" }
             val googleReaderAPI = getGoogleReaderAPI()
+            googleReaderAPI.refreshCredentialsIfNeeded()
             val lastMonthAt =
                 Calendar.getInstance()
                     .apply {

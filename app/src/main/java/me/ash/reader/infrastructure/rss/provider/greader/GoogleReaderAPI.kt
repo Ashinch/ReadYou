@@ -69,7 +69,7 @@ private constructor(
         return result.isSuccess
     }
 
-    private suspend fun refreshCredentialsIfNeeded() {
+    suspend fun refreshCredentialsIfNeeded() {
         if (authData.clientLoginToken.isNullOrEmpty()) {
             reAuthenticate().getOrThrow().let { authData = it }
         }
