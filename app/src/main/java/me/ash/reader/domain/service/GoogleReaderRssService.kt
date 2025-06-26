@@ -23,6 +23,7 @@ import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
+import me.ash.reader.domain.model.account.AccountType.Companion.FreshRSS
 import me.ash.reader.domain.model.account.security.GoogleReaderSecurityKey
 import me.ash.reader.domain.model.article.Article
 import me.ash.reader.domain.model.feed.Feed
@@ -39,7 +40,6 @@ import me.ash.reader.infrastructure.net.onFailure
 import me.ash.reader.infrastructure.net.onSuccess
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI
-import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.longId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofCategoryIdToStreamId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofCategoryStreamIdToId
 import me.ash.reader.infrastructure.rss.provider.greader.GoogleReaderAPI.Companion.ofFeedStreamIdToId
@@ -266,13 +266,21 @@ constructor(
                     .toSet()
             }
 
-            val remoteReadIds = async {
-                fetchItemIdsAndContinue {
-                    googleReaderAPI.getReadItemIds(since = lastMonthAt, continuationId = it)
+            val remoteReadIds =
+                if (account.type.id != FreshRSS.id) {
+                    async {
+                        fetchItemIdsAndContinue {
+                                googleReaderAPI.getReadItemIds(
+                                    since = lastMonthAt,
+                                    continuationId = it,
+                                )
+                            }
+                            .map { it.shortId }
+                            .toSet()
+                    }
+                } else {
+                    async { emptySet() }
                 }
-                    .map { it.shortId }
-                    .toSet()
-            }
 
             val localAllItems = articleDao.queryMetadataAll(accountId)
             val localUnreadIds =
@@ -363,13 +371,13 @@ constructor(
 
             val deferredList =
                 fetchItemsContentsDeferred(
-                    itemIds = toBeSync.await(),
-                    googleReaderAPI = googleReaderAPI,
-                    accountId = accountId,
-                    unreadIds = remoteUnreadIds.await(),
-                    starredIds = remoteStarredIds.await(),
-                    scope = this,
-                )
+                        itemIds = toBeSync.await(),
+                        googleReaderAPI = googleReaderAPI,
+                        accountId = accountId,
+                        unreadIds = remoteUnreadIds.await(),
+                        starredIds = remoteStarredIds.await(),
+                        scope = this,
+                    )
                     .toMutableList()
 
             val remoteGroups = async { groupWithFeedsMap.await().keys.toList() }
@@ -410,10 +418,21 @@ constructor(
                 }
             }
 
-            launch {
+            if (account.type.id != FreshRSS.id) {
+                launch {
+                    articleDao.markAsReadByIdSet(
+                        accountId = accountId,
+                        ids = remoteReadIds.await().map { accountId spacerDollar it }.toSet(),
+                        isUnread = false,
+                    )
+                }
+            } else {
                 articleDao.markAsReadByIdSet(
                     accountId = accountId,
-                    ids = remoteReadIds.await().map { accountId spacerDollar it }.toSet(),
+                    ids =
+                        (localUnreadIds - remoteUnreadIds.await())
+                            .map { accountId spacerDollar it }
+                            .toSet(),
                     isUnread = false,
                 )
             }
@@ -456,23 +475,23 @@ constructor(
 
         val unreadIds = async {
             fetchItemIdsAndContinue {
-                googleReaderAPI.getItemIdsForFeed(
-                    feedId = feedId.dollarLast(),
-                    filterRead = true,
-                    continuationId = it,
-                )
-            }
+                    googleReaderAPI.getItemIdsForFeed(
+                        feedId = feedId.dollarLast(),
+                        filterRead = true,
+                        continuationId = it,
+                    )
+                }
                 .toSet()
         }
 
         val allIds = async {
             fetchItemIdsAndContinue {
-                googleReaderAPI.getItemIdsForFeed(
-                    feedId = feedId.dollarLast(),
-                    filterRead = false,
-                    continuationId = it,
-                )
-            }
+                    googleReaderAPI.getItemIdsForFeed(
+                        feedId = feedId.dollarLast(),
+                        filterRead = false,
+                        continuationId = it,
+                    )
+                }
                 .toSet()
         }
 
@@ -571,13 +590,13 @@ constructor(
         starredIds: Set<String>,
     ): List<Article> = supervisorScope {
         fetchItemsContentsDeferred(
-            itemIds = itemIds,
-            googleReaderAPI = googleReaderAPI,
-            accountId = accountId,
-            unreadIds = unreadIds,
-            starredIds = starredIds,
-            scope = this,
-        )
+                itemIds = itemIds,
+                googleReaderAPI = googleReaderAPI,
+                accountId = accountId,
+                unreadIds = unreadIds,
+                starredIds = starredIds,
+                scope = this,
+            )
             .awaitAll()
             .flatten()
     }
@@ -601,28 +620,28 @@ constructor(
             when {
                 groupId != null -> {
                     if (before == null) {
-                        articleDao.queryMetadataByGroupIdWhenIsUnread(
-                            accountId,
-                            groupId,
-                            !isUnread,
-                        )
-                    } else {
-                        articleDao.queryMetadataByGroupIdWhenIsUnread(
-                            accountId,
-                            groupId,
-                            !isUnread,
-                            before,
-                        )
-                    }
+                            articleDao.queryMetadataByGroupIdWhenIsUnread(
+                                accountId,
+                                groupId,
+                                !isUnread,
+                            )
+                        } else {
+                            articleDao.queryMetadataByGroupIdWhenIsUnread(
+                                accountId,
+                                groupId,
+                                !isUnread,
+                                before,
+                            )
+                        }
                         .map { it.id.dollarLast() }
                 }
 
                 feedId != null -> {
                     if (before == null) {
-                        articleDao.queryMetadataByFeedId(accountId, feedId, !isUnread)
-                    } else {
-                        articleDao.queryMetadataByFeedId(accountId, feedId, !isUnread, before)
-                    }
+                            articleDao.queryMetadataByFeedId(accountId, feedId, !isUnread)
+                        } else {
+                            articleDao.queryMetadataByFeedId(accountId, feedId, !isUnread, before)
+                        }
                         .map { it.id.dollarLast() }
                 }
 
@@ -632,10 +651,10 @@ constructor(
 
                 else -> {
                     if (before == null) {
-                        articleDao.queryMetadataAll(accountId, !isUnread)
-                    } else {
-                        articleDao.queryMetadataAll(accountId, !isUnread, before)
-                    }
+                            articleDao.queryMetadataAll(accountId, !isUnread)
+                        } else {
+                            articleDao.queryMetadataAll(accountId, !isUnread, before)
+                        }
                         .map { it.id.dollarLast() }
                 }
             }
