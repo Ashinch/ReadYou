@@ -146,7 +146,7 @@
     <string name="help">Ayuda</string>
     <string name="on_start">Al iniciar</string>
     <string name="initial_page">Página inicial</string>
-    <string name="initial_filter">Filtro inicial</string>
+    <string name="initial_filter">Filtro por defecto</string>
     <string name="preview_article_title">Finalmente la novela "El Señor de los Misterios" ha llegado a su fin</string>
     <string name="preview_article_desc">El Loco es el octavo y último volumen de la serie El Señor de los Misterios
         escrito por el Calamar que ama el buceo.

@@ -78,8 +78,8 @@
     <string name="accounts_desc">Local, serviços, hospedado por si</string>
     <string name="color_and_style">Cor e Estilo</string>
     <string name="color_and_style_desc">Tema, Estilo de Cores, Tamanho de Fonte</string>
-    <string name="interaction">Interação</string>
-    <string name="interaction_desc">Página Inicial, Feedback Tátil</string>
+    <string name="interaction">Preferências de uso</string>
+    <string name="interaction_desc">Página inicial, gestos</string>
     <string name="languages">Idiomas</string>
     <string name="help_translate">Ajude a traduzir</string>
     <string name="use_device_languages">Usar o idioma do dispositivo</string>
@@ -113,8 +113,8 @@
     <string name="check_failure">Não foi possível verificar por atualizações</string>
     <string name="download_failure">Não foi possível baixar as atualizações</string>
     <string name="rate_limit">O limite de requisições está limitado</string>
-    <string name="initial_page">Página Inicial</string>
-    <string name="initial_filter">Filtro Inicial</string>
+    <string name="initial_page">Página inicial</string>
+    <string name="initial_filter">Filtro padrão</string>
     <string name="paste">Colar</string>
     <string name="search">Pesquisar</string>
     <string name="clear">Limpar</string>
@@ -138,7 +138,7 @@
     <string name="get_new_updates">Receber novas atualizações</string>
     <string name="tips_and_support">Dicas e Suporte</string>
     <string name="terms_of_service">Termos de serviço</string>
-    <string name="tips_and_support_desc">Sobre, Licenças de código aberto</string>
+    <string name="tips_and_support_desc">Sobre, patrocinar, licenças de código aberto</string>
     <string name="tos_content"><h5> Política de privacidade </h5> <br/> <p> Levamos a sua privacidade muito a sério. </p> <br/> <p> <b>Read You</b> não coleta nenhum dado do usuário e todas as informações sensíveis (como senhas e outras informações da conta) são armazenadas de forma segura localmente em seu dispositivo. </p> <br/> <p> <b>Read You</b> utiliza das seguintes permissões para fornecer seus serviços. </p> <br/> <p> - Acesso à internet (para acessar o conteúdo online conforme especificado pelo usuário) </p> <p> - Obter status de conexão (para identificar quando o dispositivo está conectado a internet) </p> <p> - Serviços em segundo plano (para automaticamente sincronizar os seus feeds favoritos regularmente) </p> <br/> <br/> <h5> Serviços de terceiros </h5> <br/> <p> Esta política não se aplica aos serviços de terceiros que você utiliza junto do <b>Read You</b>. Você pode visualizar a política de privacidade de cada serviço em seus respectivos sites </p> <br/> <br/> <h5> Disclaimer </h5> <br/> <p> <b>Read You</b> é um agregador de conteúdo apenas. Seu uso do <b>Read You</b> está sujeito as leis e regulamentações de seu país e região e qualquer responsabilidade decorrente de suas ações será assumida por você diretamente. </p> <br/> <br/> <h5> Licença de código aberto </h5> <br/> <p> <b>Read You</b> é um projeto de código aberto sobre a licença GNU GPL 3.0 Open Source License[1], na qual permite que você use, referencie e modifique o código fonte do <b>Read You</b> gratuitamente, mas não permite que você modifique o código para que seja vendido como uma solução comercial de código fechado. Para mais detalhes, veja a documentação completa da licença GNU GPL 3.0 Open Source License[2]. </p> <br/> <br/> <h5> Apêndice </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="sponsor">Patrocinador</string>
     <string name="open_source_licenses">Licenças de código aberto</string>
