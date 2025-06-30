@@ -113,6 +113,29 @@
                 android:name="autoStoreLocales"
                 android:value="true" />
         </service>
+
+        <receiver
+            android:name=".ui.widget.ArticleListWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/article_list_widget_info" />
+        </receiver>
+
+
+        <receiver
+            android:name=".ui.widget.ArticleCardWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/article_card_widget_info" />
+        </receiver>
     </application>
 
 </manifest>
