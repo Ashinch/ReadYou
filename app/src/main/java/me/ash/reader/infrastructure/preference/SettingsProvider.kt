@@ -86,7 +86,6 @@ class SettingsProvider @Inject constructor(
             LocalFeedsGroupListExpand provides settings.feedsGroupListExpand,
             LocalFeedsGroupListTonalElevation provides settings.feedsGroupListTonalElevation,
             LocalFeedsFilterBarStyle provides settings.feedsFilterBarStyle,
-            LocalFeedsFilterBarFilled provides settings.feedsFilterBarFilled,
             LocalFeedsFilterBarPadding provides settings.feedsFilterBarPadding,
             LocalFeedsFilterBarTonalElevation provides settings.feedsFilterBarTonalElevation,
 
@@ -100,7 +99,6 @@ class SettingsProvider @Inject constructor(
             LocalFlowArticleListDateStickyHeader provides settings.flowArticleListDateStickyHeader,
             LocalFlowArticleListTonalElevation provides settings.flowArticleListTonalElevation,
             LocalFlowFilterBarStyle provides settings.flowFilterBarStyle,
-            LocalFlowFilterBarFilled provides settings.flowFilterBarFilled,
             LocalFlowFilterBarPadding provides settings.flowFilterBarPadding,
             LocalFlowFilterBarTonalElevation provides settings.flowFilterBarTonalElevation,
             LocalFlowArticleListReadIndicator provides settings.flowArticleListReadIndicator,

@@ -64,7 +64,6 @@ import androidx.work.WorkInfo
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.domain.data.FilterState
-import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarFilled
 import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarPadding
 import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarStyle
 import me.ash.reader.infrastructure.preference.LocalFeedsFilterBarTonalElevation
@@ -113,7 +112,6 @@ fun FeedsPage(
     val groupListTonalElevation = LocalFeedsGroupListTonalElevation.current
     val groupListExpand = LocalFeedsGroupListExpand.current
     val filterBarStyle = LocalFeedsFilterBarStyle.current
-    val filterBarFilled = LocalFeedsFilterBarFilled.current
     val filterBarPadding = LocalFeedsFilterBarPadding.current
     val filterBarTonalElevation = LocalFeedsFilterBarTonalElevation.current
 
@@ -365,7 +363,7 @@ fun FeedsPage(
                 },
                 filter = filterState.filter,
                 filterBarStyle = filterBarStyle.value,
-                filterBarFilled = filterBarFilled.value,
+                filterBarFilled = true,
                 filterBarPadding = filterBarPadding.dp,
                 filterBarTonalElevation = filterBarTonalElevation.value.dp,
             ) {

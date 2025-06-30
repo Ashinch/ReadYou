@@ -28,7 +28,6 @@ fun FeedsPageStylePage(
 ) {
     val context = LocalContext.current
     val filterBarStyle = LocalFeedsFilterBarStyle.current
-    val filterBarFilled = LocalFeedsFilterBarFilled.current
     val filterBarPadding = LocalFeedsFilterBarPadding.current
     val filterBarTonalElevation = LocalFeedsFilterBarTonalElevation.current
     val topBarTonalElevation = LocalFeedsTopBarTonalElevation.current
@@ -81,7 +80,7 @@ fun FeedsPageStylePage(
                             topBarTonalElevation = topBarTonalElevation,
                             groupListExpand = groupListExpand,
                             filterBarStyle = filterBarStyle.value,
-                            filterBarFilled = filterBarFilled.value,
+                            filterBarFilled = true,
                             filterBarPadding = filterBarPadding.dp,
                             filterBarTonalElevation = filterBarTonalElevation.value.dp,
                         )
@@ -146,16 +145,6 @@ fun FeedsPageStylePage(
                             filterBarStyleDialogVisible = true
                         },
                     ) {}
-                    SettingItem(
-                        title = stringResource(R.string.fill_selected_icon),
-                        onClick = {
-                            (!filterBarFilled).put(context, scope)
-                        },
-                    ) {
-                        RYSwitch(activated = filterBarFilled.value) {
-                            (!filterBarFilled).put(context, scope)
-                        }
-                    }
                     SettingItem(
                         title = stringResource(R.string.horizontal_padding),
                         desc = "${filterBarPadding}dp",

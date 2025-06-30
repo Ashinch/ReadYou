@@ -28,7 +28,6 @@ fun FlowPageStylePage(
 ) {
     val context = LocalContext.current
     val filterBarStyle = LocalFlowFilterBarStyle.current
-    val filterBarFilled = LocalFlowFilterBarFilled.current
     val filterBarPadding = LocalFlowFilterBarPadding.current
     val filterBarTonalElevation = LocalFlowFilterBarTonalElevation.current
     val topBarTonalElevation = LocalFlowTopBarTonalElevation.current
@@ -95,7 +94,7 @@ fun FlowPageStylePage(
                             topBarTonalElevation = topBarTonalElevation,
                             articleListTonalElevation = articleListTonalElevation,
                             filterBarStyle = filterBarStyle.value,
-                            filterBarFilled = filterBarFilled.value,
+                            filterBarFilled = true,
                             filterBarPadding = filterBarPadding.dp,
                             filterBarTonalElevation = filterBarTonalElevation.value.dp,
                         )
@@ -240,16 +239,6 @@ fun FlowPageStylePage(
                             filterBarStyleDialogVisible = true
                         },
                     ) {}
-                    SettingItem(
-                        title = stringResource(R.string.fill_selected_icon),
-                        onClick = {
-                            (!filterBarFilled).put(context, scope)
-                        },
-                    ) {
-                        RYSwitch(activated = filterBarFilled.value) {
-                            (!filterBarFilled).put(context, scope)
-                        }
-                    }
                     SettingItem(
                         title = stringResource(R.string.horizontal_padding),
                         desc = "${filterBarPadding}dp",

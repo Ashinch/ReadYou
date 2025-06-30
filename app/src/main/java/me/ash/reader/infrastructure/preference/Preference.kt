@@ -28,7 +28,6 @@ fun Preferences.toSettings(): Settings {
 
         // Feeds page
         feedsFilterBarStyle = FeedsFilterBarStylePreference.fromPreferences(this),
-        feedsFilterBarFilled = FeedsFilterBarFilledPreference.fromPreferences(this),
         feedsFilterBarPadding = FeedsFilterBarPaddingPreference.fromPreferences(this),
         feedsFilterBarTonalElevation = FeedsFilterBarTonalElevationPreference.fromPreferences(this),
         feedsTopBarTonalElevation = FeedsTopBarTonalElevationPreference.fromPreferences(this),
@@ -37,7 +36,6 @@ fun Preferences.toSettings(): Settings {
 
         // Flow page
         flowFilterBarStyle = FlowFilterBarStylePreference.fromPreferences(this),
-        flowFilterBarFilled = FlowFilterBarFilledPreference.fromPreferences(this),
         flowFilterBarPadding = FlowFilterBarPaddingPreference.fromPreferences(this),
         flowFilterBarTonalElevation = FlowFilterBarTonalElevationPreference.fromPreferences(this),
         flowTopBarTonalElevation = FlowTopBarTonalElevationPreference.fromPreferences(this),

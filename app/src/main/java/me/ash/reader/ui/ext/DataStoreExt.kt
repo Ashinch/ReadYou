@@ -114,7 +114,6 @@ data class DataStoreKey<T>(
 
         // Feeds page
         const val feedsFilterBarStyle = "feedsFilterBarStyle"
-        const val feedsFilterBarFilled = "feedsFilterBarFilled"
         const val feedsFilterBarPadding = "feedsFilterBarPadding"
         const val feedsFilterBarTonalElevation = "feedsFilterBarTonalElevation"
         const val feedsTopBarTonalElevation = "feedsTopBarTonalElevation"
@@ -123,7 +122,6 @@ data class DataStoreKey<T>(
 
         // Flow page
         const val flowFilterBarStyle = "flowFilterBarStyle"
-        const val flowFilterBarFilled = "flowFilterBarFilled"
         const val flowFilterBarPadding = "flowFilterBarPadding"
         const val flowFilterBarTonalElevation = "flowFilterBarTonalElevation"
         const val flowTopBarTonalElevation = "flowTopBarTonalElevation"
@@ -194,7 +192,6 @@ data class DataStoreKey<T>(
             basicFonts to DataStoreKey(intPreferencesKey(basicFonts), Int::class.java),
             // Feeds page
             feedsFilterBarStyle to DataStoreKey(intPreferencesKey(feedsFilterBarStyle), Int::class.java),
-            feedsFilterBarFilled to DataStoreKey(booleanPreferencesKey(feedsFilterBarFilled), Boolean::class.java),
             feedsFilterBarPadding to DataStoreKey(intPreferencesKey(feedsFilterBarPadding), Int::class.java),
             feedsFilterBarTonalElevation to DataStoreKey(intPreferencesKey(feedsFilterBarTonalElevation), Int::class.java),
             feedsTopBarTonalElevation to DataStoreKey(intPreferencesKey(feedsTopBarTonalElevation), Int::class.java),
@@ -202,7 +199,6 @@ data class DataStoreKey<T>(
             feedsGroupListTonalElevation to DataStoreKey(intPreferencesKey(feedsGroupListTonalElevation), Int::class.java),
             // Flow page
             flowFilterBarStyle to DataStoreKey(intPreferencesKey(flowFilterBarStyle), Int::class.java),
-            flowFilterBarFilled to DataStoreKey(booleanPreferencesKey(flowFilterBarFilled), Boolean::class.java),
             flowFilterBarPadding to DataStoreKey(intPreferencesKey(flowFilterBarPadding), Int::class.java),
             flowFilterBarTonalElevation to DataStoreKey(intPreferencesKey(flowFilterBarTonalElevation), Int::class.java),
             flowTopBarTonalElevation to DataStoreKey(intPreferencesKey(flowTopBarTonalElevation), Int::class.java),

@@ -23,7 +23,6 @@ data class Settings(
 
     // Feeds page
     val feedsFilterBarStyle: FeedsFilterBarStylePreference = FeedsFilterBarStylePreference.default,
-    val feedsFilterBarFilled: FeedsFilterBarFilledPreference = FeedsFilterBarFilledPreference.default,
     val feedsFilterBarPadding: Int = FeedsFilterBarPaddingPreference.default,
     val feedsFilterBarTonalElevation: FeedsFilterBarTonalElevationPreference = FeedsFilterBarTonalElevationPreference.default,
     val feedsTopBarTonalElevation: FeedsTopBarTonalElevationPreference = FeedsTopBarTonalElevationPreference.default,
@@ -32,7 +31,6 @@ data class Settings(
 
     // Flow page
     val flowFilterBarStyle: FlowFilterBarStylePreference = FlowFilterBarStylePreference.default,
-    val flowFilterBarFilled: FlowFilterBarFilledPreference = FlowFilterBarFilledPreference.default,
     val flowFilterBarPadding: Int = FlowFilterBarPaddingPreference.default,
     val flowFilterBarTonalElevation: FlowFilterBarTonalElevationPreference = FlowFilterBarTonalElevationPreference.default,
     val flowTopBarTonalElevation: FlowTopBarTonalElevationPreference = FlowTopBarTonalElevationPreference.default,

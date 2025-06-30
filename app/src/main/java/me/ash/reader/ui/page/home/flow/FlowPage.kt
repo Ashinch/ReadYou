@@ -72,7 +72,6 @@ import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.infrastructure.preference.LocalFlowArticleListDateStickyHeader
 import me.ash.reader.infrastructure.preference.LocalFlowArticleListFeedIcon
 import me.ash.reader.infrastructure.preference.LocalFlowArticleListTonalElevation
-import me.ash.reader.infrastructure.preference.LocalFlowFilterBarFilled
 import me.ash.reader.infrastructure.preference.LocalFlowFilterBarPadding
 import me.ash.reader.infrastructure.preference.LocalFlowFilterBarStyle
 import me.ash.reader.infrastructure.preference.LocalFlowFilterBarTonalElevation
@@ -120,7 +119,6 @@ fun FlowPage(
     val articleListDateStickyHeader = LocalFlowArticleListDateStickyHeader.current
     val topBarTonalElevation = LocalFlowTopBarTonalElevation.current
     val filterBarStyle = LocalFlowFilterBarStyle.current
-    val filterBarFilled = LocalFlowFilterBarFilled.current
     val filterBarPadding = LocalFlowFilterBarPadding.current
     val filterBarTonalElevation = LocalFlowFilterBarTonalElevation.current
     val sharedContent = LocalSharedContent.current
@@ -667,7 +665,7 @@ fun FlowPage(
                         },
                     filter = filterUiState.filter,
                     filterBarStyle = filterBarStyle.value,
-                    filterBarFilled = filterBarFilled.value,
+                    filterBarFilled = true,
                     filterBarPadding = filterBarPadding.dp,
                     filterBarTonalElevation = filterBarTonalElevation.value.dp,
                 ) {
