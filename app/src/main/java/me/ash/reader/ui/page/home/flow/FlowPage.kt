@@ -198,7 +198,7 @@ fun FlowPage(
 
     val sortByEarliest =
         filterUiState.filter.isUnread() &&
-            LocalSortUnreadArticles.current == SortUnreadArticlesPreference.Earliest
+                LocalSortUnreadArticles.current == SortUnreadArticlesPreference.Earliest
 
     val onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? =
         remember(sortByEarliest) {
@@ -246,13 +246,6 @@ fun FlowPage(
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
 
     val isSyncing = flowViewModel.isSyncingFlow.collectAsStateValue()
-
-    LaunchedEffect(isSyncing, listState) {
-        if (isSyncing) {
-            snapshotFlow { listState.layoutInfo.totalItemsCount }
-                .collect { listState.requestScrollToItem(0) }
-        }
-    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         RYScaffold(
@@ -464,7 +457,7 @@ fun FlowPage(
                             contentTransitionBackward
                         } else if (
                             targetFilter.group != initialFilter.group ||
-                                targetFilter.feed != initialFilter.feed
+                            targetFilter.feed != initialFilter.feed
                         ) {
                             contentTransitionVertical
                         } else {
@@ -508,19 +501,27 @@ fun FlowPage(
                     }
 
                     val listState = remember(pager) { listState }
+
+                    LaunchedEffect(pagingItems.itemCount) {
+                        if (isSyncing) {
+                            listState.requestScrollToItem(0)
+                        }
+                    }
+
                     val loadAction =
                         remember(pager, flowUiState) {
-                                when {
-                                    flowUiState.nextFilterState != null ->
-                                        LoadAction.NextFeed.fromFilterState(
-                                            flowUiState.nextFilterState
-                                        )
+                            when {
+                                flowUiState.nextFilterState != null ->
+                                    LoadAction.NextFeed.fromFilterState(
+                                        flowUiState.nextFilterState
+                                    )
 
-                                    filterState.filter.isUnread() && markAsReadOnScroll ->
-                                        LoadAction.MarkAllAsRead
-                                    else -> null
-                                }
+                                filterState.filter.isUnread() && markAsReadOnScroll ->
+                                    LoadAction.MarkAllAsRead
+
+                                else -> null
                             }
+                        }
                             .also { currentLoadAction = it }
 
                     val onLoadNext: (() -> Unit)? =
@@ -553,17 +554,18 @@ fun FlowPage(
 
                     val pullToLoadState =
                         rememberPullToLoadState(
-                                key = pager,
-                                onLoadNext = onLoadNext,
-                                onLoadPrevious = onPullToSync,
-                                loadThreshold = PullToLoadDefaults.loadThreshold(.1f),
-                            )
+                            key = pager,
+                            onLoadNext = onLoadNext,
+                            onLoadPrevious = onPullToSync,
+                            loadThreshold = PullToLoadDefaults.loadThreshold(.1f),
+                        )
                             .also { currentPullToLoadState = it }
 
                     Box(modifier = Modifier.fillMaxSize()) {
                         LazyColumn(
                             modifier =
-                                Modifier.pullToLoad(
+                                Modifier
+                                    .pullToLoad(
                                         pullToLoadState,
                                         enabled = pullToSwitchFeed.value,
                                         contentOffsetY = { fraction ->
