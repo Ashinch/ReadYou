@@ -390,7 +390,7 @@ fun FlowPage(
             },
             content = {
                 RYExtensibleVisibility(modifier = Modifier.zIndex(1f), visible = onSearch) {
-                    BackHandler { onSearch = false }
+                    BackHandler(onSearch) { onSearch = false }
                     SearchBar(
                         value = filterUiState.searchContent ?: "",
                         placeholder =
@@ -425,7 +425,7 @@ fun FlowPage(
                 }
 
                 RYExtensibleVisibility(markAsRead) {
-                    BackHandler { markAsRead = false }
+                    BackHandler(markAsRead) { markAsRead = false }
 
                     MarkAsReadBar {
                         markAsRead = false
