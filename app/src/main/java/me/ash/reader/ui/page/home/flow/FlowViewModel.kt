@@ -8,12 +8,14 @@ import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -39,6 +41,7 @@ import kotlin.collections.any
 
 private const val TAG = "FlowViewModel"
 
+@OptIn(FlowPreview::class)
 @HiltViewModel
 class FlowViewModel @Inject constructor(
     private val rssService: RssService,
@@ -55,13 +58,14 @@ class FlowViewModel @Inject constructor(
     private val _flowUiState = MutableStateFlow(FlowUiState())
     val flowUiState: StateFlow<FlowUiState> = _flowUiState.asStateFlow()
 
-    private val _isSyncingFlow = workManager.getWorkInfosByTagFlow(SyncWorker.WORK_TAG).map {
+    private val syncWorkerStatusFlow = workManager.getWorkInfosByTagFlow(SyncWorker.WORK_TAG).map {
         it.any { workInfo ->
             workInfo.state == WorkInfo.State.RUNNING
         }
     }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
-    val isSyncingFlow = MutableStateFlow(false)
+    private val _isSyncingFlow = MutableStateFlow(false)
+    val isSyncingFlow = _isSyncingFlow.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -125,7 +129,7 @@ class FlowViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            _isSyncingFlow.collect { isSyncingFlow.value = it }
+            syncWorkerStatusFlow.debounce(500L).collect { _isSyncingFlow.value = it }
         }
     }
 
@@ -208,12 +212,12 @@ class FlowViewModel @Inject constructor(
 
     fun sync() {
         viewModelScope.launch {
-            val isSyncing = isSyncingFlow.value
+            val isSyncing = syncWorkerStatusFlow.value
             if (!isSyncing) {
-                isSyncingFlow.value = true
+                _isSyncingFlow.value = true
                 delay(500L)
-                if (_isSyncingFlow.value == false) {
-                    isSyncingFlow.value = false
+                if (syncWorkerStatusFlow.value == false) {
+                    _isSyncingFlow.value = false
                 }
             }
         }

@@ -45,6 +45,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -99,6 +100,7 @@ import me.ash.reader.ui.page.home.reading.PullToLoadDefaults.ContentOffsetMultip
 import me.ash.reader.ui.page.home.reading.PullToLoadState
 import me.ash.reader.ui.page.home.reading.pullToLoad
 import me.ash.reader.ui.page.home.reading.rememberPullToLoadState
+import timber.log.Timber
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -502,9 +504,13 @@ fun FlowPage(
 
                     val listState = remember(pager) { listState }
 
-                    LaunchedEffect(pagingItems.itemCount) {
-                        if (isSyncing) {
-                            listState.requestScrollToItem(0)
+                    val isSyncing by rememberUpdatedState(isSyncing)
+
+                    LaunchedEffect(pagingItems) {
+                        snapshotFlow { pagingItems.loadState.isIdle }.collect {
+                            if (isSyncing) {
+                                listState.scrollToItem(0)
+                            }
                         }
                     }
 
