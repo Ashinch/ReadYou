@@ -212,10 +212,10 @@ class FlowViewModel @Inject constructor(
 
     fun sync() {
         viewModelScope.launch {
+            _isSyncingFlow.value = true
             val isSyncing = syncWorkerStatusFlow.value
             if (!isSyncing) {
-                _isSyncingFlow.value = true
-                delay(500L)
+                delay(1000L)
                 if (syncWorkerStatusFlow.value == false) {
                     _isSyncingFlow.value = false
                 }
