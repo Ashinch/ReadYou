@@ -1,6 +1,5 @@
 package me.ash.reader.ui.page.common
 
-import android.util.Log
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
@@ -8,29 +7,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import me.ash.reader.infrastructure.preference.InitialPagePreference
 import me.ash.reader.infrastructure.preference.LocalDarkTheme
 import me.ash.reader.infrastructure.preference.LocalSettings
 import me.ash.reader.ui.ext.animatedComposable
-import me.ash.reader.ui.ext.collectAsStateValue
-import me.ash.reader.ui.ext.findActivity
-import me.ash.reader.ui.ext.initialPage
 import me.ash.reader.ui.ext.isFirstLaunch
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage
@@ -70,24 +59,7 @@ fun HomeEntry(
 ) {
     val context = LocalContext.current
 
-    val intent by rememberSaveable { mutableStateOf(context.findActivity()?.intent) }
-    var openArticleId by rememberSaveable {
-        mutableStateOf(intent?.extras?.getString(ExtraName.ARTICLE_ID) ?: "")
-    }.also {
-        intent?.replaceExtras(null)
-    }
 
-    LaunchedEffect(openArticleId) {
-        if (openArticleId.isNotEmpty()) {
-            navController.navigate(RouteName.FLOW) {
-                launchSingleTop = true
-            }
-            navController.navigate("${RouteName.READING}/${openArticleId}") {
-                launchSingleTop = true
-            }
-            openArticleId = ""
-        }
-    }
     val settings = LocalSettings.current
     val isFirstLaunch = remember { context.isFirstLaunch }
     val initialPage = remember { settings.initialPage }

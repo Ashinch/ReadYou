@@ -23,9 +23,11 @@ import me.ash.reader.infrastructure.preference.AccountSettingsProvider
 import me.ash.reader.infrastructure.preference.LanguagesPreference
 import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.ui.ext.languages
+import me.ash.reader.ui.page.common.ExtraName
 import me.ash.reader.ui.page.common.HomeEntry
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
+import timber.log.Timber
 import java.lang.reflect.Field
 import javax.inject.Inject
 
@@ -41,7 +43,8 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var settingsProvider: SettingsProvider
 
-    @Inject lateinit var accountService: AccountService
+    @Inject
+    lateinit var accountService: AccountService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,45 +89,64 @@ class MainActivity : AppCompatActivity() {
                     val subscribeViewModel: SubscribeViewModel = hiltViewModel()
                     val navController = rememberNavController()
 
+                    HomeEntry(subscribeViewModel = subscribeViewModel, navController = navController)
+
                     DisposableEffect(this) {
                         val listener = Consumer<Intent> { intent ->
-                            intent.getTextOrNull()?.let {
-                                subscribeViewModel.handleSharedUrlFromIntent(it)
-                                val res = navController.popBackStack(
-                                    route = RouteName.FEEDS,
-                                    inclusive = false,
-                                    saveState = true
-                                )
-                                if (!res) navController.navigate(
-                                    route = RouteName.FEEDS,
-                                )
+                            intent.getLaunchAction()?.let { action ->
+                                when (action) {
+                                    is LaunchAction.OpenArticle -> {
+                                        navController.navigate("${RouteName.READING}/${action.articleId}") {
+                                            launchSingleTop = true
+                                        }
+                                    }
+
+                                    is LaunchAction.Subscribe -> {
+                                        subscribeViewModel.handleSharedUrlFromIntent(action.url)
+                                        val res = navController.popBackStack(
+                                            route = RouteName.FEEDS,
+                                            inclusive = false,
+                                            saveState = true
+                                        )
+                                        if (!res) navController.navigate(
+                                            route = RouteName.FEEDS,
+                                        )
+                                    }
+                                }
+
                             }
                         }
+                        listener.accept(intent) // consume the launch intent as well
                         addOnNewIntentListener(listener)
                         onDispose {
                             removeOnNewIntentListener(listener)
                         }
                     }
-
-                    HomeEntry(subscribeViewModel = subscribeViewModel)
                 }
             }
         }
     }
 }
 
-private fun Intent.getTextOrNull(): String? {
+sealed interface LaunchAction {
+    data class Subscribe(val url: String) : LaunchAction
+    data class OpenArticle(val articleId: String) : LaunchAction
+}
 
+private fun Intent.getLaunchAction(): LaunchAction? {
     return when (action) {
         Intent.ACTION_VIEW -> {
-            dataString
+            dataString?.let { LaunchAction.Subscribe(it) }
         }
 
         Intent.ACTION_SEND -> {
             getStringExtra(Intent.EXTRA_TEXT)?.also { removeExtra(Intent.EXTRA_TEXT) }
+                ?.let { LaunchAction.Subscribe(it) }
         }
 
-        else -> null
+        else -> {
+            getStringExtra(ExtraName.ARTICLE_ID)?.also { removeExtra(ExtraName.ARTICLE_ID) }
+                ?.let { LaunchAction.OpenArticle(it) }
+        }
     }
-
 }
