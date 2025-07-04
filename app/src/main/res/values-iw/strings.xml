@@ -34,7 +34,7 @@
     <string name="get_new_updates_desc">קיימת גרסה חדשה %1$s</string>
     <string name="color_and_style">צבע וסגנון</string>
     <string name="color_and_style_desc">ערכת עיצוב, סגנון צבע, גודל גופן</string>
-    <string name="interaction">אינטראקציה</string>
+    <string name="interaction">שימוש</string>
     <string name="interaction_desc">עמוד התחלה, תנועות</string>
     <string name="languages">שפות</string>
     <string name="help_translate">עזרה בתרגום</string>
