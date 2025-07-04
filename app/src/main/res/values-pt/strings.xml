@@ -21,8 +21,8 @@
     <string name="search">Pesquisar</string>
     <string name="preset">Predefinição</string>
     <string name="allow_notification">Permitir notificação</string>
-    <string name="all_deny_notification_toast">Nenhuma notificação do grupo \"%1$s\" está permitida</string>
-    <string name="all_allow_notification_toast">Todas as notificações do grupo \"%1$s\" estão permitidas</string>
+    <string name="all_deny_notification_toast">Notificações do grupo \"%1$s\" são negadas</string>
+    <string name="all_allow_notification_toast">Notificações do grupo \"%1$s\" são permitidas</string>
     <string name="parse_full_content">Mostrar conteúdo completo</string>
     <string name="clear_articles">Limpar artigos</string>
     <string name="all">Todos</string>
@@ -41,7 +41,7 @@
     <string name="defaults">Predefinido</string>
     <string name="settings">Configurações</string>
     <string name="all_parse_full_content_tips">Análise de conteúdo completo de todos os artigos do grupo \"%1$s\"</string>
-    <string name="all_parse_full_content_toast">Mostrar conteúdo completo dos artigos do grupo \"%1$s\"</string>
+    <string name="all_parse_full_content_toast">Mostrar conteúdo completo dos artigos do grupo \"%1$s\" é permitido</string>
     <string name="clear_articles_group_tips">Limpar todos os artigos arquivados no grupo \"%1$s\"</string>
     <string name="add_to_group">Adicionar a um grupo</string>
     <string name="all_move_to_group_toast">Todos as fontes movidas para o grupo \"%1$s\"</string>
