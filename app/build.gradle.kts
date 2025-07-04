@@ -34,8 +34,8 @@ android {
         applicationId = "me.ash.reader"
         minSdk = 26
         targetSdk = 34
-        versionCode = 34
-        versionName = "0.14.1"
+        versionCode = 35
+        versionName = "0.14.2"
 
         buildConfigField("String", "USER_AGENT_STRING", "\"ReadYou/${versionName}(${versionCode})\"")
 
@@ -54,6 +54,7 @@ android {
     flavorDimensions.add("channel")
     productFlavors {
         create("github") {
+            isDefault = true
             dimension = "channel"
         }
         create("fdroid") {
