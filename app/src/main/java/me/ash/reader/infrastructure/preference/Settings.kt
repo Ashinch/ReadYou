@@ -74,7 +74,7 @@ data class Settings(
     val swipeEndAction: SwipeEndActionPreference = SwipeEndActionPreference.default,
     val markAsReadOnScroll: MarkAsReadOnScrollPreference = MarkAsReadOnScrollPreference.default,
     val hideEmptyGroups: HideEmptyGroupsPreference = HideEmptyGroupsPreference.default,
-    val pullToSwitchFeed: PullToSwitchFeedPreference = PullToSwitchFeedPreference.default,
+    val pullToSwitchFeed: PullToLoadNextFeedPreference = PullToLoadNextFeedPreference.default,
     val pullToSwitchArticle: PullToSwitchArticlePreference = PullToSwitchArticlePreference.default,
     val openLink: OpenLinkPreference = OpenLinkPreference.default,
     val openLinkSpecificBrowser: OpenLinkSpecificBrowserPreference = OpenLinkSpecificBrowserPreference.default,

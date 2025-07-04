@@ -34,6 +34,7 @@ import me.ash.reader.domain.service.LocalRssService
 import me.ash.reader.domain.service.SyncWorker
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
+import me.ash.reader.infrastructure.preference.PullToLoadNextFeedPreference
 import me.ash.reader.infrastructure.preference.SettingsProvider
 import java.util.Date
 import javax.inject.Inject
@@ -190,7 +191,7 @@ class FlowViewModel @Inject constructor(
 
     fun loadNextFeedOrGroup() {
         viewModelScope.launch {
-            if (settingsProvider.settings.markAsReadOnScroll.value) {
+            if (settingsProvider.settings.pullToSwitchFeed == PullToLoadNextFeedPreference.MarkAsReadAndLoadNextFeed) {
                 markAllAsRead()
             }
             flowUiState.value.nextFilterState?.let { filterStateUseCase.updateFilterState(it) }

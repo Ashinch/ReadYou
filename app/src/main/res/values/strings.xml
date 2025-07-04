@@ -360,4 +360,7 @@
     <string name="bold_characters">Bold characters</string>
     <string name="use_bold_characters">Use bold characters</string>
     <string name="bold_characters_preview">Bold the first few characters of words in an article</string>
+    <string name="load_next_feed">Load next feed</string>
+    <string name="mark_all_as_read_and_load_next_feed">Mark all as read and load next feed</string>
+    <string name="pull_from_bottom">Pull from bottom</string>
 </resources>

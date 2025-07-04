@@ -37,6 +37,7 @@ import me.ash.reader.infrastructure.preference.LocalSettings
 import me.ash.reader.infrastructure.preference.LocalSharedContent
 import me.ash.reader.infrastructure.preference.LocalSortUnreadArticles
 import me.ash.reader.infrastructure.preference.OpenLinkPreference
+import me.ash.reader.infrastructure.preference.PullToLoadNextFeedPreference
 import me.ash.reader.infrastructure.preference.SharedContentPreference
 import me.ash.reader.infrastructure.preference.SortUnreadArticlesPreference
 import me.ash.reader.infrastructure.preference.SwipeEndActionPreference
@@ -83,6 +84,7 @@ fun InteractionPage(
     var openLinkSpecificBrowserDialogVisible by remember { mutableStateOf(false) }
     var sharedContentDialogVisible by remember { mutableStateOf(false) }
     var showSortUnreadArticlesDialog by remember { mutableStateOf(false) }
+    var showPullToLoadDialog by remember { mutableStateOf(false) }
 
     RYScaffold(
         containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
@@ -178,15 +180,12 @@ fun InteractionPage(
                     }
 
                     SettingItem(
-                        title = stringResource(R.string.pull_to_switch_feed),
+                        title = stringResource(R.string.pull_from_bottom),
+                        desc = pullToSwitchFeed.description(),
                         onClick = {
-                            pullToSwitchFeed.toggle(context, scope)
+                            showPullToLoadDialog = true
                         },
-                    ) {
-                        RYSwitch(activated = settings.pullToSwitchFeed.value) {
-                            pullToSwitchFeed.toggle(context, scope)
-                        }
-                    }
+                    )
 
                     Spacer(modifier = Modifier.height(24.dp))
 
@@ -373,6 +372,22 @@ fun InteractionPage(
         },
         onDismissRequest = {
             showSortUnreadArticlesDialog = false
+        }
+    )
+
+    RadioDialog(
+        visible = showPullToLoadDialog,
+        title = stringResource(R.string.pull_from_bottom),
+        options = PullToLoadNextFeedPreference.values.map {
+            RadioDialogOption(
+                text = it.description(),
+                selected = it == pullToSwitchFeed,
+            ) {
+                it.put(context, scope)
+            }
+        },
+        onDismissRequest = {
+            showPullToLoadDialog = false
         }
     )
 }

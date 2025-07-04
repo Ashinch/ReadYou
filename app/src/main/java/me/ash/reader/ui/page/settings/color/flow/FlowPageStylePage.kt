@@ -53,6 +53,7 @@ fun FlowPageStylePage(
     var articleListTonalElevationDialogVisible by remember { mutableStateOf(false) }
     var articleListReadIndicatorDialogVisible by remember { mutableStateOf(false) }
     var showArticleListDescDialog by remember { mutableStateOf(false) }
+    var showPullToLoadDialog by remember { mutableStateOf(false) }
 
     var showSortUnreadArticlesDialog by remember { mutableStateOf(false) }
 
@@ -205,15 +206,12 @@ fun FlowPageStylePage(
                     }
 
                     SettingItem(
-                        title = stringResource(R.string.pull_to_switch_feed),
+                        title = stringResource(R.string.pull_from_bottom),
+                        desc = pullToSwitchFeed.description(),
                         onClick = {
-                            pullToSwitchFeed.toggle(context, scope)
+                            showPullToLoadDialog = true
                         },
-                    ) {
-                        RYSwitch(activated = settings.pullToSwitchFeed.value) {
-                            pullToSwitchFeed.toggle(context, scope)
-                        }
-                    }
+                    )
 
                     SettingItem(
                         title = stringResource(R.string.tonal_elevation),
@@ -384,6 +382,22 @@ fun FlowPageStylePage(
         },
         onDismissRequest = {
             showSortUnreadArticlesDialog = false
+        }
+    )
+
+    RadioDialog(
+        visible = showPullToLoadDialog,
+        title = stringResource(R.string.pull_from_bottom),
+        options = PullToLoadNextFeedPreference.values.map {
+            RadioDialogOption(
+                text = it.description(),
+                selected = it == pullToSwitchFeed,
+            ) {
+                it.put(context, scope)
+            }
+        },
+        onDismissRequest = {
+            showPullToLoadDialog = false
         }
     )
 }

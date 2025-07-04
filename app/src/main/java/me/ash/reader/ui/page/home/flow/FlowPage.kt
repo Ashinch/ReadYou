@@ -83,6 +83,7 @@ import me.ash.reader.infrastructure.preference.LocalOpenLinkSpecificBrowser
 import me.ash.reader.infrastructure.preference.LocalSettings
 import me.ash.reader.infrastructure.preference.LocalSharedContent
 import me.ash.reader.infrastructure.preference.LocalSortUnreadArticles
+import me.ash.reader.infrastructure.preference.PullToLoadNextFeedPreference
 import me.ash.reader.infrastructure.preference.SortUnreadArticlesPreference
 import me.ash.reader.ui.component.FilterBar
 import me.ash.reader.ui.component.base.FeedbackIconButton
@@ -100,7 +101,6 @@ import me.ash.reader.ui.page.home.reading.PullToLoadDefaults.ContentOffsetMultip
 import me.ash.reader.ui.page.home.reading.PullToLoadState
 import me.ash.reader.ui.page.home.reading.pullToLoad
 import me.ash.reader.ui.page.home.reading.rememberPullToLoadState
-import timber.log.Timber
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -200,7 +200,7 @@ fun FlowPage(
 
     val sortByEarliest =
         filterUiState.filter.isUnread() &&
-                LocalSortUnreadArticles.current == SortUnreadArticlesPreference.Earliest
+            LocalSortUnreadArticles.current == SortUnreadArticlesPreference.Earliest
 
     val onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? =
         remember(sortByEarliest) {
@@ -459,7 +459,7 @@ fun FlowPage(
                             contentTransitionBackward
                         } else if (
                             targetFilter.group != initialFilter.group ||
-                            targetFilter.feed != initialFilter.feed
+                                targetFilter.feed != initialFilter.feed
                         ) {
                             contentTransitionVertical
                         } else {
@@ -507,27 +507,36 @@ fun FlowPage(
                     val isSyncing by rememberUpdatedState(isSyncing)
 
                     LaunchedEffect(pagingItems) {
-                        snapshotFlow { pagingItems.loadState.isIdle }.collect {
-                            if (isSyncing) {
-                                listState.scrollToItem(0)
+                        snapshotFlow { pagingItems.loadState.isIdle }
+                            .collect {
+                                if (isSyncing) {
+                                    listState.scrollToItem(0)
+                                }
                             }
-                        }
                     }
 
                     val loadAction =
-                        remember(pager, flowUiState) {
-                            when {
-                                flowUiState.nextFilterState != null ->
-                                    LoadAction.NextFeed.fromFilterState(
-                                        flowUiState.nextFilterState
-                                    )
+                        remember(pager, flowUiState, pullToSwitchFeed) {
+                                when (pullToSwitchFeed) {
+                                    PullToLoadNextFeedPreference.None -> null
+                                    else -> {
+                                        when {
+                                            flowUiState.nextFilterState != null ->
+                                                LoadAction.NextFeed.fromFilterState(
+                                                    flowUiState.nextFilterState
+                                                )
 
-                                filterState.filter.isUnread() && markAsReadOnScroll ->
-                                    LoadAction.MarkAllAsRead
+                                            filterState.filter.isUnread() &&
+                                                pullToSwitchFeed ==
+                                                    PullToLoadNextFeedPreference
+                                                        .MarkAsReadAndLoadNextFeed ->
+                                                LoadAction.MarkAllAsRead
 
-                                else -> null
+                                            else -> null
+                                        }
+                                    }
+                                }
                             }
-                        }
                             .also { currentLoadAction = it }
 
                     val onLoadNext: (() -> Unit)? =
@@ -560,20 +569,19 @@ fun FlowPage(
 
                     val pullToLoadState =
                         rememberPullToLoadState(
-                            key = pager,
-                            onLoadNext = onLoadNext,
-                            onLoadPrevious = onPullToSync,
-                            loadThreshold = PullToLoadDefaults.loadThreshold(.1f),
-                        )
+                                key = pager,
+                                onLoadNext = onLoadNext,
+                                onLoadPrevious = onPullToSync,
+                                loadThreshold = PullToLoadDefaults.loadThreshold(.1f),
+                            )
                             .also { currentPullToLoadState = it }
 
                     Box(modifier = Modifier.fillMaxSize()) {
                         LazyColumn(
                             modifier =
-                                Modifier
-                                    .pullToLoad(
-                                        pullToLoadState,
-                                        enabled = pullToSwitchFeed.value,
+                                Modifier.pullToLoad(
+                                        state = pullToLoadState,
+                                        enabled = true,
                                         contentOffsetY = { fraction ->
                                             if (fraction > 0f) {
                                                 (fraction * ContentOffsetMultiple * 1.5f)
