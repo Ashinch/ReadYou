@@ -18,7 +18,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.profileinstaller.ProfileInstallerInitializer
 import coil.ImageLoader
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.reflect.Field
+import javax.inject.Inject
 import me.ash.reader.domain.service.AccountService
+import me.ash.reader.infrastructure.compose.ProvideCompositionLocals
 import me.ash.reader.infrastructure.preference.AccountSettingsProvider
 import me.ash.reader.infrastructure.preference.LanguagesPreference
 import me.ash.reader.infrastructure.preference.SettingsProvider
@@ -27,24 +30,15 @@ import me.ash.reader.ui.page.common.ExtraName
 import me.ash.reader.ui.page.common.HomeEntry
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
-import timber.log.Timber
-import java.lang.reflect.Field
-import javax.inject.Inject
 
-
-/**
- * The Single-Activity Architecture.
- */
+/** The Single-Activity Architecture. */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var imageLoader: ImageLoader
+    @Inject lateinit var imageLoader: ImageLoader
 
-    @Inject
-    lateinit var settingsProvider: SettingsProvider
+    @Inject lateinit var settingsProvider: SettingsProvider
 
-    @Inject
-    lateinit var accountService: AccountService
+    @Inject lateinit var accountService: AccountService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,9 +48,7 @@ class MainActivity : AppCompatActivity() {
 
         // Set the language
         if (Build.VERSION.SDK_INT < 33) {
-            LanguagesPreference.fromValue(languages).let {
-                LanguagesPreference.setLocale(it)
-            }
+            LanguagesPreference.fromValue(languages).let { LanguagesPreference.setLocale(it) }
         }
 
         // Workaround for https://github.com/Ashinch/ReadYou/issues/312: increase cursor window size
@@ -68,17 +60,16 @@ class MainActivity : AppCompatActivity() {
             Log.e("RLog", "Unable to increase cursor window size: ${e.printStackTrace()}")
         }
 
-        val requestPermissionLauncher = this.registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted ->
-            if (isGranted) {
-            } else { // Permission denied }
+        val requestPermissionLauncher =
+            this.registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted
+                ->
+                if (isGranted) {} else { // Permission denied }
+                }
             }
-        }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !NotificationManagerCompat.from(
-                this
-            ).areNotificationsEnabled()
+        if (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                !NotificationManagerCompat.from(this).areNotificationsEnabled()
         ) {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
@@ -89,38 +80,43 @@ class MainActivity : AppCompatActivity() {
                     val subscribeViewModel: SubscribeViewModel = hiltViewModel()
                     val navController = rememberNavController()
 
-                    HomeEntry(subscribeViewModel = subscribeViewModel, navController = navController)
+                    ProvideCompositionLocals {
+                        HomeEntry(
+                            subscribeViewModel = subscribeViewModel,
+                            navController = navController,
+                        )
+                    }
 
                     DisposableEffect(this) {
-                        val listener = Consumer<Intent> { intent ->
-                            intent.getLaunchAction()?.let { action ->
-                                when (action) {
-                                    is LaunchAction.OpenArticle -> {
-                                        navController.navigate("${RouteName.READING}/${action.articleId}") {
-                                            launchSingleTop = true
+                        val listener =
+                            Consumer<Intent> { intent ->
+                                intent.getLaunchAction()?.let { action ->
+                                    when (action) {
+                                        is LaunchAction.OpenArticle -> {
+                                            navController.navigate(
+                                                "${RouteName.READING}/${action.articleId}"
+                                            ) {
+                                                launchSingleTop = true
+                                            }
+                                        }
+
+                                        is LaunchAction.Subscribe -> {
+                                            subscribeViewModel.handleSharedUrlFromIntent(action.url)
+                                            val res =
+                                                navController.popBackStack(
+                                                    route = RouteName.FEEDS,
+                                                    inclusive = false,
+                                                    saveState = true,
+                                                )
+                                            if (!res)
+                                                navController.navigate(route = RouteName.FEEDS)
                                         }
                                     }
-
-                                    is LaunchAction.Subscribe -> {
-                                        subscribeViewModel.handleSharedUrlFromIntent(action.url)
-                                        val res = navController.popBackStack(
-                                            route = RouteName.FEEDS,
-                                            inclusive = false,
-                                            saveState = true
-                                        )
-                                        if (!res) navController.navigate(
-                                            route = RouteName.FEEDS,
-                                        )
-                                    }
                                 }
-
                             }
-                        }
                         listener.accept(intent) // consume the launch intent as well
                         addOnNewIntentListener(listener)
-                        onDispose {
-                            removeOnNewIntentListener(listener)
-                        }
+                        onDispose { removeOnNewIntentListener(listener) }
                     }
                 }
             }
@@ -130,6 +126,7 @@ class MainActivity : AppCompatActivity() {
 
 sealed interface LaunchAction {
     data class Subscribe(val url: String) : LaunchAction
+
     data class OpenArticle(val articleId: String) : LaunchAction
 }
 
@@ -140,12 +137,14 @@ private fun Intent.getLaunchAction(): LaunchAction? {
         }
 
         Intent.ACTION_SEND -> {
-            getStringExtra(Intent.EXTRA_TEXT)?.also { removeExtra(Intent.EXTRA_TEXT) }
+            getStringExtra(Intent.EXTRA_TEXT)
+                ?.also { removeExtra(Intent.EXTRA_TEXT) }
                 ?.let { LaunchAction.Subscribe(it) }
         }
 
         else -> {
-            getStringExtra(ExtraName.ARTICLE_ID)?.also { removeExtra(ExtraName.ARTICLE_ID) }
+            getStringExtra(ExtraName.ARTICLE_ID)
+                ?.also { removeExtra(ExtraName.ARTICLE_ID) }
                 ?.let { LaunchAction.OpenArticle(it) }
         }
     }
