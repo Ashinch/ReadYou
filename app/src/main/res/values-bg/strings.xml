@@ -328,4 +328,7 @@
     <string name="pull_to_switch_feed">Плъзнете, за да заредите следващата емисия</string>
     <string name="use_bold_characters">Използвайте удебелени символи</string>
     <string name="bold_characters_preview">Удебеляване на първите няколко букви от думите в статията</string>
+    <string name="load_next_feed">Зареждане на следващата емисия</string>
+    <string name="mark_all_as_read_and_load_next_feed">Маркирай всичко като прочетено и зареди следващата емисия</string>
+    <string name="pull_from_bottom">Издърпайте отдолу</string>
 </resources>
