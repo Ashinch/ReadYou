@@ -574,6 +574,20 @@ private fun TextComposer.appendTextChildren(
                         }
                     }
 
+                    "figcaption",
+                    "caption" -> {
+                        lazyListScope.item {
+                            Text(
+                                modifier =
+                                    Modifier.fillMaxWidth()
+                                        .padding(horizontal = textHorizontalPadding().dp)
+                                        .padding(bottom = 24.dp),
+                                text = element.text(),
+                                style = captionStyle(),
+                            )
+                        }
+                    }
+
                     "ul" -> {
                         element.children()
                             .filter { it.tagName() == "li" }
