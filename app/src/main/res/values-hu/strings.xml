@@ -96,7 +96,7 @@
     <string name="icons_and_label_only_selected">Ikonok és címkék (csak aktívak)</string>
     <string name="tips_top_bar_tonal_elevation">A tónusos emelkedés csak görgetéskor érhető el a felső sáv listájánál</string>
     <string name="add_accounts">Fiókok hozzáadása</string>
-    <string name="add_accounts_desc">Helyi, szolgáltatások, saját üzemeltetésű</string>
+    <string name="add_accounts_desc">Helyi, szolgáltatói, saját üzemeltetésű</string>
     <string name="display">Megjelenítés</string>
     <string name="synchronous">Szinkronizálás</string>
     <string name="sync_interval">Szinkronizálás</string>
@@ -328,4 +328,7 @@
     <string name="grey_out_articles">Olvasott cikkek elszürkítése</string>
     <string name="additional_info_desc">További információk tartalmazzák az egyes hírforrások konfigurációs beállításait, például hogy engedélyezzék-e az értesítést, elemezzék-e a teljes tartalmat stb. Ha az exportált OPML-fájlt más olvasókkal kívánja használni, válassza a „kizárás” lehetőséget.</string>
     <string name="bold_characters_preview">A szavak első néhány karaktereinek félkövér kiemelése egy cikkben</string>
+    <string name="load_next_feed">Következő hírforrás betöltése</string>
+    <string name="mark_all_as_read_and_load_next_feed">Összes megjelölése olvasottként és a következő hírforrás betöltése</string>
+    <string name="pull_from_bottom">Húzás alulról felfelé</string>
 </resources>

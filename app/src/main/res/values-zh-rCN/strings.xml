@@ -325,4 +325,7 @@
     <string name="bold_characters">字符加粗</string>
     <string name="use_bold_characters">使用加粗字符</string>
     <string name="bold_characters_preview">加粗文章内单词的开头几个字符</string>
+    <string name="load_next_feed">加载下一个源</string>
+    <string name="mark_all_as_read_and_load_next_feed">标记为全部已读并加载下一个源</string>
+    <string name="pull_from_bottom">底部上拉</string>
 </resources>
