@@ -8,6 +8,9 @@ import com.rometools.rome.feed.synd.SyndImageImpl
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.nio.charset.Charset
+import java.util.*
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import me.ash.reader.domain.model.article.Article
@@ -24,31 +27,32 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.executeAsync
 import okhttp3.internal.commonIsSuccessful
-import java.io.InputStream
-import java.util.*
-import javax.inject.Inject
+import okio.IOException
+import org.jsoup.Jsoup
 
 val enclosureRegex = """<enclosure\s+url="([^"]+)"\s+type=".*"\s*/>""".toRegex()
 val imgRegex = """img.*?src=(["'])((?!data).*?)\1""".toRegex(RegexOption.DOT_MATCHES_ALL)
 
-/**
- * Some operations on RSS.
- */
-class RssHelper @Inject constructor(
-    @ApplicationContext
-    private val context: Context,
-    @IODispatcher
-    private val ioDispatcher: CoroutineDispatcher,
+/** Some operations on RSS. */
+class RssHelper
+@Inject
+constructor(
+    @ApplicationContext private val context: Context,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     private val okHttpClient: OkHttpClient,
 ) {
 
     @Throws(Exception::class)
     suspend fun searchFeed(feedLink: String): SyndFeed {
         return withContext(ioDispatcher) {
-            SyndFeedInput().build(XmlReader(inputStream(okHttpClient, feedLink))).also {
-                it.icon = SyndImageImpl()
-                it.icon.link = queryRssIconLink(feedLink)
-                it.icon.url = it.icon.link
+            val response = response(okHttpClient, feedLink)
+            val contentType = response.header("Content-Type")
+            response.body.byteStream().use { inputStream ->
+                SyndFeedInput().build(XmlReader(inputStream, contentType)).also {
+                    it.icon = SyndImageImpl()
+                    it.icon.link = queryRssIconLink(feedLink)
+                    it.icon.url = it.icon.link
+                }
             }
         }
     }
@@ -58,16 +62,49 @@ class RssHelper @Inject constructor(
         return withContext(ioDispatcher) {
             val response = response(okHttpClient, link)
             if (response.commonIsSuccessful) {
-                val content = response.body.string()
+                val responseBody = response.body
+                val charset = responseBody.contentType()?.charset()
+                val content =
+                    responseBody.source().use {
+                        if (charset != null) {
+                            return@use it.readString(charset)
+                        }
+
+                        val peekContent = it.peek().readString(Charsets.UTF_8)
+
+                        val charsetFromMeta =
+                            runCatching {
+                                    val element =
+                                        Jsoup.parse(peekContent, link)
+                                            .selectFirst("meta[http-equiv=content-type]")
+                                    return@runCatching if (element == null) Charsets.UTF_8
+                                    else {
+                                        element
+                                            .attr("content")
+                                            .substringAfter("charset=")
+                                            .removeSurrounding("\"")
+                                            .lowercase()
+                                            .let { Charset.forName(it) }
+                                    }
+                                }
+                                .getOrDefault(Charsets.UTF_8)
+
+                        if (charsetFromMeta == Charsets.UTF_8) {
+                            peekContent
+                        } else {
+                            it.readString(charsetFromMeta)
+                        }
+                    }
+
                 val articleContent = Readability.parseToElement(content, link)
-                articleContent?.run {
+                articleContent?.let {
                     val h1Element = articleContent.selectFirst("h1")
                     if (h1Element != null && h1Element.hasText() && h1Element.text() == title) {
                         h1Element.remove()
                     }
                     articleContent.toString()
-                } ?: ""
-            } else throw Exception()
+                } ?: throw IOException("articleContent is null")
+            } else throw IOException(response.message)
         }
     }
 
@@ -78,9 +115,12 @@ class RssHelper @Inject constructor(
     ): List<Article> =
         try {
             val accountId = context.currentAccountId
-            inputStream(okHttpClient, feed.url).use {
-                SyndFeedInput().apply { isPreserveWireFeed = true }
-                    .build(XmlReader(it))
+            val response = response(okHttpClient, feed.url)
+            val contentType = response.header("Content-Type")
+            response.body.byteStream().use { inputStream ->
+                SyndFeedInput()
+                    .apply { isPreserveWireFeed = true }
+                    .build(XmlReader(inputStream, contentType))
                     .entries
                     .asSequence()
                     .takeWhile { latestLink == null || latestLink != it.link }
@@ -100,30 +140,32 @@ class RssHelper @Inject constructor(
         preDate: Date = Date(),
     ): Article {
         val desc = syndEntry.description?.value
-        val content = syndEntry.contents
-            .takeIf { it.isNotEmpty() }
-            ?.let { it.joinToString("\n") { it.value } }
-//        Log.i(
-//            "RLog",
-//            "request rss:\n" +
-//                    "name: ${feed.name}\n" +
-//                    "feedUrl: ${feed.url}\n" +
-//                    "url: ${syndEntry.link}\n" +
-//                    "title: ${syndEntry.title}\n" +
-//                    "desc: ${desc}\n" +
-//                    "content: ${content}\n"
-//        )
+        val content =
+            syndEntry.contents
+                .takeIf { it.isNotEmpty() }
+                ?.let { it.joinToString("\n") { it.value } }
+        //        Log.i(
+        //            "RLog",
+        //            "request rss:\n" +
+        //                    "name: ${feed.name}\n" +
+        //                    "feedUrl: ${feed.url}\n" +
+        //                    "url: ${syndEntry.link}\n" +
+        //                    "title: ${syndEntry.title}\n" +
+        //                    "desc: ${desc}\n" +
+        //                    "content: ${content}\n"
+        //        )
         return Article(
             id = accountId.spacerDollar(UUID.randomUUID().toString()),
             accountId = accountId,
             feedId = feed.id,
-            date = (syndEntry.publishedDate
-                ?: syndEntry.updatedDate)?.takeIf { !it.isFuture(preDate) } ?: preDate,
+            date =
+                (syndEntry.publishedDate ?: syndEntry.updatedDate)?.takeIf { !it.isFuture(preDate) }
+                    ?: preDate,
             title = syndEntry.title.decodeHTML() ?: feed.name,
             author = syndEntry.author,
             rawDescription = content ?: desc ?: "",
             shortDescription = Readability.parseToText(desc ?: content, syndEntry.link).take(280),
-//            fullContent = content,
+            //            fullContent = content,
             img = findThumbnail(syndEntry) ?: findThumbnail(content ?: desc),
             link = syndEntry.link ?: "",
             updateAt = preDate,
@@ -135,7 +177,11 @@ class RssHelper @Inject constructor(
             return syndEntry.enclosures.first().url
         }
         if (syndEntry.foreignMarkup.firstOrNull()?.name == "thumbnail") {
-            return syndEntry.foreignMarkup.firstOrNull()?.attributes?.find { it.name == "url" }?.value
+            return syndEntry.foreignMarkup
+                .firstOrNull()
+                ?.attributes
+                ?.find { it.name == "url" }
+                ?.value
         }
         return null
     }
@@ -163,18 +209,9 @@ class RssHelper @Inject constructor(
     }
 
     suspend fun saveRssIcon(feedDao: FeedDao, feed: Feed, iconLink: String) {
-        feedDao.update(
-            feed.copy(icon = iconLink)
-        )
+        feedDao.update(feed.copy(icon = iconLink))
     }
 
-    private suspend fun inputStream(
-        client: OkHttpClient,
-        url: String,
-    ): InputStream = response(client, url).body.byteStream()
-
-    private suspend fun response(
-        client: OkHttpClient,
-        url: String,
-    ) = client.newCall(Request.Builder().url(url).build()).executeAsync()
+    private suspend fun response(client: OkHttpClient, url: String): okhttp3.Response =
+        client.newCall(Request.Builder().url(url).build()).executeAsync()
 }
