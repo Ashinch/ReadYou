@@ -334,4 +334,7 @@
     <string name="bold_characters_preview">Pogrub pierwsze kilka znaków słów w artykule</string>
     <string name="bold_characters">Pogrubione znaki</string>
     <string name="use_bold_characters">Użyj pogrubionych znaków</string>
+    <string name="mark_all_as_read_and_load_next_feed">Oznacz wszystkie jako przeczytane i załaduj następny kanał</string>
+    <string name="pull_from_bottom">Przeciągnij od dołu</string>
+    <string name="load_next_feed">Załaduj następny kanał</string>
 </resources>

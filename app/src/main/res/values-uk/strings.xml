@@ -334,4 +334,7 @@
     <string name="use_bold_characters">Використовуйте жирний шрифт</string>
     <string name="bold_characters">Жирний шрифт</string>
     <string name="bold_characters_preview">Виділення жирним шрифтом перших кількох символів слів у статті</string>
+    <string name="load_next_feed">Завантажити наступний канал</string>
+    <string name="mark_all_as_read_and_load_next_feed">Позначити всі як прочитані та завантажити наступну стрічку</string>
+    <string name="pull_from_bottom">Потягніть знизу</string>
 </resources>
