@@ -23,11 +23,11 @@ lifecycle = "2.8.7"
 navigation = "2.8.9"
 paging = "3.3.6"
 profileinstaller = "1.4.1"
-room = "2.7.1"
+room = "2.7.2"
 work = "2.10.1"
 
 # Compose
-composeBom = "2025.06.00"
+composeBom = "2025.06.02"
 composeHtml = "1.0.2"
 
 # Coil

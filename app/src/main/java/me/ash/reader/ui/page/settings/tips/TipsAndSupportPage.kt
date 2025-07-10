@@ -49,7 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.shadow.DropShadow
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -209,7 +209,7 @@ fun TipsAndSupportPage(
                                 .background(color = logoBGColor, shape = bgShape)
                                 .dropShadow(
                                     shape = shadowShape,
-                                    DropShadow(
+                                    Shadow(
                                         radius = 24.dp,
                                         spread = 16.dp,
                                         alpha = .1f,
