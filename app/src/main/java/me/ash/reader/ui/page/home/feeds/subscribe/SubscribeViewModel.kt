@@ -5,34 +5,37 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rometools.rome.feed.synd.SyndFeed
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.io.InputStream
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.domain.model.group.Group
+import me.ash.reader.domain.service.AccountService
 import me.ash.reader.domain.service.OpmlService
 import me.ash.reader.domain.service.RssService
 import me.ash.reader.infrastructure.android.AndroidStringsHelper
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.rss.RssHelper
 import me.ash.reader.ui.ext.formatUrl
-import java.io.InputStream
-import javax.inject.Inject
 
 @HiltViewModel
-class SubscribeViewModel @Inject constructor(
+class SubscribeViewModel
+@Inject
+constructor(
     private val opmlService: OpmlService,
     val rssService: RssService,
     private val rssHelper: RssHelper,
     private val androidStringsHelper: AndroidStringsHelper,
     @ApplicationScope private val applicationScope: CoroutineScope,
+    accountService: AccountService,
 ) : ViewModel() {
 
     private val _subscribeUiState = MutableStateFlow(SubscribeUiState())
@@ -42,15 +45,14 @@ class SubscribeViewModel @Inject constructor(
         MutableStateFlow(SubscribeState.Hidden)
     val subscribeState = _subscribeState.asStateFlow()
 
-
-    val groupsFlow =
-        rssService.get().pullGroups().stateIn(
-            scope = viewModelScope,
-            initialValue = emptyList(),
-            started = SharingStarted.Eagerly
-        )
+    val groupsFlow = MutableStateFlow<List<Group>>(emptyList())
 
     init {
+        viewModelScope.launch {
+            accountService.currentAccountFlow.collectLatest {
+                rssService.get().pullGroups().collect { groupsFlow.value = it }
+            }
+        }
         viewModelScope.launch {
             groupsFlow.collect { groups ->
                 _subscribeState.update {
@@ -99,10 +101,8 @@ class SubscribeViewModel @Inject constructor(
     fun toggleParseFullContentPreset() {
         _subscribeState.update { state ->
             when (state) {
-                is SubscribeState.Configure -> state.copy(
-                    fullContent = !state.fullContent,
-                    browser = false
-                )
+                is SubscribeState.Configure ->
+                    state.copy(fullContent = !state.fullContent, browser = false)
 
                 else -> state
             }
@@ -112,10 +112,8 @@ class SubscribeViewModel @Inject constructor(
     fun toggleOpenInBrowserPreset() {
         _subscribeState.update { state ->
             when (state) {
-                is SubscribeState.Configure -> state.copy(
-                    browser = !state.browser,
-                    fullContent = false
-                )
+                is SubscribeState.Configure ->
+                    state.copy(browser = !state.browser, fullContent = false)
 
                 else -> state
             }
@@ -140,27 +138,31 @@ class SubscribeViewModel @Inject constructor(
 
             if (rssService.get().isFeedExist(feedLink)) {
                 _subscribeState.value =
-                    currentState.copy(errorMessage = androidStringsHelper.getString(R.string.already_subscribed))
+                    currentState.copy(
+                        errorMessage = androidStringsHelper.getString(R.string.already_subscribed)
+                    )
                 return@launch
             }
             val groups = groupsFlow.value
             val firstGroupId = groups.firstOrNull()?.id ?: return@launch
 
-            val job = viewModelScope.launch {
-                runCatching {
-                    rssHelper.searchFeed(feedLink)
-                }.onSuccess {
-                    val groups = groupsFlow.value
-                    _subscribeState.value = SubscribeState.Configure(
-                        searchedFeed = it,
-                        feedLink = feedLink,
-                        groups = groups,
-                        selectedGroupId = firstGroupId
-                    )
-                }.onFailure {
-                    _subscribeState.value = currentState.copy(errorMessage = it.message)
+            val job =
+                viewModelScope.launch {
+                    runCatching { rssHelper.searchFeed(feedLink) }
+                        .onSuccess {
+                            val groups = groupsFlow.value
+                            _subscribeState.value =
+                                SubscribeState.Configure(
+                                    searchedFeed = it,
+                                    feedLink = feedLink,
+                                    groups = groups,
+                                    selectedGroupId = firstGroupId,
+                                )
+                        }
+                        .onFailure {
+                            _subscribeState.value = currentState.copy(errorMessage = it.message)
+                        }
                 }
-            }
 
             _subscribeState.value =
                 SubscribeState.Fetching(linkState = currentState.linkState, job = job)
@@ -181,14 +183,16 @@ class SubscribeViewModel @Inject constructor(
 
         applicationScope.launch {
             val searchedFeed = state.searchedFeed
-            rssService.get().subscribe(
-                searchedFeed = searchedFeed,
-                feedLink = state.feedLink,
-                groupId = state.selectedGroupId,
-                isNotification = state.notification,
-                isFullContent = state.fullContent,
-                isBrowser = state.browser,
-            )
+            rssService
+                .get()
+                .subscribe(
+                    searchedFeed = searchedFeed,
+                    feedLink = state.feedLink,
+                    groupId = state.selectedGroupId,
+                    isNotification = state.notification,
+                    isFullContent = state.fullContent,
+                    isBrowser = state.browser,
+                )
             hideDrawer()
         }
     }
@@ -198,14 +202,12 @@ class SubscribeViewModel @Inject constructor(
     }
 
     fun handleSharedUrlFromIntent(url: String) {
-        viewModelScope.launch {
-            _subscribeState.update {
-                SubscribeState.Idle(
-                    linkState = TextFieldState(url),
-                )
+        viewModelScope
+            .launch {
+                _subscribeState.update { SubscribeState.Idle(linkState = TextFieldState(url)) }
+                delay(50)
             }
-            delay(50)
-        }.invokeOnCompletion { searchFeed() }
+            .invokeOnCompletion { searchFeed() }
     }
 
     fun showDrawer() {
@@ -227,25 +229,17 @@ class SubscribeViewModel @Inject constructor(
     }
 
     fun showRenameDialog() {
-        _subscribeUiState.update {
-            it.copy(
-                renameDialogVisible = true
-            )
-        }
+        _subscribeUiState.update { it.copy(renameDialogVisible = true) }
         _subscribeUiState.update { uiState ->
-            (_subscribeState.value as? SubscribeState.Configure)?.searchedFeed?.title?.let { title ->
+            (_subscribeState.value as? SubscribeState.Configure)?.searchedFeed?.title?.let { title
+                ->
                 uiState.copy(newName = title)
             } ?: uiState
         }
     }
 
     fun hideRenameDialog() {
-        _subscribeUiState.update {
-            it.copy(
-                renameDialogVisible = false,
-                newName = "",
-            )
-        }
+        _subscribeUiState.update { it.copy(renameDialogVisible = false, newName = "") }
     }
 
     fun inputNewName(content: String) {
@@ -255,11 +249,11 @@ class SubscribeViewModel @Inject constructor(
     fun renameFeed() {
         _subscribeState.update { state ->
             when (state) {
-                is SubscribeState.Configure -> state.copy(
-                    searchedFeed = state.searchedFeed.apply {
-                        title = _subscribeUiState.value.newName
-                    }
-                )
+                is SubscribeState.Configure ->
+                    state.copy(
+                        searchedFeed =
+                            state.searchedFeed.apply { title = _subscribeUiState.value.newName }
+                    )
 
                 else -> state
             }
@@ -286,14 +280,11 @@ sealed interface SubscribeState {
     data class Idle(
         override val linkState: TextFieldState = TextFieldState(),
         val importFromOpmlEnabled: Boolean = false,
-        val errorMessage: String? = null
-    ) :
-        SubscribeState, Input
-
-    data class Fetching(
-        override val linkState: TextFieldState,
-        val job: Job
+        val errorMessage: String? = null,
     ) : SubscribeState, Input
+
+    data class Fetching(override val linkState: TextFieldState, val job: Job) :
+        SubscribeState, Input
 
     data class Configure(
         val searchedFeed: SyndFeed,
