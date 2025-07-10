@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.CheckResult
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.text.hexToLong
+import kotlin.text.startsWith
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import me.ash.reader.infrastructure.di.USER_AGENT_STRING
@@ -21,7 +22,6 @@ import okhttp3.Request
 import okhttp3.executeAsync
 import okio.IOException
 import timber.log.Timber
-import kotlin.text.startsWith
 
 private const val TAG = "GoogleReaderAPI"
 
@@ -267,23 +267,29 @@ private constructor(
         retryableGetRequest<GoogleReaderDTO.User>("reader/api/0/user-info")
 
     suspend fun getSubscriptionList(): GoogleReaderDTO.SubscriptionList? =
-        retryableGetRequestWithResult<GoogleReaderDTO.SubscriptionList>("reader/api/0/subscription/list").getOrNull()
+        retryableGetRequestWithResult<GoogleReaderDTO.SubscriptionList>(
+                "reader/api/0/subscription/list"
+            )
+            .getOrNull()
 
     suspend fun getReadItemIds(
         since: Long,
+        useIt: Boolean = false,
         limit: String? = MAXIMUM_ITEMS_LIMIT,
         continuationId: String? = null,
     ): GoogleReaderDTO.ItemIds? =
         retryableGetRequestWithResult<GoogleReaderDTO.ItemIds>(
-            query = "reader/api/0/stream/items/ids",
-            params =
-                mutableListOf<Pair<String, String>>().apply {
-                    add(Pair("s", Stream.Read.tag))
-                    add(Pair("ot", since.toString()))
-                    limit?.let { add(Pair("n", limit)) }
-                    continuationId?.let { add(Pair("c", continuationId)) }
-                },
-        ).getOrNull()
+                query = "reader/api/0/stream/items/ids",
+                params =
+                    mutableListOf<Pair<String, String>>().apply {
+                        if (useIt) add("s" to Stream.AllItems.tag)
+                        add(Pair(if (useIt) "it" else "s", Stream.Read.tag))
+                        add(Pair("ot", since.toString()))
+                        limit?.let { add(Pair("n", limit)) }
+                        continuationId?.let { add(Pair("c", continuationId)) }
+                    },
+            )
+            .getOrNull()
 
     suspend fun getItemIdsForFeed(
         feedId: String,
@@ -293,16 +299,17 @@ private constructor(
         continuationId: String? = null,
     ): GoogleReaderDTO.ItemIds? =
         retryableGetRequestWithResult<GoogleReaderDTO.ItemIds>(
-            query = "reader/api/0/stream/items/ids",
-            params =
-                mutableListOf<Pair<String, String>>().apply {
-                    add(Pair("s", Stream.Feed(feedId).tag))
-                    if (filterRead) add(Pair("xt", Stream.Read.tag))
-                    limit?.let { add(Pair("n", limit)) }
-                    since?.let { add(Pair("ot", since.toString())) }
-                    continuationId?.let { add(Pair("c", continuationId)) }
-                },
-        ).getOrNull()
+                query = "reader/api/0/stream/items/ids",
+                params =
+                    mutableListOf<Pair<String, String>>().apply {
+                        add(Pair("s", Stream.Feed(feedId).tag))
+                        if (filterRead) add(Pair("xt", Stream.Read.tag))
+                        limit?.let { add(Pair("n", limit)) }
+                        since?.let { add(Pair("ot", since.toString())) }
+                        continuationId?.let { add(Pair("c", continuationId)) }
+                    },
+            )
+            .getOrNull()
 
     suspend fun getItemIdsForCategory(
         categoryId: String,
@@ -312,16 +319,17 @@ private constructor(
         continuationId: String? = null,
     ): GoogleReaderDTO.ItemIds? =
         retryableGetRequestWithResult<GoogleReaderDTO.ItemIds>(
-            query = "reader/api/0/stream/items/ids",
-            params =
-                mutableListOf<Pair<String, String>>().apply {
-                    add(Pair("s", Stream.Category(categoryId).tag))
-                    if (filterRead) add(Pair("xt", Stream.Read.tag))
-                    limit?.let { add(Pair("n", limit)) }
-                    since?.let { add(Pair("ot", since.toString())) }
-                    continuationId?.let { add(Pair("c", continuationId)) }
-                },
-        ).getOrNull()
+                query = "reader/api/0/stream/items/ids",
+                params =
+                    mutableListOf<Pair<String, String>>().apply {
+                        add(Pair("s", Stream.Category(categoryId).tag))
+                        if (filterRead) add(Pair("xt", Stream.Read.tag))
+                        limit?.let { add(Pair("n", limit)) }
+                        since?.let { add(Pair("ot", since.toString())) }
+                        continuationId?.let { add(Pair("c", continuationId)) }
+                    },
+            )
+            .getOrNull()
 
     suspend fun getUnreadItemIds(
         since: Long? = null,
@@ -329,16 +337,17 @@ private constructor(
         continuationId: String? = null,
     ): GoogleReaderDTO.ItemIds? =
         retryableGetRequestWithResult<GoogleReaderDTO.ItemIds>(
-            query = "reader/api/0/stream/items/ids",
-            params =
-                mutableListOf<Pair<String, String>>().apply {
-                    add(Pair("s", Stream.AllItems.tag))
-                    add(Pair("xt", Stream.Read.tag))
-                    limit?.let { add(Pair("n", limit)) }
-                    since?.let { add(Pair("ot", since.toString())) }
-                    continuationId?.let { add(Pair("c", continuationId)) }
-                },
-        ).getOrNull()
+                query = "reader/api/0/stream/items/ids",
+                params =
+                    mutableListOf<Pair<String, String>>().apply {
+                        add(Pair("s", Stream.AllItems.tag))
+                        add(Pair("xt", Stream.Read.tag))
+                        limit?.let { add(Pair("n", limit)) }
+                        since?.let { add(Pair("ot", since.toString())) }
+                        continuationId?.let { add(Pair("c", continuationId)) }
+                    },
+            )
+            .getOrNull()
 
     suspend fun getStarredItemIds(
         since: Long? = null,
@@ -346,15 +355,16 @@ private constructor(
         continuationId: String? = null,
     ): GoogleReaderDTO.ItemIds? =
         retryableGetRequestWithResult<GoogleReaderDTO.ItemIds>(
-            query = "reader/api/0/stream/items/ids",
-            params =
-                mutableListOf<Pair<String, String>>().apply {
-                    add(Pair("s", Stream.Starred.tag))
-                    limit?.let { add(Pair("n", limit)) }
-                    since?.let { add(Pair("ot", since.toString())) }
-                    continuationId?.let { add(Pair("c", continuationId)) }
-                },
-        ).getOrNull()
+                query = "reader/api/0/stream/items/ids",
+                params =
+                    mutableListOf<Pair<String, String>>().apply {
+                        add(Pair("s", Stream.Starred.tag))
+                        limit?.let { add(Pair("n", limit)) }
+                        since?.let { add(Pair("ot", since.toString())) }
+                        continuationId?.let { add(Pair("c", continuationId)) }
+                    },
+            )
+            .getOrNull()
 
     suspend fun getItemsContents(ids: List<String>?) =
         retryablePostRequest<GoogleReaderDTO.ItemsContents>(
@@ -449,23 +459,26 @@ private constructor(
             }
         }
 
-        val ItemId.isLongId: Boolean get() = startsWith(PREFIX)
+        val ItemId.isLongId: Boolean
+            get() = startsWith(PREFIX)
 
         @OptIn(ExperimentalStdlibApi::class)
         val ItemId.longId: String
-            get() = if (isLongId) {
-                this
-            } else {
-                PREFIX + this.toLong(10).toHexString(hexFormat)
-            }
+            get() =
+                if (isLongId) {
+                    this
+                } else {
+                    PREFIX + this.toLong(10).toHexString(hexFormat)
+                }
 
         @OptIn(ExperimentalStdlibApi::class)
         val ItemId.shortId: String
-            get() = if (!isLongId) {
-                this
-            } else {
-                this.removePrefix(PREFIX).hexToLong().toString()
-            }
+            get() =
+                if (!isLongId) {
+                    this
+                } else {
+                    this.removePrefix(PREFIX).hexToLong().toString()
+                }
 
         fun String.ofFeedIdToStreamId(): String {
             return "feed/$this"

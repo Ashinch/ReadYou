@@ -266,21 +266,18 @@ constructor(
                     .toSet()
             }
 
-            val remoteReadIds =
-                if (account.type.id != FreshRSS.id) {
-                    async {
-                        fetchItemIdsAndContinue {
-                                googleReaderAPI.getReadItemIds(
-                                    since = lastMonthAt,
-                                    continuationId = it,
-                                )
-                            }
-                            .map { it.shortId }
-                            .toSet()
+            val isFreshRss = account.type.id == FreshRSS.id
+            val remoteReadIds = async {
+                fetchItemIdsAndContinue {
+                        googleReaderAPI.getReadItemIds(
+                            since = lastMonthAt,
+                            continuationId = it,
+                            useIt = isFreshRss,
+                        )
                     }
-                } else {
-                    async { emptySet() }
-                }
+                    .map { it.shortId }
+                    .toSet()
+            }
 
             val localAllItems = articleDao.queryMetadataAll(accountId)
             val localUnreadIds =
@@ -418,21 +415,10 @@ constructor(
                 }
             }
 
-            if (account.type.id != FreshRSS.id) {
-                launch {
-                    articleDao.markAsReadByIdSet(
-                        accountId = accountId,
-                        ids = remoteReadIds.await().map { accountId spacerDollar it }.toSet(),
-                        isUnread = false,
-                    )
-                }
-            } else {
+            launch {
                 articleDao.markAsReadByIdSet(
                     accountId = accountId,
-                    ids =
-                        (localUnreadIds - remoteUnreadIds.await())
-                            .map { accountId spacerDollar it }
-                            .toSet(),
+                    ids = remoteReadIds.await().map { accountId spacerDollar it }.toSet(),
                     isUnread = false,
                 )
             }
