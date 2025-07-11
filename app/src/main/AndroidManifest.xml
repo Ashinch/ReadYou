@@ -19,6 +19,12 @@
         <intent>
             <action android:name="android.intent.action.TTS_SERVICE" />
         </intent>
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.TRANSLATE" />
+        </intent>
     </queries>
 
     <application
@@ -34,8 +40,8 @@
             android:name=".infrastructure.android.MainActivity"
             android:exported="true"
             android:launchMode="singleInstance"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.Reader">
+            android:theme="@style/Theme.Reader"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
