@@ -2,6 +2,7 @@ package me.ash.reader.domain.service
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.ui.util.fastFilter
 import androidx.work.ListenableWorker
 import androidx.work.WorkManager
 import com.rometools.rome.feed.synd.SyndFeed
@@ -401,18 +402,37 @@ constructor(
             groupDao.insertOrUpdate(remoteGroups.await())
             feedDao.insertOrUpdate(remoteFeeds.await())
 
+            val notificationFeeds = feedDao.queryNotificationEnabled(accountId).associateBy { it.id }
+            val notificationFeedIds = notificationFeeds.keys
+            val articlesToNotify = mutableListOf<Article>()
+
             if (deferredList.isNotEmpty()) {
                 launch {
-                    whileSelect {
-                        for (deferred in deferredList) {
-                            deferred.onAwait {
-                                articleDao.insertList(it)
-                                deferredList.remove(deferred)
-                                deferredList.isNotEmpty()
+                        whileSelect {
+                            for (deferred in deferredList) {
+                                deferred.onAwait {
+                                    articleDao.insertList(it)
+                                    articlesToNotify.addAll(
+                                        it.fastFilter {
+                                            it.isUnread && notificationFeedIds.contains(it.feedId)
+                                        }
+                                    )
+                                    deferredList.remove(deferred)
+                                    deferredList.isNotEmpty()
+                                }
                             }
                         }
                     }
-                }
+                    .invokeOnCompletion {
+                        launch {
+                            articlesToNotify
+                                .groupBy { it.feedId }
+                                .mapKeys { (feedId, _) -> notificationFeeds[feedId]!! }
+                                .forEach { (feed, articles) ->
+                                    notificationHelper.notify(feed, articles)
+                                }
+                        }
+                    }
             }
 
             launch {
@@ -454,6 +474,7 @@ constructor(
         val accountId = account.id!!
         val googleReaderAPI = getGoogleReaderAPI()
 
+        val feed = feedDao.queryById(feedId)!!
         val localUnreadIds = articleDao.queryMetadataByFeedId(accountId, feedId, isUnread = true)
         val localReadIds = articleDao.queryMetadataByFeedId(accountId, feedId, isUnread = false)
 
@@ -496,6 +517,10 @@ constructor(
                 unreadIds = unreadIds.await().map { it.shortId }.toSet(),
                 starredIds = starredIds.await().map { it.shortId }.toSet(),
             )
+
+        val articlesToNotify = items.fastFilter { it.isUnread }
+
+        notificationHelper.notify(feed, articlesToNotify)
 
         articleDao.insert(*items.toTypedArray())
         Timber.i("onCompletion: ${System.currentTimeMillis() - preTime}")

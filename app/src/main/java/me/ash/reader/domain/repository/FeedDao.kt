@@ -147,6 +147,15 @@ interface FeedDao {
         """
         SELECT * FROM feed
         WHERE accountId = :accountId
+        AND isNotification = 1
+        """
+    )
+    suspend fun queryNotificationEnabled(accountId: Int): List<Feed>
+
+    @Query(
+        """
+        SELECT * FROM feed
+        WHERE accountId = :accountId
         AND url = :url
         """
     )
