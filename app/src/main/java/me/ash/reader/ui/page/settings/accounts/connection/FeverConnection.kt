@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.account.security.FeverSecurityKey

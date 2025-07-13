@@ -27,7 +27,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import me.ash.reader.R
 import me.ash.reader.ui.component.FeedIcon
 import me.ash.reader.ui.component.RenameDialog

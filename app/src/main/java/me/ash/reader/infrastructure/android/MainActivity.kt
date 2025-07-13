@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.DisposableEffect
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Consumer
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import androidx.profileinstaller.ProfileInstallerInitializer
 import coil.ImageLoader

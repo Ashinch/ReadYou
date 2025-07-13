@@ -28,7 +28,7 @@ if (keyPropsFile.exists()) {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "me.ash.reader"
@@ -151,7 +151,7 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
     ksp(libs.hilt.compiler)
-    implementation(libs.hilt.navigation.compose)
+    implementation(libs.hilt.viewmodel)
 
     // AndroidX
     implementation(libs.android.svg)
@@ -180,6 +180,12 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.activity.compose)
     implementation(libs.appcompat)
+
+    implementation(libs.navigation3.runtime)
+    implementation(libs.navigation3.ui)
+//    implementation(libs.compose.material3.adaptive.navigation3)
+    implementation(libs.lifecycle.viewmodel.navigation3)
+    implementation(libs.kotlinx.serialization.core)
 
     implementation(libs.timber)
 
