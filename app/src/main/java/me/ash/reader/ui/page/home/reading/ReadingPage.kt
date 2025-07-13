@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
+import kotlin.math.abs
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.infrastructure.android.TextToSpeechManager
@@ -51,18 +51,17 @@ import me.ash.reader.infrastructure.preference.not
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.page.home.reading.tts.TtsButton
-import kotlin.math.abs
 
 private const val UPWARD = 1
 private const val DOWNWARD = -1
 
-@OptIn(
-    ExperimentalFoundationApi::class, ExperimentalMaterialApi::class
-)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun ReadingPage(
-    navController: NavHostController,
+    //    navController: NavHostController,
     readingViewModel: ReadingViewModel,
+    onBack: () -> Unit,
+    onNavigateToStylePage: () -> Unit,
 ) {
     val context = LocalContext.current
     val hapticFeedback = LocalHapticFeedback.current
@@ -77,172 +76,193 @@ fun ReadingPage(
 
     var currentImageData by remember { mutableStateOf(ImageData()) }
 
-    val isShowToolBar = if (LocalReadingAutoHideToolbar.current.value) {
-        readerState.articleId != null && !isReaderScrollingDown
-    } else {
-        true
-    }
-
-    var showTopDivider by remember {
-        mutableStateOf(false)
-    }
-
-    LaunchedEffect(readerState.listIndex) {
-        readerState.listIndex?.let {
-            navController.previousBackStackEntry?.savedStateHandle?.set("articleIndex", it)
+    val isShowToolBar =
+        if (LocalReadingAutoHideToolbar.current.value) {
+            readerState.articleId != null && !isReaderScrollingDown
+        } else {
+            true
         }
-    }
+
+    var showTopDivider by remember { mutableStateOf(false) }
+
+    //    LaunchedEffect(readerState.listIndex) {
+    //        readerState.listIndex?.let {
+    //            navController.previousBackStackEntry?.savedStateHandle?.set("articleIndex", it)
+    //        }
+    //    }
 
     var bringToTop by remember { mutableStateOf(false) }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
         content = { paddings ->
-
             Box(modifier = Modifier.fillMaxSize()) {
                 if (readerState.articleId != null) {
                     TopBar(
-                        navController = navController,
                         isShow = isShowToolBar,
                         isScrolled = showTopDivider,
                         title = readerState.title,
                         link = readerState.link,
                         onClick = { bringToTop = true },
-                        onClose = {
-                            navController.popBackStack()
-                        },
+                        onClose = onBack,
+                        onNavigateToStylePage = onNavigateToStylePage,
                     )
                 }
 
                 val isNextArticleAvailable = readerState.nextArticle != null
                 val isPreviousArticleAvailable = readerState.previousArticle != null
 
-
                 if (readerState.articleId != null) {
                     // Content
                     AnimatedContent(
                         targetState = readerState,
                         transitionSpec = {
-                            val direction = when {
-                                initialState.nextArticle?.articleId == targetState.articleId -> UPWARD
-                                initialState.previousArticle?.articleId == targetState.articleId -> DOWNWARD
-                                initialState.articleId == targetState.articleId -> {
-                                    when (targetState.content) {
-                                        is ReaderState.Description -> DOWNWARD
-                                        else -> UPWARD
+                            val direction =
+                                when {
+                                    initialState.nextArticle?.articleId == targetState.articleId ->
+                                        UPWARD
+                                    initialState.previousArticle?.articleId ==
+                                        targetState.articleId -> DOWNWARD
+                                    initialState.articleId == targetState.articleId -> {
+                                        when (targetState.content) {
+                                            is ReaderState.Description -> DOWNWARD
+                                            else -> UPWARD
+                                        }
                                     }
-                                }
 
-                                else -> UPWARD
-                            }
+                                    else -> UPWARD
+                                }
                             val exit = 100
                             val enter = exit * 2
                             (slideInVertically(
                                 initialOffsetY = { (it * 0.2f * direction).toInt() },
-                                animationSpec = spring(
-                                    dampingRatio = .9f,
-                                    stiffness = Spring.StiffnessLow,
-                                    visibilityThreshold = IntOffset.VisibilityThreshold
-                                )
-                            ) + fadeIn(
-                                tween(
-                                    delayMillis = exit,
-                                    durationMillis = enter,
-                                    easing = LinearOutSlowInEasing
-                                )
-                            )) togetherWith (slideOutVertically(
-                                targetOffsetY = { (it * -0.2f * direction).toInt() },
-                                animationSpec = spring(
-                                    dampingRatio = Spring.DampingRatioNoBouncy,
-                                    stiffness = Spring.StiffnessLow,
-                                    visibilityThreshold = IntOffset.VisibilityThreshold
-                                )
-                            ) + fadeOut(
-                                tween(durationMillis = exit, easing = FastOutLinearInEasing)
-                            ))
-                        }, label = ""
+                                animationSpec =
+                                    spring(
+                                        dampingRatio = .9f,
+                                        stiffness = Spring.StiffnessLow,
+                                        visibilityThreshold = IntOffset.VisibilityThreshold,
+                                    ),
+                            ) +
+                                fadeIn(
+                                    tween(
+                                        delayMillis = exit,
+                                        durationMillis = enter,
+                                        easing = LinearOutSlowInEasing,
+                                    )
+                                )) togetherWith
+                                (slideOutVertically(
+                                    targetOffsetY = { (it * -0.2f * direction).toInt() },
+                                    animationSpec =
+                                        spring(
+                                            dampingRatio = Spring.DampingRatioNoBouncy,
+                                            stiffness = Spring.StiffnessLow,
+                                            visibilityThreshold = IntOffset.VisibilityThreshold,
+                                        ),
+                                ) +
+                                    fadeOut(
+                                        tween(durationMillis = exit, easing = FastOutLinearInEasing)
+                                    ))
+                        },
+                        label = "",
                     ) {
+                        remember { it }
+                            .run {
+                                val state =
+                                    rememberPullToLoadState(
+                                        key = content,
+                                        onLoadNext =
+                                            if (isNextArticleAvailable) {
+                                                { readingViewModel.loadNext() }
+                                            } else null,
+                                        onLoadPrevious =
+                                            if (isPreviousArticleAvailable) {
+                                                { readingViewModel.loadPrevious() }
+                                            } else null,
+                                    )
 
-                        remember { it }.run {
-                            val state =
-                                rememberPullToLoadState(
-                                    key = content,
-                                    onLoadNext = if (isNextArticleAvailable) {
-                                        { readingViewModel.loadNext() }
-                                    } else null,
-                                    onLoadPrevious = if (isPreviousArticleAvailable) {
-                                        { readingViewModel.loadPrevious() }
-                                    } else null
-                                )
+                                val listState =
+                                    rememberSaveable(
+                                        inputs = arrayOf(content),
+                                        saver = LazyListState.Saver,
+                                    ) {
+                                        LazyListState()
+                                    }
 
-                            val listState = rememberSaveable(
-                                inputs = arrayOf(content),
-                                saver = LazyListState.Saver
-                            ) { LazyListState() }
+                                val scrollState = rememberScrollState()
 
-                            val scrollState = rememberScrollState()
+                                val scope = rememberCoroutineScope()
 
-                            val scope = rememberCoroutineScope()
+                                LaunchedEffect(bringToTop) {
+                                    if (bringToTop) {
+                                        scope
+                                            .launch {
+                                                if (scrollState.value != 0) {
+                                                    scrollState.animateScrollTo(0)
+                                                } else if (listState.firstVisibleItemIndex != 0) {
+                                                    listState.animateScrollToItem(0)
+                                                }
+                                            }
+                                            .invokeOnCompletion { bringToTop = false }
+                                    }
+                                }
 
-                            LaunchedEffect(bringToTop) {
-                                if (bringToTop) {
-                                    scope.launch {
-                                        if (scrollState.value != 0) {
-                                            scrollState.animateScrollTo(0)
-                                        } else if (listState.firstVisibleItemIndex != 0) {
-                                            listState.animateScrollToItem(0)
+                                showTopDivider =
+                                    snapshotFlow {
+                                            scrollState.value >= 120 ||
+                                                listState.firstVisibleItemIndex != 0
                                         }
-                                    }.invokeOnCompletion { bringToTop = false }
-                                }
-                            }
+                                        .collectAsStateValue(initial = false)
 
-
-                            showTopDivider = snapshotFlow {
-                                scrollState.value >= 120 || listState.firstVisibleItemIndex != 0
-                            }.collectAsStateValue(initial = false)
-
-                            CompositionLocalProvider(
-                                LocalTextStyle provides LocalTextStyle.current.run {
-                                    merge(lineHeight = if (lineHeight.isSpecified) (lineHeight.value * LocalReadingTextLineHeight.current).sp else TextUnit.Unspecified)
-                                }
-                            ) {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
+                                CompositionLocalProvider(
+                                    LocalTextStyle provides
+                                        LocalTextStyle.current.run {
+                                            merge(
+                                                lineHeight =
+                                                    if (lineHeight.isSpecified)
+                                                        (lineHeight.value *
+                                                                LocalReadingTextLineHeight.current)
+                                                            .sp
+                                                    else TextUnit.Unspecified
+                                            )
+                                        }
                                 ) {
-                                    Content(
-                                        modifier = Modifier
-                                            .pullToLoad(
-                                                state = state,
-                                                onScroll = { f ->
-                                                    if (abs(f) > 2f)
-                                                        isReaderScrollingDown = f < 0f
-                                                },
-                                                enabled = isPullToSwitchArticleEnabled
-                                            ),
-                                        contentPadding = paddings,
-                                        content = content.text ?: "",
-                                        feedName = feedName,
-                                        title = title.toString(),
-                                        author = author,
-                                        link = link,
-                                        publishedDate = publishedDate,
-                                        isLoading = content is ReaderState.Loading,
-                                        scrollState = scrollState,
-                                        listState = listState,
-                                        onImageClick = { imgUrl, altText ->
-                                            currentImageData = ImageData(imgUrl, altText)
-                                            showFullScreenImageViewer = true
-                                        }
-                                    )
-                                    PullToLoadIndicator(
-                                        state = state,
-                                        canLoadPrevious = isPreviousArticleAvailable,
-                                        canLoadNext = isNextArticleAvailable
-                                    )
+                                    Box(
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.Center,
+                                    ) {
+                                        Content(
+                                            modifier =
+                                                Modifier.pullToLoad(
+                                                    state = state,
+                                                    onScroll = { f ->
+                                                        if (abs(f) > 2f)
+                                                            isReaderScrollingDown = f < 0f
+                                                    },
+                                                    enabled = isPullToSwitchArticleEnabled,
+                                                ),
+                                            contentPadding = paddings,
+                                            content = content.text ?: "",
+                                            feedName = feedName,
+                                            title = title.toString(),
+                                            author = author,
+                                            link = link,
+                                            publishedDate = publishedDate,
+                                            isLoading = content is ReaderState.Loading,
+                                            scrollState = scrollState,
+                                            listState = listState,
+                                            onImageClick = { imgUrl, altText ->
+                                                currentImageData = ImageData(imgUrl, altText)
+                                                showFullScreenImageViewer = true
+                                            },
+                                        )
+                                        PullToLoadIndicator(
+                                            state = state,
+                                            canLoadPrevious = isPreviousArticleAvailable,
+                                            canLoadNext = isNextArticleAvailable,
+                                        )
+                                    }
                                 }
                             }
-                        }
                     }
                 }
                 // Bottom Bar
@@ -252,24 +272,18 @@ fun ReadingPage(
                         isUnread = readingUiState.isUnread,
                         isStarred = readingUiState.isStarred,
                         isNextArticleAvailable = isNextArticleAvailable,
-                        isFullContent = readerState.content is ReaderState.FullContent || readerState.content is ReaderState.Error,
+                        isFullContent =
+                            readerState.content is ReaderState.FullContent ||
+                                readerState.content is ReaderState.Error,
                         isBoldCharacters = boldCharacters.value,
-                        onUnread = {
-                            readingViewModel.updateReadStatus(it)
-                        },
-                        onStarred = {
-                            readingViewModel.updateStarredStatus(it)
-                        },
-                        onNextArticle = {
-                            readingViewModel.loadNext()
-                        },
+                        onUnread = { readingViewModel.updateReadStatus(it) },
+                        onStarred = { readingViewModel.updateStarredStatus(it) },
+                        onNextArticle = { readingViewModel.loadNext() },
                         onFullContent = {
                             if (it) readingViewModel.renderFullContent()
                             else readingViewModel.renderDescriptionContent()
                         },
-                        onBoldCharacters = {
-                            (!boldCharacters).put(context, coroutineScope)
-                        },
+                        onBoldCharacters = { (!boldCharacters).put(context, coroutineScope) },
                         onReadAloud = {
                             readingViewModel.textToSpeechManager.readHtml(
                                 readerState.content.text ?: return@BottomBar
@@ -293,17 +307,20 @@ fun ReadingPage(
                                             readingViewModel.textToSpeechManager.stop()
                                         }
 
-                                        TextToSpeechManager.State.Preparing -> {/* no-op */
+                                        TextToSpeechManager.State.Preparing -> {
+                                            /* no-op */
                                         }
                                     }
                                 },
-                                state = readingViewModel.textToSpeechManager.stateFlow.collectAsStateValue()
+                                state =
+                                    readingViewModel.textToSpeechManager.stateFlow
+                                        .collectAsStateValue(),
                             )
-                        }
+                        },
                     )
                 }
             }
-        }
+        },
     )
     if (showFullScreenImageViewer) {
 
@@ -315,12 +332,12 @@ fun ReadingPage(
                     onSuccess = { context.showToast(context.getString(R.string.image_saved)) },
                     onFailure = {
                         // FIXME: crash the app for error report
-                            th ->
+                        th ->
                         throw th
-                    }
+                    },
                 )
             },
-            onDismissRequest = { showFullScreenImageViewer = false }
+            onDismissRequest = { showFullScreenImageViewer = false },
         )
     }
 }

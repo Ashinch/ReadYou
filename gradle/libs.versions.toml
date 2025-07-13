@@ -14,7 +14,7 @@ accompanist = "0.34.0"
 
 # AndroidX
 activityCompose = "1.12.0-alpha04"
-appcompat = "1.7.0"
+appcompat = "1.7.1"
 browser = "1.8.0"
 coreKtx = "1.16.0"
 datastore = "1.1.4"
@@ -56,6 +56,8 @@ timber = "5.0.1"
 nav3 = "1.0.0-alpha05"
 kotlinxSerializationCore = "1.9.0"
 viewmodelNav3 = "1.0.0-alpha03"
+
+navigationevent = "1.0.0-alpha04"
 
 [libraries]
 # AboutLibraries
@@ -121,6 +123,7 @@ navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", ver
 navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3" }
 lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "viewmodelNav3" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
+navigationevent = { module = "androidx.navigationevent:navigationevent", version.ref = "navigationevent" }
 
 compose-material3-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "nav3" }
 

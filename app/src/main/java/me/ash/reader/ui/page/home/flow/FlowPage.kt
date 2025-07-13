@@ -61,7 +61,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filterNotNull
@@ -94,7 +93,6 @@ import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.motion.Direction
 import me.ash.reader.ui.motion.sharedXAxisTransitionSlow
 import me.ash.reader.ui.motion.sharedYAxisTransitionExpressive
-import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.reading.PullToLoadDefaults
 import me.ash.reader.ui.page.home.reading.PullToLoadDefaults.ContentOffsetMultiple
@@ -109,11 +107,13 @@ import me.ash.reader.ui.page.home.reading.rememberPullToLoadState
 )
 @Composable
 fun FlowPage(
-    navController: NavHostController,
+    //    navController: NavHostController,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     flowViewModel: FlowViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel,
+    onNavigateUp: () -> Unit,
+    navigateToArticle: (String) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val articleListTonalElevation = LocalFlowArticleListTonalElevation.current
@@ -235,13 +235,7 @@ fun FlowPage(
         }
     }
 
-    BackHandler {
-        if (navController.previousBackStackEntry == null) {
-            navController.navigate(RouteName.FEEDS) { launchSingleTop = true }
-        } else {
-            navController.popBackStack()
-        }
-    }
+    BackHandler { onNavigateUp() }
 
     val topAppBarState = rememberTopAppBarState()
 
@@ -316,13 +310,7 @@ fun FlowPage(
                                 tint = MaterialTheme.colorScheme.onSurface,
                             ) {
                                 onSearch = false
-                                if (navController.previousBackStackEntry == null) {
-                                    navController.navigate(RouteName.FEEDS) {
-                                        launchSingleTop = true
-                                    }
-                                } else {
-                                    navController.popBackStack()
-                                }
+                                onNavigateUp()
                             }
                         },
                         actions = {
@@ -622,11 +610,7 @@ fun FlowPage(
                                             openLinkSpecificBrowser,
                                         )
                                     } else {
-                                        navController.navigate(
-                                            "${RouteName.READING}/${articleWithFeed.article.id}"
-                                        ) {
-                                            launchSingleTop = true
-                                        }
+                                        navigateToArticle(articleWithFeed.article.id)
                                     }
                                 },
                                 onToggleStarred = onToggleStarred,

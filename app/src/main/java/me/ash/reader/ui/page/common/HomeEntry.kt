@@ -59,39 +59,53 @@ fun HomeEntry(
 ) {
     val context = LocalContext.current
 
-
     val settings = LocalSettings.current
     val isFirstLaunch = remember { context.isFirstLaunch }
     val initialPage = remember { settings.initialPage }
     val startDestination =
-        if (isFirstLaunch) RouteName.STARTUP else if (initialPage == InitialPagePreference.FlowPage) {
+        if (isFirstLaunch) RouteName.STARTUP
+        else if (initialPage == InitialPagePreference.FlowPage) {
             RouteName.FLOW
         } else RouteName.FEEDS
 
-    AppTheme(
-        useDarkTheme = LocalDarkTheme.current.isDarkTheme()
-    ) {
+    AppTheme(useDarkTheme = LocalDarkTheme.current.isDarkTheme()) {
         SharedTransitionScope {
             NavHost(
-                modifier = Modifier
-                    .then(it)
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.surface),
+                modifier =
+                    Modifier.then(it).fillMaxSize().background(MaterialTheme.colorScheme.surface),
                 navController = navController,
                 startDestination = startDestination,
             ) {
                 // Startup
                 animatedComposable(route = RouteName.STARTUP) {
-                    StartupPage(navController)
+                    StartupPage(
+                        onNavigateToFeeds = {
+                            navController.navigate(RouteName.FEEDS) { launchSingleTop = true }
+                        }
+                    )
                 }
 
                 // Home
                 animatedComposable(route = RouteName.FEEDS) {
                     FeedsPage(
-                        navController = navController,
+                        //                        navController = navController,
                         sharedTransitionScope = this@SharedTransitionScope,
                         animatedVisibilityScope = this,
-                        subscribeViewModel = subscribeViewModel
+                        subscribeViewModel = subscribeViewModel,
+                        navigationToFlow = {
+                            navController.navigate(RouteName.FLOW) { launchSingleTop = true }
+                        },
+                        navigateToSettings = {
+                            navController.navigate(RouteName.SETTINGS) { launchSingleTop = true }
+                        },
+                        navigateToAccountList = {
+                            navController.navigate(RouteName.ACCOUNTS) { launchSingleTop = true }
+                        },
+                        navigateToAccountDetail = { accountId ->
+                            navController.navigate("${RouteName.ACCOUNT_DETAILS}/$accountId") {
+                                launchSingleTop = true
+                            }
+                        },
                     )
                 }
                 animatedComposable(route = RouteName.FLOW) { entry ->
@@ -99,51 +113,64 @@ fun HomeEntry(
 
                     LaunchedEffect(navController) {
                         val lastReadIndexFlow =
-                            navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Int?>(
-                                "articleIndex",
-                                null
-                            )
+                            navController.currentBackStackEntry
+                                ?.savedStateHandle
+                                ?.getStateFlow<Int?>("articleIndex", null)
                         val index = lastReadIndexFlow?.first { it != null }
                         if (index != null) {
                             flowViewModel.updateLastReadIndex(index)
                             navController.currentBackStackEntry
-                                ?.savedStateHandle?.remove<Int>("articleIndex")
+                                ?.savedStateHandle
+                                ?.remove<Int>("articleIndex")
                         }
                     }
 
                     FlowPage(
-                        navController = navController,
+                        //                        navController = navController,
                         homeViewModel = homeViewModel,
                         flowViewModel = flowViewModel,
                         sharedTransitionScope = this@SharedTransitionScope,
                         animatedVisibilityScope = this,
+                        onNavigateUp = {
+                            if (navController.previousBackStackEntry == null) {
+                                navController.navigate(RouteName.FEEDS) { launchSingleTop = true }
+                            } else {
+                                navController.popBackStack()
+                            }
+                        },
+                        navigateToArticle = { articleId ->
+                            navController.navigate("${RouteName.READING}/${articleId}") {
+                                launchSingleTop = true
+                            }
+                        },
                     )
                 }
                 animatedComposable(route = "${RouteName.READING}/{articleId}") { entry ->
-                    val articleId = entry.arguments?.getString("articleId")?.also {
-                        entry.arguments?.remove("articleId")
-                    }
+                    val articleId =
+                        entry.arguments?.getString("articleId")?.also {
+                            entry.arguments?.remove("articleId")
+                        }
 
                     val readingViewModel: ReadingViewModel =
-                        hiltViewModel<ReadingViewModel, ReadingViewModel.ReadingViewModelFactory> { factory ->
+                        hiltViewModel<ReadingViewModel, ReadingViewModel.ReadingViewModelFactory> {
+                            factory ->
                             factory.create(articleId.toString(), null)
                         }
 
                     ReadingPage(
-                        navController = navController,
-                        readingViewModel = readingViewModel
+                        readingViewModel = readingViewModel,
+                        onBack = { navController.popBackStack() },
+                        onNavigateToStylePage = {
+                            navController.navigate(RouteName.READING_PAGE_STYLE)
+                        },
                     )
                 }
 
                 // Settings
-                animatedComposable(route = RouteName.SETTINGS) {
-                    SettingsPage(navController)
-                }
+                animatedComposable(route = RouteName.SETTINGS) { SettingsPage(navController) }
 
                 // Accounts
-                animatedComposable(route = RouteName.ACCOUNTS) {
-                    AccountsPage(navController)
-                }
+                animatedComposable(route = RouteName.ACCOUNTS) { AccountsPage(navController) }
 
                 animatedComposable(route = "${RouteName.ACCOUNT_DETAILS}/{accountId}") {
                     AccountDetailsPage(navController)
@@ -157,9 +184,7 @@ fun HomeEntry(
                 animatedComposable(route = RouteName.COLOR_AND_STYLE) {
                     ColorAndStylePage(navController)
                 }
-                animatedComposable(route = RouteName.DARK_THEME) {
-                    DarkThemePage(navController)
-                }
+                animatedComposable(route = RouteName.DARK_THEME) { DarkThemePage(navController) }
                 animatedComposable(route = RouteName.FEEDS_PAGE_STYLE) {
                     FeedsPageStylePage(navController)
                 }
@@ -186,9 +211,7 @@ fun HomeEntry(
                 }
 
                 // Interaction
-                animatedComposable(route = RouteName.INTERACTION) {
-                    InteractionPage(navController)
-                }
+                animatedComposable(route = RouteName.INTERACTION) { InteractionPage(navController) }
 
                 // Languages
                 animatedComposable(route = RouteName.LANGUAGES) {

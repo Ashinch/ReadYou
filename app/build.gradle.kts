@@ -1,6 +1,6 @@
-import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
-import java.util.Properties
 import java.io.FileInputStream
+import java.util.Properties
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 
 plugins {
     alias(libs.plugins.kotlin.android)
@@ -13,15 +13,17 @@ plugins {
 }
 
 fun fetchGitCommitHash(): String {
-    val process = ProcessBuilder("git", "rev-parse", "--verify", "--short", "HEAD")
-        .redirectErrorStream(true)
-        .start()
+    val process =
+        ProcessBuilder("git", "rev-parse", "--verify", "--short", "HEAD")
+            .redirectErrorStream(true)
+            .start()
     return process.inputStream.bufferedReader().use { it.readText().trim() }
 }
 
 val gitCommitHash = fetchGitCommitHash()
 val keyProps = Properties()
 val keyPropsFile: File = rootProject.file("signature/keystore.properties")
+
 if (keyPropsFile.exists()) {
     println("Loading keystore properties from ${keyPropsFile.absolutePath}")
     keyProps.load(FileInputStream(keyPropsFile))
@@ -37,18 +39,18 @@ android {
         versionCode = 37
         versionName = "0.14.4"
 
-        buildConfigField("String", "USER_AGENT_STRING", "\"ReadYou/${versionName}(${versionCode})\"")
+        buildConfigField(
+            "String",
+            "USER_AGENT_STRING",
+            "\"ReadYou/${versionName}(${versionCode})\"",
+        )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
-        room {
-            schemaDirectory("$projectDir/schemas")
-        }
+        room { schemaDirectory("$projectDir/schemas") }
 
-        ksp {
-            arg("room.incremental","true")
-        }
+        ksp { arg("room.incremental", "true") }
     }
 
     flavorDimensions.add("channel")
@@ -57,9 +59,7 @@ android {
             isDefault = true
             dimension = "channel"
         }
-        create("fdroid") {
-            dimension = "channel"
-        }
+        create("fdroid") { dimension = "channel" }
         create("googlePlay") {
             dimension = "channel"
             applicationIdSuffix = ".google.play"
@@ -73,23 +73,23 @@ android {
             storePassword = keyProps["storePassword"] as String?
         }
     }
-    lint {
-        disable.addAll(listOf("MissingTranslation", "ExtraTranslation"))
-    }
+    lint { disable.addAll(listOf("MissingTranslation", "ExtraTranslation")) }
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
             signingConfig = signingConfigs.getByName("release")
         }
-        all {
-            signingConfig = signingConfigs.getByName("release")
-        }
+        all { signingConfig = signingConfigs.getByName("release") }
     }
     applicationVariants.all {
         outputs.all {
-            (this as com.android.build.gradle.internal.api.BaseVariantOutputImpl).outputFileName = "ReadYou-${defaultConfig.versionName}-${gitCommitHash}.apk"
+            (this as com.android.build.gradle.internal.api.BaseVariantOutputImpl).outputFileName =
+                "ReadYou-${defaultConfig.versionName}-${gitCommitHash}.apk"
         }
     }
     kotlinOptions {
@@ -100,26 +100,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    buildFeatures {
-        buildConfig = true
-    }
-    packaging {
-        resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
-    }
-    androidResources {
-        generateLocaleConfig = true
-    }
-    composeCompiler {
-        featureFlags = setOf(
-            ComposeFeatureFlag.PausableComposition
-        )
-    }
+    buildFeatures { buildConfig = true }
+    packaging { resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}") }
+    androidResources { generateLocaleConfig = true }
+    composeCompiler { featureFlags = setOf(ComposeFeatureFlag.PausableComposition) }
     namespace = "me.ash.reader"
 }
 
-aboutLibraries {
-    excludeFields = arrayOf("generated")
-}
+aboutLibraries { excludeFields = arrayOf("generated") }
 
 dependencies {
     // AboutLibraries
@@ -183,9 +171,10 @@ dependencies {
 
     implementation(libs.navigation3.runtime)
     implementation(libs.navigation3.ui)
-//    implementation(libs.compose.material3.adaptive.navigation3)
+    //    implementation(libs.compose.material3.adaptive.navigation3)
     implementation(libs.lifecycle.viewmodel.navigation3)
     implementation(libs.kotlinx.serialization.core)
+    implementation(libs.navigationevent)
 
     implementation(libs.timber)
 

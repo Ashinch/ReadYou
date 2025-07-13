@@ -39,79 +39,67 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.infrastructure.preference.LocalSharedContent
 import me.ash.reader.infrastructure.preference.ReadingPageTonalElevationPreference
 import me.ash.reader.ui.component.base.FeedbackIconButton
-import me.ash.reader.ui.page.common.RouteName
 
 private val sizeSpec = spring<IntSize>(stiffness = 700f)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
-    navController: NavHostController,
     isShow: Boolean,
     isScrolled: Boolean = false,
     title: String? = "",
     link: String? = "",
     onClick: (() -> Unit)? = null,
     onClose: () -> Unit = {},
+    onNavigateToStylePage: () -> Unit,
 ) {
     val context = LocalContext.current
     val sharedContent = LocalSharedContent.current
     val isOutlined =
         LocalReadingPageTonalElevation.current == ReadingPageTonalElevationPreference.Outlined
 
-    val containerColor by animateColorAsState(with(MaterialTheme.colorScheme) {
-        if (isOutlined || !isScrolled) surface else surfaceContainer
-    }, label = "", animationSpec = spring(stiffness = Spring.StiffnessMediumLow))
+    val containerColor by
+        animateColorAsState(
+            with(MaterialTheme.colorScheme) {
+                if (isOutlined || !isScrolled) surface else surfaceContainer
+            },
+            label = "",
+            animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        )
 
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .zIndex(1f),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        Column(
-            modifier = Modifier.drawBehind { drawRect(containerColor) }
-        ) {
+    Box(modifier = Modifier.fillMaxSize().zIndex(1f), contentAlignment = Alignment.TopCenter) {
+        Column(modifier = Modifier.drawBehind { drawRect(containerColor) }) {
             Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(
-                        WindowInsets.statusBars
-                            .asPaddingValues()
-                            .calculateTopPadding()
-                    ),
+                modifier =
+                    Modifier.fillMaxWidth()
+                        .height(WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
             )
             AnimatedVisibility(
                 visible = isShow,
-                enter = expandVertically(
-                    expandFrom = Alignment.Bottom,
-                    animationSpec = sizeSpec
-                ),
-                exit = shrinkVertically(
-                    shrinkTowards = Alignment.Bottom,
-                    animationSpec = sizeSpec
-                )
+                enter = expandVertically(expandFrom = Alignment.Bottom, animationSpec = sizeSpec),
+                exit = shrinkVertically(shrinkTowards = Alignment.Bottom, animationSpec = sizeSpec),
             ) {
                 TopAppBar(
                     title = {},
-                    modifier = if (onClick == null) Modifier else Modifier.clickable(
-                        onClick = onClick,
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ),
+                    modifier =
+                        if (onClick == null) Modifier
+                        else
+                            Modifier.clickable(
+                                onClick = onClick,
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() },
+                            ),
                     windowInsets = WindowInsets(0.dp),
                     navigationIcon = {
                         FeedbackIconButton(
                             imageVector = Icons.Rounded.Close,
                             contentDescription = stringResource(R.string.close),
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = MaterialTheme.colorScheme.onSurface,
                         ) {
                             onClose()
                         }
@@ -121,11 +109,9 @@ fun TopBar(
                             modifier = Modifier.size(22.dp),
                             imageVector = Icons.Outlined.Palette,
                             contentDescription = stringResource(R.string.style),
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = MaterialTheme.colorScheme.onSurface,
                         ) {
-                            navController.navigate(RouteName.READING_PAGE_STYLE) {
-                                launchSingleTop = true
-                            }
+                            onNavigateToStylePage()
                         }
                         FeedbackIconButton(
                             modifier = Modifier.size(20.dp),
@@ -136,13 +122,13 @@ fun TopBar(
                             sharedContent.share(context, title, link)
                         }
                     },
-                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 )
             }
             if (isOutlined && isScrolled) {
                 HorizontalDivider(
                     color = MaterialTheme.colorScheme.surfaceContainerHighest,
-                    thickness = 0.5f.dp
+                    thickness = 0.5f.dp,
                 )
             }
         }

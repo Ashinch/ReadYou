@@ -24,12 +24,15 @@ import me.ash.reader.domain.service.AccountService
 import me.ash.reader.infrastructure.compose.ProvideCompositionLocals
 import me.ash.reader.infrastructure.preference.AccountSettingsProvider
 import me.ash.reader.infrastructure.preference.LanguagesPreference
+import me.ash.reader.infrastructure.preference.LocalDarkTheme
 import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.ui.ext.languages
 import me.ash.reader.ui.page.common.ExtraName
 import me.ash.reader.ui.page.common.HomeEntry
 import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
+import me.ash.reader.ui.page.nav3.AppEntry
+import me.ash.reader.ui.theme.AppTheme
 
 /** The Single-Activity Architecture. */
 @AndroidEntryPoint
@@ -81,10 +84,13 @@ class MainActivity : AppCompatActivity() {
                     val navController = rememberNavController()
 
                     ProvideCompositionLocals {
-                        HomeEntry(
-                            subscribeViewModel = subscribeViewModel,
-                            navController = navController,
-                        )
+                        AppTheme(useDarkTheme = LocalDarkTheme.current.isDarkTheme()) {
+                            AppEntry()
+                        }
+//                        HomeEntry(
+//                            subscribeViewModel = subscribeViewModel,
+//                            navController = navController,
+//                        )
                     }
 
                     DisposableEffect(this) {
