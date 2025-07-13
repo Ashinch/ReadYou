@@ -60,7 +60,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.Morph
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.OpenLinkPreference
@@ -73,7 +72,6 @@ import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.ext.put
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.graphics.MorphPolygonShape
-import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.theme.palette.alwaysLight
 import me.ash.reader.ui.theme.palette.onLight
 
@@ -94,8 +92,9 @@ private val ShapeGacha by lazy {
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun TipsAndSupportPage(
-    navController: NavHostController,
     updateViewModel: UpdateViewModel = hiltViewModel(),
+    onBack: () -> Unit,
+    navigateToLicenseList: () -> Unit,
 ) {
     val context = LocalContext.current
     val view = LocalView.current
@@ -145,22 +144,18 @@ fun TipsAndSupportPage(
             FeedbackIconButton(
                 imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                 contentDescription = stringResource(R.string.back),
-                tint = MaterialTheme.colorScheme.onSurface
-            ) {
-                navController.popBackStack()
-            }
+                tint = MaterialTheme.colorScheme.onSurface,
+                onClick = onBack
+            )
         },
         actions = {
             FeedbackIconButton(
                 modifier = Modifier.size(20.dp),
                 imageVector = Icons.Rounded.Balance,
                 contentDescription = stringResource(R.string.open_source_licenses),
-                tint = MaterialTheme.colorScheme.onSurface
-            ) {
-                navController.navigate(RouteName.LICENSE_LIST) {
-                    launchSingleTop = true
-                }
-            }
+                tint = MaterialTheme.colorScheme.onSurface,
+                onClick = navigateToLicenseList
+            )
         },
         content = {
             LazyColumn(

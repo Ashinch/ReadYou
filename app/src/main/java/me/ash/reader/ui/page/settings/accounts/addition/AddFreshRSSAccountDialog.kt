@@ -51,7 +51,8 @@ import me.ash.reader.ui.page.settings.accounts.AccountViewModel
 @OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
 @Composable
 fun AddFreshRSSAccountDialog(
-    navController: NavHostController,
+    onBack: () -> Unit,
+    onNavigateToAccountDetails: (Int) -> Unit,
     viewModel: AdditionViewModel = hiltViewModel(),
     accountViewModel: AccountViewModel = hiltViewModel(),
 ) {
@@ -171,10 +172,8 @@ fun AddFreshRSSAccountDialog(
                             context.showToast(exception?.message ?: "Not valid credentials")
                         } else {
                             viewModel.hideAddFreshRSSAccountDialog()
-                            navController.popBackStack()
-                            navController.navigate("${RouteName.ACCOUNT_DETAILS}/${account.id}") {
-                                launchSingleTop = true
-                            }
+                            onBack()
+                            onNavigateToAccountDetails(account.id!!)
                         }
                     }
                 }

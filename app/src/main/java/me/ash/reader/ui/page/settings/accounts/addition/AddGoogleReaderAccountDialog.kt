@@ -45,7 +45,8 @@ import me.ash.reader.ui.page.settings.accounts.AccountViewModel
 @OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
 @Composable
 fun AddGoogleReaderAccountDialog(
-    navController: NavHostController,
+    onBack: () -> Unit,
+    onNavigateToAccountDetails: (Int) -> Unit,
     viewModel: AdditionViewModel = hiltViewModel(),
     accountViewModel: AccountViewModel = hiltViewModel(),
 ) {
@@ -165,10 +166,8 @@ fun AddGoogleReaderAccountDialog(
                             context.showToast(exception?.message ?: "Not valid credentials")
                         } else {
                             viewModel.hideAddGoogleReaderAccountDialog()
-                            navController.popBackStack()
-                            navController.navigate("${RouteName.ACCOUNT_DETAILS}/${account.id}") {
-                                launchSingleTop = true
-                            }
+                            onBack()
+                            onNavigateToAccountDetails(account.id!!)
                         }
                     }
                 },

@@ -44,7 +44,8 @@ import me.ash.reader.ui.page.settings.accounts.AccountViewModel
 @OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
 @Composable
 fun AddFeverAccountDialog(
-    navController: NavHostController,
+    onBack: () -> Unit,
+    onNavigateToAccountDetails: (Int) -> Unit,
     viewModel: AdditionViewModel = hiltViewModel(),
     accountViewModel: AccountViewModel = hiltViewModel(),
 ) {
@@ -158,10 +159,8 @@ fun AddFeverAccountDialog(
                             context.showToast(exception?.message ?: "Not valid credentials")
                         } else {
                             viewModel.hideAddFeverAccountDialog()
-                            navController.popBackStack()
-                            navController.navigate("${RouteName.ACCOUNT_DETAILS}/${account.id}") {
-                                launchSingleTop = true
-                            }
+                            onBack()
+                            onNavigateToAccountDetails(account.id!!)
                         }
                     }
                 },

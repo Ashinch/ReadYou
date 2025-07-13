@@ -44,8 +44,6 @@ import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import java.util.Date
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.KeepArchivedPreference
@@ -69,7 +67,6 @@ import me.ash.reader.ui.ext.getCurrentVersion
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.ext.showToastLong
 import me.ash.reader.ui.ext.toString
-import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.page.settings.accounts.connection.AccountConnection
 import me.ash.reader.ui.theme.palette.onLight
@@ -77,8 +74,9 @@ import me.ash.reader.ui.theme.palette.onLight
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AccountDetailsPage(
-    navController: NavHostController = rememberNavController(),
-    viewModel: AccountViewModel = hiltViewModel(),
+    viewModel: AccountViewModel,
+    onBack: () -> Unit,
+    navigateToFeeds: () -> Unit,
 ) {
     val uiState = viewModel.accountUiState.collectAsStateValue()
     val context = LocalContext.current
@@ -98,12 +96,6 @@ fun AccountDetailsPage(
     var syncIntervalDialogVisible by remember { mutableStateOf(false) }
     var keepArchivedDialogVisible by remember { mutableStateOf(false) }
     var exportOPMLModeDialogVisible by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        navController.currentBackStackEntryFlow.collect {
-            it.arguments?.getString("accountId")?.let { viewModel.initData(it.toInt()) }
-        }
-    }
 
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(MimeType.ANY)) {
@@ -125,18 +117,16 @@ fun AccountDetailsPage(
                 imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                 contentDescription = stringResource(R.string.back),
                 tint = MaterialTheme.colorScheme.onSurface,
-            ) {
-                navController.popBackStack()
-            }
+                onClick = onBack
+            )
         },
         actions = {
             FeedbackIconButton(
                 imageVector = Icons.Rounded.Close,
                 contentDescription = stringResource(R.string.close),
                 tint = MaterialTheme.colorScheme.onSurface,
-            ) {
-                navController.navigate(RouteName.FEEDS) { launchSingleTop = true }
-            }
+                onClick = navigateToFeeds
+            )
         },
         content = {
             LazyColumn {
@@ -375,7 +365,7 @@ fun AccountDetailsPage(
                 onClick = {
                     selectedAccount?.id?.let {
                         viewModel.delete(it) {
-                            navController.popBackStack()
+                            onBack()
                             context.showToastLong(context.getString(R.string.delete_account_toast))
                         }
                     }

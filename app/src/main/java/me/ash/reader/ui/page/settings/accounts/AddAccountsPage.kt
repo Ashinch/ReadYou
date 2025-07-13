@@ -15,8 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import me.ash.reader.R
 import me.ash.reader.ui.component.base.DisplayText
 import me.ash.reader.ui.component.base.FeedbackIconButton
@@ -28,9 +26,10 @@ import me.ash.reader.ui.theme.palette.onLight
 
 @Composable
 fun AddAccountsPage(
-    navController: NavHostController = rememberNavController(),
     viewModel: AccountViewModel = hiltViewModel(),
     additionViewModel: AdditionViewModel = hiltViewModel(),
+    onBack: () -> Unit,
+    navigateToAccountDetails: (Int) -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -40,10 +39,9 @@ fun AddAccountsPage(
             FeedbackIconButton(
                 imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                 contentDescription = stringResource(R.string.back),
-                tint = MaterialTheme.colorScheme.onSurface
-            ) {
-                navController.popBackStack()
-            }
+                tint = MaterialTheme.colorScheme.onSurface,
+                onClick = onBack
+            )
         },
         content = {
             LazyColumn {
@@ -126,14 +124,14 @@ fun AddAccountsPage(
         }
     )
 
-    AddLocalAccountDialog(navController)
-    AddFeverAccountDialog(navController)
-    AddGoogleReaderAccountDialog(navController)
-    AddFreshRSSAccountDialog(navController)
+    AddLocalAccountDialog(onBack, navigateToAccountDetails)
+    AddFeverAccountDialog(onBack, navigateToAccountDetails)
+    AddGoogleReaderAccountDialog(onBack, navigateToAccountDetails)
+    AddFreshRSSAccountDialog(onBack, navigateToAccountDetails)
 }
 
 @Preview
 @Composable
 fun AddAccountsPreview() {
-    AddAccountsPage()
+    AddAccountsPage(onBack = {}, navigateToAccountDetails = {})
 }

@@ -29,7 +29,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import me.ash.reader.R
 import me.ash.reader.domain.model.account.Account
 import me.ash.reader.domain.model.account.AccountType
@@ -43,7 +42,8 @@ import me.ash.reader.ui.page.settings.accounts.AccountViewModel
 @OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
 @Composable
 fun AddLocalAccountDialog(
-    navController: NavHostController,
+    onBack: () -> Unit,
+    onNavigateToAccountDetails: (Int) -> Unit,
     viewModel: AdditionViewModel = hiltViewModel(),
     accountViewModel: AccountViewModel = hiltViewModel(),
 ) {
@@ -63,10 +63,8 @@ fun AddLocalAccountDialog(
                     context.showToast(exception?.message ?: "Not valid credentials")
                 } else {
                     viewModel.hideAddLocalAccountDialog()
-                    navController.popBackStack()
-                    navController.navigate("${RouteName.ACCOUNT_DETAILS}/${account.id}") {
-                        launchSingleTop = true
-                    }
+                    onBack()
+                    onNavigateToAccountDetails(account.id!!)
                 }
             }
         }

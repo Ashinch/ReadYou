@@ -57,7 +57,7 @@ fun HomeEntry(
     homeViewModel: HomeViewModel = hiltViewModel(),
     subscribeViewModel: SubscribeViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
+    /*val context = LocalContext.current
 
     val settings = LocalSettings.current
     val isFirstLaunch = remember { context.isFirstLaunch }
@@ -232,5 +232,5 @@ fun HomeEntry(
                 }
             }
         }
-    }
+    }*/
 }

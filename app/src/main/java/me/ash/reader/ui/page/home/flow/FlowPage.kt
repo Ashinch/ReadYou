@@ -235,8 +235,6 @@ fun FlowPage(
         }
     }
 
-    BackHandler { onNavigateUp() }
-
     val topAppBarState = rememberTopAppBarState()
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
