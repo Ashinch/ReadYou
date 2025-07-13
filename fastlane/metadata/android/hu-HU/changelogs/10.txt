@@ -1,0 +1,13 @@
+## 0.7.8
+
+1. Nyelvi beállítások oldal hozzáadása (néhány hiba).
+
+2. Sötét téma beállítások hozzáadása.
+
+3. AMOLED sötét téma hozzáadása.
+
+4. Tiszta cikkek funkció hozzáadása a hírforrásokhoz és a csoportokhoz.
+
+5. Android 12+ készülékek esetén mostantól a háttérképek első színpalettáját a rendszer által szolgáltatott színsémára cseréli le.
+
+6. Az RSS-elemző bővítmény átváltva Rome-ra. (képesnek kell lennie a legtöbb hírforrás elemzésére, ismert hiba, hogy nem tudja elemezni a speciális formátumokat, mint a Youtube, Reddit, stb.)
