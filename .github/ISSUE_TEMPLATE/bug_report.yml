@@ -10,6 +10,7 @@ body:
       options:
         - label: I've already searched in [existing issues](https://github.com/Ashinch/ReadYou/issues?q=is%3Aissue+) and haven't found a similar problem reported.
           required: true
+        - label: I'm using the [latest version](https://github.com/Ashinch/ReadYou/releases/latest) of the app
         - label: This error caused the app to crash
         - label: This error is reproducible
 
