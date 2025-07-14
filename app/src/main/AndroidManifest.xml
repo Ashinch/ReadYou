@@ -36,13 +36,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Reader"
+        android:enableOnBackInvokedCallback="false"
         android:usesCleartextTraffic="true">
         <activity
             android:name=".infrastructure.android.MainActivity"
             android:exported="true"
             android:launchMode="singleInstance"
             android:theme="@style/Theme.Reader"
-            android:enableOnBackInvokedCallback="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
