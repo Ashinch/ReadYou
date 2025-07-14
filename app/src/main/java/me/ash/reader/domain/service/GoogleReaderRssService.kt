@@ -402,7 +402,8 @@ constructor(
             groupDao.insertOrUpdate(remoteGroups.await())
             feedDao.insertOrUpdate(remoteFeeds.await())
 
-            val notificationFeeds = feedDao.queryNotificationEnabled(accountId).associateBy { it.id }
+            val notificationFeeds =
+                feedDao.queryNotificationEnabled(accountId).associateBy { it.id }
             val notificationFeedIds = notificationFeeds.keys
             val articlesToNotify = mutableListOf<Article>()
 
@@ -518,9 +519,10 @@ constructor(
                 starredIds = starredIds.await().map { it.shortId }.toSet(),
             )
 
-        val articlesToNotify = items.fastFilter { it.isUnread }
-
-        notificationHelper.notify(feed, articlesToNotify)
+        if (feed.isNotification) {
+            val articlesToNotify = items.fastFilter { it.isUnread }
+            notificationHelper.notify(feed, articlesToNotify)
+        }
 
         articleDao.insert(*items.toTypedArray())
         Timber.i("onCompletion: ${System.currentTimeMillis() - preTime}")

@@ -48,6 +48,8 @@ constructor(
 
     fun notify(feed: Feed, articles: List<Article>) {
         if (!notificationManager.areNotificationsEnabled()) return
+        if (articles.isEmpty()) return
+        if (!feed.isNotification) return
         coroutineScope.launch {
             Timber.d("notify ${feed.name} for ${articles.size} articles")
 
@@ -66,10 +68,7 @@ constructor(
                 NotificationCompat.Builder(context, NotificationGroupName.ARTICLE_UPDATE)
                     .setContentTitle(feed.name)
                     .setContentText(
-                        context.resources.getQuantityText(
-                            R.plurals.unread_desc,
-                            articles.size,
-                        )
+                        context.resources.getQuantityText(R.plurals.unread_desc, articles.size)
                     )
                     .setSmallIcon(R.drawable.ic_notification)
                     .setStyle(NotificationCompat.InboxStyle().setSummaryText(feed.name))
