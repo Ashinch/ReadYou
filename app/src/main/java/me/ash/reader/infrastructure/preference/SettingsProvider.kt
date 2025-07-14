@@ -54,7 +54,6 @@ class SettingsProvider @Inject constructor(
         coroutineScope.launch(ioDispatcher) {
             preferencesFlow.collect {
                 _settingsFlow.value = it.toSettings()
-                println("id: ${it.get<Int>(DataStoreKey.currentAccountId)}")
             }
         }
     }

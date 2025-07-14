@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.room)
     alias(libs.plugins.hilt)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 fun fetchGitCommitHash(): String {

@@ -7,24 +7,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
-import me.ash.reader.infrastructure.preference.InitialPagePreference
-import me.ash.reader.infrastructure.preference.LocalSettings
-import me.ash.reader.ui.ext.isFirstLaunch
 import me.ash.reader.ui.motion.materialSharedAxisXIn
 import me.ash.reader.ui.motion.materialSharedAxisXOut
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage
+import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.page.home.flow.FlowPage
 import me.ash.reader.ui.page.home.reading.ReadingPage
 import me.ash.reader.ui.page.home.reading.ReadingViewModel
@@ -55,28 +51,16 @@ private const val INITIAL_OFFSET_FACTOR = 0.10f
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun AppEntry() {
+fun AppEntry(backStack: NavBackStack) {
     val homeViewModel = hiltViewModel<HomeViewModel>()
+    val subscribeViewModel = hiltViewModel<SubscribeViewModel>()
 
-    val context = LocalContext.current
-
-    val settings = LocalSettings.current
-    val isFirstLaunch = remember { context.isFirstLaunch }
-    val initialPage = remember { settings.initialPage }
-
-    val startDestination =
-        if (isFirstLaunch) listOf(Route.Startup)
-        else if (initialPage == InitialPagePreference.FlowPage) {
-            listOf(Route.Feeds, Route.Flow)
-        } else listOf(Route.Feeds)
-
-    val backStack = remember { mutableStateListOf<Route>().apply { addAll(startDestination) } }
     val onBack: () -> Unit = {
         if (backStack.size == 1) backStack[0] = Route.Feeds else backStack.removeLastOrNull()
     }
 
     SharedTransitionLayout {
-        NavDisplay<Route>(
+        NavDisplay(
             modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface),
             backStack = backStack,
             entryDecorators =
@@ -111,6 +95,7 @@ fun AppEntry() {
                     Route.Feeds -> {
                         NavEntry(key) {
                             FeedsPage(
+                                subscribeViewModel = subscribeViewModel,
                                 sharedTransitionScope = this@SharedTransitionLayout,
                                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 navigateToSettings = { backStack.add(Route.Settings) },
@@ -254,6 +239,7 @@ fun AppEntry() {
                             )
                         }
                     Route.LicenseList -> NavEntry(key) { LicenseListPage(onBack = onBack) }
+                    else -> NavEntry(key) { throw Exception("Unknown destination") }
                 }
             },
         )

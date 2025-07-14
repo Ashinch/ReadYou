@@ -10,11 +10,14 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Consumer
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.profileinstaller.ProfileInstallerInitializer
 import coil.ImageLoader
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,15 +26,17 @@ import javax.inject.Inject
 import me.ash.reader.domain.service.AccountService
 import me.ash.reader.infrastructure.compose.ProvideCompositionLocals
 import me.ash.reader.infrastructure.preference.AccountSettingsProvider
+import me.ash.reader.infrastructure.preference.InitialPagePreference
 import me.ash.reader.infrastructure.preference.LanguagesPreference
 import me.ash.reader.infrastructure.preference.LocalDarkTheme
 import me.ash.reader.infrastructure.preference.SettingsProvider
+import me.ash.reader.ui.ext.initialPage
+import me.ash.reader.ui.ext.isFirstLaunch
 import me.ash.reader.ui.ext.languages
 import me.ash.reader.ui.page.common.ExtraName
-import me.ash.reader.ui.page.common.HomeEntry
-import me.ash.reader.ui.page.common.RouteName
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.page.nav3.AppEntry
+import me.ash.reader.ui.page.nav3.key.Route
 import me.ash.reader.ui.theme.AppTheme
 
 /** The Single-Activity Architecture. */
@@ -81,51 +86,57 @@ class MainActivity : AppCompatActivity() {
             AccountSettingsProvider(accountService = accountService) {
                 settingsProvider.ProvidesSettings {
                     val subscribeViewModel: SubscribeViewModel = hiltViewModel()
-                    val navController = rememberNavController()
 
                     ProvideCompositionLocals {
                         AppTheme(useDarkTheme = LocalDarkTheme.current.isDarkTheme()) {
-                            AppEntry()
+                            val isFirstLaunch = remember { isFirstLaunch }
+                            val initialPage = remember { initialPage }
+
+                            val startDestination =
+                                if (isFirstLaunch) listOf(Route.Startup)
+                                else if (initialPage == InitialPagePreference.FlowPage.value) {
+                                    listOf(Route.Feeds, Route.Flow)
+                                } else listOf(Route.Feeds)
+
+                            val backStack =
+                                rememberNavBackStack<Route>().apply { addAll(startDestination) }
+
+                            NewIntentHandlerEffect(backStack, subscribeViewModel)
+                            AppEntry(backStack)
                         }
-//                        HomeEntry(
-//                            subscribeViewModel = subscribeViewModel,
-//                            navController = navController,
-//                        )
-                    }
-
-                    DisposableEffect(this) {
-                        val listener =
-                            Consumer<Intent> { intent ->
-                                intent.getLaunchAction()?.let { action ->
-                                    when (action) {
-                                        is LaunchAction.OpenArticle -> {
-                                            navController.navigate(
-                                                "${RouteName.READING}/${action.articleId}"
-                                            ) {
-                                                launchSingleTop = true
-                                            }
-                                        }
-
-                                        is LaunchAction.Subscribe -> {
-                                            subscribeViewModel.handleSharedUrlFromIntent(action.url)
-                                            val res =
-                                                navController.popBackStack(
-                                                    route = RouteName.FEEDS,
-                                                    inclusive = false,
-                                                    saveState = true,
-                                                )
-                                            if (!res)
-                                                navController.navigate(route = RouteName.FEEDS)
-                                        }
-                                    }
-                                }
-                            }
-                        listener.accept(intent) // consume the launch intent as well
-                        addOnNewIntentListener(listener)
-                        onDispose { removeOnNewIntentListener(listener) }
                     }
                 }
             }
+        }
+    }
+
+    @Composable
+    fun NewIntentHandlerEffect(backStack: NavBackStack, subscribeViewModel: SubscribeViewModel) {
+        DisposableEffect(backStack) {
+            val listener =
+                Consumer<Intent> { intent ->
+                    intent.getLaunchAction()?.let { action ->
+                        when (action) {
+                            is LaunchAction.OpenArticle -> {
+                                backStack.add(Route.Reading(articleId = action.articleId))
+                            }
+
+                            is LaunchAction.Subscribe -> {
+                                subscribeViewModel.handleSharedUrlFromIntent(action.url)
+                                val feedsIndex = backStack.indexOf(Route.Feeds)
+                                if (feedsIndex != -1) {
+                                    backStack.removeRange(feedsIndex + 1, backStack.size)
+                                } else {
+                                    backStack.add(0, Route.Feeds)
+                                    backStack.removeRange(1, backStack.size)
+                                }
+                            }
+                        }
+                    }
+                }
+            listener.accept(intent) // consume the launch intent as well
+            addOnNewIntentListener(listener)
+            onDispose { removeOnNewIntentListener(listener) }
         }
     }
 }
