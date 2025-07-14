@@ -92,14 +92,15 @@ class MainActivity : AppCompatActivity() {
                             val isFirstLaunch = remember { isFirstLaunch }
                             val initialPage = remember { initialPage }
 
-                            val startDestination =
+                            val startDestination = remember {
                                 if (isFirstLaunch) listOf(Route.Startup)
                                 else if (initialPage == InitialPagePreference.FlowPage.value) {
                                     listOf(Route.Feeds, Route.Flow)
                                 } else listOf(Route.Feeds)
+                            }
 
                             val backStack =
-                                rememberNavBackStack<Route>().apply { addAll(startDestination) }
+                                rememberNavBackStack<Route>(*startDestination.toTypedArray())
 
                             NewIntentHandlerEffect(backStack, subscribeViewModel)
                             AppEntry(backStack)
