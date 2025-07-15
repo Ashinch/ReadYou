@@ -9,9 +9,9 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
+import me.ash.reader.domain.data.Diff
 import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.ArticleWithFeed
-import me.ash.reader.domain.data.Diff
 
 @Suppress("FunctionName")
 @OptIn(ExperimentalFoundationApi::class)
@@ -23,9 +23,9 @@ fun LazyListScope.ArticleList(
     articleListTonalElevation: Int,
     isSwipeEnabled: () -> Boolean = { false },
     isMenuEnabled: Boolean = true,
-    onClick: (ArticleWithFeed) -> Unit = {},
-    onToggleStarred: (ArticleWithFeed) -> Unit = { },
-    onToggleRead: (ArticleWithFeed) -> Unit = { },
+    onClick: (ArticleWithFeed, Int) -> Unit = { _, _ -> },
+    onToggleStarred: (ArticleWithFeed) -> Unit = {},
+    onToggleRead: (ArticleWithFeed) -> Unit = {},
     onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? = null,
     onMarkBelowAsRead: ((ArticleWithFeed) -> Unit)? = null,
     onShare: ((ArticleWithFeed) -> Unit)? = null,
@@ -37,7 +37,7 @@ fun LazyListScope.ArticleList(
         items(
             count = pagingItems.itemCount,
             key = pagingItems.itemKey(::key),
-            contentType = pagingItems.itemContentType(::contentType)
+            contentType = pagingItems.itemContentType(::contentType),
         ) { index ->
             when (val item = pagingItems[index]) {
                 is ArticleFlowItem.Article -> {
@@ -46,14 +46,17 @@ fun LazyListScope.ArticleList(
                         articleWithFeed = item.articleWithFeed,
                         isUnread = diffMap[article.id]?.isUnread ?: article.isUnread,
                         articleListTonalElevation = articleListTonalElevation,
-                        onClick = onClick,
+                        onClick = { onClick(it, index) },
                         isSwipeEnabled = isSwipeEnabled,
                         isMenuEnabled = isMenuEnabled,
                         onToggleStarred = onToggleStarred,
                         onToggleRead = onToggleRead,
-                        onMarkAboveAsRead = if (index == 1) null else onMarkAboveAsRead, // index == 0 -> ArticleFlowItem.Date
-                        onMarkBelowAsRead = if (index == pagingItems.itemCount - 1) null else onMarkBelowAsRead,
-                        onShare = onShare
+                        onMarkAboveAsRead =
+                            if (index == 1) null
+                            else onMarkAboveAsRead, // index == 0 -> ArticleFlowItem.Date
+                        onMarkBelowAsRead =
+                            if (index == pagingItems.itemCount - 1) null else onMarkBelowAsRead,
+                        onShare = onShare,
                     )
                 }
 
@@ -77,14 +80,17 @@ fun LazyListScope.ArticleList(
                             articleWithFeed = item.articleWithFeed,
                             isUnread = diffMap[article.id]?.isUnread ?: article.isUnread,
                             articleListTonalElevation = articleListTonalElevation,
-                            onClick = onClick,
+                            onClick = { onClick(it, index) },
                             isSwipeEnabled = isSwipeEnabled,
                             isMenuEnabled = isMenuEnabled,
                             onToggleStarred = onToggleStarred,
                             onToggleRead = onToggleRead,
-                            onMarkAboveAsRead = if (index == 1) null else onMarkAboveAsRead, // index == 0 -> ArticleFlowItem.Date
-                            onMarkBelowAsRead = if (index == pagingItems.itemCount - 1) null else onMarkBelowAsRead,
-                            onShare = onShare
+                            onMarkAboveAsRead =
+                                if (index == 1) null
+                                else onMarkAboveAsRead, // index == 0 -> ArticleFlowItem.Date
+                            onMarkBelowAsRead =
+                                if (index == pagingItems.itemCount - 1) null else onMarkBelowAsRead,
+                            onShare = onShare,
                         )
                     }
                 }

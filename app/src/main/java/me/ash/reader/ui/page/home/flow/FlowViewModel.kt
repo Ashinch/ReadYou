@@ -185,8 +185,8 @@ class FlowViewModel @Inject constructor(
         }
     }
 
-    fun updateLastReadIndex(index: Int?) {
-        _flowUiState.update { it.copy(lastReadIndex = index) }
+    fun updateReadingArticleId(id: String?) {
+        _flowUiState.update { it.copy(readingArticleId = id) }
     }
 
     fun loadNextFeedOrGroup() {
@@ -242,7 +242,7 @@ class FlowViewModel @Inject constructor(
 }
 
 data class FlowUiState(
-    val lastReadIndex: Int? = null,
+    val readingArticleId: String? = null,
     val nextFilterState: FilterState? = null,
     val pagerData: PagerData = PagerData()
 )

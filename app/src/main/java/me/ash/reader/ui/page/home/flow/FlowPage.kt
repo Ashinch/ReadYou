@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filterNotNull
@@ -113,7 +114,7 @@ fun FlowPage(
     flowViewModel: FlowViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel,
     onNavigateUp: () -> Unit,
-    navigateToArticle: (String) -> Unit,
+    navigateToArticle: (String, Int) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val articleListTonalElevation = LocalFlowArticleListTonalElevation.current
@@ -168,23 +169,6 @@ fun FlowPage(
                 .filterNotNull()
         }
 
-    var showFab by remember(listState) { mutableStateOf(false) }
-
-    val lastReadIndex = flowUiState.lastReadIndex
-
-    LaunchedEffect(lastVisibleIndex, lastReadIndex) {
-        if (lastReadIndex != null) {
-            lastVisibleIndex.collect { index ->
-                if (index < lastReadIndex) {
-                    showFab = true
-                } else {
-                    showFab = false
-                    flowViewModel.updateLastReadIndex(null)
-                }
-            }
-        }
-    }
-
     val onToggleStarred: (ArticleWithFeed) -> Unit = remember {
         { article ->
             flowViewModel.updateStarredStatus(
@@ -238,6 +222,49 @@ fun FlowPage(
     val topAppBarState = rememberTopAppBarState()
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topAppBarState)
+
+    val scrollAppBarToCollapsed =
+        remember(topAppBarState) {
+            {
+                scope.launch {
+                    val initial = topAppBarState.heightOffset
+                    val target = topAppBarState.heightOffsetLimit
+                    if (initial != target)
+                        animate(
+                            initialValue = initial,
+                            targetValue = target,
+                            initialVelocity = 0f,
+                            animationSpec = settleSpec,
+                        ) { value, _ ->
+                            topAppBarState.heightOffset = value
+                        }
+                }
+            }
+        }
+
+    val readingArticleId = flowUiState.readingArticleId
+
+    var pagingItems: LazyPagingItems<ArticleFlowItem>? by remember { mutableStateOf(null) }
+
+    LaunchedEffect(readingArticleId) {
+        if (readingArticleId != null) {
+            val item =
+                listState.layoutInfo.visibleItemsInfo.firstOrNull { it.key == readingArticleId }
+
+            val index =
+                item?.index
+                    ?: (pagingItems?.itemSnapshotList?.indexOfFirst {
+                        it is ArticleFlowItem.Article &&
+                            it.articleWithFeed.article.id == readingArticleId
+                    } ?: -1)
+
+
+            if (index != -1) {
+                scrollAppBarToCollapsed()
+                listState.animateScrollToItem(index, scrollOffset = -100)
+            }
+        }
+    }
 
     val isSyncing = flowViewModel.isSyncingFlow.collectAsStateValue()
 
@@ -455,7 +482,7 @@ fun FlowPage(
                 ) { flowUiState ->
                     val pager = flowUiState.pagerData.pager
                     val filterState = flowUiState.pagerData.filterState
-                    val pagingItems = pager.collectAsLazyPagingItems()
+                    val pagingItems = pager.collectAsLazyPagingItems().also { pagingItems = it }
 
                     if (markAsReadOnScroll && filterState.filter.isUnread()) {
                         LaunchedEffect(listState.isScrollInProgress) {
@@ -596,7 +623,7 @@ fun FlowPage(
                                 isShowStickyHeader = articleListDateStickyHeader.value,
                                 articleListTonalElevation = articleListTonalElevation.value,
                                 isSwipeEnabled = { listState.isScrollInProgress },
-                                onClick = { articleWithFeed ->
+                                onClick = { articleWithFeed, index ->
                                     if (articleWithFeed.feed.isBrowser) {
                                         homeViewModel.diffMapHolder.updateDiff(
                                             articleWithFeed,
@@ -608,7 +635,7 @@ fun FlowPage(
                                             openLinkSpecificBrowser,
                                         )
                                     } else {
-                                        navigateToArticle(articleWithFeed.article.id)
+                                        navigateToArticle(articleWithFeed.article.id, index)
                                     }
                                 },
                                 onToggleStarred = onToggleStarred,
@@ -628,27 +655,6 @@ fun FlowPage(
                             }
                         }
                     }
-                }
-            },
-            floatingActionButton = {
-                ScrollToLastReadFab(visible = showFab) {
-                    scope.launch {
-                        lastReadIndex?.let { listState.animateScrollToItem(index = it) }
-                    }
-                    scope.launch {
-                        val initial = topAppBarState.heightOffset
-                        val target = topAppBarState.heightOffsetLimit
-                        animate(
-                            initialValue = initial,
-                            targetValue = target,
-                            initialVelocity = 0f,
-                            animationSpec = settleSpec,
-                        ) { value, _ ->
-                            topAppBarState.heightOffset = value
-                        }
-                    }
-                    flowViewModel.updateLastReadIndex(null)
-                    showFab = false
                 }
             },
             floatingActionButtonPosition = FabPosition.Center,

@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 fun fetchGitCommitHash(): String {
@@ -176,6 +177,8 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.navigation3)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.navigationevent)
+    implementation(libs.compose.material3.adaptive.navigation)
+    implementation(libs.compose.material3.adaptive.layout)
 
     implementation(libs.timber)
 

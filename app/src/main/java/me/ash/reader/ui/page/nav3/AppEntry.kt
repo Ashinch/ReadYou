@@ -18,6 +18,7 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import me.ash.reader.ui.motion.materialSharedAxisXIn
 import me.ash.reader.ui.motion.materialSharedAxisXOut
+import me.ash.reader.ui.page.adaptive.ArticleListReaderPage
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
@@ -109,34 +110,34 @@ fun AppEntry(backStack: NavBackStack) {
                     }
                     Route.Flow -> {
                         NavEntry(key) {
-                            FlowPage(
+                            ArticleListReaderPage(
                                 sharedTransitionScope = this@SharedTransitionLayout,
-                                homeViewModel = homeViewModel,
                                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                                onNavigateUp = onBack,
-                                navigateToArticle = { backStack.add(Route.Reading(it)) },
-                            )
-                        }
-                    }
-                    is Route.Reading -> {
-                        NavEntry(key) {
-                            val articleId = key.articleId
-
-                            val readingViewModel: ReadingViewModel =
-                                hiltViewModel<
-                                    ReadingViewModel,
-                                    ReadingViewModel.ReadingViewModelFactory,
-                                > { factory ->
-                                    factory.create(articleId.toString(), null)
-                                }
-
-                            ReadingPage(
-                                readingViewModel = readingViewModel,
+                                homeViewModel = homeViewModel,
                                 onBack = onBack,
                                 onNavigateToStylePage = { backStack.add(Route.ReadingPageStyle) },
                             )
                         }
                     }
+//                    is Route.Reading -> {
+//                        NavEntry(key) {
+//                            val articleId = key.articleId
+//
+//                            val readingViewModel: ReadingViewModel =
+//                                hiltViewModel<
+//                                    ReadingViewModel,
+//                                    ReadingViewModel.ReadingViewModelFactory,
+//                                > { factory ->
+//                                    factory.create(articleId.toString(), null)
+//                                }
+//
+//                            ReadingPage(
+//                                readingViewModel = readingViewModel,
+//                                onBack = onBack,
+//                                onNavigateToStylePage = { backStack.add(Route.ReadingPageStyle) },
+//                            )
+//                        }
+//                    }
                     Route.Startup -> {
                         NavEntry(key) {
                             StartupPage(onNavigateToFeeds = { backStack.add(Route.Feeds) })

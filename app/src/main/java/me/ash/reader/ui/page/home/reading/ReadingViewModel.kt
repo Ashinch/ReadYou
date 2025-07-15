@@ -27,14 +27,14 @@ import me.ash.reader.infrastructure.android.TextToSpeechManager
 import me.ash.reader.infrastructure.di.ApplicationScope
 import me.ash.reader.infrastructure.di.IODispatcher
 import me.ash.reader.infrastructure.rss.ReaderCacheHelper
+import timber.log.Timber
 import java.util.Date
+import javax.inject.Inject
 
 private const val TAG = "ReadingViewModel"
 
-@HiltViewModel(assistedFactory = ReadingViewModel.ReadingViewModelFactory::class)
-class ReadingViewModel @AssistedInject constructor(
-    @Assisted private val initialArticleId: String,
-    @Assisted private val initialListIndex: Int?,
+@HiltViewModel
+class ReadingViewModel @Inject constructor(
     private val rssService: RssService,
     private val readerCacheHelper: ReaderCacheHelper,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -56,9 +56,6 @@ class ReadingViewModel @AssistedInject constructor(
     private val currentFeed: Feed?
         get() = readingUiState.value.articleWithFeed?.feed
 
-    init {
-        initData(initialArticleId, initialListIndex)
-    }
 
     fun initData(articleId: String, listIndex: Int? = null) {
         viewModelScope.launch {
@@ -206,6 +203,7 @@ class ReadingViewModel @AssistedInject constructor(
             }
         }
 
+        Timber.d("$previousArticle, $nextArticle, $listIndex")
         return copy(
             nextArticle = nextArticle, previousArticle = previousArticle, listIndex = index
         )
@@ -229,13 +227,6 @@ class ReadingViewModel @AssistedInject constructor(
         viewModelScope.launch {
             imageDownloader.downloadImage(url).onSuccess(onSuccess).onFailure(onFailure)
         }
-    }
-
-    @AssistedFactory
-    interface ReadingViewModelFactory {
-        fun create(
-            articleId: String, initialListIndex: Int?
-        ): ReadingViewModel
     }
 }
 
