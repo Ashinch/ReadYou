@@ -54,34 +54,21 @@ class AnnotatedParagraphStringBuilder {
             return false
         }
 
-    fun pushStyle(style: SpanStyle): Int =
-        builder.pushStyle(style = style)
+    fun pushStyle(style: SpanStyle): Int = builder.pushStyle(style = style)
 
     fun pushStyle(style: ParagraphStyle): Int = builder.pushStyle(style)
 
-    fun pop(index: Int) =
-        builder.pop(index)
+    fun pop(index: Int) = builder.pop(index)
 
     fun pop() = builder.pop()
 
-    fun pushComposableStyle(
-        style: @Composable () -> TextStyle,
-    ): Int {
-        composableStyles.add(
-            ComposableStyleWithStartEnd(
-                style = style,
-                start = builder.length
-            )
-        )
+    fun pushComposableStyle(style: @Composable () -> TextStyle): Int {
+        composableStyles.add(ComposableStyleWithStartEnd(style = style, start = builder.length))
         return composableStyles.lastIndex
     }
 
-    fun popComposableStyle(
-        index: Int,
-    ) {
-        poppedComposableStyles.add(
-            composableStyles.removeAt(index).copy(end = builder.length)
-        )
+    fun popComposableStyle(index: Int) {
+        poppedComposableStyles.add(composableStyles.removeAt(index).copy(end = builder.length))
     }
 
     fun pushLink(link: LinkAnnotation) = builder.pushLink(link)
@@ -103,6 +90,7 @@ class AnnotatedParagraphStringBuilder {
 
     @Composable
     fun toAnnotatedString(): AnnotatedString {
+        val poppedComposableStyles = poppedComposableStyles.cleanup()
         for (composableStyle in poppedComposableStyles) {
             val style = composableStyle.style()
             val spanStyle = style.toSpanStyle()
@@ -110,27 +98,24 @@ class AnnotatedParagraphStringBuilder {
             builder.addStyle(
                 style = spanStyle,
                 start = composableStyle.start,
-                end = composableStyle.end
+                end = composableStyle.end,
             )
             builder.addStyle(
                 style = paragraphStyle,
                 start = composableStyle.start,
-                end = composableStyle.end
+                end = composableStyle.end,
             )
         }
+        val composableStyles = composableStyles.cleanup()
         for (composableStyle in composableStyles) {
             val style = composableStyle.style()
             val spanStyle = style.toSpanStyle()
             val paragraphStyle = style.toParagraphStyle()
-            builder.addStyle(
-                style = spanStyle,
-                start = composableStyle.start,
-                end = builder.length
-            )
+            builder.addStyle(style = spanStyle, start = composableStyle.start, end = builder.length)
             builder.addStyle(
                 style = paragraphStyle,
                 start = composableStyle.start,
-                end = builder.length
+                end = builder.length,
             )
         }
         return builder.toAnnotatedString()
@@ -138,6 +123,7 @@ class AnnotatedParagraphStringBuilder {
 }
 
 fun AnnotatedParagraphStringBuilder.isEmpty() = lastTwoChars.isEmpty()
+
 fun AnnotatedParagraphStringBuilder.isNotEmpty() = lastTwoChars.isNotEmpty()
 
 fun AnnotatedParagraphStringBuilder.ensureDoubleNewline() {
@@ -151,8 +137,8 @@ fun AnnotatedParagraphStringBuilder.ensureDoubleNewline() {
         }
 
         length == 2 &&
-                lastTwoChars.peekLatest()?.isWhitespace() == true &&
-                lastTwoChars.peekSecondLatest()?.isWhitespace() == true -> {
+            lastTwoChars.peekLatest()?.isWhitespace() == true &&
+            lastTwoChars.peekSecondLatest()?.isWhitespace() == true -> {
             // Nothing to do
         }
 
@@ -220,3 +206,29 @@ data class ComposableStyleWithStartEnd(
     val start: Int,
     val end: Int = -1,
 )
+
+private fun List<ComposableStyleWithStartEnd>.cleanup(): List<ComposableStyleWithStartEnd> {
+    val sortedStyles =
+        this.sortedWith(
+            compareBy<ComposableStyleWithStartEnd> { it.start }.thenByDescending { it.end }
+        )
+
+    val validStyles = mutableListOf<ComposableStyleWithStartEnd>()
+
+    var lastStyleEnd = -1
+
+    for (currentStyle in sortedStyles) {
+        if (currentStyle.start >= currentStyle.end) continue
+        if (currentStyle.start < lastStyleEnd) {
+            val fixedStart = lastStyleEnd
+            if (fixedStart < currentStyle.end) {
+                validStyles.add(currentStyle.copy(start = fixedStart))
+                lastStyleEnd = currentStyle.end
+            }
+        } else {
+            validStyles.add(currentStyle)
+            lastStyleEnd = currentStyle.end
+        }
+    }
+    return validStyles
+}
