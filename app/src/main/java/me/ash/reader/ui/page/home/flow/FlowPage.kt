@@ -241,7 +241,7 @@ fun FlowPage(
             }
         }
 
-    val readingArticleId = flowUiState.readingArticleId
+    val readingArticleId = viewModel.readerStateStateFlow.collectAsStateValue().articleId
 
     var pagingItems: LazyPagingItems<ArticleFlowItem>? by remember { mutableStateOf(null) }
 

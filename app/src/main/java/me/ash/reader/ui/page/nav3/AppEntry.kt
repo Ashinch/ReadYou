@@ -6,7 +6,13 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
+import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -19,12 +25,10 @@ import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import me.ash.reader.ui.motion.materialSharedAxisXIn
 import me.ash.reader.ui.motion.materialSharedAxisXOut
 import me.ash.reader.ui.page.adaptive.ArticleListReaderPage
+import me.ash.reader.ui.page.adaptive.ArticleListReaderViewModel
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
-import me.ash.reader.ui.page.home.flow.FlowPage
-import me.ash.reader.ui.page.home.reading.ReadingPage
-import me.ash.reader.ui.page.home.reading.ReadingViewModel
 import me.ash.reader.ui.page.nav3.key.Route
 import me.ash.reader.ui.page.settings.SettingsPage
 import me.ash.reader.ui.page.settings.accounts.AccountDetailsPage
@@ -50,7 +54,11 @@ import me.ash.reader.ui.page.startup.StartupPage
 
 private const val INITIAL_OFFSET_FACTOR = 0.10f
 
-@OptIn(ExperimentalSharedTransitionApi::class)
+@OptIn(
+    ExperimentalSharedTransitionApi::class,
+    ExperimentalMaterial3AdaptiveApi::class,
+    ExperimentalMaterial3AdaptiveApi::class,
+)
 @Composable
 fun AppEntry(backStack: NavBackStack) {
     val homeViewModel = hiltViewModel<HomeViewModel>()
@@ -100,7 +108,7 @@ fun AppEntry(backStack: NavBackStack) {
                                 sharedTransitionScope = this@SharedTransitionLayout,
                                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
                                 navigateToSettings = { backStack.add(Route.Settings) },
-                                navigationToFlow = { backStack.add(Route.Flow) },
+                                navigationToFlow = { backStack.add(Route.Reading(null)) },
                                 navigateToAccountList = { backStack.add(Route.Accounts) },
                                 navigateToAccountDetail = {
                                     backStack.add(Route.AccountDetails(it))
@@ -108,36 +116,56 @@ fun AppEntry(backStack: NavBackStack) {
                             )
                         }
                     }
-                    Route.Flow -> {
+                    is Route.Reading -> {
                         NavEntry(key) {
+                            val scaffoldDirective =
+                                calculatePaneScaffoldDirective(currentWindowAdaptiveInfo())
+                            val navigator =
+                                rememberListDetailPaneScaffoldNavigator<Any>(
+                                    scaffoldDirective = scaffoldDirective,
+                                    isDestinationHistoryAware = false,
+                                )
+                            val articleId = key.articleId
+
+                            val viewModel = hiltViewModel<ArticleListReaderViewModel>()
+                            LaunchedEffect(articleId) {
+                                if (articleId != null) {
+                                    viewModel.initData(articleId)
+                                    navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Detail)
+                                }
+                            }
+
                             ArticleListReaderPage(
+                                scaffoldDirective = scaffoldDirective,
+                                navigator = navigator,
                                 sharedTransitionScope = this@SharedTransitionLayout,
                                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                                viewModel = hiltViewModel(),
+                                viewModel = viewModel,
                                 onBack = onBack,
                                 onNavigateToStylePage = { backStack.add(Route.ReadingPageStyle) },
                             )
                         }
                     }
-//                    is Route.Reading -> {
-//                        NavEntry(key) {
-//                            val articleId = key.articleId
-//
-//                            val readingViewModel: ReadingViewModel =
-//                                hiltViewModel<
-//                                    ReadingViewModel,
-//                                    ReadingViewModel.ReadingViewModelFactory,
-//                                > { factory ->
-//                                    factory.create(articleId.toString(), null)
-//                                }
-//
-//                            ReadingPage(
-//                                readingViewModel = readingViewModel,
-//                                onBack = onBack,
-//                                onNavigateToStylePage = { backStack.add(Route.ReadingPageStyle) },
-//                            )
-//                        }
-//                    }
+                    //                    is Route.Reading -> {
+                    //                        NavEntry(key) {
+                    //                            val articleId = key.articleId
+                    //
+                    //                            val readingViewModel: ReadingViewModel =
+                    //                                hiltViewModel<
+                    //                                    ReadingViewModel,
+                    //                                    ReadingViewModel.ReadingViewModelFactory,
+                    //                                > { factory ->
+                    //                                    factory.create(articleId.toString(), null)
+                    //                                }
+                    //
+                    //                            ReadingPage(
+                    //                                readingViewModel = readingViewModel,
+                    //                                onBack = onBack,
+                    //                                onNavigateToStylePage = {
+                    // backStack.add(Route.ReadingPageStyle) },
+                    //                            )
+                    //                        }
+                    //                    }
                     Route.Startup -> {
                         NavEntry(key) {
                             StartupPage(onNavigateToFeeds = { backStack.add(Route.Feeds) })

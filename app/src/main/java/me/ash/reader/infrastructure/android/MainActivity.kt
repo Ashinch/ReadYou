@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                             val startDestination = remember {
                                 if (isFirstLaunch) listOf(Route.Startup)
                                 else if (initialPage == InitialPagePreference.FlowPage.value) {
-                                    listOf(Route.Feeds, Route.Flow)
+                                    listOf(Route.Feeds, Route.Reading(null))
                                 } else listOf(Route.Feeds)
                             }
 
@@ -119,6 +119,10 @@ class MainActivity : AppCompatActivity() {
                     intent.getLaunchAction()?.let { action ->
                         when (action) {
                             is LaunchAction.OpenArticle -> {
+                                val readingIndex = backStack.indexOfFirst { it is Route.Reading }
+                                if (readingIndex != -1) {
+                                    backStack.removeRange(readingIndex, backStack.size)
+                                }
                                 backStack.add(Route.Reading(articleId = action.articleId))
                             }
 

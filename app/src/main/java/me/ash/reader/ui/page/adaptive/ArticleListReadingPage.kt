@@ -8,30 +8,23 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.layout.PaneExpansionAnchor
-import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
+import androidx.compose.material3.adaptive.layout.PaneScaffoldDirective
 import androidx.compose.material3.adaptive.layout.rememberPaneExpansionState
 import androidx.compose.material3.adaptive.navigation.BackNavigationBehavior
 import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneScaffold
-import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
+import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import me.ash.reader.ui.ext.collectAsStateValue
-import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.flow.FlowPage
-import me.ash.reader.ui.page.home.flow.FlowViewModel
 import me.ash.reader.ui.page.home.reading.ReadingPage
-import me.ash.reader.ui.page.home.reading.ReadingViewModel
 
 @Parcelize private data class ArticleData(val articleId: String, val listIndex: Int) : Parcelable
 
@@ -39,26 +32,17 @@ import me.ash.reader.ui.page.home.reading.ReadingViewModel
 @Composable
 fun ArticleListReaderPage(
     modifier: Modifier = Modifier,
+    scaffoldDirective: PaneScaffoldDirective,
+    navigator: ThreePaneScaffoldNavigator<Any>,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: ArticleListReaderViewModel,
     onBack: () -> Unit,
     onNavigateToStylePage: () -> Unit,
 ) {
-    val scaffoldDirective = calculatePaneScaffoldDirective(currentWindowAdaptiveInfo())
-    val navigator =
-        rememberListDetailPaneScaffoldNavigator<ArticleData>(
-            scaffoldDirective = scaffoldDirective,
-            isDestinationHistoryAware = false,
-        )
+
 
     val scope = rememberCoroutineScope()
-
-    val readerState = viewModel.readerStateStateFlow.collectAsStateValue()
-
-    LaunchedEffect(readerState.articleId) {
-        viewModel.updateReadingArticleId(readerState.articleId)
-    }
 
     val backBehavior = BackNavigationBehavior.PopUntilCurrentDestinationChange
 

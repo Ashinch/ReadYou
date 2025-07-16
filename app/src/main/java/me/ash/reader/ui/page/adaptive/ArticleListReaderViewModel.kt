@@ -197,9 +197,6 @@ class ArticleListReaderViewModel @Inject constructor(
         }
     }
 
-    fun updateReadingArticleId(id: String?) {
-        _flowUiState.update { it.copy(readingArticleId = id) }
-    }
 
     fun loadNextFeedOrGroup() {
         viewModelScope.launch {
@@ -453,7 +450,6 @@ class ArticleListReaderViewModel @Inject constructor(
 }
 
 data class FlowUiState(
-    val readingArticleId: String? = null,
     val nextFilterState: FilterState? = null,
     val pagerData: PagerData = PagerData()
 )

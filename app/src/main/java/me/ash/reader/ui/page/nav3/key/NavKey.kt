@@ -11,9 +11,9 @@ sealed interface Route : NavKey {
     // Home
     @Serializable data object Feeds : Route
 
-    @Serializable data object Flow : Route
+    //    @Serializable data object Flow : Route
 
-    @Serializable class Reading(val articleId: String) : Route
+    @Serializable class Reading(val articleId: String?) : Route
 
     // Settings
     @Serializable data object Settings : Route
