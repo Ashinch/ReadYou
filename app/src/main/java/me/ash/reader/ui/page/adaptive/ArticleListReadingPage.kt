@@ -4,10 +4,9 @@ import android.os.Parcelable
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.material3.LocalMinimumInteractiveComponentSize
-import androidx.compose.material3.VerticalDragHandle
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.layout.AnimatedPane
@@ -23,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -33,7 +33,7 @@ import me.ash.reader.ui.page.home.flow.FlowViewModel
 import me.ash.reader.ui.page.home.reading.ReadingPage
 import me.ash.reader.ui.page.home.reading.ReadingViewModel
 
-@Parcelize data class ArticleData(val articleId: String, val listIndex: Int) : Parcelable
+@Parcelize private data class ArticleData(val articleId: String, val listIndex: Int) : Parcelable
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -64,37 +64,30 @@ fun ArticleListReaderPage(
 
     val backBehavior = BackNavigationBehavior.PopUntilCurrentDestinationChange
 
+    val hiddenAnchor = remember(scaffoldDirective) { PaneExpansionAnchor.Offset.fromStart(0.dp) }
+
+    val expandedAnchor =
+        remember(scaffoldDirective) {
+            PaneExpansionAnchor.Offset.fromStart(scaffoldDirective.defaultPanePreferredWidth)
+        }
+
     val paneExpansionState =
         rememberPaneExpansionState(
             initialAnchoredIndex = 1,
-            anchors =
-                listOf(
-                    PaneExpansionAnchor.Proportion(0f),
-                    PaneExpansionAnchor.Offset.fromStart(
-                        scaffoldDirective.defaultPanePreferredWidth
-                    ),
-                ),
+            anchors = listOf(hiddenAnchor, expandedAnchor),
         )
 
     NavigableListDetailPaneScaffold(
         navigator = navigator,
         modifier = modifier,
         defaultBackBehavior = backBehavior,
-        paneExpansionDragHandle = {
-            val interactionSource = remember { MutableInteractionSource() }
-            VerticalDragHandle(
-                modifier =
-                    Modifier.paneExpansionDraggable(
-                        it,
-                        LocalMinimumInteractiveComponentSize.current,
-                        interactionSource,
-                    ),
-                interactionSource = interactionSource,
-            )
-        },
+        paneExpansionDragHandle = { Spacer(modifier = Modifier.width(2.dp)) },
         paneExpansionState = paneExpansionState,
         listPane = {
-            AnimatedPane {
+            AnimatedPane(
+                enterTransition = motionDataProvider.calculateEnterTransition(paneRole),
+                exitTransition = motionDataProvider.calculateExitTransition(paneRole),
+            ) {
                 BoxWithConstraints {
                     if (this.maxWidth > scaffoldDirective.defaultPanePreferredWidth / 2)
                         FlowPage(
@@ -104,24 +97,23 @@ fun ArticleListReaderPage(
                             flowViewModel = flowViewModel,
                             onNavigateUp = onBack,
                             navigateToArticle = { id, index ->
-                                scope
-                                    .launch {
-                                        navigator.navigateTo(
-                                            pane = ListDetailPaneScaffoldRole.Detail,
-                                            contentKey =
-                                                ArticleData(articleId = id, listIndex = index),
-                                        )
-                                    }
-                                    .invokeOnCompletion {
-                                        readingViewModel.initData(articleId = id, listIndex = index)
-                                    }
+                                readingViewModel.initData(articleId = id, listIndex = index)
+                                scope.launch {
+                                    navigator.navigateTo(
+                                        pane = ListDetailPaneScaffoldRole.Detail,
+                                        contentKey = ArticleData(articleId = id, listIndex = index),
+                                    )
+                                }
                             },
                         )
                 }
             }
         },
         detailPane = {
-            AnimatedPane {
+            AnimatedPane(
+                enterTransition = motionDataProvider.calculateEnterTransition(paneRole),
+                exitTransition = motionDataProvider.calculateExitTransition(paneRole),
+            ) {
                 if (navigator.currentDestination?.pane == ListDetailPaneScaffoldRole.Detail) {
                     ReadingPage(
                         readingViewModel = readingViewModel,
