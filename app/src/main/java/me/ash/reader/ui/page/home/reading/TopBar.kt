@@ -19,9 +19,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.MenuOpen
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Menu
+import androidx.compose.material.icons.rounded.MenuOpen
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -44,6 +47,7 @@ import me.ash.reader.infrastructure.preference.LocalReadingPageTonalElevation
 import me.ash.reader.infrastructure.preference.LocalSharedContent
 import me.ash.reader.infrastructure.preference.ReadingPageTonalElevationPreference
 import me.ash.reader.ui.component.base.FeedbackIconButton
+import me.ash.reader.ui.page.adaptive.NavigationAction
 
 private val sizeSpec = spring<IntSize>(stiffness = 700f)
 
@@ -54,8 +58,9 @@ fun TopBar(
     isScrolled: Boolean = false,
     title: String? = "",
     link: String? = "",
+    navigationAction: NavigationAction,
     onClick: (() -> Unit)? = null,
-    onClose: () -> Unit = {},
+    onNavButtonClick: (NavigationAction) -> Unit = {},
     onNavigateToStylePage: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -96,12 +101,24 @@ fun TopBar(
                             ),
                     windowInsets = WindowInsets(0.dp),
                     navigationIcon = {
+                        val imageVector =
+                            when (navigationAction) {
+                                NavigationAction.Close -> Icons.Rounded.Close
+                                NavigationAction.HideList -> Icons.AutoMirrored.Rounded.MenuOpen
+                                NavigationAction.ExpandList -> Icons.Rounded.Menu
+                            }
+                        val contentDescription =
+                            when (navigationAction) {
+                                NavigationAction.Close -> stringResource(R.string.close)
+                                NavigationAction.HideList -> "Hide list"
+                                NavigationAction.ExpandList -> "Expand list"
+                            }
                         FeedbackIconButton(
-                            imageVector = Icons.Rounded.Close,
-                            contentDescription = stringResource(R.string.close),
+                            imageVector = imageVector,
+                            contentDescription = contentDescription,
                             tint = MaterialTheme.colorScheme.onSurface,
                         ) {
-                            onClose()
+                            onNavButtonClick(navigationAction)
                         }
                     },
                     actions = {

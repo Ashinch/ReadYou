@@ -51,6 +51,7 @@ import me.ash.reader.infrastructure.preference.not
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
 import me.ash.reader.ui.page.adaptive.ArticleListReaderViewModel
+import me.ash.reader.ui.page.adaptive.NavigationAction
 import me.ash.reader.ui.page.home.reading.tts.TtsButton
 
 private const val UPWARD = 1
@@ -61,7 +62,9 @@ private const val DOWNWARD = -1
 fun ReadingPage(
     //    navController: NavHostController,
     viewModel: ArticleListReaderViewModel,
-    onBack: () -> Unit,
+    navigationAction: NavigationAction,
+    onLoadArticle: (String, Int) -> Unit,
+    onNavAction: (NavigationAction) -> Unit,
     onNavigateToStylePage: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -105,7 +108,8 @@ fun ReadingPage(
                         title = readerState.title,
                         link = readerState.link,
                         onClick = { bringToTop = true },
-                        onClose = onBack,
+                        navigationAction = navigationAction,
+                        onNavButtonClick = onNavAction,
                         onNavigateToStylePage = onNavigateToStylePage,
                     )
                 }
@@ -173,11 +177,17 @@ fun ReadingPage(
                                         key = content,
                                         onLoadNext =
                                             if (isNextArticleAvailable) {
-                                                { viewModel.loadNext() }
+                                                {
+                                                    val (id, index) = readerState.nextArticle
+                                                    onLoadArticle(id, index)
+                                                }
                                             } else null,
                                         onLoadPrevious =
                                             if (isPreviousArticleAvailable) {
-                                                { viewModel.loadPrevious() }
+                                                {
+                                                    val (id, index) = readerState.previousArticle
+                                                    onLoadArticle(id, index)
+                                                }
                                             } else null,
                                     )
 
@@ -279,7 +289,12 @@ fun ReadingPage(
                         isBoldCharacters = boldCharacters.value,
                         onUnread = { viewModel.updateReadStatus(it) },
                         onStarred = { viewModel.updateStarredStatus(it) },
-                        onNextArticle = { viewModel.loadNext() },
+                        onNextArticle = {
+                            readerState.nextArticle?.let {
+                                val (id, index) = it
+                                onLoadArticle(id, index)
+                            }
+                        },
                         onFullContent = {
                             if (it) viewModel.renderFullContent()
                             else viewModel.renderDescriptionContent()
@@ -314,8 +329,7 @@ fun ReadingPage(
                                     }
                                 },
                                 state =
-                                    viewModel.textToSpeechManager.stateFlow
-                                        .collectAsStateValue(),
+                                    viewModel.textToSpeechManager.stateFlow.collectAsStateValue(),
                             )
                         },
                     )

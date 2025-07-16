@@ -427,18 +427,6 @@ class ArticleListReaderViewModel @Inject constructor(
         )
     }
 
-    fun loadPrevious(): Boolean {
-        val (articleId, listIndex) = readerStateStateFlow.value.previousArticle ?: return false
-        initData(articleId, listIndex)
-        return true
-    }
-
-    fun loadNext(): Boolean {
-        val (articleId, listIndex) = readerStateStateFlow.value.nextArticle ?: return false
-        initData(articleId, listIndex)
-        return true
-    }
-
     fun downloadImage(
         url: String, onSuccess: (Uri) -> Unit = {}, onFailure: (Throwable) -> Unit = {}
     ) {

@@ -13,6 +13,7 @@ import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -24,6 +25,7 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import me.ash.reader.ui.motion.materialSharedAxisXIn
 import me.ash.reader.ui.motion.materialSharedAxisXOut
+import me.ash.reader.ui.page.adaptive.ArticleData
 import me.ash.reader.ui.page.adaptive.ArticleListReaderPage
 import me.ash.reader.ui.page.adaptive.ArticleListReaderViewModel
 import me.ash.reader.ui.page.home.HomeViewModel
@@ -120,20 +122,25 @@ fun AppEntry(backStack: NavBackStack) {
                         NavEntry(key) {
                             val scaffoldDirective =
                                 calculatePaneScaffoldDirective(currentWindowAdaptiveInfo())
+
+                            val key = rememberSaveable(saver = Route.Reading.Saver) { key }
+
                             val navigator =
-                                rememberListDetailPaneScaffoldNavigator<Any>(
+                                rememberListDetailPaneScaffoldNavigator<ArticleData>(
                                     scaffoldDirective = scaffoldDirective,
                                     isDestinationHistoryAware = false,
                                 )
-                            val articleId = key.articleId
 
-                            val viewModel = hiltViewModel<ArticleListReaderViewModel>()
-                            LaunchedEffect(articleId) {
-                                if (articleId != null) {
-                                    viewModel.initData(articleId)
-                                    navigator.navigateTo(pane = ListDetailPaneScaffoldRole.Detail)
+                            LaunchedEffect(key) {
+                                if (key.articleId != null) {
+                                    navigator.navigateTo(
+                                        ListDetailPaneScaffoldRole.Detail,
+                                        ArticleData(key.articleId),
+                                    )
                                 }
                             }
+
+                            val viewModel = hiltViewModel<ArticleListReaderViewModel>()
 
                             ArticleListReaderPage(
                                 scaffoldDirective = scaffoldDirective,

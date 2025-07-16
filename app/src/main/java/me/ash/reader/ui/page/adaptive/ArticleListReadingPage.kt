@@ -4,12 +4,12 @@ import android.os.Parcelable
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
 import androidx.compose.material3.adaptive.layout.PaneExpansionAnchor
 import androidx.compose.material3.adaptive.layout.PaneScaffoldDirective
 import androidx.compose.material3.adaptive.layout.rememberPaneExpansionState
@@ -17,6 +17,7 @@ import androidx.compose.material3.adaptive.navigation.BackNavigationBehavior
 import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneScaffold
 import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -25,15 +26,16 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import me.ash.reader.ui.page.home.flow.FlowPage
 import me.ash.reader.ui.page.home.reading.ReadingPage
+import timber.log.Timber
 
-@Parcelize private data class ArticleData(val articleId: String, val listIndex: Int) : Parcelable
+@Parcelize data class ArticleData(val articleId: String, val listIndex: Int? = null) : Parcelable
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun ArticleListReaderPage(
     modifier: Modifier = Modifier,
     scaffoldDirective: PaneScaffoldDirective,
-    navigator: ThreePaneScaffoldNavigator<Any>,
+    navigator: ThreePaneScaffoldNavigator<ArticleData>,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: ArticleListReaderViewModel,
@@ -41,10 +43,9 @@ fun ArticleListReaderPage(
     onNavigateToStylePage: () -> Unit,
 ) {
 
-
     val scope = rememberCoroutineScope()
 
-    val backBehavior = BackNavigationBehavior.PopUntilCurrentDestinationChange
+    val backBehavior = BackNavigationBehavior.PopUntilScaffoldValueChange
 
     val hiddenAnchor = remember(scaffoldDirective) { PaneExpansionAnchor.Offset.fromStart(0.dp) }
 
@@ -59,6 +60,26 @@ fun ArticleListReaderPage(
             anchors = listOf(hiddenAnchor, expandedAnchor),
         )
 
+    val isTwoPane =
+        navigator.scaffoldValue.run {
+            get(ListDetailPaneScaffoldRole.List) == PaneAdaptedValue.Expanded &&
+                get(ListDetailPaneScaffoldRole.Detail) == PaneAdaptedValue.Expanded
+        }
+
+    val navigationAction =
+        if (isTwoPane) {
+            val currentAnchor = paneExpansionState.currentAnchor
+            if (currentAnchor == null || currentAnchor == expandedAnchor) {
+                NavigationAction.HideList
+            } else {
+                NavigationAction.ExpandList
+            }
+        } else {
+            NavigationAction.Close
+        }
+
+    LaunchedEffect(isTwoPane) { Timber.d("isTwoPane: $isTwoPane") }
+
     NavigableListDetailPaneScaffold(
         navigator = navigator,
         modifier = modifier,
@@ -70,24 +91,22 @@ fun ArticleListReaderPage(
                 enterTransition = motionDataProvider.calculateEnterTransition(paneRole),
                 exitTransition = motionDataProvider.calculateExitTransition(paneRole),
             ) {
-                BoxWithConstraints {
-                    if (this.maxWidth > scaffoldDirective.defaultPanePreferredWidth / 2)
-                        FlowPage(
-                            sharedTransitionScope = sharedTransitionScope,
-                            animatedVisibilityScope = animatedVisibilityScope,
-                            viewModel = viewModel,
-                            onNavigateUp = onBack,
-                            navigateToArticle = { id, index ->
-                                viewModel.initData(articleId = id, listIndex = index)
-                                scope.launch {
-                                    navigator.navigateTo(
-                                        pane = ListDetailPaneScaffoldRole.Detail,
-                                        contentKey = ArticleData(articleId = id, listIndex = index),
-                                    )
-                                }
-                            },
-                        )
-                }
+                //                BoxWithConstraints {
+                FlowPage(
+                    sharedTransitionScope = sharedTransitionScope,
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    viewModel = viewModel,
+                    onNavigateUp = onBack,
+                    navigateToArticle = { id, index ->
+                        scope.launch {
+                            navigator.navigateTo(
+                                pane = ListDetailPaneScaffoldRole.Detail,
+                                contentKey = ArticleData(articleId = id, listIndex = index),
+                            )
+                        }
+                    },
+                )
+                //                }
             }
         },
         detailPane = {
@@ -95,19 +114,39 @@ fun ArticleListReaderPage(
                 enterTransition = motionDataProvider.calculateEnterTransition(paneRole),
                 exitTransition = motionDataProvider.calculateExitTransition(paneRole),
             ) {
-                if (navigator.currentDestination?.pane == ListDetailPaneScaffoldRole.Detail) {
-                    ReadingPage(
-                        viewModel = viewModel,
-                        onBack = {
-                            if (navigator.canNavigateBack(backBehavior)) {
-                                scope.launch { navigator.navigateBack(backBehavior) }
-                            } else {
-                                onBack()
-                            }
-                        },
-                        onNavigateToStylePage = onNavigateToStylePage,
-                    )
+                navigator.currentDestination?.contentKey?.let {
+                    viewModel.initData(articleId = it.articleId, listIndex = it.listIndex)
                 }
+                ReadingPage(
+                    viewModel = viewModel,
+                    navigationAction = navigationAction,
+                    onLoadArticle = { id, index ->
+                        scope.launch {
+                            navigator.navigateTo(
+                                pane = ListDetailPaneScaffoldRole.Detail,
+                                contentKey = ArticleData(articleId = id, listIndex = index),
+                            )
+                        }
+                    },
+                    onNavAction = {
+                        when (it) {
+                            NavigationAction.Close -> {
+                                if (navigator.canNavigateBack(backBehavior)) {
+                                    scope.launch { navigator.navigateBack(backBehavior) }
+                                } else {
+                                    onBack()
+                                }
+                            }
+                            NavigationAction.HideList -> {
+                                scope.launch { paneExpansionState.animateTo(hiddenAnchor) }
+                            }
+                            NavigationAction.ExpandList -> {
+                                scope.launch { paneExpansionState.animateTo(expandedAnchor) }
+                            }
+                        }
+                    },
+                    onNavigateToStylePage = onNavigateToStylePage,
+                )
             }
         },
     )
