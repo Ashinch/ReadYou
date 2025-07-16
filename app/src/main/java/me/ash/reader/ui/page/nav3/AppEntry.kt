@@ -28,7 +28,6 @@ import me.ash.reader.ui.motion.materialSharedAxisXOut
 import me.ash.reader.ui.page.adaptive.ArticleData
 import me.ash.reader.ui.page.adaptive.ArticleListReaderPage
 import me.ash.reader.ui.page.adaptive.ArticleListReaderViewModel
-import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.feeds.FeedsPage
 import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.page.nav3.key.Route
@@ -63,7 +62,6 @@ private const val INITIAL_OFFSET_FACTOR = 0.10f
 )
 @Composable
 fun AppEntry(backStack: NavBackStack) {
-    val homeViewModel = hiltViewModel<HomeViewModel>()
     val subscribeViewModel = hiltViewModel<SubscribeViewModel>()
 
     val onBack: () -> Unit = {
