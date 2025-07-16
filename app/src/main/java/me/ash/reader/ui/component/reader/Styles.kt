@@ -41,8 +41,8 @@ import androidx.compose.ui.unit.sp
 import me.ash.reader.infrastructure.preference.*
 import me.ash.reader.ui.ext.alphaLN
 
-private val MediumContentWidth = 600.dp
-private val ExpandedContentWidth = 768.dp
+val MediumContentWidth = 600.dp
+val ExpandedContentWidth = 768.dp
 
 val LocalTextContentWidth = compositionLocalOf { MediumContentWidth }
 val LocalImageContentWidth = compositionLocalOf { MediumContentWidth }

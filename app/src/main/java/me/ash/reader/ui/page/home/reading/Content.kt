@@ -26,6 +26,7 @@ import java.util.Date
 import me.ash.reader.infrastructure.preference.LocalReadingRenderer
 import me.ash.reader.infrastructure.preference.LocalReadingSubheadUpperCase
 import me.ash.reader.infrastructure.preference.ReadingRendererPreference
+import me.ash.reader.ui.component.reader.LocalTextContentWidth
 import me.ash.reader.ui.component.reader.Reader
 import me.ash.reader.ui.component.webview.RYWebView
 import me.ash.reader.ui.ext.drawVerticalScrollbar
@@ -52,7 +53,8 @@ fun Content(
     val subheadUpperCase = LocalReadingSubheadUpperCase.current
     val renderer = LocalReadingRenderer.current
 
-    val maxWidthModifier = Modifier.widthIn(max = 600.dp)
+    val textContentWidth = LocalTextContentWidth.current
+    val maxWidthModifier = Modifier.widthIn(max = textContentWidth)
     val uriHandler = LocalUriHandler.current
 
     val headline =
