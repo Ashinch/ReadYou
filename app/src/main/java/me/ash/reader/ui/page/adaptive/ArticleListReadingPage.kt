@@ -114,8 +114,11 @@ fun ArticleListReaderPage(
                 enterTransition = motionDataProvider.calculateEnterTransition(paneRole),
                 exitTransition = motionDataProvider.calculateExitTransition(paneRole),
             ) {
-                navigator.currentDestination?.contentKey?.let {
-                    viewModel.initData(articleId = it.articleId, listIndex = it.listIndex)
+                val contentKey = navigator.currentDestination?.contentKey
+                LaunchedEffect(contentKey) {
+                    contentKey?.let {
+                        viewModel.initData(articleId = it.articleId, listIndex = it.listIndex)
+                    }
                 }
                 ReadingPage(
                     viewModel = viewModel,

@@ -57,14 +57,13 @@ class ArticleListReaderViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @ApplicationScope private val applicationScope: CoroutineScope,
     val diffMapHolder: DiffMapHolder,
-    private val articlePagingListUseCase: ArticlePagingListUseCase,
     private val filterStateUseCase: FilterStateUseCase,
     private val groupWithFeedsListUseCase: GroupWithFeedsListUseCase,
     private val settingsProvider: SettingsProvider,
     private val readerCacheHelper: ReaderCacheHelper,
     val textToSpeechManager: TextToSpeechManager,
     private val imageDownloader: AndroidImageDownloader,
-    private val pagingListUseCase: ArticlePagingListUseCase,
+    private val articleListUseCase: ArticlePagingListUseCase,
     workManager: WorkManager,
 ) : ViewModel() {
 
@@ -82,7 +81,7 @@ class ArticleListReaderViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            articlePagingListUseCase.pagerFlow.combine(groupWithFeedsListUseCase.groupWithFeedListFlow) { pagerData, groupWithFeedsList ->
+            articleListUseCase.pagerFlow.combine(groupWithFeedsListUseCase.groupWithFeedListFlow) { pagerData, groupWithFeedsList ->
                 val filterState = pagerData.filterState
                 var nextFilterState: FilterState? = null
                 if (filterState.group != null) {
@@ -184,7 +183,7 @@ class ArticleListReaderViewModel @Inject constructor(
     ) {
         viewModelScope.launch(ioDispatcher) {
             val items =
-                articlePagingListUseCase.itemSnapshotList.filterIsInstance<ArticleFlowItem.Article>()
+                articleListUseCase.itemSnapshotList.filterIsInstance<ArticleFlowItem.Article>()
                     .map { it.articleWithFeed }.filter {
                         if (isBefore) {
                             date > it.article.date && it.article.isUnread
@@ -210,7 +209,7 @@ class ArticleListReaderViewModel @Inject constructor(
     fun markAllAsRead() {
         viewModelScope.launch {
             val items =
-                articlePagingListUseCase.itemSnapshotList.items.filterIsInstance<ArticleFlowItem.Article>()
+                articleListUseCase.itemSnapshotList.items.filterIsInstance<ArticleFlowItem.Article>()
                     .map { it.articleWithFeed }
 
             diffMapHolder.updateDiff(
@@ -277,7 +276,7 @@ class ArticleListReaderViewModel @Inject constructor(
 
     fun initData(articleId: String, listIndex: Int? = null) {
         viewModelScope.launch {
-            val snapshotList = pagingListUseCase.itemSnapshotList
+            val snapshotList = articleListUseCase.itemSnapshotList
 
             val itemByIndex =
                 listIndex?.let { snapshotList.getOrNull(it) as? ArticleFlowItem.Article }
@@ -388,7 +387,7 @@ class ArticleListReaderViewModel @Inject constructor(
     }
 
     fun ReaderState.prefetchArticleId(): ReaderState {
-        val items = pagingListUseCase.itemSnapshotList
+        val items = articleListUseCase.itemSnapshotList
         val currentId = currentArticle?.id
         val index = items.indexOfFirst { item ->
             item is ArticleFlowItem.Article && item.articleWithFeed.article.id == currentId
