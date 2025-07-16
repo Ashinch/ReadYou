@@ -110,13 +110,13 @@ private fun LazyListScope.formatBody(
                 }
             val requiresBidi = paragraph.toString().requiresBidi()
             val textStyle = bodyStyle().applyTextDirection(requiresBidi = requiresBidi)
+            val contentWidth = LocalTextContentWidth.current
 
             Text(
                 text = paragraph,
                 style = textStyle,
                 modifier =
-                    Modifier.width(MAX_CONTENT_WIDTH.dp)
-                        .padding(horizontal = textHorizontalPadding().dp),
+                    Modifier.width(contentWidth).padding(horizontal = textHorizontalPadding().dp),
             )
         }
     }
@@ -143,6 +143,7 @@ private fun LazyListScope.formatCodeBlock(
 ) {
     val composer = TextComposer { paragraphBuilder ->
         item {
+            val contentWidth = LocalTextContentWidth.current
             val scrollState = rememberScrollState()
             Spacer(modifier = Modifier.height(8.dp))
             Surface(
@@ -152,7 +153,7 @@ private fun LazyListScope.formatCodeBlock(
             ) {
                 Box(
                     modifier =
-                        Modifier.width(MAX_CONTENT_WIDTH.dp)
+                        Modifier.width(contentWidth)
                             .padding(all = 8.dp)
                             .horizontalScroll(state = scrollState)
                 ) {
@@ -495,9 +496,10 @@ private fun TextComposer.appendTextChildren(
                             val alt = element.attr("alt") ?: ""
                             appendImage(onLinkClick = onLinkClick) { onClick ->
                                 lazyListScope.item {
+                                    val contentWidth = LocalImageContentWidth.current
                                     Column(
                                         modifier =
-                                            Modifier.width(MAX_CONTENT_WIDTH.dp)
+                                            Modifier.width(contentWidth)
                                                 .padding(vertical = 16.dp)
                                     ) {
                                         DisableSelection {
@@ -523,9 +525,10 @@ private fun TextComposer.appendTextChildren(
                     "figcaption",
                     "caption" -> {
                         lazyListScope.item {
+                            val contentWidth = LocalTextContentWidth.current
                             Text(
                                 modifier =
-                                    Modifier.fillMaxWidth()
+                                    Modifier.width(contentWidth)
                                         .padding(horizontal = textHorizontalPadding().dp)
                                         .padding(bottom = 24.dp),
                                 text = element.text(),
@@ -631,9 +634,10 @@ private fun TextComposer.appendTextChildren(
                         if (video != null) {
                             appendImage(onLinkClick = onLinkClick) {
                                 lazyListScope.item {
+                                    val contentWidth = LocalImageContentWidth.current
                                     Column(
                                         modifier =
-                                            Modifier.width(MAX_CONTENT_WIDTH.dp)
+                                            Modifier.width(contentWidth)
                                                 .padding(vertical = 32.dp)
                                     ) {
                                         DisableSelection {
