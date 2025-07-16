@@ -50,6 +50,7 @@ import me.ash.reader.infrastructure.preference.LocalReadingTextLineHeight
 import me.ash.reader.infrastructure.preference.not
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.ext.showToast
+import me.ash.reader.ui.page.adaptive.ArticleListReaderViewModel
 import me.ash.reader.ui.page.home.reading.tts.TtsButton
 
 private const val UPWARD = 1
@@ -59,15 +60,15 @@ private const val DOWNWARD = -1
 @Composable
 fun ReadingPage(
     //    navController: NavHostController,
-    readingViewModel: ReadingViewModel,
+    viewModel: ArticleListReaderViewModel,
     onBack: () -> Unit,
     onNavigateToStylePage: () -> Unit,
 ) {
     val context = LocalContext.current
     val hapticFeedback = LocalHapticFeedback.current
     val isPullToSwitchArticleEnabled = LocalPullToSwitchArticle.current.value
-    val readingUiState = readingViewModel.readingUiState.collectAsStateValue()
-    val readerState = readingViewModel.readerStateStateFlow.collectAsStateValue()
+    val readingUiState = viewModel.readingUiState.collectAsStateValue()
+    val readerState = viewModel.readerStateStateFlow.collectAsStateValue()
     val boldCharacters = LocalReadingBoldCharacters.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -172,11 +173,11 @@ fun ReadingPage(
                                         key = content,
                                         onLoadNext =
                                             if (isNextArticleAvailable) {
-                                                { readingViewModel.loadNext() }
+                                                { viewModel.loadNext() }
                                             } else null,
                                         onLoadPrevious =
                                             if (isPreviousArticleAvailable) {
-                                                { readingViewModel.loadPrevious() }
+                                                { viewModel.loadPrevious() }
                                             } else null,
                                     )
 
@@ -276,16 +277,16 @@ fun ReadingPage(
                             readerState.content is ReaderState.FullContent ||
                                 readerState.content is ReaderState.Error,
                         isBoldCharacters = boldCharacters.value,
-                        onUnread = { readingViewModel.updateReadStatus(it) },
-                        onStarred = { readingViewModel.updateStarredStatus(it) },
-                        onNextArticle = { readingViewModel.loadNext() },
+                        onUnread = { viewModel.updateReadStatus(it) },
+                        onStarred = { viewModel.updateStarredStatus(it) },
+                        onNextArticle = { viewModel.loadNext() },
                         onFullContent = {
-                            if (it) readingViewModel.renderFullContent()
-                            else readingViewModel.renderDescriptionContent()
+                            if (it) viewModel.renderFullContent()
+                            else viewModel.renderDescriptionContent()
                         },
                         onBoldCharacters = { (!boldCharacters).put(context, coroutineScope) },
                         onReadAloud = {
-                            readingViewModel.textToSpeechManager.readHtml(
+                            viewModel.textToSpeechManager.readHtml(
                                 readerState.content.text ?: return@BottomBar
                             )
                         },
@@ -298,13 +299,13 @@ fun ReadingPage(
                                         }
 
                                         TextToSpeechManager.State.Idle -> {
-                                            readingViewModel.textToSpeechManager.readHtml(
+                                            viewModel.textToSpeechManager.readHtml(
                                                 readerState.content.text ?: ""
                                             )
                                         }
 
                                         is TextToSpeechManager.State.Reading -> {
-                                            readingViewModel.textToSpeechManager.stop()
+                                            viewModel.textToSpeechManager.stop()
                                         }
 
                                         TextToSpeechManager.State.Preparing -> {
@@ -313,7 +314,7 @@ fun ReadingPage(
                                     }
                                 },
                                 state =
-                                    readingViewModel.textToSpeechManager.stateFlow
+                                    viewModel.textToSpeechManager.stateFlow
                                         .collectAsStateValue(),
                             )
                         },
@@ -327,7 +328,7 @@ fun ReadingPage(
         ReaderImageViewer(
             imageData = currentImageData,
             onDownloadImage = {
-                readingViewModel.downloadImage(
+                viewModel.downloadImage(
                     it,
                     onSuccess = { context.showToast(context.getString(R.string.image_saved)) },
                     onFailure = {

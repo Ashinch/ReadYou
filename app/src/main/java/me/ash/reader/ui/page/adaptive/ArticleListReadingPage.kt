@@ -41,11 +41,9 @@ fun ArticleListReaderPage(
     modifier: Modifier = Modifier,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    homeViewModel: HomeViewModel,
+    viewModel: ArticleListReaderViewModel,
     onBack: () -> Unit,
     onNavigateToStylePage: () -> Unit,
-    flowViewModel: FlowViewModel = hiltViewModel(),
-    readingViewModel: ReadingViewModel = hiltViewModel(),
 ) {
     val scaffoldDirective = calculatePaneScaffoldDirective(currentWindowAdaptiveInfo())
     val navigator =
@@ -56,10 +54,10 @@ fun ArticleListReaderPage(
 
     val scope = rememberCoroutineScope()
 
-    val readerState = readingViewModel.readerStateStateFlow.collectAsStateValue()
+    val readerState = viewModel.readerStateStateFlow.collectAsStateValue()
 
     LaunchedEffect(readerState.articleId) {
-        flowViewModel.updateReadingArticleId(readerState.articleId)
+        viewModel.updateReadingArticleId(readerState.articleId)
     }
 
     val backBehavior = BackNavigationBehavior.PopUntilCurrentDestinationChange
@@ -93,11 +91,10 @@ fun ArticleListReaderPage(
                         FlowPage(
                             sharedTransitionScope = sharedTransitionScope,
                             animatedVisibilityScope = animatedVisibilityScope,
-                            homeViewModel = homeViewModel,
-                            flowViewModel = flowViewModel,
+                            viewModel = viewModel,
                             onNavigateUp = onBack,
                             navigateToArticle = { id, index ->
-                                readingViewModel.initData(articleId = id, listIndex = index)
+                                viewModel.initData(articleId = id, listIndex = index)
                                 scope.launch {
                                     navigator.navigateTo(
                                         pane = ListDetailPaneScaffoldRole.Detail,
@@ -116,7 +113,7 @@ fun ArticleListReaderPage(
             ) {
                 if (navigator.currentDestination?.pane == ListDetailPaneScaffoldRole.Detail) {
                     ReadingPage(
-                        readingViewModel = readingViewModel,
+                        viewModel = viewModel,
                         onBack = {
                             if (navigator.canNavigateBack(backBehavior)) {
                                 scope.launch { navigator.navigateBack(backBehavior) }

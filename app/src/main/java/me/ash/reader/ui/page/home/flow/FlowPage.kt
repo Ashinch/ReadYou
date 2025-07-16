@@ -94,6 +94,7 @@ import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.motion.Direction
 import me.ash.reader.ui.motion.sharedXAxisTransitionSlow
 import me.ash.reader.ui.motion.sharedYAxisTransitionExpressive
+import me.ash.reader.ui.page.adaptive.ArticleListReaderViewModel
 import me.ash.reader.ui.page.home.HomeViewModel
 import me.ash.reader.ui.page.home.reading.PullToLoadDefaults
 import me.ash.reader.ui.page.home.reading.PullToLoadDefaults.ContentOffsetMultiple
@@ -108,11 +109,9 @@ import me.ash.reader.ui.page.home.reading.rememberPullToLoadState
 )
 @Composable
 fun FlowPage(
-    //    navController: NavHostController,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    flowViewModel: FlowViewModel = hiltViewModel(),
-    homeViewModel: HomeViewModel,
+    viewModel: ArticleListReaderViewModel,
     onNavigateUp: () -> Unit,
     navigateToArticle: (String, Int) -> Unit,
 ) {
@@ -134,7 +133,7 @@ fun FlowPage(
     val settings = LocalSettings.current
     val pullToSwitchFeed = settings.pullToSwitchFeed
 
-    val flowUiState = flowViewModel.flowUiState.collectAsStateValue()
+    val flowUiState = viewModel.flowUiState.collectAsStateValue()
 
     val pagerData: PagerData = flowUiState.pagerData
 
@@ -171,7 +170,7 @@ fun FlowPage(
 
     val onToggleStarred: (ArticleWithFeed) -> Unit = remember {
         { article ->
-            flowViewModel.updateStarredStatus(
+            viewModel.updateStarredStatus(
                 articleId = article.article.id,
                 isStarred = !article.article.isStarred,
             )
@@ -179,7 +178,7 @@ fun FlowPage(
     }
 
     val onToggleRead: (ArticleWithFeed) -> Unit = remember {
-        { articleWithFeed -> homeViewModel.diffMapHolder.updateDiff(articleWithFeed) }
+        { articleWithFeed -> viewModel.diffMapHolder.updateDiff(articleWithFeed) }
     }
 
     val sortByEarliest =
@@ -189,7 +188,7 @@ fun FlowPage(
     val onMarkAboveAsRead: ((ArticleWithFeed) -> Unit)? =
         remember(sortByEarliest) {
             {
-                flowViewModel.markAsReadFromListByDate(
+                viewModel.markAsReadFromListByDate(
                     date = it.article.date,
                     isBefore = sortByEarliest,
                 )
@@ -199,7 +198,7 @@ fun FlowPage(
     val onMarkBelowAsRead: ((ArticleWithFeed) -> Unit)? =
         remember(sortByEarliest) {
             {
-                flowViewModel.markAsReadFromListByDate(
+                viewModel.markAsReadFromListByDate(
                     date = it.article.date,
                     isBefore = !sortByEarliest,
                 )
@@ -215,7 +214,7 @@ fun FlowPage(
     LaunchedEffect(onSearch) {
         if (!onSearch) {
             keyboardController?.hide()
-            homeViewModel.inputSearchContent(null)
+            viewModel.inputSearchContent(null)
         }
     }
 
@@ -266,7 +265,7 @@ fun FlowPage(
         }
     }
 
-    val isSyncing = flowViewModel.isSyncingFlow.collectAsStateValue()
+    val isSyncing = viewModel.isSyncingFlow.collectAsStateValue()
 
     Box(modifier = Modifier.fillMaxSize()) {
         RYScaffold(
@@ -431,10 +430,10 @@ fun FlowPage(
                                     )
                             },
                         focusRequester = focusRequester,
-                        onValueChange = { homeViewModel.inputSearchContent(it) },
+                        onValueChange = { viewModel.inputSearchContent(it) },
                         onClose = {
                             onSearch = false
-                            homeViewModel.inputSearchContent(null)
+                            viewModel.inputSearchContent(null)
                         },
                     )
                 }
@@ -444,7 +443,7 @@ fun FlowPage(
 
                     MarkAsReadBar {
                         markAsRead = false
-                        flowViewModel.updateReadStatus(
+                        viewModel.updateReadStatus(
                             groupId = filterUiState.group?.id,
                             feedId = filterUiState.feed?.id,
                             articleId = null,
@@ -496,7 +495,7 @@ fun FlowPage(
                                                 items.add(it.articleWithFeed)
                                         }
                                     }
-                                    homeViewModel.diffMapHolder.updateDiff(
+                                    viewModel.diffMapHolder.updateDiff(
                                         articleWithFeed = items.toTypedArray(),
                                         isUnread = false,
                                     )
@@ -554,10 +553,10 @@ fun FlowPage(
 
                     val onLoadNext: (() -> Unit)? =
                         when (loadAction) {
-                            is LoadAction.NextFeed -> flowViewModel::loadNextFeedOrGroup
+                            is LoadAction.NextFeed -> viewModel::loadNextFeedOrGroup
                             LoadAction.MarkAllAsRead -> {
                                 {
-                                    flowViewModel.markAllAsRead()
+                                    viewModel.markAllAsRead()
                                     currentPullToLoadState?.animateDistanceTo(
                                         targetValue = 0f,
                                         animationSpec = settleSpec,
@@ -572,7 +571,7 @@ fun FlowPage(
                         if (isSyncing) null
                         else {
                             {
-                                flowViewModel.sync()
+                                viewModel.sync()
                                 currentPullToLoadState?.animateDistanceTo(
                                     targetValue = 0f,
                                     animationSpec = settleSpec,
@@ -618,14 +617,14 @@ fun FlowPage(
                         ) {
                             ArticleList(
                                 pagingItems = pagingItems,
-                                diffMap = homeViewModel.diffMapHolder.diffMap,
+                                diffMap = viewModel.diffMapHolder.diffMap,
                                 isShowFeedIcon = articleListFeedIcon.value,
                                 isShowStickyHeader = articleListDateStickyHeader.value,
                                 articleListTonalElevation = articleListTonalElevation.value,
                                 isSwipeEnabled = { listState.isScrollInProgress },
                                 onClick = { articleWithFeed, index ->
                                     if (articleWithFeed.feed.isBrowser) {
-                                        homeViewModel.diffMapHolder.updateDiff(
+                                        viewModel.diffMapHolder.updateDiff(
                                             articleWithFeed,
                                             isUnread = false,
                                         )
@@ -674,7 +673,7 @@ fun FlowPage(
                     filterBarTonalElevation = filterBarTonalElevation.value.dp,
                 ) {
                     if (filterUiState.filter != it) {
-                        homeViewModel.changeFilter(filterUiState.copy(filter = it))
+                        viewModel.changeFilter(filterUiState.copy(filter = it))
                     } else {
                         scope.launch {
                             if (listState.firstVisibleItemIndex != 0) {

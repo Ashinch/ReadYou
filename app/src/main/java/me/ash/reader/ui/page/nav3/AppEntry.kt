@@ -113,7 +113,7 @@ fun AppEntry(backStack: NavBackStack) {
                             ArticleListReaderPage(
                                 sharedTransitionScope = this@SharedTransitionLayout,
                                 animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-                                homeViewModel = homeViewModel,
+                                viewModel = hiltViewModel(),
                                 onBack = onBack,
                                 onNavigateToStylePage = { backStack.add(Route.ReadingPageStyle) },
                             )
