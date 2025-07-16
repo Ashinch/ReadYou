@@ -77,7 +77,7 @@ constructor(
                     .build(),
             )
 
-            articles.forEachIndexed { _, article ->
+            articles.asReversed().forEachIndexed { _, article ->
                 val builder =
                     NotificationCompat.Builder(context, NotificationGroupName.ARTICLE_UPDATE)
                         .setSmallIcon(R.drawable.ic_notification)
