@@ -153,7 +153,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         WidgetUpdateWorker.enqueueOneTimeWork(workManager)
-        Timber.d("resume!!")
         super.onResume()
     }
 }

@@ -835,10 +835,27 @@ interface ArticleDao {
         SELECT * FROM article
         WHERE accountId = :accountId
         AND isUnread = 1
+        ORDER BY date desc
         LIMIT :limit
         """
     )
     suspend fun queryLatestUnreadArticles(accountId: Int, limit: Int): List<ArticleWithFeed>
+
+
+    /**
+     * query the latest unread articles from account with id, limit count
+     */
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM article
+        WHERE accountId = :accountId
+        AND isUnread = 1
+        ORDER BY date desc
+        LIMIT :limit
+        """
+    )
+    fun queryLatestUnreadArticleFlow(accountId: Int, limit: Int): Flow<List<ArticleWithFeed>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg article: Article)
