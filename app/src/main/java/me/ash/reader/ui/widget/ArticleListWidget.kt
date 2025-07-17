@@ -13,6 +13,10 @@ import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalSize
+import androidx.glance.action.ActionParameters
+import androidx.glance.action.actionParametersOf
+import androidx.glance.action.actionStartActivity
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
@@ -35,15 +39,12 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import me.ash.reader.R
-import me.ash.reader.domain.repository.ArticleDao
-import me.ash.reader.domain.service.AccountService
+import me.ash.reader.infrastructure.android.MainActivity
+import me.ash.reader.ui.page.common.ExtraName
 
 class ArticleListWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = ArticleListWidget()
@@ -51,23 +52,24 @@ class ArticleListWidgetReceiver : GlanceAppWidgetReceiver() {
 
 class ArticleListWidget : GlanceAppWidget() {
 
-
     override val sizeMode: SizeMode = SizeMode.Exact
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val entryPoint =
-            EntryPointAccessors.fromApplication(context, WidgetEntryPoint::class.java)
-        val articles = withContext(Dispatchers.IO) {
-            val articleDao = entryPoint.articleDao()
-            val accountService = entryPoint.accountService()
-            val currentAccountId = accountService.getCurrentAccountId()
-            articleDao.queryLatestUnreadArticles(accountId = currentAccountId, limit = 10)
-        }.map {
-            Article(
-                title = it.article.title,
-                feedName = it.feed.name,
-            )
-        }
+        val entryPoint = EntryPointAccessors.fromApplication(context, WidgetEntryPoint::class.java)
+        val articles =
+            withContext(Dispatchers.IO) {
+                    val articleDao = entryPoint.articleDao()
+                    val accountService = entryPoint.accountService()
+                    val currentAccountId = accountService.getCurrentAccountId()
+                    articleDao.queryLatestUnreadArticles(accountId = currentAccountId, limit = 10)
+                }
+                .map {
+                    Article(
+                        title = it.article.title,
+                        feedName = it.feed.name,
+                        articleId = it.article.id,
+                    )
+                }
 
         provideContent {
             GlanceTheme {
@@ -86,10 +88,7 @@ class ArticleListWidget : GlanceAppWidget() {
 @GlanceComposable
 @Composable
 fun WidgetContainer(modifier: GlanceModifier = GlanceModifier, content: @Composable () -> Unit) {
-    Column(
-        modifier.fillMaxSize().background(GlanceTheme.colors.surface),
-        content = { content() },
-    )
+    Column(modifier.fillMaxSize().background(GlanceTheme.colors.surface), content = { content() })
 }
 
 @GlanceComposable
@@ -112,10 +111,11 @@ fun Header(text: String, theme: Theme, modifier: GlanceModifier = GlanceModifier
                     fontSize = fontSize,
                     fontWeight = FontWeight.Bold,
                     color = GlanceTheme.colors.onSurface,
-                    fontFamily = when (theme) {
-                        Theme.Serif -> FontFamily.Serif
-                        Theme.SansSerif -> FontFamily.SansSerif
-                    }
+                    fontFamily =
+                        when (theme) {
+                            Theme.Serif -> FontFamily.Serif
+                            Theme.SansSerif -> FontFamily.SansSerif
+                        },
                 ),
             maxLines = 1,
         )
@@ -126,7 +126,20 @@ fun Header(text: String, theme: Theme, modifier: GlanceModifier = GlanceModifier
 fun ArticleList(items: List<Article>, theme: Theme, modifier: GlanceModifier = GlanceModifier) {
     LazyColumn(modifier = modifier) {
         item { Spacer(modifier = GlanceModifier.height(4.dp)) }
-        items(items) { ArticleItem(article = it, theme = theme) }
+        items(items) {
+            ArticleItem(
+                article = it,
+                theme = theme,
+                modifier =
+                    GlanceModifier.clickable(
+                        actionStartActivity<MainActivity>(
+                            actionParametersOf(
+                                ActionParameters.Key<String>(ExtraName.ARTICLE_ID) to it.articleId
+                            )
+                        )
+                    ),
+            )
+        }
         item { Spacer(modifier = GlanceModifier.height(12.dp)) }
     }
 }
@@ -151,15 +164,17 @@ fun ArticleItem(article: Article, theme: Theme, modifier: GlanceModifier = Glanc
             style =
                 TextStyle(
                     fontSize = 16.sp,
-                    fontWeight = when (theme) {
-                        Theme.Serif -> FontWeight.Bold
-                        Theme.SansSerif -> FontWeight.Bold
-                    },
+                    fontWeight =
+                        when (theme) {
+                            Theme.Serif -> FontWeight.Bold
+                            Theme.SansSerif -> FontWeight.Bold
+                        },
                     color = GlanceTheme.colors.onSurface,
-                    fontFamily = when (theme) {
-                        Theme.Serif -> FontFamily.Serif
-                        Theme.SansSerif -> FontFamily.SansSerif
-                    }
+                    fontFamily =
+                        when (theme) {
+                            Theme.Serif -> FontFamily.Serif
+                            Theme.SansSerif -> FontFamily.SansSerif
+                        },
                 ),
             maxLines = 2,
         )
@@ -168,21 +183,38 @@ fun ArticleItem(article: Article, theme: Theme, modifier: GlanceModifier = Glanc
 
 private val previewArticles =
     listOf<Article>(
-        Article(title = "5 Takeaways From Lorde’s New Album Virgin", feedName = "Pitchfork"),
+        Article(
+            title = "5 Takeaways From Lorde’s New Album Virgin",
+            feedName = "Pitchfork",
+            articleId = "",
+        ),
         Article(
             title =
                 "Big Thief’s Adrianne Lenker Announces Live Album, Shares Previously Unreleased Song “Happiness”",
             feedName = "Pitchfork",
+            articleId = "",
         ),
-        Article(title = "Haruomi Hosono on the Music That Made Him", feedName = "Pitchfork"),
-        Article(title = "Faye Webster Announces Orchestral Tour Dates", feedName = "Pitchfork"),
-//        Article(title = "研究人员发现玻璃瓶中的微塑料含量比塑料瓶中的还要高", feedName = "Pitchfork"),
+        Article(
+            title = "Haruomi Hosono on the Music That Made Him",
+            feedName = "Pitchfork",
+            articleId = "",
+        ),
+        Article(
+            title = "Faye Webster Announces Orchestral Tour Dates",
+            feedName = "Pitchfork",
+            articleId = "",
+        ),
         Article(
             title =
                 "Big Thief’s Adrianne Lenker Announces Live Album, Shares Previously Unreleased Song “Happiness”",
             feedName = "Pitchfork",
+            articleId = "",
         ),
-        Article(title = "Faye Webster Announces Orchestral Tour Dates", feedName = "Pitchfork"),
+        Article(
+            title = "Faye Webster Announces Orchestral Tour Dates",
+            feedName = "Pitchfork",
+            articleId = "",
+        ),
     )
 
 @OptIn(ExperimentalGlancePreviewApi::class)
@@ -272,7 +304,6 @@ private fun PreviewArticleCard() {
     }
 }
 
-
 sealed interface DataSource {}
 
 sealed interface Theme {
@@ -281,4 +312,4 @@ sealed interface Theme {
     object SansSerif : Theme
 }
 
-data class Article(val title: String, val feedName: String)
+data class Article(val title: String, val feedName: String, val articleId: String)
