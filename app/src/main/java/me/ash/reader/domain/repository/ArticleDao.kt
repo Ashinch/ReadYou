@@ -826,6 +826,20 @@ interface ArticleDao {
     ): List<ArticleMeta>
 
 
+    /**
+     * query the latest unread articles from account with id, limit count
+     */
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM article
+        WHERE accountId = :accountId
+        AND isUnread = 1
+        LIMIT :limit
+        """
+    )
+    suspend fun queryLatestUnreadArticles(accountId: Int, limit: Int): List<ArticleWithFeed>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg article: Article)
 

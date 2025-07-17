@@ -35,24 +35,48 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import me.ash.reader.R
+import me.ash.reader.domain.repository.ArticleDao
+import me.ash.reader.domain.service.AccountService
 
 class ArticleListWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = ArticleListWidget()
 }
 
 class ArticleListWidget : GlanceAppWidget() {
+
+
     override val sizeMode: SizeMode = SizeMode.Exact
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        val entryPoint =
+            EntryPointAccessors.fromApplication(context, WidgetEntryPoint::class.java)
+        val articles = withContext(Dispatchers.IO) {
+            val articleDao = entryPoint.articleDao()
+            val accountService = entryPoint.accountService()
+            val currentAccountId = accountService.getCurrentAccountId()
+            articleDao.queryLatestUnreadArticles(accountId = currentAccountId, limit = 10)
+        }.map {
+            Article(
+                title = it.article.title,
+                feedName = it.feed.name,
+            )
+        }
 
         provideContent {
             GlanceTheme {
                 // create your AppWidget here
                 WidgetContainer {
+                    val theme = Theme.Serif
                     Spacer(modifier = GlanceModifier.height(24.dp))
-                    Header("Media")
-                    ArticleList(articles)
+                    Header(context.getString(R.string.unread), theme)
+                    ArticleList(articles, theme)
                 }
             }
         }
@@ -63,14 +87,14 @@ class ArticleListWidget : GlanceAppWidget() {
 @Composable
 fun WidgetContainer(modifier: GlanceModifier = GlanceModifier, content: @Composable () -> Unit) {
     Column(
-        modifier.fillMaxSize().background(GlanceTheme.colors.background),
+        modifier.fillMaxSize().background(GlanceTheme.colors.surface),
         content = { content() },
     )
 }
 
 @GlanceComposable
 @Composable
-fun Header(text: String, modifier: GlanceModifier = GlanceModifier) {
+fun Header(text: String, theme: Theme, modifier: GlanceModifier = GlanceModifier) {
     val widgetHeight = LocalSize.current.height
     val widgetWidth = LocalSize.current.width
 
@@ -88,7 +112,10 @@ fun Header(text: String, modifier: GlanceModifier = GlanceModifier) {
                     fontSize = fontSize,
                     fontWeight = FontWeight.Bold,
                     color = GlanceTheme.colors.onSurface,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = when (theme) {
+                        Theme.Serif -> FontFamily.Serif
+                        Theme.SansSerif -> FontFamily.SansSerif
+                    }
                 ),
             maxLines = 1,
         )
@@ -96,17 +123,17 @@ fun Header(text: String, modifier: GlanceModifier = GlanceModifier) {
 }
 
 @Composable
-fun ArticleList(items: List<Article>, modifier: GlanceModifier = GlanceModifier) {
+fun ArticleList(items: List<Article>, theme: Theme, modifier: GlanceModifier = GlanceModifier) {
     LazyColumn(modifier = modifier) {
         item { Spacer(modifier = GlanceModifier.height(4.dp)) }
-        items(items) { ArticleItem(it) }
+        items(items) { ArticleItem(article = it, theme = theme) }
         item { Spacer(modifier = GlanceModifier.height(12.dp)) }
     }
 }
 
 @GlanceComposable
 @Composable
-fun ArticleItem(article: Article, modifier: GlanceModifier = GlanceModifier) {
+fun ArticleItem(article: Article, theme: Theme, modifier: GlanceModifier = GlanceModifier) {
     Column(modifier = modifier.padding(bottom = 8.dp).padding(horizontal = 12.dp)) {
         Text(
             text = article.feedName,
@@ -124,16 +151,22 @@ fun ArticleItem(article: Article, modifier: GlanceModifier = GlanceModifier) {
             style =
                 TextStyle(
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = when (theme) {
+                        Theme.Serif -> FontWeight.Bold
+                        Theme.SansSerif -> FontWeight.Bold
+                    },
                     color = GlanceTheme.colors.onSurface,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = when (theme) {
+                        Theme.Serif -> FontFamily.Serif
+                        Theme.SansSerif -> FontFamily.SansSerif
+                    }
                 ),
             maxLines = 2,
         )
     }
 }
 
-val articles =
+private val previewArticles =
     listOf<Article>(
         Article(title = "5 Takeaways From Lorde’s New Album Virgin", feedName = "Pitchfork"),
         Article(
@@ -159,12 +192,31 @@ val articles =
 @Preview(widthDp = 240, heightDp = 300)
 @Preview(widthDp = 360, heightDp = 360)
 private fun PreviewArticleList() {
+
     GlanceTheme {
         // create your AppWidget here
         WidgetContainer {
             Spacer(modifier = GlanceModifier.height(24.dp))
-            Header("Media")
-            ArticleList(articles)
+            Header("Media", Theme.SansSerif)
+            ArticleList(previewArticles, Theme.SansSerif)
+        }
+    }
+}
+
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Composable
+@GlanceComposable
+@Preview(widthDp = 200, heightDp = 200)
+@Preview(widthDp = 240, heightDp = 300)
+@Preview(widthDp = 360, heightDp = 360)
+private fun PreviewArticleListSerif() {
+
+    GlanceTheme {
+        // create your AppWidget here
+        WidgetContainer {
+            Spacer(modifier = GlanceModifier.height(24.dp))
+            Header("Media", Theme.Serif)
+            ArticleList(previewArticles, Theme.Serif)
         }
     }
 }
@@ -219,7 +271,6 @@ private fun PreviewArticleCard() {
         }
     }
 }
-
 
 
 sealed interface DataSource {}

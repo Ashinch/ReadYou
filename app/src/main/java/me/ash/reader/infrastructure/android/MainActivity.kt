@@ -15,7 +15,9 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Consumer
+import androidx.glance.appwidget.updateAll
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.profileinstaller.ProfileInstallerInitializer
@@ -23,6 +25,7 @@ import coil.ImageLoader
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.reflect.Field
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 import me.ash.reader.domain.service.AccountService
 import me.ash.reader.infrastructure.compose.ProvideCompositionLocals
 import me.ash.reader.infrastructure.preference.AccountSettingsProvider
@@ -38,6 +41,8 @@ import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.page.nav3.AppEntry
 import me.ash.reader.ui.page.nav3.key.Route
 import me.ash.reader.ui.theme.AppTheme
+import me.ash.reader.ui.widget.ArticleCardWidget
+import me.ash.reader.ui.widget.ArticleListWidget
 
 /** The Single-Activity Architecture. */
 @AndroidEntryPoint
@@ -143,6 +148,14 @@ class MainActivity : AppCompatActivity() {
             addOnNewIntentListener(listener)
             onDispose { removeOnNewIntentListener(listener) }
         }
+    }
+
+    override fun onPause() {
+        lifecycleScope.launch {
+            ArticleListWidget().updateAll(this@MainActivity)
+            ArticleCardWidget().updateAll(this@MainActivity)
+        }
+        super.onPause()
     }
 }
 
