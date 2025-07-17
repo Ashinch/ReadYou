@@ -145,7 +145,7 @@ fun ArticleListReaderPage(
                 LaunchedEffect(contentKey) {
                     contentKey?.let {
                         viewModel.initData(articleId = it.articleId, listIndex = it.listIndex)
-                    }
+                    } ?: viewModel.clearData()
                 }
 
                 CompositionLocalProvider(LocalTextContentWidth provides animatedContentWidth) {

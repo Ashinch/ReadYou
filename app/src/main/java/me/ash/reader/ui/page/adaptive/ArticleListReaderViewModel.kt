@@ -317,6 +317,11 @@ class ArticleListReaderViewModel @Inject constructor(
         }
     }
 
+    fun clearData(){
+        _readingUiState.update { ReadingUiState() }
+        _readerState.update { ReaderState() }
+    }
+
     suspend fun ReaderState.renderContent(articleWithFeed: ArticleWithFeed): ReaderState {
         val contentState = if (articleWithFeed.feed.isFullContent) {
             val fullContent =
