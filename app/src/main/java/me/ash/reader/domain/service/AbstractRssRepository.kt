@@ -198,8 +198,15 @@ abstract class AbstractRssRepository(
                     syncOnlyWhenCharging = it.syncOnlyWhenCharging,
                     syncOnlyOnWiFi = it.syncOnlyOnWiFi,
                 )
+                WidgetUpdateWorker.enqueuePeriodicWork(
+                    workManager = workManager,
+                    syncInterval = it.syncInterval,
+                    syncOnlyWhenCharging = it.syncOnlyWhenCharging,
+                    syncOnlyOnWiFi = it.syncOnlyOnWiFi,
+                )
             } else {
                 SyncWorker.cancelPeriodicWork(workManager)
+                WidgetUpdateWorker.cancelPeriodicWork(workManager)
             }
         }
     }

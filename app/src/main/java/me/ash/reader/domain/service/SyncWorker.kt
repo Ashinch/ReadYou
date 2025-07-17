@@ -59,6 +59,7 @@ constructor(
                         .setInputData(inputData)
                         .build(),
                 )
+                .then(OneTimeWorkRequestBuilder<WidgetUpdateWorker>().build())
                 .then(OneTimeWorkRequestBuilder<ReaderWorker>().build())
                 .enqueue()
         }
