@@ -172,7 +172,9 @@ fun ArticleListReaderPage(
                             when (it) {
                                 NavigationAction.Close -> {
                                     if (navigator.canNavigateBack(backBehavior)) {
-                                        scope.launch { navigator.navigateBack(backBehavior) }
+                                        scope
+                                            .launch { navigator.navigateBack(backBehavior) }
+                                            .invokeOnCompletion { viewModel.clearData() }
                                     } else {
                                         onBack()
                                     }
