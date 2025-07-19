@@ -62,7 +62,7 @@ fun TtsButton(
             is TextToSpeechManager.State.Reading -> {
                 Box(
                     modifier = modifier
-                        .size(48.dp)
+                        .size(40.dp)
                         .clip(CircleShape)
                         .clickable(onClick = {
                             hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
@@ -86,7 +86,7 @@ fun TtsButton(
             else -> {
                 Box(
                     modifier = modifier
-                        .size(48.dp)
+                        .size(40.dp)
                         .clip(CircleShape)
                         .combinedClickable(onClick = {
                             hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
