@@ -63,7 +63,6 @@ class ArticleCardWidget : GlanceAppWidget() {
                 }
             } ?: return
 
-        Timber.d(article.toString())
         val bitmap =
             withContext(Dispatchers.IO) {
                 val link = article.article.img
