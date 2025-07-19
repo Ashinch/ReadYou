@@ -45,17 +45,17 @@
     <string name="selected">Seleccionado</string>
     <string name="allow_notification">Permitir notificaciones</string>
     <string name="all_allow_notification_tips">Permitir que todas las fuentes del grupo \"%1$s\" envíen notificaciones</string>
-    <string name="all_allow_notification_toast">Todas las notificaciones del grupo \"%1$s\" están permitidas</string>
-    <string name="all_deny_notification_toast">Todas las notificaciones del grupo \"%1$s\" están denegadas</string>
+    <string name="all_allow_notification_toast">Las notificaciones del grupo \"%1$s\" están permitidas</string>
+    <string name="all_deny_notification_toast">Las notificaciones del grupo \"%1$s\" están denegadas</string>
     <string name="parse_full_content">Analizar todo el contenido</string>
     <string name="all_parse_full_content_tips">Análisis del contenido completo de los artículos del grupo \"%1$s\"</string>
-    <string name="all_parse_full_content_toast">Análisis de contenido completo de los artículos del grupo \"%1$s\"</string>
-    <string name="all_deny_parse_full_content_toast">No más análisis de contenido completo de los artículos del grupo \"%1$s\"</string>
-    <string name="clear_articles">Borrar artículos</string>
-    <string name="clear_articles_in_feed_toast">Limpiado todo el archivo de artículos en la fuente \"%1$s\"</string>
-    <string name="clear_articles_in_group_toast">Limpiado todo el archivo de artículos en el grupo \"%1$s\"</string>
-    <string name="clear_articles_feed_tips">Borrar todos los artículos archivados en la fuente \"%1$s\"</string>
-    <string name="clear_articles_group_tips">Borrar todo el archivo de los artículos en el grupo \"%1$s\"</string>
+    <string name="all_parse_full_content_toast">Análisis de contenido completo de los artículos en el grupo \"%1$s\" está permitido</string>
+    <string name="all_deny_parse_full_content_toast">Análisis de contenido completo de los artículos en el grupo \"%1$s\" está denegado</string>
+    <string name="clear_articles">Limpiar artículos</string>
+    <string name="clear_articles_in_feed_toast">Limpiados todos artículos archivados en la fuente \"%1$s\"</string>
+    <string name="clear_articles_in_group_toast">Limpiados todos los artículos archivados en el grupo \"%1$s\"</string>
+    <string name="clear_articles_feed_tips">Limpiar todos los artículos archivados en la fuente \"%1$s\"</string>
+    <string name="clear_articles_group_tips">Limpiar todos los artículos archivados en el grupo \"%1$s\"</string>
     <string name="add_to_group">Añadir al grupo</string>
     <string name="move_to_group">Mover al grupo</string>
     <string name="all_move_to_group_tips">Mover todas las fuentes en el grupo \"%1$s\" al grupo \"%2$s\"</string>
@@ -320,9 +320,9 @@
     <string name="client_certificate">Certificado de cliente (opcional)</string>
     <string name="hide_empty_groups">Ocultar grupos vacíos</string>
     <string name="open_in_browser">Abrir en el navegador</string>
-    <string name="all_open_in_browser_tips">Abrir todos los artículos en el grupo \"%1$s\" usando el navegador</string>
-    <string name="all_open_in_browser_toast">Abrir todos los artículos en el grupo \"%1$s\" usando el navegador</string>
-    <string name="all_deny_open_in_browser_toast">Ya no se abrirán todos los artículos en el grupo \"%1$s\" usando el navegador</string>
+    <string name="all_open_in_browser_tips">Abrir todos los artículos en el grupo \"%1$s\" usando el navegador predeterminado</string>
+    <string name="all_open_in_browser_toast">Abrir todos los artículos en el grupo \"%1$s\" usando el navegador por defecto está permitido</string>
+    <string name="all_deny_open_in_browser_toast">Abrir todos los artículos en el grupo \"%1$s\" usando el navegador predeterminado está denegado</string>
     <string name="sort_unread_articles">Ordenar artículos sin leer</string>
     <string name="latest">Más reciente</string>
     <string name="earliest">Más antiguo</string>
@@ -333,4 +333,7 @@
     <string name="bold_characters">Caracteres en negrita</string>
     <string name="bold_characters_preview">Poner los primeros caracteres de las palabras en un artículo en negrita</string>
     <string name="use_bold_characters">Usar caracteres en negrita</string>
+    <string name="load_next_feed">Cargar siguiente fuente</string>
+    <string name="mark_all_as_read_and_load_next_feed">Marcar todos como leídos y cargar siguiente fuente</string>
+    <string name="pull_from_bottom">Tirar desde abajo</string>
 </resources>

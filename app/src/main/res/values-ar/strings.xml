@@ -324,4 +324,5 @@
     <string name="become_a_sponsor">كن داعما</string>
     <string name="sponsor_desc">نحن نبني ونحافظ على هذا التطبيق المجاني والمفتوح المصدر في غير ساعات العمل لدينا. إذا كنت تستمتع به، فيرجى التفكير في دعمنا بتبرع صغير! ☕️</string>
     <string name="toolbars">شريط الأدوات</string>
+    <string name="all_open_in_browser_toast">Opening all articles in the \"%1$s\" group in the default browser is allowed</string>
 </resources>
