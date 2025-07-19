@@ -1,0 +1,23 @@
+## 0.9.6
+
+1. Fever API támogatása (béta)
+
+2. Fordítás javítása (köszönet mindenkinek)
+
+3. A fiókváltáskor folyamatos szinkronizálás hibájának javítása.
+
+4. Nem lehet módosítani más fiókok beállításait hiba javítva lett
+
+A Fever egy elavult API, amely nem teljesen kompatibilis a modern olvasókkal.
+De mivel ez az első harmadik féltől származó, Read You által támogatott szolgáltatás API-ja, jó lehetőség a kezdésre
+
+A közeljövőben lesz egy kiegészítő frissítés a hibajavításokhoz és további fordításokhoz
+
+
+### Ismert hibák
+
+1. A Fever-fiók minden szinkronizáláskor csak a teljes cikkmennyiséget tudja lehívni a kiszolgálóról
+
+2. A Fever-fiók értesítési funkciója nem működik
+
+3. A Fever-fiók teljes tartalomelemzésének előre beállított kapcsolója minden szinkronizálás után visszaáll
