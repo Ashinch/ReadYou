@@ -39,6 +39,7 @@ constructor(
 
         private const val WORK_NAME_ONETIME = "SYNC_ONETIME"
         const val WORK_TAG = "SYNC_TAG"
+        const val PERIODIC_WORK_TAG = "PERIODIC_WORK_TAG"
 
         fun cancelOneTimeWork(workManager: WorkManager) {
             workManager.cancelUniqueWork(WORK_NAME_ONETIME)
@@ -84,6 +85,7 @@ constructor(
                             .build()
                     )
                     .addTag(WORK_TAG)
+                    .addTag(PERIODIC_WORK_TAG)
                     .setInitialDelay(syncInterval.value, TimeUnit.MINUTES)
                     .build(),
             )
@@ -101,6 +103,7 @@ constructor(
                             )
                             .build()
                     )
+                    .addTag(PERIODIC_WORK_TAG)
                     .setInitialDelay(syncInterval.value, TimeUnit.MINUTES)
                     .build(),
             )

@@ -3,6 +3,7 @@ package me.ash.reader.ui.page.settings.troubleshooting
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +37,7 @@ class TroubleshootingViewModel @Inject constructor(
     private val mainDispatcher: CoroutineDispatcher,
     @ApplicationScope
     private val applicationScope: CoroutineScope,
+    val workManager: WorkManager
 ) : ViewModel() {
 
     private val _troubleshootingUiState = MutableStateFlow(TroubleshootingUiState())

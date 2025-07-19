@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
@@ -12,11 +13,13 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.ReportGmailerrorred
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,7 +35,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import java.util.Date
 import me.ash.reader.R
+import me.ash.reader.domain.service.SyncWorker.Companion.PERIODIC_WORK_TAG
 import me.ash.reader.infrastructure.preference.OpenLinkPreference
 import me.ash.reader.ui.component.base.Banner
 import me.ash.reader.ui.component.base.DisplayText
@@ -48,49 +53,50 @@ import me.ash.reader.ui.ext.openURL
 import me.ash.reader.ui.ext.toString
 import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.theme.palette.onLight
-import java.util.Date
 
 @Composable
-fun TroubleshootingPage(
-    onBack: () -> Unit,
-    viewModel: TroubleshootingViewModel = hiltViewModel(),
-) {
+fun TroubleshootingPage(onBack: () -> Unit, viewModel: TroubleshootingViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val uiState = viewModel.troubleshootingUiState.collectAsStateValue()
     var byteArray by remember { mutableStateOf(ByteArray(0)) }
 
-    val exportLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.CreateDocument(MimeType.JSON)
-    ) { result ->
-        viewModel.exportPreferencesAsJSON(context) { byteArray ->
-            result?.let { uri ->
-                context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                    outputStream.write(byteArray)
+    val exportLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(MimeType.JSON)) {
+            result ->
+            viewModel.exportPreferencesAsJSON(context) { byteArray ->
+                result?.let { uri ->
+                    context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                        outputStream.write(byteArray)
+                    }
                 }
             }
         }
-    }
 
-    val importLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.OpenDocument()
-    ) {
-        it?.let { uri ->
-            context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                byteArray = inputStream.readBytes()
-                viewModel.tryImport(context, byteArray)
+    val importLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) {
+            it?.let { uri ->
+                context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                    byteArray = inputStream.readBytes()
+                    viewModel.tryImport(context, byteArray)
+                }
             }
         }
-    }
+
+    val workInfos =
+        viewModel.workManager
+            .getWorkInfosByTagFlow(PERIODIC_WORK_TAG)
+            .collectAsStateValue(emptyList())
 
     RYScaffold(
-        containerColor = MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
+        containerColor =
+            MaterialTheme.colorScheme.surface onLight MaterialTheme.colorScheme.inverseOnSurface,
         navigationIcon = {
             FeedbackIconButton(
                 imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                 contentDescription = stringResource(R.string.back),
                 tint = MaterialTheme.colorScheme.onSurface,
-                onClick = onBack
+                onClick = onBack,
             )
         },
         content = {
@@ -110,7 +116,7 @@ fun TroubleshootingPage(
                     ) {
                         context.openURL(
                             context.getString(R.string.issue_tracer_url),
-                            OpenLinkPreference.AutoPreferCustomTabs
+                            OpenLinkPreference.AutoPreferCustomTabs,
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
@@ -123,24 +129,29 @@ fun TroubleshootingPage(
                     )
                     SettingItem(
                         title = stringResource(R.string.import_from_json),
-                        onClick = {
-                            importLauncher.launch(arrayOf(MimeType.ANY))
-                        },
+                        onClick = { importLauncher.launch(arrayOf(MimeType.ANY)) },
                     ) {}
                     SettingItem(
                         title = stringResource(R.string.export_as_json),
-                        onClick = {
-                            preferenceFileLauncher(context, exportLauncher)
-                        },
+                        onClick = { preferenceFileLauncher(context, exportLauncher) },
                     ) {}
                     Spacer(modifier = Modifier.height(24.dp))
                 }
+                items(workInfos) {
+                    WorkInfo(
+                        title = it.tags.toString(),
+                        state = it.state.toString(),
+                        nextScheduledMillis = it.nextScheduleTimeMillis,
+                    )
+                }
                 item {
                     Spacer(modifier = Modifier.height(24.dp))
-                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                    Spacer(
+                        modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars)
+                    )
                 }
             }
-        }
+        },
     )
 
     RYDialog(
@@ -152,12 +163,8 @@ fun TroubleshootingPage(
                 contentDescription = stringResource(R.string.import_from_json),
             )
         },
-        title = {
-            Text(text = stringResource(R.string.import_from_json))
-        },
-        text = {
-            Text(text = stringResource(R.string.invalid_json_file_warning))
-        },
+        title = { Text(text = stringResource(R.string.import_from_json)) },
+        text = { Text(text = stringResource(R.string.invalid_json_file_warning)) },
         confirmButton = {
             TextButton(
                 onClick = {
@@ -180,7 +187,25 @@ private fun preferenceFileLauncher(
     context: Context,
     launcher: ManagedActivityResultLauncher<String, Uri?>,
 ) {
-    launcher.launch("Read-You-" +
+    launcher.launch(
+        "Read-You-" +
             "${context.getCurrentVersion()}-settings-" +
-            "${Date().toString(DateFormat.YYYY_MM_DD_DASH_HH_MM_SS_DASH)}.json")
+            "${Date().toString(DateFormat.YYYY_MM_DD_DASH_HH_MM_SS_DASH)}.json"
+    )
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun WorkInfo(
+    title: String,
+    state: String,
+    nextScheduledMillis: Long,
+    modifier: Modifier = Modifier,
+) {
+    val date = remember(nextScheduledMillis) { Date(nextScheduledMillis) }
+    Column(modifier = modifier.padding(horizontal = 24.dp, vertical = 16.dp)) {
+        Text(title, style = MaterialTheme.typography.titleMediumEmphasized)
+        Text(state, style = MaterialTheme.typography.bodySmall)
+        Text("Next scheduled time: $date", style = MaterialTheme.typography.bodySmall)
+    }
 }
