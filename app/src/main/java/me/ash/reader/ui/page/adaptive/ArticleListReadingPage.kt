@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import me.ash.reader.ui.component.reader.ExpandedContentWidth
@@ -124,6 +125,7 @@ fun ArticleListReaderPage(
                         animatedVisibilityScope = animatedVisibilityScope,
                         viewModel = viewModel,
                         onNavigateUp = onBack,
+                        isTwoPane = isTwoPane,
                         navigateToArticle = { id, index ->
                             scope.launch {
                                 navigator.navigateTo(
@@ -143,9 +145,15 @@ fun ArticleListReaderPage(
             ) {
                 val contentKey = navigator.currentDestination?.contentKey
                 LaunchedEffect(contentKey) {
-                    contentKey?.let {
-                        viewModel.initData(articleId = it.articleId, listIndex = it.listIndex)
-                    } ?: viewModel.clearData()
+                    if (contentKey == null) {
+                        delay(100L)
+                        viewModel.clearData()
+                    } else {
+                        viewModel.initData(
+                            articleId = contentKey.articleId,
+                            listIndex = contentKey.listIndex,
+                        )
+                    }
                 }
 
                 CompositionLocalProvider(LocalTextContentWidth provides animatedContentWidth) {

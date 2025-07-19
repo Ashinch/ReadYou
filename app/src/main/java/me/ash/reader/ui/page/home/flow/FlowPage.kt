@@ -109,6 +109,7 @@ import me.ash.reader.ui.page.home.reading.rememberPullToLoadState
 fun FlowPage(
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
+    isTwoPane: Boolean,
     viewModel: ArticleListReaderViewModel,
     onNavigateUp: () -> Unit,
     navigateToArticle: (String, Int) -> Unit,
@@ -239,26 +240,28 @@ fun FlowPage(
             }
         }
 
-    val readingArticleId = viewModel.readerStateStateFlow.collectAsStateValue().articleId
+    val readerState = viewModel.readerStateStateFlow.collectAsStateValue()
 
     var pagingItems: LazyPagingItems<ArticleFlowItem>? by remember { mutableStateOf(null) }
 
-    LaunchedEffect(readingArticleId) {
-        if (readingArticleId != null) {
-            val item =
-                listState.layoutInfo.visibleItemsInfo.firstOrNull { it.key == readingArticleId }
+    LaunchedEffect(readerState, isTwoPane) {
+        if (readerState.articleId != null) {
+            val articleId = readerState.articleId
+
+            val itemList = pagingItems?.itemSnapshotList
 
             val index =
-                item?.index
-                    ?: (pagingItems?.itemSnapshotList?.indexOfFirst {
-                        it is ArticleFlowItem.Article &&
-                            it.articleWithFeed.article.id == readingArticleId
-                    } ?: -1)
-
+                itemList?.indexOfFirst {
+                    it is ArticleFlowItem.Article && it.articleWithFeed.article.id == articleId
+                } ?: -1
 
             if (index != -1) {
                 scrollAppBarToCollapsed()
-                listState.animateScrollToItem(index, scrollOffset = -100)
+                if (isTwoPane) {
+                    listState.animateScrollToItem(index, scrollOffset = -200)
+                } else {
+                    listState.scrollToItem(index, scrollOffset = -100)
+                }
             }
         }
     }
