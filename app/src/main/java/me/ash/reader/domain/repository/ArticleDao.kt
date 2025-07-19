@@ -839,7 +839,40 @@ interface ArticleDao {
         LIMIT :limit
         """
     )
-    suspend fun queryLatestUnreadArticles(accountId: Int, limit: Int): List<ArticleWithFeed>
+    suspend fun queryLatestUnreadArticles(accountId: Int, limit: Int = 10): List<ArticleWithFeed>
+
+
+    /**
+     * query the latest unread articles from feed with id, limit count
+     */
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM article
+        WHERE feedId = :feedId
+        AND isUnread = 1
+        ORDER BY date desc
+        LIMIT :limit
+        """
+    )
+    suspend fun queryLatestUnreadArticlesFromFeed(feedId: String, limit: Int = 10): List<ArticleWithFeed>
+
+
+    /**
+     * query the latest unread articles from group with id, limit count
+     */
+    @Transaction
+    @Query(
+        """
+        SELECT a.* FROM article AS a
+        LEFT JOIN feed AS f ON a.feedId = f.id
+        WHERE f.groupId = :groupId
+        AND a.isUnread = 1
+        ORDER BY a.date DESC
+        LIMIT :limit
+        """
+    )
+    suspend fun queryLatestUnreadArticlesFromGroup(groupId: String, limit: Int = 10): List<ArticleWithFeed>
 
 
     /**

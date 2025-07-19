@@ -18,6 +18,7 @@ import androidx.glance.action.actionParametersOf
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.lazy.LazyColumn
@@ -55,29 +56,20 @@ class ArticleListWidget : GlanceAppWidget() {
     override val sizeMode: SizeMode = SizeMode.Exact
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        val widgetId = GlanceAppWidgetManager(context).getAppWidgetId(id)
         val entryPoint = EntryPointAccessors.fromApplication(context, WidgetEntryPoint::class.java)
-        val articles =
-            withContext(Dispatchers.IO) {
-                    val articleDao = entryPoint.articleDao()
-                    val accountService = entryPoint.accountService()
-                    val currentAccountId = accountService.getCurrentAccountId()
-                    articleDao.queryLatestUnreadArticles(accountId = currentAccountId, limit = 10)
-                }
-                .map {
-                    Article(
-                        title = it.article.title,
-                        feedName = it.feed.name,
-                        articleId = it.article.id,
-                    )
-                }
+        val repository = entryPoint.repository()
+        val config = repository.getConfig(widgetId)
+        val (theme, dataSource) = config
+
+        val (title, articles) = withContext(Dispatchers.IO) { repository.getData(dataSource) }
 
         provideContent {
             GlanceTheme {
                 // create your AppWidget here
                 WidgetContainer {
-                    val theme = Theme.Serif
                     Spacer(modifier = GlanceModifier.height(24.dp))
-                    Header(context.getString(R.string.unread), theme)
+                    Header(title, theme)
                     ArticleList(articles, theme)
                 }
             }
@@ -134,7 +126,7 @@ fun ArticleList(items: List<Article>, theme: Theme, modifier: GlanceModifier = G
                     GlanceModifier.clickable(
                         actionStartActivity<MainActivity>(
                             actionParametersOf(
-                                ActionParameters.Key<String>(ExtraName.ARTICLE_ID) to it.articleId
+                                ActionParameters.Key<String>(ExtraName.ARTICLE_ID) to it.id
                             )
                         )
                     ),
@@ -186,34 +178,34 @@ private val previewArticles =
         Article(
             title = "5 Takeaways From Lorde’s New Album Virgin",
             feedName = "Pitchfork",
-            articleId = "",
+            id = "",
         ),
         Article(
             title =
                 "Big Thief’s Adrianne Lenker Announces Live Album, Shares Previously Unreleased Song “Happiness”",
             feedName = "Pitchfork",
-            articleId = "",
+            id = "",
         ),
         Article(
             title = "Haruomi Hosono on the Music That Made Him",
             feedName = "Pitchfork",
-            articleId = "",
+            id = "",
         ),
         Article(
             title = "Faye Webster Announces Orchestral Tour Dates",
             feedName = "Pitchfork",
-            articleId = "",
+            id = "",
         ),
         Article(
             title =
                 "Big Thief’s Adrianne Lenker Announces Live Album, Shares Previously Unreleased Song “Happiness”",
             feedName = "Pitchfork",
-            articleId = "",
+            id = "",
         ),
         Article(
             title = "Faye Webster Announces Orchestral Tour Dates",
             feedName = "Pitchfork",
-            articleId = "",
+            id = "",
         ),
     )
 
@@ -303,13 +295,3 @@ private fun PreviewArticleCard() {
         }
     }
 }
-
-sealed interface DataSource {}
-
-sealed interface Theme {
-    object Serif : Theme
-
-    object SansSerif : Theme
-}
-
-data class Article(val title: String, val feedName: String, val articleId: String)

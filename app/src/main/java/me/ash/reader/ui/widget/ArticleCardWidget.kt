@@ -15,6 +15,7 @@ import androidx.glance.action.actionParametersOf
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
@@ -40,7 +41,6 @@ import kotlinx.coroutines.withContext
 import me.ash.reader.R
 import me.ash.reader.infrastructure.android.MainActivity
 import me.ash.reader.ui.page.common.ExtraName
-import timber.log.Timber
 
 class ArticleCardWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = ArticleCardWidget()
@@ -51,21 +51,22 @@ class ArticleCardWidget : GlanceAppWidget() {
 
     @SuppressLint("RestrictedApi")
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        val widgetId = GlanceAppWidgetManager(context).getAppWidgetId(id)
+        val entryPoint = EntryPointAccessors.fromApplication(context, WidgetEntryPoint::class.java)
+        val repository = entryPoint.repository()
+
+        val (_, dataSource) = repository.getConfig(widgetId)
+
         val article =
             withContext(Dispatchers.IO) {
-                val entryPoint =
-                    EntryPointAccessors.fromApplication(context, WidgetEntryPoint::class.java)
-                val accountService = entryPoint.accountService()
-                val articleDao = entryPoint.articleDao()
-                val currentAccountId = accountService.getCurrentAccountId()
-                articleDao.queryLatestUnreadArticles(accountId = currentAccountId, limit = 10).let {
-                    it.firstOrNull { !it.article.img.isNullOrEmpty() } ?: it.firstOrNull()
+                repository.getData(dataSource).articles.let {
+                    it.firstOrNull { !it.imgUrl.isNullOrEmpty() } ?: it.firstOrNull()
                 }
             } ?: return
 
         val bitmap =
             withContext(Dispatchers.IO) {
-                val link = article.article.img
+                val link = article.imgUrl
                 val imageLoader = context.imageLoader
                 imageLoader
                     .execute(
@@ -98,7 +99,7 @@ class ArticleCardWidget : GlanceAppWidget() {
                                     actionStartActivity<MainActivity>(
                                         actionParametersOf(
                                             ActionParameters.Key<String>(ExtraName.ARTICLE_ID) to
-                                                article.article.id
+                                                article.id
                                         )
                                     )
                                 ),
@@ -131,7 +132,7 @@ class ArticleCardWidget : GlanceAppWidget() {
 
                         Column(GlanceModifier.padding(12.dp)) {
                             Text(
-                                article.feed.name,
+                                article.feedName,
                                 style =
                                     TextStyle(
                                         color = ColorProvider(feedColor),
@@ -142,7 +143,7 @@ class ArticleCardWidget : GlanceAppWidget() {
                                 maxLines = 1,
                             )
                             Text(
-                                article.article.title,
+                                article.title,
                                 style =
                                     TextStyle(
                                         color = ColorProvider(titleColor),
