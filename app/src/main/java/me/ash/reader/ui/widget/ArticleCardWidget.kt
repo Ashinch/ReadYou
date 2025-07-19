@@ -2,10 +2,10 @@ package me.ash.reader.ui.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
@@ -32,54 +32,71 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
-import coil.imageLoader
-import coil.request.ImageRequest
-import coil.size.Dimension
-import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.withContext
 import me.ash.reader.R
 import me.ash.reader.infrastructure.android.MainActivity
+import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.page.common.ExtraName
 
+@AndroidEntryPoint
 class ArticleCardWidgetReceiver : GlanceAppWidgetReceiver() {
+    @Inject lateinit var repository: WidgetRepository
     override val glanceAppWidget: GlanceAppWidget = ArticleCardWidget()
+
+    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
+        super.onDeleted(context, appWidgetIds)
+        repository.clearConfig(appWidgetIds)
+    }
 }
 
-class ArticleCardWidget : GlanceAppWidget() {
-    override val sizeMode: SizeMode = SizeMode.Exact
+class ArticleCardWidget() : GlanceAppWidget() {
+    override val sizeMode: SizeMode = SizeMode.Single
 
     @SuppressLint("RestrictedApi")
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        val repository = WidgetRepository.get(context)
         val widgetId = GlanceAppWidgetManager(context).getAppWidgetId(id)
-        val entryPoint = EntryPointAccessors.fromApplication(context, WidgetEntryPoint::class.java)
-        val repository = entryPoint.repository()
 
-        val (_, dataSource) = repository.getConfig(widgetId)
+        val initialConfig = repository.getConfig(widgetId)
 
-        val article =
+        val initialData =
+            withContext(Dispatchers.IO) { repository.getData(initialConfig.dataSource).first() }
+
+        val configFlow = repository.getConfigFlow(widgetId)
+
+        val initialArticle =
             withContext(Dispatchers.IO) {
-                repository.getData(dataSource).articles.let {
+                initialData.articles.let {
                     it.firstOrNull { !it.imgUrl.isNullOrEmpty() } ?: it.firstOrNull()
                 }
             } ?: return
 
-        val bitmap =
-            withContext(Dispatchers.IO) {
-                val link = article.imgUrl
-                val imageLoader = context.imageLoader
-                imageLoader
-                    .execute(
-                        ImageRequest.Builder(context)
-                            .data(link)
-                            .size(width = Dimension.Pixels(600), height = Dimension.Undefined)
-                            .build()
-                    )
-                    .drawable
-                    ?.toBitmapOrNull()
-            }
+        val initialBitmap = repository.fetchBitmap(initialArticle.imgUrl)
 
         provideContent {
+            val (_, dataSource) = configFlow.collectAsStateValue(initialConfig)
+
+            val articleFlow =
+                remember(dataSource) { repository.getData(dataSource) }
+                    .mapNotNull {
+                        it.articles.let {
+                            it.firstOrNull { !it.imgUrl.isNullOrEmpty() } ?: it.firstOrNull()
+                        }
+                    }
+
+            val article = articleFlow.collectAsStateValue(initialArticle)
+
+            val bitmap =
+                articleFlow
+                    .map { repository.fetchBitmap(it.imgUrl) }
+                    .collectAsStateValue(initialBitmap)
+
             GlanceTheme {
                 val titleColor =
                     if (bitmap != null) Color.White

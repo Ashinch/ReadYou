@@ -11,6 +11,7 @@
     <queries>
         <intent>
             <action android:name="android.intent.action.MAIN" />
+
             <category android:name="android.intent.category.APP_BROWSER" />
         </intent>
         <intent>
@@ -21,6 +22,7 @@
         </intent>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT" />
+
             <data android:mimeType="text/plain" />
         </intent>
         <intent>
@@ -31,13 +33,21 @@
     <application
         android:name=".infrastructure.android.AndroidApp"
         android:allowBackup="true"
+        android:enableOnBackInvokedCallback="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/read_you"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Reader"
-        android:enableOnBackInvokedCallback="false"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.widget.WidgetConfigActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Reader">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".infrastructure.android.MainActivity"
             android:exported="true"
@@ -57,9 +67,7 @@
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-
                 <data android:host="*" />
-
                 <data android:mimeType="text/xml" />
                 <data android:mimeType="application/rss+xml" />
                 <data android:mimeType="application/atom+xml" />
@@ -78,6 +86,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="text/plain" />
@@ -86,15 +95,12 @@
         <activity
             android:name=".infrastructure.android.CrashReportActivity"
             android:exported="false"
-            android:theme="@style/Theme.Reader">
-
-        </activity>
+            android:theme="@style/Theme.Reader"></activity>
 
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
             tools:node="remove" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -120,18 +126,18 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/article_list_widget_info" />
         </receiver>
-
-
         <receiver
             android:name=".ui.widget.ArticleCardWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/article_card_widget_info" />

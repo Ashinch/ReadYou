@@ -60,6 +60,7 @@ viewmodelNav3 = "1.0.0-alpha03"
 material3Adaptive = "1.2.0-alpha08"
 
 navigationevent = "1.0.0-alpha04"
+composeBomVersion = "2024.09.00"
 
 [libraries]
 # AboutLibraries
@@ -147,6 +148,9 @@ espresso = { group = "androidx.test.espresso", name = "espresso-core", version.r
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockitoCore" }
 mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockitoJUnitJupiter" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockitoKotlin" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBomVersion" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

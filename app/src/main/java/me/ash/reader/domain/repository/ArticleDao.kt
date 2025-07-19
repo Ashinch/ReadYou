@@ -839,7 +839,7 @@ interface ArticleDao {
         LIMIT :limit
         """
     )
-    suspend fun queryLatestUnreadArticles(accountId: Int, limit: Int = 10): List<ArticleWithFeed>
+    fun queryLatestUnreadArticles(accountId: Int, limit: Int = 10): Flow<List<ArticleWithFeed>>
 
 
     /**
@@ -855,7 +855,7 @@ interface ArticleDao {
         LIMIT :limit
         """
     )
-    suspend fun queryLatestUnreadArticlesFromFeed(feedId: String, limit: Int = 10): List<ArticleWithFeed>
+    fun queryLatestUnreadArticlesFromFeed(feedId: String, limit: Int = 10): Flow<List<ArticleWithFeed>>
 
 
     /**
@@ -872,7 +872,7 @@ interface ArticleDao {
         LIMIT :limit
         """
     )
-    suspend fun queryLatestUnreadArticlesFromGroup(groupId: String, limit: Int = 10): List<ArticleWithFeed>
+    fun queryLatestUnreadArticlesFromGroup(groupId: String, limit: Int = 10): Flow<List<ArticleWithFeed>>
 
 
     /**

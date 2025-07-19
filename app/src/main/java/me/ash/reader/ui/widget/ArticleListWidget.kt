@@ -3,9 +3,12 @@ package me.ash.reader.ui.widget
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.glance.GlanceComposable
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -35,38 +38,75 @@ import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
+import androidx.glance.state.GlanceStateDefinition
 import androidx.glance.text.FontFamily
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
-import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import me.ash.reader.R
 import me.ash.reader.infrastructure.android.MainActivity
+import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.page.common.ExtraName
+import timber.log.Timber
 
+@AndroidEntryPoint
 class ArticleListWidgetReceiver : GlanceAppWidgetReceiver() {
+    @Inject lateinit var repository: WidgetRepository
+
     override val glanceAppWidget: GlanceAppWidget = ArticleListWidget()
+
+    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
+        super.onDeleted(context, appWidgetIds)
+        repository.clearConfig(appWidgetIds)
+    }
 }
 
-class ArticleListWidget : GlanceAppWidget() {
+class ArticleListWidget() : GlanceAppWidget() {
 
     override val sizeMode: SizeMode = SizeMode.Exact
 
-    override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val widgetId = GlanceAppWidgetManager(context).getAppWidgetId(id)
-        val entryPoint = EntryPointAccessors.fromApplication(context, WidgetEntryPoint::class.java)
-        val repository = entryPoint.repository()
-        val config = repository.getConfig(widgetId)
-        val (theme, dataSource) = config
+    override val stateDefinition: GlanceStateDefinition<*>?
+        get() =
+            object : GlanceStateDefinition<Preferences> {
+                override fun getLocation(context: Context, fileKey: String): File {
+                    TODO("Not yet implemented")
+                }
 
-        val (title, articles) = withContext(Dispatchers.IO) { repository.getData(dataSource) }
+                override suspend fun getDataStore(
+                    context: Context,
+                    fileKey: String,
+                ): DataStore<Preferences> {
+                    return context.widgetDataStore
+                }
+            }
+
+    override suspend fun provideGlance(context: Context, id: GlanceId) {
+        val repository = WidgetRepository.get(context)
+        val widgetId = GlanceAppWidgetManager(context).getAppWidgetId(id)
+        val initialConfig = repository.getConfig(widgetId)
+        val configFlow = repository.getConfigFlow(widgetId)
+
+        val initialData =
+            withContext(Dispatchers.IO) { repository.getData(initialConfig.dataSource).first() }
 
         provideContent {
+            val config = configFlow.collectAsStateValue(initialConfig)
+            val (theme, dataSource) = config
+
+            val data =
+                remember(dataSource) { repository.getData(dataSource) }
+                    .collectAsStateValue(initialData)
+
+            val (title, articles) = data
+
             GlanceTheme {
-                // create your AppWidget here
                 WidgetContainer {
                     Spacer(modifier = GlanceModifier.height(24.dp))
                     Header(title, theme)

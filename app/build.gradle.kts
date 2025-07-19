@@ -119,6 +119,8 @@ dependencies {
     // Compose
     implementation(libs.compose.html)
     implementation(platform(libs.compose.bom))
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui.graphics)
     androidTestImplementation(platform(libs.compose.bom))
     implementation(libs.compose.animation.graphics)
     implementation(libs.compose.ui)
@@ -139,6 +141,9 @@ dependencies {
     // Hilt
     implementation(libs.hilt.work)
     implementation(libs.hilt.android)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    debugImplementation(libs.compose.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
     ksp(libs.hilt.android.compiler)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.viewmodel)
