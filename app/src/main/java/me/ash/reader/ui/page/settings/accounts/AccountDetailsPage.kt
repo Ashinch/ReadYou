@@ -157,6 +157,15 @@ fun AccountDetailsPage(
                         modifier = Modifier.padding(horizontal = 24.dp),
                         text = stringResource(R.string.synchronous),
                     )
+                    selectedAccount?.let {
+                        SettingItem(
+                            title = "Last updatedInfo",
+                            desc = selectedAccount.updateAt.toString(),
+                            onClick = {},
+                            enabled = false
+                        ) {}
+                    }
+
                     SettingItem(
                         title = stringResource(R.string.sync_interval),
                         desc = selectedAccount?.syncInterval?.toDesc(context),
