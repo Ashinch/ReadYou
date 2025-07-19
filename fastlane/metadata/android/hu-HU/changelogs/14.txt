@@ -1,0 +1,15 @@
+## 0.9.0
+
+1. Fiókbeállítási funkció hozzáadása
+
+2. Fordítás hozzáadása számos nyelven (köszönet mindenkinek, köszönet a Weblate.com-nak)
+
+3. „Következő cikk gomb” funkció hozzáadása olvasáskor (ideiglenes animáció, köszönet a frearbnak)
+
+4. Monokróm ikon javítása Android 13-on
+
+5. TLSv1.3 függőség eltávolítása, az alkalmazás méretének csökkentése érdekében (ismeretlen hatás)
+
+6. Az egyszerre betöltött cikkek számának csökkentése (100 -> 50)
+
+7. Többfiókos felhasználói felület hozzáadása (a következő verzió támogatja a több helyi fiókot)

@@ -1,0 +1,13 @@
+## 0.9.1
+
+Ez egy további frissítés.
+
+1. A renderelő mostantól a „Következő cikk” gombra kattintva újra a tetejére pozícionál.
+
+2. Fordítás hozzáadása és javítása (köszönöm mindenkinek)
+
+3. A „Kezdeti szűrő” funkció javítása
+
+4. A Politico és a Substack cikkkép betöltési problémájának javítása (köszönet a Liquid-Aristocracy-nak és a Feeder-nek)
+
+5. Az alkalmazás összeomlásának problémájának javítása a frissítések ellenőrzésekor

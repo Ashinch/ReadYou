@@ -1,0 +1,7 @@
+## 0.11.0
+
+Emléítésre méltó változások:
+2. Elemek automatikus megjelölése olvasottként görgetéskor
+3. A felső alkalmazássávra kattintva visszatérhet az oldal tetejére
+4. Elválasztók hozzáadása az olvasási oldal eszköztáraihoz
+5. Gomb hozzáadása a hírforrás-csoportok összecsukásához/kibontásához

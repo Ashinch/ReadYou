@@ -1,0 +1,27 @@
+## 0.9.9
+
+1. A Fever API mostantól megfelelően szinkronizálja az olvasott/csillagozott metaadatokat az eszközök között (#401) (#406) (@mbestavros)
+
+2. Értesítési engedélykérés hozzáadása, ha releváns (#422) (@RafhaanShah)
+
+3. Új funkció: Olvasottként való megjelölés csúsztatással (#455) (@boun, @nvllz)
+
+4. Új funkció: Külső hivatkozások kezelése (#428) (@S-H-Y-A)
+
+5. Kedvencek lekérése a hírforrás elemeihez (#471) (@Ashinch, @kid1412621)
+
+6. Különböző belső átalakítások és javítások (@Ashinch)
+
+7. Fordítások frissítései: Magyar, török, szerb, német, indonéz, perzsa és sok más (köszönet mindenkinek, aki segített!)
+
+### Megjegyzések
+
+1. @Ashinch kinevezte @mbestavros-t és @JunkFood02-t további munkatársakká a Githubon:
+
+„Amikor nincs elég szabadidőm, mélyen értékelem, hogy mindenki összefogott, hogy hozzájáruljon ehhez a projekthez. @mbestavros és @JunkFood02 felkerülnek a projekt munkatársainak listájára, és bizonyos jogosultságokat biztosítanak a projekt kiadási terveinek kezeléséhez.”
+
+(Forrás: https://github.com/Ashinch/ReadYou/issues/495#issuecomment-1880344011)
+
+Hogy teljesen egyértelmű legyen: ez nem azt jelenti, hogy @Ashinch kilép a projektből! Ez csak azt jelenti, hogy több ember áll rendelkezésre, hogy segítsen az új kiadások létrehozásában. Ez rengeteget fog segíteni, amikor @Ashinch elfoglalt, és csökkenteni fogja a kódírási idejét, miután az már beolvadt a Githubba.
+
+2. Ezzel kapcsolatban: a 0.9.9-es kiadást @mbestavros kezeli! Imádom @Ashinch munkáját a ReadYou-val, és hálás vagyok a lehetőségért, hogy segíthetek a kiadáskezelésben.

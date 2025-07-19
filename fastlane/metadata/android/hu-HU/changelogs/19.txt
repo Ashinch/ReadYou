@@ -1,0 +1,29 @@
+## 0.9.8
+
+1. A fordítás javítása (@nvllz , köszönet mindenkinek)
+
+2. A beépített GoogleSans betűtípus eltávolítása az alkalmazásból (a rendszer alapértelmezett betűtípusát fogja használni).
+
+3. Külső betűtípus-fájlok használatának támogatása az alkalmazás alap- és az olvasó betűtípusaként.
+
+4. Az OPML-fájlból történő importálás funkció javítása
+
+5. A Fever API integráció optimalizálása (#363)
+
+6. UI javítások (#382, @JunkFood02)
+
+7. A „Megjelölés olvasottként” gombok javítása a Fever API számára (#399, @mbestavros)
+
+8. RTL szövegkiosztás támogatása az olvasási oldalon (#378, @JunkFood02)
+
+9. A Material 1.0.1-es verzióra emelése és az „Mindig kibontott” előnézet javítása (#374, @Scholar-Jr)
+
+### Megjegyzések
+
+1. A GoogleSans betűtípus szolgáltatása jogi kockázatokkal jár.
+
+2. A külső betűtípusok még nem támogatják a több betűsúlyt.
+
+3. A Google Reader (GReader) API integrálása folyamatban van.
+
+4. Köszönöm minden közreműködőnek, aki elolvasta a rossz kódomat. Van néhány ötletem a javításhoz

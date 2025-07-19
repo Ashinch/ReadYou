@@ -1,0 +1,18 @@
+## 0.8.0
+1.Német fordítás hozzáadva (köszönet Dave-nek).
+
+2.Az olvasóoldal renderelésének átalakítása (köszönet a Feeder nyílt forráskódjának).
+
+3.Görgetésjelző sáv hozzáadva az olvasóoldalhoz (köszönet Matt Vaughn-nak és Albert Chang-nek a referenciáért, mert nincs Google API és csak kézzel lehetett megvalósítani).
+
+4.Cikkmegosztási funkció hozzáadva.
+
+5.Cikkek bélyegkép-előnézet hozzáadva (csak a kiadás óta újonnan szinkronizált cikkekre érvényes).
+
+6.Egyéb részletes változások.
+
+### Megjegyzés
+
+1. Ez a verzió egy kicsit laggos, sok problémát találtunk, a következő verzióban optimalizáljuk és újraformázzuk a kódot.
+
+2. Három hónapba telik, mire elkezdhetsz hozzájárulni a fordításokhoz (a Weblate követelménye a nyílt forráskódú projektekkel szemben).
