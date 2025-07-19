@@ -1,7 +1,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:configure="me.ash.reader.ui.widget.WidgetConfigActivity"
     android:initialLayout="@layout/glance_default_loading_layout"
-    android:maxResizeWidth="150dp"
+    android:maxResizeWidth="180dp"
     android:maxResizeHeight="150dp"
     android:minWidth="120dp"
     android:minHeight="120dp"

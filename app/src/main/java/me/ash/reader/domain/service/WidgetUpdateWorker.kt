@@ -1,12 +1,9 @@
 package me.ash.reader.domain.service
 
-import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProviderInfo
-import android.content.ComponentName
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.glance.appwidget.compose
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.updateAll
 import androidx.hilt.work.HiltWorker
 import androidx.work.Constraints
@@ -14,7 +11,6 @@ import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.OutOfQuotaPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
@@ -38,8 +34,7 @@ constructor(
     @Assisted private val workerParams: WorkerParameters,
     private val repository: WidgetRepository,
 ) : CoroutineWorker(context, workerParams) {
-
-    private val appWidgetManager = AppWidgetManager.getInstance(context)
+    var haveSetPreviews = false
 
     override suspend fun doWork(): Result {
 
@@ -54,43 +49,18 @@ constructor(
 
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     private suspend fun generatePreviews() {
-        if (
-            appWidgetManager
-                .getAppWidgetIds(ComponentName(context, ArticleListWidgetReceiver::class.java))
-                .isEmpty()
-        ) {
-            appWidgetManager.setWidgetPreview(
-                ComponentName(context, ArticleListWidgetReceiver::class.java),
-                AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN or
-                    AppWidgetProviderInfo.WIDGET_CATEGORY_KEYGUARD or
-                    AppWidgetProviderInfo.WIDGET_CATEGORY_SEARCHBOX,
-                ArticleListWidget().compose(context),
-            )
-        }
-        if (
-            appWidgetManager
-                .getAppWidgetIds(ComponentName(context, ArticleCardWidgetReceiver::class.java))
-                .isEmpty()
-        ) {
-            appWidgetManager.setWidgetPreview(
-                ComponentName(context, ArticleCardWidgetReceiver::class.java),
-                AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN or
-                    AppWidgetProviderInfo.WIDGET_CATEGORY_KEYGUARD or
-                    AppWidgetProviderInfo.WIDGET_CATEGORY_SEARCHBOX,
-                ArticleCardWidget().compose(context),
-            )
-        }
+        if (haveSetPreviews) return
+        val glanceManager = GlanceAppWidgetManager(context)
+        val list = glanceManager.setWidgetPreviews(ArticleCardWidgetReceiver::class)
+        val card = glanceManager.setWidgetPreviews(ArticleListWidgetReceiver::class)
+        haveSetPreviews = list and card
     }
 
     companion object {
         private const val WORK_NAME_PERIODIC = "WidgetUpdateWorker"
 
         fun enqueueOneTimeWork(workManager: WorkManager) =
-            workManager.enqueue(
-                OneTimeWorkRequestBuilder<WidgetUpdateWorker>()
-                    .setExpedited(policy = OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-                    .build()
-            )
+            workManager.enqueue(OneTimeWorkRequestBuilder<WidgetUpdateWorker>().build())
 
         fun enqueuePeriodicWork(
             workManager: WorkManager,

@@ -54,7 +54,6 @@ import me.ash.reader.R
 import me.ash.reader.infrastructure.android.MainActivity
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.page.common.ExtraName
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ArticleListWidgetReceiver : GlanceAppWidgetReceiver() {
@@ -86,6 +85,21 @@ class ArticleListWidget() : GlanceAppWidget() {
                     return context.widgetDataStore
                 }
             }
+
+    override suspend fun providePreview(context: Context, widgetCategory: Int) {
+        val repository = WidgetRepository.get(context)
+        val config = repository.getDefaultConfig()
+        val data = withContext(Dispatchers.IO) { repository.getData(config.dataSource).first() }
+        provideContent {
+            GlanceTheme {
+                WidgetContainer {
+                    Spacer(modifier = GlanceModifier.height(24.dp))
+                    Header(data.title, config.theme)
+                    ArticleList(data.articles, config.theme)
+                }
+            }
+        }
+    }
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val repository = WidgetRepository.get(context)
@@ -131,7 +145,7 @@ fun Header(text: String, theme: Theme, modifier: GlanceModifier = GlanceModifier
 
     val fontSize =
         if (widgetHeight > 240.dp && widgetWidth > 300.dp) {
-            24.sp
+            22.sp
         } else {
             18.sp
         }

@@ -85,6 +85,8 @@ constructor(
             }
         }
 
+    fun getDefaultConfig() = FeedWidgetConfig.default(accountService.getCurrentAccountId())
+
     suspend fun writeConfig(widgetId: Int, config: FeedWidgetConfig) =
         context.writeConfig(widgetId, config)
 

@@ -2,6 +2,8 @@ package me.ash.reader.ui.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -10,6 +12,7 @@ import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.ImageProvider
+import androidx.glance.LocalContext
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.actionParametersOf
 import androidx.glance.action.actionStartActivity
@@ -43,6 +46,7 @@ import me.ash.reader.R
 import me.ash.reader.infrastructure.android.MainActivity
 import me.ash.reader.ui.ext.collectAsStateValue
 import me.ash.reader.ui.page.common.ExtraName
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ArticleCardWidgetReceiver : GlanceAppWidgetReceiver() {
@@ -57,6 +61,25 @@ class ArticleCardWidgetReceiver : GlanceAppWidgetReceiver() {
 
 class ArticleCardWidget() : GlanceAppWidget() {
     override val sizeMode: SizeMode = SizeMode.Single
+
+    override suspend fun providePreview(context: Context, widgetCategory: Int) {
+        runCatching {
+                val repository = WidgetRepository.get(context)
+                val config = repository.getDefaultConfig()
+                val data =
+                    withContext(Dispatchers.IO) { repository.getData(config.dataSource).first() }
+                val article =
+                    data.articles.let {
+                        it.firstOrNull { !it.imgUrl.isNullOrEmpty() } ?: it.first()
+                    }
+                val bitmap = repository.fetchBitmap(article.imgUrl)
+
+                provideContent {
+                    GlanceTheme { GlanceTheme { ArticleCard(article = article, bitmap = bitmap) } }
+                }
+            }
+            .onFailure { Timber.e(it) }
+    }
 
     @SuppressLint("RestrictedApi")
     override suspend fun provideGlance(context: Context, id: GlanceId) {
@@ -73,9 +96,9 @@ class ArticleCardWidget() : GlanceAppWidget() {
         val initialArticle =
             withContext(Dispatchers.IO) {
                 initialData.articles.let {
-                    it.firstOrNull { !it.imgUrl.isNullOrEmpty() } ?: it.firstOrNull()
+                    it.firstOrNull { !it.imgUrl.isNullOrEmpty() } ?: it.first()
                 }
-            } ?: return
+            }
 
         val initialBitmap = repository.fetchBitmap(initialArticle.imgUrl)
 
@@ -97,81 +120,75 @@ class ArticleCardWidget() : GlanceAppWidget() {
                     .map { repository.fetchBitmap(it.imgUrl) }
                     .collectAsStateValue(initialBitmap)
 
-            GlanceTheme {
-                val titleColor =
-                    if (bitmap != null) Color.White
-                    else GlanceTheme.colors.onSurface.getColor(context)
+            GlanceTheme { ArticleCard(article = article, bitmap = bitmap) }
+        }
+    }
+}
 
-                val feedColor =
-                    if (bitmap != null) Color.White
-                    else GlanceTheme.colors.primary.getColor(context)
+@SuppressLint("RestrictedApi")
+@Composable
+fun ArticleCard(article: Article, bitmap: Bitmap?, modifier: GlanceModifier = GlanceModifier) {
 
-                // create your AppWidget here
-                WidgetContainer {
-                    Box(
-                        contentAlignment = Alignment.BottomStart,
-                        modifier =
-                            GlanceModifier.fillMaxSize()
-                                .clickable(
-                                    actionStartActivity<MainActivity>(
-                                        actionParametersOf(
-                                            ActionParameters.Key<String>(ExtraName.ARTICLE_ID) to
-                                                article.id
-                                        )
-                                    )
-                                ),
-                    ) {
-                        //                        Image(
-                        //                            provider = ImageProvider(resId =
-                        // R.drawable.animation),
-                        //                            contentDescription = null,
-                        //                            colorFilter = null,
-                        //                            contentScale = ContentScale.Crop,
-                        //                            modifier = GlanceModifier.fillMaxSize(),
-                        //                        )
-                        if (bitmap != null) {
-                            Spacer(
-                                modifier =
-                                    GlanceModifier.fillMaxSize()
-                                        .background(
-                                            imageProvider = ImageProvider(bitmap),
-                                            contentScale = ContentScale.Crop,
-                                        )
-                            )
-                            Spacer(
-                                modifier =
-                                    GlanceModifier.fillMaxSize()
-                                        .background(
-                                            imageProvider = ImageProvider(R.drawable.scrim_gradient)
-                                        )
-                            )
-                        }
+    val context = LocalContext.current
 
-                        Column(GlanceModifier.padding(12.dp)) {
-                            Text(
-                                article.feedName,
-                                style =
-                                    TextStyle(
-                                        color = ColorProvider(feedColor),
-                                        fontFamily = FontFamily.SansSerif,
-                                        fontSize = 13.sp,
-                                        fontWeight = FontWeight.Bold,
-                                    ),
-                                maxLines = 1,
+    val titleColor =
+        if (bitmap != null) Color.White else GlanceTheme.colors.onSurface.getColor(context)
+
+    val feedColor =
+        if (bitmap != null) Color.White else GlanceTheme.colors.primary.getColor(context)
+
+    // create your AppWidget here
+    WidgetContainer(modifier = modifier) {
+        Box(
+            contentAlignment = Alignment.BottomStart,
+            modifier =
+                GlanceModifier.fillMaxSize()
+                    .clickable(
+                        actionStartActivity<MainActivity>(
+                            actionParametersOf(
+                                ActionParameters.Key<String>(ExtraName.ARTICLE_ID) to article.id
                             )
-                            Text(
-                                article.title,
-                                style =
-                                    TextStyle(
-                                        color = ColorProvider(titleColor),
-                                        fontFamily = FontFamily.Serif,
-                                        fontSize = 16.sp,
-                                        fontWeight = FontWeight.Bold,
-                                    ),
+                        )
+                    ),
+        ) {
+            if (bitmap != null) {
+                Spacer(
+                    modifier =
+                        GlanceModifier.fillMaxSize()
+                            .background(
+                                imageProvider = ImageProvider(bitmap),
+                                contentScale = ContentScale.Crop,
                             )
-                        }
-                    }
-                }
+                )
+                Spacer(
+                    modifier =
+                        GlanceModifier.fillMaxSize()
+                            .background(imageProvider = ImageProvider(R.drawable.scrim_gradient))
+                )
+            }
+
+            Column(GlanceModifier.padding(12.dp)) {
+                Text(
+                    article.feedName,
+                    style =
+                        TextStyle(
+                            color = ColorProvider(feedColor),
+                            fontFamily = FontFamily.SansSerif,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold,
+                        ),
+                    maxLines = 1,
+                )
+                Text(
+                    article.title,
+                    style =
+                        TextStyle(
+                            color = ColorProvider(titleColor),
+                            fontFamily = FontFamily.Serif,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                        ),
+                )
             }
         }
     }
