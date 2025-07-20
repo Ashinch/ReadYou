@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
@@ -23,11 +25,11 @@ import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.ButtonGroup
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumFloatingActionButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -48,7 +50,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidgetManager
-import androidx.glance.appwidget.compose
 import androidx.lifecycle.lifecycleScope
 import androidx.work.WorkManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -106,14 +107,18 @@ class WidgetConfigActivity : ComponentActivity() {
                         containerColor = MaterialTheme.colorScheme.surface,
                         modifier = Modifier.fillMaxSize(),
                         floatingActionButton = {
-                            FloatingActionButton(
+                            MediumFloatingActionButton(
                                 shape = CircleShape,
                                 elevation = FloatingActionButtonDefaults.loweredElevation(),
-                                containerColor = MaterialTheme.colorScheme.primaryFixedDim,
+                                containerColor = MaterialTheme.colorScheme.primaryFixed,
                                 contentColor = MaterialTheme.colorScheme.onPrimaryFixedVariant,
                                 onClick = { updateWidget(config, glanceId, appWidgetId, isCard) },
                             ) {
-                                Icon(Icons.Rounded.Done, stringResource(R.string.done))
+                                Icon(
+                                    Icons.Rounded.Done,
+                                    stringResource(R.string.done),
+                                    modifier = Modifier.size(32.dp),
+                                )
                             }
                         },
                         floatingActionButtonPosition = FabPosition.Center,
@@ -124,13 +129,21 @@ class WidgetConfigActivity : ComponentActivity() {
                                     Text(
                                         modifier =
                                             Modifier.padding(
-                                                top = 48.dp,
+                                                top = 64.dp,
                                                 start = 24.dp,
                                                 bottom = 24.dp,
                                                 end = 24.dp,
                                             ),
                                         text = stringResource(R.string.widget_settings),
-                                        style = MaterialTheme.typography.displaySmallEmphasized,
+                                        style =
+                                            MaterialTheme.typography.displaySmall.merge(
+                                                fontWeight = FontWeight.Bold,
+                                                fontFamily =
+                                                    when (config.theme) {
+                                                        Theme.SansSerif -> FontFamily.SansSerif
+                                                        Theme.Serif -> FontFamily.Serif
+                                                    },
+                                            ),
                                         color = MaterialTheme.colorScheme.onSurface,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
@@ -164,6 +177,7 @@ class WidgetConfigActivity : ComponentActivity() {
                                             },
                                     )
                                 }
+                                item { Spacer(modifier = Modifier.height(120.dp)) }
                             }
                         }
                     }
@@ -223,7 +237,8 @@ fun ThemePicker(modifier: Modifier = Modifier, selected: Theme?, onClick: (Theme
                     modifier = Modifier.animateWidth(interactionSource1).weight(1f),
                 ) {
                     Text(
-                        "Sans Serif",
+                        modifier = Modifier.padding(vertical = 4.dp),
+                        text = "Sans Serif",
                         style = LocalTextStyle.current.merge(fontFamily = FontFamily.SansSerif),
                     )
                 }
@@ -238,7 +253,8 @@ fun ThemePicker(modifier: Modifier = Modifier, selected: Theme?, onClick: (Theme
                     modifier = Modifier.animateWidth(interactionSource2).weight(1f),
                 ) {
                     Text(
-                        "Serif",
+                        modifier = Modifier.padding(vertical = 4.dp),
+                        text = "Serif",
                         style =
                             LocalTextStyle.current.merge(
                                 fontFamily = FontFamily.Serif,
