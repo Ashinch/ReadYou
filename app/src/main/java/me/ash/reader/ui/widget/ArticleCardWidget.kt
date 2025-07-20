@@ -70,9 +70,9 @@ class ArticleCardWidget() : GlanceAppWidget() {
                     withContext(Dispatchers.IO) { repository.getData(config.dataSource).first() }
                 val article =
                     data.articles.let {
-                        it.firstOrNull { !it.imgUrl.isNullOrEmpty() } ?: it.first()
+                        it.firstOrNull { !it.imgUrl.isNullOrEmpty() } ?: it.firstOrNull()
                     }
-                val bitmap = repository.fetchBitmap(article.imgUrl)
+                val bitmap = repository.fetchBitmap(article?.imgUrl)
 
                 provideContent {
                     GlanceTheme { GlanceTheme { ArticleCard(article = article, bitmap = bitmap) } }
@@ -96,18 +96,18 @@ class ArticleCardWidget() : GlanceAppWidget() {
         val initialArticle =
             withContext(Dispatchers.IO) {
                 initialData.articles.let {
-                    it.firstOrNull { !it.imgUrl.isNullOrEmpty() } ?: it.first()
+                    it.firstOrNull { !it.imgUrl.isNullOrEmpty() } ?: it.firstOrNull()
                 }
             }
 
-        val initialBitmap = repository.fetchBitmap(initialArticle.imgUrl)
+        val initialBitmap = repository.fetchBitmap(initialArticle?.imgUrl)
 
         provideContent {
             val (_, dataSource) = configFlow.collectAsStateValue(initialConfig)
 
             val articleFlow =
                 remember(dataSource) { repository.getData(dataSource) }
-                    .mapNotNull {
+                    .map {
                         it.articles.let {
                             it.firstOrNull { !it.imgUrl.isNullOrEmpty() } ?: it.firstOrNull()
                         }
@@ -117,7 +117,7 @@ class ArticleCardWidget() : GlanceAppWidget() {
 
             val bitmap =
                 articleFlow
-                    .map { repository.fetchBitmap(it.imgUrl) }
+                    .map { repository.fetchBitmap(it?.imgUrl) }
                     .collectAsStateValue(initialBitmap)
 
             GlanceTheme { ArticleCard(article = article, bitmap = bitmap) }
@@ -127,7 +127,7 @@ class ArticleCardWidget() : GlanceAppWidget() {
 
 @SuppressLint("RestrictedApi")
 @Composable
-fun ArticleCard(article: Article, bitmap: Bitmap?, modifier: GlanceModifier = GlanceModifier) {
+fun ArticleCard(article: Article?, bitmap: Bitmap?, modifier: GlanceModifier = GlanceModifier) {
 
     val context = LocalContext.current
 
@@ -137,19 +137,18 @@ fun ArticleCard(article: Article, bitmap: Bitmap?, modifier: GlanceModifier = Gl
     val feedColor =
         if (bitmap != null) Color.White else GlanceTheme.colors.primary.getColor(context)
 
+    val parameters =
+        if (article != null)
+            actionParametersOf(ActionParameters.Key<String>(ExtraName.ARTICLE_ID) to article.id)
+        else actionParametersOf()
+
     // create your AppWidget here
     WidgetContainer(modifier = modifier) {
         Box(
             contentAlignment = Alignment.BottomStart,
             modifier =
                 GlanceModifier.fillMaxSize()
-                    .clickable(
-                        actionStartActivity<MainActivity>(
-                            actionParametersOf(
-                                ActionParameters.Key<String>(ExtraName.ARTICLE_ID) to article.id
-                            )
-                        )
-                    ),
+                    .clickable(actionStartActivity<MainActivity>(parameters)),
         ) {
             if (bitmap != null) {
                 Spacer(
@@ -168,27 +167,41 @@ fun ArticleCard(article: Article, bitmap: Bitmap?, modifier: GlanceModifier = Gl
             }
 
             Column(GlanceModifier.padding(12.dp)) {
-                Text(
-                    article.feedName,
-                    style =
-                        TextStyle(
-                            color = ColorProvider(feedColor),
-                            fontFamily = FontFamily.SansSerif,
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.Bold,
-                        ),
-                    maxLines = 1,
-                )
-                Text(
-                    article.title,
-                    style =
-                        TextStyle(
-                            color = ColorProvider(titleColor),
-                            fontFamily = FontFamily.Serif,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                        ),
-                )
+                if (article == null) {
+                    Text(
+                        context.getString(R.string.no_unread_articles),
+                        style =
+                            TextStyle(
+                                color = ColorProvider(feedColor),
+                                fontFamily = FontFamily.SansSerif,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                            ),
+                        modifier = GlanceModifier.padding(bottom = 8.dp, start = 4.dp)
+                    )
+                } else {
+                    Text(
+                        article.feedName,
+                        style =
+                            TextStyle(
+                                color = ColorProvider(feedColor),
+                                fontFamily = FontFamily.SansSerif,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                            ),
+                        maxLines = 1,
+                    )
+                    Text(
+                        article.title,
+                        style =
+                            TextStyle(
+                                color = ColorProvider(titleColor),
+                                fontFamily = FontFamily.Serif,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                            ),
+                    )
+                }
             }
         }
     }

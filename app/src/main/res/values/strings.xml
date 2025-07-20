@@ -371,4 +371,5 @@
     <string name="widget_settings">Widget settings</string>
     <string name="done">Done</string>
     <string name="last_updated">Last updated</string>
+    <string name="no_unread_articles">No unread articles</string>
 </resources>

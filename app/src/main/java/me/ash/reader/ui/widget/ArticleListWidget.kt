@@ -15,6 +15,7 @@ import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
+import androidx.glance.LocalContext
 import androidx.glance.LocalSize
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.actionParametersOf
@@ -24,6 +25,8 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
+import androidx.glance.appwidget.appWidgetBackground
+import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
@@ -91,13 +94,7 @@ class ArticleListWidget() : GlanceAppWidget() {
         val config = repository.getDefaultConfig()
         val data = withContext(Dispatchers.IO) { repository.getData(config.dataSource).first() }
         provideContent {
-            GlanceTheme {
-                WidgetContainer {
-                    Spacer(modifier = GlanceModifier.height(24.dp))
-                    Header(data.title, config.theme)
-                    ArticleList(data.articles, config.theme)
-                }
-            }
+            GlanceTheme { WidgetContainer { ArticleList(data.title, data.articles, config.theme) } }
         }
     }
 
@@ -120,13 +117,7 @@ class ArticleListWidget() : GlanceAppWidget() {
 
             val (title, articles) = data
 
-            GlanceTheme {
-                WidgetContainer {
-                    Spacer(modifier = GlanceModifier.height(24.dp))
-                    Header(title, theme)
-                    ArticleList(articles, theme)
-                }
-            }
+            GlanceTheme { WidgetContainer { ArticleList(title, articles, theme) } }
         }
     }
 }
@@ -134,7 +125,25 @@ class ArticleListWidget() : GlanceAppWidget() {
 @GlanceComposable
 @Composable
 fun WidgetContainer(modifier: GlanceModifier = GlanceModifier, content: @Composable () -> Unit) {
-    Column(modifier.fillMaxSize().background(GlanceTheme.colors.surface), content = { content() })
+    Box(
+        modifier
+            .fillMaxSize()
+            .background(GlanceTheme.colors.surface)
+            .appWidgetBackground()
+            .widgetCornerRadius(),
+        content = { content() },
+    )
+}
+
+private fun GlanceModifier.widgetCornerRadius(): GlanceModifier {
+    val cornerRadiusModifier =
+        if (android.os.Build.VERSION.SDK_INT >= 31) {
+            GlanceModifier.cornerRadius(android.R.dimen.system_app_widget_background_radius)
+        } else {
+            GlanceModifier
+        }
+
+    return this.then(cornerRadiusModifier)
 }
 
 @GlanceComposable
@@ -143,13 +152,18 @@ fun Header(text: String, theme: Theme, modifier: GlanceModifier = GlanceModifier
     val widgetHeight = LocalSize.current.height
     val widgetWidth = LocalSize.current.width
 
+    val isLargeVariant = widgetHeight > 240.dp && widgetWidth > 300.dp
+
     val fontSize =
-        if (widgetHeight > 240.dp && widgetWidth > 300.dp) {
-            22.sp
+        if (isLargeVariant) {
+            20.sp
         } else {
             18.sp
         }
-    Column(modifier = modifier.padding(bottom = 8.dp).padding(horizontal = 12.dp)) {
+
+    val bottomPadding = if (isLargeVariant) 10.dp else 8.dp
+
+    Column(modifier = modifier.padding(bottom = bottomPadding).padding(horizontal = 12.dp)) {
         Text(
             text = text,
             style =
@@ -169,24 +183,54 @@ fun Header(text: String, theme: Theme, modifier: GlanceModifier = GlanceModifier
 }
 
 @Composable
-fun ArticleList(items: List<Article>, theme: Theme, modifier: GlanceModifier = GlanceModifier) {
-    LazyColumn(modifier = modifier) {
-        item { Spacer(modifier = GlanceModifier.height(4.dp)) }
-        items(items) {
-            ArticleItem(
-                article = it,
-                theme = theme,
-                modifier =
-                    GlanceModifier.clickable(
-                        actionStartActivity<MainActivity>(
-                            actionParametersOf(
-                                ActionParameters.Key<String>(ExtraName.ARTICLE_ID) to it.id
-                            )
-                        )
+fun ArticleList(
+    title: String,
+    items: List<Article>,
+    theme: Theme,
+    modifier: GlanceModifier = GlanceModifier,
+) {
+    val context = LocalContext.current
+    if (items.isEmpty()) {
+        Column(modifier = modifier.fillMaxSize().clickable(actionStartActivity<MainActivity>())) {
+            Spacer(modifier = GlanceModifier.height(24.dp))
+            Header(title, theme)
+            Text(
+                text = context.getString(R.string.no_unread_articles),
+                style =
+                    TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = GlanceTheme.colors.primary,
+                        fontFamily = FontFamily.SansSerif,
                     ),
+                maxLines = 1,
+                modifier = GlanceModifier.padding(horizontal = 12.dp),
             )
         }
-        item { Spacer(modifier = GlanceModifier.height(12.dp)) }
+    } else {
+        Column(modifier = modifier) {
+            Spacer(modifier = GlanceModifier.height(24.dp))
+            Header(title, theme)
+
+            LazyColumn() {
+                item { Spacer(modifier = GlanceModifier.height(4.dp)) }
+                items(items) {
+                    ArticleItem(
+                        article = it,
+                        theme = theme,
+                        modifier =
+                            GlanceModifier.clickable(
+                                actionStartActivity<MainActivity>(
+                                    actionParametersOf(
+                                        ActionParameters.Key<String>(ExtraName.ARTICLE_ID) to it.id
+                                    )
+                                )
+                            ),
+                    )
+                }
+                item { Spacer(modifier = GlanceModifier.height(12.dp)) }
+            }
+        }
     }
 }
 
@@ -273,11 +317,7 @@ private fun PreviewArticleList() {
 
     GlanceTheme {
         // create your AppWidget here
-        WidgetContainer {
-            Spacer(modifier = GlanceModifier.height(24.dp))
-            Header("Media", Theme.SansSerif)
-            ArticleList(previewArticles, Theme.SansSerif)
-        }
+        WidgetContainer { ArticleList("Media", emptyList(), Theme.SansSerif) }
     }
 }
 
@@ -291,11 +331,7 @@ private fun PreviewArticleListSerif() {
 
     GlanceTheme {
         // create your AppWidget here
-        WidgetContainer {
-            Spacer(modifier = GlanceModifier.height(24.dp))
-            Header("Media", Theme.Serif)
-            ArticleList(previewArticles, Theme.Serif)
-        }
+        WidgetContainer { ArticleList("Media", previewArticles, Theme.Serif) }
     }
 }
 
