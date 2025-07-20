@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import java.util.Date
 import me.ash.reader.R
+import me.ash.reader.domain.service.SyncWorker.Companion.ONETIME_WORK_TAG
 import me.ash.reader.domain.service.SyncWorker.Companion.PERIODIC_WORK_TAG
 import me.ash.reader.infrastructure.preference.OpenLinkPreference
 import me.ash.reader.ui.component.base.Banner
@@ -83,7 +84,12 @@ fun TroubleshootingPage(onBack: () -> Unit, viewModel: TroubleshootingViewModel 
             }
         }
 
-    val workInfos =
+    val onetimeWorkerInfos =
+        viewModel.workManager
+            .getWorkInfosByTagFlow(ONETIME_WORK_TAG)
+            .collectAsStateValue(emptyList())
+
+    val periodicWorkerInfos =
         viewModel.workManager
             .getWorkInfosByTagFlow(PERIODIC_WORK_TAG)
             .collectAsStateValue(emptyList())
@@ -137,9 +143,19 @@ fun TroubleshootingPage(onBack: () -> Unit, viewModel: TroubleshootingViewModel 
                     ) {}
                     Spacer(modifier = Modifier.height(24.dp))
                 }
-                items(workInfos) {
+                item {
+                    Subtitle(modifier = Modifier.padding(horizontal = 24.dp), text = "Worker infos")
+                }
+                items(onetimeWorkerInfos) {
                     WorkInfo(
-                        title = it.tags.toString(),
+                        tags = it.tags,
+                        state = it.state.toString(),
+                        nextScheduledMillis = it.nextScheduleTimeMillis,
+                    )
+                }
+                items(periodicWorkerInfos) {
+                    WorkInfo(
+                        tags = it.tags,
                         state = it.state.toString(),
                         nextScheduledMillis = it.nextScheduleTimeMillis,
                     )
@@ -197,15 +213,17 @@ private fun preferenceFileLauncher(
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun WorkInfo(
-    title: String,
+    tags: Set<String>,
     state: String,
     nextScheduledMillis: Long,
     modifier: Modifier = Modifier,
 ) {
     val date = remember(nextScheduledMillis) { Date(nextScheduledMillis) }
     Column(modifier = modifier.padding(horizontal = 24.dp, vertical = 16.dp)) {
-        Text(title, style = MaterialTheme.typography.titleMediumEmphasized)
+        Text(tags.toString(), style = MaterialTheme.typography.bodyLarge)
         Text(state, style = MaterialTheme.typography.bodySmall)
-        Text("Next scheduled time: $date", style = MaterialTheme.typography.bodySmall)
+        if (tags.contains(PERIODIC_WORK_TAG)) {
+            Text("Next scheduled time: $date", style = MaterialTheme.typography.bodySmall)
+        }
     }
 }

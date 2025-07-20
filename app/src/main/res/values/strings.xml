@@ -370,4 +370,5 @@
     <string name="theme">Theme</string>
     <string name="widget_settings">Widget settings</string>
     <string name="done">Done</string>
+    <string name="last_updated">Last updated</string>
 </resources>

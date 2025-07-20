@@ -15,10 +15,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.update
@@ -65,7 +63,7 @@ class FeedsViewModel @Inject constructor(
         MutableStateFlow(FeedsUiState())
     val feedsUiState: StateFlow<FeedsUiState> = _feedsUiState.asStateFlow()
 
-    val syncWorkLiveData = workManager.getWorkInfosByTagLiveData(SyncWorker.WORK_TAG)
+    val syncWorkLiveData = workManager.getWorkInfosByTagLiveData(SyncWorker.SYNC_TAG)
 
     val filterStateFlow = filterStateUseCase.filterStateFlow
     val groupWithFeedsListFlow = groupWithFeedsListUseCase.groupWithFeedListFlow

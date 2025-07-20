@@ -36,13 +36,15 @@ constructor(
     companion object {
         private const val SYNC_WORK_NAME_PERIODIC = "ReadYou"
         private const val READER_WORK_NAME_PERIODIC = "FETCH_FULL_CONTENT_PERIODIC"
+        private const val SYNC_ONETIME_NAME = "SYNC_ONETIME"
 
-        private const val WORK_NAME_ONETIME = "SYNC_ONETIME"
-        const val WORK_TAG = "SYNC_TAG"
+        const val SYNC_TAG = "SYNC_TAG"
+        const val READER_TAG = "READER_TAG"
+        const val ONETIME_WORK_TAG = "ONETIME_WORK_TAG"
         const val PERIODIC_WORK_TAG = "PERIODIC_WORK_TAG"
 
         fun cancelOneTimeWork(workManager: WorkManager) {
-            workManager.cancelUniqueWork(WORK_NAME_ONETIME)
+            workManager.cancelUniqueWork(SYNC_ONETIME_NAME)
         }
 
         fun cancelPeriodicWork(workManager: WorkManager) {
@@ -53,15 +55,21 @@ constructor(
         fun enqueueOneTimeWork(workManager: WorkManager, inputData: Data = workDataOf()) {
             workManager
                 .beginUniqueWork(
-                    WORK_NAME_ONETIME,
+                    SYNC_ONETIME_NAME,
                     ExistingWorkPolicy.KEEP,
                     OneTimeWorkRequestBuilder<SyncWorker>()
-                        .addTag(WORK_TAG)
+                        .addTag(SYNC_TAG)
+                        .addTag(ONETIME_WORK_TAG)
                         .setInputData(inputData)
                         .build(),
                 )
                 .then(OneTimeWorkRequestBuilder<WidgetUpdateWorker>().build())
-                .then(OneTimeWorkRequestBuilder<ReaderWorker>().build())
+                .then(
+                    OneTimeWorkRequestBuilder<ReaderWorker>()
+                        .addTag(READER_TAG)
+                        .addTag(ONETIME_WORK_TAG)
+                        .build()
+                )
                 .enqueue()
         }
 
@@ -84,7 +92,7 @@ constructor(
                             )
                             .build()
                     )
-                    .addTag(WORK_TAG)
+                    .addTag(SYNC_TAG)
                     .addTag(PERIODIC_WORK_TAG)
                     .setInitialDelay(syncInterval.value, TimeUnit.MINUTES)
                     .build(),
@@ -104,6 +112,7 @@ constructor(
                             .build()
                     )
                     .addTag(PERIODIC_WORK_TAG)
+                    .addTag(READER_TAG)
                     .setInitialDelay(syncInterval.value, TimeUnit.MINUTES)
                     .build(),
             )

@@ -23,14 +23,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material.icons.outlined.PersonOff
-import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,12 +39,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import java.util.Date
 import me.ash.reader.R
 import me.ash.reader.infrastructure.preference.KeepArchivedPreference
@@ -71,7 +73,7 @@ import me.ash.reader.ui.page.settings.SettingItem
 import me.ash.reader.ui.page.settings.accounts.connection.AccountConnection
 import me.ash.reader.ui.theme.palette.onLight
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AccountDetailsPage(
     viewModel: AccountViewModel,
@@ -117,16 +119,26 @@ fun AccountDetailsPage(
                 imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                 contentDescription = stringResource(R.string.back),
                 tint = MaterialTheme.colorScheme.onSurface,
-                onClick = onBack
+                onClick = onBack,
             )
         },
         actions = {
-            FeedbackIconButton(
-                imageVector = Icons.Rounded.Close,
-                contentDescription = stringResource(R.string.close),
-                tint = MaterialTheme.colorScheme.onSurface,
-                onClick = navigateToFeeds
-            )
+            val haptic = LocalHapticFeedback.current
+            Button(
+                modifier = Modifier.padding(end = 8.dp),
+                onClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.ContextClick)
+                    navigateToFeeds()
+                },
+                shapes = ButtonDefaults.shapes(),
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryFixedDim,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryFixedVariant,
+                    ),
+            ) {
+                Text(stringResource(R.string.done))
+            }
         },
         content = {
             LazyColumn {
@@ -159,10 +171,10 @@ fun AccountDetailsPage(
                     )
                     selectedAccount?.let {
                         SettingItem(
-                            title = "Last updatedInfo",
+                            title = stringResource(R.string.last_updated),
                             desc = selectedAccount.updateAt.toString(),
                             onClick = {},
-                            enabled = false
+                            enabled = false,
                         ) {}
                     }
 

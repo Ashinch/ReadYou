@@ -70,7 +70,7 @@ class ArticleListReaderViewModel @Inject constructor(
     private val _flowUiState = MutableStateFlow(FlowUiState())
     val flowUiState: StateFlow<FlowUiState> = _flowUiState.asStateFlow()
 
-    private val syncWorkerStatusFlow = workManager.getWorkInfosByTagFlow(SyncWorker.WORK_TAG).map {
+    private val syncWorkerStatusFlow = workManager.getWorkInfosByTagFlow(SyncWorker.SYNC_TAG).map {
         it.any { workInfo ->
             workInfo.state == WorkInfo.State.RUNNING
         }
