@@ -19,6 +19,7 @@ constructor(
     @Assisted workerParams: WorkerParameters,
     private val rssService: RssService,
     private val readerCacheHelper: ReaderCacheHelper,
+    private val workManager: WorkManager,
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
@@ -30,12 +31,26 @@ constructor(
             rssService.get().clearKeepArchivedArticles().forEach {
                 readerCacheHelper.deleteCacheFor(articleId = it.id)
             }
+            workManager
+                .beginUniqueWork(
+                    uniqueWorkName = POST_SYNC_WORK_NAME,
+                    existingWorkPolicy = ExistingWorkPolicy.KEEP,
+                    OneTimeWorkRequestBuilder<ReaderWorker>()
+                        .addTag(READER_TAG)
+                        .addTag(ONETIME_WORK_TAG)
+                        .build(),
+                )
+                .then(OneTimeWorkRequestBuilder<WidgetUpdateWorker>().build())
+                .enqueue()
         }
     }
 
     companion object {
         private const val SYNC_WORK_NAME_PERIODIC = "ReadYou"
+        @Deprecated("do not use")
         private const val READER_WORK_NAME_PERIODIC = "FETCH_FULL_CONTENT_PERIODIC"
+        private const val POST_SYNC_WORK_NAME = "POST_SYNC_WORK"
+
         private const val SYNC_ONETIME_NAME = "SYNC_ONETIME"
 
         const val SYNC_TAG = "SYNC_TAG"
@@ -62,13 +77,6 @@ constructor(
                         .addTag(ONETIME_WORK_TAG)
                         .setInputData(inputData)
                         .build(),
-                )
-                .then(OneTimeWorkRequestBuilder<WidgetUpdateWorker>().build())
-                .then(
-                    OneTimeWorkRequestBuilder<ReaderWorker>()
-                        .addTag(READER_TAG)
-                        .addTag(ONETIME_WORK_TAG)
-                        .build()
                 )
                 .enqueue()
         }
@@ -98,24 +106,7 @@ constructor(
                     .build(),
             )
 
-            workManager.enqueueUniquePeriodicWork(
-                READER_WORK_NAME_PERIODIC,
-                ExistingPeriodicWorkPolicy.UPDATE,
-                PeriodicWorkRequestBuilder<ReaderWorker>(syncInterval.value, TimeUnit.MINUTES)
-                    .setConstraints(
-                        Constraints.Builder()
-                            .setRequiresCharging(syncOnlyWhenCharging.value)
-                            .setRequiredNetworkType(
-                                if (syncOnlyOnWiFi.value) NetworkType.UNMETERED
-                                else NetworkType.CONNECTED
-                            )
-                            .build()
-                    )
-                    .addTag(PERIODIC_WORK_TAG)
-                    .addTag(READER_TAG)
-                    .setInitialDelay(syncInterval.value, TimeUnit.MINUTES)
-                    .build(),
-            )
+            workManager.cancelUniqueWork(READER_WORK_NAME_PERIODIC)
         }
     }
 }
