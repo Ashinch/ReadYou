@@ -200,6 +200,7 @@ fun ArticleCard(article: Article?, bitmap: Bitmap?, modifier: GlanceModifier = G
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                             ),
+                        maxLines = 6
                     )
                 }
             }

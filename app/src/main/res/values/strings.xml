@@ -372,4 +372,7 @@
     <string name="done">Done</string>
     <string name="last_updated">Last updated</string>
     <string name="no_unread_articles">No unread articles</string>
+    <string name="list_widget_label">List view</string>
+    <string name="card_widget_label">Card view</string>"
+    <string name="widget_description">View latest unread articles from selected sources</string>
 </resources>

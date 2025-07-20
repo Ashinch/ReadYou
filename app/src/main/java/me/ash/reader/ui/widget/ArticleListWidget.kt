@@ -161,9 +161,14 @@ fun Header(text: String, theme: Theme, modifier: GlanceModifier = GlanceModifier
             18.sp
         }
 
+    val topPadding = if (isLargeVariant) 28.dp else 24.dp
+
     val bottomPadding = if (isLargeVariant) 10.dp else 8.dp
 
-    Column(modifier = modifier.padding(bottom = bottomPadding).padding(horizontal = 12.dp)) {
+    Column(
+        modifier =
+            modifier.padding(top = topPadding, bottom = bottomPadding).padding(horizontal = 12.dp)
+    ) {
         Text(
             text = text,
             style =
@@ -192,7 +197,6 @@ fun ArticleList(
     val context = LocalContext.current
     if (items.isEmpty()) {
         Column(modifier = modifier.fillMaxSize().clickable(actionStartActivity<MainActivity>())) {
-            Spacer(modifier = GlanceModifier.height(24.dp))
             Header(title, theme)
             Text(
                 text = context.getString(R.string.no_unread_articles),
@@ -209,7 +213,6 @@ fun ArticleList(
         }
     } else {
         Column(modifier = modifier) {
-            Spacer(modifier = GlanceModifier.height(24.dp))
             Header(title, theme)
 
             LazyColumn() {

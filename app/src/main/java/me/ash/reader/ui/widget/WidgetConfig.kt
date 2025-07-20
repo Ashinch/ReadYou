@@ -3,10 +3,10 @@ package me.ash.reader.ui.widget
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FeedWidgetConfig(val theme: Theme, val dataSource: DataSource) {
+data class WidgetConfig(val theme: Theme, val dataSource: DataSource) {
     companion object {
         fun default(accountId: Int) =
-            FeedWidgetConfig(theme = Theme.SansSerif, dataSource = DataSource.Account(accountId))
+            WidgetConfig(theme = Theme.SansSerif, dataSource = DataSource.Account(accountId))
     }
 }
 

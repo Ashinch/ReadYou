@@ -50,17 +50,17 @@ constructor(
 
     private fun Context.getConfigFlow(
         widgetId: Int,
-        default: FeedWidgetConfig = FeedWidgetConfig.default(accountService.getCurrentAccountId()),
-    ): Flow<FeedWidgetConfig> =
+        default: WidgetConfig = WidgetConfig.default(accountService.getCurrentAccountId()),
+    ): Flow<WidgetConfig> =
         widgetDataStore.data.map {
             val string = it[stringPreferencesKey(widgetId.toString())]
             if (string == null) default
             else
-                runCatching { json.decodeFromString<FeedWidgetConfig>(string) }
+                runCatching { json.decodeFromString<WidgetConfig>(string) }
                     .getOrDefault(default)
         }
 
-    private suspend fun Context.writeConfig(widgetId: Int, config: FeedWidgetConfig) =
+    private suspend fun Context.writeConfig(widgetId: Int, config: WidgetConfig) =
         withContext(Dispatchers.IO) {
             widgetDataStore.edit { preferences ->
                 val configString =
@@ -85,14 +85,14 @@ constructor(
             }
         }
 
-    fun getDefaultConfig() = FeedWidgetConfig.default(accountService.getCurrentAccountId())
+    fun getDefaultConfig() = WidgetConfig.default(accountService.getCurrentAccountId())
 
-    suspend fun writeConfig(widgetId: Int, config: FeedWidgetConfig) =
+    suspend fun writeConfig(widgetId: Int, config: WidgetConfig) =
         context.writeConfig(widgetId, config)
 
-    suspend fun getConfig(widgetId: Int): FeedWidgetConfig = getConfigFlow(widgetId).first()
+    suspend fun getConfig(widgetId: Int): WidgetConfig = getConfigFlow(widgetId).first()
 
-    fun getConfigFlow(widgetId: Int): Flow<FeedWidgetConfig> = context.getConfigFlow(widgetId)
+    fun getConfigFlow(widgetId: Int): Flow<WidgetConfig> = context.getConfigFlow(widgetId)
 
     fun clearConfig(widgetIds: IntArray) =
         coroutineScope.launch(Dispatchers.IO) {

@@ -122,6 +122,7 @@
 
         <receiver
             android:name=".ui.widget.ArticleListWidgetReceiver"
+            android:label="@string/list_widget_label"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -133,6 +134,7 @@
         </receiver>
         <receiver
             android:name=".ui.widget.ArticleCardWidgetReceiver"
+            android:label="@string/card_widget_label"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

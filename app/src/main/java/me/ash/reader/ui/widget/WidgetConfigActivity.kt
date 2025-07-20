@@ -98,7 +98,7 @@ class WidgetConfigActivity : ComponentActivity() {
         setContent {
             settingsProvider.ProvidesSettings {
                 AppTheme(useDarkTheme = LocalDarkTheme.current.isDarkTheme()) {
-                    var config: FeedWidgetConfig by remember { mutableStateOf(config) }
+                    var config: WidgetConfig by remember { mutableStateOf(config) }
 
                     val dataSources =
                         repository.getCurrentDataSources().collectAsStateValue(emptyList())
@@ -187,7 +187,7 @@ class WidgetConfigActivity : ComponentActivity() {
     }
 
     fun updateWidget(
-        config: FeedWidgetConfig,
+        config: WidgetConfig,
         glanceId: GlanceId,
         appWidgetId: Int,
         isCard: Boolean,
@@ -289,7 +289,7 @@ fun SingleChoiceItem(
                 .padding(vertical = 16.dp, horizontal = 24.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 title,
                 style = MaterialTheme.typography.bodyLargeEmphasized,
@@ -302,7 +302,6 @@ fun SingleChoiceItem(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        Spacer(modifier = Modifier.weight(1f))
         RadioButton(selected = selected, onClick = null, interactionSource = interactionSource)
     }
 }
