@@ -51,7 +51,7 @@
     <string name="tonal_elevation">色調の高さ</string>
     <string name="basic_fonts">基本フォント</string>
     <string name="open_source_licenses">オープンソースライセンス</string>
-    <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
+    <string name="update_link">https://api.github.com/repos/ReadYouApp/ReadYou/releases/latest</string>
     <string name="change_log">変更履歴</string>
     <string name="update">アップデート</string>
     <string name="download_failure">アップデートをダウンロードできませんでした</string>
@@ -132,7 +132,7 @@
     <string name="flow_page">フローページ</string>
     <string name="reading_page">閲覧ページ</string>
     <string name="primary_color_hint">例: #666666 や 666666 など</string>
-    <string name="tos_content"><h5> プライバシー ポリシー </h5> <br/> <p> 私はあなたのプライバシーを非常に真剣に受け止めています。 </p> <br/> <p> <b>Read You</b> はユーザーデータを収集せず、すべての重要情報 (パスワードやその他のアカウント情報) はデバイスのローカルのアプリケーションデータベースに安全に保存されます。 </p> <br/> <p> <b>Read You</b> は、サービスを提供するために、次の権限を必要とします。 </p> <br/> <p> - ネットワークアクセスの権限 (指定したオンラインコンテンツにアクセスするため) </p> <p> - ネットワークの状態を取得する権限 (現在デバイスが利用可能なネットワーク状況かどうかを取得するため) </p> <p> - バックグラウンドサービスの権限 (定期的にコンテンツを同期するため) </p> <br/> <br/> <h5> サード パーティ サービス </h5> <br/> <p> このポリシーは、<b>Read You</b> で使用するパーティー サービスには適用されません。 </p> <br/> <br/> <h5> 免責事項 </h5> <br/> <p> <b>Read You</b> はあくまで情報収集ツールです。 <b>Read You</b> の使用は、あなたの国と地域の法律と規制の対象となり、あなたのの行為から生じる責任は、あなたが個人的に負うものとします。 </p> <br/> <br/> <h5> オープンソース ライセンス </h5> <br/> <p> <b>Read You</b> は、GNU GPL 3.0 オープンソース ライセンス[1]に基づくオープン ソース プロジェクトです。 <b>Read You</b> のソース コードを無料で使用、参照、および変更することはできますが、変更および派生したコードをクローズドソースの商用ソフトウェアとして配布および販売することはできません。詳細については、完全な GNU GPL 3.0 オープン ソース ライセンス[2]全文をご覧ください。 </p> <br/> <br/> <h5> 付録 </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https:/ /www.gnu.org/licenses/gpl-3.0.html </p></string>
+    <string name="tos_content"><h5> プライバシー ポリシー </h5> <br/> <p> 私はあなたのプライバシーを非常に真剣に受け止めています。 </p> <br/> <p> <b>Read You</b> はユーザーデータを収集せず、すべての重要情報 (パスワードやその他のアカウント情報) はデバイスのローカルのアプリケーションデータベースに安全に保存されます。 </p> <br/> <p> <b>Read You</b> は、サービスを提供するために、次の権限を必要とします。 </p> <br/> <p> - ネットワークアクセスの権限 (指定したオンラインコンテンツにアクセスするため) </p> <p> - ネットワークの状態を取得する権限 (現在デバイスが利用可能なネットワーク状況かどうかを取得するため) </p> <p> - バックグラウンドサービスの権限 (定期的にコンテンツを同期するため) </p> <br/> <br/> <h5> サード パーティ サービス </h5> <br/> <p> このポリシーは、<b>Read You</b> で使用するパーティー サービスには適用されません。 </p> <br/> <br/> <h5> 免責事項 </h5> <br/> <p> <b>Read You</b> はあくまで情報収集ツールです。 <b>Read You</b> の使用は、あなたの国と地域の法律と規制の対象となり、あなたのの行為から生じる責任は、あなたが個人的に負うものとします。 </p> <br/> <br/> <h5> オープンソース ライセンス </h5> <br/> <p> <b>Read You</b> は、GNU GPL 3.0 オープンソース ライセンス[1]に基づくオープン ソース プロジェクトです。 <b>Read You</b> のソース コードを無料で使用、参照、および変更することはできますが、変更および派生したコードをクローズドソースの商用ソフトウェアとして配布および販売することはできません。詳細については、完全な GNU GPL 3.0 オープン ソース ライセンス[2]全文をご覧ください。 </p> <br/> <br/> <h5> 付録 </h5> <br/> <p> - [1] https://github.com/ReadYouApp/ReadYou </p> <p> - [2] https:/ /www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="appearance">外観</string>
     <string name="use_device_theme">デバイスのテーマを使用する</string>
     <string name="skip_this_version">このバージョンをスキップ</string>

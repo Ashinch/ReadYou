@@ -20,7 +20,7 @@
 
 "When I don't have enough free time, I deeply appreciate everyone coming together to contribute to this project. @mbestavros and @JunkFood02 will be added to the list of collaborators for the project, granting you some permissions to manage the project's release plans."
 
-(Source: https://github.com/Ashinch/ReadYou/issues/495#issuecomment-1880344011)
+(Source: https://github.com/ReadYouApp/ReadYou/issues/495#issuecomment-1880344011)
 
 请务必明确：这并不意味着 @Ashinch 将退出该项目！这只是意味着有更多的人可以帮助创建新版本，当 @Ashinch 很忙的时候，这将会有很大的帮助，并且一旦代码被合并到 Github 上，就会减少发布代码的时间
 

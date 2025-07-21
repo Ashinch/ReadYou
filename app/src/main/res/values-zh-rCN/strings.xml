@@ -105,7 +105,7 @@
     <string name="tos_tips">在此之前，请阅读并同意 Read You 的服务条款与隐私政策。</string>
     <string name="browse_tos_tips">查看《<i><u>服务条款与隐私政策</u></i>》</string>
     <string name="terms_of_service">服务条款</string>
-    <string name="tos_content"><h5> 隐私政策 </h5> <br/> <p> 我们非常重视您的隐私。 </p> <br/> <p> <b>Read You</b> 不收集任何用户数据，所有敏感信息（密码和其他账户信息）都安全地存储在您设备上的本地应用数据库中。 </p> <br/> <p> <b>Read You</b> 将使用以下权限为您提供服务： </p> <br/> <p> - 访问网络权限（用于访问您所指定的在线内容） </p> <p> - 获取网络状态权限（用于确定当前设备是否拥有可用的网络条件） </p> <p> - 后台服务权限（用于定时自动地为您同步已收藏的内容） </p> <br/> <br/> <h5> 第三方服务 </h5> <br/> <p> 本政策不适用于您与 <b>Read You</b> 一起使用的第三方服务。您可以在所使用的第三方服务的网站上查阅相关的隐私政策。 </p> <br/> <br/> <h5> 免责声明 </h5> <br/> <p> <b>Read You</b> 仅是一款内容收藏工具。您在使用 <b>Read You</b> 的过程中，应遵守所在国家和地区的法律法规，因您的行为所产生的一切责任将由您个人承担。 </p> <br/> <br/> <h5> 开源许可 </h5> <br/> <p> <b>Read You</b> 是一个使用 GNU GPL 3.0 开源许可协议的开源项目[1]，允许您免费使用、引用、修改 <b>Read You</b> 的源代码，但不允许修改后和其衍生的代码作为闭源的商业软件进行发布和销售。具体细节请查看完整的 GNU GPL 3.0 开源许可协议 [2]。 </p> <br/> <br/> <h5> 附录 </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
+    <string name="tos_content"><h5> 隐私政策 </h5> <br/> <p> 我们非常重视您的隐私。 </p> <br/> <p> <b>Read You</b> 不收集任何用户数据，所有敏感信息（密码和其他账户信息）都安全地存储在您设备上的本地应用数据库中。 </p> <br/> <p> <b>Read You</b> 将使用以下权限为您提供服务： </p> <br/> <p> - 访问网络权限（用于访问您所指定的在线内容） </p> <p> - 获取网络状态权限（用于确定当前设备是否拥有可用的网络条件） </p> <p> - 后台服务权限（用于定时自动地为您同步已收藏的内容） </p> <br/> <br/> <h5> 第三方服务 </h5> <br/> <p> 本政策不适用于您与 <b>Read You</b> 一起使用的第三方服务。您可以在所使用的第三方服务的网站上查阅相关的隐私政策。 </p> <br/> <br/> <h5> 免责声明 </h5> <br/> <p> <b>Read You</b> 仅是一款内容收藏工具。您在使用 <b>Read You</b> 的过程中，应遵守所在国家和地区的法律法规，因您的行为所产生的一切责任将由您个人承担。 </p> <br/> <br/> <h5> 开源许可 </h5> <br/> <p> <b>Read You</b> 是一个使用 GNU GPL 3.0 开源许可协议的开源项目[1]，允许您免费使用、引用、修改 <b>Read You</b> 的源代码，但不允许修改后和其衍生的代码作为闭源的商业软件进行发布和销售。具体细节请查看完整的 GNU GPL 3.0 开源许可协议 [2]。 </p> <br/> <br/> <h5> 附录 </h5> <br/> <p> - [1] https://github.com/ReadYouApp/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">同意并继续</string>
     <string name="wallpaper_colors">壁纸颜色</string>
     <string name="no_palettes">无色板</string>
@@ -129,7 +129,7 @@
     <string name="reading_page">阅读页面</string>
     <string name="sponsor">捐赠</string>
     <string name="open_source_licenses">开放源代码许可</string>
-    <string name="update_link">https://gitee.com/api/v5/repos/Ashinch/ReadYou/releases/latest</string>
+    <string name="update_link">https://gitee.com/api/v5/repos/ReadYouApp/ReadYou/releases/latest</string>
     <string name="change_log">更新日志</string>
     <string name="update">更新</string>
     <string name="skip_this_version">跳过这个版本</string>

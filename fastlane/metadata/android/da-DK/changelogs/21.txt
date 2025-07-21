@@ -24,7 +24,7 @@
 
 »Når jeg ikke har nok fritid, sætter jeg stor pris på, at alle kommer sammen for at bidrage til dette projekt. @mbestavros og @JunkFood02 vil blive føjet til listen over samarbejdspartnere for projektet, hvilket giver jer nogle tilladelser til at styre projektets udgivelsesplaner.«
 
-(Kilde: https://github.com/Ashinch/ReadYou/issues/495#issuecomment-1880344011)
+(Kilde: https://github.com/ReadYouApp/ReadYou/issues/495#issuecomment-1880344011)
 
 For at gøre det helt klart: Det betyder ikke, at @Ashinch trækker sig fra projektet! Det betyder bare, at der er flere mennesker til rådighed til at hjælpe med at skabe nye udgivelser. Det vil være en stor hjælp, når @Ashinch har travlt, og det bør reducere den tid, det tager at sende kode ud, når den er blevet flettet på Github.
 

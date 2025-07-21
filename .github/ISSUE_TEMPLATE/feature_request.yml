@@ -8,7 +8,7 @@ body:
     attributes:
       label: Checklist
       options:
-        - label: I've already searched in [existing issues](https://github.com/Ashinch/ReadYou/issues?q=is%3Aissue+) and haven't found a similar feature request.
+        - label: I've already searched in [existing issues](https://github.com/ReadYouApp/ReadYou/issues?q=is%3Aissue+) and haven't found a similar feature request.
           required: true
 
 

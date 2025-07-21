@@ -24,7 +24,7 @@
 
 "Keď nemám dostatok voľného času, hlboko si vážim každého, kto sa zišiel, aby prispel k tomuto projektu. @mbestavros a @JunkFood02 budú pridané do zoznamu spolupracovníkov projektu, ktorí vám udelia určité povolenia na správu plánov vydania projektu. ."
 
-(Zdroj: https://github.com/Ashinch/ReadYou/issues/495#issuecomment-1880344011)
+(Zdroj: https://github.com/ReadYouApp/ReadYou/issues/495#issuecomment-1880344011)
 
 Aby bolo úplne jasné: to neznamená, že @Ashinch odstupuje z projektu! Znamená to len, že je k dispozícii viac ľudí, ktorí vám pomôžu vytvoriť nové vydania. To pomôže veľa, keď je @Ashinch zaneprázdnený, a malo by to skrátiť čas na odoslanie kódu po jeho zlúčení na Github.
 

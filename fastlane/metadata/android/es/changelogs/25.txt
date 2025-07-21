@@ -9,7 +9,7 @@
 
 ### Notas
 
-**Registro de cambios completo:** [0.10.0...0.10.1](https://github.com/Ashinch/ReadYou/compare/0.10.0...0.10.1)
+**Registro de cambios completo:** [0.10.0...0.10.1](https://github.com/ReadYouApp/ReadYou/compare/0.10.0...0.10.1)
 
 Este es un parche de corrección de errores. En caso de que te lo hayas perdido, aquí tienes el registro de cambios de la versión 0.10.0:
 
@@ -47,4 +47,4 @@ Este es un parche de corrección de errores. En caso de que te lo hayas perdido,
 3. Estamos buscando otros canales de patrocinio, actualmente disponibles son AFDIAN. Si desea apoyar el desarrollo de ReadYou, puede patrocinarlo a través de [AFDIAN](https://afdian.net/a/ashinch).
 4. Gracias a nuestros patrocinadores: @User_3072e, @User_223be, @User_3c5c7(Simon), @User_97ebe, @Lowae, @User_28b9f, @User_yuHC, @nullqwertyuiop, @openisgood, @User_vWca, @qgmzmy, @User_97ee1.
 
-**Registro de cambios completo:** [0.9.12...0.10.0](https://github.com/Ashinch/ReadYou/compare/0.9.12...0.10.0)
+**Registro de cambios completo:** [0.9.12...0.10.0](https://github.com/ReadYouApp/ReadYou/compare/0.9.12...0.10.0)

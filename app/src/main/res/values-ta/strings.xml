@@ -242,7 +242,7 @@
     <string name="update">புதுப்பி</string>
     <string name="skip_this_version">இப்பதிப்பைக் கடந்திடு</string>
     <string name="is_latest_version">இதுவே இச்செயலியின் பிந்தையப் பதிப்பு</string>
-    <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
+    <string name="update_link">https://api.github.com/repos/ReadYouApp/ReadYou/releases/latest</string>
     <string name="check_failure">புதுப்பிக்கும் சோதனை செயலிழந்தது</string>
     <string name="download_failure">புதுப்பித்தல்களை பதிவிறக்கமுடியவில்லை</string>
     <string name="help">உதவி</string>

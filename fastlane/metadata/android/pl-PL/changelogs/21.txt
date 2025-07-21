@@ -24,7 +24,7 @@
 
 „Kiedy nie mam wystarczająco dużo wolnego czasu, bardzo doceniam, że wszyscy zbierają się, aby przyczynić się do tego projektu. @mbestavros i @JunkFood02 zostaną dodani do listy współpracowników projektu, przyznając Ci pewne uprawnienia do zarządzania planami wydań projektu”.
 
-(Źródło: https://github.com/Ashinch/ReadYou/issues/495#issuecomment-1880344011)
+(Źródło: https://github.com/ReadYouApp/ReadYou/issues/495#issuecomment-1880344011)
 
 Aby było jasne: nie oznacza to, że @Ashinch rezygnuje z projektu! Oznacza to po prostu, że jest więcej osób dostępnych do pomocy w tworzeniu nowych wydań. To bardzo pomoże, gdy @Ashinch jest zajęty i powinno skrócić czas dostarczania kodu po jego scaleniu na Github.
 

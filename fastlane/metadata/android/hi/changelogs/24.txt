@@ -32,4 +32,4 @@
 3. हम अन्य प्रायोजन चैनलों की तलाश कर रहे हैं, वर्तमान में AFDIAN उपलब्ध है। यदि आप ReadYou के विकास का समर्थन करना चाहते हैं, तो आप इसे [AFDIAN](https://afdian.net/a/ashinch) के माध्यम से प्रायोजित कर सकते हैं।
 4. हमारे प्रायोजकों को धन्यवाद: @User_3072e, @User_223be, @User_3c5c7(Simon), @User_97ebe, @Lowae, @User_28b9f, @User_yuHC, @nullqwertyuiop, @openisgood, @User_vWca, @qgmzmy, @User_97ee1
 
-**पूर्ण चेंजलॉग:** [0.9.12...0.10.0](https://github.com/Ashinch/ReadYou/compare/0.9.12...0.10.0)
+**पूर्ण चेंजलॉग:** [0.9.12...0.10.0](https://github.com/ReadYouApp/ReadYou/compare/0.9.12...0.10.0)
