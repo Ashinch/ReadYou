@@ -331,4 +331,16 @@
     <string name="load_next_feed">Зареждане на следващата емисия</string>
     <string name="mark_all_as_read_and_load_next_feed">Маркирай всичко като прочетено и зареди следващата емисия</string>
     <string name="pull_from_bottom">Издърпайте отдолу</string>
+    <string name="account">Профил</string>
+    <string name="feed">Емисия</string>
+    <string name="folder">Папка</string>
+    <string name="data_source">Източник на данни</string>
+    <string name="theme">Тема</string>
+    <string name="widget_settings">Настройки на приспособление</string>
+    <string name="done">Готово</string>
+    <string name="last_updated">Последна актуализация</string>
+    <string name="no_unread_articles">Няма непрочетени статии</string>
+    <string name="list_widget_label">Изглед като списък</string>
+    <string name="card_widget_label">Изглед като карта</string>"
+    <string name="widget_description">Преглед на най-новите непрочетени статии от избрани източници</string>
 </resources>
