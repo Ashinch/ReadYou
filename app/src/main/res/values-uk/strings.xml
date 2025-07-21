@@ -337,4 +337,16 @@
     <string name="load_next_feed">Завантажити наступний канал</string>
     <string name="mark_all_as_read_and_load_next_feed">Позначити всі як прочитані та завантажити наступну стрічку</string>
     <string name="pull_from_bottom">Потягніть знизу</string>
+    <string name="account">Обліковий запис</string>
+    <string name="feed">Канал</string>
+    <string name="folder">Папка</string>
+    <string name="data_source">Джерело даних</string>
+    <string name="theme">Тема</string>
+    <string name="widget_settings">Налаштування віджета</string>
+    <string name="done">Готово</string>
+    <string name="last_updated">Останнє оновлення</string>
+    <string name="no_unread_articles">Немає непрочитаних статей</string>
+    <string name="list_widget_label">Список перегляд</string>
+    <string name="card_widget_label">Перегляд картки</string>"
+    <string name="widget_description">Переглянути останні непрочитані статті з вибраних джерел</string>
 </resources>

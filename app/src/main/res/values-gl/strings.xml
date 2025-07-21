@@ -328,4 +328,7 @@
     <string name="mark_as_read_on_scroll">Marcar como lido ao desprazar</string>
     <string name="bold_characters_preview">Pon en letra grosa os primeiros caracteres das palabras no artigo</string>
     <string name="sponsor_desc">Construímos e mantemos esta aplicación gratuíta e de código aberto no noso tempo libre. Se a gozas, considera apoiarnos cunha pequena doazón! ☕️</string>
+    <string name="load_next_feed">Cargar a seguinte fonte</string>
+    <string name="mark_all_as_read_and_load_next_feed">Marcar todo como lido e cargar a seguinte fonte</string>
+    <string name="pull_from_bottom">Tirar desde debaixo</string>
 </resources>
