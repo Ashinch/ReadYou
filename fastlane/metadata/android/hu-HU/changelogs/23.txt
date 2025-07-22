@@ -1,0 +1,24 @@
+## 0.9.12
+
+1. Google Reader API és FreshRSS API támogatása (#536, @Ashinch)
+2. Előre és hátra átmenet animáció használata (#540, @JunkFood02)
+3. Lehetőség biztosítása további információk kizárására OPML-fájlba történő exportáláskor (#567, @Ashinch)
+4. Lehetőség biztosítása a csillaggal jelölt cikkelemek szürkítésére (#547, @MauroGuida)
+5. Az „olvasottnak jelölés csúsztatással” hiba javítása (#520, @aeghn)
+6. Az üres csoport nem kerek alsó sarkának javítása (#529, @kid1412621)
+7. Szinkronizálás utáni nézetfrissítés javítása (#531, @kid1412621)
+8. A hiányzó cikkcím okozta hiba javítása (#532, @kid1412621)
+9. A cikkek szinkronizálás közbeni elárvulásának javítása a Fever API-ban (#534, @Ashinch)
+10. Számos UI javítás és hibajavítás (@Ashinch, @JunkFood02)
+11. Fordítási frissítések (köszönet mindenkinek, aki segített)
+
+### Megjegyzések
+
+1. Köszönet a FreshRSS közösségnek, különösen @Alkarexnek, a projektben nyújtott segítségért.
+2. A ReadYou jelenleg nem teljesen kompatibilis az Inoreaderrel a Google Reader API-n keresztül.
+3. A ReadYou jelenleg nem képes új csoportot megadni, amikor a Google Reader API-n keresztül előfizetést adunk hozzá.
+4. A Google Reader API-val történő szinkronizáláskor a ReadYou szinkronizálásonként akár 10k cikket is lekérhet. Az olvasott cikkek esetében csak az elmúlt hónapban megjelent cikkek kerülnek szinkronizálásra, míg az olvasatlan és csillaggal jelölt cikkek teljes mértékben szinkronizálásra kerülnek. A szinkronizálási sebesség elsősorban ezen cikkek számától függ. A kezdeti szinkronizálás némi időt vehet igénybe, ami a helyi és a kiszolgáló közötti adatmennyiség-különbségtől függ. Ha nagy számú hírforrása van, akkor is lassúnak érezheti, szükség esetén megpróbálhatom optimalizálni.
+5. A tesztelésben részt vevő felhasználók a „0.9.12” verzió telepítése után szinkronizálják újra vagy adják hozzá újra a Google Reader API fiókjukat.
+6. Várjuk a következő verzióban részletesen kidolgozott további fejlesztéseket.
+
+**Teljes változáslista:** [0.9.11...0.9.12](https://github.com/Ashinch/ReadYou/compare/0.9.11...0.9.12)

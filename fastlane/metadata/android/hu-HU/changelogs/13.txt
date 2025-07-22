@@ -1,0 +1,29 @@
+## 0.8.3
+
+1. Hírforrás nevének megváltoztatása feliratkozáskor
+
+2. Olvasóoldal stílusbeállításainak hozzáadása
+
+3. Olasz fordítás hozzáadva (köszönet Giovanninak)
+
+4. Hindi fordítás hozzáadva (köszönet augurer)
+
+5. Spanyol fordítás hozzáadva (köszönet Jayler95-nek)
+
+6. Lengyel fordítás hozzáadva (köszönet maciej-klupp-nak)
+
+7. Német fordítás frissítése (köszönet Dave-nek)
+
+8. A ToS elkészítése és felvétele az F-Droidra (köszönet linsui-nak)
+
+9. Egyéb részlet módosítások
+
+Most, hogy a Read You rendelkezik alapvető helyi olvasási funkcionalitással, ez a három dolog lesz a következő prioritás.
+
+1. Néhány fiókbeállítás (pl. szinkronizálási intervallum).
+
+2. Több fiók támogatása (ez szükséges a harmadik féltől származó API-k támogatása előtt).
+
+3. Néhány harmadik féltől származó API támogatása (pl. Fever, Google Reader).
+
+Az összes többi funkció iránti kérés elhalasztva.

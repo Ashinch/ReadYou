@@ -1,0 +1,9 @@
+## 0.9.7
+
+Ez egy további frissítés.
+
+1. A c0ff8ba hotfix beolvasztása
+
+2. A fordítás javítása (köszönet mindenkinek)
+
+3. A GitHub README leíró fájljainak frissítése
