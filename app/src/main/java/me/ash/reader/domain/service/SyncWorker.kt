@@ -87,9 +87,21 @@ constructor(
             syncOnlyWhenCharging: SyncOnlyWhenChargingPreference,
             syncOnlyOnWiFi: SyncOnlyOnWiFiPreference,
         ) {
+            val workState =
+                workManager
+                    .getWorkInfosForUniqueWork(SYNC_WORK_NAME_PERIODIC)
+                    .get()
+                    .firstOrNull()
+                    ?.state
+
+            val policy =
+                if (workState == WorkInfo.State.ENQUEUED || workState == WorkInfo.State.RUNNING)
+                    ExistingPeriodicWorkPolicy.UPDATE
+                else ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE
+
             workManager.enqueueUniquePeriodicWork(
                 SYNC_WORK_NAME_PERIODIC,
-                ExistingPeriodicWorkPolicy.UPDATE,
+                policy,
                 PeriodicWorkRequestBuilder<SyncWorker>(syncInterval.value, TimeUnit.MINUTES)
                     .setConstraints(
                         Constraints.Builder()
@@ -99,6 +111,11 @@ constructor(
                                 else NetworkType.CONNECTED
                             )
                             .build()
+                    )
+                    .setBackoffCriteria(
+                        backoffPolicy = BackoffPolicy.EXPONENTIAL,
+                        backoffDelay = 30,
+                        timeUnit = TimeUnit.SECONDS,
                     )
                     .addTag(SYNC_TAG)
                     .addTag(PERIODIC_WORK_TAG)
