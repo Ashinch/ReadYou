@@ -234,7 +234,7 @@
     <string name="open_link_specific_browser_not_selected">Žiadny</string>
     <string name="default_browser">Vynútiť predvolený prehliadač</string>
     <string name="always_ask">Vždy sa spýtať</string>
-    <string name="open_link_something_wrong">Nastavenie „Otvoriť odkaz“ bolo ignorované, pretože sa niečo pokazilo.</string>
+    <string name="open_link_something_wrong">Nastavenie „Otvoriť odkaz“ bolo ignorované, pretože sa niečo pokazilo</string>
     <string name="open_link_ask_dialog_title">Otvoriť v…</string>
     <string name="grey_out_articles">Zošednúť články</string>
     <string name="all_read">Všetko prečítané</string>
@@ -331,4 +331,7 @@
     <string name="bold_characters">Tučné písmo</string>
     <string name="use_bold_characters">Použiť tučné písmo</string>
     <string name="bold_characters_preview">Zvýrazniť prvé znaky slov v článku</string>
+    <string name="load_next_feed">Načítať ďalší kanál</string>
+    <string name="mark_all_as_read_and_load_next_feed">Označiť všetko ako prečítané a načítať ďalší kanál</string>
+    <string name="pull_from_bottom">Ťahajte zospodu</string>
 </resources>

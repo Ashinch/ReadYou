@@ -124,4 +124,10 @@
     <string name="preview_feed_name">റെഡ്ഡിറ്റ്</string>
     <string name="agree">സമ്മതിക്കുന്നു</string>
     <string name="tos_tips">തുടരാൻ Read You-യുടെ സേവന നിബന്ധനകളും സ്വകാര്യതാനയവും ദയവായി വായിച്ചു സമ്മതിക്കുക.</string>
+    <string name="rate_limit">അഭ്യർത്ഥന നിരക്ക് പരിമിതമാണ്</string>
+    <string name="help">സഹായം</string>
+    <string name="on_start">ആരംഭത്തിൽ</string>
+    <string name="all_deny_open_in_browser_toast">\"%1$s\" ഗ്രൂപ്പിലെ എല്ലാ ലേഖനങ്ങളും ഡിഫോൾട്ട് ബ്രൗസറിൽ തുറക്കുന്നത് നിരോധിച്ചിരിക്കുന്നു</string>
+    <string name="mark_as_read_button_position">\"വായിച്ചതായി അടയാളപ്പെടുത്തുക\" ബട്ടൺ സ്ഥാനം</string>
+    <string name="top_bar">മുകളിലെ ബാർ</string>
 </resources>

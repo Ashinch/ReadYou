@@ -328,4 +328,16 @@
     <string name="load_next_feed">加载下一个源</string>
     <string name="mark_all_as_read_and_load_next_feed">标记为全部已读并加载下一个源</string>
     <string name="pull_from_bottom">底部上拉</string>
+    <string name="account">账户</string>
+    <string name="feed">源</string>
+    <string name="folder">文件夹</string>
+    <string name="data_source">数据源</string>
+    <string name="theme">主题</string>
+    <string name="widget_settings">小部件设置</string>
+    <string name="done">完毕</string>
+    <string name="last_updated">上次更新</string>
+    <string name="no_unread_articles">无未读文章</string>
+    <string name="list_widget_label">列表视图</string>
+    <string name="card_widget_label">卡片视图</string>"
+    <string name="widget_description">查看来自所选源的最新未读文章</string>
 </resources>
