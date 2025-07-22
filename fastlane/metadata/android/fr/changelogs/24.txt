@@ -32,4 +32,4 @@
 3. Nous sommes à la recherches d'autres moyens de parrainage, le seul actuellement dispponible est AFDIAN. Si vous souhaitez supporter le développement de ReadYou, vous pouvez le parrainer via [AFDIAN](https://afdian.net/a/ashinch).
 4. Merci à nos parrains : @User_3072e, @User_223be, @User_3c5c7(Simon), @User_97ebe, @Lowae, @User_28b9f, @User_yuHC, @nullqwertyuiop, @openisgood, @User_vWca, @qgmzmy, @User_97ee1
 
-**Changelog complet :** [0.9.12...0.10.0](https://github.com/Ashinch/ReadYou/compare/0.9.12...0.10.0)
+**Changelog complet :** [0.9.12...0.10.0](https://github.com/ReadYouApp/ReadYou/compare/0.9.12...0.10.0)

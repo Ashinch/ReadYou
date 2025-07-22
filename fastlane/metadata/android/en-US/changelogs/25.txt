@@ -9,7 +9,7 @@
 
 ### Notes
 
-**Full changelog:** [0.10.0...0.10.1](https://github.com/Ashinch/ReadYou/compare/0.10.0...0.10.1)
+**Full changelog:** [0.10.0...0.10.1](https://github.com/ReadYouApp/ReadYou/compare/0.10.0...0.10.1)
 
 This is a bug fix patch. In case you missed it, here is the changelog for version 0.10.0:
 
@@ -47,5 +47,5 @@ This is a bug fix patch. In case you missed it, here is the changelog for versio
 3. We are looking for other sponsorship channels, currently available are AFDIAN. If you would like to support the development of ReadYou, you can sponsor it through [AFDIAN](https://afdian.net/a/ashinch).
 4. Thanks to our sponsors: @User_3072e, @User_223be, @User_3c5c7(Simon), @User_97ebe, @Lowae, @User_28b9f, @User_yuHC, @nullqwertyuiop, @openisgood, @User_vWca, @qgmzmy, @User_97ee1
 
-**Full changelog:** [0.9.12...0.10.0](https://github.com/Ashinch/ReadYou/compare/0.9.12...0.10.0)
+**Full changelog:** [0.9.12...0.10.0](https://github.com/ReadYouApp/ReadYou/compare/0.9.12...0.10.0)
 

@@ -31,4 +31,4 @@
 2. Saluran sponsor buymeacoffee.com saat ini tidak tersedia, dan uang yang sebelumnya disumbangkan telah dikembalikan ke rekening donatur.
 3. Kami mencari saluran sponsor lainnya, yang saat ini tersedia adalah AFDIAN. Jika Anda ingin mendukung pengembangan ReadYou, Anda dapat mensponsorinya melalui [AFDIAN](https://afdian.net/a/ashinch). 4. Terima kasih kepada sponsor kami: @User_3072e, @User_223be, @User_3c5c7(Simon), @User_97ebe, @Lowae, @User_28b9f, @User_yuHC, @nullqwertyuiop, @openisgood, @User_vWca, @qgmzmy, @User_97ee1
 
-**Catatan perubahan lengkap:** [0.9.12...0.10.0](https://github.com/Ashinch/ReadYou/compare/0.9.12...0.10.0)
+**Catatan perubahan lengkap:** [0.9.12...0.10.0](https://github.com/ReadYouApp/ReadYou/compare/0.9.12...0.10.0)

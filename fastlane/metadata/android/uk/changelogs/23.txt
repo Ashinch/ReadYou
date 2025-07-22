@@ -10,4 +10,4 @@
 - Дякуємо спільноті FreshRSS і особливо @Alkarex за допомогу
 - ReadYou наразі не повністю сумісний з Inoreader з Google Reader API
 
-**Усі зміни**: [0.9.11...0.9.12](https://github.com/Ashinch/ReadYou/compare/0.9.11...0.9.12)
+**Усі зміни**: [0.9.11...0.9.12](https://github.com/ReadYouApp/ReadYou/compare/0.9.11...0.9.12)

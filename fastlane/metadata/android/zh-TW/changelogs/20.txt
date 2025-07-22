@@ -20,7 +20,7 @@
 
 "When I don't have enough free time, I deeply appreciate everyone coming together to contribute to this project. @mbestavros and @JunkFood02 will be added to the list of collaborators for the project, granting you some permissions to manage the project's release plans."
 
-(出處：https://github.com/Ashinch/ReadYou/issues/495#issuecomment-1880344011)
+(出處：https://github.com/ReadYouApp/ReadYou/issues/495#issuecomment-1880344011)
 
 務請瞭解：這並不表示 @Ashinch 將離開本專案！相反地，這代表著有更多的有志之士協助建構新的版本，當 @Ashinch 繁忙之時，這將是一大助力。並且一旦完成 GitHub 上的合併請求，就能縮短發佈程式碼的時間。
 

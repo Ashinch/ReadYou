@@ -20,7 +20,7 @@
 
 "Cuando no tengo suficiente tiempo libre, agradezco profundamente que todos se unan para contribuir a este proyecto. @mbestavros y @JunkFood02 serán añadidos a la lista de colaboradores del proyecto, otorgándoles algunos permisos para gestionar los planes de lanzamiento del proyecto."
 
-(Fuente: https://github.com/Ashinch/ReadYou/issues/495#issuecomment-1880344011)
+(Fuente: https://github.com/ReadYouApp/ReadYou/issues/495#issuecomment-1880344011)
 
 Para que quede absolutamente claro: ¡esto no significa que @Ashinch abandone el proyecto! Sólo significa que hay más gente disponible para ayudar a crear nuevas versiones. Esto ayudará mucho cuando @Ashinch esté ocupado, y debería reducir el tiempo para enviar el código una vez que se haya fusionado en Github.
 

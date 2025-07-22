@@ -21,4 +21,4 @@
 5. Odporúčame používateľom, ktorí sa zúčastnili testovania, aby si po nainštalovaní verzie `0.9.12` znova synchronizovali alebo pridali svoj účet Google Reader API.
 6. Tešme sa na ďalšie drobné vylepšenia v ďalšej verzii.
 
-**Úplný zoznam zmien:** [0.9.11...0.9.12](https://github.com/Ashinch/ReadYou/compare/0.9.11...0.9.12)
+**Úplný zoznam zmien:** [0.9.11...0.9.12](https://github.com/ReadYouApp/ReadYou/compare/0.9.11...0.9.12)

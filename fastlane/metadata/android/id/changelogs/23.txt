@@ -21,4 +21,4 @@
 5. Kami menyarankan agar pengguna yang telah berpartisipasi dalam pengujian melakukan sinkronisasi ulang atau menambahkan kembali akun Google Reader API mereka setelah menginstal versi `0.9.12`.
 6. Mari kita nantikan penyempurnaan lebih lanjut secara mendetail di versi berikutnya.
 
-**Catatan perubahan lengkap:** [0.9.11...0.9.12](https://github.com/Ashinch/ReadYou/compare/0.9.11...0.9.12)
+**Catatan perubahan lengkap:** [0.9.11...0.9.12](https://github.com/ReadYouApp/ReadYou/compare/0.9.11...0.9.12)

@@ -9,4 +9,4 @@
 
 ### Примітки
 
-**Повний журнал змін:** [0.10.0...0.10.1](https://github.com/Ashinch/ReadYou/compare/0.10.0...0.10.1)
+**Повний журнал змін:** [0.10.0...0.10.1](https://github.com/ReadYouApp/ReadYou/compare/0.10.0...0.10.1)

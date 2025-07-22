@@ -111,7 +111,7 @@
     <string name="checking_updates">പുതുക്കലുകൾക്കായി പരിശോധിക്കുന്നു…</string>
     <string name="is_latest_version">ഇത് അപ്ലിക്കേഷന്റെ ഏറ്റവും പുതിയ പതിപ്പാണ്</string>
     <string name="check_failure">പുതുക്കലുകൾ പരിശോധിക്കാൻ പരാജയപ്പെട്ടു</string>
-    <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
+    <string name="update_link">https://api.github.com/repos/ReadYouApp/ReadYou/releases/latest</string>
     <string name="change_log">മാറ്റങ്ങൾ</string>
     <string name="dark_theme">ഡാർക്ക് തീം</string>
     <string name="use_device_theme">ഉപകരണത്തിന്റെ തീം ഉപയോഗിക്കുക</string>
