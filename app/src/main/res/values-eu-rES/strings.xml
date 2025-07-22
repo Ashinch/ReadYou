@@ -207,7 +207,7 @@
         &lt;br/&gt;
         &lt;p&gt;
 
-        - [1] https://github.com/Ashinch/ReadYou
+        - [1] https://github.com/ReadYouApp/ReadYou
 
         &lt;/p&gt;
         &lt;p&gt;
@@ -239,7 +239,7 @@
     <string name="reading_page">Irakurketa orria</string>
     <string name="sponsor">Babesa eman</string>
     <string name="open_source_licenses">Kode irekiko lizentziak</string>
-    <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
+    <string name="update_link">https://api.github.com/repos/ReadYouApp/ReadYou/releases/latest</string>
     <string name="change_log">Aldaketa egunkaria</string>
     <string name="update">Eguneratu</string>
     <string name="skip_this_version">Ez eguneratu bertsio honetara</string>

@@ -20,7 +20,7 @@
 
 "Wenn ich nicht genug freie Zeit habe, schätze ich es sehr, dass alle zusammenkommen, um zum Projekt beizutragen. @mbestavros und @JunkFood02 werden der Liste der Projektmitarbeiter hinzugefügt, wodurch sie einige Berechtigungen erhalten, um die Versionspläne des Projekts zu verwalten."
 
-(Quelle: https://github.com/Ashinch/ReadYou/issues/495#issuecomment-1880344011)
+(Quelle: https://github.com/ReadYouApp/ReadYou/issues/495#issuecomment-1880344011)
 
 Zur Klarstellung: Das heißt nicht, dass @Ashinch beim Projekt aussteigt! Das heißt nur, dass mehr Leute zur Verfügung stehen, um bei der Erstellung neuer Versionen zu helfen. Das hilft ungemein, wenn @Ashinch beschäftigt ist, und verkürzt die Zeit bis zur Freigabe des Codes, sobald er auf Github gemerged wurde.
 

@@ -18,8 +18,8 @@
     <string name="feeds">Feeds</string>
     <string name="syncing">Synchronisieren…</string>
     <string name="loading">Laden…</string>
-    <string name="expand_less">Weniger erweitern</string>
-    <string name="expand_more">Mehr erweitern</string>
+    <string name="expand_less">Reduzieren</string>
+    <string name="expand_more">Erweitern</string>
     <string name="confirm">Bestätigen</string>
     <string name="cancel">Abbrechen</string>
     <string name="allow">Erlauben</string>
@@ -40,7 +40,7 @@
     <string name="import_from_opml">Aus OPML importieren</string>
     <string name="preset">Voreinstellung</string>
     <string name="selected">Ausgewählte</string>
-    <string name="allow_notification">Benachrichtigung zulassen</string>
+    <string name="allow_notification">Benachrichtigungen zulassen</string>
     <string name="all_allow_notification_tips">Erlaube allen Feeds in der Gruppe „%1$s“ Benachrichtigungen zu senden</string>
     <string name="all_allow_notification_toast">Benachrichtigungen der Gruppe „%1$s“ sind erlaubt</string>
     <string name="all_deny_notification_toast">Benachrichtigungen der Gruppe „%1$s“ werden verweigert</string>
@@ -49,11 +49,11 @@
     <string name="all_parse_full_content_toast">Vollständiges Parsen des Inhalts aller Artikel in der Gruppe „%1$s“ ist erlaubt</string>
     <string name="all_deny_parse_full_content_toast">Vollständiges Parsen des Inhalts aller Artikel in der Gruppe „%1$s“ wird verweigert</string>
     <string name="clear_articles">Artikel leeren</string>
-    <string name="clear_articles_in_feed_toast">Alle archivierten Artikel im Feed „%1$s“ wurden gelöscht</string>
-    <string name="clear_articles_in_group_toast">Alle archivierten Artikel in der Gruppe „%1$s“ wurden gelöscht</string>
-    <string name="clear_articles_feed_tips">Alle archivierten Artikel im Feed „%1$s“ löschen</string>
-    <string name="clear_articles_group_tips">Alle archivierten Artikel in der Gruppe „%1$s“ löschen</string>
-    <string name="add_to_group">Zu Gruppe hinzufügen</string>
+    <string name="clear_articles_in_feed_toast">Alle archivierten Artikel im Feed „%1$s“ wurden geleert</string>
+    <string name="clear_articles_in_group_toast">Alle archivierten Artikel in der Gruppe „%1$s“ wurden geleert</string>
+    <string name="clear_articles_feed_tips">Alle archivierten Artikel im Feed „%1$s“ leeren</string>
+    <string name="clear_articles_group_tips">Alle archivierten Artikel in der Gruppe „%1$s“ leeren</string>
+    <string name="add_to_group">Zur Gruppe hinzufügen</string>
     <string name="move_to_group">Zur Gruppe verschieben</string>
     <string name="all_move_to_group_tips">Verschieben Sie alle Feeds in der Gruppe „%1$s“ in die Gruppe „%2$s“</string>
     <string name="all_move_to_group_toast">Alle zur Gruppe „%1$s“ verschoben</string>
@@ -107,7 +107,7 @@
     <string name="tos_tips">Bitte lesen Sie die Nutzungsbedingungen und die Datenschutzrichtlinie von Read You und stimmen Sie ihnen zu, um fortzufahren.</string>
     <string name="browse_tos_tips">Durchsuchen Sie die <i><u>Nutzungsbedingungen und Datenschutzbestimmungen</u></i></string>
     <string name="terms_of_service">Nutzungsbedingungen</string>
-    <string name="tos_content"><h5> Datenschutzrichtlinie </h5> <br/> <p> Wir nehmen Ihre Privatsphäre sehr ernst. </p> <br/> <p> <b>Read You</b> sammelt keine Benutzerdaten und alle vertraulichen Informationen (Passwörter und andere Kontoinformationen) werden sicher in der lokalen Anwendungsdatenbank auf Ihrem Gerät gespeichert. </p> <br/> <p> <b>Read You</b> verwendet die folgenden Berechtigungen, um Ihnen den Dienst bereitzustellen. </p> <br/> <p> – Berechtigung zum Netzwerkzugriff (um auf Online-Inhalte nach Ihren Angaben zuzugreifen) </p> <p> – Berechtigung zum Abrufen des Netzwerkstatus (um festzustellen, ob auf dem Gerät aktuell Netzwerkbedingungen verfügbar sind) </p> <p> – Berechtigung für Hintergrunddienste (um Ihre Favoriten regelmäßig automatisch zu synchronisieren) </p> <br/> <br/> <h5> Dienste von Drittanbietern </h5> <br/> <p> Diese Richtlinie gilt nicht für Dienste von Drittanbietern, die Sie mit <b>Read You</b> verwenden. Sie können die Datenschutzrichtlinien der von Ihnen genutzten Dienste von Drittanbietern auf deren Websites einsehen. </p> <br/> <br/> <h5> Haftungsausschlüsse </h5> <br/> <p> <b>Read You</b> ist ausschließlich ein Tool zur Inhaltserfassung. Ihre Nutzung von <b>Read You</b> unterliegt den Gesetzen und Bestimmungen Ihres Landes und Ihrer Region, und jegliche Haftung, die sich aus Ihren Handlungen ergibt, wird von Ihnen persönlich getragen. </p> <br/> <br/> <h5> Open-Source-Lizenz </h5> <br/> <p> <b>Read You</b> ist ein Open-Source-Projekt unter der GNU GPL 3.0 Open Source License[1], die Ihnen das kostenlose Verwenden, Referenzieren und Modifizieren des Quellcodes von <b>Read You</b> erlaubt, jedoch nicht die Verbreitung und den Verkauf des modifizierten und abgeleiteten Codes als kommerzielle Closed-Source-Software erlaubt. Weitere Einzelheiten entnehmen Sie bitte der vollständigen GNU GPL 3.0 Open Source License[2]. </p> <br/> <br/> <h5> Anhang </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
+    <string name="tos_content"><h5> Datenschutzrichtlinie </h5> <br/> <p> Wir nehmen Ihre Privatsphäre sehr ernst. </p> <br/> <p> <b>Read You</b> sammelt keine Benutzerdaten und alle vertraulichen Informationen (Passwörter und andere Kontoinformationen) werden sicher in der lokalen Anwendungsdatenbank auf Ihrem Gerät gespeichert. </p> <br/> <p> <b>Read You</b> verwendet die folgenden Berechtigungen, um Ihnen den Dienst bereitzustellen. </p> <br/> <p> – Berechtigung zum Netzwerkzugriff (um auf Online-Inhalte nach Ihren Angaben zuzugreifen) </p> <p> – Berechtigung zum Abrufen des Netzwerkstatus (um festzustellen, ob auf dem Gerät aktuell Netzwerkbedingungen verfügbar sind) </p> <p> – Berechtigung für Hintergrunddienste (um Ihre Favoriten regelmäßig automatisch zu synchronisieren) </p> <br/> <br/> <h5> Dienste von Drittanbietern </h5> <br/> <p> Diese Richtlinie gilt nicht für Dienste von Drittanbietern, die Sie mit <b>Read You</b> verwenden. Sie können die Datenschutzrichtlinien der von Ihnen genutzten Dienste von Drittanbietern auf deren Websites einsehen. </p> <br/> <br/> <h5> Haftungsausschlüsse </h5> <br/> <p> <b>Read You</b> ist ausschließlich ein Tool zur Inhaltserfassung. Ihre Nutzung von <b>Read You</b> unterliegt den Gesetzen und Bestimmungen Ihres Landes und Ihrer Region, und jegliche Haftung, die sich aus Ihren Handlungen ergibt, wird von Ihnen persönlich getragen. </p> <br/> <br/> <h5> Open-Source-Lizenz </h5> <br/> <p> <b>Read You</b> ist ein Open-Source-Projekt unter der GNU GPL 3.0 Open Source License[1], die Ihnen das kostenlose Verwenden, Referenzieren und Modifizieren des Quellcodes von <b>Read You</b> erlaubt, jedoch nicht die Verbreitung und den Verkauf des modifizierten und abgeleiteten Codes als kommerzielle Closed-Source-Software erlaubt. Weitere Einzelheiten entnehmen Sie bitte der vollständigen GNU GPL 3.0 Open Source License[2]. </p> <br/> <br/> <h5> Anhang </h5> <br/> <p> - [1] https://github.com/ReadYouApp/ReadYou </p> <p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="agree">Zustimmen</string>
     <string name="wallpaper_colors">Hintergrundfarben</string>
     <string name="no_palettes">Keine Paletten</string>
@@ -131,10 +131,10 @@
     <string name="reading_page">Leseseite</string>
     <string name="sponsor">Sponsor</string>
     <string name="open_source_licenses">Open Source Lizenzen</string>
-    <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
+    <string name="update_link">https://api.github.com/repos/ReadYouApp/ReadYou/releases/latest</string>
     <string name="change_log">Änderungsprotokoll</string>
     <string name="update">Aktualisieren</string>
-    <string name="skip_this_version">Version überspringen</string>
+    <string name="skip_this_version">Diese Version überspringen</string>
     <string name="checking_updates">Suche nach Aktualisierungen…</string>
     <string name="is_latest_version">Dies ist die neueste Version der App</string>
     <string name="check_failure">Suche nach Updates fehlgeschlagen</string>
@@ -155,12 +155,12 @@
     <string name="feed_names">Feed Namen</string>
     <string name="feed_favicons">Feed Favicons</string>
     <string name="article_date_sticky_header">Fixierte Kopfzeile mit Veröffentlichungsdatum</string>
-    <string name="article_list">Artikelliste</string>
-    <string name="group_list">Gruppenliste</string>
+    <string name="article_list">Artikel-Liste</string>
+    <string name="group_list">Gruppen-Liste</string>
     <string name="always_expand">Immer erweitern</string>
     <string name="top">Oben</string>
     <string name="mark_as_read_button_position">Position der Schaltfläche \"Als gelesen markieren\"</string>
-    <string name="top_bar">Obere Leiste</string>
+    <string name="top_bar">Kopfleiste</string>
     <string name="fill_selected_icon">Ausgewähltes Filter-Symbol füllen</string>
     <string name="filter_bar">Filterleiste</string>
     <string name="icons">Symbole</string>
@@ -313,7 +313,7 @@
     <string name="become_a_sponsor">Sponsor werden</string>
     <string name="sponsor_desc">Wir entwickeln und pflegen diese kostenlose, quelloffene Anwendung in unserer Freizeit. Wenn sie Ihnen gefällt, unterstützen Sie uns bitte mit einer kleinen Spende! ☕️</string>
     <string name="open_in_browser">Im Browser öffnen</string>
-    <string name="all_open_in_browser_tips">Alle Artikel der Gruppe „%1$s“ mit dem Standard-Browser öffnen</string>
+    <string name="all_open_in_browser_tips">Alle Artikel der Gruppe „%1$s“ im Standard-Browser öffnen</string>
     <string name="all_open_in_browser_toast">Das Öffnen aller Artikel der Gruppe „%1$s“ im Standard-Browser ist erlaubt</string>
     <string name="all_deny_open_in_browser_toast">Das Öffnen aller Artikel der Gruppe „%1$s“ im Standard-Browser wird verweigert</string>
     <string name="client_certificate">Client-Zertifikat (optional)</string>
@@ -328,4 +328,7 @@
     <string name="bold_characters">Fettgedruckte Zeichen</string>
     <string name="use_bold_characters">Fettgedruckte Zeichen verwenden</string>
     <string name="bold_characters_preview">Fettdruck der ersten Buchstaben eines Wortes in einem Artikel</string>
+    <string name="load_next_feed">Nächsten Feed laden</string>
+    <string name="mark_all_as_read_and_load_next_feed">Alles als gelesen markieren und nächsten Feed laden</string>
+    <string name="pull_from_bottom">Nach oben wischen</string>
 </resources>

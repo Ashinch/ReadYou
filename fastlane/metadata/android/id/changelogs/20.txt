@@ -20,7 +20,7 @@
 
 “Ketika saya tidak memiliki waktu luang yang cukup, saya sangat menghargai semua orang yang ikut berkontribusi dalam proyek ini. @mbestavros dan @JunkFood02 akan ditambahkan ke dalam daftar kolaborator untuk proyek ini, yang akan memberi Anda beberapa izin untuk mengelola rencana rilis proyek.”
 
-(Sumber: https://github.com/Ashinch/ReadYou/issues/495#issuecomment-1880344011)
+(Sumber: https://github.com/ReadYouApp/ReadYou/issues/495#issuecomment-1880344011)
 
 Untuk memperjelas: ini bukan berarti @Ashinch mengundurkan diri dari proyek ini! Ini hanya berarti ada lebih banyak orang yang tersedia untuk membantu membuat rilis baru. Ini akan sangat membantu ketika @Ashinch sedang sibuk, dan akan mengurangi waktu untuk mengirimkan kode setelah digabungkan di Github.
 

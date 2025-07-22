@@ -20,7 +20,7 @@
 
 "Yeterince boş zamanım olmadığında, bu projeye katkıda bulunmak için bir araya gelen herkesi derinden takdir ediyorum. @mbestavros ve @JunkFood02 proje için geliştiriciler listesine eklenecek ve projenin sürüm planlarını yönetmek için bazı izinler verilecektir."
 
-(Kaynak: https://github.com/Ashinch/ReadYou/issues/495#issuecomment-1880344011)
+(Kaynak: https://github.com/ReadYouApp/ReadYou/issues/495#issuecomment-1880344011)
 
 Kesinlikle açık olmak gerekirse: bu @Ashinch'in projeden çekildiği anlamına gelmiyor! Bu yalnızca yeni sürümlerin oluşturulmasına yardımcı olacak daha fazla kişinin bulunduğu anlamına geliyor. Bu, @Ashinch meşgul olduğunda çok yardımcı olacak ve Github'da birleştirildikten sonra kod gönderme süresini kısaltacaktır.
 

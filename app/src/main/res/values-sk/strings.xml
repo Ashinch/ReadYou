@@ -127,7 +127,7 @@
     <string name="tonal_elevation">Zvýraznenie tónovania</string>
     <string name="reading_fonts">Písmo čítania</string>
     <string name="basic_fonts">Základné písmo</string>
-    <string name="tos_content"><h5> Zásady ochrany osobných údajov </h5> <br/> <p> Vaše súkromie berieme veľmi vážne. </p> <br/> <p> <b>Read You</b> nezhromažďuje žiadne používateľské údaje a všetky citlivé informácie (heslá a ďalšie informácie o účte) sú bezpečne uložené v lokálnej databáze aplikácie vo vašom zariadení. </p> <br/> <p> <b>Read You</b> použije na poskytovanie služby nasledujúce povolenia. </p> <br/> <p> - Povolenie na prístup k sieti (na prístup k obsahu online, ako určíte) </p> <p> - Povolenie na získanie stavu siete (na určenie, či má zariadenie momentálne prístup k sieti) </p> <p> – Povolenie služby na pozadí (na pravidelnú automatickú synchronizáciu vašich obľúbených položiek) </p> <br/> <br/> <h5> Služby tretích strán </h5> <br/> <p> Tieto zásady sa nevzťahujú na služby tretích strán, ktoré používate s <b>Read You</b>. Zásady ochrany osobných údajov služieb tretích strán, ktoré používate, si môžete prečítať na ich webových stránkach </p> <br/> <br/><h5> Vylúčenie zodpovednosti </h5> <br/> <p> <b>Read You</b> je iba nástroj na zhromažďovanie obsahu. Vaše používanie <b>Read You</b> podlieha zákonom a predpisom vašej krajiny a regiónu a akúkoľvek zodpovednosť vyplývajúcu z vašich činov budete niesť vy osobne. </p> <br/> <br/> <h5> Open source licencia </h5> <br/> <p> <b>Read You</b> je projekt s otvoreným zdrojovým kódom pod GNU GPL 3.0 Open Source License[1], ktorá vám umožňuje bezplatne používať, odkazovať a upravovať zdrojový kód <b>Read You</b>, ale neumožňuje distribuovať a predávať upravený a odvodený kód ako uzavretý zdroj komerčného softvéru. Podrobnosti nájdete v úplnom znení GNU GPL 3.0 Open Source License[2]. </p> <br/> <br/> <h5> Príloha </h5> <br/> <p> - [1] https://github.com/Ashinch/ReadYou </p><p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
+    <string name="tos_content"><h5> Zásady ochrany osobných údajov </h5> <br/> <p> Vaše súkromie berieme veľmi vážne. </p> <br/> <p> <b>Read You</b> nezhromažďuje žiadne používateľské údaje a všetky citlivé informácie (heslá a ďalšie informácie o účte) sú bezpečne uložené v lokálnej databáze aplikácie vo vašom zariadení. </p> <br/> <p> <b>Read You</b> použije na poskytovanie služby nasledujúce povolenia. </p> <br/> <p> - Povolenie na prístup k sieti (na prístup k obsahu online, ako určíte) </p> <p> - Povolenie na získanie stavu siete (na určenie, či má zariadenie momentálne prístup k sieti) </p> <p> – Povolenie služby na pozadí (na pravidelnú automatickú synchronizáciu vašich obľúbených položiek) </p> <br/> <br/> <h5> Služby tretích strán </h5> <br/> <p> Tieto zásady sa nevzťahujú na služby tretích strán, ktoré používate s <b>Read You</b>. Zásady ochrany osobných údajov služieb tretích strán, ktoré používate, si môžete prečítať na ich webových stránkach </p> <br/> <br/><h5> Vylúčenie zodpovednosti </h5> <br/> <p> <b>Read You</b> je iba nástroj na zhromažďovanie obsahu. Vaše používanie <b>Read You</b> podlieha zákonom a predpisom vašej krajiny a regiónu a akúkoľvek zodpovednosť vyplývajúcu z vašich činov budete niesť vy osobne. </p> <br/> <br/> <h5> Open source licencia </h5> <br/> <p> <b>Read You</b> je projekt s otvoreným zdrojovým kódom pod GNU GPL 3.0 Open Source License[1], ktorá vám umožňuje bezplatne používať, odkazovať a upravovať zdrojový kód <b>Read You</b>, ale neumožňuje distribuovať a predávať upravený a odvodený kód ako uzavretý zdroj komerčného softvéru. Podrobnosti nájdete v úplnom znení GNU GPL 3.0 Open Source License[2]. </p> <br/> <br/> <h5> Príloha </h5> <br/> <p> - [1] https://github.com/ReadYouApp/ReadYou </p><p> - [2] https://www.gnu.org/licenses/gpl-3.0.html </p></string>
     <string name="feeds_page">Stránka informačných kanálov</string>
     <string name="open_source_licenses">Open source licencie</string>
     <string name="sponsor">Sponsor</string>
@@ -234,14 +234,14 @@
     <string name="open_link_specific_browser_not_selected">Žiadny</string>
     <string name="default_browser">Vynútiť predvolený prehliadač</string>
     <string name="always_ask">Vždy sa spýtať</string>
-    <string name="open_link_something_wrong">Nastavenie „Otvoriť odkaz“ bolo ignorované, pretože sa niečo pokazilo.</string>
+    <string name="open_link_something_wrong">Nastavenie „Otvoriť odkaz“ bolo ignorované, pretože sa niečo pokazilo</string>
     <string name="open_link_ask_dialog_title">Otvoriť v…</string>
     <string name="grey_out_articles">Zošednúť články</string>
     <string name="all_read">Všetko prečítané</string>
     <string name="read_excluding_starred">Prečítané, okrem obľúbených</string>
     <string name="next_article">Ďalší článok</string>
     <string name="change_log">Zoznam zmien</string>
-    <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
+    <string name="update_link">https://api.github.com/repos/ReadYouApp/ReadYou/releases/latest</string>
     <string name="download_failure">Nepodarilo sa stiahnuť aktualizácie</string>
     <string name="preview_article_desc">Blázon je ôsmy a posledný diel série Pán záhad, ktorú napísala sépia, ktorá sa rada potápa.</string>
     <string name="preview_feed_name">Reddit</string>
@@ -331,4 +331,7 @@
     <string name="bold_characters">Tučné písmo</string>
     <string name="use_bold_characters">Použiť tučné písmo</string>
     <string name="bold_characters_preview">Zvýrazniť prvé znaky slov v článku</string>
+    <string name="load_next_feed">Načítať ďalší kanál</string>
+    <string name="mark_all_as_read_and_load_next_feed">Označiť všetko ako prečítané a načítať ďalší kanál</string>
+    <string name="pull_from_bottom">Ťahajte zospodu</string>
 </resources>

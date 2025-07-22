@@ -34,7 +34,7 @@
     <string name="on">Activate</string>
     <string name="other">Alteres</string>
     <string name="amoled_dark_theme">Tema preto escuro</string>
-    <string name="update_link">https://api.github.com/repos/Ashinch/ReadYou/releases/latest</string>
+    <string name="update_link">https://api.github.com/repos/ReadYouApp/ReadYou/releases/latest</string>
     <string name="change_log">Registro de cambiamentos</string>
     <string name="update">Actualisation</string>
     <string name="skip_this_version">Saltar iste version</string>

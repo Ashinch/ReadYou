@@ -20,7 +20,7 @@
 
 "When I don't have enough free time, I deeply appreciate everyone coming together to contribute to this project. @mbestavros and @JunkFood02 will be added to the list of collaborators for the project, granting you some permissions to manage the project's release plans."
 
-(Source: https://github.com/Ashinch/ReadYou/issues/495#issuecomment-1880344011)
+(Source: https://github.com/ReadYouApp/ReadYou/issues/495#issuecomment-1880344011)
 
 To be absolutely clear: this does not mean that @Ashinch is stepping down from the project! It just means there are more people available to help create new releases. This will help a ton when @Ashinch is busy, and should reduce the time to ship code once it's been merged on Github.
 

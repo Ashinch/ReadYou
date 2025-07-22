@@ -9,7 +9,7 @@
 
 ### Notes
 
-**完整更新日志：** [0.10.0...0.10.1](https://github.com/Ashinch/ReadYou/compare/0.10.0...0.10.1)
+**完整更新日志：** [0.10.0...0.10.1](https://github.com/ReadYouApp/ReadYou/compare/0.10.0...0.10.1)
 
 这是一个修复补丁，以下是 0.10.0 版本的更新日志，您可能错过了它：
 
@@ -47,4 +47,4 @@
 3. 我们正在寻找其他赞助渠道，目前可用的有 "爱发电"。如果您想支持 ReadYou 的开发，可以通过 [爱发电](https://afdian.net/a/ashinch) 进行赞助。
 4. 感谢我们的赞助者： @User_3072e, @User_223be, @User_3c5c7(Simon), @User_97ebe, @Lowae, @User_28b9f, @User_yuHC, @nullqwertyuiop, @openisgood, @User_vWca, @qgmzmy, @User_97ee1。
 
-**完整更新日志：** [0.9.12...0.10.0](https://github.com/Ashinch/ReadYou/compare/0.9.12...0.10.0)
+**完整更新日志：** [0.9.12...0.10.0](https://github.com/ReadYouApp/ReadYou/compare/0.9.12...0.10.0)
