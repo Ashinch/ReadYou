@@ -44,12 +44,6 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun providesFilterState(settingsProvider: SettingsProvider): FilterStateUseCase {
-        return FilterStateUseCase(settingsProvider)
-    }
-
-    @Provides
-    @Singleton
     fun providesGroupWithFeedsList(
         @ApplicationScope applicationScope: CoroutineScope,
         @IODispatcher ioDispatcher: CoroutineDispatcher,

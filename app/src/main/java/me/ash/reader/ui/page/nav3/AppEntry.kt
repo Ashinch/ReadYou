@@ -9,7 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
-import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldDestinationItem
 import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
@@ -24,6 +23,7 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
+import kotlinx.coroutines.delay
 import me.ash.reader.ui.motion.materialSharedAxisXIn
 import me.ash.reader.ui.motion.materialSharedAxisXOut
 import me.ash.reader.ui.page.adaptive.ArticleData
@@ -128,26 +128,11 @@ fun AppEntry(backStack: NavBackStack) {
                                 rememberListDetailPaneScaffoldNavigator<ArticleData>(
                                     scaffoldDirective = scaffoldDirective,
                                     isDestinationHistoryAware = false,
-                                    initialDestinationHistory =
-                                        buildList {
-                                            add(
-                                                ThreePaneScaffoldDestinationItem(
-                                                    ListDetailPaneScaffoldRole.List
-                                                )
-                                            )
-                                            if (key.articleId != null) {
-                                                add(
-                                                    ThreePaneScaffoldDestinationItem(
-                                                        ListDetailPaneScaffoldRole.Detail,
-                                                        ArticleData(key.articleId),
-                                                    )
-                                                )
-                                            }
-                                        },
                                 )
 
                             LaunchedEffect(key) {
                                 if (key.articleId != null) {
+                                    delay(50L)
                                     navigator.navigateTo(
                                         ListDetailPaneScaffoldRole.Detail,
                                         ArticleData(key.articleId),

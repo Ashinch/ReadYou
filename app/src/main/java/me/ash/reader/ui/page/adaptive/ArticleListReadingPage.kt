@@ -22,6 +22,7 @@ import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneSca
 import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -147,7 +148,7 @@ fun ArticleListReaderPage(
                 LaunchedEffect(contentKey) {
                     if (contentKey == null) {
                         delay(100L)
-                        viewModel.clearData()
+                        viewModel.clearReadingData()
                     } else {
                         viewModel.initData(
                             articleId = contentKey.articleId,
@@ -174,7 +175,7 @@ fun ArticleListReaderPage(
                                     if (navigator.canNavigateBack(backBehavior)) {
                                         scope
                                             .launch { navigator.navigateBack(backBehavior) }
-                                            .invokeOnCompletion { viewModel.clearData() }
+                                            .invokeOnCompletion { viewModel.clearReadingData() }
                                     } else {
                                         onBack()
                                     }

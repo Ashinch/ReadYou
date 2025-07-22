@@ -7,6 +7,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Date
+import javax.inject.Inject
+import kotlin.collections.any
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -22,19 +25,19 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.ash.reader.domain.data.ArticlePagingListUseCase
-import me.ash.reader.domain.model.article.ArticleFlowItem
-import me.ash.reader.domain.model.general.MarkAsReadConditions
-import me.ash.reader.domain.service.RssService
 import me.ash.reader.domain.data.DiffMapHolder
 import me.ash.reader.domain.data.FilterState
 import me.ash.reader.domain.data.FilterStateUseCase
 import me.ash.reader.domain.data.GroupWithFeedsListUseCase
 import me.ash.reader.domain.data.PagerData
 import me.ash.reader.domain.model.article.Article
+import me.ash.reader.domain.model.article.ArticleFlowItem
 import me.ash.reader.domain.model.article.ArticleWithFeed
 import me.ash.reader.domain.model.feed.Feed
+import me.ash.reader.domain.model.general.MarkAsReadConditions
 import me.ash.reader.domain.service.GoogleReaderRssService
 import me.ash.reader.domain.service.LocalRssService
+import me.ash.reader.domain.service.RssService
 import me.ash.reader.domain.service.SyncWorker
 import me.ash.reader.infrastructure.android.AndroidImageDownloader
 import me.ash.reader.infrastructure.android.TextToSpeechManager
@@ -44,15 +47,14 @@ import me.ash.reader.infrastructure.preference.PullToLoadNextFeedPreference
 import me.ash.reader.infrastructure.preference.SettingsProvider
 import me.ash.reader.infrastructure.rss.ReaderCacheHelper
 import timber.log.Timber
-import java.util.Date
-import javax.inject.Inject
-import kotlin.collections.any
 
 private const val TAG = "FlowViewModel"
 
 @OptIn(FlowPreview::class)
-@HiltViewModel
-class ArticleListReaderViewModel @Inject constructor(
+@HiltViewModel()
+class ArticleListReaderViewModel
+@Inject
+constructor(
     private val rssService: RssService,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @ApplicationScope private val applicationScope: CoroutineScope,
@@ -67,21 +69,11 @@ class ArticleListReaderViewModel @Inject constructor(
     workManager: WorkManager,
 ) : ViewModel() {
 
-    private val _flowUiState = MutableStateFlow(FlowUiState())
-    val flowUiState: StateFlow<FlowUiState> = _flowUiState.asStateFlow()
-
-    private val syncWorkerStatusFlow = workManager.getWorkInfosByTagFlow(SyncWorker.SYNC_TAG).map {
-        it.any { workInfo ->
-            workInfo.state == WorkInfo.State.RUNNING
-        }
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
-
-    private val _isSyncingFlow = MutableStateFlow(false)
-    val isSyncingFlow = _isSyncingFlow.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            articleListUseCase.pagerFlow.combine(groupWithFeedsListUseCase.groupWithFeedListFlow) { pagerData, groupWithFeedsList ->
+    val flowUiState: StateFlow<FlowUiState?> =
+        articleListUseCase.pagerFlow
+            .combine(groupWithFeedsListUseCase.groupWithFeedListFlow) {
+                pagerData,
+                groupWithFeedsList ->
                 val filterState = pagerData.filterState
                 var nextFilterState: FilterState? = null
                 if (filterState.group != null) {
@@ -95,12 +87,12 @@ class ArticleListReaderViewModel @Inject constructor(
                     } else {
                         val allGroupList =
                             rssService.get().queryAllGroupWithFeeds().map { it.group }
-                        val index = allGroupList.indexOfFirst {
-                            it.id == filterState.group.id
-                        }
+                        val index = allGroupList.indexOfFirst { it.id == filterState.group.id }
                         if (index != -1) {
-                            val nextGroup = allGroupList.subList(index, allGroupList.size)
-                                .fastFirstOrNull { groupList.map { it.id }.contains(it.id) }
+                            val nextGroup =
+                                allGroupList.subList(index, allGroupList.size).fastFirstOrNull {
+                                    groupList.map { it.id }.contains(it.id)
+                                }
                             if (nextGroup != null) {
                                 nextFilterState = filterState.copy(group = nextGroup)
                             }
@@ -117,12 +109,12 @@ class ArticleListReaderViewModel @Inject constructor(
                     } else {
                         val allFeedList =
                             rssService.get().queryAllGroupWithFeeds().flatMap { it.feeds }
-                        val index = allFeedList.indexOfFirst {
-                            it.id == filterState.feed.id
-                        }
+                        val index = allFeedList.indexOfFirst { it.id == filterState.feed.id }
                         if (index != -1) {
-                            val nextFeed = allFeedList.subList(index, allFeedList.size)
-                                .fastFirstOrNull { feedList.map { it.id }.contains(it.id) }
+                            val nextFeed =
+                                allFeedList.subList(index, allFeedList.size).fastFirstOrNull {
+                                    feedList.map { it.id }.contains(it.id)
+                                }
                             if (nextFeed != null) {
                                 nextFilterState = filterState.copy(feed = nextFeed)
                             }
@@ -130,16 +122,19 @@ class ArticleListReaderViewModel @Inject constructor(
                     }
                 }
                 FlowUiState(nextFilterState = nextFilterState, pagerData = pagerData)
-            }.collect { flowUiState ->
-                _flowUiState.update {
-                    it.copy(
-                        nextFilterState = flowUiState.nextFilterState,
-                        pagerData = flowUiState.pagerData
-                    )
-                }
             }
-        }
+            .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
+    private val syncWorkerStatusFlow =
+        workManager
+            .getWorkInfosByTagFlow(SyncWorker.SYNC_TAG)
+            .map { it.any { workInfo -> workInfo.state == WorkInfo.State.RUNNING } }
+            .stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
+    private val _isSyncingFlow = MutableStateFlow(false)
+    val isSyncingFlow = _isSyncingFlow.asStateFlow()
+
+    init {
         viewModelScope.launch {
             syncWorkerStatusFlow.debounce(500L).collect { _isSyncingFlow.value = it }
         }
@@ -153,71 +148,67 @@ class ArticleListReaderViewModel @Inject constructor(
         isUnread: Boolean,
     ) {
         applicationScope.launch(ioDispatcher) {
-            rssService.get().markAsRead(
-                groupId = groupId,
-                feedId = feedId,
-                articleId = articleId,
-                before = conditions.toDate(),
-                isUnread = isUnread,
-            )
+            rssService
+                .get()
+                .markAsRead(
+                    groupId = groupId,
+                    feedId = feedId,
+                    articleId = articleId,
+                    before = conditions.toDate(),
+                    isUnread = isUnread,
+                )
         }
     }
 
-    fun updateStarredStatus(
-        articleId: String?,
-        isStarred: Boolean,
-    ) {
+    fun updateStarredStatus(articleId: String?, isStarred: Boolean) {
         applicationScope.launch(ioDispatcher) {
             if (articleId != null) {
-                rssService.get().markAsStarred(
-                    articleId = articleId,
-                    isStarred = isStarred,
-                )
+                rssService.get().markAsStarred(articleId = articleId, isStarred = isStarred)
             }
         }
     }
 
-    fun markAsReadFromListByDate(
-        date: Date,
-        isBefore: Boolean,
-    ) {
+    fun markAsReadFromListByDate(date: Date, isBefore: Boolean) {
         viewModelScope.launch(ioDispatcher) {
             val items =
-                articleListUseCase.itemSnapshotList.filterIsInstance<ArticleFlowItem.Article>()
-                    .map { it.articleWithFeed }.filter {
+                articleListUseCase.itemSnapshotList
+                    .filterIsInstance<ArticleFlowItem.Article>()
+                    .map { it.articleWithFeed }
+                    .filter {
                         if (isBefore) {
                             date > it.article.date && it.article.isUnread
                         } else {
                             date < it.article.date && it.article.isUnread
                         }
-                    }.distinctBy { it.article.id }
+                    }
+                    .distinctBy { it.article.id }
 
             diffMapHolder.updateDiff(articleWithFeed = items.toTypedArray(), isUnread = false)
         }
     }
 
-
     fun loadNextFeedOrGroup() {
         viewModelScope.launch {
-            if (settingsProvider.settings.pullToSwitchFeed == PullToLoadNextFeedPreference.MarkAsReadAndLoadNextFeed) {
+            if (
+                settingsProvider.settings.pullToSwitchFeed ==
+                    PullToLoadNextFeedPreference.MarkAsReadAndLoadNextFeed
+            ) {
                 markAllAsRead()
             }
-            flowUiState.value.nextFilterState?.let { filterStateUseCase.updateFilterState(it) }
+            flowUiState.value?.nextFilterState?.let { filterStateUseCase.updateFilterState(it) }
         }
     }
 
     fun markAllAsRead() {
         viewModelScope.launch {
             val items =
-                articleListUseCase.itemSnapshotList.items.filterIsInstance<ArticleFlowItem.Article>()
+                articleListUseCase.itemSnapshotList.items
+                    .filterIsInstance<ArticleFlowItem.Article>()
                     .map { it.articleWithFeed }
 
-            diffMapHolder.updateDiff(
-                articleWithFeed = items.toTypedArray(), isUnread = false
-            )
+            diffMapHolder.updateDiff(articleWithFeed = items.toTypedArray(), isUnread = false)
         }
     }
-
 
     fun sync() {
         viewModelScope.launch {
@@ -234,33 +225,38 @@ class ArticleListReaderViewModel @Inject constructor(
             val filterState = filterStateUseCase.filterStateFlow.value
             val service = rssService.get()
             when (service) {
-                is LocalRssService -> service.doSyncOneTime(
-                    feedId = filterState.feed?.id, groupId = filterState.group?.id
-                )
+                is LocalRssService ->
+                    service.doSyncOneTime(
+                        feedId = filterState.feed?.id,
+                        groupId = filterState.group?.id,
+                    )
 
-                is GoogleReaderRssService -> service.doSyncOneTime(
-                    feedId = filterState.feed?.id, groupId = filterState.group?.id
-                )
+                is GoogleReaderRssService ->
+                    service.doSyncOneTime(
+                        feedId = filterState.feed?.id,
+                        groupId = filterState.group?.id,
+                    )
 
                 else -> service.doSyncOneTime()
             }
         }
     }
 
+    fun resetFilter() =
+        filterStateUseCase.updateFilterState(feed = null, group = null, searchContent = null)
 
     fun changeFilter(filterState: FilterState) {
         filterStateUseCase.updateFilterState(
             filterState.feed,
             filterState.group,
-            filterState.filter
+            filterState.filter,
         )
     }
 
     fun inputSearchContent(content: String? = null) {
-        filterStateUseCase.updateFilterState(searchContent = content)
+        if (content != filterStateUseCase.filterStateFlow.value.searchContent)
+            filterStateUseCase.updateFilterState(searchContent = content)
     }
-
-
 
     private val _readingUiState = MutableStateFlow(ReadingUiState())
     val readingUiState: StateFlow<ReadingUiState> = _readingUiState.asStateFlow()
@@ -270,9 +266,9 @@ class ArticleListReaderViewModel @Inject constructor(
 
     private val currentArticle: Article?
         get() = readingUiState.value.articleWithFeed?.article
+
     private val currentFeed: Feed?
         get() = readingUiState.value.articleWithFeed?.feed
-
 
     fun initData(articleId: String, listIndex: Int? = null) {
         viewModelScope.launch {
@@ -286,51 +282,55 @@ class ArticleListReaderViewModel @Inject constructor(
                     itemByIndex
                 } else {
                     snapshotList.find { item ->
-                        item is ArticleFlowItem.Article && item.articleWithFeed.article.id == articleId
+                        item is ArticleFlowItem.Article &&
+                            item.articleWithFeed.article.id == articleId
                     } as? ArticleFlowItem.Article
                 }
 
             val item =
-                itemByIndex?.articleWithFeed ?: (itemFromList?.articleWithFeed ?: rssService.get()
-                    .findArticleById(articleId)!!)
+                itemByIndex?.articleWithFeed
+                    ?: (itemFromList?.articleWithFeed
+                        ?: rssService.get().findArticleById(articleId)!!)
 
             if (diffMapHolder.checkIfUnread(item)) {
                 diffMapHolder.updateDiff(item, isUnread = false)
             }
             item.run {
                 _readingUiState.update {
-                    it.copy(
-                        articleWithFeed = this, isStarred = article.isStarred, isUnread = false
-                    )
+                    it.copy(articleWithFeed = this, isStarred = article.isStarred, isUnread = false)
                 }
                 _readerState.update {
                     it.copy(
-                        articleId = article.id,
-                        feedName = feed.name,
-                        title = article.title,
-                        author = article.author,
-                        link = article.link,
-                        publishedDate = article.date,
-                    ).prefetchArticleId().renderContent(this)
+                            articleId = article.id,
+                            feedName = feed.name,
+                            title = article.title,
+                            author = article.author,
+                            link = article.link,
+                            publishedDate = article.date,
+                        )
+                        .prefetchArticleId()
+                        .renderContent(this)
                 }
             }
         }
     }
 
-    fun clearData(){
+    fun clearReadingData() {
         _readingUiState.update { ReadingUiState() }
         _readerState.update { ReaderState() }
     }
 
     suspend fun ReaderState.renderContent(articleWithFeed: ArticleWithFeed): ReaderState {
-        val contentState = if (articleWithFeed.feed.isFullContent) {
-            val fullContent =
-                readerCacheHelper.readFullContent(articleWithFeed.article.id).getOrNull()
-            if (fullContent != null) ReaderState.FullContent(fullContent) else {
-                renderFullContent()
-                ReaderState.Loading
-            }
-        } else ReaderState.Description(articleWithFeed.article.rawDescription)
+        val contentState =
+            if (articleWithFeed.feed.isFullContent) {
+                val fullContent =
+                    readerCacheHelper.readFullContent(articleWithFeed.article.id).getOrNull()
+                if (fullContent != null) ReaderState.FullContent(fullContent)
+                else {
+                    renderFullContent()
+                    ReaderState.Loading
+                }
+            } else ReaderState.Description(articleWithFeed.article.rawDescription)
 
         return copy(content = contentState)
     }
@@ -338,23 +338,27 @@ class ArticleListReaderViewModel @Inject constructor(
     fun renderDescriptionContent() {
         _readerState.update {
             it.copy(
-                content = ReaderState.Description(
-                    content = currentArticle?.rawDescription ?: ""
-                )
+                content = ReaderState.Description(content = currentArticle?.rawDescription ?: "")
             )
         }
     }
 
     fun renderFullContent() {
-        val fetchJob = viewModelScope.launch {
-            readerCacheHelper.readOrFetchFullContent(
-                currentArticle!!
-            ).onSuccess { content ->
-                _readerState.update { it.copy(content = ReaderState.FullContent(content = content)) }
-            }.onFailure { th ->
-                _readerState.update { it.copy(content = ReaderState.Error(th.message.toString())) }
+        val fetchJob =
+            viewModelScope.launch {
+                readerCacheHelper
+                    .readOrFetchFullContent(currentArticle!!)
+                    .onSuccess { content ->
+                        _readerState.update {
+                            it.copy(content = ReaderState.FullContent(content = content))
+                        }
+                    }
+                    .onFailure { th ->
+                        _readerState.update {
+                            it.copy(content = ReaderState.Error(th.message.toString()))
+                        }
+                    }
             }
-        }
         viewModelScope.launch {
             delay(100L)
             if (fetchJob.isActive) {
@@ -365,38 +369,33 @@ class ArticleListReaderViewModel @Inject constructor(
 
     fun updateReadStatus(isUnread: Boolean) {
         readingUiState.value.articleWithFeed?.let {
-            diffMapHolder.updateDiff(
-                it,
-                isUnread = isUnread
-            )
+            diffMapHolder.updateDiff(it, isUnread = isUnread)
         }
-        _readingUiState.update { it.copy(isUnread = diffMapHolder.checkIfUnread(it.articleWithFeed!!)) }
+        _readingUiState.update {
+            it.copy(isUnread = diffMapHolder.checkIfUnread(it.articleWithFeed!!))
+        }
     }
 
     fun updateStarredStatus(isStarred: Boolean) {
         applicationScope.launch(ioDispatcher) {
             _readingUiState.update { it.copy(isStarred = isStarred) }
             currentArticle?.let {
-                rssService.get().markAsStarred(
-                    articleId = it.id,
-                    isStarred = isStarred,
-                )
+                rssService.get().markAsStarred(articleId = it.id, isStarred = isStarred)
             }
         }
     }
 
     private fun setLoading() {
-        _readerState.update {
-            it.copy(content = ReaderState.Loading)
-        }
+        _readerState.update { it.copy(content = ReaderState.Loading) }
     }
 
     fun ReaderState.prefetchArticleId(): ReaderState {
         val items = articleListUseCase.itemSnapshotList
         val currentId = currentArticle?.id
-        val index = items.indexOfFirst { item ->
-            item is ArticleFlowItem.Article && item.articleWithFeed.article.id == currentId
-        }
+        val index =
+            items.indexOfFirst { item ->
+                item is ArticleFlowItem.Article && item.articleWithFeed.article.id == currentId
+            }
         var previousArticle: ReaderState.PrefetchResult? = null
         var nextArticle: ReaderState.PrefetchResult? = null
 
@@ -406,9 +405,11 @@ class ArticleListReaderViewModel @Inject constructor(
                 val previousIndex = prevIterator.previousIndex()
                 val prev = prevIterator.previous()
                 if (prev is ArticleFlowItem.Article) {
-                    previousArticle = ReaderState.PrefetchResult(
-                        articleId = prev.articleWithFeed.article.id, index = previousIndex
-                    )
+                    previousArticle =
+                        ReaderState.PrefetchResult(
+                            articleId = prev.articleWithFeed.article.id,
+                            index = previousIndex,
+                        )
                     break
                 }
             }
@@ -416,35 +417,35 @@ class ArticleListReaderViewModel @Inject constructor(
             while (nextIterator.hasNext()) {
                 val nextIndex = nextIterator.nextIndex()
                 val next = nextIterator.next()
-                if (next is ArticleFlowItem.Article && next.articleWithFeed.article.id != currentId) {
-                    nextArticle = ReaderState.PrefetchResult(
-                        articleId = next.articleWithFeed.article.id, index = nextIndex
-                    )
+                if (
+                    next is ArticleFlowItem.Article && next.articleWithFeed.article.id != currentId
+                ) {
+                    nextArticle =
+                        ReaderState.PrefetchResult(
+                            articleId = next.articleWithFeed.article.id,
+                            index = nextIndex,
+                        )
                     break
                 }
             }
         }
 
         Timber.d("$previousArticle, $nextArticle, $listIndex")
-        return copy(
-            nextArticle = nextArticle, previousArticle = previousArticle, listIndex = index
-        )
+        return copy(nextArticle = nextArticle, previousArticle = previousArticle, listIndex = index)
     }
 
     fun downloadImage(
-        url: String, onSuccess: (Uri) -> Unit = {}, onFailure: (Throwable) -> Unit = {}
+        url: String,
+        onSuccess: (Uri) -> Unit = {},
+        onFailure: (Throwable) -> Unit = {},
     ) {
         viewModelScope.launch {
             imageDownloader.downloadImage(url).onSuccess(onSuccess).onFailure(onFailure)
         }
     }
-
 }
 
-data class FlowUiState(
-    val nextFilterState: FilterState? = null,
-    val pagerData: PagerData = PagerData()
-)
+data class FlowUiState(val pagerData: PagerData, val nextFilterState: FilterState? = null)
 
 data class ReadingUiState(
     val articleWithFeed: ArticleWithFeed? = null,
@@ -462,7 +463,7 @@ data class ReaderState(
     val content: ContentState = Loading,
     val listIndex: Int? = null,
     val nextArticle: PrefetchResult? = null,
-    val previousArticle: PrefetchResult? = null
+    val previousArticle: PrefetchResult? = null,
 ) {
     data class PrefetchResult(val articleId: String, val index: Int)
 
@@ -479,7 +480,10 @@ data class ReaderState(
     }
 
     data class FullContent(val content: String) : ContentState
+
     data class Description(val content: String) : ContentState
+
     data class Error(val message: String) : ContentState
+
     data object Loading : ContentState
 }

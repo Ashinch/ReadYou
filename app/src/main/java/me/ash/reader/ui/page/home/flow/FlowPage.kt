@@ -133,6 +133,7 @@ fun FlowPage(
     val pullToSwitchFeed = settings.pullToSwitchFeed
 
     val flowUiState = viewModel.flowUiState.collectAsStateValue()
+    if (flowUiState == null) return
 
     val pagerData: PagerData = flowUiState.pagerData
 

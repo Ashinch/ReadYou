@@ -17,8 +17,6 @@ import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
 import androidx.glance.LocalSize
-import androidx.glance.action.ActionParameters
-import androidx.glance.action.actionParametersOf
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
@@ -56,7 +54,6 @@ import kotlinx.coroutines.withContext
 import me.ash.reader.R
 import me.ash.reader.infrastructure.android.MainActivity
 import me.ash.reader.ui.ext.collectAsStateValue
-import me.ash.reader.ui.page.common.ExtraName
 
 @AndroidEntryPoint
 class ArticleListWidgetReceiver : GlanceAppWidgetReceiver() {
@@ -94,7 +91,11 @@ class ArticleListWidget() : GlanceAppWidget() {
         val config = repository.getDefaultConfig()
         val data = withContext(Dispatchers.IO) { repository.getData(config.dataSource).first() }
         provideContent {
-            GlanceTheme { WidgetContainer { ArticleList(data.title, data.articles, config.theme) } }
+            GlanceTheme {
+                WidgetContainer {
+                    ArticleList(data.title, data.articles, config.dataSource, config.theme)
+                }
+            }
         }
     }
 
@@ -117,7 +118,7 @@ class ArticleListWidget() : GlanceAppWidget() {
 
             val (title, articles) = data
 
-            GlanceTheme { WidgetContainer { ArticleList(title, articles, theme) } }
+            GlanceTheme { WidgetContainer { ArticleList(title, articles, dataSource, theme) } }
         }
     }
 }
@@ -191,12 +192,21 @@ fun Header(text: String, theme: Theme, modifier: GlanceModifier = GlanceModifier
 fun ArticleList(
     title: String,
     items: List<Article>,
+    dataSource: DataSource,
     theme: Theme,
     modifier: GlanceModifier = GlanceModifier,
 ) {
     val context = LocalContext.current
+
     if (items.isEmpty()) {
-        Column(modifier = modifier.fillMaxSize().clickable(actionStartActivity<MainActivity>())) {
+        Column(
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .clickable(
+                        actionStartActivity<MainActivity>(makeActionParameters(null, dataSource))
+                    )
+        ) {
             Header(title, theme)
             Text(
                 text = context.getString(R.string.no_unread_articles),
@@ -224,9 +234,7 @@ fun ArticleList(
                         modifier =
                             GlanceModifier.clickable(
                                 actionStartActivity<MainActivity>(
-                                    actionParametersOf(
-                                        ActionParameters.Key<String>(ExtraName.ARTICLE_ID) to it.id
-                                    )
+                                    makeActionParameters(it, dataSource)
                                 )
                             ),
                     )
@@ -320,7 +328,9 @@ private fun PreviewArticleList() {
 
     GlanceTheme {
         // create your AppWidget here
-        WidgetContainer { ArticleList("Media", emptyList(), Theme.SansSerif) }
+        WidgetContainer {
+            ArticleList("Media", emptyList(), DataSource.Account(0), Theme.SansSerif)
+        }
     }
 }
 
@@ -334,7 +344,9 @@ private fun PreviewArticleListSerif() {
 
     GlanceTheme {
         // create your AppWidget here
-        WidgetContainer { ArticleList("Media", previewArticles, Theme.Serif) }
+        WidgetContainer {
+            ArticleList("Media", previewArticles, DataSource.Account(0), Theme.Serif)
+        }
     }
 }
 

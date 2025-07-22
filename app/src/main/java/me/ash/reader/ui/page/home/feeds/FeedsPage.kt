@@ -248,7 +248,9 @@ fun FeedsPage(
                     item {
                         Spacer(modifier = Modifier.height(24.dp))
                         Row(
-                            modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 26.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
@@ -261,7 +263,9 @@ fun FeedsPage(
                                 onClick = {
                                     if (hasGroupVisible) collapseAllGroups() else expandAllGroups()
                                 },
-                                modifier = Modifier.padding(end = 8.dp).size(28.dp),
+                                modifier = Modifier
+                                    .padding(end = 8.dp)
+                                    .size(28.dp),
                             ) {
                                 Icon(
                                     imageVector =

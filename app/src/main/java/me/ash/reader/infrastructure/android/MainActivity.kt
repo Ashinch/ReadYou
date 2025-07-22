@@ -24,7 +24,7 @@ import coil.ImageLoader
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.reflect.Field
 import javax.inject.Inject
-import kotlinx.coroutines.launch
+import me.ash.reader.domain.data.FilterStateUseCase
 import me.ash.reader.domain.service.AccountService
 import me.ash.reader.domain.service.WidgetUpdateWorker
 import me.ash.reader.infrastructure.compose.ProvideCompositionLocals
@@ -41,7 +41,6 @@ import me.ash.reader.ui.page.home.feeds.subscribe.SubscribeViewModel
 import me.ash.reader.ui.page.nav3.AppEntry
 import me.ash.reader.ui.page.nav3.key.Route
 import me.ash.reader.ui.theme.AppTheme
-import timber.log.Timber
 
 /** The Single-Activity Architecture. */
 @AndroidEntryPoint
@@ -54,6 +53,8 @@ class MainActivity : AppCompatActivity() {
 
     @Inject lateinit var workManager: WorkManager
 
+    @Inject lateinit var filterUseCase: FilterStateUseCase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i("RLog", "onCreate: ${ProfileInstallerInitializer().create(this)}")
@@ -65,7 +66,8 @@ class MainActivity : AppCompatActivity() {
             LanguagesPreference.fromValue(languages).let { LanguagesPreference.setLocale(it) }
         }
 
-        // Workaround for https://github.com/ReadYouApp/ReadYou/issues/312: increase cursor window size
+        // Workaround for https://github.com/ReadYouApp/ReadYou/issues/312: increase cursor window
+        // size
         try {
             val field: Field = CursorWindow::class.java.getDeclaredField("sCursorWindowSize")
             field.isAccessible = true
@@ -97,12 +99,36 @@ class MainActivity : AppCompatActivity() {
                         AppTheme(useDarkTheme = LocalDarkTheme.current.isDarkTheme()) {
                             val isFirstLaunch = remember { isFirstLaunch }
                             val initialPage = remember { initialPage }
+                            val launchAction = intent.getLaunchAction()
 
                             val startDestination = remember {
                                 if (isFirstLaunch) listOf(Route.Startup)
-                                else if (initialPage == InitialPagePreference.FlowPage.value) {
-                                    listOf(Route.Feeds, Route.Reading(null))
-                                } else listOf(Route.Feeds)
+                                else
+                                    when (launchAction) {
+                                        is LaunchAction.OpenArticle -> {
+                                            filterUseCase.init(
+                                                launchAction.feedId,
+                                                launchAction.groupId,
+                                            )
+                                            listOf(
+                                                Route.Feeds,
+                                                Route.Reading(launchAction.articleId),
+                                            )
+                                        }
+                                        is LaunchAction.Subscribe -> {
+                                            subscribeViewModel.handleSharedUrlFromIntent(
+                                                launchAction.url
+                                            )
+                                            listOf(Route.Feeds)
+                                        }
+                                        else -> {
+                                            if (
+                                                initialPage == InitialPagePreference.FlowPage.value
+                                            ) {
+                                                listOf(Route.Feeds, Route.Reading(null))
+                                            } else listOf(Route.Feeds)
+                                        }
+                                    }
                             }
 
                             val backStack =
@@ -125,11 +151,13 @@ class MainActivity : AppCompatActivity() {
                     intent.getLaunchAction()?.let { action ->
                         when (action) {
                             is LaunchAction.OpenArticle -> {
+                                val (articleId, feedId, groupId) = action
+                                filterUseCase.init(feedId, groupId)
                                 val readingIndex = backStack.indexOfFirst { it is Route.Reading }
                                 if (readingIndex != -1) {
                                     backStack.removeRange(readingIndex, backStack.size)
                                 }
-                                backStack.add(Route.Reading(articleId = action.articleId))
+                                backStack.add(Route.Reading(articleId = articleId))
                             }
 
                             is LaunchAction.Subscribe -> {
@@ -160,7 +188,8 @@ class MainActivity : AppCompatActivity() {
 sealed interface LaunchAction {
     data class Subscribe(val url: String) : LaunchAction
 
-    data class OpenArticle(val articleId: String) : LaunchAction
+    data class OpenArticle(val articleId: String, val feedId: String?, val groupId: String?) :
+        LaunchAction
 }
 
 private fun Intent.getLaunchAction(): LaunchAction? {
@@ -176,9 +205,13 @@ private fun Intent.getLaunchAction(): LaunchAction? {
         }
 
         else -> {
-            getStringExtra(ExtraName.ARTICLE_ID)
-                ?.also { removeExtra(ExtraName.ARTICLE_ID) }
-                ?.let { LaunchAction.OpenArticle(it) }
+            val articleId =
+                getStringExtra(ExtraName.ARTICLE_ID)?.also { removeExtra(ExtraName.ARTICLE_ID) }
+            val feedId = getStringExtra(ExtraName.FEED_ID)?.also { removeExtra(ExtraName.FEED_ID) }
+            val groupId =
+                getStringExtra(ExtraName.GROUP_ID)?.also { removeExtra(ExtraName.GROUP_ID) }
+
+            articleId?.let { LaunchAction.OpenArticle(it, feedId, groupId) }
         }
     }
 }

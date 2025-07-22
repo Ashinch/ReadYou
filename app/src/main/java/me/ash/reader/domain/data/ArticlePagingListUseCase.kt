@@ -43,7 +43,10 @@ constructor(
     private val accountService: AccountService,
 ) {
 
-    private val mutablePagerFlow = MutableStateFlow<PagerData>(PagerData())
+    private val mutablePagerFlow =
+        MutableStateFlow<PagerData>(
+            PagerData(filterState = filterStateUseCase.filterStateFlow.value)
+        )
     val pagerFlow: StateFlow<PagerData> = mutablePagerFlow
 
     var itemSnapshotList by

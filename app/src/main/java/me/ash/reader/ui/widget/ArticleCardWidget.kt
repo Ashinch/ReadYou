@@ -13,8 +13,6 @@ import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
-import androidx.glance.action.ActionParameters
-import androidx.glance.action.actionParametersOf
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
@@ -40,12 +38,10 @@ import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.withContext
 import me.ash.reader.R
 import me.ash.reader.infrastructure.android.MainActivity
 import me.ash.reader.ui.ext.collectAsStateValue
-import me.ash.reader.ui.page.common.ExtraName
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -75,7 +71,15 @@ class ArticleCardWidget() : GlanceAppWidget() {
                 val bitmap = repository.fetchBitmap(article?.imgUrl)
 
                 provideContent {
-                    GlanceTheme { GlanceTheme { ArticleCard(article = article, bitmap = bitmap) } }
+                    GlanceTheme {
+                        GlanceTheme {
+                            ArticleCard(
+                                article = article,
+                                dataSource = config.dataSource,
+                                bitmap = bitmap,
+                            )
+                        }
+                    }
                 }
             }
             .onFailure { Timber.e(it) }
@@ -120,14 +124,19 @@ class ArticleCardWidget() : GlanceAppWidget() {
                     .map { repository.fetchBitmap(it?.imgUrl) }
                     .collectAsStateValue(initialBitmap)
 
-            GlanceTheme { ArticleCard(article = article, bitmap = bitmap) }
+            GlanceTheme { ArticleCard(article = article, dataSource = dataSource, bitmap = bitmap) }
         }
     }
 }
 
 @SuppressLint("RestrictedApi")
 @Composable
-fun ArticleCard(article: Article?, bitmap: Bitmap?, modifier: GlanceModifier = GlanceModifier) {
+fun ArticleCard(
+    article: Article?,
+    bitmap: Bitmap?,
+    dataSource: DataSource,
+    modifier: GlanceModifier = GlanceModifier,
+) {
 
     val context = LocalContext.current
 
@@ -137,10 +146,7 @@ fun ArticleCard(article: Article?, bitmap: Bitmap?, modifier: GlanceModifier = G
     val feedColor =
         if (bitmap != null) Color.White else GlanceTheme.colors.primary.getColor(context)
 
-    val parameters =
-        if (article != null)
-            actionParametersOf(ActionParameters.Key<String>(ExtraName.ARTICLE_ID) to article.id)
-        else actionParametersOf()
+    val parameters = makeActionParameters(article, dataSource)
 
     // create your AppWidget here
     WidgetContainer(modifier = modifier) {
@@ -177,7 +183,7 @@ fun ArticleCard(article: Article?, bitmap: Bitmap?, modifier: GlanceModifier = G
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
                             ),
-                        modifier = GlanceModifier.padding(bottom = 8.dp, start = 4.dp)
+                        modifier = GlanceModifier.padding(bottom = 8.dp, start = 4.dp),
                     )
                 } else {
                     Text(
@@ -200,7 +206,7 @@ fun ArticleCard(article: Article?, bitmap: Bitmap?, modifier: GlanceModifier = G
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                             ),
-                        maxLines = 6
+                        maxLines = 6,
                     )
                 }
             }
