@@ -489,6 +489,7 @@ constructor(
                         continuationId = it,
                     )
                 }
+                .map { it.shortId }
                 .toSet()
         }
 
@@ -500,11 +501,13 @@ constructor(
                         continuationId = it,
                     )
                 }
+                .map { it.shortId }
                 .toSet()
         }
 
         val starredIds = async {
             fetchItemIdsAndContinue { googleReaderAPI.getStarredItemIds(continuationId = it) }
+                .map { it.shortId }
                 .toSet()
         }
 
@@ -515,8 +518,8 @@ constructor(
                 itemIds = toFetch,
                 googleReaderAPI = googleReaderAPI,
                 accountId = accountId,
-                unreadIds = unreadIds.await().map { it.shortId }.toSet(),
-                starredIds = starredIds.await().map { it.shortId }.toSet(),
+                unreadIds = unreadIds.await(),
+                starredIds = starredIds.await(),
             )
 
         if (feed.isNotification) {
