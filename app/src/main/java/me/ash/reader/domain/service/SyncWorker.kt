@@ -38,6 +38,11 @@ constructor(
                     OneTimeWorkRequestBuilder<ReaderWorker>()
                         .addTag(READER_TAG)
                         .addTag(ONETIME_WORK_TAG)
+                        .setBackoffCriteria(
+                            backoffPolicy = BackoffPolicy.EXPONENTIAL,
+                            backoffDelay = 30,
+                            timeUnit = TimeUnit.SECONDS,
+                        )
                         .build(),
                 )
                 .enqueue()
