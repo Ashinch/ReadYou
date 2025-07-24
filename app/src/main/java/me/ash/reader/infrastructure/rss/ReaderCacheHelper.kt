@@ -91,7 +91,7 @@ constructor(
                     return@withContext fetchFullContentInternal(article)
                         .fold(onFailure = { false }, onSuccess = { true })
                 } else {
-                    return@withContext false
+                    return@withContext true
                 }
             } catch (_: SecurityException) {
                 return@withContext false
