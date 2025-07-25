@@ -35,6 +35,7 @@ import androidx.glance.layout.Column
 import androidx.glance.layout.ContentScale
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
+import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.preview.ExperimentalGlancePreviewApi
@@ -248,7 +249,7 @@ fun ArticleList(
 @GlanceComposable
 @Composable
 fun ArticleItem(article: Article, theme: Theme, modifier: GlanceModifier = GlanceModifier) {
-    Column(modifier = modifier.padding(bottom = 8.dp).padding(horizontal = 12.dp)) {
+    Column(modifier = modifier.fillMaxWidth().padding(bottom = 8.dp).padding(horizontal = 12.dp)) {
         Text(
             text = article.feedName,
             style =
@@ -322,14 +323,15 @@ private val previewArticles =
 @Composable
 @GlanceComposable
 @Preview(widthDp = 200, heightDp = 200)
-@Preview(widthDp = 240, heightDp = 300)
+@Preview(widthDp = 306, heightDp = 276)
 @Preview(widthDp = 360, heightDp = 360)
+@Preview(widthDp = 488, heightDp = 672)
 private fun PreviewArticleList() {
 
     GlanceTheme {
         // create your AppWidget here
         WidgetContainer {
-            ArticleList("Media", emptyList(), DataSource.Account(0), Theme.SansSerif)
+            ArticleList("Media", previewArticles, DataSource.Account(0), Theme.SansSerif)
         }
     }
 }
